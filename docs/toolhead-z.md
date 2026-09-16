@@ -156,12 +156,31 @@ Die Gewindestange bleibt — geändert ist, **wie** die Mutter angebunden ist. Z
 Dinge machen den Unterschied:
 
 **Spielfrei durch zwei Muttern mit Feder.** Im Mutternblock sitzen zwei
-M6-Muttern in nach vorn offenen Taschen; dazwischen liegt eine Druckfeder
-(Ø8 × 11 mm) in einer Kammer. Die Feder drückt die untere Mutter auf den Boden
-und die obere unter die Decke des Blocks. Beide Muttern tragen damit auf
-gegenüberliegenden Gewindeflanken — das Flankenspiel der Gewindestange ist
-aufgebraucht, ohne dass etwas klemmt. Die Schlittenplatte schließt die Taschen,
-die Muttern können nicht herausfallen.
+M6-Muttern in Sechskanttaschen; dazwischen liegt eine Druckfeder (Ø8 × 11 mm)
+in einer Kammer. Die Feder drückt die untere Mutter auf den Boden und die obere
+unter die Decke des Blocks. Beide Muttern tragen damit auf gegenüberliegenden
+Gewindeflanken — das Flankenspiel der Gewindestange ist aufgebraucht, ohne dass
+etwas klemmt.
+
+**Die Mutterntaschen halten die Mutter vor dem Festschrauben.** Jede Tasche ist
+ein echtes Sechskant mit SW + 0,15 mm, gedreht so, dass die Mutter mit einer
+**Flanke** am Taschenboden anliegt und nicht mit einer Ecke — Formschluss auf
+allen sechs Flanken, die Mutter kann nicht kippen. Davor sitzt ein um 0,20 mm
+**engeres Mundstück** (1,4 mm lang): die Mutter wird einmal hineingedrückt und
+rastet hinter einer Stufe von 0,19 mm je Seite ein. Beim Zusammenbauen fällt
+sie damit nicht mehr heraus, auch bevor die Schlittenplatte die Tasche
+verschließt.
+
+Im Sechskant selbst hat die Mutter bewusst 0,15 mm Spiel und bleibt **in Z
+beweglich** — sonst könnte die Feder sie nicht gegen Boden bzw. Decke drücken
+und die Spielfreiheit wäre hin. Beide Werte hängen an Parametern
+(`tasche_spiel`, `tasche_klemmung`); wird eine Tasche im Druck zu stramm,
+reicht eine Änderung im Parameter-Dialog.
+
+Die beiden **M3-Muttern der schwimmenden Verschraubung** sitzen ebenfalls in
+Sechskanttaschen (statt vorher quadratischen) und müssen beim Anziehen nicht
+von hinten gegengehalten werden. Dafür rücken ihre Bohrungen 5 mm vom Blockrand
+ein: über Eck ist die Tasche 6,5 mm breit und braucht noch Wand.
 
 **Schwimmend verschraubt.** Der Block ist mit **zwei M3 durch Ø4,6-Bohrungen**
 (statt 3,4) plus großen Scheiben an der Schlittenplatte befestigt. Vorgehen:
@@ -287,3 +306,5 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `konsole_unten` / `konsole_dicke` | 68 / 8 mm | Lage und Dicke der Motorkonsole |
 | `motor_rippe_hoehe` | 3 mm | Höhe der Führungsrippen am Motorflansch |
 | `m3_uebermass` | 4,6 mm | Ausrichtspiel des Mutternblocks |
+| `tasche_spiel` | 0,15 mm | Spiel der Mutterntaschen auf die Schlüsselweite |
+| `tasche_klemmung` | 0,20 mm | Untermaß im Mundstück — hält die M6-Mutter |

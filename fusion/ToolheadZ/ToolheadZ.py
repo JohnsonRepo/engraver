@@ -18,10 +18,12 @@
 #
 # Konventionen: siehe fusion-python/SKILL.md und references/baugruppen.md.
 
+import math
+
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 4
+REVISION = 5
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -84,6 +86,11 @@ MASSE = {
     'm3_senkung':          (6.5,   'Freibohrung fuer M3-Zylinderkopf + Werkzeug'),
     'm3_mutter_sw':        (5.5,   'M3 Mutter: Schluesselweite'),
     'm3_mutter_h':         (2.4,   'M3 Mutter: Hoehe'),
+    # Mutterntaschen bewusst enger als die Faustregel in hardware.md
+    # (SW + 0,2..0,3): die Muttern sollen VOR dem Festschrauben von allein
+    # sitzen. Falls eine Tasche zu stramm wird, hier erhoehen.
+    'tasche_spiel':        (0.15,  'Mutterntasche: Spiel auf die Schluesselweite'),
+    'tasche_klemmung':     (0.20,  'Mutterntasche: Untermass im Mundstueck'),
     'm3_scheibe_h':        (0.5,   'M3 Scheibe DIN 125: Dicke'),
     'insert_m3_d':         (4.0,   'ruthex M3: Einpressbohrung'),
     'insert_m3_t':         (7.0,   'ruthex M3: Sacklochtiefe'),
@@ -273,8 +280,10 @@ def lage():
     L['z_wagen_loecher'] = [
         (sx * w('z_wagen_loch_quer') / 2.0, sz * w('z_wagen_loch_laengs') / 2.0)
         for sx in (-1, 1) for sz in (-1, 1)]
-    # Schwimmende Verschraubung des Mutternblocks, links und rechts der Tasche
-    L['block_schraube_x'] = [w('block_x_links') + 4.0, w('block_x_rechts') - 4.0]
+    # Schwimmende Verschraubung des Mutternblocks, links und rechts der Tasche.
+    # 5 mm Randabstand: die Sechskanttasche der M3-Mutter ist ueber Eck 6,5 mm
+    # breit und braucht noch Wand zum Blockrand.
+    L['block_schraube_x'] = [w('block_x_links') + 5.0, w('block_x_rechts') - 5.0]
 
     L['motor_loecher'] = [
         (w('spindel_x') + sx * w('motor_loch') / 2.0,
@@ -441,6 +450,33 @@ def langloch(sk, cu, cv, halb_versatz, radius):
     kreis(sk, cu + halb_versatz, cv, 2 * radius)
     rechteck(sk, cu - halb_versatz, cv - radius,
              cu + halb_versatz, cv + radius)
+
+
+def sechskant(sk, cu, cv, sw, flach_quer=True):
+    """Regelmaessiges Sechskant ueber die Schluesselweite sw (Abstand der
+    parallelen Flanken), Masse in mm.
+
+    flach_quer=True: zwei Flanken stehen senkrecht zur v-Achse. Die Mutter wird
+    dann in v-Richtung eingeschoben und liegt am Taschenboden mit einer FLANKE
+    an, nicht mit einer Ecke — sie kann nicht kippen und sitzt formschluessig
+    auf allen sechs Flanken.
+
+    Die Ecken werden ueber die SketchPoints der Nachbarlinien verkettet, damit
+    das Profil sicher schliesst.
+    """
+    r = sw / math.sqrt(3.0)                      # Umkreisradius
+    start = 0.0 if flach_quer else 30.0
+    ecken = [(cu + r * math.cos(math.radians(start + i * 60.0)),
+              cv + r * math.sin(math.radians(start + i * 60.0)))
+             for i in range(6)]
+    linien = sk.sketchCurves.sketchLines
+    erste = linien.addByTwoPoints(punkt(sk, *ecken[0]), punkt(sk, *ecken[1]))
+    vorher = erste
+    for i in range(1, 5):
+        vorher = linien.addByTwoPoints(vorher.endSketchPoint,
+                                       punkt(sk, *ecken[i + 1]))
+    linien.addByTwoPoints(vorher.endSketchPoint, erste.startSketchPoint)
+    return erste
 
 
 def groesstes_profil(sk):
@@ -753,18 +789,25 @@ def bau_mutternblock(app, design, comp, L, zc, fehler):
     kreis(sk, sx, sy, w('spindel_durchgang'))
     durch(comp, alle_profile(sk), koerper)
 
-    # Mutterntaschen: nach vorn offene Schlitze, die Schlittenplatte schliesst
-    # sie. Zwei parallele Flanken halten die Mutter gegen Verdrehen.
-    # Jede Tasche wird um ihre eigene Mittelebene geschnitten.
-    breite = w('m6_mutter_sw') + 0.25
+    # Mutterntaschen fuer die beiden M6-Muttern: Sechskant mit einer Flanke am
+    # Taschenboden, davor ein etwas engeres Mundstueck. Die Mutter wird einmal
+    # hineingedrueckt, rastet hinter der Stufe ein und kann danach nicht mehr
+    # herausfallen — auch nicht, bevor die Schlittenplatte die Tasche
+    # verschliesst. Im Sechskant selbst hat sie Spiel und bleibt in Z
+    # beweglich, sonst koennte die Feder sie nicht gegen Boden bzw. Decke
+    # druecken. Jede Tasche wird um ihre eigene Mittelebene geschnitten.
     tiefe = w('m6_mutter_h') + 0.3
+    sw = w('m6_mutter_sw') + w('tasche_spiel')
+    flanke = sw / 2.0                             # halbe Schluesselweite
+    mund = 2.0 * w('m6_mutter_sw') / math.sqrt(3.0) - w('tasche_klemmung')
     versatz = w('feder_raum_l') / 2 + tiefe / 2
     for name, z_mitte in (('unten', zc - versatz), ('oben', zc + versatz)):
         sk = skizze(comp, ebene_z(comp, z_mitte, 'E_Tasche_' + name),
                     'Sk_Mutterntasche_' + name)
-        rechteck(sk, sx - breite / 2, sy - w('m6_mutter_sw') / 1.7320508,
-                 sx + breite / 2, L['schlitten_y1'])
-        tasche(comp, groesstes_profil(sk), tiefe, koerper)
+        sechskant(sk, sx, sy, sw, flach_quer=True)
+        rechteck(sk, sx - mund / 2, sy + flanke, sx + mund / 2,
+                 L['schlitten_y1'])
+        tasche(comp, alle_profile(sk), tiefe, koerper)
 
     sk = skizze(comp, e_mitte, 'Sk_Federkammer')
     kreis(sk, sx, sy, w('feder_raum_d'))
@@ -775,10 +818,12 @@ def bau_mutternblock(app, design, comp, L, zc, fehler):
         kreis(sk, x, zc, w('m3_durchgang'))
     durch(comp, alle_profile(sk), koerper)
 
+    # Mutterntaschen der schwimmenden Verschraubung: Sechskant, damit die
+    # M3-Mutter beim Anziehen von der Tasche gehalten wird und man sie nicht
+    # von hinten gegenhalten muss.
     sk = skizze(comp, e_hinten, 'Sk_Mutterntaschen_Block')
-    t = w('m3_mutter_sw') + 0.25
     for x in L['block_schraube_x']:
-        rechteck(sk, x - t / 2, zc - t / 2, x + t / 2, zc + t / 2)
+        sechskant(sk, x, zc, w('m3_mutter_sw') + w('tasche_spiel'))
     weg(comp, alle_profile(sk), w('m3_mutter_h') + 0.3, koerper)
 
     fussfase(comp, koerper, 'y', zc - w('block_hoehe') / 2, w('fase_fuss'),
@@ -872,6 +917,16 @@ def hinweise_bauen(L, zc, fehler):
         '  Zwei M6-Muttern im Mutternblock, von einer Druckfeder auseinander-',
         '  gedrueckt: die untere liegt auf dem Boden, die obere unter der',
         '  Decke. Die Gewindeflanken tragen damit gegenlaeufig — spielfrei.',
+        '  MUTTERNTASCHEN: Sechskant mit SW+{:.2f}, eine Flanke liegt am'.format(
+            w('tasche_spiel')),
+        '  Taschenboden. Davor ein um {:.2f} mm engeres Mundstueck: die'.format(
+            w('tasche_klemmung')),
+        '  Mutter wird einmal hineingedrueckt und rastet dahinter ein —',
+        '  sie fallt beim Zusammenbauen nicht mehr heraus. Im Sechskant selbst',
+        '  hat sie Spiel und bleibt in Z beweglich, damit die Feder sie gegen',
+        '  Boden bzw. Decke druecken kann.',
+        '  Die beiden M3-Muttern der schwimmenden Verschraubung sitzen',
+        '  ebenfalls in Sechskanttaschen und muessen nicht gegengehalten werden.',
         '  Der Block ist mit Uebermass ({:.1f} mm statt {:.1f}) verschraubt:'.format(
             w('m3_uebermass'), w('m3_durchgang')),
         '  Z-Achse mehrmals durchfahren, DANN festziehen. So kaempft die',

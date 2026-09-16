@@ -11,6 +11,7 @@ Druckbarkeit. Gibt am Ende die Stueckliste aus.
 Exit-Code 0 = alle Pruefungen bestanden.
 """
 
+import math
 import os
 import sys
 
@@ -218,13 +219,49 @@ def main():
          L['schlitten_y1'] - (sy + w('spindel_durchgang') / 2), 3.0)
     p.ok('Wand hinter der Spindelbohrung',
          (sy - w('spindel_durchgang') / 2) - w('block_y_hinten'), 3.0)
-    ecke = w('m6_mutter_sw') / 1.7320508              # halbe Eckenweite
+    # Sechskanttasche: Flanke am Taschenboden (Y), Ecken quer (X).
+    sw6 = w('m6_mutter_sw') + w('tasche_spiel')
+    flanke = sw6 / 2.0                               # halbe Schluesselweite
+    eck = sw6 / 1.7320508                            # halbe Eckenweite
+    eck_mutter = w('m6_mutter_sw') / 1.7320508
+    mund = 2.0 * eck_mutter - w('tasche_klemmung')
     p.ok('Wand hinter der Mutterntasche',
-         (sy - ecke) - w('block_y_hinten'), 2.0)
+         (sy - flanke) - w('block_y_hinten'), 2.0)
     p.ok('Mutterntasche bleibt im Block (X)',
-         (w('block_x_rechts') - sx) - ecke, 2.0)
+         (w('block_x_rechts') - sx) - eck, 2.0)
     p.ok('Mutterntasche bleibt im Block (X, links)',
-         (sx - w('block_x_links')) - ecke, 2.0)
+         (sx - w('block_x_links')) - eck, 2.0)
+    p.ok('Sechskant: Mutter hat Spiel und bleibt in Z beweglich',
+         w('tasche_spiel'), 0.10)
+    p.ok('Sechskant: Mutter sitzt nicht zu lose', w('tasche_spiel'), 0.30, '<=')
+    p.ok('Mundstueck klemmt die Mutter beim Einschieben',
+         2.0 * eck_mutter - mund, 0.10)
+    p.ok('Haltestufe hinter dem Mundstueck je Seite',
+         (2.0 * eck - mund) / 2.0, 0.15)
+    p.ok('Mundstueck lang genug zum Drucken',
+         L['schlitten_y1'] - (sy + flanke), 1.00)
+    p.ok('Mundstueck nicht zu eng zum Einschieben',
+         2.0 * eck_mutter - mund, 0.40, '<=')
+    # Die Sechskant-Formel des Skripts gegenrechnen: aus den Eckpunkten, die
+    # sechskant() erzeugt, muessen Schluesselweite und Eckenweite wieder
+    # herauskommen — sonst passt keine echte Mutter in die Tasche.
+    r = sw6 / math.sqrt(3.0)
+    ecken = [(r * math.cos(math.radians(i * 60.0)),
+              r * math.sin(math.radians(i * 60.0))) for i in range(6)]
+    p.ok('Sechskant-Formel: Schluesselweite trifft',
+         abs(2 * max(abs(v) for _, v in ecken) - sw6), 0.001, '<=')
+    p.ok('Sechskant-Formel: Eckenweite trifft',
+         abs(2 * max(abs(u) for u, _ in ecken) - 2 * eck), 0.001, '<=')
+    p.ok('Taschentiefe nimmt die Mutterhoehe auf',
+         (w('m6_mutter_h') + 0.3) - w('m6_mutter_h'), 0.2)
+    # M3-Sechskanttaschen der schwimmenden Verschraubung
+    eck3 = (w('m3_mutter_sw') + w('tasche_spiel')) / 1.7320508
+    p.ok('M3-Tasche bleibt im Block (links)',
+         (L['block_schraube_x'][0] - eck3) - w('block_x_links'), 1.5)
+    p.ok('M3-Tasche bleibt im Block (rechts)',
+         w('block_x_rechts') - (L['block_schraube_x'][1] + eck3), 1.5)
+    p.ok('Abstand M3-Tasche <-> M6-Tasche in Z',
+         (w('feder_raum_l') / 2) - eck3, 1.0)
     stapel = 2 * w('m6_mutter_h') + w('feder_raum_l') + 2 * w('block_boden')
     p.ok('Blockhoehe reicht fuer Mutter+Feder+Mutter',
          w('block_hoehe') - stapel, 0.0)
@@ -295,7 +332,8 @@ def main():
             'M6-Gewindestange {:.0f} mm (Zuschnitt)'.format(
                 10 * round(L['spindel_laenge'] / 10 + 0.5)),
             'Flexible Kupplung 5 -> 6 mm, {:.0f} mm lang'.format(w('kupplung_l')),
-            '2x M6-Mutter + 1x Druckfeder Ø8 x {:.0f} mm'.format(w('feder_raum_l')),
+            '2x M6-Mutter (Sechskanttasche, SW+{:.2f}) + Druckfeder Ø8 x {:.0f}'
+            .format(w('tasche_spiel'), w('feder_raum_l')),
             '4x M3x12 Zylinderkopf + Scheibe (Traegerplatte -> X-Wagen)',
             '{}x M3x10 Senkkopf DIN 7991 + {}x ruthex M3 (Z-Schiene -> Sockel)'
             .format(len(L['z_schiene_loecher']), len(L['z_schiene_loecher'])),

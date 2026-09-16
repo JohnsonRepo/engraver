@@ -14,10 +14,12 @@ flexible Kupplung auf eine M6-Gewindestange. Der Laser sitzt auf dem Z-Schlitten
 
 | Pos | Teil | Material | Funktion |
 |---|---|---|---|
-| 1 | **Trägerplatte** | PETG, 8 mm | sitzt auf dem X-Wagen, trägt Schienensockel und Motorkonsole |
-| 2 | **Motorhalter** | PETG | U-Konsole oben, NEMA 17 mit Welle nach unten |
-| 3 | **Schlittenplatte** | PETG | auf dem MGN9H-Z-Wagen, trägt den Laser |
-| 4 | **Mutternblock** | PETG | zwei M6-Muttern, federverspannt, schwimmend verschraubt |
+| 1 | **Trägerplatte** mit angeformter **Motorkonsole** | PETG, 8 mm | sitzt auf dem X-Wagen, trägt Schienensockel, Konsole und Führungsrippen |
+| 2 | **Schlittenplatte** | PETG | auf dem MGN9H-Z-Wagen, trägt den Laser |
+| 3 | **Mutternblock** | PETG | zwei M6-Muttern, federverspannt, schwimmend verschraubt |
+
+Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
+[Motorbefestigung](#motorbefestigung-warum-nur-zwei-schrauben).
 
 ## Bezugsebene und Koordinaten
 
@@ -82,6 +84,57 @@ höhere Konsole (`konsole_unten`) — dann wird der Toolhead entsprechend höher
 Die Kollisionsprüfung fährt den Weg in 21 Stellungen ab und prüft jedes bewegte
 Teil gegen jedes feste, einschließlich Portalprofil und X-Schiene.
 
+## Motorbefestigung: warum nur zwei Schrauben
+
+Ein NEMA 17 hat **Gewinde im Flansch**, kein Durchgangsloch. Er wird also
+zwangsläufig **von unten** verschraubt — ein Durchstecken von oben ist nicht
+möglich.
+
+Die hintere Schraubenreihe liegt bei Y = +5,5 mm und damit **mitten im
+Querschnitt der Trägerplatte** (Y = 0…8). Von unten kommt dort nie ein
+Werkzeug hin: die Platte ist eine durchgehende Wand über ihre ganze Höhe. Ein
+separater Motorhalter ändert daran nichts — die Platte steht so oder so im Weg.
+Die Ursache ist, dass die Motorachse an der Spindelachse hängt und die bei
+Y = 21 mm liegen muss, damit der Mutternblock hinter die Schlittenplatte passt.
+
+Die Lösung besteht deshalb aus zwei Teilen:
+
+* **Zwei M3×12 in der vorderen Reihe** (Y = 36,5 mm). Der Zugangskorridor ist
+  dort frei — auch an der Kupplung vorbei, die 2,5 mm neben den Bohrungen
+  verläuft. `toolhead_check.py` prüft für jede benutzte Schraube einen freien
+  senkrechten Korridor von Ø7 mm und weist ausdrücklich nach, dass die hintere
+  Reihe blockiert ist.
+* **Zwei Führungsrippen**, 3 mm hoch, die den Motorflansch links und rechts mit
+  0,4 mm Spiel fassen. Sie nehmen das Motormoment formschlüssig auf — bei
+  0,4 Nm Haltemoment sind das rund 9 N je Rippe. Die Schrauben halten den Motor
+  damit nur noch nieder, sie müssen kein Moment übertragen.
+
+Die hinteren beiden Bohrungen werden **nicht gebohrt**; sie wären nur
+irreführend.
+
+**Falls du alle vier Schrauben willst:** dann muss die Motorachse nach vorn,
+mindestens auf Y ≈ 28,5 mm. Das zieht die ganze Y-Kette mit (`pad_hoehe` von 6
+auf 12 mm, damit der Mutternblock noch hinter die Schlittenplatte passt), die
+Strahlachse wandert auf 58,5 mm und die Z-Wagenschrauben werden M3×14. Sag
+Bescheid, dann rechne ich das durch.
+
+## Warum Trägerplatte und Konsole ein Teil sind
+
+Du hast es selbst vorgeschlagen, und es ist die bessere Lösung:
+
+* Die Verschraubung Halter ↔ Platte entfällt komplett — vier Schrauben, vier
+  Muttern und zwei Anschraublaschen weniger, und nichts kann sich lösen.
+* Die Konsole wird steifer: sie hängt nicht an vier M3, sondern ist
+  durchgehendes Material.
+* **Es druckt sich sogar besser.** Mit der Rückseite (Passfläche) auf dem Bett
+  stehen Platte, Sockel, Konsole *und* Führungsrippen alle auf dem Bett. Die
+  Konsole wächst als Wand in Aufbaurichtung mit, ohne Überhang — kein
+  Stützmaterial. Das Kragmoment des Motors an der Konsole beträgt 0,04 Nm; die
+  Biegespannung quer zur Schicht liegt bei etwa 0,07 MPa, also weit unter allem,
+  was PETG in der Schichthaftung kann.
+
+Das Bauteil wird damit 78 × 48 × 145 mm groß und passt aufrecht in den A1.
+
 ## Z-Antrieb: M6 behalten, aber spielfrei und schwimmend
 
 Die Gewindestange bleibt — geändert ist, **wie** die Mutter angebunden ist. Zwei
@@ -113,8 +166,7 @@ werden.
 |---|---|---|
 | Trägerplatte → X-Wagen (MGN15H) | 4 × M3×12 + Scheibe | 3,5 mm Gewindeeingriff bei 4 mm verfügbarer Tiefe |
 | Z-Schiene → Sockel | 5 × M3×10 Senkkopf DIN 7991 + 5 × ruthex M3 | Einsätze vor der Montage einschmelzen |
-| Motorhalter → Trägerplatte | 4 × M3×16 + M3-Mutter | Mutterntaschen auf der Plattenrückseite |
-| NEMA 17 → Motorkonsole | 4 × M3×8 | Zentrierbund in Ø22,4 |
+| NEMA 17 → Konsole | **2 × M3×12**, vordere Reihe | 4 mm Eingriff; Moment über die Führungsrippen, Zentrierbund in Ø22,4 |
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × M3×8 | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger** |
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 9021 | Scheibe wegen der Langlöcher Pflicht |
 | Mutternblock → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe | Ø4,6-Bohrung, ausrichten dann festziehen |
@@ -134,7 +186,7 @@ von der Schlittenplatte verdeckt:
 4. **Laser an die Schlittenplatte** — die Köpfe der oberen Schraubenreihe
    liegen in den Ø10-Freiräumen im Auflagepad
 5. Schlittenplatte auf den Z-Wagen (4 × M3×8)
-6. Motorhalter an die Trägerplatte, NEMA 17 auf die Konsole
+6. NEMA 17 zwischen die Führungsrippen setzen, 2 × M3×12 von unten
 7. Kupplung und Gewindestange, Mutternblock zuletzt ausrichten und festziehen
 
 ## Zwei Details, die beim Konstruieren aufgefallen sind
@@ -155,8 +207,7 @@ das Pad durchdringt. Vom Pad bleiben 571 mm² Auflage auf dem Wagen.
 
 | Teil | Lage aufs Bett | Warum |
 |---|---|---|
-| Trägerplatte | Rückseite (Passfläche) unten | alle Kräfte in der Schicht, keine Stützen |
-| Motorhalter | Konsolenoberseite unten, Laschen nach oben | Motorauflage wird plan, keine Stützen |
+| Trägerplatte (mit Konsole) | Rückseite (Passfläche) unten | Platte, Sockel, Konsole und Rippen stehen alle auf dem Bett — keine Stützen, alle Kräfte in der Schicht |
 | Schlittenplatte | Laser-Anschraubfläche unten | Brücke 10,5 mm zwischen den Rippen |
 | Mutternblock | Unterseite unten | Spindelbohrung wird rund |
 
@@ -166,7 +217,7 @@ Passfläche ab.
 
 ## Vor dem Druck prüfen
 
-Das Skript legt fünf **ausgeblendete Bohrlehren** an (3 mm, PLA): im Browser
+Das Skript legt vier **ausgeblendete Bohrlehren** an (3 mm, PLA): im Browser
 einblenden, drucken, ans reale Teil halten.
 
 | Lehre | prüft |
@@ -174,7 +225,6 @@ einblenden, drucken, ans reale Teil halten.
 | `Bohrlehre_XWagen` | 25 × 25 mm — sitzt am Portal wirklich ein MGN15H? |
 | `Bohrlehre_ZWagen` | inneres Lochpaar = MGN9C (10 mm), äußeres = MGN9H (16 mm) |
 | `Bohrlehre_Laser` | 39 × 15 mm |
-| `Bohrlehre_Motorhalter` | Verbindung zweier gedruckter Teile |
 | `Bohrlehre_Mutternblock` | Verbindung zweier gedruckter Teile |
 
 Offene Punkte aus `hardware-notizen.md`: das Laser-Bohrbild ist als 39 × 15
@@ -219,4 +269,6 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `spindel_x` / `spindel_y` | 30 / 21 mm | Lage der Spindelachse |
 | `laser_versatz_z` | −19,5 mm | Lage des Lasers am Schlitten |
 | `traeger_dicke` | 8 mm | Dicke der Trägerplatte |
+| `konsole_unten` / `konsole_dicke` | 68 / 8 mm | Lage und Dicke der Motorkonsole |
+| `motor_rippe_hoehe` | 3 mm | Höhe der Führungsrippen am Motorflansch |
 | `m3_uebermass` | 4,6 mm | Ausrichtspiel des Mutternblocks |

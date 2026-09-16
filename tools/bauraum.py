@@ -50,6 +50,23 @@ class Quader:
                                 (self.z, other.z)))
 
 
+def zugang_frei(x, y, r, z_von, boxen, ausser=()):
+    """Ist der senkrechte Korridor mit Radius r ab z_von nach unten frei?
+    Liefert den Namen des ersten blockierenden Quaders oder None. Geprueft
+    werden nur feste Teile — bewegte kann man vor der Montage wegfahren.
+
+    Genau diese Pruefung fehlte, als die hintere Schraubenreihe des NEMA 17
+    ueber dem Querschnitt der Traegerplatte landete.
+    """
+    for q in boxen:
+        if q.name in ausser or q.z[0] >= z_von:
+            continue
+        if (q.x[0] < x + r and x - r < q.x[1]
+                and q.y[0] < y + r and y - r < q.y[1]):
+            return q.name
+    return None
+
+
 def bauraeume(w, L):
     """(feste, bewegte, erlaubte_paare). Die bewegten Quader stehen relativ
     zur Wagenmitte zc = 0 und werden mit .verschoben(zc) positioniert."""
@@ -79,14 +96,15 @@ def bauraeume(w, L):
         Quader('Z-Schiene MGN9', -w('z_schiene_breite') / 2,
                w('z_schiene_breite') / 2, L['sockel_y1'], L['z_schiene_y1'],
                L['z_schiene_z0'], L['z_schiene_z1'], 'fuehrung'),
+        # Konsole und Fuehrungsrippen sind an die Traegerplatte angeformt
         Quader('Motorkonsole', L['konsole_x0'], L['konsole_x1'], 0.0,
                w('konsole_y_vorn'), L['konsole_z0'], L['konsole_z1']),
-        Quader('Lasche links', L['lasche_x'][0][0], L['lasche_x'][0][1],
-               L['traeger_y1'], L['traeger_y1'] + w('konsole_flansch'),
-               w('traeger_kopf_unten'), L['konsole_z0']),
-        Quader('Lasche rechts', L['lasche_x'][1][0], L['lasche_x'][1][1],
-               L['traeger_y1'], L['traeger_y1'] + w('konsole_flansch'),
-               w('traeger_kopf_unten'), L['konsole_z0']),
+        Quader('Fuehrungsrippe links', L['motor_rippe_x'][0][0],
+               L['motor_rippe_x'][0][1], 0.0, L['motor_rippe_y1'],
+               L['konsole_z1'], L['motor_rippe_z1']),
+        Quader('Fuehrungsrippe rechts', L['motor_rippe_x'][1][0],
+               L['motor_rippe_x'][1][1], 0.0, L['motor_rippe_y1'],
+               L['konsole_z1'], L['motor_rippe_z1']),
         Quader('NEMA 17', sx - w('motor_flansch') / 2,
                sx + w('motor_flansch') / 2, sy - w('motor_flansch') / 2,
                sy + w('motor_flansch') / 2, L['motor_flansch_z'], L['motor_z1'],
@@ -123,11 +141,12 @@ def bauraeume(w, L):
         ('Mutternblock', 'M6-Gewindestange'),
         ('Kupplung', 'M6-Gewindestange'),
         ('Motorkonsole', 'NEMA 17'),
-        ('Motorkonsole', 'Lasche links'),
-        ('Motorkonsole', 'Lasche rechts'),
+        ('Motorkonsole', 'Fuehrungsrippe links'),
+        ('Motorkonsole', 'Fuehrungsrippe rechts'),
+        ('Fuehrungsrippe links', 'NEMA 17'),
+        ('Fuehrungsrippe rechts', 'NEMA 17'),
         ('Motorkonsole', 'Traegerplatte Kopf'),
-        ('Traegerplatte Kopf', 'Lasche links'),
-        ('Traegerplatte Kopf', 'Lasche rechts'),
+        ('Motorkonsole', 'Traegerplatte Hauptsaeule'),
         ('Traegerplatte Hauptsaeule', 'Traegerplatte Kopf'),
         ('Traegerplatte Hauptsaeule', 'Schienensockel'),
         ('Traegerplatte Kopf', 'Schienensockel'),

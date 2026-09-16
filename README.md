@@ -32,10 +32,11 @@ tools/geometrie_check.py       Prüfung der Einzelplatte
 
 ### Toolhead Z-Achse (aktuell)
 
-Kompletter Toolhead als Baugruppe aus vier gedruckten Teilen: **Trägerplatte**
-am MGN15H-Wagen des Portals, **Motorhalter** mit NEMA 17 oben, **Schlittenplatte**
-auf dem MGN9H-Z-Wagen mit dem Laser, und ein **Mutternblock** mit zwei
-federverspannten M6-Muttern, der schwimmend verschraubt ist.
+Kompletter Toolhead als Baugruppe aus drei gedruckten Teilen: **Trägerplatte**
+am MGN15H-Wagen des Portals — mit angeformter Motorkonsole für den NEMA 17 —,
+**Schlittenplatte** auf dem MGN9H-Z-Wagen mit dem Laser, und ein
+**Mutternblock** mit zwei federverspannten M6-Muttern, der schwimmend
+verschraubt ist.
 
 Nutzbarer Z-Verfahrweg **48,95 mm**, Strahlachse 52,5 mm vor der
 X-Wagen-Stirnfläche. Details in [docs/toolhead-z.md](docs/toolhead-z.md).
@@ -71,5 +72,6 @@ python3 tools/geometrie_check.py    # nur die Einzelplatte
 prüft dieselbe Maßkette, die das Skript zum Bauen verwendet: Y-Kette,
 Verfahrweg mit allen vier Begrenzungen, Kollisionen über 21 Stellungen des
 Verfahrwegs, Materialstege, Schraubenlängen und -eingriffstiefen,
+freie Zugangskorridore für jede Schraube,
 Langloch-Toleranzen, Druckbarkeit — und statisch, dass jeder im Skript benutzte
 Maß- und Lageschlüssel existiert. Exit-Code 0 = alles bestanden.

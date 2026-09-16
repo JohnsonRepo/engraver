@@ -36,6 +36,13 @@ class Pruefung:
             'OK ' if gut else 'FEHL', text, ist, einheit, vgl, soll))
         return gut
 
+    def ja(self, text, bedingung, hinweis=''):
+        if not bedingung:
+            self.fehler += 1
+        self.zeilen.append('  [{}] {}{}'.format(
+            'OK ' if bedingung else 'FEHL', text, hinweis))
+        return bedingung
+
     def info(self, text, wert=None, einheit='mm'):
         if wert is None:
             self.zeilen.append('  ---- ' + text)
@@ -105,7 +112,6 @@ def main():
     # ---- Bauraeume: gemeinsame Quelle mit der Layout-Zeichnung ----------
     sx, sy = w('spindel_x'), w('spindel_y')
     r_kup = w('kupplung_d') / 2.0
-    lasch = w('konsole_lasche_b')
     feste, bewegte, paare_erlaubt = bauraum.bauraeume(w, L)
     bewegte_namen = {x.name for x in bewegte}
 
@@ -161,22 +167,49 @@ def main():
     p.ok('oberste Schienenschraube unter dem Kopfbereich',
          w('traeger_kopf_unten') - L['z_schiene_loecher'][-1], 6.0)
 
-    p.titel('5) Motorkonsole')
-    p.ok('Konsole traegt das hintere Motorlochbild',
-         sy - w('motor_loch') / 2, 4.0)
+    p.titel('5) Motorkonsole (angeformt) und Zugang zu den Motorschrauben')
     p.ok('Konsole traegt das vordere Motorlochbild',
          w('konsole_y_vorn') - (sy + w('motor_loch') / 2), 4.0)
     p.ok('Bund-Freibohrung passt in die Konsole',
          w('motor_flansch') - (w('motor_bund_d') + w('spiel_locker')), 4.0)
     p.ok('Konsole dicker als der Zentrierbund',
          w('konsole_dicke') - w('motor_bund_h'), 3.0)
-    p.ok('Laschen lassen die Kupplung durch (links)',
-         (sx - r_kup) - (sx - w('motor_flansch') / 2 - 2 + lasch), 1.0)
-    p.ok('Laschen lassen die Kupplung durch (rechts)',
-         (sx + w('motor_flansch') / 2 + 2 - lasch) - (sx + r_kup), 1.0)
-    p.info('Kragmoment des Motors an der Lasche (280 g)',
-           0.280 * 9.81 * (sy - (L['traeger_y1'] + w('konsole_flansch'))) / 1000.0,
-           'Nm')
+    p.ok('Kopf der Traegerplatte backt die Konsole ganz',
+         w('traeger_x_kopf') - L['konsole_x1'], 0.0)
+    p.ok('Fuehrungsrippen fassen den Flansch mit Spiel',
+         L['motor_rippe_x'][1][0] - L['motor_rippe_x'][0][1]
+         - w('motor_flansch'), 0.2)
+    p.ok('Rippen bleiben in der Konsole (links)',
+         L['motor_rippe_x'][0][0] - L['konsole_x0'], 0.0)
+    p.ok('Rippen bleiben in der Konsole (rechts)',
+         L['konsole_x1'] - L['motor_rippe_x'][1][1], 0.0)
+    p.ok('Rippenhoehe fasst den Flansch', w('motor_rippe_hoehe'), 2.0)
+    p.ok('Motorschraube M3x12: Gewindeeingriff',
+         12.0 - w('konsole_dicke'), 3.5)
+
+    # Der Zugangsfehler, der beim ersten Aufbau aufgefallen ist: NEMA17 hat
+    # Gewinde im Flansch, also wird von UNTEN verschraubt. Jede benutzte
+    # Schraube braucht einen freien senkrechten Korridor.
+    ausser = ('Motorkonsole', 'Fuehrungsrippe links', 'Fuehrungsrippe rechts')
+    for x, y in L['motor_schrauben']:
+        blocker = bauraum.zugang_frei(x, y, INBUS_FREI_D / 2, L['konsole_z0'],
+                                      feste, ausser)
+        p.ja('Schraubzugang von unten bei X={:+.1f} Y={:+.1f}'.format(x, y),
+             blocker is None,
+             '' if blocker is None else '   blockiert von: ' + blocker)
+    y_hinten = sy - w('motor_loch') / 2
+    gesperrt = [bauraum.zugang_frei(sx * w('motor_loch') / 2 + w('spindel_x'),
+                                    y_hinten, INBUS_FREI_D / 2,
+                                    L['konsole_z0'], feste, ausser)
+                for sx in (-1, 1)]
+    p.info('hintere Schraubenreihe liegt bei Y={:+.1f} und ist blockiert von '
+           '{} — sie bleibt deshalb ungebohrt'.format(
+               y_hinten, ' / '.join(sorted(set(g for g in gesperrt if g)))))
+    p.info('Motormoment 0,4 Nm je Fuehrungsrippe',
+           0.4 / (2 * (w('motor_flansch') / 2 + w('spiel_locker') / 2) / 1000.0),
+           'N')
+    p.info('Kragmoment des Motors an der Konsole (280 g)',
+           0.280 * 9.81 * (sy - L['traeger_y1']) / 1000.0, 'Nm')
 
     p.titel('6) Mutternblock (M6, zwei Muttern mit Feder)')
     block_tiefe = L['schlitten_y1'] - w('block_y_hinten')
@@ -239,11 +272,13 @@ def main():
 
     p.titel('8) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
     for name, a, b in (
-            ('Traegerplatte', w('traeger_x_kopf') - w('traeger_x_links'),
-             L['konsole_z0'] - w('traeger_z_unten')),
+            ('Traegerplatte (mit Konsole)',
+             w('traeger_x_kopf') - w('traeger_x_links'),
+             L['motor_rippe_z1'] - w('traeger_z_unten')),
             ('Schlittenplatte', w('block_x_rechts') + w('schlitten_breite_l'),
              L['schlitten_oben_rel'] - L['schlitten_unten_rel']),
-            ('Motorkonsole', w('motor_flansch') + 4, w('konsole_y_vorn'))):
+            ('Mutternblock', w('block_x_rechts') - w('block_x_links'),
+             w('block_hoehe'))):
         p.ok('{}: groesste Kante'.format(name), max(a, b), 250.0, '<=')
     p.ok('Bruecke Schlittenplatte zwischen den Rippen',
          w('rippe_seite_innen') - w('rippe_mitte_breite') / 2, 25.0, '<=')
@@ -260,11 +295,10 @@ def main():
             '4x M3x12 Zylinderkopf + Scheibe (Traegerplatte -> X-Wagen)',
             '{}x M3x10 Senkkopf DIN 7991 + {}x ruthex M3 (Z-Schiene -> Sockel)'
             .format(len(L['z_schiene_loecher']), len(L['z_schiene_loecher'])),
-            '4x M3x16 + 4x M3-Mutter (Motorhalter -> Traegerplatte)',
             '4x M3x8 Zylinderkopf    (Schlittenplatte -> Z-Wagen)',
             '4x M3x10 + 4x Scheibe DIN 9021 (Laser -> Schlittenplatte)',
             '2x M3x16 + 2x M3-Mutter + 2x Scheibe (Mutternblock, schwimmend)',
-            '4x M3x8 Zylinderkopf    (NEMA 17 -> Motorkonsole)'):
+            '2x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, vordere Reihe)'):
         p.info(zeile)
 
     p.titel('10) Statische Pruefung der Schluessel im Skript')

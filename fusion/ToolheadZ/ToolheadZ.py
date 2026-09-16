@@ -21,7 +21,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -91,7 +91,7 @@ MASSE = {
     'traeger_dicke':       (8.0,   'Traegerplatte: Dicke'),
     'traeger_x_links':    (-22.0,  'Traegerplatte: linke Kante'),
     'traeger_x_rechts':    (22.0,  'Traegerplatte: rechte Kante der Hauptsaeule'),
-    'traeger_x_kopf':      (52.0,  'Traegerplatte: rechte Kante des Kopfbereichs'),
+    'traeger_x_kopf':      (56.0,  'Traegerplatte: rechte Kante des Kopfbereichs'),
     'traeger_z_unten':    (-66.0,  'Traegerplatte: Unterkante'),
     'traeger_kopf_unten':  (44.0,  'Traegerplatte: Unterkante des Kopfbereichs'),
     'sockel_breite':        (9.0,  'Schienensockel: Breite = Schienenbreite!'),
@@ -100,12 +100,13 @@ MASSE = {
     # --- Lage der Spindelachse und der Motorkonsole ------------------------
     'spindel_x':           (30.0,  'Spindelachse: X (Abstand von der Schienenachse)'),
     'spindel_y':           (21.0,  'Spindelachse: Y ab X-Wagen-Stirnflaeche'),
-    'konsole_unten':       (68.0,  'Motorkonsole: Unterseite (= Oberkante Traeger)'),
+    # Die Konsole ist Teil der Traegerplatte (ein Druckteil) — keine Laschen.
+    'konsole_unten':       (68.0,  'Motorkonsole: Unterseite (= Oberkante Saeule)'),
     'konsole_dicke':       (8.0,   'Motorkonsole: Dicke'),
-    'konsole_flansch':     (6.0,   'Motorhalter: Dicke der Anschraublaschen'),
-    'konsole_lasche_b':    (12.0,  'Motorhalter: Breite je Anschraublasche'),
     'konsole_y_vorn':      (48.0,  'Motorkonsole: vordere Kante'),
-    'konsole_rand':         (2.0,  'Motorkonsole: Rand um den Motorflansch'),
+    'konsole_rand':        (4.5,   'Motorkonsole: Rand neben den Fuehrungsrippen'),
+    'motor_rippe_breite':  (3.0,   'Fuehrungsrippe am Motorflansch: Breite'),
+    'motor_rippe_hoehe':   (3.0,   'Fuehrungsrippe: Hoehe ueber der Konsole'),
     'endschalter_x':      (-16.0,  'Endschalter-Befestigung: X (Platzhalter)'),
 
     # --- Schlittenplatte (Konzept aus ToolheadGrundplatte) -----------------
@@ -226,17 +227,28 @@ def lage():
     L['z_schiene_loecher'] = [
         L['z_schiene_z0'] + w('z_schiene_randab') + i * w('z_schiene_lochab')
         for i in range(n)]
-    # Motorkonsole und ihre beiden Anschraublaschen; die Kupplung laeuft
-    # zwischen den Laschen durch.
+    # Motorkonsole: Teil der Traegerplatte, kein eigenes Bauteil.
     L['konsole_x0'] = w('spindel_x') - w('motor_flansch') / 2.0 - w('konsole_rand')
     L['konsole_x1'] = w('spindel_x') + w('motor_flansch') / 2.0 + w('konsole_rand')
-    L['lasche_x'] = [
-        (L['konsole_x0'], L['konsole_x0'] + w('konsole_lasche_b')),
-        (L['konsole_x1'] - w('konsole_lasche_b'), L['konsole_x1'])]
-    L['halter_loecher'] = [
-        (x0 + w('konsole_lasche_b') / 2.0, z)
-        for x0, _ in L['lasche_x']
-        for z in (w('traeger_kopf_unten') + 6.0, L['konsole_z0'] - 6.0)]
+
+    # Der Motor wird von UNTEN verschraubt — NEMA17 hat Gewinde im Flansch, ein
+    # Durchstecken von oben ist nicht moeglich. Die HINTERE Schraubenreihe liegt
+    # bei y = spindel_y - motor_loch/2 mitten im Querschnitt der Traegerplatte
+    # (y = 0..traeger_dicke) und ist von unten prinzipiell nicht erreichbar —
+    # daran aendert auch ein separater Motorhalter nichts. Verschraubt wird
+    # deshalb nur die VORDERE Reihe; das Motormoment nehmen zwei
+    # Fuehrungsrippen formschluessig auf. Pruefung: tools/toolhead_check.py.
+    innen = w('motor_flansch') / 2.0 + w('spiel_locker') / 2.0
+    L['motor_rippe_x'] = [
+        (w('spindel_x') - innen - w('motor_rippe_breite'),
+         w('spindel_x') - innen),
+        (w('spindel_x') + innen,
+         w('spindel_x') + innen + w('motor_rippe_breite'))]
+    L['motor_rippe_y1'] = w('spindel_y') + w('motor_flansch') / 2.0
+    L['motor_rippe_z1'] = L['konsole_z1'] + w('motor_rippe_hoehe')
+    L['motor_schrauben'] = [
+        (w('spindel_x') + sx * w('motor_loch') / 2.0,
+         w('spindel_y') + w('motor_loch') / 2.0) for sx in (-1, 1)]
     L['endschalter_z'] = [20.0, 40.0]
 
     # Lochbild des Z-Wagens, relativ zur Wagenmitte zc
@@ -537,12 +549,26 @@ def fussfase(comp, koerper, achse, wert_mm, fase_mm, fehler, was):
 
 # --- Bauteile ----------------------------------------------------------------
 def bau_traegerplatte(app, design, comp, L, fehler):
-    """Vertikale Platte auf dem MGN15H-Wagen des Portals. Traegt den
-    Schienensockel fuer die Z-Fuehrung und oben die Motorkonsole.
-    Drucklage: Rueckseite (Passflaeche) aufs Bett, Aufbaurichtung = Maschine Y."""
+    """Traegerplatte MIT angeformter Motorkonsole — ein Druckteil.
+
+    Ein separater Motorhalter brachte keinen Vorteil: die hintere
+    Schraubenreihe des NEMA 17 liegt ueber dem Querschnitt der Platte und ist
+    von unten so oder so nicht erreichbar. Angeformt entfaellt dafuer die
+    Verschraubung Halter/Platte vollstaendig, und die Konsole wird steifer.
+
+    Der Motor sitzt oben auf der Konsole (Welle nach unten durch die
+    Bundbohrung), gehalten von der vorderen Schraubenreihe und zwei
+    Fuehrungsrippen, die den Flansch seitlich fassen und das Motormoment
+    formschluessig aufnehmen.
+
+    Drucklage: Rueckseite (Passflaeche) aufs Bett, Aufbaurichtung = Maschine Y.
+    Platte, Sockel, Konsole und Rippen stehen dann alle auf dem Bett — kein
+    Stuetzmaterial, und alle Kraefte liegen in der Schicht."""
     e_hinten = ebene_y(comp, 0.0, 'E_Traeger_hinten')
     e_vorn = ebene_y(comp, L['traeger_y1'], 'E_Traeger_vorn')
     e_sockel = ebene_y(comp, L['sockel_y1'], 'E_Sockel_vorn')
+    e_konsole = ebene_z(comp, (L['konsole_z0'] + L['konsole_z1']) / 2.0,
+                        'E_Konsole_mitte')
 
     sk = skizze(comp, e_hinten, 'Sk_Hauptsaeule')
     rechteck(sk, w('traeger_x_links'), w('traeger_z_unten'),
@@ -550,10 +576,23 @@ def bau_traegerplatte(app, design, comp, L, fehler):
     koerper = neu(comp, groesstes_profil(sk), w('traeger_dicke')).bodies.item(0)
     koerper.name = 'Traegerplatte'
 
+    # Kopfbereich: verbreitert sich nach rechts und traegt die Konsole
     sk = skizze(comp, e_hinten, 'Sk_Kopfbereich')
     rechteck(sk, w('traeger_x_links'), w('traeger_kopf_unten'),
              w('traeger_x_kopf'), L['konsole_z0'])
     dazu(comp, groesstes_profil(sk), w('traeger_dicke'), koerper)
+
+    # Motorkonsole: waagerechte Platte, kragt nach vorn aus
+    sk = skizze(comp, e_hinten, 'Sk_Motorkonsole')
+    rechteck(sk, L['konsole_x0'], L['konsole_z0'], L['konsole_x1'],
+             L['konsole_z1'])
+    dazu(comp, groesstes_profil(sk), w('konsole_y_vorn'), koerper)
+
+    # Fuehrungsrippen: fassen den Motorflansch links und rechts
+    sk = skizze(comp, e_hinten, 'Sk_Fuehrungsrippen')
+    for x0, x1 in L['motor_rippe_x']:
+        rechteck(sk, x0, L['konsole_z1'], x1, L['motor_rippe_z1'])
+    dazu(comp, alle_profile(sk), L['motor_rippe_y1'], koerper)
 
     # Schienensockel: genau so breit wie die Schiene, damit die Schuerzen des
     # Wagens frei laufen; 5 mm hoch, damit die M3-Inserts 7 mm tief sitzen.
@@ -575,18 +614,13 @@ def bau_traegerplatte(app, design, comp, L, fehler):
         kreis(sk, 0.0, z, w('insert_m3_d'))
     weg(comp, alle_profile(sk), -w('insert_m3_t'), koerper)
 
-    # Motorhalter: Durchgang + Mutterntaschen auf der Rueckseite (im Kopf-
-    # bereich liegt die Rueckseite frei, der X-Wagen ist weit darunter).
-    sk = skizze(comp, e_hinten, 'Sk_Bohrungen_Motorhalter')
-    for x, z in L['halter_loecher']:
-        kreis(sk, x, z, w('m3_durchgang'))
+    # Bundbohrung und die beiden erreichbaren Motorschrauben
+    sk = skizze(comp, e_konsole, 'Sk_Motorbefestigung')
+    kreis(sk, w('spindel_x'), w('spindel_y'),
+          w('motor_bund_d') + w('spiel_locker'))
+    for x, y in L['motor_schrauben']:
+        kreis(sk, x, y, w('m3_durchgang'))
     durch(comp, alle_profile(sk), koerper)
-
-    sk = skizze(comp, e_hinten, 'Sk_Mutterntaschen_Motorhalter')
-    t = w('m3_mutter_sw') + 0.25
-    for x, z in L['halter_loecher']:
-        rechteck(sk, x - t / 2, z - t / 2, x + t / 2, z + t / 2)
-    weg(comp, alle_profile(sk), w('m3_mutter_h') + 0.3, koerper)
 
     # Universalbefestigung fuer einen Z-Endschalter — Lochbild ist ein
     # Platzhalter, an den eigenen Schalter anpassen.
@@ -598,50 +632,8 @@ def bau_traegerplatte(app, design, comp, L, fehler):
     fussfase(comp, koerper, 'z', 0.0, w('fase_fuss'), fehler, 'Traegerplatte')
     bbox_pruefen(koerper, 'Traegerplatte',
                  ((w('traeger_x_links'), w('traeger_x_kopf')),
-                  (L['traeger_y0'], L['sockel_y1']),
-                  (w('traeger_z_unten'), L['konsole_z0'])), fehler)
-    material_zuweisen(app, design, koerper, 'PETG')
-    return koerper
-
-
-def bau_motorhalter(app, design, comp, L, fehler):
-    """U-Konsole oben auf der Traegerplatte: waagerechte Platte fuer den
-    NEMA 17 (Welle nach unten) und zwei Anschraublaschen, die die Kupplung
-    zwischen sich durchlassen.
-    Drucklage: Konsolenoberseite aufs Bett, Aufbaurichtung = Maschine Z."""
-    e_oben = ebene_z(comp, (L['konsole_z0'] + L['konsole_z1']) / 2.0,
-                     'E_Konsole_mitte')
-    e_lasche = ebene_y(comp, L['traeger_y1'], 'E_Lasche_hinten')
-
-    sk = skizze(comp, e_oben, 'Sk_Konsole')
-    rechteck(sk, L['konsole_x0'], 0.0, L['konsole_x1'], w('konsole_y_vorn'))
-    koerper = neu_mittig(comp, groesstes_profil(sk),
-                         w('konsole_dicke')).bodies.item(0)
-    koerper.name = 'Motorhalter'
-
-    sk = skizze(comp, e_lasche, 'Sk_Laschen')
-    for x0, x1 in L['lasche_x']:
-        rechteck(sk, x0, w('traeger_kopf_unten'), x1, L['konsole_z0'])
-    dazu(comp, alle_profile(sk), w('konsole_flansch'), koerper)
-
-    sk = skizze(comp, e_oben, 'Sk_Motorlochbild')
-    kreis(sk, w('spindel_x'), w('spindel_y'),
-          w('motor_bund_d') + w('spiel_locker'))
-    for x, y in L['motor_loecher']:
-        kreis(sk, x, y, w('m3_durchgang'))
-    durch(comp, alle_profile(sk), koerper)
-
-    sk = skizze(comp, e_lasche, 'Sk_Bohrungen_Laschen')
-    for x, z in L['halter_loecher']:
-        kreis(sk, x, z, w('m3_durchgang'))
-    durch(comp, alle_profile(sk), koerper)
-
-    fussfase(comp, koerper, 'y', L['konsole_z1'], w('fase_fuss'), fehler,
-             'Motorhalter')
-    bbox_pruefen(koerper, 'Motorhalter',
-                 ((L['konsole_x0'], L['konsole_x1']),
-                  (0.0, w('konsole_y_vorn')),
-                  (w('traeger_kopf_unten'), L['konsole_z1'])), fehler)
+                  (L['traeger_y0'], w('konsole_y_vorn')),
+                  (w('traeger_z_unten'), L['motor_rippe_z1'])), fehler)
     material_zuweisen(app, design, koerper, 'PETG')
     return koerper
 
@@ -795,8 +787,6 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
         ('Laser', (-40.0, -45.0),
          [(x, z) for x in (-w('laser_loch_quer') / 2, w('laser_loch_quer') / 2)
           for z in (L['laser_loch_unten_rel'] - L['laser_loch_oben_rel'], 0.0)]),
-        ('Motorhalter', (-105.0, 60.0),
-         [(x - w('spindel_x'), z - 56.0) for x, z in L['halter_loecher']]),
         ('Mutternblock', (-105.0, -60.0),
          [(x - w('spindel_x'), 0.0) for x in L['block_schraube_x']]),
     ]
@@ -844,6 +834,19 @@ def hinweise_bauen(L, zc, fehler):
         '  M6-Gewindestange: {:.0f} mm benoetigt (Zuschnitt {:.0f} mm)'.format(
             L['spindel_laenge'], 10 * round(L['spindel_laenge'] / 10 + 0.5)),
         '',
+        'MOTORBEFESTIGUNG: NEMA17 hat Gewinde im Flansch, es wird also von',
+        '  UNTEN verschraubt. Die hintere Schraubenreihe liegt bei Y={:+.1f} und'.format(
+            w('spindel_y') - w('motor_loch') / 2),
+        '  damit im Querschnitt der Traegerplatte (Y=0..{:.0f}) — von unten'.format(
+            w('traeger_dicke')),
+        '  prinzipiell nicht erreichbar, auch nicht mit separatem Halter.',
+        '  Deshalb: nur die VORDERE Reihe verschrauben (2x M3x12), und zwei',
+        '  Fuehrungsrippen ({:.0f} mm hoch) fassen den Flansch seitlich und'.format(
+            w('motor_rippe_hoehe')),
+        '  nehmen das Motormoment formschluessig auf (ca. 9 N je Rippe).',
+        '  Die Konsole ist an die Traegerplatte angeformt — ein Druckteil,',
+        '  keine Verschraubung Halter/Platte mehr.',
+        '',
         'ANTRIEB: NEMA 17 oben, Welle nach unten, flexible Kupplung 5->6 mm.',
         '  Zwei M6-Muttern im Mutternblock, von einer Druckfeder auseinander-',
         '  gedrueckt: die untere liegt auf dem Boden, die obere unter der',
@@ -860,7 +863,7 @@ def hinweise_bauen(L, zc, fehler):
         '  3. Z-Schiene auf den Sockel (Senkkopf M3x10 in die Inserts)',
         '  4. Laser an die Schlittenplatte (Koepfe liegen im Pad-Freiraum)',
         '  5. Schlittenplatte auf den Z-Wagen (4x M3x8)',
-        '  6. Motorhalter an die Traegerplatte, Motor auf die Konsole',
+        '  6. Motor zwischen die Fuehrungsrippen setzen, 2x M3x12 von unten',
         '  7. Kupplung + Gewindestange, Mutternblock zuletzt ausrichten',
         '',
         'PRUEFEN VOR DEM DRUCK (Lochbilder Status [?]):',
@@ -875,8 +878,9 @@ def hinweise_bauen(L, zc, fehler):
         '  (= MGN15H) — das passt zum X-Wagen, nicht zur MGN9-Z-Achse.',
         '',
         'DRUCK (PETG, Bambu Lab A1):',
-        '  Traegerplatte ... Rueckseite (Passflaeche) aufs Bett, keine Stuetzen',
-        '  Motorhalter ..... Konsolenoberseite aufs Bett, Laschen nach oben',
+        '  Traegerplatte ... Rueckseite (Passflaeche) aufs Bett. Platte, Sockel,',
+        '                    Konsole und Rippen stehen alle auf dem Bett —',
+        '                    keine Stuetzen, alle Kraefte in der Schicht.',
         '  Schlittenplatte . Laser-Anschraubflaeche aufs Bett',
         '  Mutternblock .... Unterseite aufs Bett (Spindelbohrung wird rund)',
         '  4 Wandlinien, >=40% Infill. PETG wegen der Abwaerme des Lasers.',
@@ -922,14 +926,13 @@ def run(context):
         # stehen sie bereits richtig zueinander und As-Built-Joints genuegen.
         einheit = adsk.core.Matrix3D.create()
         occ = {}
-        for name in ('Traegerplatte', 'Motorhalter', 'Schlittenplatte',
+        for name in ('Traegerplatte', 'Schlittenplatte',
                      'Mutternblock', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
 
         bau_traegerplatte(app, design, occ['Traegerplatte'].component, L, fehler)
-        bau_motorhalter(app, design, occ['Motorhalter'].component, L, fehler)
         bau_schlittenplatte(app, design, occ['Schlittenplatte'].component,
                             L, zc, fehler)
         bau_mutternblock(app, design, occ['Mutternblock'].component, L, zc, fehler)
@@ -938,9 +941,8 @@ def run(context):
         occ['Traegerplatte'].isGrounded = True
         occ['Bohrlehren'].isGrounded = True
 
-        # Starre As-Built-Joints fuer die feste Verschraubung ...
-        for a, b in (('Motorhalter', 'Traegerplatte'),
-                     ('Mutternblock', 'Schlittenplatte')):
+        # Starrer As-Built-Joint fuer die feste Verschraubung ...
+        for a, b in (('Mutternblock', 'Schlittenplatte'),):
             try:
                 ein = root.asBuiltJoints.createInput(occ[a], occ[b], None)
                 ein.setAsRigidJointMotion()

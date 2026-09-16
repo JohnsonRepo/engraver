@@ -21,7 +21,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -323,36 +323,40 @@ def validierungs_bericht(app, design, ui, hinweise=None):
 
 
 # --- Geometrie-Helfer --------------------------------------------------------
-def P(x, y):
-    """Skizzenpunkt in cm."""
-    return adsk.core.Point3D.create(x, y, 0)
+def _offsetebene(comp, basis, ziel_cm, achse, name):
+    """Offsetebene, deren Lage nachgemessen und bei falschem Vorzeichen
+    korrigiert wird. In welche Richtung die Normale der Fusion-Basisebenen
+    zeigt, ist nicht verlaesslich vorhersagbar — nachmessen ist billiger als
+    raten. `achse` ist die Modellachse, auf der die Ebene liegen soll."""
+    if abs(ziel_cm) < 1e-9:
+        return basis
+    for vorzeichen in (1.0, -1.0):
+        ein = comp.constructionPlanes.createInput()
+        ein.setByOffset(basis, adsk.core.ValueInput.createByReal(
+            vorzeichen * ziel_cm))
+        pl = comp.constructionPlanes.add(ein)
+        if abs(getattr(pl.geometry.origin, achse) - ziel_cm) < 1e-6:
+            pl.name = name
+            return pl
+        pl.deleteMe()
+    raise RuntimeError('Ebene {} laesst sich nicht auf {:.3f} cm legen'.format(
+        name, ziel_cm))
 
 
 def ebene_y(comp, y_mm, name):
     """Konstruktionsebene senkrecht zu Maschinen-Y (Plattenebene).
-    Skizzenkoordinaten darauf sind (Maschine X, Maschine Z), positives
-    Extrudieren laeuft in +Maschinen-Y."""
+    Skizzenkoordinaten darauf sind (Maschine X, Maschine Z)."""
     if abs(y_mm) < 1e-9:
         return comp.xYConstructionPlane
-    ein = comp.constructionPlanes.createInput()
-    ein.setByOffset(comp.xYConstructionPlane,
-                    adsk.core.ValueInput.createByReal(y_mm / 10.0))
-    pl = comp.constructionPlanes.add(ein)
-    pl.name = name
-    return pl
+    # Modell-Z entspricht Maschine Y
+    return _offsetebene(comp, comp.xYConstructionPlane, y_mm / 10.0, 'z', name)
 
 
 def ebene_z(comp, z_mm, name):
     """Konstruktionsebene senkrecht zu Maschinen-Z (waagerecht).
-    Die XZ-Ebene hat die Normale -Modell-Y = -Maschinen-Z; ein NEGATIVER
-    Offset legt die Ebene deshalb auf +z. Skizzenkoordinaten darauf sind
-    (Maschine X, Maschine Y), positives Extrudieren laeuft nach UNTEN."""
-    ein = comp.constructionPlanes.createInput()
-    ein.setByOffset(comp.xZConstructionPlane,
-                    adsk.core.ValueInput.createByReal(-z_mm / 10.0))
-    pl = comp.constructionPlanes.add(ein)
-    pl.name = name
-    return pl
+    Skizzenkoordinaten darauf sind (Maschine X, Maschine Y)."""
+    # Modell-Y entspricht Maschine Z
+    return _offsetebene(comp, comp.xZConstructionPlane, z_mm / 10.0, 'y', name)
 
 
 def skizze(comp, ebene, name):
@@ -361,32 +365,52 @@ def skizze(comp, ebene, name):
     return sk
 
 
+def _ebene_info(sk):
+    """Welche beiden Maschinenachsen liegen in der Ebene dieser Skizze, und wo
+    liegt die Ebene? Liefert (feste Achse, Wert in mm). Wird aus der echten
+    Ebenengeometrie gelesen, nicht angenommen."""
+    pl = adsk.core.Plane.cast(sk.referencePlane.geometry)
+    if abs(pl.normal.z) > 0.9:       # Modell-Z = Maschine Y
+        return 'y', pl.origin.z * 10.0
+    return 'z', pl.origin.y * 10.0   # Modell-Y = Maschine Z
+
+
+def punkt(sk, u_mm, v_mm):
+    """Punkt in Maschinenkoordinaten -> Skizzenkoordinaten (cm).
+    u ist immer Maschine X; v ist Maschine Z bei senkrechten Ebenen und
+    Maschine Y bei waagerechten. Der Umweg ueber modelToSketchSpace macht das
+    Ergebnis unabhaengig davon, wie Fusion die Achsen der Ebene orientiert —
+    eine gespiegelte Skizze wuerde sonst ohne Fehlermeldung durchgehen."""
+    fest, wert = _ebene_info(sk)
+    if fest == 'y':                  # Ebene bei konstantem Maschinen-Y
+        modell = adsk.core.Point3D.create(u_mm / 10.0, v_mm / 10.0, wert / 10.0)
+    else:                            # Ebene bei konstantem Maschinen-Z
+        modell = adsk.core.Point3D.create(u_mm / 10.0, wert / 10.0, v_mm / 10.0)
+    sp = sk.modelToSketchSpace(modell)
+    return adsk.core.Point3D.create(sp.x, sp.y, 0)
+
+
 def rechteck(sk, u0, v0, u1, v1):
-    """Achsparalleles Rechteck, Skizzenmasse in mm (wird nach cm gewandelt)."""
+    """Achsparalleles Rechteck, Angaben in Maschinenkoordinaten (mm)."""
     return sk.sketchCurves.sketchLines.addTwoPointRectangle(
-        P(u0 / 10.0, v0 / 10.0), P(u1 / 10.0, v1 / 10.0))
+        punkt(sk, u0, v0), punkt(sk, u1, v1))
 
 
 def kreis(sk, u, v, d_mm):
     return sk.sketchCurves.sketchCircles.addByCenterRadius(
-        P(u / 10.0, v / 10.0), d_mm / 20.0)
+        punkt(sk, u, v), d_mm / 20.0)
 
 
 def langloch(sk, cu, cv, halb_versatz, radius):
-    """Langloch mit Achse in Skizzen-U: zwei Linien + zwei Halbkreise als EIN
-    geschlossenes Profil. Masse in mm. Die Boegen laufen ueber die vorhandenen
-    SketchPoints der Linien, damit das Profil sicher schliesst."""
-    linien, boegen = sk.sketchCurves.sketchLines, sk.sketchCurves.sketchArcs
-    u0, u1 = (cu - halb_versatz) / 10.0, (cu + halb_versatz) / 10.0
-    v0, v1 = (cv - radius) / 10.0, (cv + radius) / 10.0
-    oben = linien.addByTwoPoints(P(u0, v1), P(u1, v1))
-    unten = linien.addByTwoPoints(P(u0, v0), P(u1, v0))
-    boegen.addByThreePoints(unten.endSketchPoint,
-                            P(u1 + radius / 10.0, cv / 10.0),
-                            oben.endSketchPoint)
-    boegen.addByThreePoints(oben.startSketchPoint,
-                            P(u0 - radius / 10.0, cv / 10.0),
-                            unten.startSketchPoint)
+    """Langloch als zwei Kreise plus Rechteck, Masse in mm. Beim Schneiden
+    werden ALLE Profile der Skizze entfernt; die Vereinigung ergibt das
+    Langloch. Robuster als ein aus Linien und Boegen zusammengesetztes
+    Profil, das bei Rundungsfehlern nicht schliesst.
+    """
+    kreis(sk, cu - halb_versatz, cv, 2 * radius)
+    kreis(sk, cu + halb_versatz, cv, 2 * radius)
+    rechteck(sk, cu - halb_versatz, cv - radius,
+             cu + halb_versatz, cv + radius)
 
 
 def groesstes_profil(sk):
@@ -425,14 +449,36 @@ def weg(comp, prof, hoehe_mm, ziel):
                        adsk.fusion.FeatureOperations.CutFeatureOperation, ziel)
 
 
-def durch(comp, prof, ziel):
-    """Schnitt durch alles in Richtung der Ebenennormale."""
-    ein = comp.features.extrudeFeatures.createInput(
-        prof, adsk.fusion.FeatureOperations.CutFeatureOperation)
-    ein.setOneSideExtent(adsk.fusion.ThroughAllExtentDefinition.create(),
-                         adsk.fusion.ExtentDirections.PositiveExtentDirection)
-    ein.participantBodies = [ziel]
+def _symmetrisch(comp, prof, laenge_mm, operation, ziel=None):
+    """Extrusion symmetrisch um die Skizzenebene: `laenge_mm` ist die
+    Gesamtlaenge, die Ebene liegt in der Mitte. Damit ist die Richtung der
+    Ebenennormale irrelevant — ein einseitiger Schnitt bricht sonst mit
+    EXTRUDE_ZERO_DISTANCE_ERROR ab, sobald die Normale vom Material wegzeigt."""
+    ein = comp.features.extrudeFeatures.createInput(prof, operation)
+    ein.setSymmetricExtent(
+        adsk.core.ValueInput.createByReal(laenge_mm / 10.0), True)
+    if ziel is not None:
+        ein.participantBodies = [ziel]
     return comp.features.extrudeFeatures.add(ein)
+
+
+def neu_mittig(comp, prof, dicke_mm):
+    """Neuer Koerper, symmetrisch um die Skizzenebene."""
+    return _symmetrisch(comp, prof, dicke_mm,
+                        adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+
+
+def tasche(comp, prof, tiefe_mm, ziel):
+    """Tasche symmetrisch um die Skizzenebene (Ebene = Taschenmitte)."""
+    return _symmetrisch(comp, prof, tiefe_mm,
+                        adsk.fusion.FeatureOperations.CutFeatureOperation, ziel)
+
+
+def durch(comp, prof, ziel, reichweite_mm=400.0):
+    """Durchgangsschnitt: symmetrisch und grosszuegig statt ThroughAll, damit
+    die Normalenrichtung der Skizzenebene keine Rolle spielt. participantBodies
+    begrenzt die Wirkung auf den Zielkoerper."""
+    return tasche(comp, prof, reichweite_mm, ziel)
 
 
 def kanten_bei(koerper, achse, wert_cm, toleranz=1e-4):
@@ -454,6 +500,22 @@ def kanten_bei(koerper, achse, wert_cm, toleranz=1e-4):
                 gesehen.add(k.tempId)
                 kanten.add(k)
     return kanten
+
+
+def bbox_pruefen(koerper, name, erwartet, fehler, toleranz=0.8):
+    """Vergleicht die Bounding Box mit dem erwarteten Bauraum in
+    Maschinenkoordinaten. Noetig, weil eine anders orientierte Skizzenachse in
+    Fusion keinen Fehler wirft — ein falsch platziertes Teil wuerde sonst
+    unbemerkt durchgehen. erwartet: ((x0,x1),(y0,y1),(z0,z1)) in mm."""
+    bb = koerper.boundingBox
+    # Modell -> Maschine: X=x, Y=z, Z=y (cm -> mm)
+    ist = ((bb.minPoint.x * 10, bb.maxPoint.x * 10),
+           (bb.minPoint.z * 10, bb.maxPoint.z * 10),
+           (bb.minPoint.y * 10, bb.maxPoint.y * 10))
+    for achse, i, e in zip('XYZ', ist, erwartet):
+        if abs(i[0] - e[0]) > toleranz or abs(i[1] - e[1]) > toleranz:
+            fehler.append('{}: {} liegt {:.1f}..{:.1f}, erwartet {:.1f}..{:.1f}'
+                          .format(name, achse, i[0], i[1], e[0], e[1]))
 
 
 def fussfase(comp, koerper, achse, wert_mm, fase_mm, fehler, was):
@@ -534,6 +596,10 @@ def bau_traegerplatte(app, design, comp, L, fehler):
     durch(comp, alle_profile(sk), koerper)
 
     fussfase(comp, koerper, 'z', 0.0, w('fase_fuss'), fehler, 'Traegerplatte')
+    bbox_pruefen(koerper, 'Traegerplatte',
+                 ((w('traeger_x_links'), w('traeger_x_kopf')),
+                  (L['traeger_y0'], L['sockel_y1']),
+                  (w('traeger_z_unten'), L['konsole_z0'])), fehler)
     material_zuweisen(app, design, koerper, 'PETG')
     return koerper
 
@@ -543,19 +609,20 @@ def bau_motorhalter(app, design, comp, L, fehler):
     NEMA 17 (Welle nach unten) und zwei Anschraublaschen, die die Kupplung
     zwischen sich durchlassen.
     Drucklage: Konsolenoberseite aufs Bett, Aufbaurichtung = Maschine Z."""
-    e_oben = ebene_z(comp, L['konsole_z1'], 'E_Konsole_oben')
+    e_oben = ebene_z(comp, (L['konsole_z0'] + L['konsole_z1']) / 2.0,
+                     'E_Konsole_mitte')
     e_lasche = ebene_y(comp, L['traeger_y1'], 'E_Lasche_hinten')
 
     sk = skizze(comp, e_oben, 'Sk_Konsole')
     rechteck(sk, L['konsole_x0'], 0.0, L['konsole_x1'], w('konsole_y_vorn'))
-    koerper = neu(comp, groesstes_profil(sk), w('konsole_dicke')).bodies.item(0)
+    koerper = neu_mittig(comp, groesstes_profil(sk),
+                         w('konsole_dicke')).bodies.item(0)
     koerper.name = 'Motorhalter'
 
     sk = skizze(comp, e_lasche, 'Sk_Laschen')
     for x0, x1 in L['lasche_x']:
         rechteck(sk, x0, w('traeger_kopf_unten'), x1, L['konsole_z0'])
-    for i in range(sk.profiles.count):
-        dazu(comp, sk.profiles.item(i), w('konsole_flansch'), koerper)
+    dazu(comp, alle_profile(sk), w('konsole_flansch'), koerper)
 
     sk = skizze(comp, e_oben, 'Sk_Motorlochbild')
     kreis(sk, w('spindel_x'), w('spindel_y'),
@@ -571,6 +638,10 @@ def bau_motorhalter(app, design, comp, L, fehler):
 
     fussfase(comp, koerper, 'y', L['konsole_z1'], w('fase_fuss'), fehler,
              'Motorhalter')
+    bbox_pruefen(koerper, 'Motorhalter',
+                 ((L['konsole_x0'], L['konsole_x1']),
+                  (0.0, w('konsole_y_vorn')),
+                  (w('traeger_kopf_unten'), L['konsole_z1'])), fehler)
     material_zuweisen(app, design, koerper, 'PETG')
     return koerper
 
@@ -644,6 +715,9 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
 
     fussfase(comp, koerper, 'z', L['schlitten_y0'], w('fase_fuss'), fehler,
              'Schlittenplatte')
+    bbox_pruefen(koerper, 'Schlittenplatte',
+                 ((-w('schlitten_breite_l'), w('block_x_rechts')),
+                  (L['schlitten_y0'], L['laser_y']), (z_u, z_o)), fehler)
     material_zuweisen(app, design, koerper, 'PETG')
     return koerper
 
@@ -654,36 +728,37 @@ def bau_mutternblock(app, design, comp, L, zc, fehler):
     auseinander. Damit tragen die Gewindeflanken gegenlaeufig — kein Spiel.
     Drucklage: Unterseite aufs Bett, Aufbaurichtung = Maschine Z, damit die
     Spindelbohrung rund wird."""
-    e_oben = ebene_z(comp, zc + w('block_hoehe') / 2, 'E_Block_oben')
+    e_mitte = ebene_z(comp, zc, 'E_Block_mitte')
     e_hinten = ebene_y(comp, w('block_y_hinten'), 'E_Block_hinten')
     sx, sy = w('spindel_x'), w('spindel_y')
 
-    sk = skizze(comp, e_oben, 'Sk_Block')
+    sk = skizze(comp, e_mitte, 'Sk_Block')
     rechteck(sk, w('block_x_links'), w('block_y_hinten'),
              w('block_x_rechts'), L['schlitten_y1'])
-    koerper = neu(comp, groesstes_profil(sk), w('block_hoehe')).bodies.item(0)
+    koerper = neu_mittig(comp, groesstes_profil(sk),
+                         w('block_hoehe')).bodies.item(0)
     koerper.name = 'Mutternblock'
 
-    sk = skizze(comp, e_oben, 'Sk_Spindelbohrung')
+    sk = skizze(comp, e_mitte, 'Sk_Spindelbohrung')
     kreis(sk, sx, sy, w('spindel_durchgang'))
     durch(comp, alle_profile(sk), koerper)
 
     # Mutterntaschen: nach vorn offene Schlitze, die Schlittenplatte schliesst
     # sie. Zwei parallele Flanken halten die Mutter gegen Verdrehen.
+    # Jede Tasche wird um ihre eigene Mittelebene geschnitten.
     breite = w('m6_mutter_sw') + 0.25
     tiefe = w('m6_mutter_h') + 0.3
-    for name, z_oben in (('unten', zc - w('feder_raum_l') / 2),
-                         ('oben', zc + w('feder_raum_l') / 2 + tiefe)):
-        sk = skizze(comp, ebene_z(comp, z_oben, 'E_Tasche_' + name),
+    versatz = w('feder_raum_l') / 2 + tiefe / 2
+    for name, z_mitte in (('unten', zc - versatz), ('oben', zc + versatz)):
+        sk = skizze(comp, ebene_z(comp, z_mitte, 'E_Tasche_' + name),
                     'Sk_Mutterntasche_' + name)
         rechteck(sk, sx - breite / 2, sy - w('m6_mutter_sw') / 1.7320508,
                  sx + breite / 2, L['schlitten_y1'])
-        weg(comp, groesstes_profil(sk), tiefe, koerper)
+        tasche(comp, groesstes_profil(sk), tiefe, koerper)
 
-    sk = skizze(comp, ebene_z(comp, zc + w('feder_raum_l') / 2, 'E_Feder_oben'),
-                'Sk_Federkammer')
+    sk = skizze(comp, e_mitte, 'Sk_Federkammer')
     kreis(sk, sx, sy, w('feder_raum_d'))
-    weg(comp, groesstes_profil(sk), w('feder_raum_l'), koerper)
+    tasche(comp, groesstes_profil(sk), w('feder_raum_l'), koerper)
 
     sk = skizze(comp, e_hinten, 'Sk_Bohrungen_Block')
     for x in L['block_schraube_x']:
@@ -698,6 +773,11 @@ def bau_mutternblock(app, design, comp, L, zc, fehler):
 
     fussfase(comp, koerper, 'y', zc - w('block_hoehe') / 2, w('fase_fuss'),
              fehler, 'Mutternblock')
+    bbox_pruefen(koerper, 'Mutternblock',
+                 ((w('block_x_links'), w('block_x_rechts')),
+                  (w('block_y_hinten'), L['schlitten_y1']),
+                  (zc - w('block_hoehe') / 2, zc + w('block_hoehe') / 2)),
+                 fehler)
     material_zuweisen(app, design, koerper, 'PETG')
     return koerper
 

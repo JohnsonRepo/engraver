@@ -183,6 +183,28 @@ decken beides ab (quer 12,4–17,6, hoch 37,6–40,4 mm). Die dort notierte Mess
 „26 × 25 mm am Toolhead-Wagen" passt zum **X**-Wagen (MGN15H), nicht zur
 MGN9-Z-Achse.
 
+## Wenn ein Teil an der falschen Stelle landet
+
+Fusion orientiert die Achsen einer Skizzenebene und die Normale einer
+Offset-Ebene nicht immer so, wie man es erwartet — und meldet dabei **keinen
+Fehler**, das Teil landet einfach gespiegelt oder verschoben. Das Skript
+verlässt sich deshalb an drei Stellen nicht auf Annahmen (Rev. 2):
+
+* **Offset-Ebenen messen ihre eigene Lage nach** und korrigieren das
+  Vorzeichen selbst, statt es zu raten.
+* **Skizzenpunkte** werden über `modelToSketchSpace` aus Maschinenkoordinaten
+  umgerechnet, statt die Achsrichtung der Ebene anzunehmen.
+* **Durchgangs- und Taschenschnitte sind symmetrisch** um ihre Skizzenebene.
+  Damit ist die Normalenrichtung irrelevant — ein einseitiger `ThroughAll`
+  bricht sonst mit `EXTRUDE_ZERO_DISTANCE_ERROR` ab, sobald die Normale vom
+  Material wegzeigt.
+
+Zusätzlich prüft das Skript nach jedem Teil die **Bounding Box gegen den
+erwarteten Bauraum** und schreibt Abweichungen in den Validierungsbericht.
+Steht dort eine Zeile wie `Mutternblock: Y liegt -29.0..-12.0, erwartet
+12.0..29.0`, ist eine Achse gespiegelt — dann bitte melden, die Zeile sagt
+genau, welche.
+
 ## Parametrik
 
 Alle Werte aus dem `MASSE`-Block landen als Fusion-User-Parameter im Dialog

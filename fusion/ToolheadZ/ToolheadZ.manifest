@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Kompletter Laser-Toolhead mit Z-Achse als Baugruppe: Traegerplatte auf dem MGN15H-Wagen des Portals, MGN9-Z-Fuehrung auf einem Schienensockel, NEMA 17 auf einer U-Konsole mit flexibler Kupplung auf eine M6-Gewindestange, Schlittenplatte mit Diodenlaser und schwimmender Mutternblock mit zwei federverspannten M6-Muttern. Plus ausgeblendete Bohrlehren fuer alle kritischen Lochbilder."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

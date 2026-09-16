@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Grundplatte fuer den Laser-Toolhead der Z-Achse: Auflagepad auf dem MGN9-Wagen, um die Wagenhoehe nach vorn versetzte Anschraubflaeche fuer einen Diodenlaser (Bohrbild 39 x 15 mm), Rippen auf der Rueckseite, plus ausgeblendete Bohrlehren fuer beide Lochbilder."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

@@ -197,14 +197,13 @@ def main():
         p.ja('Schraubzugang von unten bei X={:+.1f} Y={:+.1f}'.format(x, y),
              blocker is None,
              '' if blocker is None else '   blockiert von: ' + blocker)
-    y_hinten = sy - w('motor_loch') / 2
-    gesperrt = [bauraum.zugang_frei(sx * w('motor_loch') / 2 + w('spindel_x'),
-                                    y_hinten, INBUS_FREI_D / 2,
-                                    L['konsole_z0'], feste, ausser)
-                for sx in (-1, 1)]
-    p.info('hintere Schraubenreihe liegt bei Y={:+.1f} und ist blockiert von '
-           '{} — sie bleibt deshalb ungebohrt'.format(
-               y_hinten, ' / '.join(sorted(set(g for g in gesperrt if g)))))
+    p.ja('alle vier Motorschrauben sind gebohrt',
+         len(L['motor_schrauben']) == 4,
+         '   ({} Bohrungen)'.format(len(L['motor_schrauben'])))
+    # Die Groesse, die spindel_y bestimmt: der Korridor der hinteren Reihe muss
+    # vor der Traegerplatte liegen, sonst ist die Reihe unerreichbar.
+    p.ok('Korridor der hinteren Reihe liegt vor der Traegerplatte',
+         L['korridor_luft'], 1.0)
     p.info('Motormoment 0,4 Nm je Fuehrungsrippe',
            0.4 / (2 * (w('motor_flansch') / 2 + w('spiel_locker') / 2) / 1000.0),
            'N')
@@ -242,7 +241,12 @@ def main():
     p.ok('Freibohrung Z-Wagen versenkt den Kopf',
          w('schlitten_dicke') - M3_KOPF_H, 1.5)
     p.ok('Freibohrung gibt den Inbus frei', w('m3_senkung'), INBUS_FREI_D)
-    p.ok('Z-Wagen: Gewindeeingriff mit M3x8', 8.0 - w('pad_hoehe'), 1.5)
+    p.ok('Z-Wagen: Gewindeeingriff mit M3x{:.0f}'.format(L['z_wagen_schraube']),
+         L['z_wagen_eingriff'], 1.5)
+    p.ok('Z-Wagen: Schraube setzt nicht auf', L['z_wagen_eingriff'],
+         w('z_gewinde_tiefe') - 0.3, '<=')
+    p.info('Klemmlaenge PETG unter dem Kopf (handfest + Sicherung)',
+           w('pad_hoehe'))
     p.ok('Kopf+Scheibe der Laserschraube bleiben im Rippenraum',
          w('pad_hoehe') - (M3_KOPF_H + 0.8), 1.0)
     p.ok('Laser haengt unter der Traegerplatte (tiefste Stellung)',
@@ -295,10 +299,11 @@ def main():
             '4x M3x12 Zylinderkopf + Scheibe (Traegerplatte -> X-Wagen)',
             '{}x M3x10 Senkkopf DIN 7991 + {}x ruthex M3 (Z-Schiene -> Sockel)'
             .format(len(L['z_schiene_loecher']), len(L['z_schiene_loecher'])),
-            '4x M3x8 Zylinderkopf    (Schlittenplatte -> Z-Wagen)',
+            '4x M3x{:.0f} Zylinderkopf   (Schlittenplatte -> Z-Wagen)'.format(
+                L['z_wagen_schraube']),
             '4x M3x10 + 4x Scheibe DIN 9021 (Laser -> Schlittenplatte)',
             '2x M3x16 + 2x M3-Mutter + 2x Scheibe (Mutternblock, schwimmend)',
-            '2x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, vordere Reihe)'):
+            '4x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, alle vier)'):
         p.info(zeile)
 
     p.titel('10) Statische Pruefung der Schluessel im Skript')

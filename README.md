@@ -38,8 +38,8 @@ am MGN15H-Wagen des Portals — mit angeformter Motorkonsole für den NEMA 17 �
 **Mutternblock** mit zwei federverspannten M6-Muttern, der schwimmend
 verschraubt ist.
 
-Nutzbarer Z-Verfahrweg **48,95 mm**, Strahlachse 52,5 mm vor der
-X-Wagen-Stirnfläche. Details in [docs/toolhead-z.md](docs/toolhead-z.md).
+Nutzbarer Z-Verfahrweg **48,95 mm**, Strahlachse 58,5 mm vor der
+X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Details in [docs/toolhead-z.md](docs/toolhead-z.md).
 
 ### Toolhead-Grundplatte (überholt)
 

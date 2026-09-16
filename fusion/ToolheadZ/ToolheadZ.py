@@ -21,7 +21,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 3
+REVISION = 4
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -49,6 +49,7 @@ MASSE = {
     'z_schiene_lochab':    (20.0,  'MGN9 Schiene: Lochabstand'),
     'z_schiene_randab':    (7.5,   'MGN9 Schiene: Randabstand'),
     'z_schiene_senkung':   (3.3,   'MGN9 Schiene: Tiefe der Senkung'),
+    'z_gewinde_tiefe':     (2.5,   'MGN9 Wagen: M3-Gewindetiefe'),
 
     # --- Kaufteil: NEMA 17 (hardware.md [w]) -------------------------------
     'motor_flansch':       (42.3,  'NEMA17: Flanschmass'),
@@ -99,18 +100,24 @@ MASSE = {
 
     # --- Lage der Spindelachse und der Motorkonsole ------------------------
     'spindel_x':           (30.0,  'Spindelachse: X (Abstand von der Schienenachse)'),
-    'spindel_y':           (21.0,  'Spindelachse: Y ab X-Wagen-Stirnflaeche'),
+    # 28,5 statt 21: nur so liegt die hintere Motorschraubenreihe
+     # (spindel_y - motor_loch/2) vor der Traegerplatte und ist von unten
+     # erreichbar. Nach vorn begrenzt die Wand vor der Spindelbohrung im
+     # Mutternblock (schlitten_y1 - spindel_y - spindel_durchgang/2 >= 3).
+    'spindel_y':           (28.5,  'Spindelachse: Y ab X-Wagen-Stirnflaeche'),
     # Die Konsole ist Teil der Traegerplatte (ein Druckteil) — keine Laschen.
     'konsole_unten':       (68.0,  'Motorkonsole: Unterseite (= Oberkante Saeule)'),
     'konsole_dicke':       (8.0,   'Motorkonsole: Dicke'),
-    'konsole_y_vorn':      (48.0,  'Motorkonsole: vordere Kante'),
+    'konsole_y_vorn':      (56.0,  'Motorkonsole: vordere Kante'),
     'konsole_rand':        (4.5,   'Motorkonsole: Rand neben den Fuehrungsrippen'),
     'motor_rippe_breite':  (3.0,   'Fuehrungsrippe am Motorflansch: Breite'),
     'motor_rippe_hoehe':   (3.0,   'Fuehrungsrippe: Hoehe ueber der Konsole'),
     'endschalter_x':      (-16.0,  'Endschalter-Befestigung: X (Platzhalter)'),
 
     # --- Schlittenplatte (Konzept aus ToolheadGrundplatte) -----------------
-    'pad_hoehe':           (6.0,   'Auflagepad: Versatz Wagenflaeche -> Platte'),
+    # 12 statt 6: schiebt die Schlittenplatte so weit nach vorn, dass der
+    # Mutternblock hinter ihr Platz hat, obwohl die Spindelachse bei 28,5 liegt.
+    'pad_hoehe':           (12.0,  'Auflagepad: Versatz Wagenflaeche -> Platte'),
     'pad_breite':          (28.0,  'Auflagepad: Breite'),
     'pad_laenge':          (26.0,  'Auflagepad: Hoehe'),
     'schlitten_dicke':     (6.0,   'Schlittenplatte: Dicke'),
@@ -129,7 +136,7 @@ MASSE = {
     # --- Mutternblock ------------------------------------------------------
     'block_x_links':       (16.0,  'Mutternblock: linke Kante'),
     'block_x_rechts':      (44.0,  'Mutternblock: rechte Kante'),
-    'block_y_hinten':      (12.0,  'Mutternblock: hintere Kante'),
+    'block_y_hinten':      (18.0,  'Mutternblock: hintere Kante'),
     'block_hoehe':         (26.0,  'Mutternblock: Hoehe'),
     'block_boden':         (2.0,   'Mutternblock: Boden/Decke unter der Mutter'),
 
@@ -214,6 +221,13 @@ def lage():
     L['zc_bindend'] = min(grenzen, key=lambda k: grenzen[k])
     L['z_weg'] = L['zc_max'] - L['zc_min']
 
+    # ---- Schraubenlaenge Schlittenplatte -> Z-Wagen -------------------------
+    # Naechste gerade Laenge ueber pad_hoehe + Mindesteingriff. Nicht
+    # verdrahten: sie muss mit pad_hoehe mitwandern, sonst passt sie nach einer
+    # Parameteraenderung stillschweigend nicht mehr.
+    L['z_wagen_schraube'] = 2.0 * int((w('pad_hoehe') + 1.5) / 2.0 + 0.999)
+    L['z_wagen_eingriff'] = L['z_wagen_schraube'] - w('pad_hoehe')
+
     # ---- Benoetigte Laenge der Gewindestange --------------------------------
     L['spindel_z0'] = L['zc_min'] + L['block_unten_rel'] - 5.0
     L['spindel_laenge'] = L['spindel_z1'] - L['spindel_z0']
@@ -232,12 +246,11 @@ def lage():
     L['konsole_x1'] = w('spindel_x') + w('motor_flansch') / 2.0 + w('konsole_rand')
 
     # Der Motor wird von UNTEN verschraubt — NEMA17 hat Gewinde im Flansch, ein
-    # Durchstecken von oben ist nicht moeglich. Die HINTERE Schraubenreihe liegt
-    # bei y = spindel_y - motor_loch/2 mitten im Querschnitt der Traegerplatte
-    # (y = 0..traeger_dicke) und ist von unten prinzipiell nicht erreichbar —
-    # daran aendert auch ein separater Motorhalter nichts. Verschraubt wird
-    # deshalb nur die VORDERE Reihe; das Motormoment nehmen zwei
-    # Fuehrungsrippen formschluessig auf. Pruefung: tools/toolhead_check.py.
+    # Durchstecken von oben ist nicht moeglich. Beide Schraubenreihen liegen
+    # jetzt vor der Traegerplatte, es sind also alle VIER erreichbar. Die
+    # Fuehrungsrippen bleiben: der Motor findet damit beim Einsetzen selbst
+    # seine Lage und die Schrauben muessen kein Moment uebertragen.
+    # Pruefung der Zugangskorridore: tools/toolhead_check.py.
     innen = w('motor_flansch') / 2.0 + w('spiel_locker') / 2.0
     L['motor_rippe_x'] = [
         (w('spindel_x') - innen - w('motor_rippe_breite'),
@@ -248,7 +261,12 @@ def lage():
     L['motor_rippe_z1'] = L['konsole_z1'] + w('motor_rippe_hoehe')
     L['motor_schrauben'] = [
         (w('spindel_x') + sx * w('motor_loch') / 2.0,
-         w('spindel_y') + w('motor_loch') / 2.0) for sx in (-1, 1)]
+         w('spindel_y') + sy * w('motor_loch') / 2.0)
+        for sy in (-1, 1) for sx in (-1, 1)]
+    # Freie Luft zwischen dem Zugangskorridor der hinteren Reihe und der
+    # Vorderseite der Traegerplatte — die Groesse, die spindel_y bestimmt.
+    L['korridor_luft'] = (w('spindel_y') - w('motor_loch') / 2.0
+                          - 3.0 - w('traeger_dicke'))
     L['endschalter_z'] = [20.0, 40.0]
 
     # Lochbild des Z-Wagens, relativ zur Wagenmitte zc
@@ -835,17 +853,20 @@ def hinweise_bauen(L, zc, fehler):
             L['spindel_laenge'], 10 * round(L['spindel_laenge'] / 10 + 0.5)),
         '',
         'MOTORBEFESTIGUNG: NEMA17 hat Gewinde im Flansch, es wird also von',
-        '  UNTEN verschraubt. Die hintere Schraubenreihe liegt bei Y={:+.1f} und'.format(
-            w('spindel_y') - w('motor_loch') / 2),
-        '  damit im Querschnitt der Traegerplatte (Y=0..{:.0f}) — von unten'.format(
+        '  UNTEN verschraubt — durchstecken von oben geht nicht. Alle VIER',
+        '  Schrauben (4x M3x12) sind erreichbar: die hintere Reihe liegt bei',
+        '  Y={:+.1f} und damit {:.1f} mm vor der Traegerplatte (Y=0..{:.0f}).'.format(
+            w('spindel_y') - w('motor_loch') / 2, L['korridor_luft'],
             w('traeger_dicke')),
-        '  prinzipiell nicht erreichbar, auch nicht mit separatem Halter.',
-        '  Deshalb: nur die VORDERE Reihe verschrauben (2x M3x12), und zwei',
-        '  Fuehrungsrippen ({:.0f} mm hoch) fassen den Flansch seitlich und'.format(
+        '  Genau dafuer sitzt die Spindelachse bei Y={:+.1f} und die'.format(
+            w('spindel_y')),
+        '  Schlittenplatte entsprechend weiter vorn (pad_hoehe={:.0f}).'.format(
+            w('pad_hoehe')),
+        '  Zwei Fuehrungsrippen ({:.0f} mm hoch) fassen den Flansch seitlich —'.format(
             w('motor_rippe_hoehe')),
-        '  nehmen das Motormoment formschluessig auf (ca. 9 N je Rippe).',
-        '  Die Konsole ist an die Traegerplatte angeformt — ein Druckteil,',
-        '  keine Verschraubung Halter/Platte mehr.',
+        '  der Motor findet beim Einsetzen selbst seine Lage.',
+        '  Die Konsole ist an die Traegerplatte angeformt: ein Druckteil,',
+        '  keine Verschraubung Halter/Platte.',
         '',
         'ANTRIEB: NEMA 17 oben, Welle nach unten, flexible Kupplung 5->6 mm.',
         '  Zwei M6-Muttern im Mutternblock, von einer Druckfeder auseinander-',
@@ -862,8 +883,9 @@ def hinweise_bauen(L, zc, fehler):
         '     sind spaeter von der Schlittenplatte verdeckt',
         '  3. Z-Schiene auf den Sockel (Senkkopf M3x10 in die Inserts)',
         '  4. Laser an die Schlittenplatte (Koepfe liegen im Pad-Freiraum)',
-        '  5. Schlittenplatte auf den Z-Wagen (4x M3x8)',
-        '  6. Motor zwischen die Fuehrungsrippen setzen, 2x M3x12 von unten',
+        '  5. Schlittenplatte auf den Z-Wagen (4x M3x{:.0f})'.format(
+            L['z_wagen_schraube']),
+        '  6. Motor zwischen die Fuehrungsrippen setzen, 4x M3x12 von unten',
         '  7. Kupplung + Gewindestange, Mutternblock zuletzt ausrichten',
         '',
         'PRUEFEN VOR DEM DRUCK (Lochbilder Status [?]):',
@@ -876,6 +898,12 @@ def hinweise_bauen(L, zc, fehler):
         '  die Langloecher decken beides ab.',
         '  ACHTUNG hardware.md: Messung am Toolhead-Wagen war 26 x 25 mm',
         '  (= MGN15H) — das passt zum X-Wagen, nicht zur MGN9-Z-Achse.',
+        '',
+        'ANZIEHEN: die Z-Wagen-Schrauben klemmen {:.0f} mm PETG (Kopf sitzt in'.format(
+            w('pad_hoehe')),
+        '  der Freibohrung auf der Pad-Vorderseite). Handfest anziehen und',
+        '  Schraubensicherung verwenden — eine lange Kunststoffsaeule setzt',
+        '  sich mehr als eine kurze.',
         '',
         'DRUCK (PETG, Bambu Lab A1):',
         '  Traegerplatte ... Rueckseite (Passflaeche) aufs Bett. Platte, Sockel,',

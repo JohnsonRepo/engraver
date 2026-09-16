@@ -19,7 +19,7 @@ flexible Kupplung auf eine M6-Gewindestange. Der Laser sitzt auf dem Z-Schlitten
 | 3 | **Mutternblock** | PETG | zwei M6-Muttern, federverspannt, schwimmend verschraubt |
 
 Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
-[Motorbefestigung](#motorbefestigung-warum-nur-zwei-schrauben).
+[Motorbefestigung](#motorbefestigung-alle-vier-schrauben-erreichbar).
 
 ## Bezugsebene und Koordinaten
 
@@ -46,9 +46,9 @@ Richtungsverwechslungen beim Extrudieren gibt.
 | +13,0 | Sockelfläche = Auflage der MGN9-Z-Schiene |
 | +19,5 | Oberkante Z-Schiene |
 | +23,0 | Stirnfläche Z-Wagen = Rückseite Auflagepad |
-| +29,0 | Rückseite Schlittenplatte |
-| +35,0 | Anschraubfläche des Lasers |
-| **+52,5** | **Strahlachse** |
+| +35,0 | Rückseite Schlittenplatte (Auflagepad 12 mm) |
+| +41,0 | Anschraubfläche des Lasers |
+| **+58,5** | **Strahlachse** |
 
 Die MGN9-Schiene sitzt auf einem **Sockel von 5 mm** — nur so sitzen die
 M3-Gewindeeinsätze 7 mm tief im Material. Der Sockel ist **genau so breit wie
@@ -84,39 +84,54 @@ höhere Konsole (`konsole_unten`) — dann wird der Toolhead entsprechend höher
 Die Kollisionsprüfung fährt den Weg in 21 Stellungen ab und prüft jedes bewegte
 Teil gegen jedes feste, einschließlich Portalprofil und X-Schiene.
 
-## Motorbefestigung: warum nur zwei Schrauben
+## Motorbefestigung: alle vier Schrauben erreichbar
 
 Ein NEMA 17 hat **Gewinde im Flansch**, kein Durchgangsloch. Er wird also
 zwangsläufig **von unten** verschraubt — ein Durchstecken von oben ist nicht
-möglich.
+möglich. Beide Schraubenreihen brauchen deshalb einen freien senkrechten
+Korridor.
 
-Die hintere Schraubenreihe liegt bei Y = +5,5 mm und damit **mitten im
-Querschnitt der Trägerplatte** (Y = 0…8). Von unten kommt dort nie ein
-Werkzeug hin: die Platte ist eine durchgehende Wand über ihre ganze Höhe. Ein
-separater Motorhalter ändert daran nichts — die Platte steht so oder so im Weg.
-Die Ursache ist, dass die Motorachse an der Spindelachse hängt und die bei
-Y = 21 mm liegen muss, damit der Mutternblock hinter die Schlittenplatte passt.
+Genau daran hängt die Lage der Spindelachse:
 
-Die Lösung besteht deshalb aus zwei Teilen:
+* Die hintere Reihe liegt bei `spindel_y − 15,5`. Damit ein Ø6-Korridor an der
+  Trägerplatte (Y = 0…8) vorbeikommt, muss `spindel_y ≥ 28` sein.
+* Nach vorn begrenzt die Wand vor der Spindelbohrung im Mutternblock:
+  `schlitten_y1 ≥ spindel_y + 6,3`.
 
-* **Zwei M3×12 in der vorderen Reihe** (Y = 36,5 mm). Der Zugangskorridor ist
-  dort frei — auch an der Kupplung vorbei, die 2,5 mm neben den Bohrungen
-  verläuft. `toolhead_check.py` prüft für jede benutzte Schraube einen freien
-  senkrechten Korridor von Ø7 mm und weist ausdrücklich nach, dass die hintere
-  Reihe blockiert ist.
-* **Zwei Führungsrippen**, 3 mm hoch, die den Motorflansch links und rechts mit
-  0,4 mm Spiel fassen. Sie nehmen das Motormoment formschlüssig auf — bei
-  0,4 Nm Haltemoment sind das rund 9 N je Rippe. Die Schrauben halten den Motor
-  damit nur noch nieder, sie müssen kein Moment übertragen.
+Gewählt: **`spindel_y` = 28,5 mm**, damit 2,0 mm Luft zum Korridor und 3,2 mm
+Wand im Mutternblock. Die Schlittenplatte muss dafür mit nach vorn — über
+`pad_hoehe` = 12 mm (statt 6). Damit liegen die hinteren Schrauben bei
+Y = +13,0 mm, also **13 mm vor der Trägerplatte**.
 
-Die hinteren beiden Bohrungen werden **nicht gebohrt**; sie wären nur
-irreführend.
+Zusätzlich fassen **zwei Führungsrippen** (3 mm hoch) den Motorflansch links und
+rechts mit 0,4 mm Spiel: der Motor findet beim Einsetzen selbst seine Lage, und
+die Schrauben müssen kein Moment übertragen (bei 0,4 Nm Haltemoment wären es
+rund 9 N je Rippe).
 
-**Falls du alle vier Schrauben willst:** dann muss die Motorachse nach vorn,
-mindestens auf Y ≈ 28,5 mm. Das zieht die ganze Y-Kette mit (`pad_hoehe` von 6
-auf 12 mm, damit der Mutternblock noch hinter die Schlittenplatte passt), die
-Strahlachse wandert auf 58,5 mm und die Z-Wagenschrauben werden M3×14. Sag
-Bescheid, dann rechne ich das durch.
+`toolhead_check.py` prüft für **jede** der vier Schrauben einen freien
+senkrechten Korridor von Ø6 mm gegen alle festen Teile — auch an der Kupplung
+vorbei — und prüft die Luft zur Trägerplatte als eigene Größe.
+
+### Was diese Variante kostet
+
+| | vorher | jetzt |
+|---|---|---|
+| Spindelachse Y | 21,0 | **28,5** mm |
+| `pad_hoehe` | 6 | **12** mm |
+| Strahlachse | 52,5 | **58,5** mm |
+| Z-Wagen-Schraube | M3×8 | **M3×14** |
+| Schlittenplatte | ~25 g | **~33 g** |
+
+Verfahrweg (48,95 mm), Trägerplatte, Z-Schiene und Gewindestange bleiben
+unverändert.
+
+**Beim Anziehen beachten:** die Z-Wagen-Schrauben klemmen jetzt **12 mm PETG**
+statt 6 (der Kopf sitzt in der Ø6,5-Freibohrung auf der Pad-Vorderseite). Eine
+doppelt so lange Kunststoffsäule setzt sich auch doppelt so viel, wenn das
+Material kriecht — handfest anziehen und Schraubensicherung verwenden. Die
+Freibohrung tiefer ins Pad zu legen (und so nur 6 mm zu klemmen) geht nicht
+kostenlos: sie käme dem Ø10-Kopffreiraum der oberen Laserschraube auf 0,25 mm
+nahe.
 
 ## Warum Trägerplatte und Konsole ein Teil sind
 
@@ -166,8 +181,8 @@ werden.
 |---|---|---|
 | Trägerplatte → X-Wagen (MGN15H) | 4 × M3×12 + Scheibe | 3,5 mm Gewindeeingriff bei 4 mm verfügbarer Tiefe |
 | Z-Schiene → Sockel | 5 × M3×10 Senkkopf DIN 7991 + 5 × ruthex M3 | Einsätze vor der Montage einschmelzen |
-| NEMA 17 → Konsole | **2 × M3×12**, vordere Reihe | 4 mm Eingriff; Moment über die Führungsrippen, Zentrierbund in Ø22,4 |
-| Schlittenplatte → Z-Wagen (MGN9H) | 4 × M3×8 | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger** |
+| NEMA 17 → Konsole | **4 × M3×12** | 4 mm Eingriff; Führungsrippen zentrieren, Zentrierbund in Ø22,4 |
+| Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 9021 | Scheibe wegen der Langlöcher Pflicht |
 | Mutternblock → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe | Ø4,6-Bohrung, ausrichten dann festziehen |
 
@@ -185,8 +200,8 @@ von der Schlittenplatte verdeckt:
 3. Z-Schiene auf den Sockel (Senkkopf M3×10)
 4. **Laser an die Schlittenplatte** — die Köpfe der oberen Schraubenreihe
    liegen in den Ø10-Freiräumen im Auflagepad
-5. Schlittenplatte auf den Z-Wagen (4 × M3×8)
-6. NEMA 17 zwischen die Führungsrippen setzen, 2 × M3×12 von unten
+5. Schlittenplatte auf den Z-Wagen (4 × M3×14)
+6. NEMA 17 zwischen die Führungsrippen setzen, 4 × M3×12 von unten
 7. Kupplung und Gewindestange, Mutternblock zuletzt ausrichten und festziehen
 
 ## Zwei Details, die beim Konstruieren aufgefallen sind
@@ -266,7 +281,7 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 |---|---|---|
 | `z_schiene_laenge` | 95 mm | Länge der Z-Führung |
 | `konsole_unten` | 68 mm | Höhe der Motorkonsole — bindet den Verfahrweg |
-| `spindel_x` / `spindel_y` | 30 / 21 mm | Lage der Spindelachse |
+| `spindel_x` / `spindel_y` | 30 / 28,5 mm | Lage der Spindelachse; `spindel_y` bestimmt den Schraubzugang |
 | `laser_versatz_z` | −19,5 mm | Lage des Lasers am Schlitten |
 | `traeger_dicke` | 8 mm | Dicke der Trägerplatte |
 | `konsole_unten` / `konsole_dicke` | 68 / 8 mm | Lage und Dicke der Motorkonsole |

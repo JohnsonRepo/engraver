@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 11
+REVISION = 12
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -1061,6 +1061,10 @@ def hinweise_bauen(L, zc, fehler):
         '  Bibliotheksnamen sind lokalisiert, ein Kopiervorlage-Treffer allein',
         '  garantiert die Dichte nicht. Steht oben eine andere Dichte, sind',
         '  die Massen falsch (Fusion-Default ist Stahl, 7,85).',
+        '  Fuer den DRUCK ist das ohne Bedeutung — der Slicer rechnet mit der',
+        '  Dichte des gewaehlten Filamentprofils. Die Masse hier ist nur die',
+        '  Plausibilitaetskontrolle und gilt fuer 100 % Fuellung; mit 4 Wand-',
+        '  linien und 40 % Infill wiegt der Druck rund ein Drittel weniger.',
         '',
         'ANZIEHEN: die Z-Wagen-Schrauben klemmen {:.0f} mm PETG (Kopf sitzt in'.format(
             w('pad_hoehe')),

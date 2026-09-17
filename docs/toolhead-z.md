@@ -159,6 +159,14 @@ Das Bauteil wird damit 78 × 145 × 56 mm groß und passt liegend in den A1.
 | Mutternblock | 9,8 cm³ | **12 g** |
 | **Druckteile zusammen** | 116,9 cm³ | **149 g** |
 
+Das sind **Vollmaterial-Massen** (100 % Füllung) und damit eine Obergrenze.
+Für den Druck selbst ist die Dichte in Fusion ohne Bedeutung — Bambu Studio
+rechnet mit der Dichte des gewählten Filamentprofils, das Modell trägt keine
+Materialinformation. Mit 4 Wandlinien und 40 % Infill liegt das echte
+Druckgewicht rund ein Drittel darunter; maßgeblich ist die Anzeige im Slicer.
+Die Werte hier dienen der Plausibilitätskontrolle und der Abschätzung der
+bewegten Masse.
+
 Bewegte Masse auf der X-Achse, grob: 149 g Druckteile + 280 g NEMA 17 + 400 g
 Laser + 66 g MGN9-Schiene und Wagen + 56 g Gewindestange und Kupplung ≈
 **950 g**. Für einen MGN15H unkritisch.

@@ -195,18 +195,23 @@ Das Bauteil wird damit 78 × 145 × 56 mm groß und passt liegend in den A1.
 
 ## Massen
 
-| Teil | Volumen | Masse PETG | Quelle |
+Alle Werte aus dem Fusion-Lauf von Rev. 14 (Geometrie identisch mit Rev. 15,
+dort hat sich nur Berichtstext geändert), PETG mit eingemessener Dichte
+1,27 g/cm³:
+
+| Teil | Volumen | Masse PETG | Bauraum |
 |---|---|---|---|
-| Trägerplatte mit Konsole | 77,5 cm³ | **98 g** | Fusion-Lauf Rev. 11 |
-| Schlittenplatte | ≈ 38 cm³ | **≈ 48 g** | gerechnet, Rev. 14 |
-| Mutternblock | 9,8 cm³ | **12 g** | Fusion-Lauf Rev. 11 |
-| **Druckteile zusammen** | ≈ 125 cm³ | **≈ 158 g** | |
+| Trägerplatte mit Konsole | 77,5 cm³ | **98,4 g** | 78 × 145 × 56 mm |
+| Schlittenplatte | 40,1 cm³ | **50,9 g** | 62 × 97 × 18 mm |
+| Mutternblock | 9,8 cm³ | **12,4 g** | 28 × 26 × 17 mm |
+| **Druckteile zusammen** | 127,4 cm³ | **161,7 g** | |
+
+Dazu die drei Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
+werden: 6,1 g (X-Wagen) · 3,6 g (Z-Wagen) · 6,7 g (Laser).
 
 Die Schlittenplatte ist mit Rev. 14 um 25,75 mm länger geworden (Langloch plus
-Rand), dafür entfallen die zwei Ø8-Durchbrüche im Pad. Der Wert oben ist aus
-dem Querschnitt gerechnet — **maßgeblich ist der Validierungsbericht des
-nächsten Fusion-Laufs**, der die Masse je Körper mit Material und Dichte
-ausgibt.
+Rand) und wog vorher 38 g; die zwei Ø8-Durchbrüche im Pad entfallen dafür.
+Gerechnet hatte ich 48 g — gemessen sind es 50,9 g.
 
 Das sind **Vollmaterial-Massen** (100 % Füllung) und damit eine Obergrenze.
 Für den Druck selbst ist die Dichte in Fusion ohne Bedeutung — Bambu Studio
@@ -216,9 +221,9 @@ Druckgewicht rund ein Drittel darunter; maßgeblich ist die Anzeige im Slicer.
 Die Werte hier dienen der Plausibilitätskontrolle und der Abschätzung der
 bewegten Masse.
 
-Bewegte Masse auf der X-Achse, grob: 158 g Druckteile + 280 g NEMA 17 + 400 g
+Bewegte Masse auf der X-Achse, grob: 162 g Druckteile + 280 g NEMA 17 + 400 g
 Laser + 66 g MGN9-Schiene und Wagen + 56 g Gewindestange und Kupplung ≈
-**950 g**. Für einen MGN15H unkritisch.
+**965 g**. Für einen MGN15H unkritisch.
 
 Die Trägerplatte ist mit 77,5 cm³ das schwerste Teil, davon etwa 23 cm³ allein
 die Motorkonsole. Ließe sich mit Taschen in Hauptsäule und Kopfbereich

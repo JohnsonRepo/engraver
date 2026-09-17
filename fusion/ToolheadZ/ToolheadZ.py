@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 14
+REVISION = 15
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -1148,8 +1148,9 @@ def hinweise_bauen(L, zc, fehler):
             w('z_wagen_loch_laengs'), w('z_wagen_loch_quer')),
         '  Bohrlehre_Laser ....... {:.2f} x {:.2f} mm (am Teil bestaetigt)'.format(
             w('laser_loch_hoch'), w('laser_loch_quer')),
-        '    Rundloch Ø{:.1f}: Lochbildtoleranz +-{:.1f} mm je Achse.'.format(
-            w('laser_loch_d'), laser_tol),
+        '    Lehre Ø{:.1f} rund; in der Platte senkrechtes Langloch {:.1f}'.format(
+            w('m3_durchgang'), w('laser_loch_d')),
+        '    breit: Lochbildtoleranz +-{:.1f} mm quer.'.format(laser_tol),
         '  OFFEN ist nur noch der X-Wagen: die alte Messung "26 x 25 mm am',
         '  Toolhead-Wagen" gehoert zu ihm (MGN15H), nicht zur Z-Achse. Vor dem',
         '  Druck der Traegerplatte mit Bohrlehre_XWagen pruefen — er traegt den',

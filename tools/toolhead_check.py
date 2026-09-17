@@ -148,9 +148,12 @@ def main():
         # Zwei mitbewegte Teile stehen relativ zueinander still — da genuegt
         # Beruehrungsfreiheit. Bewegt gegen fest braucht echten Freigang.
         mit = a in bewegte_namen and b in bewegte_namen
+        # 0,01 Toleranz: die bindende Verfahrgrenze ist aus luft_bau
+        # gerechnet, der Abstand wird an ihr also genau luft_bau — in
+        # Gleitkomma knapp darunter.
         p.ok('{} <-> {}{} (engste Stellung zc={:+.1f})'.format(
             a, b, ' [mitbewegt]' if mit else '', zc),
-             d, 0.5 if mit else w('luft_bau'))
+             d + 0.01, 0.5 if mit else w('luft_bau'))
 
     p.titel('4) Traegerplatte: Stege, Schrauben, Inserts')
     p.ok('Steg quer um die X-Wagenbohrung',
@@ -176,8 +179,42 @@ def main():
            len(L['z_schiene_loecher']), 'Stk')
     p.ok('unterste Schienenschraube ueber der Plattenunterkante',
          L['z_schiene_loecher'][0] - w('traeger_z_unten'), 6.0)
-    p.ok('oberste Schienenschraube unter dem Kopfbereich',
-         w('traeger_kopf_unten') - L['z_schiene_loecher'][-1], 6.0)
+    # Die Schiene laeuft jetzt bis in den Kopfbereich hinauf. Entscheidend ist
+    # nicht mehr, dass sie unter ihm bleibt, sondern dass jedes Loch noch
+    # Material unter sich hat — also unter der Konsole liegt.
+    p.ok('oberste Schienenschraube unter der Motorkonsole',
+         L['konsole_z0'] - L['z_schiene_loecher'][-1], 6.0)
+    p.ok('Sockel traegt die Schiene auf ganzer Laenge',
+         L['konsole_z0'] - L['z_schiene_z1'], 0.0)
+    # Die Schiene sitzt in Z FEST und ist damit ein dauerhaftes Hindernis:
+    # ihr unteres Ende muss ueber dem dicksten Werkstueck bleiben.
+    oberkante_werkstueck = -w('bett_abstand') + w('werkstueck_max')
+    p.ok('Schienenende ueber dem dicksten Werkstueck',
+         L['z_schiene_z0'] - oberkante_werkstueck, 5.0)
+    p.ok('Plattenunterkante ueber dem dicksten Werkstueck',
+         w('traeger_z_unten') - oberkante_werkstueck, 5.0)
+    p.info('moegliche Werkstueckhoehe (feste Teile, 5 mm Luft)',
+           L['werkstueck_frei'])
+    # Versteifungsrippen: Steifigkeit gegen das Kragmoment des Motors.
+    # Flaechenmoment um die X-Achse, Platte + zwei Rippen (Steiner).
+    rippe_b = w('saeule_rippe_x1') - w('saeule_rippe_x0')
+    breite = w('traeger_x_rechts') - w('traeger_x_links')
+    d, tr = w('traeger_dicke'), w('saeule_rippe_tiefe')
+    i_platte = breite * d ** 3 / 12.0
+    i_rippen = 2 * (rippe_b * tr ** 3 / 12.0
+                    + rippe_b * tr * (d + tr / 2.0 - d / 2.0) ** 2)
+    hebel = L['konsole_z0'] - w('x_wagen_loch_quer') / 2
+    kraft = 0.280 * 9.81                      # NEMA 17
+    durchbiegung = lambda i: kraft * hebel ** 3 / (3 * 2000.0 * i)
+    p.info('Kragarm Saeule (X-Wagen -> Konsole)', hebel)
+    p.info('Durchbiegung am Motor OHNE Rippen', durchbiegung(i_platte))
+    p.ok('Durchbiegung am Motor mit Rippen',
+         durchbiegung(i_platte + i_rippen), 0.5, '<=')
+    p.ok('Rippe laesst den Korridor der Motorschraube frei',
+         w('saeule_rippe_x0') - (w('spindel_x') - w('motor_loch') / 2
+                                 + INBUS_FREI_D / 2), 0.0)
+    p.ok('Rippe bleibt in der Saeule', w('traeger_x_rechts')
+         - w('saeule_rippe_x1'), 0.0)
 
     p.titel('5) Motorkonsole (angeformt) und Zugang zu den Motorschrauben')
     p.ok('Konsole traegt das vordere Motorlochbild',
@@ -292,7 +329,8 @@ def main():
             for zc_w in (L['zc_min'], L['zc_max']))
         if frei < WERKZEUG_LAENGE:
             fehlt.append(z)
-    p.ja('alle 5 Schienenschrauben in einer Wagenstellung erreichbar',
+    p.ja('alle {} Schienenschrauben in einer Wagenstellung erreichbar'.format(
+             len(L['z_schiene_loecher'])),
          not fehlt, '' if not fehlt else '   blockiert bei Z=' + str(fehlt))
 
     # 3) + 4) Die beiden Verbindungen, die sich gegenseitig zubauen koennen:

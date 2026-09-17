@@ -22,6 +22,8 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 | Wert | Maß | Status |
 |---|---|---|
 | Linearführung Z | **MGN9H** | `[v]` am 2026-09-17 mit Bohrlehre geprüft |
+| Schienenlänge | **200 mm** | `[v]` vorhandene Schiene |
+| Randabstand / Lochabstand | **10 / 20 mm** → 10 Löcher | `[v]` gemessen |
 | Wagen-Lochbild | **15 quer × 16 längs** | `[v]` |
 | Montagehöhe Wagen | 10 mm über der Schienen-Auflageebene | `[w]` |
 | Schiene MGN9 | 9 breit × 6,5 hoch | `[w]` |

@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 15
+REVISION = 16
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -47,9 +47,14 @@ MASSE = {
     'z_wagen_hoehe':       (10.0,  'MGN9 Montagehoehe: Wagenflaeche ueber Sockel'),
     'z_schiene_breite':    (9.0,   'MGN9 Schiene: Breite'),
     'z_schiene_hoehe':     (6.5,   'MGN9 Schiene: Hoehe'),
-    'z_schiene_laenge':    (95.0,  'MGN9 Schiene: Laenge (2*7,5 + 4*20)'),
+    # 200 mm ist die vorhandene Schiene [v]; 10 + 9*20 + 10 = 200, also
+    # 10 Loecher. Die Schiene sitzt in Z FEST (sie haengt am X-Wagen), ihr
+    # unteres Ende ist damit ein dauerhaftes Hindernis: es muss ueber dem
+    # dicksten Werkstueck bleiben. Deshalb waechst sie nach OBEN, nicht nach
+    # unten — Unterkante bleibt, wo sie war.
+    'z_schiene_laenge':   (200.0,  'MGN9 Schiene: Laenge (10 + 9*20 + 10)'),
     'z_schiene_lochab':    (20.0,  'MGN9 Schiene: Lochabstand'),
-    'z_schiene_randab':    (7.5,   'MGN9 Schiene: Randabstand'),
+    'z_schiene_randab':    (10.0,  'MGN9 Schiene: Randabstand'),
     'z_schiene_senkung':   (3.3,   'MGN9 Schiene: Tiefe der Senkung'),
     'z_gewinde_tiefe':     (2.5,   'MGN9 Wagen: M3-Gewindetiefe'),
 
@@ -109,7 +114,21 @@ MASSE = {
     'traeger_x_rechts':    (22.0,  'Traegerplatte: rechte Kante der Hauptsaeule'),
     'traeger_x_kopf':      (56.0,  'Traegerplatte: rechte Kante des Kopfbereichs'),
     'traeger_z_unten':    (-66.0,  'Traegerplatte: Unterkante'),
-    'traeger_kopf_unten':  (44.0,  'Traegerplatte: Unterkante des Kopfbereichs'),
+    # Der Kopf ist nur breit, weil er die Konsole tragen muss — er beginnt
+    # deshalb erst kurz unter ihr, sonst waere die lange Saeule unnoetig
+    # schwer.
+    'traeger_kopf_unten': (115.0,  'Traegerplatte: Unterkante des Kopfbereichs'),
+    # Versteifung der Saeule: zwei Rippen auf der Vorderseite, an den Kanten
+    # der Saeule. Ohne sie biegt der Motor (2,75 N auf 132,5 mm Hebel ab der
+    # Verschraubung am X-Wagen) die 8-mm-Platte um 0,57 mm durch, mit ihnen um
+    # 0,22 mm — der Bericht rechnet beides aus.
+    # 18..22 statt weiter innen, weil dazwischen kein Platz ist: bei X=+14,5
+    # laeuft der Korridor der hinteren Motorschraube durch, bei |X|<13 der
+    # Z-Wagen. An der Kante wirkt die Rippe ohnehin am besten.
+    'saeule_rippe_x0':     (18.0,  'Saeulenrippe: Innenkante (Abstand zur Achse)'),
+    'saeule_rippe_x1':     (22.0,  'Saeulenrippe: Aussenkante'),
+    # 6,5 mm tief: der Mutternblock beginnt bei Y=18, es bleiben 3,5 mm Luft.
+    'saeule_rippe_tiefe':   (6.5,  'Saeulenrippe: Hoehe ueber der Plattenvorderseite'),
     'sockel_breite':        (9.0,  'Schienensockel: Breite = Schienenbreite!'),
     'sockel_hoehe':        (5.0,   'Schienensockel: Hoehe ueber der Plattenvorderseite'),
 
@@ -121,7 +140,8 @@ MASSE = {
      # Mutternblock (schlitten_y1 - spindel_y - spindel_durchgang/2 >= 3).
     'spindel_y':           (28.5,  'Spindelachse: Y ab X-Wagen-Stirnflaeche'),
     # Die Konsole ist Teil der Traegerplatte (ein Druckteil) — keine Laschen.
-    'konsole_unten':       (68.0,  'Motorkonsole: Unterseite (= Oberkante Saeule)'),
+    # 145: 5 mm ueber dem oberen Schienenende (-60 + 200 = +140).
+    'konsole_unten':      (145.0,  'Motorkonsole: Unterseite (= Oberkante Saeule)'),
     'konsole_dicke':       (8.0,   'Motorkonsole: Dicke'),
     'konsole_y_vorn':      (56.0,  'Motorkonsole: vordere Kante'),
     'konsole_rand':        (4.5,   'Motorkonsole: Rand neben den Fuehrungsrippen'),
@@ -212,6 +232,8 @@ def lage():
     L['strahl_y'] = L['laser_y'] + w('laser_tiefe') / 2.0
 
     # ---- Z-Kette: Schiene, Wagen, Kupplung, Motor ---------------------------
+    L['saeule_rippe_x'] = [(-w('saeule_rippe_x1'), -w('saeule_rippe_x0')),
+                           (w('saeule_rippe_x0'), w('saeule_rippe_x1'))]
     L['z_schiene_ueberstand'] = 6.0        # Schienenende ueber der Plattenunterkante
     L['z_schiene_z0'] = w('traeger_z_unten') + L['z_schiene_ueberstand']
     L['z_schiene_z1'] = L['z_schiene_z0'] + w('z_schiene_laenge')
@@ -267,6 +289,11 @@ def lage():
     #      Rechnung fuer den Bericht, keine Geometrie.
     L['linse_tief'] = w('bett_abstand') + L['laser_unten_rel'] + L['zc_min']
     L['linse_hoch'] = w('bett_abstand') + L['laser_unten_rel'] + L['zc_max']
+    # Die festen Teile (Plattenunterkante, Schienenende) haengen auf einer
+    # Hoehe und fahren in X mit: sie begrenzen die Werkstueckhoehe unabhaengig
+    # vom Verfahrweg. Mit langem Verfahrweg ist das die eigentliche Grenze.
+    L['werkstueck_frei'] = min(
+        w('traeger_z_unten'), L['z_schiene_z0']) + w('bett_abstand') - 5.0
 
     # ---- Grenzen der Langlochstellung (mm nach oben, 0 = Lochmitte).
     #      Nach oben bindet die MONTAGE: schiebt man den Laser hoch, wandert
@@ -745,11 +772,18 @@ def fokus_zeilen(L, w, kandidaten=(15.0, 20.0, 25.0, 30.0, 35.0)):
     zeilen = []
     for f in kandidaten:
         von, bis = langloch_stellung(L, f, w('werkstueck_max'))
-        stellung = min(max(von, L['langloch_ab_max']), L['langloch_auf_max'])
-        passt = (von <= L['langloch_auf_max'] and bis >= L['langloch_ab_max'])
+        von = max(von, L['langloch_ab_max'])         # Hub nach unten
+        bis = min(bis, L['langloch_auf_max'])        # Montage nach oben
+        if von <= bis:
+            # Innerhalb des gueltigen Fensters moeglichst die Lochmitte, dann
+            # bleibt in beide Richtungen Luft zum Nachstellen.
+            stellung, hinweis = min(max(0.0, von), bis), 'passt'
+        else:
+            stellung = L['langloch_auf_max']
+            hinweis = 'nur {:.0f} mm Werkstueck'.format(
+                L['linse_hoch'] + stellung - f)
         zeilen.append('    f = {:.0f} mm  ->  Laser {:+.1f} mm  ({})'.format(
-            f, stellung, 'passt' if passt else 'nur {:.0f} mm Werkstueck'.format(
-                L['linse_hoch'] + stellung - f)))
+            f, stellung, hinweis))
     return zeilen
 
 
@@ -806,6 +840,16 @@ def bau_traegerplatte(app, design, comp, L, fehler):
     rechteck(sk, -w('sockel_breite') / 2, L['z_schiene_z0'],
              w('sockel_breite') / 2, L['z_schiene_z1'])
     dazu(comp, groesstes_profil(sk), w('sockel_hoehe'), koerper)
+
+    # Versteifung der Saeule: zwei Rippen an den Saeulenkanten, von der
+    # Plattenunterkante bis unter die Konsole. Sie tragen das Kragmoment des
+    # Motors — ohne sie biegt die 8-mm-Platte am oberen Ende um 0,57 mm durch,
+    # mit ihnen um 0,22 mm. Drucklage bleibt: sie stehen wie der Sockel nach
+    # oben, kein Stuetzmaterial.
+    sk = skizze(comp, e_vorn, 'Sk_Saeulenrippen')
+    for x0, x1 in L['saeule_rippe_x']:
+        rechteck(sk, x0, w('traeger_z_unten'), x1, L['konsole_z0'])
+    dazu(comp, alle_profile(sk), w('saeule_rippe_tiefe'), koerper)
 
     # Verschraubung zum X-Wagen (Kopf liegt frei vor der Platte)
     sk = skizze(comp, e_hinten, 'Sk_Bohrungen_XWagen')
@@ -1112,8 +1156,10 @@ def hinweise_bauen(L, zc, fehler):
         '  2. Traegerplatte an den X-Wagen (4x M3x12 + Scheibe) — die Koepfe',
         '     sind spaeter von der Schlittenplatte verdeckt. Schlanken Inbus',
         '     nehmen, der Korridor streift den Z-Wagen um 0,5 mm.',
-        '  3. Z-Schiene auf den Sockel (Senkkopf M3x10 in die Inserts):',
-        '     3 Schrauben mit dem Wagen oben, 2 mit dem Wagen unten',
+        '  3. Z-Schiene auf den Sockel ({:.0f}x Senkkopf M3x10 in die'.format(
+            len(L['z_schiene_loecher'])),
+        '     Inserts): der Wagen verdeckt je Stellung zwei Schrauben —',
+        '     erst mit dem Wagen unten, die letzten zwei mit ihm oben',
         '  4. Schlittenplatte auf den Z-Wagen (4x M3x{:.0f} von vorn durch die'.format(
             L['z_wagen_schraube']),
         '     Freibohrungen) — nur solange der Laser NICHT dran ist',
@@ -1131,6 +1177,10 @@ def hinweise_bauen(L, zc, fehler):
         '  in die Geometrie zu giessen, ist die Laserhoehe verstellbar:',
         '  Linse ueber dem Bett in Lochmitte ... {:.1f} bis {:.1f} mm'.format(
             L['linse_tief'], L['linse_hoch']),
+        '  Werkstueck moeglich bis ........... {:.0f} mm (nicht der'.format(
+            L['werkstueck_frei']),
+        '    Verfahrweg begrenzt das, sondern die Plattenunterkante: sie',
+        '    faehrt in X mit und muss ueber dem Werkstueck bleiben)',
         '  nutzbare Langlochstellung ......... {:+.1f} bis {:+.1f} mm'.format(
             L['langloch_ab_max'], L['langloch_auf_max']),
         '  Nach oben bindet nicht der Hub, sondern die Montage: hoeher',

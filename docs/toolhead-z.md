@@ -59,31 +59,45 @@ streifen. Das prüft `toolhead_check.py` ausdrücklich.
 
 | Z | Ebene |
 |---|---|
+| −130,0 | Bettoberfläche (`bett_abstand`) |
 | −120,3 | Unterkante Schlittenplatte, tiefste Stellung |
 | −110,8 | Laser-Unterkante (Linse), tiefste Stellung |
-| −60,0 | Unterkante MGN9-Schiene (95 mm lang, 5 Schrauben) |
-| −40,1 … +15,1 | Bereich der Wagenmitte `zc` |
-| +35,0 | Oberkante MGN9-Schiene |
-| +39,0 … +64,0 | flexible Kupplung |
-| +68,0 | Unterseite Motorkonsole = Oberkante Trägerplatte |
-| +76,0 | Motorflansch |
-| +116,0 | Oberkante NEMA 17 |
+| −66,0 | Unterkante Trägerplatte |
+| −60,0 | Unterkante MGN9-Schiene (**200 mm lang, 10 Schrauben**) |
+| −40,1 … +96,0 | Bereich der Wagenmitte `zc` |
+| +116,0 … +141,0 | flexible Kupplung |
+| +140,0 | Oberkante MGN9-Schiene |
+| +145,0 | Unterseite Motorkonsole = Oberkante Trägerplatte |
+| +153,0 | Motorflansch |
+| +193,0 | Oberkante NEMA 17 |
 
-**Nutzbarer Verfahrweg: 55,1 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
+**Nutzbarer Verfahrweg: 136,1 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
 alle vier aus und nennt die bindende:
 
 | Grenze | zc max |
 |---|---|
-| **Wagen am oberen Schienenende** | **+15,1** ← bindend |
-| Schlittenplatte gegen Kupplung | +19,0 |
-| Mutternblock gegen Kupplung | +23,0 |
-| Laser-Oberkante gegen Motorkonsole | +36,2 |
+| **Schlittenplatte gegen Kupplung** | **+96,0** ← bindend |
+| Mutternblock gegen Kupplung | +100,0 |
+| Laser-Oberkante gegen Motorkonsole | +113,2 |
+| Wagen am oberen Schienenende | +120,1 |
 
-Seit der Laser tiefer hängt (`laser_versatz_z` = −46, siehe
-[Laserhöhe](#laserhöhe-langloch-statt-rechnen)), bindet nicht mehr er, sondern
-das Schienenende. Mehr Weg gibt es also nur über eine längere Schiene
-(`z_schiene_laenge`) — und dann über eine höhere Konsole, weil als nächstes die
-Kupplung im Weg steht.
+### Die Schiene sitzt in Z fest — das begrenzt die Werkstückhöhe
+
+Die Z-Schiene hängt an der Trägerplatte am X-Wagen: sie fährt in X und Y mit,
+aber **nicht** in Z. Ihr unteres Ende ist damit ein dauerhaftes Hindernis auf
+seiner Höhe und muss über dem dicksten Werkstück bleiben — sonst rammt es das
+Werkstück beim Verfahren. Dasselbe gilt für die Unterkante der Trägerplatte,
+die 6 mm tiefer liegt.
+
+Genau deshalb wächst die 200-mm-Schiene **nach oben**: Unterkante bleibt bei
+−60 (20 mm Luft über einem 50-mm-Werkstück), Oberkante geht auf +140, und die
+Motorkonsole rückt von +68 auf +145. Nach unten wäre die Schiene mit 200 mm
+bis −125 gekommen — 45 mm **in** das Werkstück hinein.
+
+Damit ist nicht mehr der Verfahrweg die Grenze für dicke Werkstücke, sondern
+die Plattenunterkante: **59 mm** bei 5 mm Luft (`werkstueck_frei` im Bericht).
+Mehr geht nur, indem `traeger_z_unten` steigt — das kostet Weg nach unten und
+damit den Fokus auf dünnem Material.
 
 Die Kollisionsprüfung fährt den Weg in 21 Stellungen ab und prüft jedes bewegte
 Teil gegen jedes feste, einschließlich Portalprofil und X-Schiene.
@@ -127,9 +141,9 @@ vorbei — und prüft die Luft zur Trägerplatte als eigene Größe.
 | Schlittenplatte | ~25 g | **38 g** (gemessen, Rev. 11) |
 
 Trägerplatte, Z-Schiene und Gewindestange bleiben davon unberührt. Der
-Verfahrweg lag damals bei 50,45 mm; er ist mit Rev. 14 auf 55,1 mm gewachsen,
-weil der Laser tiefer hängt und damit nicht mehr die Motorkonsole die Grenze
-setzt.
+Verfahrweg lag damals bei 50,45 mm; er ist mit Rev. 14 auf 55,1 mm gewachsen
+(Laser tiefer, also nicht mehr die Motorkonsole als Grenze) und mit Rev. 16 auf
+136,1 mm (Schiene 200 mm).
 
 **Beim Anziehen beachten:** die Z-Wagen-Schrauben klemmen jetzt **12 mm PETG**
 statt 6 (der Kopf sitzt in der Ø6,5-Freibohrung auf der Pad-Vorderseite). Eine
@@ -150,31 +164,48 @@ Z-Wagen davor und der Inbus hat 12 mm Platz — zu wenig. Die Reihe muss weiter
 weg als halbe Wagenlänge plus Werkzeugradius (19,95 + 3 = 22,95 mm).
 
 **Fokus.** Gemessen sind **130 mm** von der Bezugsebene bis zur Bettoberfläche
-(`bett_abstand`) und **50 mm** dickstes Werkstück (`werkstueck_max`). Damit
-liegt die Gehäuseunterkante des Lasers über dem Bett zwischen **19,2 und
-74,3 mm**. Der Fokusabstand *f* des Moduls steht nicht auf dem Modul — deshalb
-sind die vier Laserbefestigungen **senkrechte Langlöcher**, ±8 mm, und die
-Höhe wird beim Zusammenbau eingestellt:
+(`bett_abstand`) und **50 mm** dickstes Werkstück (`werkstueck_max`). Mit der
+200-mm-Schiene liegt die Gehäuseunterkante des Lasers über dem Bett zwischen
+**19,2 und 155,2 mm**. Der Fokusabstand *f* des Moduls steht nicht auf dem
+Modul — deshalb sind die vier Laserbefestigungen **senkrechte Langlöcher**,
+±8 mm, und die Höhe wird beim Zusammenbau eingestellt:
 
-| f | Langlochstellung | erreichbare Werkstückdicke |
+| f | Langlochstellung | Bemerkung |
 |---|---|---|
-| 15 mm | 8,0 mm nach unten | 0 … 50 mm |
-| 20 mm | 4,3 mm nach unten | 0 … 50 mm |
-| 25 mm | 0,7 mm nach oben | 0 … 50 mm |
-| 30 mm | 2,8 mm nach oben (Anschlag) | 0 … 47 mm |
-| 35 mm | 2,8 mm nach oben (Anschlag) | 0 … 42 mm |
+| 15 mm | 4,2 mm nach unten | die Linse kommt sonst nicht tief genug für dünnes Material |
+| 20 … 35 mm | Lochmitte (0) | in beide Richtungen Luft zum Nachstellen |
 
-**Nach oben ist nutzbar nur +2,8 mm** — nicht weil der Hub endet, sondern weil
-die obere Schraubenreihe sonst wieder hinter dem Z-Wagen verschwindet. Daraus
-folgt eine harte Grenze der Maschine: bei 130 mm Bezugshöhe und 50 mm Werkstück
-geht das nur auf, solange **f ≤ 27,1 mm** ist. Bei größerem f bleibt
-`77,1 mm − f` als Werkstückdicke. Beides rechnet der Bericht mit aus, und beide
-Maschinenmaße sind Parameter — messe anders, ändere die Zahl und lass das
-Skript neu laufen.
+**Nach oben nutzbar sind +2,8 mm** — nicht weil der Hub endet, sondern weil die
+obere Schraubenreihe sonst hinter dem Z-Wagen verschwindet und nicht mehr
+verschraubbar ist. Mit 55 mm Verfahrweg (Schiene 95 mm) war das die bindende
+Grenze und ergab `f ≤ 27,1 mm`; mit 136 mm Weg ist diese Grenze weg — jeder
+Fokusabstand von 13 bis 35 mm geht auf. Du musst *f* also nicht kennen, um die
+Platte zu drucken; nur zum Einstellen beim Zusammenbau.
 
 Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
-(1 mm dicker = 1 mm tiefer); sie kann das Fenster also nach unten verschieben,
-aber nicht nach oben — für großes f hilft sie nicht.
+(1 mm dicker = 1 mm tiefer) — mit dem langen Verfahrweg brauchst du sie für den
+Fokus nicht mehr.
+
+## Versteifungsrippen an der Säule
+
+Mit der Konsole auf +145 sitzt der Motor **132,5 mm** über der Verschraubung am
+X-Wagen. Sein Gewicht (280 g) biegt die 8 mm dünne Säule dort um **0,57 mm**
+durch — ein statischer Versatz, der die Gewindestange schiefstellt. Zwei
+Rippen auf der Vorderseite (4 mm breit, 6,5 mm hoch, über die ganze
+Säulenhöhe) bringen das auf **0,22 mm**; das Skript rechnet beide Werte im
+Bericht mit.
+
+Die Rippen sitzen an den **Kanten** der Säule (X = ±18 … ±22), nicht weiter
+innen. Dazwischen ist kein Platz:
+
+* bei X = +14,5 läuft der senkrechte Korridor der hinteren Motorschraube
+  durch — eine Rippe dort macht sie unerreichbar (das hat `toolhead_check.py`
+  beim ersten Entwurf sofort gemeldet),
+* bei |X| < 13 fährt der Z-Wagen vorbei.
+
+An der Kante wirken sie ohnehin am besten, und 6,5 mm Höhe lässt dem
+Mutternblock (ab Y = 18) 3,5 mm Luft. Gedruckt wird nichts anders: sie stehen
+wie der Schienensockel nach oben, kein Stützmaterial.
 
 ## Warum Trägerplatte und Konsole ein Teil sind
 
@@ -191,27 +222,25 @@ Du hast es selbst vorgeschlagen, und es ist die bessere Lösung:
   Biegespannung quer zur Schicht liegt bei etwa 0,07 MPa, also weit unter allem,
   was PETG in der Schichthaftung kann.
 
-Das Bauteil wird damit 78 × 145 × 56 mm groß und passt liegend in den A1.
+Das Bauteil wird damit 78 × 222 × 56 mm groß und passt liegend in den A1
+(Bett 256 mm).
 
 ## Massen
 
-Alle Werte aus dem Fusion-Lauf von Rev. 14 (Geometrie identisch mit Rev. 15,
-dort hat sich nur Berichtstext geändert), PETG mit eingemessener Dichte
-1,27 g/cm³:
+| Teil | Volumen | Masse PETG | Bauraum | Quelle |
+|---|---|---|---|---|
+| Trägerplatte mit Konsole | ≈ 121 cm³ | **≈ 154 g** | 78 × 222 × 56 mm | gerechnet, Rev. 16 |
+| Schlittenplatte | 40,1 cm³ | **50,9 g** | 62 × 97 × 18 mm | Fusion-Lauf Rev. 14 |
+| Mutternblock | 9,8 cm³ | **12,4 g** | 28 × 26 × 17 mm | Fusion-Lauf Rev. 14 |
+| **Druckteile zusammen** | ≈ 171 cm³ | **≈ 217 g** | | |
 
-| Teil | Volumen | Masse PETG | Bauraum |
-|---|---|---|---|
-| Trägerplatte mit Konsole | 77,5 cm³ | **98,4 g** | 78 × 145 × 56 mm |
-| Schlittenplatte | 40,1 cm³ | **50,9 g** | 62 × 97 × 18 mm |
-| Mutternblock | 9,8 cm³ | **12,4 g** | 28 × 26 × 17 mm |
-| **Druckteile zusammen** | 127,4 cm³ | **161,7 g** | |
+Die Trägerplatte ist mit Rev. 16 von 145 auf 222 mm gewachsen (Schiene 200 mm,
+Konsole auf +145) und wog vorher 98,4 g. Der Wert ist aus dem Querschnitt
+gerechnet — **maßgeblich ist der Validierungsbericht des nächsten
+Fusion-Laufs**. Schlittenplatte und Mutternblock sind unverändert.
 
 Dazu die drei Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
 werden: 6,1 g (X-Wagen) · 3,6 g (Z-Wagen) · 6,7 g (Laser).
-
-Die Schlittenplatte ist mit Rev. 14 um 25,75 mm länger geworden (Langloch plus
-Rand) und wog vorher 38 g; die zwei Ø8-Durchbrüche im Pad entfallen dafür.
-Gerechnet hatte ich 48 g — gemessen sind es 50,9 g.
 
 Das sind **Vollmaterial-Massen** (100 % Füllung) und damit eine Obergrenze.
 Für den Druck selbst ist die Dichte in Fusion ohne Bedeutung — Bambu Studio
@@ -221,12 +250,13 @@ Druckgewicht rund ein Drittel darunter; maßgeblich ist die Anzeige im Slicer.
 Die Werte hier dienen der Plausibilitätskontrolle und der Abschätzung der
 bewegten Masse.
 
-Bewegte Masse auf der X-Achse, grob: 162 g Druckteile + 280 g NEMA 17 + 400 g
-Laser + 66 g MGN9-Schiene und Wagen + 56 g Gewindestange und Kupplung ≈
-**965 g**. Für einen MGN15H unkritisch.
+Bewegte Masse auf der X-Achse, grob: 217 g Druckteile + 280 g NEMA 17 + 400 g
+Laser + 115 g MGN9-Schiene (200 mm) und Wagen + 71 g Gewindestange und
+Kupplung ≈ **1,08 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
+im zweistelligen Nm-Bereich, hier rund 1 Nm).
 
-Die Trägerplatte ist mit 77,5 cm³ das schwerste Teil, davon etwa 23 cm³ allein
-die Motorkonsole. Ließe sich mit Taschen in Hauptsäule und Kopfbereich
+Die Trägerplatte ist mit ≈ 121 cm³ das schwerste Teil, davon etwa 23 cm³
+allein die Motorkonsole und 64 cm³ die Säule. Ließe sich mit Taschen in Hauptsäule und Kopfbereich
 reduzieren — bisher nicht gemacht, weil die Steifigkeit dort die Genauigkeit
 der ganzen Z-Achse bestimmt.
 
@@ -279,15 +309,15 @@ werden.
 | Verbindung | Schrauben | Hinweis |
 |---|---|---|
 | Trägerplatte → X-Wagen (MGN15H) | 4 × M3×12 + Scheibe | 3,5 mm Gewindeeingriff bei 4 mm verfügbarer Tiefe |
-| Z-Schiene → Sockel | 5 × M3×10 Senkkopf DIN 7991 + 5 × ruthex M3 | Einsätze vor der Montage einschmelzen |
+| Z-Schiene → Sockel | **10 × M3×10 Senkkopf DIN 7991 + 10 × ruthex M3** | Einsätze vor der Montage einschmelzen; Randabstand 10 mm, Lochabstand 20 mm |
 | NEMA 17 → Konsole | **4 × M3×12** | 4 mm Eingriff; Führungsrippen zentrieren, Zentrierbund in Ø22,4 |
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +2,8 mm** |
 | Mutternblock → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe | Ø4,6-Bohrung, ausrichten dann festziehen |
 
-Kaufteile: MGN9-Schiene 95 mm + Wagen MGN9H · NEMA 17 (Körper 40 mm, Welle 5 mm)
-· M6-Gewindestange, Zuschnitt **120 mm** (110 mm werden gebraucht) · flexible
-Kupplung 5→6 mm, 25 mm lang · 2 × M6-Mutter · Druckfeder Ø8 × 11 mm.
+Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
+Welle 5 mm) · M6-Gewindestange, Zuschnitt **190 mm** (187 mm werden gebraucht)
+· flexible Kupplung 5→6 mm, 25 mm lang · 2 × M6-Mutter · Druckfeder Ø8 × 11 mm.
 
 ## Montagereihenfolge und Werkzeugzugang
 
@@ -299,9 +329,9 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 
 | # | Schritt | Werkzeug | freie Länge |
 |---|---|---|---|
-| 1 | 5 × ruthex M3 in den Schienensockel einschmelzen | Lötkolben | — |
+| 1 | 10 × ruthex M3 in den Schienensockel einschmelzen | Lötkolben | — |
 | 2 | **Trägerplatte an den X-Wagen**, 4 × M3×12 + Scheibe | Inbus von vorn | frei, aber der Korridor streift den Z-Wagen um 0,5 mm → schlanken Schlüssel nehmen, keinen dicken Bit-Halter |
-| 3 | Z-Schiene auf den Sockel, 5 × M3×10 Senkkopf DIN 7991 | Inbus von vorn | Wagen ganz oben → Z = −52,5 / −32,5 / −12,5; Wagen ganz unten → +7,5 / +27,5 |
+| 3 | Z-Schiene auf den Sockel, 10 × M3×10 Senkkopf DIN 7991 | Inbus von vorn | der Wagen verdeckt je Stellung zwei Schrauben: erst mit dem Wagen unten acht setzen, dann hochschieben und die letzten zwei |
 | 4 | **Schlittenplatte auf den Z-Wagen**, 4 × M3×14 | Inbus von vorn durch die Ø6,5-Freibohrungen | frei — **nur solange der Laser nicht dran ist** |
 | 5 | Mutternblock bestücken: 2 × M6-Mutter eindrücken, Feder einlegen, 2 × M3-Mutter in die Sechskanttaschen | Finger | — |
 | 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 87 mm mit dem Z-Schlitten unten, 32 mm mit ihm oben — beides reicht, unten ist es bequemer |
@@ -385,7 +415,7 @@ reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 
 | Teil | Lage aufs Bett | Warum |
 |---|---|---|
-| Trägerplatte (mit Konsole) | Rückseite (Passfläche) unten | Platte, Sockel, Konsole und Rippen stehen alle auf dem Bett — keine Stützen, alle Kräfte in der Schicht |
+| Trägerplatte (mit Konsole) | Rückseite (Passfläche) unten | Platte, Sockel, Konsole, Säulen- und Führungsrippen stehen alle auf dem Bett — keine Stützen, alle Kräfte in der Schicht. 222 mm lang, passt liegend in den A1 |
 | Schlittenplatte | Laser-Anschraubfläche unten | Brücke 11 mm zwischen den Rippen; die Langlöcher liegen in der Wand, keine Stützen |
 | Mutternblock | Unterseite unten | Spindelbohrung wird rund |
 
@@ -461,8 +491,11 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
-| `z_schiene_laenge` | 95 mm | Länge der Z-Führung |
-| `konsole_unten` / `konsole_dicke` | 68 / 8 mm | Motorkonsole — `konsole_unten` bindet den Verfahrweg |
+| `z_schiene_laenge` | **200 mm** | Länge der Z-Führung (vorhandene Schiene) |
+| `z_schiene_randab` | 10 mm | Randabstand des ersten Lochs — muss zur Schiene passen, sonst sitzen die Gewindeeinsätze falsch |
+| `konsole_unten` / `konsole_dicke` | **145** / 8 mm | Motorkonsole, 5 mm über dem Schienenende |
+| `traeger_kopf_unten` | 115 mm | ab hier wird die Platte breit (trägt die Konsole) |
+| `saeule_rippe_x0` / `_x1` / `_tiefe` | 18 / 22 / 6,5 mm | Versteifungsrippen der Säule |
 | `spindel_x` / `spindel_y` | 30 / 28,5 mm | Lage der Spindelachse; `spindel_y` bestimmt den Schraubzugang |
 | `laser_versatz_z` | −46 mm | Lage des Lasers am Schlitten — bindet Montagezugang **und** Fokusfenster |
 | `laser_langloch_hub` | 8 mm | senkrechter Verstellweg je Richtung (nach oben nutzbar: +2,8 mm) |

@@ -38,11 +38,12 @@ am MGN15H-Wagen des Portals — mit angeformter Motorkonsole für den NEMA 17 �
 **Mutternblock** mit zwei federverspannten M6-Muttern, der schwimmend
 verschraubt ist.
 
-Nutzbarer Z-Verfahrweg **55,1 mm**, Strahlachse 58,5 mm vor der
-X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Die
+Nutzbarer Z-Verfahrweg **136,1 mm** (MGN9-Schiene 200 mm), Strahlachse 58,5 mm
+vor der X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Die
 Laserhöhe ist über senkrechte Langlöcher ±8 mm verstellbar, damit der
-Fokusabstand des Moduls nicht in der Geometrie steckt. Details in
-[docs/toolhead-z.md](docs/toolhead-z.md).
+Fokusabstand des Moduls nicht in der Geometrie steckt. Werkstückhöhe bis 59 mm
+— begrenzt nicht vom Verfahrweg, sondern von der Plattenunterkante, die in X
+mitfährt. Details in [docs/toolhead-z.md](docs/toolhead-z.md).
 
 ### Toolhead-Grundplatte (überholt)
 

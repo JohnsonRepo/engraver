@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 12
+REVISION = 13
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -1031,13 +1031,28 @@ def hinweise_bauen(L, zc, fehler):
         'MONTAGEREIHENFOLGE (wichtig, sonst kommt man nicht mehr dran):',
         '  1. Gewindeeinsaetze in den Schienensockel einschmelzen',
         '  2. Traegerplatte an den X-Wagen (4x M3x12 + Scheibe) — die Koepfe',
-        '     sind spaeter von der Schlittenplatte verdeckt',
-        '  3. Z-Schiene auf den Sockel (Senkkopf M3x10 in die Inserts)',
-        '  4. Laser an die Schlittenplatte (Koepfe liegen im Pad-Freiraum)',
-        '  5. Schlittenplatte auf den Z-Wagen (4x M3x{:.0f})'.format(
+        '     sind spaeter von der Schlittenplatte verdeckt. Schlanken Inbus',
+        '     nehmen, der Korridor streift den Z-Wagen um 0,5 mm.',
+        '  3. Z-Schiene auf den Sockel (Senkkopf M3x10 in die Inserts):',
+        '     3 Schrauben mit dem Wagen oben, 2 mit dem Wagen unten',
+        '  4. Schlittenplatte auf den Z-Wagen (4x M3x{:.0f} von vorn durch die'.format(
             L['z_wagen_schraube']),
-        '  6. Motor zwischen die Fuehrungsrippen setzen, 4x M3x12 von unten',
-        '  7. Kupplung + Gewindestange, Mutternblock zuletzt ausrichten',
+        '     Freibohrungen) — nur solange der Laser NICHT dran ist',
+        '  5. Mutternblock bestuecken (2x M6-Mutter + Feder, 2x M3-Mutter)',
+        '  6. Motor zwischen die Fuehrungsrippen, 4x M3x12 von unten —',
+        '     Z-Schlitten vorher nach UNTEN schieben (oben nur 11 mm Platz)',
+        '  7. Kupplung + Gewindestange, dann Mutternblock ausrichten',
+        '  8. Laser zuletzt, 4x M3x10 + Scheibe von hinten',
+        '',
+        'ACHTUNG — OFFENER KONFLIKT (toolhead_check.py, Abschnitt 6):',
+        '  Schritt 4 und Schritt 8 bauen sich gegenseitig zu. Das Gewinde der',
+        '  Laserbefestigung sitzt im Modul, also wird von HINTEN verschraubt;',
+        '  die obere Laserreihe liegt dann hinter dem Z-Wagen (12 mm frei).',
+        '  Umgekehrt deckt das Lasergehaeuse die Ø{:.1f}-Freibohrungen der'.format(
+            w('m3_senkung')),
+        '  Wagenschrauben ab (6 mm frei). Gebraucht werden ~20 mm Inbus.',
+        '  In dieser Revision ist die Baugruppe damit NICHT montierbar —',
+        '  Loesungen in docs/toolhead-z.md, Abschnitt Montagereihenfolge.',
         '',
         'LEHREN — nur fuer KAUFTEIL-Lochbilder; fuer',
         '  Mutternblock <-> Schlittenplatte braucht es keine, beide kommen aus',

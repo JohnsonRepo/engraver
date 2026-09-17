@@ -130,8 +130,8 @@ statt 6 (der Kopf sitzt in der Ø6,5-Freibohrung auf der Pad-Vorderseite). Eine
 doppelt so lange Kunststoffsäule setzt sich auch doppelt so viel, wenn das
 Material kriecht — handfest anziehen und Schraubensicherung verwenden. Die
 Freibohrung tiefer ins Pad zu legen (und so nur 6 mm zu klemmen) geht nicht
-kostenlos: sie käme dem Ø10-Kopffreiraum der oberen Laserschraube auf 0,25 mm
-nahe.
+kostenlos: sie käme dem Ø8-Kopffreiraum der oberen Laserschraube auf 0,8 mm
+nahe — zu wenig Wand für PETG.
 
 ## Warum Trägerplatte und Konsole ein Teil sind
 
@@ -235,19 +235,69 @@ Kaufteile: MGN9-Schiene 95 mm + Wagen MGN9H · NEMA 17 (Körper 40 mm, Welle 5 m
 · M6-Gewindestange, Zuschnitt **120 mm** (110 mm werden gebraucht) · flexible
 Kupplung 5→6 mm, 25 mm lang · 2 × M6-Mutter · Druckfeder Ø8 × 11 mm.
 
-## Montagereihenfolge
+## Montagereihenfolge und Werkzeugzugang
 
-Die Reihenfolge ist nicht beliebig — die Köpfe der X-Wagen-Schrauben sind später
-von der Schlittenplatte verdeckt:
+`toolhead_check.py`, Abschnitt 6, misst für **jede** Schraube die freie
+Werkzeuglänge in einem Korridor Ø6 mm — und zwar in dem Zustand, in dem sie
+verschraubt wird (Teile, die es dann noch nicht gibt, blockieren nicht). Unter
+**20 mm** ist eine Schraube nicht erreichbar, auch wenn die Bohrung selbst frei
+ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 
-1. Gewindeeinsätze in den Schienensockel einschmelzen
-2. **Trägerplatte an den X-Wagen** (4 × M3×12 + Scheibe)
-3. Z-Schiene auf den Sockel (Senkkopf M3×10)
-4. **Laser an die Schlittenplatte** — die Köpfe der oberen Schraubenreihe
-   liegen in den Ø10-Freiräumen im Auflagepad
-5. Schlittenplatte auf den Z-Wagen (4 × M3×14)
-6. NEMA 17 zwischen die Führungsrippen setzen, 4 × M3×12 von unten
-7. Kupplung und Gewindestange, Mutternblock zuletzt ausrichten und festziehen
+| # | Schritt | Werkzeug | freie Länge |
+|---|---|---|---|
+| 1 | 5 × ruthex M3 in den Schienensockel einschmelzen | Lötkolben | — |
+| 2 | **Trägerplatte an den X-Wagen**, 4 × M3×12 + Scheibe | Inbus von vorn | frei, aber der Korridor streift den Z-Wagen um 0,5 mm → schlanken Schlüssel nehmen, keinen dicken Bit-Halter |
+| 3 | Z-Schiene auf den Sockel, 5 × M3×10 Senkkopf DIN 7991 | Inbus von vorn | Wagen ganz oben → Z = −52,5 / −32,5 / −12,5; Wagen ganz unten → +7,5 / +27,5 |
+| 4 | **Schlittenplatte auf den Z-Wagen**, 4 × M3×14 | Inbus von vorn durch die Ø6,5-Freibohrungen | frei — **nur solange der Laser nicht dran ist** |
+| 5 | Mutternblock bestücken: 2 × M6-Mutter eindrücken, Feder einlegen, 2 × M3-Mutter in die Sechskanttaschen | Finger | — |
+| 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 61 mm mit dem Z-Schlitten **unten**, nur 11 mm mit ihm oben (Lasergehäuse) → vorher nach unten schieben |
+| 7 | Kupplung und Gewindestange einsetzen | — | — |
+| 8 | Mutternblock an die Schlittenplatte, 2 × M3×16: locker lassen, Achse mehrmals durchfahren, dann festziehen | Inbus von vorn | frei |
+| 9 | Laser an die Schlittenplatte, 4 × M3×10 + Scheibe DIN 125 | Inbus **von hinten** | ⚠️ 12 mm — siehe unten |
+
+### Offener Konflikt: Laser und Z-Wagen bauen sich gegenseitig zu
+
+Das Gewinde der Laserbefestigung sitzt **im Modul** (`hardware-notizen.md`:
+4 × M3), der Schraubenkopf also auf der Plattenrückseite — verschraubt wird
+**von hinten**. Die Schlittenplatte wird dagegen **von vorn** an den Z-Wagen
+geschraubt, durch die Ø6,5-Freibohrungen in der Laser-Anschraubfläche. Beide
+Korridore laufen durch dieselbe 6-mm-Platte, und jedes Teil verdeckt die
+Schrauben des anderen:
+
+| Reihenfolge | betroffene Schrauben | freie Länge | Hindernis |
+|---|---|---|---|
+| Platte zuerst (Schritt 4 → 9) | 2 × Laser, obere Reihe | **12 mm** | Z-Wagen; der Ø8-Durchbruch im Pad ist nur 12 mm lang |
+| Laser zuerst (9 → 4) | 4 × Z-Wagen | **6 mm** | Lasergehäuse liegt bündig vor der Freibohrung |
+
+Gebraucht werden 20 mm. **Damit ist Rev. 12/13 nicht montierbar** — kein
+Platzmangel, sondern ein Reihenfolgefehler, den die bisherige Prüfung nicht
+gesehen hat: sie hat Korridore nur als „frei / blockiert" bewertet, nie deren
+Länge. Die untere Laserreihe ist übrigens erreichbar (27 mm, mit dem Schlitten
+ganz unten sogar frei) — nur die obere liegt genau hinter dem Wagen.
+
+### Zwei Wege heraus
+
+**A — Laser 26 mm tiefer setzen** (`laser_versatz_z` von −20,25 auf −46):
+beide Laserreihen liegen dann unterhalb von Wagen und Trägerplatte, sobald der
+Schlitten ganz unten steht. Der Laser wird also **zuletzt** montiert, von
+hinten, mit freiem Korridor. Gerechnet mit dem Prüfskript:
+
+* Verfahrweg **55,1 mm** statt 50,45 (die Grenze „Laser-Oberkante gegen
+  Motorkonsole" fällt weg, jetzt bindet das Schienenende)
+* die Ø8-Durchbrüche im Pad entfallen, die Auflage auf dem Wagen wird größer
+* Schlittenplatte 26 mm länger, ≈ 9 g mehr, längerer Kragarm (die Rippen laufen
+  mit, statische Durchbiegung ≈ 0,3 mm)
+* **Preis:** die Strahlachse und der ganze Fokusbereich rutschen 26 mm nach
+  unten. Das muss zur Höhe deines Portals passen.
+
+**B — Schlittenplatte in zwei Teile trennen:** ein Wagenadapter (Pad, 4 × M3×14
+zum Wagen) und eine Laserplatte, verschraubt mit 4 × M3 **von vorn außerhalb
+des Lasergehäuses** (X = ±22, das Gehäuse reicht nur bis ±17,5). Der Laser
+bleibt, wo er ist; dafür ein Teil und vier Schrauben mehr, ≈ 30 g, und die
+Anschraubpunkte müssen in Z am Mutternblock vorbei.
+
+Beides ist gerechnet, aber noch nicht umgesetzt — die Entscheidung hängt an der
+Bauhöhe deiner Maschine.
 
 ## Zwei Details, die beim Konstruieren aufgefallen sind
 
@@ -260,9 +310,11 @@ Bohrungen nicht. Bei anderen Werten tun sie es; `toolhead_check.py` prüft alle
 vier Kombinationen.
 
 **Kopf-Freiraum im Auflagepad.** Die obere Laser-Schraubenreihe liegt innerhalb
-des Auflagepads. Zwei **Ø10-Durchbrüche im Pad** nehmen Kopf und Scheibe auf;
+des Auflagepads. Zwei **Ø8-Durchbrüche im Pad** nehmen Kopf und Scheibe auf;
 die Scheibe liegt trotzdem auf der Plattenrückseite auf, weil der Durchbruch nur
-das Pad durchdringt. Vom Pad bleiben 571 mm² Auflage auf dem Wagen.
+das Pad durchdringt. Vom Pad bleiben 679 mm² Auflage auf dem Wagen. Dieser
+Durchbruch ist zugleich der Werkzeugkanal für die obere Laserreihe — und mit
+12 mm zu kurz, siehe [Montagereihenfolge](#montagereihenfolge-und-werkzeugzugang).
 
 ## Warum Rundlöcher statt Langlöcher
 

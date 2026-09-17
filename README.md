@@ -72,6 +72,12 @@ python3 tools/geometrie_check.py    # nur die Einzelplatte
 prüft dieselbe Maßkette, die das Skript zum Bauen verwendet: Y-Kette,
 Verfahrweg mit allen vier Begrenzungen, Kollisionen über 21 Stellungen des
 Verfahrwegs, Materialstege, Schraubenlängen und -eingriffstiefen,
-freie Zugangskorridore für jede Schraube,
-Lochbildtoleranzen, Druckbarkeit — und statisch, dass jeder im Skript benutzte
-Maß- und Lageschlüssel existiert. Exit-Code 0 = alles bestanden.
+**Werkzeugzugang für jede Schraube** (freie Inbus-Länge im Zustand, in dem sie
+verschraubt wird), Lochbildtoleranzen, Druckbarkeit — und statisch, dass jeder
+im Skript benutzte Maß- und Lageschlüssel existiert. Exit-Code 0 = alles
+bestanden.
+
+**Stand:** eine Prüfung schlägt fehl — Laser und Z-Wagen verdecken sich
+gegenseitig die Schrauben, die Baugruppe ist in dieser Form nicht montierbar.
+Analyse und die zwei gerechneten Lösungen stehen in
+[docs/toolhead-z.md](docs/toolhead-z.md#offener-konflikt-laser-und-z-wagen-bauen-sich-gegenseitig-zu).

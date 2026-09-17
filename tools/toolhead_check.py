@@ -25,6 +25,9 @@ M3_KOPF_D, M3_KOPF_H = 5.5, 3.0
 SCHEIBE_GROSS = 9.0                 # DIN 9021 M3
 SCHEIBE_NORM = 7.0                  # DIN 125 M3
 INBUS_FREI_D = 6.0                  # Platz fuer den 2,5er Inbus
+# Kuerzester nutzbarer Schenkel eines 2,5-mm-Inbus. Darunter kommt
+# man an die Schraube nicht mehr heran, auch wenn die Bohrung frei ist.
+WERKZEUG_LAENGE = 20.0
 M3_SCHAFT_D = 3.0
 # Frueher an diesem Lasermodul gemessene Lochbilder (hoch, quer). Der aktuelle
 # Wert steht in MASSE und ist seit 2026-09-17 mit einer Lehre am Teil
@@ -219,7 +222,136 @@ def main():
     p.info('Kragmoment des Motors an der Konsole (280 g)',
            0.280 * 9.81 * (sy - L['traeger_y1']) / 1000.0, 'Nm')
 
-    p.titel('6) Mutternblock (M6, zwei Muttern mit Feder)')
+    p.titel('6) Werkzeugzugang: laesst sich das ueberhaupt montieren?')
+    # Ein Inbus braucht nicht nur einen freien Korridor, sondern auch LAENGE.
+    # Eine 6,5-Freibohrung mit dem Laser 6 mm dahinter ist unbenutzbar, auch
+    # wenn "nichts in der Bohrung steht". Jede Verbindung wird in dem Zustand
+    # geprueft, in dem sie verschraubt wird — Teile, die es dann noch nicht
+    # gibt, blockieren nicht.
+    kasten = {q.name: q for q in feste}
+
+    def zustand(namen, zc=0.0):
+        return ([kasten[n] for n in namen if n in kasten]
+                + [q.verschoben(zc) for q in bewegte if q.name in namen])
+
+    def kuerzester(punkte, achse, ri, boxen, eigen=()):
+        """(kuerzeste freie Werkzeuglaenge, Hindernis) ueber alle Schrauben."""
+        schlecht = (float('inf'), None)
+        for pt in punkte:
+            d, wer = bauraum.freier_korridor(pt, achse, ri, INBUS_FREI_D / 2,
+                                             boxen, eigen)
+            if d < schlecht[0]:
+                schlecht = (d, wer)
+        return schlecht
+
+    def beste_stellung(punkte, achse, ri, namen, eigen=(), mitbewegt=True):
+        """Maximum ueber den Verfahrweg: der Wagen laesst sich verschieben.
+        mitbewegt=True heisst, die Schraube wandert mit dem Wagen (Z relativ
+        zu zc); False sind feste Koordinaten wie die Motorschrauben."""
+        best = (-1.0, None, 0.0)
+        for i in range(21):
+            zc = L['zc_min'] + (L['zc_max'] - L['zc_min']) * i / 20.0
+            pkt = [(x, y, zc + z if mitbewegt else z) for x, y, z in punkte]
+            d, wer = kuerzester(pkt, achse, ri, zustand(namen, zc), eigen)
+            if d > best[0]:
+                best = (d, wer, zc)
+        return best
+
+    def zugang(text, laenge, hindernis, soll=WERKZEUG_LAENGE, pruefen=True):
+        """pruefen=False: nur berichten. Fuer die beiden Reihenfolge-Varianten
+        ist EINE ausreichend, also darf die andere nicht als Fehler zaehlen."""
+        beschriftung = '{}{}'.format(
+            text, '' if laenge >= soll or not hindernis
+            else '  [' + hindernis + ']')
+        wert = 999.0 if laenge == float('inf') else laenge
+        if pruefen:
+            p.ok(beschriftung, wert, soll)
+        else:
+            p.info(beschriftung + ('  ok' if laenge >= soll else '  zu kurz'),
+                   wert)
+        return laenge >= soll
+
+    # 1) Traegerplatte -> X-Wagen: nur Portal, Schiene, Wagen sind da.
+    #    Schlanker Inbus, weil der Korridor den Z-Wagen streift.
+    d, wer = kuerzester(
+        [(x, L['traeger_y1'], z) for x, z in L['x_wagen_loecher']], 'y', +1,
+        zustand(('Portalprofil 2020', 'X-Schiene MGN15', 'X-Wagen MGN15H')))
+    zugang('Traegerplatte -> X-Wagen (von vorn, vor allem anderen)', d, wer)
+
+    # 2) Z-Schiene -> Sockel: der Z-Wagen verdeckt je nach Stellung 2 Schrauben,
+    #    also muss jede Schraube in MINDESTENS einer Wagenstellung frei sein.
+    fehlt = []
+    for z in L['z_schiene_loecher']:
+        frei = max(bauraum.freier_korridor(
+            (0.0, L['sockel_y1'], z), 'y', +1, INBUS_FREI_D / 2,
+            zustand(('Z-Wagen MGN9H',), zc_w), ())[0]
+            for zc_w in (L['zc_min'], L['zc_max']))
+        if frei < WERKZEUG_LAENGE:
+            fehlt.append(z)
+    p.ja('alle 5 Schienenschrauben in einer Wagenstellung erreichbar',
+         not fehlt, '' if not fehlt else '   blockiert bei Z=' + str(fehlt))
+
+    # 3) + 4) Die beiden Verbindungen, die sich gegenseitig zubauen koennen:
+    #    Schlittenplatte -> Z-Wagen (von vorn durch die Freibohrung) und
+    #    Laser -> Schlittenplatte (von hinten, Gewinde sitzt im Laser).
+    wagen_pkt = [(x, L['schlitten_y1'], z) for x, z in L['z_wagen_loecher']]
+    laser_pkt_rel = [(x, L['schlitten_y1'], rel)
+                     for rel in (L['laser_loch_oben_rel'],
+                                 L['laser_loch_unten_rel'])
+                     for x in (-w('laser_loch_quer') / 2,
+                               w('laser_loch_quer') / 2)]
+    eigen = ('Schlitten Pad/Rippen', 'Schlittenplatte')
+
+    d_wagen_ohne, h1 = kuerzester(
+        wagen_pkt, 'y', +1, zustand(eigen + ('Z-Wagen MGN9H',)), eigen)
+    a1 = zugang('A) Platte -> Z-Wagen, Laser noch NICHT montiert',
+                d_wagen_ohne, h1, pruefen=False)
+    d_wagen_mit, h2 = kuerzester(
+        wagen_pkt, 'y', +1,
+        zustand(eigen + ('Z-Wagen MGN9H', 'Diodenlaser')), eigen)
+    b2 = zugang('B) Platte -> Z-Wagen, Laser schon montiert',
+                d_wagen_mit, h2, pruefen=False)
+
+    d_laser_lose, h3 = kuerzester(
+        [(x, y, z) for x, y, z in laser_pkt_rel], 'y', -1,
+        zustand(eigen), eigen)
+    b1 = zugang('B) Laser -> lose Platte (vor der Montage am Wagen)',
+                d_laser_lose, h3, pruefen=False)
+    d_laser_mont, h4, zc_l = beste_stellung(
+        laser_pkt_rel, 'y', -1,
+        eigen + ('Z-Wagen MGN9H', 'Z-Schiene MGN9', 'Schienensockel',
+                 'Traegerplatte Hauptsaeule', 'Traegerplatte Kopf',
+                 'X-Wagen MGN15H', 'X-Schiene MGN15', 'Portalprofil 2020'),
+        eigen)
+    a2 = zugang('A) Laser -> Platte, Platte schon am Wagen (beste Stellung '
+                'zc={:+.1f})'.format(zc_l), d_laser_mont, h4,
+                pruefen=False)
+
+    # Es genuegt EINE der beiden Reihenfolgen. Gibt es keine, ist die
+    # Baugruppe nicht montierbar — kein Kosmetikfehler, ein Denkfehler.
+    p.ja('es gibt eine Montagereihenfolge fuer Laser und Z-Wagen',
+         (a1 and a2) or (b1 and b2),
+         '   A) Platte zuerst: {} / B) Laser zuerst: {}'.format(
+             'ok' if a1 and a2 else 'nein', 'ok' if b1 and b2 else 'nein'))
+
+    # 5) Mutternblock: von vorn, mit Laser und Block montiert.
+    d, wer = kuerzester(
+        [(x, L['schlitten_y1'], 0.0) for x in L['block_schraube_x']], 'y', +1,
+        zustand(eigen + ('Diodenlaser', 'Mutternblock')),
+        eigen + ('Mutternblock',))
+    zugang('Mutternblock -> Platte (von vorn, zuletzt)', d, wer)
+
+    # 6) Motorschrauben: von unten, der Z-Schlitten wird dafuer weggefahren.
+    motor_eigen = ('NEMA 17', 'Motorkonsole', 'Fuehrungsrippe links',
+                   'Fuehrungsrippe rechts')
+    alle_namen = tuple(kasten) + tuple(q.name for q in bewegte)
+    d, wer, zc_m = beste_stellung(
+        [(x, y, L['motor_flansch_z']) for x, y in L['motor_schrauben']],
+        'z', -1, alle_namen, motor_eigen, mitbewegt=False)
+    zugang('Motor -> Konsole (von unten, Z-Schlitten bei zc={:+.1f})'.format(
+        zc_m), d, wer)
+
+    p.titel('7) Mutternblock (M6, zwei Muttern mit Feder)')
     block_tiefe = L['schlitten_y1'] - w('block_y_hinten')
     p.info('Blockmasse (B x T x H)', w('block_x_rechts') - w('block_x_links'))
     p.info('Blocktiefe', block_tiefe)
@@ -280,7 +412,7 @@ def main():
     p.ok('Grosse Scheibe deckt das Uebermass',
          SCHEIBE_GROSS - w('m3_uebermass'), 2.0)
 
-    p.titel('7) Schlittenplatte und Laser (Konzept aus ToolheadGrundplatte)')
+    p.titel('8) Schlittenplatte und Laser (Konzept aus ToolheadGrundplatte)')
     p.ok('Platte deckt das Laserlochbild quer',
          w('schlitten_breite_l')
          - (w('laser_loch_quer') / 2 + w('laser_loch_d') / 2), 3.0)
@@ -346,7 +478,7 @@ def main():
          w('pad_breite') * w('pad_laenge')
          - 2 * 3.1416 * (w('kopf_freiraum') / 2) ** 2, 400.0, '>=', 'mm2')
 
-    p.titel('8) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
+    p.titel('9) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
     for name, a, b in (
             ('Traegerplatte (mit Konsole)',
              w('traeger_x_kopf') - w('traeger_x_links'),
@@ -359,7 +491,7 @@ def main():
     p.ok('Bruecke Schlittenplatte zwischen den Rippen',
          w('rippe_seite_innen') - w('rippe_mitte_breite') / 2, 25.0, '<=')
 
-    p.titel('9) Stueckliste')
+    p.titel('10) Stueckliste')
     for zeile in (
             'MGN9 Linearschiene {:.0f} mm + Wagen MGN9H'.format(
                 w('z_schiene_laenge')),
@@ -380,7 +512,7 @@ def main():
             '4x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, alle vier)'):
         p.info(zeile)
 
-    p.titel('10) Statische Pruefung der Schluessel im Skript')
+    p.titel('11) Statische Pruefung der Schluessel im Skript')
     import re
     quelle = open(SKRIPT, encoding='utf-8').read()
     masse_namen = set(mod.MASSE)
@@ -402,7 +534,7 @@ def main():
         p.info('nur dokumentierend (nicht in Geometrie): '
                + ', '.join(unbenutzt))
 
-    p.titel('11) Validierungsbericht des Fusion-Skripts')
+    p.titel('12) Validierungsbericht des Fusion-Skripts')
     try:
         zc = (L['zc_min'] + L['zc_max']) / 2.0
         for zeile in mod.hinweise_bauen(L, zc, []):

@@ -164,3 +164,33 @@ def bauraeume(w, L):
         ('Traegerplatte Kopf', 'X-Schiene MGN15'),
     }
     return feste, bewegte, erlaubt
+
+
+def freier_korridor(punkt, achse, richtung, r, boxen, ausser=()):
+    """Freie Werkzeuglaenge ab `punkt` (x, y, z) entlang `achse` in
+    `richtung` (+1/-1), fuer einen Korridor mit Radius `r`.
+
+    Liefert (laenge_mm, name_des_ersten_hindernisses). laenge = float('inf'),
+    wenn nichts im Weg ist. Damit laesst sich pruefen, ob ein Inbus in eine
+    Schraube gesteckt werden kann — die reine Ja/Nein-Frage (zugang_frei)
+    genuegt nicht, weil ein Hindernis 60 mm weiter weg keines ist.
+    """
+    i = {'x': 0, 'y': 1, 'z': 2}[achse]
+    quer = [j for j in (0, 1, 2) if j != i]
+    laenge, schuld = float('inf'), None
+    for q in boxen:
+        if q.name in ausser:
+            continue
+        kasten = (q.x, q.y, q.z)
+        if not all(kasten[j][0] < punkt[j] + r and punkt[j] - r < kasten[j][1]
+                   for j in quer):
+            continue
+        if richtung > 0 and kasten[i][1] > punkt[i]:
+            d = max(kasten[i][0] - punkt[i], 0.0)
+        elif richtung < 0 and kasten[i][0] < punkt[i]:
+            d = max(punkt[i] - kasten[i][1], 0.0)
+        else:
+            continue
+        if d < laenge:
+            laenge, schuld = d, q.name
+    return laenge, schuld

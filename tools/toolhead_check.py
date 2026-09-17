@@ -20,7 +20,10 @@ import bauraum                                        # noqa: E402
 
 SKRIPT = bauraum.SKRIPT
 M3_KOPF_D, M3_KOPF_H = 5.5, 3.0
-SCHEIBE_D = 9.0                     # DIN 9021 M3, gross
+# Zwei Scheiben im Einsatz: gross am schwimmenden Mutternblock (deckt das
+# Uebermass der Ausrichtbohrung), normal am Laser (Rundloch Ø4,0).
+SCHEIBE_GROSS = 9.0                 # DIN 9021 M3
+SCHEIBE_NORM = 7.0                  # DIN 125 M3
 INBUS_FREI_D = 6.0                  # Platz fuer den 2,5er Inbus
 M3_SCHAFT_D = 3.0
 # Frueher an diesem Lasermodul gemessene Lochbilder (hoch, quer). Der aktuelle
@@ -274,12 +277,13 @@ def main():
          w('block_x_links') - w('z_wagen_breite') / 2, 3.0)
     p.ok('Ausrichtspiel der schwimmenden Verschraubung',
          w('m3_uebermass') - w('m3_durchgang'), 0.8)
-    p.ok('Scheibe deckt das Uebermass', SCHEIBE_D - w('m3_uebermass'), 2.0)
+    p.ok('Grosse Scheibe deckt das Uebermass',
+         SCHEIBE_GROSS - w('m3_uebermass'), 2.0)
 
     p.titel('7) Schlittenplatte und Laser (Konzept aus ToolheadGrundplatte)')
-    schlitz_hx = w('schlitz_verstellweg') / 2 + w('schlitz_breite') / 2
     p.ok('Platte deckt das Laserlochbild quer',
-         w('schlitten_breite_l') - (w('laser_loch_quer') / 2 + schlitz_hx), 3.0)
+         w('schlitten_breite_l')
+         - (w('laser_loch_quer') / 2 + w('laser_loch_d') / 2), 3.0)
     p.ok('Freibohrung Z-Wagen versenkt den Kopf',
          w('schlitten_dicke') - M3_KOPF_H, 1.5)
     p.ok('Freibohrung gibt den Inbus frei', w('m3_senkung'), INBUS_FREI_D)
@@ -295,29 +299,33 @@ def main():
     # wandert mit dem Lochbild nach aussen, also mitpruefen.
     lq = w('laser_loch_quer') / 2
     p.ok('Scheibe der Laserschraube passt neben die Mittelrippe',
-         (lq - SCHEIBE_D / 2) - w('rippe_mitte_breite') / 2, 0.5)
+         (lq - SCHEIBE_NORM / 2) - w('rippe_mitte_breite') / 2, 0.5)
     p.ok('Scheibe der Laserschraube passt neben die Seitenrippe',
-         w('rippe_seite_innen') - (lq + SCHEIBE_D / 2), 0.5)
+         w('rippe_seite_innen') - (lq + SCHEIBE_NORM / 2), 0.5)
     p.ok('Kopffreiraum bleibt im Auflagepad',
          w('pad_breite') / 2 - (lq + w('kopf_freiraum') / 2), 1.5)
-    # Verstellbereich der Langloecher gegen die frueheren Messungen halten
-    quer_tol = w('schlitz_verstellweg') + w('schlitz_breite') - M3_SCHAFT_D
-    hoch_tol = w('schlitz_breite') - M3_SCHAFT_D
-    p.info('Langloch deckt quer ab: {:.1f} bis {:.1f} mm'.format(
-        w('laser_loch_quer') - quer_tol, w('laser_loch_quer') + quer_tol))
-    p.info('Langloch deckt hoch ab: {:.1f} bis {:.1f} mm'.format(
-        w('laser_loch_hoch') - hoch_tol, w('laser_loch_hoch') + hoch_tol))
+    # Rundloch statt Langloch: die Lochbildtoleranz kommt jetzt allein aus dem
+    # Uebermass Ø4,0 auf Schaft Ø3 — beide Loecher koennen gegenlaeufig wandern.
+    laser_tol = w('laser_loch_d') - M3_SCHAFT_D
+    p.ok('Lochbildtoleranz deckt den Schrumpf ueber die Hoehe',
+         laser_tol, 0.6)
+    p.ok('Kopf kann nicht durch das Loch rutschen',
+         M3_KOPF_D - w('laser_loch_d'), 1.0)
+    p.ok('Normale Scheibe deckt das Laserloch',
+         SCHEIBE_NORM - w('laser_loch_d'), 2.0)
+    p.info('Lochbild deckt ab: {:.1f}-{:.1f} hoch, {:.1f}-{:.1f} quer'.format(
+        w('laser_loch_hoch') - laser_tol, w('laser_loch_hoch') + laser_tol,
+        w('laser_loch_quer') - laser_tol, w('laser_loch_quer') + laser_tol))
     for hoch, quer in LASER_MESSUNGEN:
-        drin = (abs(hoch - w('laser_loch_hoch')) <= hoch_tol
-                and abs(quer - w('laser_loch_quer')) <= quer_tol)
+        drin = (abs(hoch - w('laser_loch_hoch')) <= laser_tol
+                and abs(quer - w('laser_loch_quer')) <= laser_tol)
         p.info('frueher gemessen {:.1f} x {:.1f}: {}'.format(
-            hoch, quer, 'noch im Verstellbereich'
-            if drin else 'AUSSERHALB des Verstellbereichs'))
+            hoch, quer, 'noch abgedeckt' if drin else 'ausserhalb (ueberholt)'))
     p.ok('Laser haengt unter der Traegerplatte (tiefste Stellung)',
          w('traeger_z_unten') - (L['zc_min'] + L['laser_unten_rel']), 5.0)
     # Lochbilder von Z-Wagen und Laser liegen beide bei X = +-7,5 und duerfen
     # sich in Z nicht in die Quere kommen.
-    r_sen, r_schl = w('m3_senkung') / 2, w('schlitz_breite') / 2
+    r_sen, r_schl = w('m3_senkung') / 2, w('laser_loch_d') / 2
     r_frei, r_loch = w('kopf_freiraum') / 2, w('m3_durchgang') / 2
     for rel, name in ((L['laser_loch_oben_rel'], 'obere'),
                       (L['laser_loch_unten_rel'], 'untere')):
@@ -328,11 +336,11 @@ def main():
          abs(L['laser_loch_oben_rel'] - w('z_wagen_loch_laengs') / 2)
          - r_frei - r_loch, 1.0)
     p.ok('Kopffreiraum nimmt Kopf und Scheibe auf',
-         w('kopf_freiraum') - SCHEIBE_D, 0.5)
+         w('kopf_freiraum') - SCHEIBE_NORM, 0.5)
     p.ok('obere Laserreihe liegt im Pad (braucht den Freiraum)',
          w('pad_laenge') / 2 - abs(L['laser_loch_oben_rel']), 0.0, '>=')
     p.ok('untere Laserreihe liegt ausserhalb des Pads',
-         abs(L['laser_loch_unten_rel']) - w('pad_laenge') / 2 - SCHEIBE_D / 2,
+         abs(L['laser_loch_unten_rel']) - w('pad_laenge') / 2 - SCHEIBE_NORM / 2,
          1.0)
     p.ok('Restauflage des Pads auf dem Wagen',
          w('pad_breite') * w('pad_laenge')
@@ -366,8 +374,9 @@ def main():
             .format(len(L['z_schiene_loecher']), len(L['z_schiene_loecher'])),
             '4x M3x{:.0f} Zylinderkopf   (Schlittenplatte -> Z-Wagen)'.format(
                 L['z_wagen_schraube']),
-            '4x M3x10 + 4x Scheibe DIN 9021 (Laser -> Schlittenplatte)',
-            '2x M3x16 + 2x M3-Mutter + 2x Scheibe (Mutternblock, schwimmend)',
+            '4x M3x10 + 4x Scheibe DIN 125 (Laser -> Schlittenplatte)',
+            '2x M3x16 + 2x M3-Mutter + 2x Scheibe DIN 9021 Ø9 '
+            '(Mutternblock, schwimmend)',
             '4x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, alle vier)'):
         p.info(zeile)
 

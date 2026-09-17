@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 9
+REVISION = 10
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -132,24 +132,28 @@ MASSE = {
     # 12 statt 6: schiebt die Schlittenplatte so weit nach vorn, dass der
     # Mutternblock hinter ihr Platz hat, obwohl die Spindelachse bei 28,5 liegt.
     'pad_hoehe':           (12.0,  'Auflagepad: Versatz Wagenflaeche -> Platte'),
-    # 30 statt 28: der Kopffreiraum sitzt jetzt bei X = +-8,25 und braucht
-    # noch Wand zum Padrand.
+    # 30: der Kopffreiraum sitzt bei X = +-8,25 und braucht Wand zum Padrand.
+    # Seit der Umstellung auf Ø4,0-Rundloecher (kleinere Scheibe, Freiraum Ø8)
+    # waeren auch 28 mm ausreichend — 30 laesst Reserve.
     'pad_breite':          (30.0,  'Auflagepad: Breite'),
     'pad_laenge':          (26.0,  'Auflagepad: Hoehe'),
     'schlitten_dicke':     (6.0,   'Schlittenplatte: Dicke'),
     'schlitten_breite_l':  (17.5,  'Schlittenplatte: Kante links der Schienenachse'),
     'schlitten_rand':      (4.0,   'Schlittenplatte: Rand um das Lochfeld'),
     'rippe_mitte_breite':  (5.0,   'Mittelrippe: Breite'),
-    # 13,5 statt 13: die Scheibe der Laserschraube (Ø9) wandert mit dem
-    # Lochbild nach aussen und braucht Platz neben der Rippe.
+    # 13,5: die Scheibe der Laserschraube liegt zwischen Mittel- und
+    # Seitenrippe. Mit der DIN-125-Scheibe (Ø7) bleiben dort 1,75 mm Luft.
     'rippe_seite_innen':   (13.5,  'Seitenrippe links: Innenkante'),
     # -laser_loch_hoch/2: die OBERE Laser-Schraubenreihe liegt damit genau auf
     # der Wagenmitte — mittig zwischen den beiden Wagen-Schraubenreihen (+-8),
     # sonst ueberschneiden sich Langloch und Freibohrung.
     'laser_versatz_z':   (-20.25,  'Laser-Lochbildmitte gegen die Wagenmitte'),
-    'kopf_freiraum':       (10.0,  'Freiraum im Pad fuer Kopf+Scheibe der Laserschraube'),
-    'schlitz_breite':      (4.4,   'Laser-Langloch: Breite'),
-    'schlitz_verstellweg': (1.2,   'Laser-Langloch: Mittenversatz quer'),
+    'kopf_freiraum':        (8.0,  'Freiraum im Pad fuer Kopf+Scheibe der Laserschraube'),
+    # Rundloch statt Langloch: das Bohrbild ist am Teil bestaetigt, ein
+    # Verstellweg quer bringt beim Laser nichts (die Querlage ist nur ein
+    # Koordinatenversatz). Ø4,0 auf M3 gibt +-0,5 mm je Loch, also +-1,0 mm
+    # Lochbildtoleranz — deckt den Schrumpf ueber 40,5 mm PETG mit Reserve.
+    'laser_loch_d':         (4.0,  'Laser-Befestigung: Bohrungsdurchmesser'),
 
     # --- Mutternblock ------------------------------------------------------
     'block_x_links':       (16.0,  'Mutternblock: linke Kante'),
@@ -216,7 +220,7 @@ def lage():
     L['laser_oben_rel'] = L['laser_unten_rel'] + w('laser_laenge')
     L['schlitten_oben_rel'] = w('pad_laenge') / 2.0 + w('schlitten_rand')
     L['schlitten_unten_rel'] = L['laser_loch_unten_rel'] \
-        - w('schlitz_breite') / 2.0 - w('schlitten_rand')
+        - w('laser_loch_d') / 2.0 - w('schlitten_rand')
     L['block_oben_rel'] = w('block_hoehe') / 2.0
     L['block_unten_rel'] = -w('block_hoehe') / 2.0
 
@@ -449,18 +453,6 @@ def rechteck(sk, u0, v0, u1, v1):
 def kreis(sk, u, v, d_mm):
     return sk.sketchCurves.sketchCircles.addByCenterRadius(
         punkt(sk, u, v), d_mm / 20.0)
-
-
-def langloch(sk, cu, cv, halb_versatz, radius):
-    """Langloch als zwei Kreise plus Rechteck, Masse in mm. Beim Schneiden
-    werden ALLE Profile der Skizze entfernt; die Vereinigung ergibt das
-    Langloch. Robuster als ein aus Linien und Boegen zusammengesetztes
-    Profil, das bei Rundungsfehlern nicht schliesst.
-    """
-    kreis(sk, cu - halb_versatz, cv, 2 * radius)
-    kreis(sk, cu + halb_versatz, cv, 2 * radius)
-    rechteck(sk, cu - halb_versatz, cv - radius,
-             cu + halb_versatz, cv + radius)
 
 
 def sechskant(sk, cu, cv, sw, flach_quer=True):
@@ -756,12 +748,13 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
         kreis(sk, x, zc + L['laser_loch_oben_rel'], w('kopf_freiraum'))
     weg(comp, alle_profile(sk), w('pad_hoehe'), koerper)
 
-    # Laser: Langloecher quer, weil das Bohrbild noch nicht verifiziert ist
-    sk = skizze(comp, e_platte, 'Sk_Langloecher_Laser')
+    # Laser: Rundloecher Ø4,0. Das Bohrbild ist am Teil bestaetigt, deshalb
+    # keine Langloecher mehr — die 1 mm Lochbildtoleranz aus dem Uebermass
+    # deckt den Schrumpf ueber 40,5 mm PETG.
+    sk = skizze(comp, e_platte, 'Sk_Bohrungen_Laser')
     for x in (-w('laser_loch_quer') / 2, w('laser_loch_quer') / 2):
         for rel in (L['laser_loch_oben_rel'], L['laser_loch_unten_rel']):
-            langloch(sk, x, zc + rel, w('schlitz_verstellweg') / 2,
-                     w('schlitz_breite') / 2)
+            kreis(sk, x, zc + rel, w('laser_loch_d'))
     weg(comp, alle_profile(sk), w('schlitten_dicke'), koerper)
 
     # Schwimmende Verschraubung des Mutternblocks: Uebermass zum Ausrichten
@@ -895,9 +888,9 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
 def hinweise_bauen(L, zc, fehler):
     """Hinweiszeilen des Validierungsberichts. Modulebene, damit der Block
     ohne Fusion getestet werden kann (tools/toolhead_check.py)."""
-    # Verstellbereich der Laser-Langloecher (Schaft Ø3 im Schlitz)
-    quer_tol = w('schlitz_verstellweg') + w('schlitz_breite') - 3.0
-    hoch_tol = w('schlitz_breite') - 3.0
+    # Lochbildtoleranz der Laser-Rundloecher (Schaft Ø3 im Loch, beide Loecher
+    # koennen gegenlaeufig wandern)
+    laser_tol = w('laser_loch_d') - 3.0
     h = [
         'BEZUGSEBENE: Ursprung = Mitte des X-Wagen-Lochbildes AUF seiner',
         '  Stirnflaeche. X = quer, Y = nach vorn, Z = senkrecht.',
@@ -979,10 +972,8 @@ def hinweise_bauen(L, zc, fehler):
             w('z_wagen_loch_laengs'), w('z_wagen_loch_quer')),
         '  Bohrlehre_Laser ....... {:.2f} x {:.2f} mm (am Teil bestaetigt)'.format(
             w('laser_loch_hoch'), w('laser_loch_quer')),
-        '    Langloch deckt quer {:.1f}-{:.1f} und hoch {:.1f}-{:.1f} mm ab —'.format(
-            w('laser_loch_quer') - quer_tol, w('laser_loch_quer') + quer_tol,
-            w('laser_loch_hoch') - hoch_tol, w('laser_loch_hoch') + hoch_tol),
-        '    jetzt nur noch Toleranzausgleich, nicht mehr Unsicherheit.',
+        '    Rundloch Ø{:.1f}: Lochbildtoleranz +-{:.1f} mm je Achse.'.format(
+            w('laser_loch_d'), laser_tol),
         '  OFFEN ist nur noch der X-Wagen: die alte Messung "26 x 25 mm am',
         '  Toolhead-Wagen" gehoert zu ihm (MGN15H), nicht zur Z-Achse. Vor dem',
         '  Druck der Traegerplatte mit Bohrlehre_XWagen pruefen — er traegt den',

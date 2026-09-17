@@ -47,16 +47,15 @@ längs), um die Baugröße zu entscheiden. Sie folgt jetzt dem Parameter
 
 Messhistorie an diesem Modul: **39 × 15** (erste Angabe) → **40 × 16**
 (`hardware.md`, eigene Messung) → **40,5 × 16,5** — mit `Bohrlehre_Laser`
-(Ø3,4 Rundlöcher) am Teil geprüft und bestätigt. Damit ist auch klar, dass
-Rundlöcher an dieser Stelle funktionieren; die Langlöcher in der
-Schlittenplatte dienen nur noch dem Toleranzausgleich.
+(Ø3,4 Rundlöcher) am Teil geprüft und bestätigt. Damit war auch belegt, dass
+Rundlöcher an dieser Stelle funktionieren — die Schlittenplatte hat seitdem
+**Rundlöcher Ø4,0** statt Langlöcher.
 
-Die Langlöcher decken **quer 13,9 – 19,1 mm** und **senkrecht 39,1 – 41,9 mm**
-ab — also die Umgebung des aktuellen Werts und die Messung 40 × 16. Die erste
-Angabe 39 × 15 liegt 0,1 mm außerhalb und gilt als überholt.
-`toolhead_check.py` führt den Verstellbereich und alle früheren Messungen im
-Bericht mit. Soll der Bereich breiter werden, genügt `schlitz_breite` von 4,4
-auf 4,6 mm — die Scheibenauflage bleibt dabei über 2 mm.
+Die Lochbildtoleranz beträgt damit **±1,0 mm je Achse** (Ø4,0 auf Schaft Ø3),
+deckt also 39,5 – 41,5 hoch und 15,5 – 17,5 quer ab — die Messung 40 × 16
+liegt noch darin, die erste Angabe 39 × 15 nicht mehr. `toolhead_check.py`
+führt Toleranz und Messhistorie im Bericht mit. Reicht der Bereich gegen den
+Schrumpf nicht, genügt `laser_loch_d` von 4,0 auf 4,5 mm.
 
 Ist das Gehäuse tiefer oder flacher als 35 mm, `laser_tiefe` anpassen — davon
 hängt nur die berechnete Lage der Strahlachse ab, nicht die Geometrie.
@@ -67,4 +66,5 @@ hängt nur die berechnete Lage der Strahlachse ab, nicht die Geometrie.
 |---|---|---|---|
 | M3 | 3,4 | 5,5 | 3,0 |
 
-Große Scheibe DIN 9021 M3: Ø 9 × 0,8 — bei Langlöchern Pflicht.
+Scheiben M3: DIN 125 Ø 7 × 0,5 am Laser (Rundloch Ø4,0) · DIN 9021 Ø 9 × 0,8
+am schwimmenden Mutternblock (deckt dort das Übermaß Ø4,6).

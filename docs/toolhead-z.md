@@ -202,7 +202,7 @@ werden.
 | Z-Schiene → Sockel | 5 × M3×10 Senkkopf DIN 7991 + 5 × ruthex M3 | Einsätze vor der Montage einschmelzen |
 | NEMA 17 → Konsole | **4 × M3×12** | 4 mm Eingriff; Führungsrippen zentrieren, Zentrierbund in Ø22,4 |
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
-| Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 9021 | Scheibe wegen der Langlöcher Pflicht |
+| Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | Rundloch Ø4,0; Scheibe deckt das Übermaß |
 | Mutternblock → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe | Ø4,6-Bohrung, ausrichten dann festziehen |
 
 Kaufteile: MGN9-Schiene 95 mm + Wagen MGN9H · NEMA 17 (Körper 40 mm, Welle 5 mm)
@@ -230,7 +230,7 @@ Die Lochbildmitte des Lasers liegt deshalb **20,25 mm unter der Wagenmitte**
 (= `−laser_loch_hoch/2`) —
 damit liegt die obere Laser-Schraubenreihe genau mittig zwischen den beiden
 Schraubenreihen des Wagens (±8) und die Ø6,5-Freibohrungen überschneiden die
-Langlöcher nicht. Bei anderen Werten tun sie es; `toolhead_check.py` prüft alle
+Bohrungen nicht. Bei anderen Werten tun sie es; `toolhead_check.py` prüft alle
 vier Kombinationen.
 
 **Kopf-Freiraum im Auflagepad.** Die obere Laser-Schraubenreihe liegt innerhalb
@@ -238,28 +238,33 @@ des Auflagepads. Zwei **Ø10-Durchbrüche im Pad** nehmen Kopf und Scheibe auf;
 die Scheibe liegt trotzdem auf der Plattenrückseite auf, weil der Durchbruch nur
 das Pad durchdringt. Vom Pad bleiben 571 mm² Auflage auf dem Wagen.
 
-## Langlöcher oder Rundlöcher?
+## Warum Rundlöcher statt Langlöcher
 
-Die vier Laserbefestigungen sind **Langlöcher** (4,4 mm breit, 1,2 mm
-Verstellweg quer) und brauchen deshalb große Scheiben DIN 9021 Ø9. Der Grund
-dafür war der unsichere Status des Bohrbildes — die Konvention des
-`fusion-python`-Skills verlangt für `[?]`-Maße Langlöcher. **Dieser Grund ist
-mit der Bestätigung weggefallen.**
+Die vier Laserbefestigungen waren zunächst **Langlöcher**, weil die Konvention
+des `fusion-python`-Skills für Maße mit Status `[?]` Langlöcher verlangt. Mit
+der Bestätigung des Bohrbildes am 2026-09-17 ist dieser Grund weggefallen —
+seitdem sind es **Rundlöcher Ø4,0**.
 
-Was bleibt, ist Toleranzausgleich: über 40,5 mm schrumpft PETG um etwa
-0,2–0,4 mm. Ein Ø3,4-Rundloch gibt auf einer M3-Schraube nur ±0,2 mm je Loch,
-das ist knapp. Sinnvolle Varianten:
+Übrig bleibt nur der Toleranzausgleich: über 40,5 mm schrumpft PETG um etwa
+0,2–0,4 mm. Ø4,0 auf einer M3-Schraube gibt ±0,5 mm je Loch, also **±1,0 mm
+Lochbildtoleranz** je Achse — Reserve genug, und die frühere Messung 40 × 16
+liegt noch darin.
 
-| Variante | Lochbildtoleranz | Scheibe | Anmerkung |
-|---|---|---|---|
-| Langloch 4,4 × 5,2 (aktuell) | quer ±2,6 · hoch ±1,4 | DIN 9021 Ø9 | großzügig, Scheibe hat nur 0,75 mm Luft zur Seitenrippe |
-| **Rundloch Ø4,0** | **±1,0** | DIN 125 Ø7 | deckt den Schrumpf mit Reserve, einfacher, 1,75 mm Luft zur Rippe |
-| Rundloch Ø3,4 | ±0,4 | DIN 125 Ø7 | exakt, aber ohne Reserve gegen Schrumpf |
+Der Verstellweg quer brachte beim Laser ohnehin nichts: die Querlage ist nur
+ein Koordinatenversatz, keine Ausrichtung. Die Umstellung hat dafür an vier
+Stellen Luft geschaffen — die Scheibe ist jetzt DIN 125 Ø7 statt DIN 9021 Ø9,
+und der Kopffreiraum im Pad konnte von Ø10 auf Ø8 schrumpfen:
 
-Empfehlung wäre **Ø4,0 rund**: der Verstellweg quer bringt beim Laser nichts
-(die Querlage ist nur ein Koordinatenversatz, keine Ausrichtung), und die
-Geometrie wird an zwei Stellen entspannter. Umgesetzt ist das noch nicht —
-die Langlöcher stehen weiter im Skript.
+| Maß | mit Langloch | mit Rundloch Ø4,0 |
+|---|---|---|
+| Scheibe ↔ Mittelrippe | 1,25 mm | **2,25 mm** |
+| Scheibe ↔ Seitenrippe | 0,75 mm | **1,75 mm** |
+| Kopffreiraum ↔ Padrand | 1,75 mm | **2,75 mm** |
+| Kopffreiraum ↔ Wagenbohrung | 1,30 mm | **2,30 mm** |
+| Restauflage des Pads | 623 mm² | **679 mm²** |
+
+`laser_loch_d` ist ein Parameter: sollte der Schrumpf doch größer ausfallen,
+reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 
 ## Druck (PETG, Bambu Lab A1)
 
@@ -307,8 +312,8 @@ Stand der offenen Punkte aus `hardware-notizen.md`:
   `Bohrlehre_Laser` am Modul bestätigt. Das war die dritte Messung (vorher
   39 × 15 und 40 × 16); die Messhistorie bleibt im Bericht stehen.
   Weil die Lehre **Ø3,4-Rundlöcher** hat, ist damit zugleich bewiesen, dass
-  Rundlöcher an dieser Stelle passen — siehe [Langlöcher oder
-  Rundlöcher?](#langlöcher-oder-rundlöcher).
+  Rundlöcher an dieser Stelle passen — umgesetzt, siehe [Warum Rundlöcher statt
+  Langlöcher](#warum-rundlöcher-statt-langlöcher).
 
 ## Wenn ein Teil an der falschen Stelle landet
 
@@ -342,11 +347,11 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | Parameter | Wert | Wirkung |
 |---|---|---|
 | `z_schiene_laenge` | 95 mm | Länge der Z-Führung |
-| `konsole_unten` | 68 mm | Höhe der Motorkonsole — bindet den Verfahrweg |
+| `konsole_unten` / `konsole_dicke` | 68 / 8 mm | Motorkonsole — `konsole_unten` bindet den Verfahrweg |
 | `spindel_x` / `spindel_y` | 30 / 28,5 mm | Lage der Spindelachse; `spindel_y` bestimmt den Schraubzugang |
 | `laser_versatz_z` | −20,25 mm | Lage des Lasers am Schlitten (= −`laser_loch_hoch`/2) |
+| `laser_loch_d` | 4,0 mm | Laserbefestigung; ±1,0 mm Lochbildtoleranz |
 | `traeger_dicke` | 8 mm | Dicke der Trägerplatte |
-| `konsole_unten` / `konsole_dicke` | 68 / 8 mm | Lage und Dicke der Motorkonsole |
 | `motor_rippe_hoehe` | 3 mm | Höhe der Führungsrippen am Motorflansch |
 | `m3_uebermass` | 4,6 mm | Ausrichtspiel des Mutternblocks |
 | `tasche_spiel` | 0,15 mm | Spiel der Mutterntaschen auf die Schlüsselweite |

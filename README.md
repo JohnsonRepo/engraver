@@ -73,5 +73,5 @@ prüft dieselbe Maßkette, die das Skript zum Bauen verwendet: Y-Kette,
 Verfahrweg mit allen vier Begrenzungen, Kollisionen über 21 Stellungen des
 Verfahrwegs, Materialstege, Schraubenlängen und -eingriffstiefen,
 freie Zugangskorridore für jede Schraube,
-Langloch-Toleranzen, Druckbarkeit — und statisch, dass jeder im Skript benutzte
+Lochbildtoleranzen, Druckbarkeit — und statisch, dass jeder im Skript benutzte
 Maß- und Lageschlüssel existiert. Exit-Code 0 = alles bestanden.

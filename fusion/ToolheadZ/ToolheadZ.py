@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 16
+REVISION = 17
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -1165,7 +1165,7 @@ def hinweise_bauen(L, zc, fehler):
         '     Freibohrungen) — nur solange der Laser NICHT dran ist',
         '  5. Mutternblock bestuecken (2x M6-Mutter + Feder, 2x M3-Mutter)',
         '  6. Motor zwischen die Fuehrungsrippen, 4x M3x12 von unten —',
-        '     mit dem Z-Schlitten unten bequemer (87 statt 32 mm Platz)',
+        '     mit dem Z-Schlitten unten bequemer (164 statt 28 mm Platz)',
         '  7. Kupplung + Gewindestange, dann Mutternblock ausrichten',
         '  8. Laser ZULETZT, 4x M3x10 + Scheibe von hinten, Z-Schlitten',
         '     dafuer nach unten fahren ({:.0f} mm freier Korridor)'.format(
@@ -1225,8 +1225,9 @@ def hinweise_bauen(L, zc, fehler):
         '',
         'DRUCK (PETG, Bambu Lab A1):',
         '  Traegerplatte ... Rueckseite (Passflaeche) aufs Bett. Platte, Sockel,',
-        '                    Konsole und Rippen stehen alle auf dem Bett —',
-        '                    keine Stuetzen, alle Kraefte in der Schicht.',
+        '                    Konsole, Saeulen- und Fuehrungsrippen stehen alle',
+        '                    auf dem Bett — keine Stuetzen, alle Kraefte in',
+        '                    der Schicht. 222 mm lang, passt liegend in den A1.',
         '  Schlittenplatte . Laser-Anschraubflaeche aufs Bett',
         '  Mutternblock .... Unterseite aufs Bett (Spindelbohrung wird rund)',
         '  4 Wandlinien, >=40% Infill. PETG wegen der Abwaerme des Lasers.',

@@ -227,17 +227,18 @@ Das Bauteil wird damit 78 × 222 × 56 mm groß und passt liegend in den A1
 
 ## Massen
 
-| Teil | Volumen | Masse PETG | Bauraum | Quelle |
+Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Rev. 16 = Rev. 17, dort hat sich nur Berichtstext geändert):
+
+| Teil | Volumen | Masse PETG | Bauraum | Lauf |
 |---|---|---|---|---|
-| Trägerplatte mit Konsole | ≈ 121 cm³ | **≈ 154 g** | 78 × 222 × 56 mm | gerechnet, Rev. 16 |
-| Schlittenplatte | 40,1 cm³ | **50,9 g** | 62 × 97 × 18 mm | Fusion-Lauf Rev. 14 |
-| Mutternblock | 9,8 cm³ | **12,4 g** | 28 × 26 × 17 mm | Fusion-Lauf Rev. 14 |
-| **Druckteile zusammen** | ≈ 171 cm³ | **≈ 217 g** | | |
+| Trägerplatte mit Konsole | 121,5 cm³ | **154,3 g** | 78 × 222 × 56 mm | Rev. 16 |
+| Schlittenplatte | 40,1 cm³ | **50,9 g** | 62 × 97 × 18 mm | Rev. 14 |
+| Mutternblock | 9,8 cm³ | **12,4 g** | 28 × 26 × 17 mm | Rev. 14 |
+| **Druckteile zusammen** | 171,4 cm³ | **217,6 g** | | |
 
 Die Trägerplatte ist mit Rev. 16 von 145 auf 222 mm gewachsen (Schiene 200 mm,
-Konsole auf +145) und wog vorher 98,4 g. Der Wert ist aus dem Querschnitt
-gerechnet — **maßgeblich ist der Validierungsbericht des nächsten
-Fusion-Laufs**. Schlittenplatte und Mutternblock sind unverändert.
+Konsole auf +145) und wog vorher 98,4 g. Gerechnet hatte ich 154 g, gemessen
+sind es 154,3 g. Schlittenplatte und Mutternblock sind unverändert.
 
 Dazu die drei Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
 werden: 6,1 g (X-Wagen) · 3,6 g (Z-Wagen) · 6,7 g (Laser).
@@ -250,12 +251,12 @@ Druckgewicht rund ein Drittel darunter; maßgeblich ist die Anzeige im Slicer.
 Die Werte hier dienen der Plausibilitätskontrolle und der Abschätzung der
 bewegten Masse.
 
-Bewegte Masse auf der X-Achse, grob: 217 g Druckteile + 280 g NEMA 17 + 400 g
+Bewegte Masse auf der X-Achse, grob: 218 g Druckteile + 280 g NEMA 17 + 400 g
 Laser + 115 g MGN9-Schiene (200 mm) und Wagen + 71 g Gewindestange und
 Kupplung ≈ **1,08 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
 im zweistelligen Nm-Bereich, hier rund 1 Nm).
 
-Die Trägerplatte ist mit ≈ 121 cm³ das schwerste Teil, davon etwa 23 cm³
+Die Trägerplatte ist mit 121,5 cm³ das schwerste Teil, davon etwa 23 cm³
 allein die Motorkonsole und 64 cm³ die Säule. Ließe sich mit Taschen in Hauptsäule und Kopfbereich
 reduzieren — bisher nicht gemacht, weil die Steifigkeit dort die Genauigkeit
 der ganzen Z-Achse bestimmt.
@@ -334,7 +335,7 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 3 | Z-Schiene auf den Sockel, 10 × M3×10 Senkkopf DIN 7991 | Inbus von vorn | der Wagen verdeckt je Stellung zwei Schrauben: erst mit dem Wagen unten acht setzen, dann hochschieben und die letzten zwei |
 | 4 | **Schlittenplatte auf den Z-Wagen**, 4 × M3×14 | Inbus von vorn durch die Ø6,5-Freibohrungen | frei — **nur solange der Laser nicht dran ist** |
 | 5 | Mutternblock bestücken: 2 × M6-Mutter eindrücken, Feder einlegen, 2 × M3-Mutter in die Sechskanttaschen | Finger | — |
-| 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 87 mm mit dem Z-Schlitten unten, 32 mm mit ihm oben — beides reicht, unten ist es bequemer |
+| 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 164 mm mit dem Z-Schlitten unten, 28 mm mit ihm oben — beides reicht, unten ist es bequemer |
 | 7 | Kupplung und Gewindestange einsetzen | — | — |
 | 8 | Mutternblock an die Schlittenplatte, 2 × M3×16: locker lassen, Achse mehrmals durchfahren, dann festziehen | Inbus von vorn | frei |
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | 27 mm, mit dem Schlitten ganz unten frei |
@@ -356,9 +357,9 @@ Zwei Dinge, die dabei leicht untergehen:
   [Laserhöhe](#laserhöhe-langloch-statt-rechnen).
 * Für Schritt 6 und Schritt 9 den **Z-Schlitten nach unten** fahren. Nötig
   ist das nur bei Schritt 9 (die Laserreihen müssen unter der Trägerplatte
-  stehen); bei den Motorschrauben wird es damit nur bequemer, 87 statt 32 mm.
-  Bis Rev. 13 waren es oben 11 mm — der tiefer hängende Laser hat auch das
-  entspannt.
+  stehen); bei den Motorschrauben wird es damit nur bequemer, 164 statt 28 mm.
+  Bis Rev. 13 waren es oben 11 mm — der tiefer hängende Laser und die längere
+  Schiene haben auch das entspannt.
 
 ## Zwei Details am Lochbild
 

@@ -42,13 +42,14 @@ längs), um die Baugröße zu entscheiden. Sie folgt jetzt dem Parameter
 
 | Wert | Maß | Status |
 |---|---|---|
-| Bohrbild (Konstruktionsgrundlage) | **40,5 hoch × 16,5 quer**, 4 × M3 | `[?]` Messung 2026-09-17, am Teil nicht mit Lehre gegengeprüft |
+| Bohrbild | **40,5 hoch × 16,5 quer**, 4 × M3 | `[v]` am 2026-09-17 mit Bohrlehre am Modul bestätigt |
 | Gehäuse (angenommen) | 35 × 35 mm Querschnitt | `[w]` |
 
 Messhistorie an diesem Modul: **39 × 15** (erste Angabe) → **40 × 16**
-(`hardware.md`, eigene Messung) → **40,5 × 16,5** (2026-09-17, aktuell
-angesetzt). Drei Werte innerhalb von 1,5 mm — solange keine Lehre das
-entscheidet, bleiben die Befestigungen Langlöcher.
+(`hardware.md`, eigene Messung) → **40,5 × 16,5** — mit `Bohrlehre_Laser`
+(Ø3,4 Rundlöcher) am Teil geprüft und bestätigt. Damit ist auch klar, dass
+Rundlöcher an dieser Stelle funktionieren; die Langlöcher in der
+Schlittenplatte dienen nur noch dem Toleranzausgleich.
 
 Die Langlöcher decken **quer 13,9 – 19,1 mm** und **senkrecht 39,1 – 41,9 mm**
 ab — also die Umgebung des aktuellen Werts und die Messung 40 × 16. Die erste

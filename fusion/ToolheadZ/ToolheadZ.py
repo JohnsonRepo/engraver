@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 8
+REVISION = 9
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -73,9 +73,13 @@ MASSE = {
     'feder_raum_d':        (10.0,  'Federkammer: Durchmesser'),
 
     # --- Kaufteil: Diodenlaser (Nutzerangabe + hardware.md) ----------------
-    # 40,5 x 16,5 — Nutzerangabe 2026-09-17, dritte Messung an diesem Modul
-    # (vorher 39 x 15 und 40 x 16). Am Teil noch nicht mit einer Lehre
-    # bestaetigt, deshalb bleiben die Befestigungen Langloecher.
+    # 40,5 x 16,5 — am 2026-09-17 mit Bohrlehre_Laser (Ø3,4 Rundloecher) am
+    # Modul geprueft und bestaetigt [v]. Dritte Messung an diesem Modul,
+    # vorher 39 x 15 und 40 x 16.
+    # Die Befestigungen sind weiterhin Langloecher. Der Grund dafuer ist jetzt
+    # nicht mehr das unsichere Bohrbild, sondern nur noch Toleranzausgleich
+    # (Schrumpf ueber 40,5 mm PETG). Rundloecher Ø4,0 wuerden auch reichen —
+    # siehe docs/toolhead-z.md.
     'laser_loch_quer':     (16.5,  'Laser: Lochabstand quer (X)'),
     'laser_loch_hoch':     (40.5,  'Laser: Lochabstand senkrecht (Z)'),
     'laser_breite':        (35.0,  'Laser: Gehaeusebreite'),
@@ -966,22 +970,23 @@ def hinweise_bauen(L, zc, fehler):
         '  6. Motor zwischen die Fuehrungsrippen setzen, 4x M3x12 von unten',
         '  7. Kupplung + Gewindestange, Mutternblock zuletzt ausrichten',
         '',
-        'PRUEFEN VOR DEM DRUCK — Lehren nur fuer KAUFTEIL-Lochbilder; fuer',
+        'LEHREN — nur fuer KAUFTEIL-Lochbilder; fuer',
         '  Mutternblock <-> Schlittenplatte braucht es keine, beide kommen aus',
         '  diesem Skript und die Platte hat dort Uebermass zum Ausrichten:',
         '  Bohrlehre_XWagen ...... {:.0f} x {:.0f} mm (MGN15H)'.format(
             w('x_wagen_loch_laengs'), w('x_wagen_loch_quer')),
         '  Bohrlehre_ZWagen ...... {:.0f} x {:.0f} mm (MGN9H, am Teil bestaetigt)'.format(
             w('z_wagen_loch_laengs'), w('z_wagen_loch_quer')),
-        '  Bohrlehre_Laser ....... {:.2f} x {:.2f} mm'.format(
+        '  Bohrlehre_Laser ....... {:.2f} x {:.2f} mm (am Teil bestaetigt)'.format(
             w('laser_loch_hoch'), w('laser_loch_quer')),
-        '    Dritte Messung an diesem Modul (vorher 39 x 15 und 40 x 16).',
-        '    Langloch deckt quer {:.1f}-{:.1f} und hoch {:.1f}-{:.1f} mm ab.'.format(
+        '    Langloch deckt quer {:.1f}-{:.1f} und hoch {:.1f}-{:.1f} mm ab —'.format(
             w('laser_loch_quer') - quer_tol, w('laser_loch_quer') + quer_tol,
             w('laser_loch_hoch') - hoch_tol, w('laser_loch_hoch') + hoch_tol),
-        '  Die alte Messung "26 x 25 mm am Toolhead-Wagen" gehoert zum X-Wagen',
-        '  (MGN15H) — die Z-Achse ist als MGN9H bestaetigt. Am X-Wagen steht',
-        '  die Bestaetigung mit der Lehre noch aus.',
+        '    jetzt nur noch Toleranzausgleich, nicht mehr Unsicherheit.',
+        '  OFFEN ist nur noch der X-Wagen: die alte Messung "26 x 25 mm am',
+        '  Toolhead-Wagen" gehoert zu ihm (MGN15H), nicht zur Z-Achse. Vor dem',
+        '  Druck der Traegerplatte mit Bohrlehre_XWagen pruefen — er traegt den',
+        '  ganzen Toolhead, und ein MGN15C haette 25 x 20 statt 25 x 25.',
         '',
         'ANZIEHEN: die Z-Wagen-Schrauben klemmen {:.0f} mm PETG (Kopf sitzt in'.format(
             w('pad_hoehe')),

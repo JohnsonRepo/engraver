@@ -24,8 +24,8 @@ SCHEIBE_D = 9.0                     # DIN 9021 M3, gross
 INBUS_FREI_D = 6.0                  # Platz fuer den 2,5er Inbus
 M3_SCHAFT_D = 3.0
 # Frueher an diesem Lasermodul gemessene Lochbilder (hoch, quer). Der aktuelle
-# Wert steht in MASSE; diese hier werden nur gegen den Verstellbereich der
-# Langloecher gehalten — das Bohrbild ist noch nicht mit einer Lehre bestaetigt.
+# Wert steht in MASSE und ist seit 2026-09-17 mit einer Lehre am Teil
+# bestaetigt; diese hier bleiben als Messhistorie im Bericht stehen.
 LASER_MESSUNGEN = ((40.0, 16.0), (39.0, 15.0))
 
 

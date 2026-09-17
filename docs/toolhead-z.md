@@ -238,6 +238,29 @@ des Auflagepads. Zwei **Ø10-Durchbrüche im Pad** nehmen Kopf und Scheibe auf;
 die Scheibe liegt trotzdem auf der Plattenrückseite auf, weil der Durchbruch nur
 das Pad durchdringt. Vom Pad bleiben 571 mm² Auflage auf dem Wagen.
 
+## Langlöcher oder Rundlöcher?
+
+Die vier Laserbefestigungen sind **Langlöcher** (4,4 mm breit, 1,2 mm
+Verstellweg quer) und brauchen deshalb große Scheiben DIN 9021 Ø9. Der Grund
+dafür war der unsichere Status des Bohrbildes — die Konvention des
+`fusion-python`-Skills verlangt für `[?]`-Maße Langlöcher. **Dieser Grund ist
+mit der Bestätigung weggefallen.**
+
+Was bleibt, ist Toleranzausgleich: über 40,5 mm schrumpft PETG um etwa
+0,2–0,4 mm. Ein Ø3,4-Rundloch gibt auf einer M3-Schraube nur ±0,2 mm je Loch,
+das ist knapp. Sinnvolle Varianten:
+
+| Variante | Lochbildtoleranz | Scheibe | Anmerkung |
+|---|---|---|---|
+| Langloch 4,4 × 5,2 (aktuell) | quer ±2,6 · hoch ±1,4 | DIN 9021 Ø9 | großzügig, Scheibe hat nur 0,75 mm Luft zur Seitenrippe |
+| **Rundloch Ø4,0** | **±1,0** | DIN 125 Ø7 | deckt den Schrumpf mit Reserve, einfacher, 1,75 mm Luft zur Rippe |
+| Rundloch Ø3,4 | ±0,4 | DIN 125 Ø7 | exakt, aber ohne Reserve gegen Schrumpf |
+
+Empfehlung wäre **Ø4,0 rund**: der Verstellweg quer bringt beim Laser nichts
+(die Querlage ist nur ein Koordinatenversatz, keine Ausrichtung), und die
+Geometrie wird an zwei Stellen entspannter. Umgesetzt ist das noch nicht —
+die Langlöcher stehen weiter im Skript.
+
 ## Druck (PETG, Bambu Lab A1)
 
 | Teil | Lage aufs Bett | Warum |
@@ -259,7 +282,7 @@ einblenden, drucken, ans reale Teil halten.
 |---|---|
 | `Bohrlehre_XWagen` | 25 × 25 mm — sitzt am Portal wirklich ein MGN15H? |
 | `Bohrlehre_ZWagen` | 16 × 15 mm — MGN9H, am 2026-09-17 am Teil bestätigt `[v]` |
-| `Bohrlehre_Laser` | 40,5 × 16,5 mm — noch offen |
+| `Bohrlehre_Laser` | 40,5 × 16,5 mm — am 2026-09-17 am Teil bestätigt `[v]` |
 
 **Eine Lehre gibt es nur für Lochbilder von Kaufteilen** — also für Teile, die
 dieses Skript nicht selbst erzeugt. Damit weicht das bewusst von der
@@ -280,14 +303,12 @@ Stand der offenen Punkte aus `hardware-notizen.md`:
 * **X-Wagen: offen.** Die alte Messung „26 × 25 mm am Toolhead-Wagen" gehört
   zu ihm, nicht zur Z-Achse — MGN15H = 25 × 25 passt dazu, ist aber noch nicht
   mit der Lehre bestätigt.
-* **Laser-Bohrbild: offen.** Aktuell angesetzt **40,5 × 16,5** (Messung vom
-  2026-09-17). Das ist die dritte Messung an diesem Modul — vorher 39 × 15 und
-  40 × 16. Die Langlöcher decken **quer 13,9–19,1 und hoch 39,1–41,9 mm** ab,
-  also die Umgebung des aktuellen Werts und die Messung 40 × 16. Die älteste
-  Messung 39 × 15 liegt seit dieser Änderung 0,1 mm außerhalb — sie gilt als
-  überholt. `toolhead_check.py` führt den Verstellbereich und alle früheren
-  Messungen im Bericht mit; soll der Bereich breiter werden, reicht
-  `schlitz_breite` von 4,4 auf 4,6 mm.
+* **Laser-Bohrbild: geklärt.** **40,5 × 16,5 mm**, am 2026-09-17 mit
+  `Bohrlehre_Laser` am Modul bestätigt. Das war die dritte Messung (vorher
+  39 × 15 und 40 × 16); die Messhistorie bleibt im Bericht stehen.
+  Weil die Lehre **Ø3,4-Rundlöcher** hat, ist damit zugleich bewiesen, dass
+  Rundlöcher an dieser Stelle passen — siehe [Langlöcher oder
+  Rundlöcher?](#langlöcher-oder-rundlöcher).
 
 ## Wenn ein Teil an der falschen Stelle landet
 

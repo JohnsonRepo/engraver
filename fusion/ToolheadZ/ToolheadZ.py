@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 13
+REVISION = 14
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -99,6 +99,7 @@ MASSE = {
     'tasche_spiel':        (0.15,  'Mutterntasche: Spiel auf die Schluesselweite'),
     'tasche_klemmung':     (0.20,  'Mutterntasche: Untermass im Mundstueck'),
     'm3_scheibe_h':        (0.5,   'M3 Scheibe DIN 125: Dicke'),
+    'inbus_frei_d':        (6.0,   'Werkzeugkorridor fuer den 2,5er Inbus'),
     'insert_m3_d':         (4.0,   'ruthex M3: Einpressbohrung'),
     'insert_m3_t':         (7.0,   'ruthex M3: Sacklochtiefe'),
 
@@ -140,20 +141,31 @@ MASSE = {
     'schlitten_dicke':     (6.0,   'Schlittenplatte: Dicke'),
     'schlitten_breite_l':  (17.5,  'Schlittenplatte: Kante links der Schienenachse'),
     'schlitten_rand':      (4.0,   'Schlittenplatte: Rand um das Lochfeld'),
+    # Nur zur Dokumentation und fuer die Fokusrechnung im Bericht — keine
+    # Geometrie. Gemessen 2026-09-17: Lochbildmitte X-Wagen -> Bettoberflaeche.
+    'bett_abstand':        (130.0, 'Maschine: Bezugsebene -> Bettoberflaeche'),
+    'werkstueck_max':      (50.0,  'Maschine: dickstes Werkstueck'),
     'rippe_mitte_breite':  (5.0,   'Mittelrippe: Breite'),
     # 13,5: die Scheibe der Laserschraube liegt zwischen Mittel- und
     # Seitenrippe. Mit der DIN-125-Scheibe (Ø7) bleiben dort 1,75 mm Luft.
     'rippe_seite_innen':   (13.5,  'Seitenrippe links: Innenkante'),
-    # -laser_loch_hoch/2: die OBERE Laser-Schraubenreihe liegt damit genau auf
-    # der Wagenmitte — mittig zwischen den beiden Wagen-Schraubenreihen (+-8),
-    # sonst ueberschneiden sich Langloch und Freibohrung.
-    'laser_versatz_z':   (-20.25,  'Laser-Lochbildmitte gegen die Wagenmitte'),
+    # -46: zwei Bedingungen zugleich. (1) MONTAGE — das Gewinde der
+    # Laserbefestigung sitzt im Modul, also wird von hinten verschraubt. Liegt
+    # die obere Lochreihe auf der Wagenmitte, steht der Z-Wagen davor und der
+    # Inbus hat nur 12 mm Platz. Sie muss um mehr als halbe Wagenlaenge plus
+    # Werkzeugradius (19,95 + 3) von der Wagenmitte weg — das gilt auch fuer
+    # die eingestellte Langlochstellung, siehe langloch_auf_max in lage().
+    # (2) FOKUS — mit bett_abstand und werkstueck_max liegt das Fokusfenster
+    # damit richtig; der Bericht rechnet die Langlochstellung je Fokusabstand
+    # aus. -46 statt -44 laesst 2,8 mm statt 0,8 mm Luft nach oben.
+    'laser_versatz_z':     (-46.0, 'Laser-Lochbildmitte gegen die Wagenmitte'),
+    # Senkrechter Verstellweg: damit haengt die Laserhoehe nicht am genauen
+    # Fokusabstand des Moduls, der auf dem Modul nicht steht.
+    'laser_langloch_hub':   (8.0,  'Laser-Befestigung: Verstellweg je Richtung'),
     'kopf_freiraum':        (8.0,  'Freiraum im Pad fuer Kopf+Scheibe der Laserschraube'),
-    # Rundloch statt Langloch: das Bohrbild ist am Teil bestaetigt, ein
-    # Verstellweg quer bringt beim Laser nichts (die Querlage ist nur ein
-    # Koordinatenversatz). Ø4,0 auf M3 gibt +-0,5 mm je Loch, also +-1,0 mm
-    # Lochbildtoleranz — deckt den Schrumpf ueber 40,5 mm PETG mit Reserve.
-    'laser_loch_d':         (4.0,  'Laser-Befestigung: Bohrungsdurchmesser'),
+    # Langloch SENKRECHT (nicht quer): 4,0 mm Breite gibt wie bisher +-0,5 mm
+    # je Loch Lochbildtoleranz quer, die Laenge ist die Hoehenverstellung.
+    'laser_loch_d':         (4.0,  'Laser-Befestigung: Langlochbreite'),
 
     # --- Mutternblock ------------------------------------------------------
     'block_x_links':       (16.0,  'Mutternblock: linke Kante'),
@@ -219,8 +231,16 @@ def lage():
     L['laser_unten_rel'] = L['laser_loch_unten_rel'] - w('laser_loch_ab_unten')
     L['laser_oben_rel'] = L['laser_unten_rel'] + w('laser_laenge')
     L['schlitten_oben_rel'] = w('pad_laenge') / 2.0 + w('schlitten_rand')
+    # Das Langloch braucht nach unten Material fuer den ganzen Hub; nach oben
+    # bleibt die Platte, wie sie war, damit der Verfahrweg nicht schrumpft
+    # (die Oberkante bindet gegen die Kupplung).
     L['schlitten_unten_rel'] = L['laser_loch_unten_rel'] \
-        - w('laser_loch_d') / 2.0 - w('schlitten_rand')
+        - w('laser_loch_d') / 2.0 - w('laser_langloch_hub') \
+        - w('schlitten_rand')
+    # Liegt die obere Lochreihe ausserhalb des Auflagepads, braucht sie dort
+    # keinen Kopffreiraum — der Schnitt entfaellt dann ganz.
+    L['laser_oben_im_pad'] = (abs(L['laser_loch_oben_rel'])
+                              < w('pad_laenge') / 2.0)
     L['block_oben_rel'] = w('block_hoehe') / 2.0
     L['block_unten_rel'] = -w('block_hoehe') / 2.0
 
@@ -242,6 +262,21 @@ def lage():
     L['zc_max'] = min(grenzen.values())
     L['zc_bindend'] = min(grenzen, key=lambda k: grenzen[k])
     L['z_weg'] = L['zc_max'] - L['zc_min']
+
+    # ---- Fokusfenster: Hoehe der Gehaeuseunterkante ueber dem Bett. Reine
+    #      Rechnung fuer den Bericht, keine Geometrie.
+    L['linse_tief'] = w('bett_abstand') + L['laser_unten_rel'] + L['zc_min']
+    L['linse_hoch'] = w('bett_abstand') + L['laser_unten_rel'] + L['zc_max']
+
+    # ---- Grenzen der Langlochstellung (mm nach oben, 0 = Lochmitte).
+    #      Nach oben bindet die MONTAGE: schiebt man den Laser hoch, wandert
+    #      die obere Schraubenreihe hinter den Z-Wagen und ist nicht mehr zu
+    #      erreichen. Nach unten bindet der Hub selbst.
+    L['langloch_auf_max'] = -(w('z_wagen_laenge') / 2.0
+                              + w('inbus_frei_d') / 2.0) \
+        - L['laser_loch_oben_rel']
+    L['langloch_auf_max'] = min(L['langloch_auf_max'], w('laser_langloch_hub'))
+    L['langloch_ab_max'] = -w('laser_langloch_hub')
 
     # ---- Schraubenlaenge Schlittenplatte -> Z-Wagen -------------------------
     # Naechste gerade Laenge ueber pad_hoehe + Mindesteingriff. Nicht
@@ -531,6 +566,20 @@ def kreis(sk, u, v, d_mm):
         punkt(sk, u, v), d_mm / 20.0)
 
 
+def langloch_senkrecht(sk, u, v, breite_mm, hub_mm):
+    """Senkrechtes Langloch (Achse = Maschine Z) als zwei Kreise plus
+    Rechteck, Masse in mm. Beim Schneiden werden ALLE Profile der Skizze
+    entfernt; die Vereinigung ergibt das Langloch. Robuster als ein aus
+    Linien und Boegen zusammengesetztes Profil, das bei Rundungsfehlern nicht
+    schliesst — diese Variante ist in Fusion bereits gelaufen (Rev. 10/11,
+    damals quer).
+    """
+    r = breite_mm / 2.0
+    kreis(sk, u, v - hub_mm, breite_mm)
+    kreis(sk, u, v + hub_mm, breite_mm)
+    rechteck(sk, u - r, v - hub_mm, u + r, v + hub_mm)
+
+
 def sechskant(sk, cu, cv, sw, flach_quer=True):
     """Regelmaessiges Sechskant ueber die Schluesselweite sw (Abstand der
     parallelen Flanken), Masse in mm.
@@ -680,6 +729,30 @@ def fussfase(comp, koerper, achse, wert_mm, fase_mm, fehler, was):
                       .format(was))
 
 
+def langloch_stellung(L, f_mm, dicke_mm):
+    """Welche Langlochstellung (mm nach oben) passt zu einem Fokusabstand f?
+    Dickes Material braucht die Linse oben (dicke + f ueber dem Bett), duennes
+    unten (f ueber dem Bett). Liefert (von, bis); von > bis heisst, der
+    Verfahrweg reicht fuer diesen Dickenbereich nicht.
+    """
+    return (dicke_mm + f_mm - L['linse_hoch'], f_mm - L['linse_tief'])
+
+
+def fokus_zeilen(L, w, kandidaten=(15.0, 20.0, 25.0, 30.0, 35.0)):
+    """Berichtszeilen: welche Langlochstellung passt zu welchem Fokusabstand?
+    Geht eine Dicke nicht mehr auf, wird gesagt, was stattdessen erreichbar
+    ist — die Stellung ist nach oben durch die Montage begrenzt."""
+    zeilen = []
+    for f in kandidaten:
+        von, bis = langloch_stellung(L, f, w('werkstueck_max'))
+        stellung = min(max(von, L['langloch_ab_max']), L['langloch_auf_max'])
+        passt = (von <= L['langloch_auf_max'] and bis >= L['langloch_ab_max'])
+        zeilen.append('    f = {:.0f} mm  ->  Laser {:+.1f} mm  ({})'.format(
+            f, stellung, 'passt' if passt else 'nur {:.0f} mm Werkstueck'.format(
+                L['linse_hoch'] + stellung - f)))
+    return zeilen
+
+
 # --- Bauteile ----------------------------------------------------------------
 def bau_traegerplatte(app, design, comp, L, fehler):
     """Traegerplatte MIT angeformter Motorkonsole — ein Druckteil.
@@ -817,20 +890,26 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
         kreis(sk, x, zc + z, w('m3_senkung'))
     weg(comp, alle_profile(sk), w('schlitten_dicke'), koerper)
 
-    # Freiraum im Pad fuer Kopf + Scheibe der OBEREN Laserschraubenreihe:
-    # nur durch das Pad, damit die Scheibenauflage an der Platte stehen bleibt.
-    sk = skizze(comp, e_pad, 'Sk_Kopffreiraum_Laser')
-    for x in (-w('laser_loch_quer') / 2, w('laser_loch_quer') / 2):
-        kreis(sk, x, zc + L['laser_loch_oben_rel'], w('kopf_freiraum'))
-    weg(comp, alle_profile(sk), w('pad_hoehe'), koerper)
+    # Freiraum im Pad fuer Kopf + Scheibe der OBEREN Laserschraubenreihe —
+    # nur noetig, solange diese Reihe ueberhaupt im Pad liegt. Seit der Laser
+    # tiefer haengt (laser_versatz_z = -46), liegt sie darunter: kein Schnitt,
+    # volle Auflage auf dem Wagen, und der Kanal wird auch nicht als
+    # Werkzeugzugang gebraucht (der Laser kommt jetzt zuletzt dran).
+    if L['laser_oben_im_pad']:
+        sk = skizze(comp, e_pad, 'Sk_Kopffreiraum_Laser')
+        for x in (-w('laser_loch_quer') / 2, w('laser_loch_quer') / 2):
+            kreis(sk, x, zc + L['laser_loch_oben_rel'], w('kopf_freiraum'))
+        weg(comp, alle_profile(sk), w('pad_hoehe'), koerper)
 
-    # Laser: Rundloecher Ø4,0. Das Bohrbild ist am Teil bestaetigt, deshalb
-    # keine Langloecher mehr — die 1 mm Lochbildtoleranz aus dem Uebermass
-    # deckt den Schrumpf ueber 40,5 mm PETG.
-    sk = skizze(comp, e_platte, 'Sk_Bohrungen_Laser')
+    # Laser: SENKRECHTE Langloecher, 4,0 mm breit, +-laser_langloch_hub lang.
+    # Quer bleibt es bei 4,0 mm und damit bei +-1,0 mm Lochbildtoleranz (das
+    # Bohrbild ist am Teil bestaetigt); die Laenge ist die Hoehenverstellung
+    # fuer den Fokusabstand des Moduls, der nicht auf dem Modul steht.
+    sk = skizze(comp, e_platte, 'Sk_Langloecher_Laser')
     for x in (-w('laser_loch_quer') / 2, w('laser_loch_quer') / 2):
         for rel in (L['laser_loch_oben_rel'], L['laser_loch_unten_rel']):
-            kreis(sk, x, zc + rel, w('laser_loch_d'))
+            langloch_senkrecht(sk, x, zc + rel, w('laser_loch_d'),
+                               w('laser_langloch_hub'))
     weg(comp, alle_profile(sk), w('schlitten_dicke'), koerper)
 
     # Schwimmende Verschraubung des Mutternblocks: Uebermass zum Ausrichten
@@ -1040,19 +1119,25 @@ def hinweise_bauen(L, zc, fehler):
         '     Freibohrungen) — nur solange der Laser NICHT dran ist',
         '  5. Mutternblock bestuecken (2x M6-Mutter + Feder, 2x M3-Mutter)',
         '  6. Motor zwischen die Fuehrungsrippen, 4x M3x12 von unten —',
-        '     Z-Schlitten vorher nach UNTEN schieben (oben nur 11 mm Platz)',
+        '     mit dem Z-Schlitten unten bequemer (87 statt 32 mm Platz)',
         '  7. Kupplung + Gewindestange, dann Mutternblock ausrichten',
-        '  8. Laser zuletzt, 4x M3x10 + Scheibe von hinten',
+        '  8. Laser ZULETZT, 4x M3x10 + Scheibe von hinten, Z-Schlitten',
+        '     dafuer nach unten fahren ({:.0f} mm freier Korridor)'.format(
+            L['schlitten_y1'] - L['traeger_y1']),
         '',
-        'ACHTUNG — OFFENER KONFLIKT (toolhead_check.py, Abschnitt 6):',
-        '  Schritt 4 und Schritt 8 bauen sich gegenseitig zu. Das Gewinde der',
-        '  Laserbefestigung sitzt im Modul, also wird von HINTEN verschraubt;',
-        '  die obere Laserreihe liegt dann hinter dem Z-Wagen (12 mm frei).',
-        '  Umgekehrt deckt das Lasergehaeuse die Ø{:.1f}-Freibohrungen der'.format(
-            w('m3_senkung')),
-        '  Wagenschrauben ab (6 mm frei). Gebraucht werden ~20 mm Inbus.',
-        '  In dieser Revision ist die Baugruppe damit NICHT montierbar —',
-        '  Loesungen in docs/toolhead-z.md, Abschnitt Montagereihenfolge.',
+        'FOKUS UND LANGLOCH (senkrechte Langloecher, +-{:.0f} mm):'.format(
+            w('laser_langloch_hub')),
+        '  Der Fokusabstand f des Moduls steht nicht auf dem Modul. Statt ihn',
+        '  in die Geometrie zu giessen, ist die Laserhoehe verstellbar:',
+        '  Linse ueber dem Bett in Lochmitte ... {:.1f} bis {:.1f} mm'.format(
+            L['linse_tief'], L['linse_hoch']),
+        '  nutzbare Langlochstellung ......... {:+.1f} bis {:+.1f} mm'.format(
+            L['langloch_ab_max'], L['langloch_auf_max']),
+        '  Nach oben bindet nicht der Hub, sondern die Montage: hoeher',
+        '  gestellt wandert die obere Schraubenreihe hinter den Z-Wagen.',
+        '  Einstellung fuer {:.0f} mm Werkstueck (bett_abstand {:.0f} mm):'.format(
+            w('werkstueck_max'), w('bett_abstand')),
+    ] + fokus_zeilen(L, w) + [
         '',
         'LEHREN — nur fuer KAUFTEIL-Lochbilder; fuer',
         '  Mutternblock <-> Schlittenplatte braucht es keine, beide kommen aus',

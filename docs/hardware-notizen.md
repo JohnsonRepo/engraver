@@ -48,8 +48,10 @@ längs), um die Baugröße zu entscheiden. Sie folgt jetzt dem Parameter
 Messhistorie an diesem Modul: **39 × 15** (erste Angabe) → **40 × 16**
 (`hardware.md`, eigene Messung) → **40,5 × 16,5** — mit `Bohrlehre_Laser`
 (Ø3,4 Rundlöcher) am Teil geprüft und bestätigt. Damit war auch belegt, dass
-Rundlöcher an dieser Stelle funktionieren — die Schlittenplatte hat seitdem
-**Rundlöcher Ø4,0** statt Langlöcher.
+Rundlöcher an dieser Stelle funktionieren — die Schlittenplatte hatte deshalb
+in Rev. 12/13 **Rundlöcher Ø4,0**. Seit Rev. 14 sind es **senkrechte
+Langlöcher 4,0 × ±8 mm**, aber aus einem anderen Grund: nicht Lochbildtoleranz,
+sondern Höhenverstellung für den unbekannten Fokusabstand (unten).
 
 Die Lochbildtoleranz beträgt damit **±1,0 mm je Achse** (Ø4,0 auf Schaft Ø3),
 deckt also 39,5 – 41,5 hoch und 15,5 – 17,5 quer ab — die Messung 40 × 16
@@ -60,11 +62,45 @@ Schrumpf nicht, genügt `laser_loch_d` von 4,0 auf 4,5 mm.
 Ist das Gehäuse tiefer oder flacher als 35 mm, `laser_tiefe` anpassen — davon
 hängt nur die berechnete Lage der Strahlachse ab, nicht die Geometrie.
 
+### Fokusabstand `[?]` — offen
+
+| Wert | Maß | Status |
+|---|---|---|
+| Fokusabstand f (Gehäuseunterkante → Material) | **unbekannt** | steht nicht auf dem Modul, Modul nicht benannt |
+
+`hardware.md` führt als Kandidaten das *Laser Tree LT-20W-A* mit „Fokus
+einstellbar 20–35 mm" `[w]` — ob es dasselbe Modul ist, ist offen. Deshalb
+steckt f **nicht** in der Geometrie: die Laserhöhe wird über senkrechte
+Langlöcher (±8 mm, nach oben nutzbar +2,8 mm) eingestellt. Der
+Validierungsbericht rechnet die Stellung je f aus.
+
+Selbst messen: Papier aufs Bett, 1–2 % Leistung, Höhe variieren bis der Punkt
+am kleinsten ist, dann Gehäuseunterkante → Papier messen. Sobald der Wert
+bekannt ist, hier eintragen und auf `[v]` setzen.
+
+## Maschinenmaße für die Z-Achse
+
+| Wert | Maß | Status |
+|---|---|---|
+| Bezugsebene (Mitte X-Wagen-Lochbild) → Bettoberfläche | **130 mm** | `[?]` am 2026-09-17 genannt, auf cm gerundet |
+| dickstes Werkstück | **50 mm** | Vorgabe |
+
+Beide stehen als `bett_abstand` und `werkstueck_max` im Skript — sie erzeugen
+keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt die
+harte Grenze **f ≤ 27,1 mm**, damit 0–50 mm Werkstückdicke erreichbar bleiben;
+darüber sind es `77,1 mm − f`. Grund: die obere Laser-Schraubenreihe muss beim
+Verschrauben neben dem Z-Wagen liegen, und das begrenzt, wie hoch der Laser
+sitzen darf.
+
+Eine dickere Opferplatte wirkt wie eine Langlochstellung nach unten (1 mm
+dicker = 1 mm tiefer) und verschiebt das Fenster nur in diese Richtung.
+
 ## Normteile (aus hardware.md, `[w]`)
 
 | Gewinde | Durchgang | Kopf-Ø | Kopfhöhe |
 |---|---|---|---|
 | M3 | 3,4 | 5,5 | 3,0 |
 
-Scheiben M3: DIN 125 Ø 7 × 0,5 am Laser (Rundloch Ø4,0) · DIN 9021 Ø 9 × 0,8
-am schwimmenden Mutternblock (deckt dort das Übermaß Ø4,6).
+Scheiben M3: DIN 125 Ø 7 × 0,5 am Laser (Langloch 4,0 breit, 1,5 mm Auflage je
+Seite) · DIN 9021 Ø 9 × 0,8 am schwimmenden Mutternblock (deckt dort das
+Übermaß Ø4,6).

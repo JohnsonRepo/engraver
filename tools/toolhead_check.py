@@ -223,6 +223,10 @@ def main():
            0.280 * 9.81 * (sy - L['traeger_y1']) / 1000.0, 'Nm')
 
     p.titel('6) Werkzeugzugang: laesst sich das ueberhaupt montieren?')
+    p.ja('Werkzeugkorridor hier und im Skript gleich definiert',
+         abs(w('inbus_frei_d') - INBUS_FREI_D) < 1e-9,
+         '   (Skript {:.1f} / Pruefung {:.1f} mm)'.format(
+             w('inbus_frei_d'), INBUS_FREI_D))
     # Ein Inbus braucht nicht nur einen freien Korridor, sondern auch LAENGE.
     # Eine 6,5-Freibohrung mit dem Laser 6 mm dahinter ist unbenutzbar, auch
     # wenn "nichts in der Bohrung steht". Jede Verbindung wird in dem Zustand
@@ -334,6 +338,13 @@ def main():
          '   A) Platte zuerst: {} / B) Laser zuerst: {}'.format(
              'ok' if a1 and a2 else 'nein', 'ok' if b1 and b2 else 'nein'))
 
+    # Das Langloch verschiebt die Schraube — nach oben bis dicht an den
+    # Z-Wagen. Die Lochmitte (Stellung 0) muss in jedem Fall montierbar sein.
+    p.ok('Langloch: Stellbereich nach oben bis zum Z-Wagen',
+         L['langloch_auf_max'], 0.0)
+    p.ok('Langloch: Stellbereich insgesamt',
+         L['langloch_auf_max'] - L['langloch_ab_max'], 4.0)
+
     # 5) Mutternblock: von vorn, mit Laser und Block montiert.
     d, wer = kuerzester(
         [(x, L['schlitten_y1'], 0.0) for x in L['block_schraube_x']], 'y', +1,
@@ -434,8 +445,6 @@ def main():
          (lq - SCHEIBE_NORM / 2) - w('rippe_mitte_breite') / 2, 0.5)
     p.ok('Scheibe der Laserschraube passt neben die Seitenrippe',
          w('rippe_seite_innen') - (lq + SCHEIBE_NORM / 2), 0.5)
-    p.ok('Kopffreiraum bleibt im Auflagepad',
-         w('pad_breite') / 2 - (lq + w('kopf_freiraum') / 2), 1.5)
     # Rundloch statt Langloch: die Lochbildtoleranz kommt jetzt allein aus dem
     # Uebermass Ø4,0 auf Schaft Ø3 — beide Loecher koennen gegenlaeufig wandern.
     laser_tol = w('laser_loch_d') - M3_SCHAFT_D
@@ -464,19 +473,57 @@ def main():
         for vz in (-w('z_wagen_loch_laengs') / 2, w('z_wagen_loch_laengs') / 2):
             p.ok('{} Laserreihe <-> Freibohrung Z-Wagen (Platte)'.format(name),
                  abs(rel - vz) - r_sen - r_schl, 1.5)
-    p.ok('Kopffreiraum <-> Wagenbohrung im Pad',
-         abs(L['laser_loch_oben_rel'] - w('z_wagen_loch_laengs') / 2)
-         - r_frei - r_loch, 1.0)
-    p.ok('Kopffreiraum nimmt Kopf und Scheibe auf',
-         w('kopf_freiraum') - SCHEIBE_NORM, 0.5)
-    p.ok('obere Laserreihe liegt im Pad (braucht den Freiraum)',
-         w('pad_laenge') / 2 - abs(L['laser_loch_oben_rel']), 0.0, '>=')
+    # Seit der Laser tiefer haengt, liegt die obere Reihe UNTER dem Pad. Dann
+    # entfaellt der Kopffreiraum ganz — sonst muss er geprueft werden.
+    if L['laser_oben_im_pad']:
+        p.ok('Kopffreiraum bleibt im Auflagepad',
+             w('pad_breite') / 2 - (lq + w('kopf_freiraum') / 2), 1.5)
+        p.ok('Kopffreiraum <-> Wagenbohrung im Pad',
+             abs(L['laser_loch_oben_rel'] - w('z_wagen_loch_laengs') / 2)
+             - r_frei - r_loch, 1.0)
+        p.ok('Kopffreiraum nimmt Kopf und Scheibe auf',
+             w('kopf_freiraum') - SCHEIBE_NORM, 0.5)
+        p.ok('obere Laserreihe liegt im Pad (braucht den Freiraum)',
+             w('pad_laenge') / 2 - abs(L['laser_loch_oben_rel']), 0.0, '>=')
+        pad_rest = (w('pad_breite') * w('pad_laenge')
+                    - 2 * 3.1416 * (w('kopf_freiraum') / 2) ** 2)
+    else:
+        p.info('obere Laserreihe liegt unter dem Pad — kein Kopffreiraum')
+        # Kopf und Scheibe sitzen jetzt frei auf der Plattenrueckseite: das
+        # ganze Langloch samt Scheibe muss unter dem Pad bleiben.
+        p.ok('Langloch oben + Scheibe bleiben unter dem Pad',
+             abs(L['laser_loch_oben_rel'] + L['langloch_auf_max'])
+             - w('pad_laenge') / 2 - SCHEIBE_NORM / 2, 1.0)
+        pad_rest = w('pad_breite') * w('pad_laenge')
+    # Langloecher: Enden gegen Plattenkante und gegen die Wagen-Freibohrungen
+    hub, r_schlitz = w('laser_langloch_hub'), w('laser_loch_d') / 2
+    p.ok('Langloch unten bleibt in der Platte',
+         (L['laser_loch_unten_rel'] - hub - r_schlitz)
+         - L['schlitten_unten_rel'], 2.0, '>=')
+    p.ok('Langloch oben bleibt in der Platte',
+         L['schlitten_oben_rel']
+         - (L['laser_loch_oben_rel'] + hub + r_schlitz), 2.0, '>=')
+    for vz in (-w('z_wagen_loch_laengs') / 2, w('z_wagen_loch_laengs') / 2):
+        p.ok('Langlochende <-> Freibohrung Z-Wagen',
+             abs(L['laser_loch_oben_rel'] + hub - vz) - r_sen - r_schlitz, 1.5)
     p.ok('untere Laserreihe liegt ausserhalb des Pads',
          abs(L['laser_loch_unten_rel']) - w('pad_laenge') / 2 - SCHEIBE_NORM / 2,
          1.0)
-    p.ok('Restauflage des Pads auf dem Wagen',
-         w('pad_breite') * w('pad_laenge')
-         - 2 * 3.1416 * (w('kopf_freiraum') / 2) ** 2, 400.0, '>=', 'mm2')
+    p.ok('Restauflage des Pads auf dem Wagen', pad_rest, 400.0, '>=', 'mm2')
+
+    # Fokusfenster: die Langlochstellung ersetzt das Wissen um den genauen
+    # Fokusabstand des Moduls. bett_abstand/werkstueck_max sind Maschinenmasse.
+    p.info('Bezugsebene -> Bettoberflaeche (gemessen)', w('bett_abstand'))
+    p.info('Linse ueber dem Bett, Lochmitte: {:.1f} bis {:.1f} mm'.format(
+        L['linse_tief'], L['linse_hoch']))
+    p.info('Langloch nutzbar: {:+.1f} bis {:+.1f} mm (oben bindet die '
+           'Montage)'.format(L['langloch_ab_max'], L['langloch_auf_max']))
+    for zeile in mod.fokus_zeilen(L, w):
+        p.info(zeile.strip())
+    f_max = (L['linse_hoch'] + L['langloch_auf_max']
+             - w('werkstueck_max'))
+    p.info('groesster Fokusabstand fuer {:.0f} mm Werkstueck'.format(
+        w('werkstueck_max')), f_max)
 
     p.titel('9) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
     for name, a, b in (

@@ -38,8 +38,11 @@ am MGN15H-Wagen des Portals — mit angeformter Motorkonsole für den NEMA 17 �
 **Mutternblock** mit zwei federverspannten M6-Muttern, der schwimmend
 verschraubt ist.
 
-Nutzbarer Z-Verfahrweg **50,45 mm**, Strahlachse 58,5 mm vor der
-X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Details in [docs/toolhead-z.md](docs/toolhead-z.md).
+Nutzbarer Z-Verfahrweg **55,1 mm**, Strahlachse 58,5 mm vor der
+X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Die
+Laserhöhe ist über senkrechte Langlöcher ±8 mm verstellbar, damit der
+Fokusabstand des Moduls nicht in der Geometrie steckt. Details in
+[docs/toolhead-z.md](docs/toolhead-z.md).
 
 ### Toolhead-Grundplatte (überholt)
 
@@ -77,7 +80,7 @@ verschraubt wird), Lochbildtoleranzen, Druckbarkeit — und statisch, dass jeder
 im Skript benutzte Maß- und Lageschlüssel existiert. Exit-Code 0 = alles
 bestanden.
 
-**Stand:** eine Prüfung schlägt fehl — Laser und Z-Wagen verdecken sich
-gegenseitig die Schrauben, die Baugruppe ist in dieser Form nicht montierbar.
-Analyse und die zwei gerechneten Lösungen stehen in
-[docs/toolhead-z.md](docs/toolhead-z.md#offener-konflikt-laser-und-z-wagen-bauen-sich-gegenseitig-zu).
+**Stand:** alle Prüfungen bestanden (Rev. 14). Der Zugangskonflikt zwischen
+Laser und Z-Wagen ist gelöst, indem der Laser 25,75 mm tiefer hängt und über
+senkrechte Langlöcher eingestellt wird —
+[Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

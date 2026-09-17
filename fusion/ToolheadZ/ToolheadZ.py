@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 10
+REVISION = 11
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -307,46 +307,111 @@ def lage():
     return L
 
 
-# --- Materialien (Standardblock, siehe SKILL.md) -----------------------------
-EIGENE_MATERIALIEN = {
-    'PLA':  ('ABS Plastic', 1.06, 1.24),
-    'PETG': ('ABS Plastic', 1.06, 1.27),
-}
+# --- Materialien -------------------------------------------------------------
+# Weicht vom Standardblock der SKILL.md ab. Der dortige Helfer sucht das
+# Basismaterial unter dem englischen Namen "ABS Plastic" und faellt sonst auf
+# eine TEILSTRING-Suche nach dem eigenen Namen zurueck. In einer deutschen
+# Fusion-Installation ist die Folge:
+#   PETG -> Teilstring "petg" findet nichts -> kein Material gesetzt ->
+#           der Koerper behaelt den Design-Default, also STAHL (7,85 g/cm3)
+#   PLA  -> Teilstring "pla"  findet z.B. "Plaster"/"Plastic" -> ~1,8 g/cm3
+# Beides laeuft ohne Fehlermeldung durch; im Bericht standen deshalb 608 g
+# fuer die Traegerplatte. Deshalb hier:
+#   1. Basismaterial ueber eine Kandidatenliste suchen, nie per Teilstring
+#      auf den eigenen Namen.
+#   2. Die Dichte NACH der Zuweisung einmessen (Masse/Volumen) und das
+#      Property so nachziehen, dass die Zieldichte herauskommt. Damit ist es
+#      gleichgueltig, von welchem Material kopiert wurde und in welcher
+#      Einheit das Density-Property rechnet.
+#   3. Bleibt die Dichte daneben, landet das als Zeile im Bericht statt
+#      stillschweigend falsche Massen zu melden.
+
+ZIELDICHTE = {'PLA': 1.24, 'PETG': 1.27}        # g/cm3
+# Kandidaten fuer das Basismaterial, aus dem kopiert wird (Reihenfolge = Vorzug)
+BASIS_KANDIDATEN = ('ABS Plastic', 'ABS', 'ABS-Kunststoff', 'Nylon',
+                    'Polycarbonate', 'Polyethylene', 'Polypropylene',
+                    'Kunststoff', 'Plastic')
+DICHTE_PROPERTY = ('Density', 'Dichte')
 
 
-def material_zuweisen(app, design, ziel, name):
-    """Setzt das physikalische Material auf `ziel` (BRepBody oder Component)."""
-    mat = design.materials.itemByName(name)
-    if not mat and name in EIGENE_MATERIALIEN:
-        basis_name, d_basis, d_ziel = EIGENE_MATERIALIEN[name]
-        basis = _bibliotheksmaterial(app, basis_name)
-        if basis:
-            mat = design.materials.addByCopy(basis, name)
-            prop = adsk.core.FloatProperty.cast(
-                mat.materialProperties.itemByName('Density'))
-            prop.value *= d_ziel / d_basis      # relativ skalieren, einheitenfrei
-    if not mat:
-        gefunden = _bibliotheksmaterial(app, name)
-        mat = design.materials.addByCopy(gefunden, name) if gefunden else None
-    if mat:
-        ziel.material = mat
-    return mat        # None = nicht gefunden -> Fusion-Default bleibt, kein Abbruch
+def _dichte(ziel):
+    """Dichte von `ziel` in g/cm3, gemessen statt angenommen.
+    physicalProperties.mass ist in kg, volume in cm3."""
+    try:
+        pp = ziel.physicalProperties
+        if pp.volume > 1e-9:
+            return pp.mass * 1000.0 / pp.volume
+    except:
+        pass
+    return None
 
 
-def _bibliotheksmaterial(app, name):
-    """Alle Materialbibliotheken durchsuchen: erst exakter Name, dann Teilstring."""
+def _bibliotheksmaterial(app, namen):
+    """Erstes Material, dessen Name (case-insensitiv) einem der Kandidaten
+    entspricht. Danach Teilstring-Suche, aber nur mit den Kandidaten — nie
+    mit einem eigenen Kurznamen wie 'PLA', der auf 'Plaster' passt."""
+    libs = app.materialLibraries
+    kandidaten = [n.lower() for n in namen]
+    for exakt in (True, False):
+        for k in range(libs.count):
+            mats = libs.item(k).materials
+            for i in range(mats.count):
+                ist = mats.item(i).name.lower()
+                for kand in kandidaten:
+                    if (ist == kand) if exakt else (kand in ist):
+                        return mats.item(i)
+    return None
+
+
+def _irgendein_material(app):
+    """Notnagel: das erste Material ueberhaupt. Weil die Dichte hinterher
+    eingemessen wird, taugt jedes als Kopiervorlage."""
     libs = app.materialLibraries
     for k in range(libs.count):
-        m = libs.item(k).materials.itemByName(name)
-        if m:
-            return m
-    nl = name.lower()
-    for k in range(libs.count):
-        mats = libs.item(k).materials
-        for i in range(mats.count):
-            if nl in mats.item(i).name.lower():
-                return mats.item(i)
+        if libs.item(k).materials.count:
+            return libs.item(k).materials.item(0)
     return None
+
+
+def material_zuweisen(app, design, ziel, name, fehler=None):
+    """Setzt das physikalische Material auf `ziel` (BRepBody oder Component).
+    Fuer eigene Materialien (ZIELDICHTE) wird die Dichte nach der Zuweisung
+    eingemessen und korrigiert."""
+    mat = design.materials.itemByName(name)
+    if not mat:
+        if name in ZIELDICHTE:
+            basis = (_bibliotheksmaterial(app, BASIS_KANDIDATEN)
+                     or _irgendein_material(app))
+        else:
+            basis = _bibliotheksmaterial(app, (name,))
+        mat = design.materials.addByCopy(basis, name) if basis else None
+    if not mat:
+        if fehler is not None:
+            fehler.append('Material {} nicht gesetzt — Masse im Bericht ist '
+                          'der Fusion-Default'.format(name))
+        return None
+
+    ziel.material = mat
+    ziel_dichte = ZIELDICHTE.get(name)
+    if ziel_dichte:
+        ist = _dichte(ziel)
+        if ist and abs(ist - ziel_dichte) > 0.01:
+            prop = None
+            for pn in DICHTE_PROPERTY:
+                prop = adsk.core.FloatProperty.cast(
+                    mat.materialProperties.itemByName(pn))
+                if prop:
+                    break
+            if prop:
+                prop.value *= ziel_dichte / ist
+            nachher = _dichte(ziel)
+            if fehler is not None and (
+                    nachher is None or abs(nachher - ziel_dichte) > 0.02):
+                fehler.append(
+                    '{}: Dichte {:.2f} statt {:.2f} g/cm3 — Massen im Bericht '
+                    'stimmen nicht'.format(
+                        name, nachher if nachher else 0.0, ziel_dichte))
+    return mat
 
 
 # --- Validierung (Standardblock, siehe SKILL.md) ------------------------------
@@ -366,9 +431,20 @@ def validierungs_bericht(app, design, ui, hinweise=None):
                       (bb.maxPoint.z - bb.minPoint.z) * 10)
                 praefix = '' if comps.count == 1 else comp.name + ' > '
                 status = '' if b.isLightBulbOn else '  [ausgeblendet]'
-                zeilen.append('{}{}: {:.1f} g, {:.0f} x {:.0f} x {:.0f} mm{}'.format(
-                    praefix, b.name, b.physicalProperties.mass * 1000,
-                    gr[0], gr[1], gr[2], status))
+                # Material und Dichte mit ausgeben: eine fehlgeschlagene
+                # Materialzuweisung faellt sonst nur ueber eine unplausibel
+                # grosse Masse auf.
+                try:
+                    mat_name = b.material.name
+                except:
+                    mat_name = '?'
+                dichte = _dichte(b)
+                zeilen.append(
+                    '{}{}: {:.1f} g  ({}, {} g/cm3)  {:.0f} x {:.0f} x {:.0f} mm{}'
+                    .format(praefix, b.name, b.physicalProperties.mass * 1000,
+                            mat_name,
+                            '{:.2f}'.format(dichte) if dichte else '?',
+                            gr[0], gr[1], gr[2], status))
         if hinweise:
             zeilen += [''] + list(hinweise)
         ui.messageBox('\n'.join(zeilen), 'Validierung')
@@ -691,7 +767,7 @@ def bau_traegerplatte(app, design, comp, L, fehler):
                  ((w('traeger_x_links'), w('traeger_x_kopf')),
                   (L['traeger_y0'], w('konsole_y_vorn')),
                   (w('traeger_z_unten'), L['motor_rippe_z1'])), fehler)
-    material_zuweisen(app, design, koerper, 'PETG')
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
 
 
@@ -768,7 +844,7 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
     bbox_pruefen(koerper, 'Schlittenplatte',
                  ((-w('schlitten_breite_l'), w('block_x_rechts')),
                   (L['schlitten_y0'], L['laser_y']), (z_u, z_o)), fehler)
-    material_zuweisen(app, design, koerper, 'PETG')
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
 
 
@@ -837,7 +913,7 @@ def bau_mutternblock(app, design, comp, L, zc, fehler):
                   (w('block_y_hinten'), L['schlitten_y1']),
                   (zc - w('block_hoehe') / 2, zc + w('block_hoehe') / 2)),
                  fehler)
-    material_zuweisen(app, design, koerper, 'PETG')
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
 
 
@@ -881,7 +957,7 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
                  max(us) + rand, max(vs) + rand)
         lehre = neu(comp, groesstes_profil(sk), w('lehre_dicke')).bodies.item(0)
         lehre.name = 'Bohrlehre_' + name
-        material_zuweisen(app, design, lehre, 'PLA')
+        material_zuweisen(app, design, lehre, 'PLA', fehler)
         lehre.isLightBulbOn = False
 
 
@@ -978,6 +1054,13 @@ def hinweise_bauen(L, zc, fehler):
         '  Toolhead-Wagen" gehoert zu ihm (MGN15H), nicht zur Z-Achse. Vor dem',
         '  Druck der Traegerplatte mit Bohrlehre_XWagen pruefen — er traegt den',
         '  ganzen Toolhead, und ein MGN15C haette 25 x 20 statt 25 x 25.',
+        '',
+        'MATERIAL: Druckteile PETG ({:.2f} g/cm3), Bohrlehren PLA ({:.2f}).'.format(
+            ZIELDICHTE['PETG'], ZIELDICHTE['PLA']),
+        '  Die Dichte wird nach der Zuweisung eingemessen und korrigiert —',
+        '  Bibliotheksnamen sind lokalisiert, ein Kopiervorlage-Treffer allein',
+        '  garantiert die Dichte nicht. Steht oben eine andere Dichte, sind',
+        '  die Massen falsch (Fusion-Default ist Stahl, 7,85).',
         '',
         'ANZIEHEN: die Z-Wagen-Schrauben klemmen {:.0f} mm PETG (Kopf sitzt in'.format(
             w('pad_hoehe')),

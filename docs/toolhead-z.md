@@ -120,7 +120,7 @@ vorbei — und prüft die Luft zur Trägerplatte als eigene Größe.
 | `pad_hoehe` | 6 | **12** mm |
 | Strahlachse | 52,5 | **58,5** mm |
 | Z-Wagen-Schraube | M3×8 | **M3×14** |
-| Schlittenplatte | ~25 g | **~33 g** |
+| Schlittenplatte | ~25 g | **38 g** (gemessen) |
 
 Verfahrweg (50,45 mm), Trägerplatte, Z-Schiene und Gewindestange bleiben
 unverändert.
@@ -148,7 +148,25 @@ Du hast es selbst vorgeschlagen, und es ist die bessere Lösung:
   Biegespannung quer zur Schicht liegt bei etwa 0,07 MPa, also weit unter allem,
   was PETG in der Schichthaftung kann.
 
-Das Bauteil wird damit 78 × 48 × 145 mm groß und passt aufrecht in den A1.
+Das Bauteil wird damit 78 × 145 × 56 mm groß und passt liegend in den A1.
+
+## Massen (aus einem echten Fusion-Lauf, Rev. 11)
+
+| Teil | Volumen | Masse PETG |
+|---|---|---|
+| Trägerplatte mit Konsole | 77,5 cm³ | **98 g** |
+| Schlittenplatte | 29,6 cm³ | **38 g** |
+| Mutternblock | 9,8 cm³ | **12 g** |
+| **Druckteile zusammen** | 116,9 cm³ | **149 g** |
+
+Bewegte Masse auf der X-Achse, grob: 149 g Druckteile + 280 g NEMA 17 + 400 g
+Laser + 66 g MGN9-Schiene und Wagen + 56 g Gewindestange und Kupplung ≈
+**950 g**. Für einen MGN15H unkritisch.
+
+Die Trägerplatte ist mit 77,5 cm³ das schwerste Teil, davon etwa 23 cm³ allein
+die Motorkonsole. Ließe sich mit Taschen in Hauptsäule und Kopfbereich
+reduzieren — bisher nicht gemacht, weil die Steifigkeit dort die Genauigkeit
+der ganzen Z-Achse bestimmt.
 
 ## Z-Antrieb: M6 behalten, aber spielfrei und schwimmend
 

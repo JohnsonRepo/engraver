@@ -257,15 +257,21 @@ einblenden, drucken, ans reale Teil halten.
 | Lehre | prüft |
 |---|---|
 | `Bohrlehre_XWagen` | 25 × 25 mm — sitzt am Portal wirklich ein MGN15H? |
-| `Bohrlehre_ZWagen` | inneres Lochpaar = MGN9C (10 mm), äußeres = MGN9H (16 mm) |
+| `Bohrlehre_ZWagen` | 16 × 15 mm — MGN9H, am 2026-09-17 am Teil bestätigt `[v]` |
 | `Bohrlehre_Laser` | 39 × 15 mm |
 | `Bohrlehre_Mutternblock` | Verbindung zweier gedruckter Teile |
 
-Offene Punkte aus `hardware-notizen.md`: das Laser-Bohrbild ist als 39 × 15
-angenommen, `hardware.md` nennt 40 × 16 aus eigener Messung — die Langlöcher
-decken beides ab (quer 12,4–17,6, hoch 37,6–40,4 mm). Die dort notierte Messung
-„26 × 25 mm am Toolhead-Wagen" passt zum **X**-Wagen (MGN15H), nicht zur
-MGN9-Z-Achse.
+Stand der offenen Punkte aus `hardware-notizen.md`:
+
+* **Z-Führung: geklärt.** MGN9H, am 2026-09-17 mit der Bohrlehre am Wagen
+  bestätigt (äußeres Lochpaar, 16 mm längs). Die Lehre hat seitdem nur noch ein
+  Lochbild und folgt dem Parameter.
+* **X-Wagen: offen.** Die alte Messung „26 × 25 mm am Toolhead-Wagen" gehört
+  zu ihm, nicht zur Z-Achse — MGN15H = 25 × 25 passt dazu, ist aber noch nicht
+  mit der Lehre bestätigt.
+* **Laser-Bohrbild: offen.** Angenommen sind 39 × 15, `hardware.md` nennt
+  40 × 16 aus eigener Messung. Die Langlöcher decken beides ab (quer
+  12,4–17,6, hoch 37,6–40,4 mm).
 
 ## Wenn ein Teil an der falschen Stelle landet
 

@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 5
+REVISION = 6
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -844,9 +844,14 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
     ebene = ebene_y(comp, -40.0, 'E_Bohrlehren')
     lehren = [
         ('XWagen', (-95.0, 0.0), L['x_wagen_loecher']),
+        # Frueher trug diese Lehre beide MGN9-Lochbilder (10 und 16 mm laengs),
+        # weil offen war, welcher Wagen verbaut ist. Am 2026-09-17 am Teil
+        # geprueft: MGN9H, 16 mm. Die Lehre folgt jetzt dem Parameter.
         ('ZWagen', (-40.0, 55.0),
-         [(x, z) for x in (-w('z_wagen_loch_quer') / 2, w('z_wagen_loch_quer') / 2)
-          for z in (-8.0, 8.0, -5.0, 5.0)]),
+         [(x, z)
+          for x in (-w('z_wagen_loch_quer') / 2, w('z_wagen_loch_quer') / 2)
+          for z in (-w('z_wagen_loch_laengs') / 2,
+                    w('z_wagen_loch_laengs') / 2)]),
         ('Laser', (-40.0, -45.0),
          [(x, z) for x in (-w('laser_loch_quer') / 2, w('laser_loch_quer') / 2)
           for z in (L['laser_loch_unten_rel'] - L['laser_loch_oben_rel'], 0.0)]),
@@ -946,13 +951,15 @@ def hinweise_bauen(L, zc, fehler):
         'PRUEFEN VOR DEM DRUCK (Lochbilder Status [?]):',
         '  Bohrlehre_XWagen ...... {:.0f} x {:.0f} mm (MGN15H)'.format(
             w('x_wagen_loch_laengs'), w('x_wagen_loch_quer')),
-        '  Bohrlehre_ZWagen ...... inneres Paar MGN9C (10), aeusseres MGN9H (16)',
+        '  Bohrlehre_ZWagen ...... {:.0f} x {:.0f} mm (MGN9H, am Teil bestaetigt)'.format(
+            w('z_wagen_loch_laengs'), w('z_wagen_loch_quer')),
         '  Bohrlehre_Laser ....... {:.0f} x {:.0f} mm'.format(
             w('laser_loch_hoch'), w('laser_loch_quer')),
         '  hardware.md nennt fuer den Laser 40 x 16 aus eigener Messung;',
         '  die Langloecher decken beides ab.',
-        '  ACHTUNG hardware.md: Messung am Toolhead-Wagen war 26 x 25 mm',
-        '  (= MGN15H) — das passt zum X-Wagen, nicht zur MGN9-Z-Achse.',
+        '  Die alte Messung "26 x 25 mm am Toolhead-Wagen" gehoert zum X-Wagen',
+        '  (MGN15H) — die Z-Achse ist als MGN9H bestaetigt. Am X-Wagen steht',
+        '  die Bestaetigung mit der Lehre noch aus.',
         '',
         'ANZIEHEN: die Z-Wagen-Schrauben klemmen {:.0f} mm PETG (Kopf sitzt in'.format(
             w('pad_hoehe')),

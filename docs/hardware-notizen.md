@@ -21,18 +21,22 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 
 | Wert | Maß | Status |
 |---|---|---|
-| Linearführung Z | MGN9 (C oder H — noch offen) | `[?]` |
-| Wagen-Lochbild | 15 quer × 16 längs (MGN9H) bzw. 15 × 10 (MGN9C) | `[w]` |
+| Linearführung Z | **MGN9H** | `[v]` am 2026-09-17 mit Bohrlehre geprüft |
+| Wagen-Lochbild | **15 quer × 16 längs** | `[v]` |
 | Montagehöhe Wagen | 10 mm über der Schienen-Auflageebene | `[w]` |
 | Schiene MGN9 | 9 breit × 6,5 hoch | `[w]` |
 | Gewindetiefe im Wagen | ~2,5 mm (M3) → max. M3×8 bei 6 mm Pad | `[w]` |
 
-**Offener Widerspruch:** `hardware.md` notiert eine eigene Messung am
-Toolhead-Wagen von **26 längs × 25 quer**, was MGN15H entspricht, nicht MGN9.
-Vor dem Druck mit `Bohrlehre_Wagen` klären. Ist es doch MGN15H, ändern sich
-`wagen_loch_quer` = 25, `wagen_loch_laengs` = 25, `wagen_hoehe` = 16 und
-`wagen_breite` = 32 — die Platte baut sich über die Parameter um, das
-Auflagepad muss dann auf mindestens 32 × 32 mm wachsen.
+**Widerspruch aufgelöst.** `hardware.md` notierte eine Messung am
+„Toolhead-Wagen" von 26 längs × 25 quer, was nicht zu MGN9 passt. Die Bohrlehre
+am Z-Wagen hat am 2026-09-17 das äußere Lochpaar (16 mm) bestätigt — die
+Z-Achse ist also **MGN9H**. Die 26 × 25 gehören folglich zum Wagen der
+**Portalführung** (X-Achse), wo MGN15H = 25 × 25 passt. Dort steht die
+Bestätigung mit `Bohrlehre_XWagen` noch aus.
+
+Die `Bohrlehre_ZWagen` trug bis dahin beide MGN9-Lochbilder (10 und 16 mm
+längs), um die Baugröße zu entscheiden. Sie folgt jetzt dem Parameter
+`z_wagen_loch_laengs` und hat nur noch vier Löcher.
 
 ## Diodenlaser
 

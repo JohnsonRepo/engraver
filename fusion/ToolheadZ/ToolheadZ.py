@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 7
+REVISION = 8
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -847,7 +847,17 @@ def bau_mutternblock(app, design, comp, L, zc, fehler):
 def bau_bohrlehren(app, design, comp, L, zc, fehler):
     """Duenne Lehrenplatten mit den kritischen Lochbildern — auflegen,
     anzeichnen, pruefen. Nach dem Lauf ausgeblendet (Konvention SKILL.md).
-    Alle Lehren liegen hinter der Maschine auf einer eigenen Ebene."""
+    Alle Lehren liegen hinter der Maschine auf einer eigenen Ebene.
+
+    Eine Lehre gibt es nur fuer Lochbilder von Teilen, die dieses Skript NICHT
+    selbst erzeugt: Kaufteile (X-Wagen, Z-Wagen, Laser). Damit weicht das
+    bewusst von der SKILL.md-Konvention ab, die auch fuer Verbindungen zwischen
+    zwei getrennt gedruckten Teilen eine Lehre vorsieht — fuer
+    Mutternblock <-> Schlittenplatte waere sie ohne Nutzen: beide Lochbilder
+    haengen an derselben Variable (block_schraube_x), und die Bohrung in der
+    Platte ist mit m3_uebermass absichtlich groesser als die im Block, damit
+    sich der Block schwimmend ausrichten laesst. Was eine Lehre pruefen
+    wuerde, ist dort also schon als Verstellbarkeit eingebaut."""
     ebene = ebene_y(comp, -40.0, 'E_Bohrlehren')
     lehren = [
         ('XWagen', (-95.0, 0.0), L['x_wagen_loecher']),
@@ -862,8 +872,6 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
         ('Laser', (-40.0, -45.0),
          [(x, z) for x in (-w('laser_loch_quer') / 2, w('laser_loch_quer') / 2)
           for z in (L['laser_loch_unten_rel'] - L['laser_loch_oben_rel'], 0.0)]),
-        ('Mutternblock', (-105.0, -60.0),
-         [(x - w('spindel_x'), 0.0) for x in L['block_schraube_x']]),
     ]
     for name, (mx, mz), punkte in lehren:
         sk = skizze(comp, ebene, 'Sk_Bohrlehre_' + name)
@@ -883,6 +891,9 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
 def hinweise_bauen(L, zc, fehler):
     """Hinweiszeilen des Validierungsberichts. Modulebene, damit der Block
     ohne Fusion getestet werden kann (tools/toolhead_check.py)."""
+    # Verstellbereich der Laser-Langloecher (Schaft Ø3 im Schlitz)
+    quer_tol = w('schlitz_verstellweg') + w('schlitz_breite') - 3.0
+    hoch_tol = w('schlitz_breite') - 3.0
     h = [
         'BEZUGSEBENE: Ursprung = Mitte des X-Wagen-Lochbildes AUF seiner',
         '  Stirnflaeche. X = quer, Y = nach vorn, Z = senkrecht.',
@@ -955,15 +966,19 @@ def hinweise_bauen(L, zc, fehler):
         '  6. Motor zwischen die Fuehrungsrippen setzen, 4x M3x12 von unten',
         '  7. Kupplung + Gewindestange, Mutternblock zuletzt ausrichten',
         '',
-        'PRUEFEN VOR DEM DRUCK (Lochbilder Status [?]):',
+        'PRUEFEN VOR DEM DRUCK — Lehren nur fuer KAUFTEIL-Lochbilder; fuer',
+        '  Mutternblock <-> Schlittenplatte braucht es keine, beide kommen aus',
+        '  diesem Skript und die Platte hat dort Uebermass zum Ausrichten:',
         '  Bohrlehre_XWagen ...... {:.0f} x {:.0f} mm (MGN15H)'.format(
             w('x_wagen_loch_laengs'), w('x_wagen_loch_quer')),
         '  Bohrlehre_ZWagen ...... {:.0f} x {:.0f} mm (MGN9H, am Teil bestaetigt)'.format(
             w('z_wagen_loch_laengs'), w('z_wagen_loch_quer')),
-        '  Bohrlehre_Laser ....... {:.0f} x {:.0f} mm'.format(
+        '  Bohrlehre_Laser ....... {:.2f} x {:.2f} mm'.format(
             w('laser_loch_hoch'), w('laser_loch_quer')),
-        '  hardware.md nennt fuer den Laser 40 x 16 aus eigener Messung;',
-        '  die Langloecher decken beides ab.',
+        '    Dritte Messung an diesem Modul (vorher 39 x 15 und 40 x 16).',
+        '    Langloch deckt quer {:.1f}-{:.1f} und hoch {:.1f}-{:.1f} mm ab.'.format(
+            w('laser_loch_quer') - quer_tol, w('laser_loch_quer') + quer_tol,
+            w('laser_loch_hoch') - hoch_tol, w('laser_loch_hoch') + hoch_tol),
         '  Die alte Messung "26 x 25 mm am Toolhead-Wagen" gehoert zum X-Wagen',
         '  (MGN15H) — die Z-Achse ist als MGN9H bestaetigt. Am X-Wagen steht',
         '  die Bestaetigung mit der Lehre noch aus.',

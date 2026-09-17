@@ -252,15 +252,25 @@ Passfläche ab.
 
 ## Vor dem Druck prüfen
 
-Das Skript legt vier **ausgeblendete Bohrlehren** an (3 mm, PLA): im Browser
+Das Skript legt drei **ausgeblendete Bohrlehren** an (3 mm, PLA): im Browser
 einblenden, drucken, ans reale Teil halten.
 
 | Lehre | prüft |
 |---|---|
 | `Bohrlehre_XWagen` | 25 × 25 mm — sitzt am Portal wirklich ein MGN15H? |
 | `Bohrlehre_ZWagen` | 16 × 15 mm — MGN9H, am 2026-09-17 am Teil bestätigt `[v]` |
-| `Bohrlehre_Laser` | 40,5 × 16,5 mm |
-| `Bohrlehre_Mutternblock` | Verbindung zweier gedruckter Teile |
+| `Bohrlehre_Laser` | 40,5 × 16,5 mm — noch offen |
+
+**Eine Lehre gibt es nur für Lochbilder von Kaufteilen** — also für Teile, die
+dieses Skript nicht selbst erzeugt. Damit weicht das bewusst von der
+Konvention des `fusion-python`-Skills ab, die auch für Verbindungen zwischen
+zwei getrennt gedruckten Teilen eine Lehre vorsieht. Für Mutternblock ↔
+Schlittenplatte wäre sie ohne Nutzen: beide Lochbilder hängen an derselben
+Variable (`block_schraube_x`), und die Bohrung in der Platte ist mit Ø4,6
+gegen Ø3,4 absichtlich übergroß, damit sich der Block schwimmend ausrichten
+lässt. Was eine Lehre dort prüfen würde, ist als Verstellbarkeit eingebaut —
+und die prüft `toolhead_check.py` als „Ausrichtspiel der schwimmenden
+Verschraubung".
 
 Stand der offenen Punkte aus `hardware-notizen.md`:
 

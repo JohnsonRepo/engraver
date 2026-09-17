@@ -98,13 +98,12 @@ Beide Lochbilder sind noch nicht am Teil verifiziert (Status `[?]`, siehe
 Bohrlehren (3 mm, PLA) — im Browser einblenden, drucken, an das reale Teil
 halten:
 
-* `Bohrlehre_Laser` — 4 × M3 auf 39 × 15 mm.
+* `Bohrlehre_Laser` — 4 × M3 auf 40,5 × 16,5 mm.
 * `Bohrlehre_Wagen` — 8 Löcher: inneres Paar = MGN9C (10 mm), äußeres Paar =
   MGN9H (16 mm). Damit ist auch geklärt, welcher Wagen verbaut ist.
 
-Die Langlöcher am Laser fangen Abweichungen ab: quer 12,4 – 17,6 mm,
-senkrecht 37,6 – 40,4 mm. Das deckt die in `hardware.md` notierte Messung
-40 × 16 mm mit ab. Weicht das reale Bohrbild stärker ab, reicht es,
+Die Langlöcher am Laser fangen Abweichungen ab: quer 13,9 – 19,1 mm,
+senkrecht 39,1 – 41,9 mm. Das deckt die frühere Messung 40 × 16 mm mit ab. Weicht das reale Bohrbild stärker ab, reicht es,
 `laser_loch_hoch` bzw. `laser_loch_quer` im Parameter-Dialog zu ändern.
 
 ## Parameter
@@ -117,7 +116,7 @@ angelegt (*Ändern → Parameter*). Die wichtigsten:
 | `wagen_loch_laengs` | 16 mm | **MGN9H = 16, MGN9C = 10** — am Wagen prüfen |
 | `wagen_loch_quer` | 15 mm | MGN9 Lochbild quer |
 | `wagen_hoehe` | 10 mm | Montagehöhe — treibt den Freigang zur Schiene |
-| `laser_loch_hoch` / `laser_loch_quer` | 39 / 15 mm | Bohrbild des Lasers |
+| `laser_loch_hoch` / `laser_loch_quer` | 40,5 / 16,5 mm | Bohrbild des Lasers |
 | `laser_tiefe` | 35 mm | treibt die Lage der Strahlachse |
 | `pad_hoehe` | 6 mm | Versatz Wagenfläche → Plattenrückseite |
 | `dicke_platte` | 6 mm | Plattendicke |

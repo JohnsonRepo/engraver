@@ -42,15 +42,20 @@ längs), um die Baugröße zu entscheiden. Sie folgt jetzt dem Parameter
 
 | Wert | Maß | Status |
 |---|---|---|
-| Bohrbild (Konstruktionsgrundlage) | 39 hoch × 15 quer, 4 × M3 | Nutzerangabe, am Teil noch nicht gegengeprüft |
+| Bohrbild (Konstruktionsgrundlage) | **40,5 hoch × 16,5 quer**, 4 × M3 | `[?]` Messung 2026-09-17, am Teil nicht mit Lehre gegengeprüft |
 | Gehäuse (angenommen) | 35 × 35 mm Querschnitt | `[w]` |
 
-`hardware.md` führt für das Modul *Laser Tree LT-20W-A* ein gemessenes
-Bohrbild von **40 hoch × 16 quer** (`[?]`, Messbasis unsicher). Beide Werte
-liegen genau 1 mm auseinander — das riecht nach unterschiedlicher Messbasis
-(Lochkante statt Lochmitte) und nicht nach zwei verschiedenen Modulen. Die
-Langlöcher der Grundplatte decken deshalb quer 12,4 – 17,6 mm und senkrecht
-37,6 – 40,4 mm ab, damit beide Varianten passen.
+Messhistorie an diesem Modul: **39 × 15** (erste Angabe) → **40 × 16**
+(`hardware.md`, eigene Messung) → **40,5 × 16,5** (2026-09-17, aktuell
+angesetzt). Drei Werte innerhalb von 1,5 mm — solange keine Lehre das
+entscheidet, bleiben die Befestigungen Langlöcher.
+
+Die Langlöcher decken **quer 13,9 – 19,1 mm** und **senkrecht 39,1 – 41,9 mm**
+ab — also die Umgebung des aktuellen Werts und die Messung 40 × 16. Die erste
+Angabe 39 × 15 liegt 0,1 mm außerhalb und gilt als überholt.
+`toolhead_check.py` führt den Verstellbereich und alle früheren Messungen im
+Bericht mit. Soll der Bereich breiter werden, genügt `schlitz_breite` von 4,4
+auf 4,6 mm — die Scheibenauflage bleibt dabei über 2 mm.
 
 Ist das Gehäuse tiefer oder flacher als 35 mm, `laser_tiefe` anpassen — davon
 hängt nur die berechnete Lage der Strahlachse ab, nicht die Geometrie.

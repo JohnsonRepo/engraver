@@ -59,21 +59,21 @@ streifen. Das prüft `toolhead_check.py` ausdrücklich.
 
 | Z | Ebene |
 |---|---|
-| −83,6 | Laser-Unterkante (Linse), tiefste Stellung |
+| −85,1 | Laser-Unterkante (Linse), tiefste Stellung |
 | −60,0 | Unterkante MGN9-Schiene (95 mm lang, 5 Schrauben) |
-| −40,1 … +8,9 | Bereich der Wagenmitte `zc` |
+| −40,1 … +10,4 | Bereich der Wagenmitte `zc` |
 | +35,0 | Oberkante MGN9-Schiene |
 | +39,0 … +64,0 | flexible Kupplung |
 | +68,0 | Unterseite Motorkonsole = Oberkante Trägerplatte |
 | +76,0 | Motorflansch |
 | +116,0 | Oberkante NEMA 17 |
 
-**Nutzbarer Verfahrweg: 48,95 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
+**Nutzbarer Verfahrweg: 50,45 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
 alle vier aus und nennt die bindende:
 
 | Grenze | zc max |
 |---|---|
-| **Laser-Oberkante gegen Motorkonsole** | **+8,9** ← bindend |
+| **Laser-Oberkante gegen Motorkonsole** | **+10,4** ← bindend |
 | Wagen am oberen Schienenende | +15,1 |
 | Schlittenplatte gegen Kupplung | +19,0 |
 | Mutternblock gegen Kupplung | +23,0 |
@@ -122,7 +122,7 @@ vorbei — und prüft die Luft zur Trägerplatte als eigene Größe.
 | Z-Wagen-Schraube | M3×8 | **M3×14** |
 | Schlittenplatte | ~25 g | **~33 g** |
 
-Verfahrweg (48,95 mm), Trägerplatte, Z-Schiene und Gewindestange bleiben
+Verfahrweg (50,45 mm), Trägerplatte, Z-Schiene und Gewindestange bleiben
 unverändert.
 
 **Beim Anziehen beachten:** die Z-Wagen-Schrauben klemmen jetzt **12 mm PETG**
@@ -226,7 +226,8 @@ von der Schlittenplatte verdeckt:
 ## Zwei Details, die beim Konstruieren aufgefallen sind
 
 **Lochbild des Lasers gegen das des Z-Wagens.** Beide liegen bei X = ±7,5 mm.
-Die Lochbildmitte des Lasers liegt deshalb **19,5 mm unter der Wagenmitte** —
+Die Lochbildmitte des Lasers liegt deshalb **20,25 mm unter der Wagenmitte**
+(= `−laser_loch_hoch/2`) —
 damit liegt die obere Laser-Schraubenreihe genau mittig zwischen den beiden
 Schraubenreihen des Wagens (±8) und die Ø6,5-Freibohrungen überschneiden die
 Langlöcher nicht. Bei anderen Werten tun sie es; `toolhead_check.py` prüft alle
@@ -258,7 +259,7 @@ einblenden, drucken, ans reale Teil halten.
 |---|---|
 | `Bohrlehre_XWagen` | 25 × 25 mm — sitzt am Portal wirklich ein MGN15H? |
 | `Bohrlehre_ZWagen` | 16 × 15 mm — MGN9H, am 2026-09-17 am Teil bestätigt `[v]` |
-| `Bohrlehre_Laser` | 39 × 15 mm |
+| `Bohrlehre_Laser` | 40,5 × 16,5 mm |
 | `Bohrlehre_Mutternblock` | Verbindung zweier gedruckter Teile |
 
 Stand der offenen Punkte aus `hardware-notizen.md`:
@@ -269,9 +270,14 @@ Stand der offenen Punkte aus `hardware-notizen.md`:
 * **X-Wagen: offen.** Die alte Messung „26 × 25 mm am Toolhead-Wagen" gehört
   zu ihm, nicht zur Z-Achse — MGN15H = 25 × 25 passt dazu, ist aber noch nicht
   mit der Lehre bestätigt.
-* **Laser-Bohrbild: offen.** Angenommen sind 39 × 15, `hardware.md` nennt
-  40 × 16 aus eigener Messung. Die Langlöcher decken beides ab (quer
-  12,4–17,6, hoch 37,6–40,4 mm).
+* **Laser-Bohrbild: offen.** Aktuell angesetzt **40,5 × 16,5** (Messung vom
+  2026-09-17). Das ist die dritte Messung an diesem Modul — vorher 39 × 15 und
+  40 × 16. Die Langlöcher decken **quer 13,9–19,1 und hoch 39,1–41,9 mm** ab,
+  also die Umgebung des aktuellen Werts und die Messung 40 × 16. Die älteste
+  Messung 39 × 15 liegt seit dieser Änderung 0,1 mm außerhalb — sie gilt als
+  überholt. `toolhead_check.py` führt den Verstellbereich und alle früheren
+  Messungen im Bericht mit; soll der Bereich breiter werden, reicht
+  `schlitz_breite` von 4,4 auf 4,6 mm.
 
 ## Wenn ein Teil an der falschen Stelle landet
 
@@ -307,7 +313,7 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `z_schiene_laenge` | 95 mm | Länge der Z-Führung |
 | `konsole_unten` | 68 mm | Höhe der Motorkonsole — bindet den Verfahrweg |
 | `spindel_x` / `spindel_y` | 30 / 28,5 mm | Lage der Spindelachse; `spindel_y` bestimmt den Schraubzugang |
-| `laser_versatz_z` | −19,5 mm | Lage des Lasers am Schlitten |
+| `laser_versatz_z` | −20,25 mm | Lage des Lasers am Schlitten (= −`laser_loch_hoch`/2) |
 | `traeger_dicke` | 8 mm | Dicke der Trägerplatte |
 | `konsole_unten` / `konsole_dicke` | 68 / 8 mm | Lage und Dicke der Motorkonsole |
 | `motor_rippe_hoehe` | 3 mm | Höhe der Führungsrippen am Motorflansch |

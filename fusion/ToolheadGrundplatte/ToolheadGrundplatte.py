@@ -26,7 +26,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadGrundplatte'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -40,8 +40,8 @@ MASSE = {
     'schiene_hoehe':       (6.5,   'MGN9 Schiene: Hoehe (nur Doku/Pruefung)'),
 
     # Diodenlaser (Nutzerangabe: Bohrbild 39 hoch x 15 quer, 4 Bohrungen)
-    'laser_loch_quer':     (15.0,  'Laser: Lochabstand quer'),
-    'laser_loch_hoch':     (39.0,  'Laser: Lochabstand senkrecht'),
+    'laser_loch_quer':     (16.5,  'Laser: Lochabstand quer'),
+    'laser_loch_hoch':     (40.5,  'Laser: Lochabstand senkrecht'),
     'laser_breite':        (35.0,  'Laser: Gehaeusebreite (nur Doku/Pruefung)'),
     'laser_tiefe':         (35.0,  'Laser: Gehaeusetiefe — treibt die Strahlachse'),
 

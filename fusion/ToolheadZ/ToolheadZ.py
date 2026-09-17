@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 6
+REVISION = 7
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -73,8 +73,11 @@ MASSE = {
     'feder_raum_d':        (10.0,  'Federkammer: Durchmesser'),
 
     # --- Kaufteil: Diodenlaser (Nutzerangabe + hardware.md) ----------------
-    'laser_loch_quer':     (15.0,  'Laser: Lochabstand quer (X)'),
-    'laser_loch_hoch':     (39.0,  'Laser: Lochabstand senkrecht (Z)'),
+    # 40,5 x 16,5 — Nutzerangabe 2026-09-17, dritte Messung an diesem Modul
+    # (vorher 39 x 15 und 40 x 16). Am Teil noch nicht mit einer Lehre
+    # bestaetigt, deshalb bleiben die Befestigungen Langloecher.
+    'laser_loch_quer':     (16.5,  'Laser: Lochabstand quer (X)'),
+    'laser_loch_hoch':     (40.5,  'Laser: Lochabstand senkrecht (Z)'),
     'laser_breite':        (35.0,  'Laser: Gehaeusebreite'),
     'laser_tiefe':         (35.0,  'Laser: Gehaeusetiefe — treibt die Strahlachse'),
     'laser_laenge':        (99.6,  'Laser: Gehaeuselaenge (senkrecht)'),
@@ -125,17 +128,21 @@ MASSE = {
     # 12 statt 6: schiebt die Schlittenplatte so weit nach vorn, dass der
     # Mutternblock hinter ihr Platz hat, obwohl die Spindelachse bei 28,5 liegt.
     'pad_hoehe':           (12.0,  'Auflagepad: Versatz Wagenflaeche -> Platte'),
-    'pad_breite':          (28.0,  'Auflagepad: Breite'),
+    # 30 statt 28: der Kopffreiraum sitzt jetzt bei X = +-8,25 und braucht
+    # noch Wand zum Padrand.
+    'pad_breite':          (30.0,  'Auflagepad: Breite'),
     'pad_laenge':          (26.0,  'Auflagepad: Hoehe'),
     'schlitten_dicke':     (6.0,   'Schlittenplatte: Dicke'),
     'schlitten_breite_l':  (17.5,  'Schlittenplatte: Kante links der Schienenachse'),
     'schlitten_rand':      (4.0,   'Schlittenplatte: Rand um das Lochfeld'),
     'rippe_mitte_breite':  (5.0,   'Mittelrippe: Breite'),
-    'rippe_seite_innen':   (13.0,  'Seitenrippe links: Innenkante'),
+    # 13,5 statt 13: die Scheibe der Laserschraube (Ø9) wandert mit dem
+    # Lochbild nach aussen und braucht Platz neben der Rippe.
+    'rippe_seite_innen':   (13.5,  'Seitenrippe links: Innenkante'),
     # -laser_loch_hoch/2: die OBERE Laser-Schraubenreihe liegt damit genau auf
     # der Wagenmitte — mittig zwischen den beiden Wagen-Schraubenreihen (+-8),
     # sonst ueberschneiden sich Langloch und Freibohrung.
-    'laser_versatz_z':    (-19.5,  'Laser-Lochbildmitte gegen die Wagenmitte'),
+    'laser_versatz_z':   (-20.25,  'Laser-Lochbildmitte gegen die Wagenmitte'),
     'kopf_freiraum':       (10.0,  'Freiraum im Pad fuer Kopf+Scheibe der Laserschraube'),
     'schlitz_breite':      (4.4,   'Laser-Langloch: Breite'),
     'schlitz_verstellweg': (1.2,   'Laser-Langloch: Mittenversatz quer'),

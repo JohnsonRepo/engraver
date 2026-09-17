@@ -22,6 +22,11 @@ SKRIPT = bauraum.SKRIPT
 M3_KOPF_D, M3_KOPF_H = 5.5, 3.0
 SCHEIBE_D = 9.0                     # DIN 9021 M3, gross
 INBUS_FREI_D = 6.0                  # Platz fuer den 2,5er Inbus
+M3_SCHAFT_D = 3.0
+# Frueher an diesem Lasermodul gemessene Lochbilder (hoch, quer). Der aktuelle
+# Wert steht in MASSE; diese hier werden nur gegen den Verstellbereich der
+# Langloecher gehalten — das Bohrbild ist noch nicht mit einer Lehre bestaetigt.
+LASER_MESSUNGEN = ((40.0, 16.0), (39.0, 15.0))
 
 
 class Pruefung:
@@ -286,6 +291,28 @@ def main():
            w('pad_hoehe'))
     p.ok('Kopf+Scheibe der Laserschraube bleiben im Rippenraum',
          w('pad_hoehe') - (M3_KOPF_H + 0.8), 1.0)
+    # Die Scheibe liegt auf der Plattenrueckseite zwischen den Rippen — sie
+    # wandert mit dem Lochbild nach aussen, also mitpruefen.
+    lq = w('laser_loch_quer') / 2
+    p.ok('Scheibe der Laserschraube passt neben die Mittelrippe',
+         (lq - SCHEIBE_D / 2) - w('rippe_mitte_breite') / 2, 0.5)
+    p.ok('Scheibe der Laserschraube passt neben die Seitenrippe',
+         w('rippe_seite_innen') - (lq + SCHEIBE_D / 2), 0.5)
+    p.ok('Kopffreiraum bleibt im Auflagepad',
+         w('pad_breite') / 2 - (lq + w('kopf_freiraum') / 2), 1.5)
+    # Verstellbereich der Langloecher gegen die frueheren Messungen halten
+    quer_tol = w('schlitz_verstellweg') + w('schlitz_breite') - M3_SCHAFT_D
+    hoch_tol = w('schlitz_breite') - M3_SCHAFT_D
+    p.info('Langloch deckt quer ab: {:.1f} bis {:.1f} mm'.format(
+        w('laser_loch_quer') - quer_tol, w('laser_loch_quer') + quer_tol))
+    p.info('Langloch deckt hoch ab: {:.1f} bis {:.1f} mm'.format(
+        w('laser_loch_hoch') - hoch_tol, w('laser_loch_hoch') + hoch_tol))
+    for hoch, quer in LASER_MESSUNGEN:
+        drin = (abs(hoch - w('laser_loch_hoch')) <= hoch_tol
+                and abs(quer - w('laser_loch_quer')) <= quer_tol)
+        p.info('frueher gemessen {:.1f} x {:.1f}: {}'.format(
+            hoch, quer, 'noch im Verstellbereich'
+            if drin else 'AUSSERHALB des Verstellbereichs'))
     p.ok('Laser haengt unter der Traegerplatte (tiefste Stellung)',
          w('traeger_z_unten') - (L['zc_min'] + L['laser_unten_rel']), 5.0)
     # Lochbilder von Z-Wagen und Laser liegen beide bei X = +-7,5 und duerfen

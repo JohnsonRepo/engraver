@@ -594,6 +594,11 @@ def main():
     p.ok('Halter: Platinenloecher liegen in der Wand',
          L['ls_wand_y1'] - (L['ls_pcb_loch_y'][-1] + w('ls_pcb_loch_d') / 2),
          1.0)
+    # Diese Pruefung hat gefehlt: der Flansch stand in die untere Bohrung
+    # hinein (0,9 mm), aufgefallen erst am gedruckten Teil.
+    p.ok('Halter: untere Platinenbohrung frei vom Flansch',
+         (L['ls_pcb_loch_y'][0] - w('ls_pcb_loch_d') / 2) - L['ls_flansch_y1'],
+         1.5)
     p.ok('Platine ragt nicht ueber den Halter hinaus (oben)',
          L['ls_sockel_z1'] - L['ls_pcb_z1'], 2.0)
     p.info('Verstellbereich des Schaltpunkts', 2 * w('ls_justage'))

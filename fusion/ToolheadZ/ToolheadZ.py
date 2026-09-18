@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 20
+REVISION = 21
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -175,6 +175,11 @@ MASSE = {
     'ls_sockel_hoehe':     (8.0,  'Endschaltersockel an der Platte: Hoehe in Y'),
     'ls_sockel_x1':      (-13.0,  'Endschaltersockel: rechte Kante'),
     'ls_pcb_loch_d':       (2.8,  'Lichtschranke: Loch fuer selbstschneidende M3'),
+    # Abstand der Platinenunterkante zum Flansch. 1 mm war zu wenig: der
+    # Flansch stand 0,9 mm in die untere Platinenbohrung hinein (am
+    # gedruckten Teil aufgefallen). Mit 3 mm bleibt unter dem Loch 1,6 mm
+    # Wand stehen.
+    'ls_pcb_luft':         (3.0,  'Lichtschranke: Platine ueber dem Flansch'),
     'ls_fahne_hoehe':     (15.0,  'Schaltfahne: Hoehe in Z'),
     'ls_fahne_dicke':      (2.0,  'Schaltfahne: Dicke (laeuft im Gabelspalt)'),
     # 9 mm Tiefe, 3,5 mm vor der Platine: die Fahne deckt damit jede
@@ -352,7 +357,7 @@ def lage():
     L['ls_wand_x0'] = L['ls_wand_x1'] - w('ls_halter_dicke')
     # Die Platine sitzt auf der Wand, die auf dem Flansch steht — beide
     # beginnen also auf der Sockelflaeche, damit das Teil plan aufs Bett geht.
-    L['ls_pcb_y0'] = L['ls_sockel_y1'] + 1.0
+    L['ls_pcb_y0'] = L['ls_flansch_y1'] + w('ls_pcb_luft')
     L['ls_pcb_y1'] = L['ls_pcb_y0'] + w('ls_pcb_breite')
     L['ls_wand_y1'] = L['ls_pcb_y1'] + 1.0
     # Die Fahne laeuft in der Schlitzmitte der Gabel, also mittig zur Platine.

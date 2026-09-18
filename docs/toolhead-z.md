@@ -224,6 +224,11 @@ sie anders, kostet das einen 6-g-Nachdruck und nicht die 154-g-Trägerplatte;
 außerdem fängt die Fahne mit 9 mm Tiefe ohnehin jede Höhe zwischen 3,5 und
 12,5 mm ab.
 
+Die Platine sitzt **3 mm über dem Flansch** (`ls_pcb_luft`). Beim ersten
+gedruckten Halter stand der Flansch 0,9 mm in die untere Platinenbohrung
+hinein — geprüft wurde bis dahin nur der Abstand nach oben. Jetzt prüft
+`toolhead_check.py` beide Seiten; unter dem Loch bleiben 4,1 mm.
+
 Zwei Dinge vor dem Druck:
 
 * **Modul an den Halter halten** und prüfen, dass die Gabel zur Fahne zeigt
@@ -293,7 +298,7 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 | Trägerplatte mit Konsole | ≈ 124 cm³ | **≈ 157 g** | 78 × 222 × 56 mm | Rev. 16 + Sockel |
 | Schlittenplatte | ≈ 41,8 cm³ | **≈ 53 g** | 71 × 97 × 24 mm | Rev. 14 + Fahne |
 | Mutternblock | 9,8 cm³ | **12,4 g** | 28 × 26 × 17 mm | Rev. 14 |
-| Endschalterhalter | ≈ 4,7 cm³ | **≈ 6 g** | 19 × 35 × 22 mm | gerechnet |
+| Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet |
 | **Druckteile zusammen** | ≈ 180 cm³ | **≈ 228 g** | | |
 
 Die Werte für Trägerplatte und Schlittenplatte sind gemessen (154,3 / 50,9 g)

@@ -224,6 +224,14 @@ sie anders, kostet das einen 6-g-Nachdruck und nicht die 154-g-Trägerplatte;
 außerdem fängt die Fahne mit 9 mm Tiefe ohnehin jede Höhe zwischen 3,5 und
 12,5 mm ab.
 
+Die Platine wird mit **M2 in Heat Inserts** (Ø3,2 × 2,5 mm) gehalten. Die
+Wand ist nur 4 mm dick — für M3-Einsätze mit 7 mm Einpresstiefe wäre das zu
+wenig, für M2 reicht es: Ø2,8 Sackloch, 3 mm tief, dahinter Ø2,4 frei für die
+Schraubenspitze. Damit sitzt der Einsatz auf Anschlag und kann beim
+Einschmelzen nicht durchrutschen. Muttern auf der Rückseite wären die
+schlechtere Wahl — die Wandrückseite ist mit X = −32 die äußerste Kante des
+Toolheads, eine Mutter baute dort 4,8 mm auf.
+
 Die Platine sitzt **3 mm über dem Flansch** (`ls_pcb_luft`). Beim ersten
 gedruckten Halter stand der Flansch 0,9 mm in die untere Platinenbohrung
 hinein — geprüft wurde bis dahin nur der Abstand nach oben. Jetzt prüft
@@ -234,8 +242,9 @@ Zwei Dinge vor dem Druck:
 * **Modul an den Halter halten** und prüfen, dass die Gabel zur Fahne zeigt
   (also nach +X) und die Löcher passen. Ich bin von Lochmitten 2,5 mm von
   jeder Kante ausgegangen — bei „1 mm von beiden Kanten" kann das nur der
-  Lochrand gewesen sein. Die Halterlöcher sind deshalb selbstschneidend Ø2,8;
-  ein halber Millimeter Abweichung ist damit egal.
+  Lochrand gewesen sein. Weil die Platine M3-Löcher hat und dort M2-Schrauben
+  durchgehen, bleibt ringsum 0,6 mm Luft: ein halber Millimeter Abweichung im
+  Lochabstand ist damit egal.
 * **Die Fahne muss undurchsichtig sein.** Helles oder naturfarbenes PETG lässt
   Infrarot durch, dann schaltet die Schranke nie sauber — dunkel drucken.
 
@@ -386,7 +395,7 @@ werden.
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +2,8 mm** |
 | Mutternblock → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe | Ø4,6-Bohrung, ausrichten dann festziehen |
 | Endschalterhalter → Sockel | 2 × M3×12 + 2 × Messing-Einsatz M3 | Langloch ±4 mm für den Schaltpunkt |
-| Lichtschranke → Halter | 2 × M3×8 selbstschneidend | Ø2,8 in die 4-mm-Wand |
+| Lichtschranke → Halter | 2 × M2×6 + 2 × Heat Insert M2 (Ø3,2 × 2,5) | Ø2,8 × 3 mm Sackloch in der 4-mm-Wand, dahinter Ø2,4 frei |
 
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
 Welle 5 mm) · M6-Gewindestange, Zuschnitt **190 mm** (187 mm werden gebraucht)

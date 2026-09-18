@@ -106,6 +106,10 @@ bekannt ist, hier eintragen und auf `[v]` setzen.
 | Bohrbild | 2 × M3 in den Ecken der Gegenseite, Lochrand 1 mm von beiden Kanten → **Lochmitten 2,5 mm, Abstand 15 mm** | `[v]` gemessen, Lochmitte abgeleitet |
 | Strahlhöhe über der Platine | **5 mm angenommen** | `[?]` nicht gemessen |
 | Versorgung | 3,3 / 5 V, D0 digital | `[w]` |
+| Befestigung | 2 × M2×6 in Heat Inserts **M2 Ø3,2 × 2,5** | `[v]` vorhanden |
+
+Einpressbohrung für die M2-Einsätze: **Ø2,8 × 3 mm**, also 0,4 mm unter dem
+Außendurchmesser — dieselbe Regel wie bei den M3-Einsätzen am Schienensockel.
 
 Die angenommene Strahlhöhe ist der Grund, warum der Halter ein eigenes
 Druckteil ist: er kostet 6 g statt 154. Die Schaltfahne deckt zudem 3,5 bis

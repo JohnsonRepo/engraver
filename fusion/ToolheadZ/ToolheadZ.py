@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 21
+REVISION = 22
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -174,7 +174,14 @@ MASSE = {
     'ls_schraub_abstand': (20.0,  'Endschalterhalter: Abstand der Anschraubpunkte'),
     'ls_sockel_hoehe':     (8.0,  'Endschaltersockel an der Platte: Hoehe in Y'),
     'ls_sockel_x1':      (-13.0,  'Endschaltersockel: rechte Kante'),
-    'ls_pcb_loch_d':       (2.8,  'Lichtschranke: Loch fuer selbstschneidende M3'),
+    # Die vorhandenen M2-Einsaetze haben 3,2 mm Aussendurchmesser und sind
+    # 2,5 mm lang [v] — Ø2,8 ist dafuer die Einpressbohrung (0,4 mm Untermass,
+    # dieselbe Regel wie bei den M3 am Schienensockel). Dahinter bleibt eine
+    # Freibohrung fuer die Schraubenspitze, damit der Einsatz nicht
+    # durchgedrueckt werden kann.
+    'ls_pcb_loch_d':       (2.8,  'Lichtschranke: Einpressbohrung M2-Einsatz'),
+    'ls_pcb_loch_t':       (3.0,  'Lichtschranke: Tiefe der Einpressbohrung'),
+    'ls_pcb_frei_d':       (2.4,  'Lichtschranke: Freibohrung fuer die Schraubenspitze'),
     # Abstand der Platinenunterkante zum Flansch. 1 mm war zu wenig: der
     # Flansch stand 0,9 mm in die untere Platinenbohrung hinein (am
     # gedruckten Teil aufgefallen). Mit 3 mm bleibt unter dem Loch 1,6 mm
@@ -1119,11 +1126,19 @@ def bau_endschalterhalter(app, design, comp, L, fehler):
     weg(comp, alle_profile(sk), w('ls_flansch_dicke'), koerper)
 
     # Platinenloecher quer durch die Wand — Ebene senkrecht zu Maschinen-X.
-    sk = skizze(comp, ebene_x(comp, L['ls_wand_x0'], 'E_LS_Platine'),
-                'Sk_LS_Platine')
+    # Zweistufig: vorn die Einpressbohrung fuer den M2-Einsatz, dahinter eine
+    # schmalere Freibohrung. Der Einsatz sitzt damit auf Anschlag, und die
+    # Schraubenspitze hat trotzdem Platz.
+    e_platine = ebene_x(comp, L['ls_wand_x1'], 'E_LS_Platine')
+    sk = skizze(comp, e_platine, 'Sk_LS_Einpressbohrung')
     for y in L['ls_pcb_loch_y']:
         kreis(sk, y, L['ls_pcb_loch_z'], w('ls_pcb_loch_d'))
-    weg(comp, alle_profile(sk), w('ls_halter_dicke'), koerper)
+    weg(comp, alle_profile(sk), -w('ls_pcb_loch_t'), koerper)
+
+    sk = skizze(comp, e_platine, 'Sk_LS_Freibohrung')
+    for y in L['ls_pcb_loch_y']:
+        kreis(sk, y, L['ls_pcb_loch_z'], w('ls_pcb_frei_d'))
+    weg(comp, alle_profile(sk), -w('ls_halter_dicke'), koerper)
 
     fussfase(comp, koerper, 'z', L['ls_sockel_y1'], w('fase_fuss'), fehler,
              'Endschalterhalter')

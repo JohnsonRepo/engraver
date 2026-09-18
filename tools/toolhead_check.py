@@ -599,6 +599,14 @@ def main():
     p.ok('Halter: untere Platinenbohrung frei vom Flansch',
          (L['ls_pcb_loch_y'][0] - w('ls_pcb_loch_d') / 2) - L['ls_flansch_y1'],
          1.5)
+    # M2-Einsatz Ø3,2 x 2,5 in der 4-mm-Wand: Einpressbohrung Ø2,8 (0,4 mm
+    # Untermass), dahinter Freibohrung — der Einsatz kann nicht durchrutschen.
+    p.ok('Halter: Einpressbohrung tiefer als der M2-Einsatz',
+         w('ls_pcb_loch_t') - 2.5, 0.4)
+    p.ok('Halter: Absatz hinter dem M2-Einsatz',
+         (w('ls_pcb_loch_d') - w('ls_pcb_frei_d')) / 2, 0.15)
+    p.ok('Halter: Wand tiefer als die Einpressbohrung',
+         w('ls_halter_dicke') - w('ls_pcb_loch_t'), 0.5)
     p.ok('Platine ragt nicht ueber den Halter hinaus (oben)',
          L['ls_sockel_z1'] - L['ls_pcb_z1'], 2.0)
     p.info('Verstellbereich des Schaltpunkts', 2 * w('ls_justage'))
@@ -643,7 +651,8 @@ def main():
             '(Mutternblock, schwimmend)',
             '4x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, alle vier)',
             '2x M3x12 + 2x Messing-Einsatz M3 Ø5 (Endschalterhalter -> Sockel)',
-            '2x M3x8 selbstschneidend (Lichtschranke -> Halter)',
+            '2x M2x6 + 2x Heat Insert M2 (Ø3,2 x 2,5) '
+            '(Lichtschranke -> Halter)',
             'Gabellichtschranke LM393, Platine {:.0f} x {:.0f} mm, '
             'Schlitz {:.0f} mm'.format(w('ls_pcb_laenge'), w('ls_pcb_breite'),
                                        w('ls_schlitz'))):

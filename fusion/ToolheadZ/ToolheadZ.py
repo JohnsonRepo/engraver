@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 18
+REVISION = 19
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -105,14 +105,12 @@ MASSE = {
     'tasche_klemmung':     (0.20,  'Mutterntasche: Untermass im Mundstueck'),
     'm3_scheibe_h':        (0.5,   'M3 Scheibe DIN 125: Dicke'),
     'inbus_frei_d':        (6.0,   'Werkzeugkorridor fuer den 2,5er Inbus'),
-    # 5,0 statt 4,0: die vorhandenen Messingeinsaetze haben 5 mm Aussen-
-    # durchmesser [v] (ruthex M3 hat 4,6 und will 4,0). Der Sockel ist so
-    # breit wie die Schiene und darf nicht breiter werden — damit bleiben
-    # (9 - 5)/2 = 2,00 mm Wand je Seite, genau das Minimum aus hardware.md.
-    # Achtung: ein EINSCHMELZ-Einsatz braucht Material zum Verdraengen, viele
-    # 5-mm-Typen wollen 4,6 mm Bohrung. Steht das so im Datenblatt, hier
-    # 4,6 eintragen — dann sind es 2,20 mm Wand.
-    'insert_m3_d':         (5.0,   'Gewindeeinsatz M3: Einpressbohrung'),
+    # 4,6 statt 4,0: die vorhandenen Messingeinsaetze haben 5 mm Aussen-
+    # durchmesser [v] (ruthex M3 hat 4,6 und will 4,0). 0,4 mm Untermass —
+    # ein Einschmelzeinsatz muss Material verdraengen, um zu greifen.
+    # Der Sockel ist so breit wie die Schiene und darf nicht breiter werden;
+    # es bleiben (9 - 4,6)/2 = 2,20 mm Wand je Seite, Minimum ist 2,0.
+    'insert_m3_d':         (4.6,   'Gewindeeinsatz M3: Einpressbohrung'),
     'insert_m3_t':         (7.0,   'Gewindeeinsatz M3: Sacklochtiefe'),
 
     # --- Traegerplatte -----------------------------------------------------
@@ -1198,8 +1196,10 @@ def hinweise_bauen(L, zc, fehler):
         '',
         'GEWINDEEINSAETZE (Z-Schiene -> Sockel, {:.0f} Stueck):'.format(
             len(L['z_schiene_loecher'])),
-        '  Einpressbohrung Ø{:.1f} mm, {:.0f} mm tief (Sackloch).'.format(
-            w('insert_m3_d'), w('insert_m3_t')),
+        '  Einpressbohrung Ø{:.1f} mm, {:.0f} mm tief (Sackloch) — {:.1f} mm'.format(
+            w('insert_m3_d'), w('insert_m3_t'),
+            5.0 - w('insert_m3_d')),
+        '  unter dem Aussendurchmesser, damit der Einsatz greift.',
         '  Wand je Seite im Sockel .... {:.2f} mm (Minimum 2,0)'.format(
             (w('sockel_breite') - w('insert_m3_d')) / 2.0),
         '  Material hinter der Bohrung  {:.1f} mm'.format(

@@ -64,6 +64,21 @@ Schrumpf nicht, genügt `laser_loch_d` von 4,0 auf 4,5 mm.
 Ist das Gehäuse tiefer oder flacher als 35 mm, `laser_tiefe` anpassen — davon
 hängt nur die berechnete Lage der Strahlachse ab, nicht die Geometrie.
 
+### Gewindeeinsätze `[v]`
+
+| Wert | Maß | Status |
+|---|---|---|
+| Typ | Messing-Einschmelzeinsatz M3 | `[v]` |
+| Außendurchmesser | **5,0 mm** | `[v]` am Teil |
+| Einpressbohrung im Skript | **5,0 mm** × 7 mm tief | `[v]` |
+| Wand im Schienensockel | **2,00 mm** je Seite | Minimum aus `hardware.md` |
+
+Nicht die ruthex-Maße aus `references/hardware.md` (M3: OD 4,6 → Bohrung 4,0).
+Der Schienensockel ist 9 mm breit und darf es bleiben — damit ist die
+Einpressbohrung die engste Stelle im ganzen Teil. Verlangt das Datenblatt eine
+Bohrung unter dem Außendurchmesser (bei Einschmelztypen der Normalfall),
+`insert_m3_d` entsprechend kleiner setzen; bei 4,6 mm wären es 2,20 mm Wand.
+
 ### Fokusabstand `[?]` — offen
 
 | Wert | Maß | Status |

@@ -171,8 +171,12 @@ def main():
          eingriff_x, w('x_gewinde_tiefe') - 0.3, '<=')
     p.ok('Insert-Sackloch bleibt im Sockelquerschnitt',
          w('traeger_dicke') + w('sockel_hoehe') - w('insert_m3_t'), 2.0)
+    # Die engste Stelle im ganzen Teil: der Sockel darf nicht breiter werden
+    # als die Schiene, also begrenzt seine Breite den Einsatzdurchmesser.
     p.ok('Wand um das Insert im Sockel',
          (w('sockel_breite') - w('insert_m3_d')) / 2, 2.0)
+    p.info('Einpressbohrung (Einsatz-Aussendurchmesser 5,0 mm)',
+           w('insert_m3_d'))
     p.ok('Sockel NICHT breiter als die Schiene (Wagenschuerzen!)',
          w('sockel_breite') - w('z_schiene_breite'), 0.0, '<=')
     p.info('Z-Schiene: Anzahl Befestigungsschrauben',
@@ -587,7 +591,8 @@ def main():
             '2x M6-Mutter (Sechskanttasche, SW+{:.2f}) + Druckfeder Ø8 x {:.0f}'
             .format(w('tasche_spiel'), w('feder_raum_l')),
             '4x M3x12 Zylinderkopf + Scheibe (Traegerplatte -> X-Wagen)',
-            '{}x M3x10 Senkkopf DIN 7991 + {}x ruthex M3 (Z-Schiene -> Sockel)'
+            '{}x M3x10 Senkkopf DIN 7991 + {}x Messing-Einsatz M3 Ø5 '
+            '(Z-Schiene -> Sockel)'
             .format(len(L['z_schiene_loecher']), len(L['z_schiene_loecher'])),
             '4x M3x{:.0f} Zylinderkopf   (Schlittenplatte -> Z-Wagen)'.format(
                 L['z_wagen_schraube']),

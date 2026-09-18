@@ -51,9 +51,27 @@ Richtungsverwechslungen beim Extrudieren gibt.
 | **+58,5** | **Strahlachse** |
 
 Die MGN9-Schiene sitzt auf einem **Sockel von 5 mm** — nur so sitzen die
-M3-Gewindeeinsätze 7 mm tief im Material. Der Sockel ist **genau so breit wie
-die Schiene (9 mm)**; wäre er breiter, würden die Schürzen des Wagens daran
+M3-Gewindeeinsätze 7 mm tief im Material (5 mm Sockel + 8 mm Platte = 13 mm,
+davon 7 mm Bohrung und 6 mm Rest). Der Sockel ist **genau so breit wie die
+Schiene (9 mm)**; wäre er breiter, würden die Schürzen des Wagens daran
 streifen. Das prüft `toolhead_check.py` ausdrücklich.
+
+Damit ist diese Bohrung die **engste Stelle im ganzen Teil**: die vorhandenen
+Messingeinsätze haben 5 mm Außendurchmesser, die Einpressbohrung Ø5,0 lässt
+also `(9 − 5)/2 = 2,00 mm` Wand je Seite — genau das Minimum, das
+`references/hardware.md` für M3 nennt. Beim Einschmelzen entsprechend wenig
+Druck geben und den Einsatz bündig setzen; ein überhitzter Einsatz treibt die
+Wand nach außen.
+
+Verlangt das Datenblatt der Einsätze eine kleinere Bohrung (bei
+Einschmelztypen üblich, weil der Einsatz Material verdrängen muss — ruthex M3
+hat 4,6 mm Außendurchmesser und will 4,0 mm), dann `insert_m3_d` entsprechend
+setzen: bei 4,6 mm sind es 2,20 mm Wand. Reicht die Wand im Druck nicht, gibt
+es zwei Wege ohne Änderung der Schienenbreite — den Einsatz 2 mm tiefer setzen,
+sodass sein unteres Ende in der 44 mm breiten Säule sitzt (dann M3×12 statt
+M3×10), oder den Sockelfuß unterhalb der Wagenschürzen verbreitern. Für
+letzteres brauche ich das Maß, wie hoch die Schürze des MGN9H über der
+Schienenauflage endet.
 
 ## Z-Kette und Verfahrweg
 
@@ -310,7 +328,7 @@ werden.
 | Verbindung | Schrauben | Hinweis |
 |---|---|---|
 | Trägerplatte → X-Wagen (MGN15H) | 4 × M3×12 + Scheibe | 3,5 mm Gewindeeingriff bei 4 mm verfügbarer Tiefe |
-| Z-Schiene → Sockel | **10 × M3×10 Senkkopf DIN 7991 + 10 × ruthex M3** | Einsätze vor der Montage einschmelzen; Randabstand 10 mm, Lochabstand 20 mm |
+| Z-Schiene → Sockel | **10 × M3×10 Senkkopf DIN 7991 + 10 × Messing-Einsatz M3** | Einsätze (Ø5 mm außen) vor der Montage einschmelzen, Bohrung Ø5,0 × 7 mm; Randabstand 10 mm, Lochabstand 20 mm |
 | NEMA 17 → Konsole | **4 × M3×12** | 4 mm Eingriff; Führungsrippen zentrieren, Zentrierbund in Ø22,4 |
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +2,8 mm** |
@@ -330,7 +348,7 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 
 | # | Schritt | Werkzeug | freie Länge |
 |---|---|---|---|
-| 1 | 10 × ruthex M3 in den Schienensockel einschmelzen | Lötkolben | — |
+| 1 | 10 × Messing-Einsatz M3 in den Schienensockel einschmelzen (Ø5,0-Bohrung, **nur 2,0 mm Wand** — wenig Druck, bündig, nicht überhitzen) | Lötkolben | — |
 | 2 | **Trägerplatte an den X-Wagen**, 4 × M3×12 + Scheibe | Inbus von vorn | frei, aber der Korridor streift den Z-Wagen um 0,5 mm → schlanken Schlüssel nehmen, keinen dicken Bit-Halter |
 | 3 | Z-Schiene auf den Sockel, 10 × M3×10 Senkkopf DIN 7991 | Inbus von vorn | der Wagen verdeckt je Stellung zwei Schrauben: erst mit dem Wagen unten acht setzen, dann hochschieben und die letzten zwei |
 | 4 | **Schlittenplatte auf den Z-Wagen**, 4 × M3×14 | Inbus von vorn durch die Ø6,5-Freibohrungen | frei — **nur solange der Laser nicht dran ist** |

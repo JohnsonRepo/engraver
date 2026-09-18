@@ -14,9 +14,10 @@ flexible Kupplung auf eine M6-Gewindestange. Der Laser sitzt auf dem Z-Schlitten
 
 | Pos | Teil | Material | Funktion |
 |---|---|---|---|
-| 1 | **Trägerplatte** mit angeformter **Motorkonsole** | PETG, 8 mm | sitzt auf dem X-Wagen, trägt Schienensockel, Konsole und Führungsrippen |
-| 2 | **Schlittenplatte** | PETG | auf dem MGN9H-Z-Wagen, trägt den Laser |
+| 1 | **Trägerplatte** mit angeformter **Motorkonsole** | PETG, 8 mm | sitzt auf dem X-Wagen, trägt Schienensockel, Konsole, Säulen- und Führungsrippen |
+| 2 | **Schlittenplatte** | PETG | auf dem MGN9H-Z-Wagen, trägt den Laser und die Schaltfahne |
 | 3 | **Mutternblock** | PETG | zwei M6-Muttern, federverspannt, schwimmend verschraubt |
+| 4 | **Endschalterhalter** | PETG | hält die Gabellichtschranke, Schaltpunkt über Langlöcher justierbar |
 
 Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
 [Motorbefestigung](#motorbefestigung-alle-vier-schrauben-erreichbar).
@@ -201,6 +202,49 @@ Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
 (1 mm dicker = 1 mm tiefer) — mit dem langen Verfahrweg brauchst du sie für den
 Fokus nicht mehr.
 
+## Endschalter: Gabellichtschranke
+
+Referenziert wird **nach oben**, weg vom Werkstück. Die Lichtschranke
+(LM393-Modul, Platine 25 × 20 mm, Gabelspalt 10 mm) sitzt **links neben der
+Säule** — dort ist über die ganze Z-Höhe nichts, und der X-Wagen ragt mit
+−29,4 mm ohnehin weiter nach außen als der Halter mit −32 mm. Die Schaltfahne
+wächst aus der oberen linken Ecke der Schlittenplatte.
+
+| Maß | Wert |
+|---|---|
+| Schaltpunkt (Strahlachse) | Z = +105,0 |
+| Weg danach bis zur mechanischen Grenze | 8 mm |
+| Justierbereich über die Langlöcher | ±4 mm |
+| Fahne im 10-mm-Spalt | 2 mm dick, 4 mm Luft je Seite |
+| Fahne deckt Strahlhöhe ab | 3,5 … 12,5 mm über der Platine |
+
+**Der Halter ist mit Absicht ein eigenes Druckteil (≈ 6 g).** Die Strahlhöhe
+über der Platine konnte ich nicht messen — sie ist mit 5 mm angenommen. Liegt
+sie anders, kostet das einen 6-g-Nachdruck und nicht die 154-g-Trägerplatte;
+außerdem fängt die Fahne mit 9 mm Tiefe ohnehin jede Höhe zwischen 3,5 und
+12,5 mm ab.
+
+Zwei Dinge vor dem Druck:
+
+* **Modul an den Halter halten** und prüfen, dass die Gabel zur Fahne zeigt
+  (also nach +X) und die Löcher passen. Ich bin von Lochmitten 2,5 mm von
+  jeder Kante ausgegangen — bei „1 mm von beiden Kanten" kann das nur der
+  Lochrand gewesen sein. Die Halterlöcher sind deshalb selbstschneidend Ø2,8;
+  ein halber Millimeter Abweichung ist damit egal.
+* **Die Fahne muss undurchsichtig sein.** Helles oder naturfarbenes PETG lässt
+  Infrarot durch, dann schaltet die Schranke nie sauber — dunkel drucken.
+
+Der Sockel an der Trägerplatte trägt zwei Gewindeeinsätze. Er ist nötig, weil
+die 8 mm dicke Platte allein für einen Ø4,6-Einsatz nur 1,7 mm Wand ließe; mit
+Sockel sind es 16 mm Material und 2,2 mm Wand. Nach rechts endet er 3 mm vor
+dem Z-Wagen.
+
+Elektrisch: **VCC vom selben Pegel wie das Board** (3,3-V-Board → 3,3 V), D0
+direkt an den Endschaltereingang. Der ebenfalls vorhandene induktive
+LJ12A3-4-Z/BX wäre hier die schlechtere Wahl — 60 g statt 5, 12–36 V mit
+Pegelwandler, ±0,1…0,2 mm statt ±0,03 mm. Der gehört an X und Y, wo er am
+Rahmen sitzt.
+
 ## Versteifungsrippen an der Säule
 
 Mit der Konsole auf +145 sitzt der Motor **132,5 mm** über der Verschraubung am
@@ -246,10 +290,16 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 
 | Teil | Volumen | Masse PETG | Bauraum | Lauf |
 |---|---|---|---|---|
-| Trägerplatte mit Konsole | 121,5 cm³ | **154,3 g** | 78 × 222 × 56 mm | Rev. 16 |
-| Schlittenplatte | 40,1 cm³ | **50,9 g** | 62 × 97 × 18 mm | Rev. 14 |
+| Trägerplatte mit Konsole | ≈ 124 cm³ | **≈ 157 g** | 78 × 222 × 56 mm | Rev. 16 + Sockel |
+| Schlittenplatte | ≈ 41,8 cm³ | **≈ 53 g** | 71 × 97 × 24 mm | Rev. 14 + Fahne |
 | Mutternblock | 9,8 cm³ | **12,4 g** | 28 × 26 × 17 mm | Rev. 14 |
-| **Druckteile zusammen** | 171,4 cm³ | **217,6 g** | | |
+| Endschalterhalter | ≈ 4,7 cm³ | **≈ 6 g** | 19 × 35 × 22 mm | gerechnet |
+| **Druckteile zusammen** | ≈ 180 cm³ | **≈ 228 g** | | |
+
+Die Werte für Trägerplatte und Schlittenplatte sind gemessen (154,3 / 50,9 g)
+plus die gerechneten Zuwächse durch Endschaltersockel (+3 g) und Schaltfahne
+(+2 g); der Halter ist ganz gerechnet. **Maßgeblich ist der nächste
+Fusion-Lauf.**
 
 Die Trägerplatte ist mit Rev. 16 von 145 auf 222 mm gewachsen (Schiene 200 mm,
 Konsole auf +145) und wog vorher 98,4 g. Gerechnet hatte ich 154 g, gemessen
@@ -330,6 +380,8 @@ werden.
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +2,8 mm** |
 | Mutternblock → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe | Ø4,6-Bohrung, ausrichten dann festziehen |
+| Endschalterhalter → Sockel | 2 × M3×12 + 2 × Messing-Einsatz M3 | Langloch ±4 mm für den Schaltpunkt |
+| Lichtschranke → Halter | 2 × M3×8 selbstschneidend | Ø2,8 in die 4-mm-Wand |
 
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
 Welle 5 mm) · M6-Gewindestange, Zuschnitt **190 mm** (187 mm werden gebraucht)
@@ -354,6 +406,7 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 7 | Kupplung und Gewindestange einsetzen | — | — |
 | 8 | Mutternblock an die Schlittenplatte, 2 × M3×16: locker lassen, Achse mehrmals durchfahren, dann festziehen | Inbus von vorn | frei |
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | 27 mm, mit dem Schlitten ganz unten frei |
+| 10 | Endschalterhalter auf den Sockel (2 × M3×12 in die Einsätze), Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen | Inbus von vorn | frei |
 
 Schritt 4 und Schritt 9 haben sich bis Rev. 13 gegenseitig zugebaut: das
 Gewinde der Laserbefestigung sitzt im Modul, also wird von hinten verschraubt —
@@ -434,6 +487,7 @@ reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 | Trägerplatte (mit Konsole) | Rückseite (Passfläche) unten | Platte, Sockel, Konsole, Säulen- und Führungsrippen stehen alle auf dem Bett — keine Stützen, alle Kräfte in der Schicht. 222 mm lang, passt liegend in den A1 |
 | Schlittenplatte | Laser-Anschraubfläche unten | Brücke 11 mm zwischen den Rippen; die Langlöcher liegen in der Wand, keine Stützen |
 | Mutternblock | Unterseite unten | Spindelbohrung wird rund |
+| Endschalterhalter | Flansch unten | Wand steht nach oben, keine Stützen |
 
 4 Wandlinien, ≥ 40 % Infill. An jeder Auflagefläche sitzt eine Fase von
 0,4 × 45° — ohne sie hebt der Elefantenfuß der ersten Schicht das Teil von der

@@ -23,7 +23,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 19
+REVISION = 20
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -152,7 +152,37 @@ MASSE = {
     'konsole_rand':        (4.5,   'Motorkonsole: Rand neben den Fuehrungsrippen'),
     'motor_rippe_breite':  (3.0,   'Fuehrungsrippe am Motorflansch: Breite'),
     'motor_rippe_hoehe':   (3.0,   'Fuehrungsrippe: Hoehe ueber der Konsole'),
-    'endschalter_x':      (-16.0,  'Endschalter-Befestigung: X (Platzhalter)'),
+    # --- Endschalter: Gabellichtschranke (LM393-Modul) ---------------------
+    # Platine 25 x 20 mm, Gabel an einer Stirnseite (1 mm von der 20-mm-Kante),
+    # Schlitzbreite 10 mm, zwei M3-Loecher in den Ecken der Gegenseite [v].
+    # Lochmitte 2,5 mm von jeder Kante (der Nutzer hat "1 mm von beiden
+    # Kanten" gemessen — bei Ø3 kann das nur der Lochrand sein), Lochabstand
+    # damit 15 mm. Der Halter hat dafuer Langloecher.
+    'ls_pcb_laenge':      (25.0,  'Lichtschranke: Platinenlaenge (in Z)'),
+    'ls_pcb_breite':      (20.0,  'Lichtschranke: Platinenbreite (in Y)'),
+    'ls_pcb_dicke':        (1.8,  'Lichtschranke: Platinendicke'),
+    'ls_pcb_rand':         (2.5,  'Lichtschranke: Lochmitte von der Kante'),
+    'ls_schlitz':         (10.0,  'Lichtschranke: Schlitzbreite (Gabelspalt)'),
+    # ANGENOMMEN: Strahlachse 5 mm ueber der Stirnkante der Platine. Genau
+    # dafuer sitzen die Anschraubloecher des Halters in Langloechern — der
+    # Schaltpunkt wird beim Einstellen gefunden, das Mass muss nicht stimmen.
+    'ls_strahl_ab_kante':  (5.0,  'Lichtschranke: Strahlachse ueber der Stirnkante'),
+    'ls_halter_dicke':     (4.0,  'Endschalterhalter: Wandstaerke'),
+    'ls_wand_versatz':     (6.0,  'Endschalterhalter: Wand links neben der Platte'),
+    'ls_flansch_dicke':    (3.0,  'Endschalterhalter: Dicke des Anschraubflansches'),
+    'ls_justage':          (4.0,  'Endschalterhalter: Langlochverstellung je Richtung'),
+    'ls_schraub_abstand': (20.0,  'Endschalterhalter: Abstand der Anschraubpunkte'),
+    'ls_sockel_hoehe':     (8.0,  'Endschaltersockel an der Platte: Hoehe in Y'),
+    'ls_sockel_x1':      (-13.0,  'Endschaltersockel: rechte Kante'),
+    'ls_pcb_loch_d':       (2.8,  'Lichtschranke: Loch fuer selbstschneidende M3'),
+    'ls_fahne_hoehe':     (15.0,  'Schaltfahne: Hoehe in Z'),
+    'ls_fahne_dicke':      (2.0,  'Schaltfahne: Dicke (laeuft im Gabelspalt)'),
+    # 9 mm Tiefe, 3,5 mm vor der Platine: die Fahne deckt damit jede
+    # Strahlhoehe zwischen 3,5 und 12,5 mm ueber der Platine ab und bleibt
+    # trotzdem 3,7 mm vom Z-Wagen weg.
+    'ls_fahne_tiefe':      (9.0,  'Schaltfahne: Tiefe quer zur Platine'),
+    'ls_fahne_luft_pcb':   (3.5,  'Schaltfahne: Luft zur Platinenoberflaeche'),
+    'ls_ueberfahrt':       (8.0,  'Weg nach dem Schaltpunkt bis zur Grenze'),
 
     # --- Schlittenplatte (Konzept aus ToolheadGrundplatte) -----------------
     # 12 statt 6: schiebt die Schlittenplatte so weit nach vorn, dass der
@@ -300,6 +330,48 @@ def lage():
     L['werkstueck_frei'] = min(
         w('traeger_z_unten'), L['z_schiene_z0']) + w('bett_abstand') - 5.0
 
+    # ---- Endschalter: Gabellichtschranke links neben der Saeule ------------
+    # Geschaltet wird beim Hochfahren: die Oberkante der Schaltfahne (= die
+    # der Schlittenplatte) erreicht den Strahl, kurz bevor der Wagen
+    # mechanisch ansteht. ls_ueberfahrt ist der Rest bis dahin.
+    L['ls_strahl_z'] = (L['zc_max'] - w('ls_ueberfahrt')
+                        + L['schlitten_oben_rel'])
+    L['ls_pcb_z0'] = L['ls_strahl_z'] - w('ls_strahl_ab_kante')
+    L['ls_pcb_z1'] = L['ls_pcb_z0'] + w('ls_pcb_laenge')
+    L['ls_sockel_z0'] = L['ls_pcb_z0'] - 5.0
+    L['ls_sockel_z1'] = L['ls_pcb_z1'] + 5.0
+    # Sockel an der Plattenvorderseite: die 8 mm dicke Platte allein traegt
+    # keinen Gewindeeinsatz (Wand 1,7 mm), mit Sockel sind es 16 mm Material.
+    L['ls_sockel_y1'] = L['traeger_y1'] + w('ls_sockel_hoehe')
+    L['ls_schraub_x'] = (w('traeger_x_links') + w('ls_sockel_x1')) / 2.0
+    L['ls_schraub_z'] = [L['ls_sockel_z0'] + 8.0,
+                         L['ls_sockel_z0'] + 8.0 + w('ls_schraub_abstand')]
+    # Halter: Flansch auf dem Sockel, Wand links davon traegt die Platine.
+    L['ls_flansch_y1'] = L['ls_sockel_y1'] + w('ls_flansch_dicke')
+    L['ls_wand_x1'] = w('traeger_x_links') - w('ls_wand_versatz')
+    L['ls_wand_x0'] = L['ls_wand_x1'] - w('ls_halter_dicke')
+    # Die Platine sitzt auf der Wand, die auf dem Flansch steht — beide
+    # beginnen also auf der Sockelflaeche, damit das Teil plan aufs Bett geht.
+    L['ls_pcb_y0'] = L['ls_sockel_y1'] + 1.0
+    L['ls_pcb_y1'] = L['ls_pcb_y0'] + w('ls_pcb_breite')
+    L['ls_wand_y1'] = L['ls_pcb_y1'] + 1.0
+    # Die Fahne laeuft in der Schlitzmitte der Gabel, also mittig zur Platine.
+    L['ls_fahne_y0'] = ((L['ls_pcb_y0'] + L['ls_pcb_y1']) / 2.0
+                        - w('ls_fahne_dicke') / 2.0)
+    L['ls_fahne_y1'] = L['ls_fahne_y0'] + w('ls_fahne_dicke')
+    L['ls_pcb_loch_y'] = [L['ls_pcb_y0'] + w('ls_pcb_rand'),
+                          L['ls_pcb_y1'] - w('ls_pcb_rand')]
+    L['ls_pcb_loch_z'] = L['ls_pcb_z1'] - w('ls_pcb_rand')
+    # Fahne in X: vor der Platine beginnen, damit sie den Strahl quert, und
+    # vor dem Z-Wagen enden.
+    L['ls_fahne_x0'] = (L['ls_wand_x1'] + w('ls_pcb_dicke')
+                        + w('ls_fahne_luft_pcb'))
+    L['ls_fahne_x1'] = L['ls_fahne_x0'] + w('ls_fahne_tiefe')
+    # Oberkante der Fahne = Oberkante der Schlittenplatte; sie schaltet also,
+    # wenn die Platte in die Gabel einfaehrt.
+    L['ls_fahne_z1_rel'] = L['schlitten_oben_rel']
+    L['ls_fahne_z0_rel'] = L['ls_fahne_z1_rel'] - w('ls_fahne_hoehe')
+
     # ---- Grenzen der Langlochstellung (mm nach oben, 0 = Lochmitte).
     #      Nach oben bindet die MONTAGE: schiebt man den Laser hoch, wandert
     #      die obere Schraubenreihe hinter den Z-Wagen und ist nicht mehr zu
@@ -356,7 +428,6 @@ def lage():
     # Vorderseite der Traegerplatte — die Groesse, die spindel_y bestimmt.
     L['korridor_luft'] = (w('spindel_y') - w('motor_loch') / 2.0
                           - 3.0 - w('traeger_dicke'))
-    L['endschalter_z'] = [20.0, 40.0]
 
     # Lochbild des Z-Wagens, relativ zur Wagenmitte zc
     L['z_wagen_loecher'] = [
@@ -549,6 +620,12 @@ def ebene_y(comp, y_mm, name):
     return _offsetebene(comp, comp.xYConstructionPlane, y_mm / 10.0, 'z', name)
 
 
+def ebene_x(comp, x_mm, name):
+    """Konstruktionsebene senkrecht zu Maschinen-X (Seitenwand).
+    Skizzenkoordinaten darauf sind (Maschine Y, Maschine Z)."""
+    return _offsetebene(comp, comp.yZConstructionPlane, x_mm / 10.0, 'x', name)
+
+
 def ebene_z(comp, z_mm, name):
     """Konstruktionsebene senkrecht zu Maschinen-Z (waagerecht).
     Skizzenkoordinaten darauf sind (Maschine X, Maschine Y)."""
@@ -569,6 +646,8 @@ def _ebene_info(sk):
     pl = adsk.core.Plane.cast(sk.referencePlane.geometry)
     if abs(pl.normal.z) > 0.9:       # Modell-Z = Maschine Y
         return 'y', pl.origin.z * 10.0
+    if abs(pl.normal.x) > 0.9:       # Modell-X = Maschine X
+        return 'x', pl.origin.x * 10.0
     return 'z', pl.origin.y * 10.0   # Modell-Y = Maschine Z
 
 
@@ -581,6 +660,8 @@ def punkt(sk, u_mm, v_mm):
     fest, wert = _ebene_info(sk)
     if fest == 'y':                  # Ebene bei konstantem Maschinen-Y
         modell = adsk.core.Point3D.create(u_mm / 10.0, v_mm / 10.0, wert / 10.0)
+    elif fest == 'x':                # Ebene bei konstantem Maschinen-X
+        modell = adsk.core.Point3D.create(wert / 10.0, v_mm / 10.0, u_mm / 10.0)
     else:                            # Ebene bei konstantem Maschinen-Z
         modell = adsk.core.Point3D.create(u_mm / 10.0, wert / 10.0, v_mm / 10.0)
     sp = sk.modelToSketchSpace(modell)
@@ -877,12 +958,19 @@ def bau_traegerplatte(app, design, comp, L, fehler):
         kreis(sk, x, y, w('m3_durchgang'))
     durch(comp, alle_profile(sk), koerper)
 
-    # Universalbefestigung fuer einen Z-Endschalter — Lochbild ist ein
-    # Platzhalter, an den eigenen Schalter anpassen.
-    sk = skizze(comp, e_hinten, 'Sk_Endschalter')
-    for z in L['endschalter_z']:
-        kreis(sk, w('endschalter_x'), z, w('m3_durchgang'))
-    durch(comp, alle_profile(sk), koerper)
+    # Sockel fuer den Endschalterhalter. Die 8 mm dicke Platte allein traegt
+    # keinen Gewindeeinsatz (Ø4,6 laesst nur 1,7 mm Wand), mit dem Sockel sind
+    # es 16 mm Material. Er endet 3 mm vor dem Z-Wagen.
+    sk = skizze(comp, e_vorn, 'Sk_Endschaltersockel')
+    rechteck(sk, w('traeger_x_links'), L['ls_sockel_z0'],
+             w('ls_sockel_x1'), L['ls_sockel_z1'])
+    dazu(comp, groesstes_profil(sk), w('ls_sockel_hoehe'), koerper)
+
+    sk = skizze(comp, ebene_y(comp, L['ls_sockel_y1'], 'E_LS_Sockel'),
+                'Sk_Inserts_Endschalter')
+    for z in L['ls_schraub_z']:
+        kreis(sk, L['ls_schraub_x'], z, w('insert_m3_d'))
+    weg(comp, alle_profile(sk), -w('insert_m3_t'), koerper)
 
     fussfase(comp, koerper, 'z', 0.0, w('fase_fuss'), fehler, 'Traegerplatte')
     bbox_pruefen(koerper, 'Traegerplatte',
@@ -961,6 +1049,22 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
                                w('laser_langloch_hub'))
     weg(comp, alle_profile(sk), w('schlitten_dicke'), koerper)
 
+    # Schaltfahne fuer die Gabellichtschranke: ein Block an der linken oberen
+    # Ecke. Er waechst aus der Seitenrippe heraus und ist nach hinten von der
+    # verbreiterten Plattenecke getragen — in der Drucklage (Laserflaeche auf
+    # dem Bett, Aufbaurichtung -Y) steht damit jede Schicht auf Material.
+    sk = skizze(comp, e_platte, 'Sk_Fahnenecke')
+    rechteck(sk, L['ls_fahne_x0'], zc + L['ls_fahne_z0_rel'],
+             -w('schlitten_breite_l'), zc + L['ls_fahne_z1_rel'])
+    dazu(comp, groesstes_profil(sk), w('schlitten_dicke'), koerper)
+
+    sk = skizze(comp, ebene_y(comp, L['ls_fahne_y0'], 'E_LS_Fahne'),
+                'Sk_Schaltfahne')
+    rechteck(sk, L['ls_fahne_x0'], zc + L['ls_fahne_z0_rel'],
+             L['ls_fahne_x1'], zc + L['ls_fahne_z1_rel'])
+    dazu(comp, groesstes_profil(sk),
+         L['schlitten_y1'] - L['ls_fahne_y0'], koerper)
+
     # Schwimmende Verschraubung des Mutternblocks: Uebermass zum Ausrichten
     sk = skizze(comp, e_platte, 'Sk_Bohrungen_Mutternblock')
     for x in L['block_schraube_x']:
@@ -969,9 +1073,59 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
 
     fussfase(comp, koerper, 'z', L['schlitten_y0'], w('fase_fuss'), fehler,
              'Schlittenplatte')
+    # Die Platte reicht links bis an die Schaltfahne heran.
     bbox_pruefen(koerper, 'Schlittenplatte',
-                 ((-w('schlitten_breite_l'), w('block_x_rechts')),
+                 ((L['ls_fahne_x0'], w('block_x_rechts')),
                   (L['schlitten_y0'], L['laser_y']), (z_u, z_o)), fehler)
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
+    return koerper
+
+
+def bau_endschalterhalter(app, design, comp, L, fehler):
+    """Haelt die Gabellichtschranke links neben der Saeule.
+
+    Eigenes Druckteil, mit Absicht: die genaue Gabelgeometrie des Moduls ist
+    nicht vermessen (Strahlhoehe ueber der Platine angenommen). Ein Irrtum
+    kostet hier 4 g statt der 154-g-Traegerplatte, und der Schaltpunkt bleibt
+    ueber die Langloecher justierbar.
+    Drucklage: Flansch aufs Bett, Wand steht nach oben — keine Stuetzen.
+    """
+    e_flansch = ebene_y(comp, L['ls_sockel_y1'], 'E_LS_Flansch')
+
+    sk = skizze(comp, e_flansch, 'Sk_LS_Flansch')
+    rechteck(sk, L['ls_wand_x0'], L['ls_sockel_z0'],
+             w('ls_sockel_x1'), L['ls_sockel_z1'])
+    koerper = neu(comp, groesstes_profil(sk),
+                  w('ls_flansch_dicke')).bodies.item(0)
+    koerper.name = 'Endschalterhalter'
+
+    sk = skizze(comp, e_flansch, 'Sk_LS_Wand')
+    rechteck(sk, L['ls_wand_x0'], L['ls_sockel_z0'],
+             L['ls_wand_x1'], L['ls_sockel_z1'])
+    dazu(comp, groesstes_profil(sk),
+         L['ls_wand_y1'] - L['ls_sockel_y1'], koerper)
+
+    # Anschraubung an den Sockel: Langloecher, damit der Schaltpunkt um
+    # +-ls_justage verschoben werden kann, ohne neu zu drucken.
+    sk = skizze(comp, e_flansch, 'Sk_LS_Anschraubung')
+    for z in L['ls_schraub_z']:
+        langloch_senkrecht(sk, L['ls_schraub_x'], z, w('m3_durchgang'),
+                           w('ls_justage'))
+    weg(comp, alle_profile(sk), w('ls_flansch_dicke'), koerper)
+
+    # Platinenloecher quer durch die Wand — Ebene senkrecht zu Maschinen-X.
+    sk = skizze(comp, ebene_x(comp, L['ls_wand_x0'], 'E_LS_Platine'),
+                'Sk_LS_Platine')
+    for y in L['ls_pcb_loch_y']:
+        kreis(sk, y, L['ls_pcb_loch_z'], w('ls_pcb_loch_d'))
+    weg(comp, alle_profile(sk), w('ls_halter_dicke'), koerper)
+
+    fussfase(comp, koerper, 'z', L['ls_sockel_y1'], w('fase_fuss'), fehler,
+             'Endschalterhalter')
+    bbox_pruefen(koerper, 'Endschalterhalter',
+                 ((L['ls_wand_x0'], w('ls_sockel_x1')),
+                  (L['ls_sockel_y1'], L['ls_wand_y1']),
+                  (L['ls_sockel_z0'], L['ls_sockel_z1'])), fehler)
     material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
 
@@ -1175,6 +1329,8 @@ def hinweise_bauen(L, zc, fehler):
         '  8. Laser ZULETZT, 4x M3x10 + Scheibe von hinten, Z-Schlitten',
         '     dafuer nach unten fahren ({:.0f} mm freier Korridor)'.format(
             L['schlitten_y1'] - L['traeger_y1']),
+        '  9. Endschalterhalter auf den Sockel (2x M3x12 in die Einsaetze),',
+        '     Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen',
         '',
         'FOKUS UND LANGLOCH (senkrechte Langloecher, +-{:.0f} mm):'.format(
             w('laser_langloch_hub')),
@@ -1193,6 +1349,24 @@ def hinweise_bauen(L, zc, fehler):
         '  Einstellung fuer {:.0f} mm Werkstueck (bett_abstand {:.0f} mm):'.format(
             w('werkstueck_max'), w('bett_abstand')),
     ] + fokus_zeilen(L, w) + [
+        '',
+        'ENDSCHALTER: Gabellichtschranke (LM393-Modul) links neben der',
+        '  Saeule, Schaltfahne an der oberen linken Ecke der Schlittenplatte.',
+        '  Referenziert wird NACH OBEN, weg vom Werkstueck.',
+        '  Schaltpunkt (Strahlachse) ... Z = {:+.1f} mm'.format(L['ls_strahl_z']),
+        '  danach bis zur Grenze ....... {:.0f} mm'.format(w('ls_ueberfahrt')),
+        '  justierbar ueber Langloecher  +-{:.0f} mm'.format(w('ls_justage')),
+        '  Die Strahlhoehe ueber der Platine ist ANGENOMMEN ({:.0f} mm). Die'.format(
+            w('ls_strahl_ab_kante')),
+        '  Fahne deckt {:.1f} bis {:.1f} mm ab, der Halter justiert den Rest.'.format(
+            w('ls_fahne_luft_pcb'),
+            w('ls_fahne_luft_pcb') + w('ls_fahne_tiefe')),
+        '  Fahne {:.0f} mm dick im {:.0f}-mm-Spalt — je Seite {:.0f} mm Luft.'.format(
+            w('ls_fahne_dicke'), w('ls_schlitz'),
+            (w('ls_schlitz') - w('ls_fahne_dicke')) / 2),
+        '  VOR DEM DRUCK: Modul an den Halter halten und pruefen, dass die',
+        '  Gabel zur Fahne zeigt. Die Fahne muss undurchsichtig sein —',
+        '  helles PETG laesst Infrarot durch, also dunkel drucken.',
         '',
         'GEWINDEEINSAETZE (Z-Schiene -> Sockel, {:.0f} Stueck):'.format(
             len(L['z_schiene_loecher'])),
@@ -1295,7 +1469,7 @@ def run(context):
         einheit = adsk.core.Matrix3D.create()
         occ = {}
         for name in ('Traegerplatte', 'Schlittenplatte',
-                     'Mutternblock', 'Bohrlehren'):
+                     'Mutternblock', 'Endschalterhalter', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -1304,9 +1478,12 @@ def run(context):
         bau_schlittenplatte(app, design, occ['Schlittenplatte'].component,
                             L, zc, fehler)
         bau_mutternblock(app, design, occ['Mutternblock'].component, L, zc, fehler)
+        bau_endschalterhalter(app, design,
+                              occ['Endschalterhalter'].component, L, fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, zc, fehler)
 
         occ['Traegerplatte'].isGrounded = True
+        occ['Endschalterhalter'].isGrounded = True
         occ['Bohrlehren'].isGrounded = True
 
         # Starrer As-Built-Joint fuer die feste Verschraubung ...

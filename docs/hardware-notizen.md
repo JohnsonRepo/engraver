@@ -95,6 +95,28 @@ Selbst messen: Papier aufs Bett, 1–2 % Leistung, Höhe variieren bis der Punkt
 am kleinsten ist, dann Gehäuseunterkante → Papier messen. Sobald der Wert
 bekannt ist, hier eintragen und auf `[v]` setzen.
 
+## Endschalter
+
+| Wert | Maß | Status |
+|---|---|---|
+| Typ | Gabellichtschranke LM393 (Hailege) | `[v]` |
+| Platine | **25 × 20 mm** | `[v]` gemessen |
+| Gabelspalt | **10 mm** | `[v]` |
+| Lage der Gabel | 1 mm von der 20-mm-Kante | `[v]` |
+| Bohrbild | 2 × M3 in den Ecken der Gegenseite, Lochrand 1 mm von beiden Kanten → **Lochmitten 2,5 mm, Abstand 15 mm** | `[v]` gemessen, Lochmitte abgeleitet |
+| Strahlhöhe über der Platine | **5 mm angenommen** | `[?]` nicht gemessen |
+| Versorgung | 3,3 / 5 V, D0 digital | `[w]` |
+
+Die angenommene Strahlhöhe ist der Grund, warum der Halter ein eigenes
+Druckteil ist: er kostet 6 g statt 154. Die Schaltfahne deckt zudem 3,5 bis
+12,5 mm über der Platine ab.
+
+Ebenfalls vorhanden: **induktiver Näherungsschalter LJ12A3-4-Z/BX** (M12,
+Sn 4 mm, NPN Schließer, 6–36 V). Für Z am Toolhead ungeeignet — 60 g,
+Pegelwandler nötig, ±0,1…0,2 mm Wiederholgenauigkeit. Vorgesehen für X und Y
+am Rahmen. Achtung: Schließer meldet bei Kabelbruch nicht; der Öffner
+(`/AX`) wäre für Endschalter die sichere Variante.
+
 ## Maschinenmaße für die Z-Achse
 
 | Wert | Maß | Status |

@@ -567,7 +567,42 @@ def main():
     p.info('groesster Fokusabstand fuer {:.0f} mm Werkstueck'.format(
         w('werkstueck_max')), f_max)
 
-    p.titel('9) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
+    p.titel('9) Endschalter: Gabellichtschranke und Schaltfahne')
+    p.info('Schaltpunkt (Strahlachse)', L['ls_strahl_z'])
+    p.ok('Weg nach dem Schalten bis zur mechanischen Grenze',
+         w('ls_ueberfahrt'), 5.0)
+    p.ok('Fahne passt in den Gabelspalt (Luft je Seite)',
+         (w('ls_schlitz') - w('ls_fahne_dicke')) / 2, 2.0)
+    p.ok('Fahne deckt die Strahlhoehe ab (Tiefe quer zur Platine)',
+         w('ls_fahne_tiefe'), 6.0)
+    p.info('abgedeckte Strahlhoehe ueber der Platine: {:.1f} bis {:.1f} mm'
+           .format(w('ls_fahne_luft_pcb'),
+                   w('ls_fahne_luft_pcb') + w('ls_fahne_tiefe')))
+    p.ok('Fahne bleibt vom Z-Wagen weg',
+         -w('z_wagen_breite') / 2 - L['ls_fahne_x1'], w('luft_bau'))
+    p.ok('Sockel bleibt vom Z-Wagen weg',
+         -w('z_wagen_breite') / 2 - w('ls_sockel_x1'), w('luft_bau'))
+    # Der Sockel ist nur so breit, wie er sein darf — also gilt fuer den
+    # Einsatz dieselbe Rechnung wie am Schienensockel.
+    p.ok('Wand um den Einsatz im Endschaltersockel',
+         (w('ls_sockel_x1') - w('traeger_x_links') - w('insert_m3_d')) / 2, 2.0)
+    p.ok('Material hinter dem Einsatz im Endschaltersockel',
+         w('ls_sockel_hoehe') + w('traeger_dicke') - w('insert_m3_t'), 2.0)
+    p.ok('Halter: Langloch bleibt im Flansch',
+         (L['ls_schraub_z'][0] - w('ls_justage') - w('m3_durchgang') / 2)
+         - L['ls_sockel_z0'], 2.0)
+    p.ok('Halter: Platinenloecher liegen in der Wand',
+         L['ls_wand_y1'] - (L['ls_pcb_loch_y'][-1] + w('ls_pcb_loch_d') / 2),
+         1.0)
+    p.ok('Platine ragt nicht ueber den Halter hinaus (oben)',
+         L['ls_sockel_z1'] - L['ls_pcb_z1'], 2.0)
+    p.info('Verstellbereich des Schaltpunkts', 2 * w('ls_justage'))
+    p.info('Toolhead-Breite links (Halterwand)', L['ls_wand_x0'])
+    p.ja('Halter bleibt im Schatten des X-Wagens',
+         L['ls_wand_x0'] >= -w('x_wagen_laenge') / 2 - 3.0,
+         '   (X-Wagen bis {:.1f} mm)'.format(-w('x_wagen_laenge') / 2))
+
+    p.titel('10) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
     for name, a, b in (
             ('Traegerplatte (mit Konsole)',
              w('traeger_x_kopf') - w('traeger_x_links'),
@@ -575,12 +610,14 @@ def main():
             ('Schlittenplatte', w('block_x_rechts') + w('schlitten_breite_l'),
              L['schlitten_oben_rel'] - L['schlitten_unten_rel']),
             ('Mutternblock', w('block_x_rechts') - w('block_x_links'),
-             w('block_hoehe'))):
+             w('block_hoehe')),
+            ('Endschalterhalter', w('ls_sockel_x1') - L['ls_wand_x0'],
+             L['ls_sockel_z1'] - L['ls_sockel_z0'])):
         p.ok('{}: groesste Kante'.format(name), max(a, b), 250.0, '<=')
     p.ok('Bruecke Schlittenplatte zwischen den Rippen',
          w('rippe_seite_innen') - w('rippe_mitte_breite') / 2, 25.0, '<=')
 
-    p.titel('10) Stueckliste')
+    p.titel('11) Stueckliste')
     for zeile in (
             'MGN9 Linearschiene {:.0f} mm + Wagen MGN9H'.format(
                 w('z_schiene_laenge')),
@@ -599,10 +636,15 @@ def main():
             '4x M3x10 + 4x Scheibe DIN 125 (Laser -> Schlittenplatte)',
             '2x M3x16 + 2x M3-Mutter + 2x Scheibe DIN 9021 Ø9 '
             '(Mutternblock, schwimmend)',
-            '4x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, alle vier)'):
+            '4x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, alle vier)',
+            '2x M3x12 + 2x Messing-Einsatz M3 Ø5 (Endschalterhalter -> Sockel)',
+            '2x M3x8 selbstschneidend (Lichtschranke -> Halter)',
+            'Gabellichtschranke LM393, Platine {:.0f} x {:.0f} mm, '
+            'Schlitz {:.0f} mm'.format(w('ls_pcb_laenge'), w('ls_pcb_breite'),
+                                       w('ls_schlitz'))):
         p.info(zeile)
 
-    p.titel('11) Statische Pruefung der Schluessel im Skript')
+    p.titel('12) Statische Pruefung der Schluessel im Skript')
     import re
     quelle = open(SKRIPT, encoding='utf-8').read()
     masse_namen = set(mod.MASSE)
@@ -624,7 +666,7 @@ def main():
         p.info('nur dokumentierend (nicht in Geometrie): '
                + ', '.join(unbenutzt))
 
-    p.titel('12) Validierungsbericht des Fusion-Skripts')
+    p.titel('13) Validierungsbericht des Fusion-Skripts')
     try:
         zc = (L['zc_min'] + L['zc_max']) / 2.0
         for zeile in mod.hinweise_bauen(L, zc, []):

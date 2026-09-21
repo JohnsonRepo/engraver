@@ -607,7 +607,7 @@ einblenden, drucken, ans reale Teil halten.
 
 | Lehre | prüft |
 |---|---|
-| `Bohrlehre_XWagen` | 25 × 25 mm — sitzt am Portal wirklich ein MGN15H? |
+| `Bohrlehre_XWagen` | 25 × 25 mm — MGN15H, am 2026-09-21 am Teil bestätigt `[v]` |
 | `Bohrlehre_ZWagen` | 16 × 15 mm — MGN9H, am 2026-09-17 am Teil bestätigt `[v]` |
 | `Bohrlehre_Laser` | 40,5 × 16,5 mm — am 2026-09-17 am Teil bestätigt `[v]` |
 
@@ -627,9 +627,11 @@ Stand der offenen Punkte aus `hardware-notizen.md`:
 * **Z-Führung: geklärt.** MGN9H, am 2026-09-17 mit der Bohrlehre am Wagen
   bestätigt (äußeres Lochpaar, 16 mm längs). Die Lehre hat seitdem nur noch ein
   Lochbild und folgt dem Parameter.
-* **X-Wagen: offen.** Die alte Messung „26 × 25 mm am Toolhead-Wagen" gehört
-  zu ihm, nicht zur Z-Achse — MGN15H = 25 × 25 passt dazu, ist aber noch nicht
-  mit der Lehre bestätigt.
+* **X-Wagen: geklärt.** **MGN15H, 25 × 25 mm**, am 2026-09-21 mit
+  `Bohrlehre_XWagen` am Wagen bestätigt. Damit ist es kein MGN15C (25 × 20),
+  und die alte Messung „26 × 25 mm am Toolhead-Wagen" ist auch für ihn
+  widerlegt: eine Ø3,4-Lehre auf M3 hätte 1 mm Abweichung nicht durchgelassen.
+  Das Lochbild der Trägerplatte steht damit fest — sie kann gedruckt werden.
 * **Laser-Bohrbild: geklärt.** **40,5 × 16,5 mm**, am 2026-09-17 mit
   `Bohrlehre_Laser` am Modul bestätigt. Das war die dritte Messung (vorher
   39 × 15 und 40 × 16); die Messhistorie bleibt im Bericht stehen.

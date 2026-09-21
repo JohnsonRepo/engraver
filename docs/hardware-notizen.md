@@ -33,12 +33,27 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 „Toolhead-Wagen" von 26 längs × 25 quer, was nicht zu MGN9 passt. Die Bohrlehre
 am Z-Wagen hat am 2026-09-17 das äußere Lochpaar (16 mm) bestätigt — die
 Z-Achse ist also **MGN9H**. Die 26 × 25 gehören folglich zum Wagen der
-**Portalführung** (X-Achse), wo MGN15H = 25 × 25 passt. Dort steht die
-Bestätigung mit `Bohrlehre_XWagen` noch aus.
+**Portalführung** (X-Achse), wo MGN15H = 25 × 25 passt. Am 2026-09-21 hat
+`Bohrlehre_XWagen` dort gepasst `[v]`: es ist ein **MGN15H mit 25 × 25**
+(ein MGN15C hätte 25 × 20), und die 26 × 25 sind damit auch als Messung des
+X-Wagens widerlegt — 1 mm Abweichung lässt eine Ø3,4-Lehre auf M3 nicht durch.
 
 Die `Bohrlehre_ZWagen` trug bis dahin beide MGN9-Lochbilder (10 und 16 mm
 längs), um die Baugröße zu entscheiden. Sie folgt jetzt dem Parameter
 `z_wagen_loch_laengs` und hat nur noch vier Löcher.
+
+## Portalführung (X-Achse)
+
+| Wert | Maß | Status |
+|---|---|---|
+| Linearführung X | **MGN15H** | `[v]` am 2026-09-21 mit `Bohrlehre_XWagen` geprüft |
+| Wagen-Lochbild | **25 × 25 mm** | `[v]` am 2026-09-21 geprüft |
+| Wagen | 32 breit (in Z) × 58,8 lang (in X) | `[w]` |
+| Montagehöhe Wagen | 16 mm über der Profilfläche | `[w]` |
+| Gewindetiefe im Wagen | 4 mm (M3) → M3×12 mit Scheibe | `[w]` |
+
+Damit ist das Lochbild der Trägerplatte bestätigt — sie trägt den ganzen
+Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 
 ## Diodenlaser
 

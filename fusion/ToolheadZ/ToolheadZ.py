@@ -29,8 +29,12 @@ REVISION = 23
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
 MASSE = {
-    # --- Kaufteil: Portalfuehrung MGN15H (hardware.md [w]) ------------------
+    # --- Kaufteil: Portalfuehrung MGN15H ------------------------------------
     # quer = senkrecht zur Schiene = Z, laengs = laengs der Schiene = X
+    # Das Lochbild 25 x 25 ist am 2026-09-21 mit Bohrlehre_XWagen am Wagen
+    # geprueft und bestaetigt [v] — damit ist es ein MGN15H (ein MGN15C
+    # haette 25 x 20) und die alte Messung "26 x 25" ist widerlegt: bei
+    # Ø3,4-Lochlehre auf M3 wuerde 1 mm Abweichung nicht mehr passen.
     'x_wagen_loch_quer':   (25.0,  'MGN15H Wagen: Lochabstand in Z'),
     'x_wagen_loch_laengs': (25.0,  'MGN15H Wagen: Lochabstand in X'),
     'x_wagen_breite':      (32.0,  'MGN15H Wagen: Breite (in Z)'),
@@ -1523,7 +1527,8 @@ def hinweise_bauen(L, zc, fehler):
         'LEHREN — nur fuer KAUFTEIL-Lochbilder; fuer',
         '  Mutternwinkel <-> Schlittenplatte braucht es keine, beide kommen aus',
         '  diesem Skript und die Platte hat dort Uebermass zum Ausrichten:',
-        '  Bohrlehre_XWagen ...... {:.0f} x {:.0f} mm (MGN15H)'.format(
+        '  Bohrlehre_XWagen ...... {:.0f} x {:.0f} mm (MGN15H, am Teil '
+        'bestaetigt)'.format(
             w('x_wagen_loch_laengs'), w('x_wagen_loch_quer')),
         '  Bohrlehre_ZWagen ...... {:.0f} x {:.0f} mm (MGN9H, am Teil bestaetigt)'.format(
             w('z_wagen_loch_laengs'), w('z_wagen_loch_quer')),
@@ -1532,10 +1537,11 @@ def hinweise_bauen(L, zc, fehler):
         '    Lehre Ø{:.1f} rund; in der Platte senkrechtes Langloch {:.1f}'.format(
             w('m3_durchgang'), w('laser_loch_d')),
         '    breit: Lochbildtoleranz +-{:.1f} mm quer.'.format(laser_tol),
-        '  OFFEN ist nur noch der X-Wagen: die alte Messung "26 x 25 mm am',
-        '  Toolhead-Wagen" gehoert zu ihm (MGN15H), nicht zur Z-Achse. Vor dem',
-        '  Druck der Traegerplatte mit Bohrlehre_XWagen pruefen — er traegt den',
-        '  ganzen Toolhead, und ein MGN15C haette 25 x 20 statt 25 x 25.',
+        '  Alle drei Lochbilder sind damit am realen Teil bestaetigt. Beim',
+        '  X-Wagen war die Frage, ob dort ein MGN15H (25 x 25) oder ein',
+        '  MGN15C (25 x 20) sitzt und wohin die alte Messung "26 x 25 mm am',
+        '  Toolhead-Wagen" gehoert. Die Lehre passt: es ist ein MGN15H, und',
+        '  1 mm Abweichung wuerde eine Ø3,4-Lehre auf M3 nicht durchlassen.',
         '',
         'MATERIAL: Druckteile PETG ({:.2f} g/cm3), Bohrlehren PLA ({:.2f}).'.format(
             ZIELDICHTE['PETG'], ZIELDICHTE['PLA']),

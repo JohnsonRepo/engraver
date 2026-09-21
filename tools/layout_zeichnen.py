@@ -20,6 +20,12 @@ RAND = 16
 ANZEIGE = {          # Anzeigenamen (bauraum.py haelt die Schluessel in ASCII)
     'Traegerplatte Hauptsaeule': 'Trägerplatte Hauptsäule',
     'Traegerplatte Kopf': 'Trägerplatte Kopf',
+    'Saeulenrippe links': 'Säulenrippe links',
+    'Saeulenrippe rechts': 'Säulenrippe rechts',
+    'Winkel Ruecken': 'Mutternwinkel: Rücken',
+    'Winkel Regal': 'Mutternwinkel: Regal',
+    'Antriebsmutter Tr8x2': 'Antriebsmutter Tr8×2 (Garnitur)',
+    'Tr8x2-Spindel': 'Tr8×2-Spindel',
 }
 FARBE = {
     'druck':    ('#c9d9ec', '#2f5d92'),      # gedruckte Teile
@@ -128,8 +134,14 @@ def main():
     vorn = Ansicht('Vorderansicht (Blick entlang Y)', 'x', ((x0, x1), (z0, z1)),
                    RAND + seite.breite + 58)
 
+    # Positionsliste: Zeilenzahl steht vor der Leinwandhoehe, sonst laeuft
+    # die Liste unten aus dem Bild (sie waechst mit jedem neuen Bauraum).
+    namen = [q.name for q in feste] + [q.name for q in bewegte]
+    spalten = 3
+    pro = (len(namen) + spalten - 1) // spalten
+
     breite = vorn.ox + vorn.breite + RAND
-    hoehe = RAND + 34 + seite.hoehe + 70 + 11 * 6
+    hoehe = RAND + 34 + seite.hoehe + 74 + pro * 11
 
     t = ['<svg xmlns="http://www.w3.org/2000/svg" width="{:.0f}" '
          'height="{:.0f}" viewBox="0 0 {:.0f} {:.0f}" '
@@ -137,7 +149,7 @@ def main():
              breite, hoehe, breite, hoehe),
          '<rect width="100%" height="100%" fill="#ffffff"/>',
          '<text x="{}" y="20" font-size="13" font-weight="600" fill="#1c2733">'
-         'Toolhead Z-Achse — Laser auf MGN9, NEMA 17 mit M6-Spindel'
+         'Toolhead Z-Achse — Laser auf MGN9, NEMA 17 mit Tr8x2-Spindel'
          '</text>'.format(RAND),
          '<text x="{}" y="32" font-size="8.5" fill="#5b6472">Ursprung = Mitte '
          'des X-Wagen-Lochbildes auf seiner Stirnfläche · Maßstab '
@@ -219,9 +231,6 @@ def main():
                  RAND + 21, ly + 32, zc_o, zc_u))
 
     # Positionsliste
-    namen = [q.name for q in feste] + [q.name for q in bewegte]
-    spalten = 3
-    pro = (len(namen) + spalten - 1) // spalten
     for i, name in enumerate(namen):
         sp, zeile = i // pro, i % pro
         t.append('<text x="{:.0f}" y="{:.1f}" font-size="8" fill="#1c2733">'

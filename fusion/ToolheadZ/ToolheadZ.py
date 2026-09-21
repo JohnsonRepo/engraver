@@ -5,8 +5,9 @@
 #                     traegt die MGN9-Z-Schiene (Sockel) und die Motorkonsole
 #   Motorhalter     — U-Konsole oben, traegt den NEMA 17 (Welle nach unten)
 #   Schlittenplatte — auf dem MGN9H-Z-Wagen, traegt den Diodenlaser
-#   Mutternblock    — zwei M6-Muttern mit Druckfeder gegeneinander verspannt,
-#                     schwimmend an der Schlittenplatte verschraubt
+#   Mutternwinkel   — Winkel fuer die Tr8x2-Anti-Backlash-Garnitur: Regal
+#                     ueber der Plattenoberkante, Ruecken schwimmend an der
+#                     Schlittenplatte verschraubt
 #
 # Koordinatensystem = Maschinenkoordinaten, global fuer alle Komponenten:
 #   X = quer, laengs des Portals          Y = nach vorn, weg vom Portal
@@ -23,7 +24,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 22
+REVISION = 23
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -67,15 +68,26 @@ MASSE = {
     'motor_laenge':        (40.0,  'NEMA17: Koerperlaenge (nur Freigang)'),
 
     # --- Kaufteil: Antrieb -------------------------------------------------
-    'spindel_d':           (6.0,   'M6-Gewindestange: Nenndurchmesser'),
-    'spindel_durchgang':   (6.6,   'M6 Durchgang (hardware.md)'),
-    'kupplung_d':          (19.0,  'Flexible Kupplung 5->6: Durchmesser'),
-    'kupplung_l':          (25.0,  'Flexible Kupplung 5->6: Laenge'),
+    # Trapezgewinde Tr8x2 mit Anti-Backlash-Garnitur (hardware.md). Die
+    # Spindel hat KEINEN angedrehten Zapfen: Ø8 ist der Gewindeaussen-
+    # durchmesser, die Klemmnabe der Kupplung greift auf die Gewindespitzen.
+    # Das traegt (siehe Momentenrechnung in toolhead_check.py, Abschnitt 7).
+    'spindel_d':           (8.0,   'Tr8x2: Gewindeaussendurchmesser'),
+    'spindel_durchgang':   (8.6,   'Tr8x2 Durchgang (+0,6 wie M6 vorher)'),
+    'kupplung_d':          (19.0,  'Klemmkupplung 5->8: Durchmesser'),
+    'kupplung_l':          (25.0,  'Klemmkupplung 5->8: Laenge'),
     'kupplung_griff':      (12.0,  'Kupplung: Einstecktiefe je Seite'),
-    'm6_mutter_sw':        (10.0,  'M6 Mutter: Schluesselweite (hardware.md)'),
-    'm6_mutter_h':         (5.2,   'M6 Mutter: Hoehe (hardware.md)'),
-    'feder_raum_l':        (11.0,  'Federkammer zwischen den beiden Muttern'),
-    'feder_raum_d':        (10.0,  'Federkammer: Durchmesser'),
+    # Die Garnitur: Flanschmutter auf dem Regal, Feder und Gleitmutter
+    # darueber. Die Befestigungsloecher im Flansch sind DURCHGANGSloecher,
+    # das Gewinde sitzt also im Druckteil (M3-Messingeinsaetze).
+    't8_flansch_d':        (22.0,  'Tr8x2 Flanschmutter: Flanschdurchmesser'),
+    't8_lochkreis':        (16.0,  'Tr8x2 Flanschmutter: Lochkreis (4x M3)'),
+    # 45 = Flanschmutter 15 + Feder vorgespannt ~15 + Gleitmutter 15. Nur
+    # geschaetzt [?] — am gelieferten Teil messen, der Wert allein bestimmt
+    # die obere Verfahrgrenze (siehe zc_grenzen).
+    't8_garnitur_h':       (45.0,  'Tr8x2 Garnitur: Bauhoehe ueber dem Regal'),
+    # Erzeugt keine Geometrie, nur Bericht und Pruefung: die bestellte Laenge.
+    'spindel_bestellt':   (200.0,  'Tr8x2: bestellte Spindellaenge'),
 
     # --- Kaufteil: Diodenlaser (Nutzerangabe + hardware.md) ----------------
     # 40,5 x 16,5 — am 2026-09-17 mit Bohrlehre_Laser (Ø3,4 Rundloecher) am
@@ -94,7 +106,7 @@ MASSE = {
 
     # --- Normteile ---------------------------------------------------------
     'm3_durchgang':        (3.4,   'M3 Durchgang'),
-    'm3_uebermass':        (4.6,   'M3 Durchgang mit Ausrichtspiel (Mutternblock)'),
+    'm3_uebermass':        (4.6,   'M3 Durchgang mit Ausrichtspiel (Mutternwinkel)'),
     'm3_senkung':          (6.5,   'Freibohrung fuer M3-Zylinderkopf + Werkzeug'),
     'm3_mutter_sw':        (5.5,   'M3 Mutter: Schluesselweite'),
     'm3_mutter_h':         (2.4,   'M3 Mutter: Hoehe'),
@@ -102,7 +114,6 @@ MASSE = {
     # (SW + 0,2..0,3): die Muttern sollen VOR dem Festschrauben von allein
     # sitzen. Falls eine Tasche zu stramm wird, hier erhoehen.
     'tasche_spiel':        (0.15,  'Mutterntasche: Spiel auf die Schluesselweite'),
-    'tasche_klemmung':     (0.20,  'Mutterntasche: Untermass im Mundstueck'),
     'm3_scheibe_h':        (0.5,   'M3 Scheibe DIN 125: Dicke'),
     'inbus_frei_d':        (6.0,   'Werkzeugkorridor fuer den 2,5er Inbus'),
     # 4,6 statt 4,0: die vorhandenen Messingeinsaetze haben 5 mm Aussen-
@@ -132,8 +143,10 @@ MASSE = {
     # Z-Wagen. An der Kante wirkt die Rippe ohnehin am besten.
     'saeule_rippe_x0':     (18.0,  'Saeulenrippe: Innenkante (Abstand zur Achse)'),
     'saeule_rippe_x1':     (22.0,  'Saeulenrippe: Aussenkante'),
-    # 6,5 mm tief: der Mutternblock beginnt bei Y=18, es bleiben 3,5 mm Luft.
-    'saeule_rippe_tiefe':   (6.5,  'Saeulenrippe: Hoehe ueber der Plattenvorderseite'),
+    # 6,0 mm tief: der Ø22-Flansch der Antriebsmutter sitzt mittig auf der
+    # Spindelachse und reicht damit bis Y=17,5 nach hinten — mehr als 6,0
+    # laesst dort keine 3,5 mm Luft mehr. Steifigkeit siehe check 4.
+    'saeule_rippe_tiefe':   (6.0,  'Saeulenrippe: Hoehe ueber der Plattenvorderseite'),
     'sockel_breite':        (9.0,  'Schienensockel: Breite = Schienenbreite!'),
     'sockel_hoehe':        (5.0,   'Schienensockel: Hoehe ueber der Plattenvorderseite'),
 
@@ -141,8 +154,9 @@ MASSE = {
     'spindel_x':           (30.0,  'Spindelachse: X (Abstand von der Schienenachse)'),
     # 28,5 statt 21: nur so liegt die hintere Motorschraubenreihe
      # (spindel_y - motor_loch/2) vor der Traegerplatte und ist von unten
-     # erreichbar. Nach vorn begrenzt die Wand vor der Spindelbohrung im
-     # Mutternblock (schlitten_y1 - spindel_y - spindel_durchgang/2 >= 3).
+     # erreichbar. Nach vorn begrenzt die Haut vor der Spindelbohrung im
+     # Ruecken des Mutternwinkels (schlitten_y1 - spindel_y
+     # - spindel_durchgang/2 >= 2).
     'spindel_y':           (28.5,  'Spindelachse: Y ab X-Wagen-Stirnflaeche'),
     # Die Konsole ist Teil der Traegerplatte (ein Druckteil) — keine Laschen.
     # 145: 5 mm ueber dem oberen Schienenende (-60 + 200 = +140).
@@ -198,7 +212,9 @@ MASSE = {
 
     # --- Schlittenplatte (Konzept aus ToolheadGrundplatte) -----------------
     # 12 statt 6: schiebt die Schlittenplatte so weit nach vorn, dass der
-    # Mutternblock hinter ihr Platz hat, obwohl die Spindelachse bei 28,5 liegt.
+    # Ruecken des Mutternwinkels hinter ihr Platz hat, obwohl die Spindelachse
+    # bei 28,5 liegt. Der Ø22-Flansch der Antriebsmutter passt hier NICHT
+    # dahinter — deshalb liegt sein Regal ueber der Plattenoberkante.
     'pad_hoehe':           (12.0,  'Auflagepad: Versatz Wagenflaeche -> Platte'),
     # 30: der Kopffreiraum sitzt bei X = +-8,25 und braucht Wand zum Padrand.
     # Seit der Umstellung auf Ø4,0-Rundloecher (kleinere Scheibe, Freiraum Ø8)
@@ -234,12 +250,20 @@ MASSE = {
     # je Loch Lochbildtoleranz quer, die Laenge ist die Hoehenverstellung.
     'laser_loch_d':         (4.0,  'Laser-Befestigung: Langlochbreite'),
 
-    # --- Mutternblock ------------------------------------------------------
-    'block_x_links':       (16.0,  'Mutternblock: linke Kante'),
-    'block_x_rechts':      (44.0,  'Mutternblock: rechte Kante'),
-    'block_y_hinten':      (18.0,  'Mutternblock: hintere Kante'),
-    'block_hoehe':         (26.0,  'Mutternblock: Hoehe'),
-    'block_boden':         (2.0,   'Mutternblock: Boden/Decke unter der Mutter'),
+    # --- Mutternwinkel -----------------------------------------------------
+    # Winkel statt Block: die gekaufte Garnitur bringt die Spielfreiheit mit
+    # (zwei Mutternhaelften, von einer Feder gegeneinander gedrueckt), sie
+    # braucht nur einen plangedrehten Flanschsitz. Das Regal liegt UEBER der
+    # Oberkante der Schlittenplatte — der Ø22-Flansch wuerde sonst in die
+    # Platte laufen (Spindelachse Y=28,5, Plattenrueckseite Y=35).
+    'winkel_x_links':      (16.0,  'Mutternwinkel: linke Kante'),
+    'winkel_x_rechts':     (44.0,  'Mutternwinkel: rechte Kante'),
+    'winkel_ruecken':      (8.0,   'Mutternwinkel: Dicke des senkrechten Ruecken'),
+    'winkel_unten':        (8.0,   'Mutternwinkel: Ruecken unter der Schraubenreihe'),
+    # 10 mm: der Flanschsitz muss den M3-Einsatz (7 mm) aufnehmen und
+    # darunter Material lassen (hardware.md: mindestens 9 mm).
+    'winkel_regal_dicke':  (10.0,  'Mutternwinkel: Dicke des Flanschregals'),
+    'winkel_luft':         (0.5,   'Mutternwinkel: Luft Regal -> Plattenoberkante'),
 
     # --- Druckgerecht + Freigaenge -----------------------------------------
     'luft_bau':            (3.0,   'Mindestfreigang zwischen bewegten Teilen'),
@@ -310,8 +334,27 @@ def lage():
     # keinen Kopffreiraum — der Schnitt entfaellt dann ganz.
     L['laser_oben_im_pad'] = (abs(L['laser_loch_oben_rel'])
                               < w('pad_laenge') / 2.0)
-    L['block_oben_rel'] = w('block_hoehe') / 2.0
-    L['block_unten_rel'] = -w('block_hoehe') / 2.0
+    # ---- Mutternwinkel: Ruecken an der Platte, Regal darueber -------------
+    # Der Ruecken liegt an der Plattenrueckseite (Y = schlitten_y1) und reicht
+    # von winkel_unten unter der Schraubenreihe bis an die Regaloberseite.
+    L['winkel_y0'] = L['schlitten_y1'] - w('winkel_ruecken')
+    L['winkel_unten_rel'] = -w('winkel_unten')
+    # Das Regal setzt erst ueber der Plattenoberkante an — sonst laeuft der
+    # Ø22-Flansch in die Platte (siehe MASSE-Kommentar).
+    L['regal_z0_rel'] = L['schlitten_oben_rel'] + w('winkel_luft')
+    L['regal_z1_rel'] = L['regal_z0_rel'] + w('winkel_regal_dicke')
+    # Das Regal traegt den runden Flansch, also genau dessen Durchmesser tief.
+    L['regal_y0'] = w('spindel_y') - w('t8_flansch_d') / 2.0
+    L['regal_y1'] = w('spindel_y') + w('t8_flansch_d') / 2.0
+    # Garnitur: Flanschmutter, Feder und Gleitmutter stehen NACH OBEN auf dem
+    # Regal. Nach unten waere kein Platz — dort sitzt die Schlittenplatte.
+    L['garnitur_z1_rel'] = L['regal_z1_rel'] + w('t8_garnitur_h')
+    # Lochkreis um 45 Grad gedreht: so bleibt der Flanschsitz in Y schlank
+    # (Loecher bei +-lochkreis/(2*sqrt2) statt +-lochkreis/2). Der runde
+    # Flansch laesst sich beliebig drehen, die Lage ist also frei waehlbar.
+    r45 = w('t8_lochkreis') / 2.0 / math.sqrt(2.0)
+    L['t8_loecher'] = [(w('spindel_x') + sx * r45, w('spindel_y') + sy * r45)
+                       for sx in (-1, 1) for sy in (-1, 1)]
 
     # ---- Verfahrgrenzen: jede Begrenzung einzeln, damit sichtbar bleibt,
     #      welche bindet ------------------------------------------------------
@@ -324,8 +367,8 @@ def lage():
             L['konsole_z0'] - luft - L['laser_oben_rel'],
         'Schlittenplatte gegen Kupplung':
             L['kupplung_z0'] - luft - L['schlitten_oben_rel'],
-        'Mutternblock gegen Kupplung':
-            L['kupplung_z0'] - luft - L['block_oben_rel'],
+        'Antriebsmutter gegen Kupplung':
+            L['kupplung_z0'] - luft - L['garnitur_z1_rel'],
     }
     L['zc_grenzen'] = grenzen
     L['zc_max'] = min(grenzen.values())
@@ -341,6 +384,10 @@ def lage():
     # vom Verfahrweg. Mit langem Verfahrweg ist das die eigentliche Grenze.
     L['werkstueck_frei'] = min(
         w('traeger_z_unten'), L['z_schiene_z0']) + w('bett_abstand') - 5.0
+    # Dasselbe gilt fuer das untere Spindelende: es haengt frei nach unten und
+    # faehrt in X mit. Gekuerzt auf die benoetigte Laenge stoert es nicht,
+    # ungekuerzt ist es die niedrigste feste Kante.
+    L['spindel_zuschnitt'] = w('spindel_bestellt')
 
     # ---- Endschalter: Gabellichtschranke links neben der Saeule ------------
     # Geschaltet wird beim Hochfahren: die Oberkante der Schaltfahne (= die
@@ -401,9 +448,25 @@ def lage():
     L['z_wagen_schraube'] = 2.0 * int((w('pad_hoehe') + 1.5) / 2.0 + 0.999)
     L['z_wagen_eingriff'] = L['z_wagen_schraube'] - w('pad_hoehe')
 
-    # ---- Benoetigte Laenge der Gewindestange --------------------------------
-    L['spindel_z0'] = L['zc_min'] + L['block_unten_rel'] - 5.0
+    # ---- Schraubenlaenge Mutternwinkel -> Schlittenplatte -------------------
+    # Geklemmt werden Platte + Ruecken bis zur Mutter, die in der Tasche
+    # sitzt. Plus grosse Scheibe (0,8) und 1 mm Reserve, aufgerundet auf die
+    # naechste gerade Laenge.
+    L['winkel_klemm'] = (w('schlitten_dicke') + w('winkel_ruecken')
+                         - (w('m3_mutter_h') + 0.3) + w('m3_mutter_h'))
+    L['winkel_schraube'] = 2.0 * int((L['winkel_klemm'] + 0.8 + 1.0) / 2.0
+                                     + 0.999)
+
+    # ---- Benoetigte Laenge der Gewindespindel -------------------------------
+    # Unten muss sie die Flanschmutter in der tiefsten Stellung noch ganz
+    # tragen (die Mutter steht auf dem Regal, greift also ab Regaloberseite
+    # nach oben) plus 5 mm Anlauf.
+    L['spindel_z0'] = L['zc_min'] + L['regal_z1_rel'] - 5.0
     L['spindel_laenge'] = L['spindel_z1'] - L['spindel_z0']
+    # Ungekuerzt reicht die Spindel entsprechend tiefer hinunter.
+    L['spindel_z0_lang'] = L['spindel_z1'] - L['spindel_zuschnitt']
+    L['werkstueck_frei_lang'] = min(
+        L['werkstueck_frei'], L['spindel_z0_lang'] + w('bett_abstand') - 5.0)
 
     # ---- Lochbilder (absolute Lagen, X/Z) -----------------------------------
     L['x_wagen_loecher'] = [
@@ -445,10 +508,11 @@ def lage():
     L['z_wagen_loecher'] = [
         (sx * w('z_wagen_loch_quer') / 2.0, sz * w('z_wagen_loch_laengs') / 2.0)
         for sx in (-1, 1) for sz in (-1, 1)]
-    # Schwimmende Verschraubung des Mutternblocks, links und rechts der Tasche.
-    # 5 mm Randabstand: die Sechskanttasche der M3-Mutter ist ueber Eck 6,5 mm
-    # breit und braucht noch Wand zum Blockrand.
-    L['block_schraube_x'] = [w('block_x_links') + 5.0, w('block_x_rechts') - 5.0]
+    # Schwimmende Verschraubung des Mutternwinkels, links und rechts der
+    # Spindel. 5 mm Randabstand: die Sechskanttasche der M3-Mutter ist ueber
+    # Eck 6,5 mm breit und braucht noch Wand zum Rand.
+    L['winkel_schraube_x'] = [w('winkel_x_links') + 5.0,
+                              w('winkel_x_rechts') - 5.0]
 
     L['motor_loecher'] = [
         (w('spindel_x') + sx * w('motor_loch') / 2.0,
@@ -787,6 +851,13 @@ def neu_mittig(comp, prof, dicke_mm):
                         adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
 
 
+def dazu_mittig(comp, prof, dicke_mm, ziel):
+    """Anfuegen, symmetrisch um die Skizzenebene."""
+    return _symmetrisch(comp, prof, dicke_mm,
+                        adsk.fusion.FeatureOperations.JoinFeatureOperation,
+                        ziel)
+
+
 def tasche(comp, prof, tiefe_mm, ziel):
     """Tasche symmetrisch um die Skizzenebene (Ebene = Taschenmitte)."""
     return _symmetrisch(comp, prof, tiefe_mm,
@@ -995,7 +1066,7 @@ def bau_traegerplatte(app, design, comp, L, fehler):
 
 def bau_schlittenplatte(app, design, comp, L, zc, fehler):
     """Auf dem MGN9H-Z-Wagen: Auflagepad + Rippen, davor die Platte mit dem
-    Laser-Lochbild, rechts eine Lasche fuer den Mutternblock.
+    Laser-Lochbild, rechts eine Lasche fuer den Mutternwinkel.
     Drucklage: Laser-Anschraubflaeche aufs Bett, Aufbaurichtung = -Maschine Y
     (im Slicer spiegeln/drehen), oder Pad-Rueckseite unten mit Stuetzen."""
     e_pad = ebene_y(comp, L['schlitten_y0'], 'E_Pad_hinten')
@@ -1014,7 +1085,7 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
              w('rippe_mitte_breite') / 2, z_o)
     dazu(comp, groesstes_profil(sk), w('pad_hoehe'), koerper)
 
-    # Nur links eine Seitenrippe — rechts sitzt der Mutternblock.
+    # Nur links eine Seitenrippe — rechts sitzt der Mutternwinkel.
     sk = skizze(comp, e_pad, 'Sk_Seitenrippe')
     rechteck(sk, -w('schlitten_breite_l'), z_u, -w('rippe_seite_innen'), z_o)
     dazu(comp, groesstes_profil(sk), w('pad_hoehe'), koerper)
@@ -1023,9 +1094,12 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
     rechteck(sk, -w('schlitten_breite_l'), z_u, w('schlitten_breite_l'), z_o)
     dazu(comp, groesstes_profil(sk), w('schlitten_dicke'), koerper)
 
-    sk = skizze(comp, e_platte, 'Sk_Lasche_Mutternblock')
-    rechteck(sk, w('schlitten_breite_l'), zc - w('block_hoehe') / 2 - 3.0,
-             w('block_x_rechts'), zc + w('block_hoehe') / 2 + 3.0)
+    # Lasche fuer den Mutternwinkel: sie reicht nach oben bis an die
+    # Plattenoberkante (dort setzt das Regal des Winkels an) und nach unten
+    # 3 mm unter den Ruecken.
+    sk = skizze(comp, e_platte, 'Sk_Lasche_Mutternwinkel')
+    rechteck(sk, w('schlitten_breite_l'), zc + L['winkel_unten_rel'] - 3.0,
+             w('winkel_x_rechts'), zc + L['schlitten_oben_rel'])
     dazu(comp, groesstes_profil(sk), w('schlitten_dicke'), koerper)
 
     # Verschraubung zum Z-Wagen: Durchgang im Pad, Freibohrung in der Platte
@@ -1077,9 +1151,9 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
     dazu(comp, groesstes_profil(sk),
          L['schlitten_y1'] - L['ls_fahne_y0'], koerper)
 
-    # Schwimmende Verschraubung des Mutternblocks: Uebermass zum Ausrichten
-    sk = skizze(comp, e_platte, 'Sk_Bohrungen_Mutternblock')
-    for x in L['block_schraube_x']:
+    # Schwimmende Verschraubung des Mutternwinkels: Uebermass zum Ausrichten
+    sk = skizze(comp, e_platte, 'Sk_Bohrungen_Mutternwinkel')
+    for x in L['winkel_schraube_x']:
         kreis(sk, x, zc, w('m3_uebermass'))
     weg(comp, alle_profile(sk), w('schlitten_dicke'), koerper)
 
@@ -1087,7 +1161,7 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
              'Schlittenplatte')
     # Die Platte reicht links bis an die Schaltfahne heran.
     bbox_pruefen(koerper, 'Schlittenplatte',
-                 ((L['ls_fahne_x0'], w('block_x_rechts')),
+                 ((L['ls_fahne_x0'], w('winkel_x_rechts')),
                   (L['schlitten_y0'], L['laser_y']), (z_u, z_o)), fehler)
     material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
@@ -1150,70 +1224,89 @@ def bau_endschalterhalter(app, design, comp, L, fehler):
     return koerper
 
 
-def bau_mutternblock(app, design, comp, L, zc, fehler):
-    """Zwei M6-Muttern, von einer Druckfeder gegeneinander verspannt: die eine
-    liegt auf dem Boden, die andere unter der Decke, die Feder drueckt sie
-    auseinander. Damit tragen die Gewindeflanken gegenlaeufig — kein Spiel.
-    Drucklage: Unterseite aufs Bett, Aufbaurichtung = Maschine Z, damit die
-    Spindelbohrung rund wird."""
-    e_mitte = ebene_z(comp, zc, 'E_Block_mitte')
-    e_hinten = ebene_y(comp, w('block_y_hinten'), 'E_Block_hinten')
+def bau_mutternwinkel(app, design, comp, L, zc, fehler):
+    """Winkel fuer die gekaufte Tr8x2-Anti-Backlash-Garnitur.
+
+    Die Spielfreiheit kommt jetzt aus dem Kaufteil (zwei Mutternhaelften, von
+    einer Feder gegeneinander gedrueckt) — das Druckteil muss nur noch einen
+    plangedrehten Flanschsitz mit vier Gewinden liefern. Deshalb Winkel statt
+    Block: senkrechter RUECKEN schwimmend an der Lasche der Schlittenplatte,
+    darueber ein waagerechtes REGAL mit dem Lochkreis.
+
+    Das Regal liegt UEBER der Oberkante der Schlittenplatte. Der Flansch hat
+    Ø22 und sitzt mittig auf der Spindelachse (Y=28,5); die Plattenrueckseite
+    liegt bei Y=35, es waeren also nur 6,5 mm — der Flansch wuerde in die
+    Platte laufen. Ueber der Oberkante ist er frei, und pad_hoehe (und damit
+    die Strahlachse) bleibt unveraendert.
+
+    Die Garnitur steht NACH OBEN: nach unten ist kein Platz. Das kostet
+    Verfahrweg nach oben (siehe zc_grenzen), aber der ist reichlich da.
+
+    Drucklage: Regaloberseite (der Flanschsitz) aufs Bett, Aufbaurichtung
+    = -Maschine Z. Der Ruecken haengt dann vollstaendig unter dem Regal, jede
+    Schicht steht auf Material, Spindel- und Einsatzbohrungen werden rund."""
+    e_ruecken = ebene_y(comp, (L['winkel_y0'] + L['schlitten_y1']) / 2.0,
+                        'E_Winkel_Ruecken_mitte')
+    e_hinten = ebene_y(comp, L['winkel_y0'], 'E_Winkel_hinten')
+    e_regal = ebene_z(comp, zc + (L['regal_z0_rel'] + L['regal_z1_rel']) / 2.0,
+                      'E_Regal_mitte')
     sx, sy = w('spindel_x'), w('spindel_y')
 
-    sk = skizze(comp, e_mitte, 'Sk_Block')
-    rechteck(sk, w('block_x_links'), w('block_y_hinten'),
-             w('block_x_rechts'), L['schlitten_y1'])
+    # Ruecken: senkrechte Platte an der Lasche, symmetrisch um ihre Mittel-
+    # ebene extrudiert (die Normalenrichtung der Offsetebene ist unbekannt).
+    sk = skizze(comp, e_ruecken, 'Sk_Winkel_Ruecken')
+    rechteck(sk, w('winkel_x_links'), zc + L['winkel_unten_rel'],
+             w('winkel_x_rechts'), zc + L['regal_z1_rel'])
     koerper = neu_mittig(comp, groesstes_profil(sk),
-                         w('block_hoehe')).bodies.item(0)
-    koerper.name = 'Mutternblock'
+                         w('winkel_ruecken')).bodies.item(0)
+    koerper.name = 'Mutternwinkel'
 
-    sk = skizze(comp, e_mitte, 'Sk_Spindelbohrung')
+    # Regal: so tief wie der Flansch, damit er rundum aufliegt.
+    sk = skizze(comp, e_regal, 'Sk_Winkel_Regal')
+    rechteck(sk, w('winkel_x_links'), L['regal_y0'],
+             w('winkel_x_rechts'), L['regal_y1'])
+    dazu_mittig(comp, groesstes_profil(sk), w('winkel_regal_dicke'), koerper)
+
+    # Durchgang fuer die Spindel — durch Regal UND Ruecken: die Spindel laeuft
+    # unter dem Regal weiter nach unten und steht bei Y=28,5 genau im Ruecken.
+    # Vor der Bohrung bleibt dort eine duenne Haut stehen (Pruefung in
+    # toolhead_check.py, Abschnitt 7) — sie haelt die beiden Schenkel des
+    # Ruecken zusammen und gibt der Lasche eine durchgehende Anlageflaeche.
+    sk = skizze(comp, e_regal, 'Sk_Spindeldurchgang')
     kreis(sk, sx, sy, w('spindel_durchgang'))
     durch(comp, alle_profile(sk), koerper)
 
-    # Mutterntaschen fuer die beiden M6-Muttern: Sechskant mit einer Flanke am
-    # Taschenboden, davor ein etwas engeres Mundstueck. Die Mutter wird einmal
-    # hineingedrueckt, rastet hinter der Stufe ein und kann danach nicht mehr
-    # herausfallen — auch nicht, bevor die Schlittenplatte die Tasche
-    # verschliesst. Im Sechskant selbst hat sie Spiel und bleibt in Z
-    # beweglich, sonst koennte die Feder sie nicht gegen Boden bzw. Decke
-    # druecken. Jede Tasche wird um ihre eigene Mittelebene geschnitten.
-    tiefe = w('m6_mutter_h') + 0.3
-    sw = w('m6_mutter_sw') + w('tasche_spiel')
-    flanke = sw / 2.0                             # halbe Schluesselweite
-    mund = 2.0 * w('m6_mutter_sw') / math.sqrt(3.0) - w('tasche_klemmung')
-    versatz = w('feder_raum_l') / 2 + tiefe / 2
-    for name, z_mitte in (('unten', zc - versatz), ('oben', zc + versatz)):
-        sk = skizze(comp, ebene_z(comp, z_mitte, 'E_Tasche_' + name),
-                    'Sk_Mutterntasche_' + name)
-        sechskant(sk, sx, sy, sw, flach_quer=True)
-        rechteck(sk, sx - mund / 2, sy + flanke, sx + mund / 2,
-                 L['schlitten_y1'])
-        tasche(comp, alle_profile(sk), tiefe, koerper)
+    # Vier Sacklochbohrungen fuer die M3-Messingeinsaetze auf dem Lochkreis.
+    # Die Loecher im Flansch sind Durchgangsloecher, das Gewinde muss also
+    # hier sitzen. Symmetrisch um die halbe Einsatztiefe geschnitten, damit
+    # die Richtung der Ebenennormale keine Rolle spielt.
+    e_einsatz = ebene_z(comp, zc + L['regal_z1_rel'] - w('insert_m3_t') / 2.0,
+                        'E_Winkel_Einsaetze')
+    sk = skizze(comp, e_einsatz, 'Sk_Einsaetze_Flansch')
+    for x, y in L['t8_loecher']:
+        kreis(sk, x, y, w('insert_m3_d'))
+    tasche(comp, alle_profile(sk), w('insert_m3_t'), koerper)
 
-    sk = skizze(comp, e_mitte, 'Sk_Federkammer')
-    kreis(sk, sx, sy, w('feder_raum_d'))
-    tasche(comp, groesstes_profil(sk), w('feder_raum_l'), koerper)
-
-    sk = skizze(comp, e_hinten, 'Sk_Bohrungen_Block')
-    for x in L['block_schraube_x']:
+    # Schwimmende Verschraubung: Durchgang im Ruecken, Sechskanttasche hinten.
+    sk = skizze(comp, e_hinten, 'Sk_Bohrungen_Winkel')
+    for x in L['winkel_schraube_x']:
         kreis(sk, x, zc, w('m3_durchgang'))
     durch(comp, alle_profile(sk), koerper)
 
-    # Mutterntaschen der schwimmenden Verschraubung: Sechskant, damit die
-    # M3-Mutter beim Anziehen von der Tasche gehalten wird und man sie nicht
-    # von hinten gegenhalten muss.
-    sk = skizze(comp, e_hinten, 'Sk_Mutterntaschen_Block')
-    for x in L['block_schraube_x']:
+    # Sechskant, damit die M3-Mutter beim Anziehen von der Tasche gehalten
+    # wird und man sie nicht von hinten gegenhalten muss.
+    sk = skizze(comp, e_hinten, 'Sk_Mutterntaschen_Winkel')
+    for x in L['winkel_schraube_x']:
         sechskant(sk, x, zc, w('m3_mutter_sw') + w('tasche_spiel'))
     weg(comp, alle_profile(sk), w('m3_mutter_h') + 0.3, koerper)
 
-    fussfase(comp, koerper, 'y', zc - w('block_hoehe') / 2, w('fase_fuss'),
-             fehler, 'Mutternblock')
-    bbox_pruefen(koerper, 'Mutternblock',
-                 ((w('block_x_links'), w('block_x_rechts')),
-                  (w('block_y_hinten'), L['schlitten_y1']),
-                  (zc - w('block_hoehe') / 2, zc + w('block_hoehe') / 2)),
+    fussfase(comp, koerper, 'y', zc + L['regal_z1_rel'], w('fase_fuss'),
+             fehler, 'Mutternwinkel')
+    # Nach vorn bindet das Regal (bis regal_y1), nicht der Ruecken.
+    bbox_pruefen(koerper, 'Mutternwinkel',
+                 ((w('winkel_x_links'), w('winkel_x_rechts')),
+                  (L['regal_y0'], L['regal_y1']),
+                  (zc + L['winkel_unten_rel'], zc + L['regal_z1_rel'])),
                  fehler)
     material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
@@ -1228,8 +1321,8 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
     selbst erzeugt: Kaufteile (X-Wagen, Z-Wagen, Laser). Damit weicht das
     bewusst von der SKILL.md-Konvention ab, die auch fuer Verbindungen zwischen
     zwei getrennt gedruckten Teilen eine Lehre vorsieht — fuer
-    Mutternblock <-> Schlittenplatte waere sie ohne Nutzen: beide Lochbilder
-    haengen an derselben Variable (block_schraube_x), und die Bohrung in der
+    Mutternwinkel <-> Schlittenplatte waere sie ohne Nutzen: beide Lochbilder
+    haengen an derselben Variable (winkel_schraube_x), und die Bohrung in der
     Platte ist mit m3_uebermass absichtlich groesser als die im Block, damit
     sich der Block schwimmend ausrichten laesst. Was eine Lehre pruefen
     wuerde, ist dort also schon als Verstellbarkeit eingebaut."""
@@ -1292,8 +1385,12 @@ def hinweise_bauen(L, zc, fehler):
         '  Laser-Unterkante: {:+.1f} bis {:+.1f} mm'.format(
             L['zc_min'] + L['laser_unten_rel'],
             L['zc_max'] + L['laser_unten_rel']),
-        '  M6-Gewindestange: {:.0f} mm benoetigt (Zuschnitt {:.0f} mm)'.format(
-            L['spindel_laenge'], 10 * round(L['spindel_laenge'] / 10 + 0.5)),
+        '  Tr8x2-Spindel: {:.0f} mm benoetigt, {:.0f} mm bestellt'.format(
+            L['spindel_laenge'], L['spindel_zuschnitt']),
+        '    ungekuerzt haengt sie bis {:+.1f} mm hinunter — dann sind nur'.format(
+            L['spindel_z0_lang']),
+        '    noch {:.0f} mm Werkstueck moeglich (gekuerzt {:.0f} mm)'.format(
+            L['werkstueck_frei_lang'], L['werkstueck_frei']),
         '',
         'MOTORBEFESTIGUNG: NEMA17 hat Gewinde im Flansch, es wird also von',
         '  UNTEN verschraubt — durchstecken von oben geht nicht. Alle VIER',
@@ -1311,24 +1408,38 @@ def hinweise_bauen(L, zc, fehler):
         '  Die Konsole ist an die Traegerplatte angeformt: ein Druckteil,',
         '  keine Verschraubung Halter/Platte.',
         '',
-        'ANTRIEB: NEMA 17 oben, Welle nach unten, flexible Kupplung 5->6 mm.',
-        '  Zwei M6-Muttern im Mutternblock, von einer Druckfeder auseinander-',
-        '  gedrueckt: die untere liegt auf dem Boden, die obere unter der',
-        '  Decke. Die Gewindeflanken tragen damit gegenlaeufig — spielfrei.',
-        '  MUTTERNTASCHEN: Sechskant mit SW+{:.2f}, eine Flanke liegt am'.format(
+        'ANTRIEB: NEMA 17 oben, Welle nach unten, Klemmkupplung 5->8 mm auf',
+        '  eine Tr8x2-Trapezgewindespindel. Die Spindel hat keinen ange-',
+        '  drehten Zapfen: die Klemmnabe greift auf die Gewindespitzen. Das',
+        '  Moment dafuer ist klein (Rechnung in toolhead_check.py, 7).',
+        '  SPIELFREIHEIT kommt aus der gekauften Anti-Backlash-Garnitur:',
+        '  Flanschmutter und Gleitmutter, von einer Feder gegeneinander',
+        '  gedrueckt. Das Druckteil liefert nur den Flanschsitz.',
+        '  MUTTERNWINKEL: senkrechter Ruecken ({:.0f} mm) an der Lasche der'.format(
+            w('winkel_ruecken')),
+        '  Schlittenplatte, darueber das Regal ({:.0f} mm) mit dem Lochkreis'.format(
+            w('winkel_regal_dicke')),
+        '  Ø{:.0f}. Das Regal liegt {:.1f} mm UEBER der Plattenoberkante —'.format(
+            w('t8_lochkreis'), w('winkel_luft')),
+        '  der Ø{:.0f}-Flansch sitzt mittig auf der Spindelachse (Y={:.1f})'.format(
+            w('t8_flansch_d'), w('spindel_y')),
+        '  und wuerde hinter der Platte (Y={:.0f}) nicht durchgehen.'.format(
+            L['schlitten_y1']),
+        '  Die Garnitur steht NACH OBEN: nach unten ist kein Platz. Sie',
+        '  begrenzt damit den Verfahrweg nach oben (Bauhoehe {:.0f} mm [?]).'.format(
+            w('t8_garnitur_h')),
+        '  GEWINDE IM DRUCKTEIL: die Flanschloecher sind Durchgangsloecher,',
+        '  also 4x M3-Messingeinsatz Ø{:.1f} x {:.0f} von oben ins Regal.'.format(
+            w('insert_m3_d'), w('insert_m3_t')),
+        '  Der Lochkreis ist um 45 Grad gedreht, damit das Regal in Y',
+        '  schlank bleibt; der runde Flansch laesst sich beliebig drehen.',
+        '  Die beiden M3-Muttern der schwimmenden Verschraubung sitzen in',
+        '  Sechskanttaschen (SW+{:.2f}) und muessen nicht gegengehalten'.format(
             w('tasche_spiel')),
-        '  Taschenboden. Davor ein um {:.2f} mm engeres Mundstueck: die'.format(
-            w('tasche_klemmung')),
-        '  Mutter wird einmal hineingedrueckt und rastet dahinter ein —',
-        '  sie fallt beim Zusammenbauen nicht mehr heraus. Im Sechskant selbst',
-        '  hat sie Spiel und bleibt in Z beweglich, damit die Feder sie gegen',
-        '  Boden bzw. Decke druecken kann.',
-        '  Die beiden M3-Muttern der schwimmenden Verschraubung sitzen',
-        '  ebenfalls in Sechskanttaschen und muessen nicht gegengehalten werden.',
-        '  Der Block ist mit Uebermass ({:.1f} mm statt {:.1f}) verschraubt:'.format(
+        '  werden. Der Winkel ist mit Uebermass ({:.1f} statt {:.1f}) ver-'.format(
             w('m3_uebermass'), w('m3_durchgang')),
-        '  Z-Achse mehrmals durchfahren, DANN festziehen. So kaempft die',
-        '  krumme Gewindestange nicht gegen die Linearfuehrung.',
+        '  schraubt: Z-Achse mehrmals durchfahren, DANN festziehen. So',
+        '  kaempft die krumme Spindel nicht gegen die Linearfuehrung.',
         '',
         'MONTAGEREIHENFOLGE (wichtig, sonst kommt man nicht mehr dran):',
         '  1. Gewindeeinsaetze in den Schienensockel einschmelzen',
@@ -1342,10 +1453,15 @@ def hinweise_bauen(L, zc, fehler):
         '  4. Schlittenplatte auf den Z-Wagen (4x M3x{:.0f} von vorn durch die'.format(
             L['z_wagen_schraube']),
         '     Freibohrungen) — nur solange der Laser NICHT dran ist',
-        '  5. Mutternblock bestuecken (2x M6-Mutter + Feder, 2x M3-Mutter)',
+        '  5. Gewindeeinsaetze ins Regal des Mutternwinkels einschmelzen,',
+        '     2x M3-Mutter in die Taschen des Ruecken',
         '  6. Motor zwischen die Fuehrungsrippen, 4x M3x12 von unten —',
         '     mit dem Z-Schlitten unten bequemer (164 statt 28 mm Platz)',
-        '  7. Kupplung + Gewindestange, dann Mutternblock ausrichten',
+        '  7. Mutternwinkel an die Lasche (2x M3x{:.0f} + grosse Scheibe von'.format(
+            L['winkel_schraube']),
+        '     vorn). Garnitur auf die Spindel drehen, Flansch aufs Regal',
+        '     (4x M3x8 von oben), dann die Spindel oben in die Kupplung.',
+        '     Alles lose lassen, mehrmals durchfahren, DANN festziehen',
         '  8. Laser ZULETZT, 4x M3x10 + Scheibe von hinten, Z-Schlitten',
         '     dafuer nach unten fahren ({:.0f} mm freier Korridor)'.format(
             L['schlitten_y1'] - L['traeger_y1']),
@@ -1405,7 +1521,7 @@ def hinweise_bauen(L, zc, fehler):
         '  wenig Druck, Einsatz buendig, nicht ueberhitzen.',
         '',
         'LEHREN — nur fuer KAUFTEIL-Lochbilder; fuer',
-        '  Mutternblock <-> Schlittenplatte braucht es keine, beide kommen aus',
+        '  Mutternwinkel <-> Schlittenplatte braucht es keine, beide kommen aus',
         '  diesem Skript und die Platte hat dort Uebermass zum Ausrichten:',
         '  Bohrlehre_XWagen ...... {:.0f} x {:.0f} mm (MGN15H)'.format(
             w('x_wagen_loch_laengs'), w('x_wagen_loch_quer')),
@@ -1444,7 +1560,9 @@ def hinweise_bauen(L, zc, fehler):
         '                    auf dem Bett — keine Stuetzen, alle Kraefte in',
         '                    der Schicht. 222 mm lang, passt liegend in den A1.',
         '  Schlittenplatte . Laser-Anschraubflaeche aufs Bett',
-        '  Mutternblock .... Unterseite aufs Bett (Spindelbohrung wird rund)',
+        '  Mutternwinkel ... Regaloberseite (Flanschsitz) aufs Bett. Der',
+        '                    Ruecken haengt darunter, Spindel- und Einsatz-',
+        '                    bohrungen werden rund, keine Stuetzen.',
         '  4 Wandlinien, >=40% Infill. PETG wegen der Abwaerme des Lasers.',
         '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
@@ -1489,7 +1607,7 @@ def run(context):
         einheit = adsk.core.Matrix3D.create()
         occ = {}
         for name in ('Traegerplatte', 'Schlittenplatte',
-                     'Mutternblock', 'Endschalterhalter', 'Bohrlehren'):
+                     'Mutternwinkel', 'Endschalterhalter', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -1497,7 +1615,8 @@ def run(context):
         bau_traegerplatte(app, design, occ['Traegerplatte'].component, L, fehler)
         bau_schlittenplatte(app, design, occ['Schlittenplatte'].component,
                             L, zc, fehler)
-        bau_mutternblock(app, design, occ['Mutternblock'].component, L, zc, fehler)
+        bau_mutternwinkel(app, design, occ['Mutternwinkel'].component,
+                          L, zc, fehler)
         bau_endschalterhalter(app, design,
                               occ['Endschalterhalter'].component, L, fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, zc, fehler)
@@ -1507,7 +1626,7 @@ def run(context):
         occ['Bohrlehren'].isGrounded = True
 
         # Starrer As-Built-Joint fuer die feste Verschraubung ...
-        for a, b in (('Mutternblock', 'Schlittenplatte'),):
+        for a, b in (('Mutternwinkel', 'Schlittenplatte'),):
             try:
                 ein = root.asBuiltJoints.createInput(occ[a], occ[b], None)
                 ein.setAsRigidJointMotion()

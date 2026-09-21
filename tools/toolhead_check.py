@@ -20,7 +20,7 @@ import bauraum                                        # noqa: E402
 
 SKRIPT = bauraum.SKRIPT
 M3_KOPF_D, M3_KOPF_H = 5.5, 3.0
-# Zwei Scheiben im Einsatz: gross am schwimmenden Mutternblock (deckt das
+# Zwei Scheiben im Einsatz: gross am schwimmenden Mutternwinkel (deckt das
 # Uebermass der Ausrichtbohrung), normal am Laser (Rundloch Ø4,0).
 SCHEIBE_GROSS = 9.0                 # DIN 9021 M3
 SCHEIBE_NORM = 7.0                  # DIN 125 M3
@@ -113,9 +113,9 @@ def main():
     p.ok('Kupplung bleibt unter der Konsole',
          L['konsole_z0'] - L['kupplung_z1'], 2.0)
     p.ok('Kupplung greift die Welle', w('kupplung_griff'), 8.0)
-    p.ok('Gewindestange wird von der Kupplung gegriffen',
+    p.ok('Spindel wird von der Kupplung gegriffen',
          w('kupplung_l') - w('kupplung_griff'), 8.0)
-    p.info('benoetigte Laenge der M6-Gewindestange', L['spindel_laenge'])
+    p.info('benoetigte Laenge der Tr8x2-Spindel', L['spindel_laenge'])
     p.info('Laser-Unterkante (Linse) tiefste Stellung',
            L['zc_min'] + L['laser_unten_rel'])
     p.info('Laser-Unterkante hoechste Stellung',
@@ -387,99 +387,179 @@ def main():
     p.ok('Langloch: Stellbereich insgesamt',
          L['langloch_auf_max'] - L['langloch_ab_max'], 4.0)
 
-    # 5) Mutternblock: von vorn, mit Laser und Block montiert.
+    # 5) Mutternwinkel: von vorn, mit Laser und Winkel montiert.
+    winkel_eigen = ('Winkel Ruecken', 'Winkel Regal')
     d, wer = kuerzester(
-        [(x, L['schlitten_y1'], 0.0) for x in L['block_schraube_x']], 'y', +1,
-        zustand(eigen + ('Diodenlaser', 'Mutternblock')),
-        eigen + ('Mutternblock',))
-    zugang('Mutternblock -> Platte (von vorn, zuletzt)', d, wer)
+        [(x, L['schlitten_y1'], 0.0) for x in L['winkel_schraube_x']], 'y', +1,
+        zustand(eigen + winkel_eigen + ('Diodenlaser',)),
+        eigen + winkel_eigen)
+    zugang('Mutternwinkel -> Platte (von vorn, zuletzt)', d, wer)
+
+    # 5b) Garnitur aufs Regal: von OBEN. Darueber steht irgendwann die
+    #     Kupplung im Weg, der Schlitten wird dafuer heruntergefahren.
+    alle_namen = tuple(kasten) + tuple(q.name for q in bewegte)
+    d, wer, zc_g = beste_stellung(
+        [(x, y, L['regal_z1_rel']) for x, y in L['t8_loecher']], 'z', +1,
+        alle_namen,
+        winkel_eigen + ('Antriebsmutter Tr8x2', 'Tr8x2-Spindel'))
+    zugang('Garnitur -> Regal (4x M3 von oben, Schlitten bei zc={:+.1f})'
+           .format(zc_g), d, wer)
 
     # 6) Motorschrauben: von unten, der Z-Schlitten wird dafuer weggefahren.
     motor_eigen = ('NEMA 17', 'Motorkonsole', 'Fuehrungsrippe links',
                    'Fuehrungsrippe rechts')
-    alle_namen = tuple(kasten) + tuple(q.name for q in bewegte)
     d, wer, zc_m = beste_stellung(
         [(x, y, L['motor_flansch_z']) for x, y in L['motor_schrauben']],
         'z', -1, alle_namen, motor_eigen, mitbewegt=False)
     zugang('Motor -> Konsole (von unten, Z-Schlitten bei zc={:+.1f})'.format(
         zc_m), d, wer)
 
-    p.titel('7) Mutternblock (M6, zwei Muttern mit Feder)')
-    block_tiefe = L['schlitten_y1'] - w('block_y_hinten')
-    p.info('Blockmasse (B x T x H)', w('block_x_rechts') - w('block_x_links'))
-    p.info('Blocktiefe', block_tiefe)
-    p.ok('Wand vor der Spindelbohrung',
-         L['schlitten_y1'] - (sy + w('spindel_durchgang') / 2), 3.0)
-    p.ok('Wand hinter der Spindelbohrung',
-         (sy - w('spindel_durchgang') / 2) - w('block_y_hinten'), 3.0)
-    # Sechskanttasche: Flanke am Taschenboden (Y), Ecken quer (X).
-    sw6 = w('m6_mutter_sw') + w('tasche_spiel')
-    flanke = sw6 / 2.0                               # halbe Schluesselweite
-    eck = sw6 / 1.7320508                            # halbe Eckenweite
-    eck_mutter = w('m6_mutter_sw') / 1.7320508
-    mund = 2.0 * eck_mutter - w('tasche_klemmung')
+    p.titel('7) Mutternwinkel und Tr8x2-Antrieb')
+    # --- Regal: Flanschsitz mit vier Gewindeeinsaetzen --------------------
+    r_lk = w('t8_lochkreis') / 2.0
+    p.info('Regal: Breite', w('winkel_x_rechts') - w('winkel_x_links'))
+    p.info('Regal: Tiefe', L['regal_y1'] - L['regal_y0'])
+    p.info('Regal: Oberkante ueber der Wagenmitte', L['regal_z1_rel'])
+    p.ok('Regal traegt den Flansch in Y rundum',
+         (L['regal_y1'] - L['regal_y0']) - w('t8_flansch_d'), 0.0)
+    p.ok('Regal traegt den Flansch in X rundum',
+         (w('winkel_x_rechts') - w('winkel_x_links')) - w('t8_flansch_d'), 0.0)
+    p.ok('Regal liegt ueber der Plattenoberkante',
+         L['regal_z0_rel'] - L['schlitten_oben_rel'], 0.3)
+    p.ja('genau deshalb: hinter der Platte waere kein Platz fuer den Flansch',
+         L['schlitten_y1'] - (w('spindel_y') + w('t8_flansch_d') / 2) < 3.0,
+         '   (er wuerde {:.1f} mm in die Platte laufen)'.format(
+             (w('spindel_y') + w('t8_flansch_d') / 2) - L['schlitten_y1']))
+    # Einsatzbohrungen auf dem um 45 Grad gedrehten Lochkreis.
+    r45 = r_lk / math.sqrt(2.0)
+    r_ein = w('insert_m3_d') / 2.0
+    p.ok('Wand Einsatzbohrung -> Regalkante hinten',
+         (w('spindel_y') - r45 - r_ein) - L['regal_y0'], 2.0)
+    p.ok('Wand Einsatzbohrung -> Regalkante vorn',
+         L['regal_y1'] - (w('spindel_y') + r45 + r_ein), 2.0)
+    p.ok('Wand Einsatzbohrung -> Regalkante seitlich',
+         (w('spindel_x') - r45 - r_ein) - w('winkel_x_links'), 2.0)
+    # Die engste Stelle im Teil: zwischen Einsatz- und Spindelbohrung. Sie
+    # laesst sich nicht vergroessern, der Lochkreis ist ein Kaufteilmass.
+    p.ok('Wand Einsatzbohrung -> Spindelbohrung',
+         r_lk - r_ein - w('spindel_durchgang') / 2.0, 1.2)
+    p.ok('Material unter dem Einsatz-Sackloch',
+         w('winkel_regal_dicke') - w('insert_m3_t'), 2.0)
+    p.ok('Sackloch tiefer als der Einsatz (typisch 5,7 mm) — Schraube setzt '
+         'nicht auf', w('insert_m3_t') - 5.7, 1.0)
+    p.ok('Schraubenkopf der Garnitur laeuft an der Spindel vorbei',
+         (r_lk - M3_KOPF_D / 2) - w('spindel_d') / 2, 1.0)
+    p.ok('Einsatz bleibt unter dem Flanschrand',
+         w('t8_flansch_d') / 2 - (r_lk + r_ein), 0.5)
+    p.ok('Spindel laeuft frei durchs Regal',
+         w('spindel_durchgang') - w('spindel_d'), 0.4)
+
+    # --- Ruecken: schwimmende Verschraubung an der Lasche -----------------
+    p.info('Ruecken: Dicke', w('winkel_ruecken'))
+    p.info('Ruecken: Hoehe', L['regal_z1_rel'] - L['winkel_unten_rel'])
+    # Die Spindel laeuft mitten durch den Ruecken; davor bleibt eine Haut,
+    # die beide Schenkel verbindet und die Anlageflaeche durchgehend haelt.
+    p.ok('Haut vor der Spindelbohrung im Ruecken',
+         L['schlitten_y1'] - (w('spindel_y') + w('spindel_durchgang') / 2),
+         2.0)
+    # Die Spindelbohrung nimmt dem Ruecken die Mitte; es bleiben zwei
+    # Schenkel, jeder muss eine Schraube mit Mutterntasche tragen.
+    p.ok('Schenkel des Ruecken neben dem Spindelkanal',
+         (w('spindel_x') - w('spindel_durchgang') / 2) - w('winkel_x_links'),
+         6.0)
+    p.ja('Spindelkanal ist nach hinten offen — druckt ohne Stuetzen',
+         (w('spindel_y') - w('spindel_durchgang') / 2) < L['winkel_y0'],
+         '   (Kanal bis Y={:.1f}, Rueckseite bei Y={:.1f})'.format(
+             w('spindel_y') - w('spindel_durchgang') / 2, L['winkel_y0']))
+    eck3 = (w('m3_mutter_sw') + w('tasche_spiel')) / 1.7320508
+    p.ok('M3-Tasche bleibt im Ruecken (links)',
+         (L['winkel_schraube_x'][0] - eck3) - w('winkel_x_links'), 1.5)
+    p.ok('M3-Tasche bleibt im Ruecken (rechts)',
+         w('winkel_x_rechts') - (L['winkel_schraube_x'][1] + eck3), 1.5)
+    p.ok('Material unter der Schraubenreihe', w('winkel_unten') - eck3, 1.5)
+    p.ok('M3-Tasche laeuft an der Spindelbohrung vorbei',
+         (w('spindel_x') - w('spindel_durchgang') / 2)
+         - (L['winkel_schraube_x'][0] + eck3), 1.0)
     p.ok('Wand hinter der Mutterntasche',
-         (sy - flanke) - w('block_y_hinten'), 2.0)
-    p.ok('Mutterntasche bleibt im Block (X)',
-         (w('block_x_rechts') - sx) - eck, 2.0)
-    p.ok('Mutterntasche bleibt im Block (X, links)',
-         (sx - w('block_x_links')) - eck, 2.0)
-    p.ok('Sechskant: Mutter hat Spiel und bleibt in Z beweglich',
-         w('tasche_spiel'), 0.10)
+         w('winkel_ruecken') - (w('m3_mutter_h') + 0.3), 2.0)
+    p.ok('Sechskant: Mutter hat Spiel', w('tasche_spiel'), 0.10)
     p.ok('Sechskant: Mutter sitzt nicht zu lose', w('tasche_spiel'), 0.30, '<=')
-    p.ok('Mundstueck klemmt die Mutter beim Einschieben',
-         2.0 * eck_mutter - mund, 0.10)
-    p.ok('Haltestufe hinter dem Mundstueck je Seite',
-         (2.0 * eck - mund) / 2.0, 0.15)
-    p.ok('Mundstueck lang genug zum Drucken',
-         L['schlitten_y1'] - (sy + flanke), 1.00)
-    p.ok('Mundstueck nicht zu eng zum Einschieben',
-         2.0 * eck_mutter - mund, 0.40, '<=')
     # Die Sechskant-Formel des Skripts gegenrechnen: aus den Eckpunkten, die
     # sechskant() erzeugt, muessen Schluesselweite und Eckenweite wieder
     # herauskommen — sonst passt keine echte Mutter in die Tasche.
-    r = sw6 / math.sqrt(3.0)
+    sw3 = w('m3_mutter_sw') + w('tasche_spiel')
+    r = sw3 / math.sqrt(3.0)
     ecken = [(r * math.cos(math.radians(i * 60.0)),
               r * math.sin(math.radians(i * 60.0))) for i in range(6)]
     p.ok('Sechskant-Formel: Schluesselweite trifft',
-         abs(2 * max(abs(v) for _, v in ecken) - sw6), 0.001, '<=')
+         abs(2 * max(abs(v) for _, v in ecken) - sw3), 0.001, '<=')
     p.ok('Sechskant-Formel: Eckenweite trifft',
-         abs(2 * max(abs(u) for u, _ in ecken) - 2 * eck), 0.001, '<=')
-    p.ok('Taschentiefe nimmt die Mutterhoehe auf',
-         (w('m6_mutter_h') + 0.3) - w('m6_mutter_h'), 0.2)
-    # M3-Sechskanttaschen der schwimmenden Verschraubung
-    eck3 = (w('m3_mutter_sw') + w('tasche_spiel')) / 1.7320508
-    p.ok('M3-Tasche bleibt im Block (links)',
-         (L['block_schraube_x'][0] - eck3) - w('block_x_links'), 1.5)
-    p.ok('M3-Tasche bleibt im Block (rechts)',
-         w('block_x_rechts') - (L['block_schraube_x'][1] + eck3), 1.5)
-    p.ok('Abstand M3-Tasche <-> M6-Tasche in Z',
-         (w('feder_raum_l') / 2) - eck3, 1.0)
-    stapel = 2 * w('m6_mutter_h') + w('feder_raum_l') + 2 * w('block_boden')
-    p.ok('Blockhoehe reicht fuer Mutter+Feder+Mutter',
-         w('block_hoehe') - stapel, 0.0)
-    p.ok('Block laeuft am Z-Wagen vorbei',
-         w('block_x_links') - w('z_wagen_breite') / 2, 3.0)
+         abs(2 * max(abs(u) for u, _ in ecken) - 2 * eck3), 0.001, '<=')
+    p.info('Klemmlaenge Platte + Ruecken bis zur Mutter', L['winkel_klemm'])
+    p.ok('Schraube M3x{:.0f} erreicht die Mutter (mit Ø9-Scheibe)'.format(
+             L['winkel_schraube']),
+         L['winkel_schraube'] - (L['winkel_klemm'] + 0.8), 0.5)
     p.ok('Ausrichtspiel der schwimmenden Verschraubung',
          w('m3_uebermass') - w('m3_durchgang'), 0.8)
     p.ok('Grosse Scheibe deckt das Uebermass',
          SCHEIBE_GROSS - w('m3_uebermass'), 2.0)
-    # Antriebsmoment und Selbsthemmung: die Frage, ob die Kupplung auf der
-    # Gewindestange durchrutscht, entscheidet sich hier und nicht am Gefuehl.
+    # Gegenstueck an der Lasche der Schlittenplatte: Ø4,6-Bohrung und die
+    # grosse Scheibe darauf muessen in die Lasche passen (sie endet mit dem
+    # Winkel bei winkel_x_rechts).
+    p.ok('Ø4,6-Bohrung bleibt in der Lasche',
+         w('winkel_x_rechts')
+         - (L['winkel_schraube_x'][1] + w('m3_uebermass') / 2), 2.0)
+    p.ok('grosse Scheibe liegt ganz auf der Lasche',
+         w('winkel_x_rechts')
+         - (L['winkel_schraube_x'][1] + SCHEIBE_GROSS / 2), 0.0)
+    p.ok('Winkel laeuft am Z-Wagen vorbei',
+         w('winkel_x_links') - w('z_wagen_breite') / 2, 3.0)
+    p.ok('Regal laeuft an der Saeulenrippe vorbei',
+         L['regal_y0'] - (L['traeger_y1'] + w('saeule_rippe_tiefe')),
+         w('luft_bau'))
+    # Drucklage: Regaloberseite aufs Bett, der Ruecken haengt darunter. Das
+    # geht nur ohne Stuetzen, wenn sein Grundriss im Regal liegt.
+    p.ja('Drucklage: Ruecken steht vollstaendig im Regalgrundriss',
+         (L['winkel_y0'] >= L['regal_y0'] - 1e-9
+          and L['schlitten_y1'] <= L['regal_y1'] + 1e-9),
+         '   Ruecken Y {:.1f}..{:.1f}, Regal Y {:.1f}..{:.1f}'.format(
+             L['winkel_y0'], L['schlitten_y1'], L['regal_y0'], L['regal_y1']))
+
+    # --- Antrieb: Garnitur, Verfahrweg, Moment ----------------------------
+    p.info('Garnitur: Oberkante ueber der Wagenmitte', L['garnitur_z1_rel'])
+    p.ja('die Garnitur bindet den Verfahrweg nach oben',
+         L['zc_bindend'] == 'Antriebsmutter gegen Kupplung',
+         '   (bindend ist: {})'.format(L['zc_bindend']))
+    p.ok('Verfahrweg trotz der Garnitur ueber dem Werkstueckbedarf',
+         L['z_weg'] - w('werkstueck_max'), 10.0)
+    p.info('benoetigte Spindellaenge', L['spindel_laenge'])
+    p.ok('bestellte Spindel ({:.0f} mm) reicht'.format(L['spindel_zuschnitt']),
+         L['spindel_zuschnitt'] - L['spindel_laenge'], 0.0)
+    p.ok('ungekuerzte Spindel laesst das dickste Werkstueck noch zu',
+         L['werkstueck_frei_lang'] - w('werkstueck_max'), 0.0)
+    # Antriebsmoment und Selbsthemmung: die Frage, ob die Klemmnabe auf den
+    # Gewindespitzen durchrutscht, entscheidet sich hier und nicht am Gefuehl.
     masse_z = 0.510                                  # bewegte Masse an Z, kg
-    steigung = 0.001                                 # M6: 1 mm
-    eta, feder = 0.25, 25.0                          # Wirkungsgrad, Feder je Mutter
+    steigung = 0.002                                 # Tr8x2: 2 mm
+    eta, feder = 0.25, 25.0                          # Wirkungsgrad, Federkraft
     moment = lambda kraft: kraft * steigung / (2 * math.pi * eta)
     p.info('Drehmoment zum Heben', moment(masse_z * 9.81) * 1000, 'mNm')
-    p.info('Drehmoment durch die Federvorspannung',
+    p.info('Drehmoment durch die Federvorspannung der Garnitur',
            moment(2 * feder) * 1000, 'mNm')
     p.ok('Klemmnabe uebertraegt das Betriebsmoment (konservativ 120 mNm)',
          120.0 - (moment(masse_z * 9.81) + moment(2 * feder)) * 1000, 0.0,
          '>=', 'mNm')
-    winkel = math.degrees(math.atan(steigung * 1000 / (math.pi * 5.35)))
+    p.ok('NEMA 17 (400 mNm Haltemoment) hat Reserve',
+         400.0 - (moment(masse_z * 9.81) + moment(2 * feder)) * 1000, 200.0,
+         '>=', 'mNm')
+    # Steigungswinkel am Flankendurchmesser d2 = d - 0,5 * P.
+    d2 = w('spindel_d') - 0.5 * steigung * 1000
+    winkel = math.degrees(math.atan(steigung * 1000 / (math.pi * d2)))
     p.ok('Spindel selbsthemmend (Steigungswinkel unter dem Reibwinkel)',
          6.0 - winkel, 0.0, '>=', 'Grad')
-    p.info('Steigungswinkel M6x1', winkel, 'Grad')
+    p.info('Steigungswinkel Tr8x2 am Flankendurchmesser', winkel, 'Grad')
+    p.info('Aufloesung bei 1/16-Schritt', steigung * 1000 / 3200.0 * 1000,
+           'um')
 
     p.titel('8) Schlittenplatte und Laser (Konzept aus ToolheadGrundplatte)')
     p.ok('Platte deckt das Laserlochbild quer',
@@ -636,10 +716,10 @@ def main():
             ('Traegerplatte (mit Konsole)',
              w('traeger_x_kopf') - w('traeger_x_links'),
              L['motor_rippe_z1'] - w('traeger_z_unten')),
-            ('Schlittenplatte', w('block_x_rechts') + w('schlitten_breite_l'),
+            ('Schlittenplatte', w('winkel_x_rechts') + w('schlitten_breite_l'),
              L['schlitten_oben_rel'] - L['schlitten_unten_rel']),
-            ('Mutternblock', w('block_x_rechts') - w('block_x_links'),
-             w('block_hoehe')),
+            ('Mutternwinkel', w('winkel_x_rechts') - w('winkel_x_links'),
+             L['regal_z1_rel'] - L['winkel_unten_rel']),
             ('Endschalterhalter', w('ls_sockel_x1') - L['ls_wand_x0'],
              L['ls_sockel_z1'] - L['ls_sockel_z0'])):
         p.ok('{}: groesste Kante'.format(name), max(a, b), 250.0, '<=')
@@ -651,11 +731,12 @@ def main():
             'MGN9 Linearschiene {:.0f} mm + Wagen MGN9H'.format(
                 w('z_schiene_laenge')),
             'NEMA 17, Koerper {:.0f} mm, Welle 5 mm'.format(w('motor_laenge')),
-            'M6-Gewindestange {:.0f} mm (Zuschnitt)'.format(
-                10 * round(L['spindel_laenge'] / 10 + 0.5)),
-            'Flexible Kupplung 5 -> 6 mm, {:.0f} mm lang'.format(w('kupplung_l')),
-            '2x M6-Mutter (Sechskanttasche, SW+{:.2f}) + Druckfeder Ø8 x {:.0f}'
-            .format(w('tasche_spiel'), w('feder_raum_l')),
+            'Tr8x2-Trapezgewindespindel {:.0f} mm ({:.0f} mm gebraucht)'.format(
+                L['spindel_zuschnitt'], L['spindel_laenge']),
+            'Klemmkupplung 5 -> 8 mm, {:.0f} mm lang'.format(w('kupplung_l')),
+            'Anti-Backlash-Garnitur Tr8x2 (Flanschmutter Ø{:.0f} + Feder + '
+            'Gleitmutter)'.format(w('t8_flansch_d')),
+            '4x M3x8 + 4x Messing-Einsatz M3 Ø5 (Garnitur -> Regal)',
             '4x M3x12 Zylinderkopf + Scheibe (Traegerplatte -> X-Wagen)',
             '{}x M3x10 Senkkopf DIN 7991 + {}x Messing-Einsatz M3 Ø5 '
             '(Z-Schiene -> Sockel)'
@@ -663,8 +744,8 @@ def main():
             '4x M3x{:.0f} Zylinderkopf   (Schlittenplatte -> Z-Wagen)'.format(
                 L['z_wagen_schraube']),
             '4x M3x10 + 4x Scheibe DIN 125 (Laser -> Schlittenplatte)',
-            '2x M3x16 + 2x M3-Mutter + 2x Scheibe DIN 9021 Ø9 '
-            '(Mutternblock, schwimmend)',
+            '2x M3x{:.0f} + 2x M3-Mutter + 2x Scheibe DIN 9021 Ø9 '
+            '(Mutternwinkel, schwimmend)'.format(L['winkel_schraube']),
             '4x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, alle vier)',
             '2x M3x12 + 2x Messing-Einsatz M3 Ø5 (Endschalterhalter -> Sockel)',
             '2x M2x6 + 2x Heat Insert M2 (Ø3,2 x 2,5) '

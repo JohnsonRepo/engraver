@@ -10,13 +10,14 @@ Geprüft mit `python3 tools/toolhead_check.py`, Layout in
 
 Der Toolhead hängt am **MGN15H-Wagen der Portalführung** und bringt seine
 eigene Z-Achse mit: eine MGN9-Führung, angetrieben von einem NEMA 17 über eine
-flexible Kupplung auf eine M6-Gewindestange. Der Laser sitzt auf dem Z-Schlitten.
+Klemmkupplung auf eine **Tr8×2-Trapezgewindespindel mit Anti-Backlash-Garnitur**.
+Der Laser sitzt auf dem Z-Schlitten.
 
 | Pos | Teil | Material | Funktion |
 |---|---|---|---|
 | 1 | **Trägerplatte** mit angeformter **Motorkonsole** | PETG, 8 mm | sitzt auf dem X-Wagen, trägt Schienensockel, Konsole, Säulen- und Führungsrippen |
 | 2 | **Schlittenplatte** | PETG | auf dem MGN9H-Z-Wagen, trägt den Laser und die Schaltfahne |
-| 3 | **Mutternblock** | PETG | zwei M6-Muttern, federverspannt, schwimmend verschraubt |
+| 3 | **Mutternwinkel** | PETG | Flanschsitz für die Tr8×2-Garnitur, schwimmend verschraubt |
 | 4 | **Endschalterhalter** | PETG | hält die Gabellichtschranke, Schaltpunkt über Langlöcher justierbar |
 
 Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
@@ -80,22 +81,30 @@ hoch die Schürze des MGN9H über der Schienenauflage endet.
 | −110,8 | Laser-Unterkante (Linse), tiefste Stellung |
 | −66,0 | Unterkante Trägerplatte |
 | −60,0 | Unterkante MGN9-Schiene (**200 mm lang, 10 Schrauben**) |
-| −40,1 … +96,0 | Bereich der Wagenmitte `zc` |
-| +116,0 … +141,0 | flexible Kupplung |
+| −40,1 … +40,5 | Bereich der Wagenmitte `zc` |
+| +68,0 | Oberkante der Antriebsmutter in der höchsten Stellung |
+| +116,0 … +141,0 | Klemmkupplung 5 → 8 mm |
 | +140,0 | Oberkante MGN9-Schiene |
 | +145,0 | Unterseite Motorkonsole = Oberkante Trägerplatte |
 | +153,0 | Motorflansch |
 | +193,0 | Oberkante NEMA 17 |
 
-**Nutzbarer Verfahrweg: 136,1 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
+**Nutzbarer Verfahrweg: 80,6 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
 alle vier aus und nennt die bindende:
 
 | Grenze | zc max |
 |---|---|
-| **Schlittenplatte gegen Kupplung** | **+96,0** ← bindend |
-| Mutternblock gegen Kupplung | +100,0 |
+| **Antriebsmutter gegen Kupplung** | **+40,5** ← bindend |
+| Schlittenplatte gegen Kupplung | +96,0 |
 | Laser-Oberkante gegen Motorkonsole | +113,2 |
 | Wagen am oberen Schienenende | +120,1 |
+
+Die Anti-Backlash-Garnitur steht **nach oben** auf dem Regal des
+Mutternwinkels (Flanschmutter + Feder + Gleitmutter, zusammen 45 mm) und ist
+damit das oberste bewegte Teil — sie kostet 55 mm Weg gegenüber der alten
+M6-Lösung. Gebraucht werden für ein 50-mm-Werkstück rund 30 mm, die Grenze
+liegt also weit außerhalb des Nutzbereichs; die 45 mm sind außerdem geschätzt
+und werden am gelieferten Teil nachgemessen.
 
 ### Die Schiene sitzt in Z fest — das begrenzt die Werkstückhöhe
 
@@ -129,11 +138,13 @@ Genau daran hängt die Lage der Spindelachse:
 
 * Die hintere Reihe liegt bei `spindel_y − 15,5`. Damit ein Ø6-Korridor an der
   Trägerplatte (Y = 0…8) vorbeikommt, muss `spindel_y ≥ 28` sein.
-* Nach vorn begrenzt die Wand vor der Spindelbohrung im Mutternblock:
-  `schlitten_y1 ≥ spindel_y + 6,3`.
+* Nach vorn begrenzt die Haut vor der Spindelbohrung im Rücken des
+  Mutternwinkels: `schlitten_y1 ≥ spindel_y + 6,3`.
 
-Gewählt: **`spindel_y` = 28,5 mm**, damit 2,0 mm Luft zum Korridor und 3,2 mm
-Wand im Mutternblock. Die Schlittenplatte muss dafür mit nach vorn — über
+Gewählt: **`spindel_y` = 28,5 mm**, damit 2,0 mm Luft zum Korridor und 2,2 mm
+Haut im Rücken (mit Tr8×2 statt M6 ist die Bohrung 2 mm größer geworden — die
+Spindel läuft damit 2,5 mm hinter der Schlittenplatte vorbei, über den ganzen
+Verfahrweg gleich weit). Die Schlittenplatte muss dafür mit nach vorn — über
 `pad_hoehe` = 12 mm (statt 6). Damit liegen die hinteren Schrauben bei
 Y = +13,0 mm, also **13 mm vor der Trägerplatte**.
 
@@ -156,10 +167,11 @@ vorbei — und prüft die Luft zur Trägerplatte als eigene Größe.
 | Z-Wagen-Schraube | M3×8 | **M3×14** |
 | Schlittenplatte | ~25 g | **38 g** (gemessen, Rev. 11) |
 
-Trägerplatte, Z-Schiene und Gewindestange bleiben davon unberührt. Der
+Trägerplatte, Z-Schiene und Spindel bleiben davon unberührt. Der
 Verfahrweg lag damals bei 50,45 mm; er ist mit Rev. 14 auf 55,1 mm gewachsen
-(Laser tiefer, also nicht mehr die Motorkonsole als Grenze) und mit Rev. 16 auf
-136,1 mm (Schiene 200 mm).
+(Laser tiefer, also nicht mehr die Motorkonsole als Grenze), mit Rev. 16 auf
+136,1 mm (Schiene 200 mm) und liegt mit Rev. 23 bei 80,6 mm (die
+Anti-Backlash-Garnitur baut nach oben auf).
 
 **Beim Anziehen beachten:** die Z-Wagen-Schrauben klemmen jetzt **12 mm PETG**
 statt 6 (der Kopf sitzt in der Ø6,5-Freibohrung auf der Pad-Vorderseite). Eine
@@ -194,9 +206,9 @@ Modul — deshalb sind die vier Laserbefestigungen **senkrechte Langlöcher**,
 **Nach oben nutzbar sind +2,8 mm** — nicht weil der Hub endet, sondern weil die
 obere Schraubenreihe sonst hinter dem Z-Wagen verschwindet und nicht mehr
 verschraubbar ist. Mit 55 mm Verfahrweg (Schiene 95 mm) war das die bindende
-Grenze und ergab `f ≤ 27,1 mm`; mit 136 mm Weg ist diese Grenze weg — jeder
-Fokusabstand von 13 bis 35 mm geht auf. Du musst *f* also nicht kennen, um die
-Platte zu drucken; nur zum Einstellen beim Zusammenbau.
+Grenze und ergab `f ≤ 27,1 mm`; mit 80,6 mm Weg reicht das Fenster von
+**f = 11 bis 53 mm**. Du musst *f* also nicht kennen, um die Platte zu drucken;
+nur zum Einstellen beim Zusammenbau.
 
 Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
 (1 mm dicker = 1 mm tiefer) — mit dem langen Verfahrweg brauchst du sie für den
@@ -264,8 +276,8 @@ Rahmen sitzt.
 Mit der Konsole auf +145 sitzt der Motor **132,5 mm** über der Verschraubung am
 X-Wagen. Sein Gewicht (280 g) biegt die 8 mm dünne Säule dort um **0,57 mm**
 durch — ein statischer Versatz, der die Gewindestange schiefstellt. Zwei
-Rippen auf der Vorderseite (4 mm breit, 6,5 mm hoch, über die ganze
-Säulenhöhe) bringen das auf **0,22 mm**; das Skript rechnet beide Werte im
+Rippen auf der Vorderseite (4 mm breit, 6,0 mm hoch, über die ganze
+Säulenhöhe) bringen das auf **0,24 mm**; das Skript rechnet beide Werte im
 Bericht mit.
 
 Die Rippen sitzen an den **Kanten** der Säule (X = ±18 … ±22), nicht weiter
@@ -276,9 +288,11 @@ innen. Dazwischen ist kein Platz:
   beim ersten Entwurf sofort gemeldet),
 * bei |X| < 13 fährt der Z-Wagen vorbei.
 
-An der Kante wirken sie ohnehin am besten, und 6,5 mm Höhe lässt dem
-Mutternblock (ab Y = 18) 3,5 mm Luft. Gedruckt wird nichts anders: sie stehen
-wie der Schienensockel nach oben, kein Stützmaterial.
+An der Kante wirken sie ohnehin am besten. Die Höhe war mit 6,5 mm auf den
+alten Mutternblock (ab Y = 18) ausgelegt; mit dem Mutternwinkel bindet jetzt
+der Ø22-Flansch der Antriebsmutter, der bis Y = 17,5 nach hinten reicht —
+deshalb **6,0 mm**, und es bleiben dieselben 3,5 mm Luft. Gedruckt wird nichts
+anders: sie stehen wie der Schienensockel nach oben, kein Stützmaterial.
 
 ## Warum Trägerplatte und Konsole ein Teil sind
 
@@ -306,7 +320,7 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 |---|---|---|---|---|
 | Trägerplatte mit Konsole | ≈ 124 cm³ | **≈ 157 g** | 78 × 222 × 56 mm | Rev. 16 + Sockel |
 | Schlittenplatte | ≈ 41,8 cm³ | **≈ 53 g** | 71 × 97 × 24 mm | Rev. 14 + Fahne |
-| Mutternblock | 9,8 cm³ | **12,4 g** | 28 × 26 × 17 mm | Rev. 14 |
+| Mutternwinkel | ≈ 11,3 cm³ | **≈ 14 g** | 28 × 36 × 22 mm | gerechnet |
 | Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet |
 | **Druckteile zusammen** | ≈ 180 cm³ | **≈ 228 g** | | |
 
@@ -317,7 +331,8 @@ Fusion-Lauf.**
 
 Die Trägerplatte ist mit Rev. 16 von 145 auf 222 mm gewachsen (Schiene 200 mm,
 Konsole auf +145) und wog vorher 98,4 g. Gerechnet hatte ich 154 g, gemessen
-sind es 154,3 g. Schlittenplatte und Mutternblock sind unverändert.
+sind es 154,3 g. Der Mutternwinkel ersetzt den 12,4 g schweren Mutternblock;
+die Schlittenplatte ändert sich nur an der Lasche (wenige Zehntel Gramm).
 
 Dazu die drei Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
 werden: 6,1 g (X-Wagen) · 3,6 g (Z-Wagen) · 6,7 g (Laser).
@@ -340,80 +355,125 @@ allein die Motorkonsole und 64 cm³ die Säule. Ließe sich mit Taschen in Haupt
 reduzieren — bisher nicht gemacht, weil die Steifigkeit dort die Genauigkeit
 der ganzen Z-Achse bestimmt.
 
-## Z-Antrieb: M6 behalten, aber spielfrei und schwimmend
+## Z-Antrieb: Tr8×2 mit Anti-Backlash-Garnitur
 
-Die Gewindestange bleibt — geändert ist, **wie** die Mutter angebunden ist. Zwei
-Dinge machen den Unterschied:
+Vorher war es eine M6-Gewindestange mit zwei federverspannten Muttern in einem
+gedruckten Block. Jetzt sind **Spindel, Garnitur und Kupplung gekauft**: eine
+Tr8×2-Trapezgewindespindel (200 mm), eine Anti-Backlash-Garnitur
+(Flanschmutter + Feder + Gleitmutter) und eine Klemmkupplung 5 → 8 mm. Die
+Spielfreiheit kommt damit aus dem Kaufteil; das Druckteil liefert nur noch den
+**Flanschsitz**.
 
-**Spielfrei durch zwei Muttern mit Feder.** Im Mutternblock sitzen zwei
-M6-Muttern in Sechskanttaschen; dazwischen liegt eine Druckfeder (Ø8 × 11 mm)
-in einer Kammer. Die Feder drückt die untere Mutter auf den Boden und die obere
-unter die Decke des Blocks. Beide Muttern tragen damit auf gegenüberliegenden
-Gewindeflanken — das Flankenspiel der Gewindestange ist aufgebraucht, ohne dass
-etwas klemmt.
+Die Spindel hat **keinen angedrehten Zapfen** — Ø8 ist der Gewindeaußen­
+durchmesser, die Klemmnabe greift auf die Gewindespitzen. Das hält, siehe
+[Drehmoment](#selbsthemmung-und-drehmoment).
 
-**Die Mutterntaschen halten die Mutter vor dem Festschrauben.** Jede Tasche ist
-ein echtes Sechskant mit SW + 0,15 mm, gedreht so, dass die Mutter mit einer
-**Flanke** am Taschenboden anliegt und nicht mit einer Ecke — Formschluss auf
-allen sechs Flanken, die Mutter kann nicht kippen. Davor sitzt ein um 0,20 mm
-**engeres Mundstück** (1,4 mm lang): die Mutter wird einmal hineingedrückt und
-rastet hinter einer Stufe von 0,19 mm je Seite ein. Beim Zusammenbauen fällt
-sie damit nicht mehr heraus, auch bevor die Schlittenplatte die Tasche
-verschließt.
+### Warum ein Winkel und kein Block
 
-Im Sechskant selbst hat die Mutter bewusst 0,15 mm Spiel und bleibt **in Z
-beweglich** — sonst könnte die Feder sie nicht gegen Boden bzw. Decke drücken
-und die Spielfreiheit wäre hin. Beide Werte hängen an Parametern
-(`tasche_spiel`, `tasche_klemmung`); wird eine Tasche im Druck zu stramm,
-reicht eine Änderung im Parameter-Dialog.
+Der Flansch der Mutter steht **senkrecht zur Spindelachse**, der Sitz muss also
+waagerecht liegen — aus dem Block wird ein Winkel. Der Haken: der Flansch hat
+Ø22 und sitzt mittig auf der Spindelachse (Y = 28,5), reicht also von Y = 17,5
+bis 39,5. Die Rückseite der Schlittenplatte liegt bei Y = 35 — hinter der
+Platte würde der Flansch **4,5 mm in die Platte hineinlaufen**.
 
-Die beiden **M3-Muttern der schwimmenden Verschraubung** sitzen ebenfalls in
-Sechskanttaschen (statt vorher quadratischen) und müssen beim Anziehen nicht
-von hinten gegengehalten werden. Dafür rücken ihre Bohrungen 5 mm vom Blockrand
-ein: über Eck ist die Tasche 6,5 mm breit und braucht noch Wand.
+Zwei Auswege:
 
-**Schwimmend verschraubt.** Der Block ist mit **zwei M3 durch Ø4,6-Bohrungen**
-(statt 3,4) plus großen Scheiben an der Schlittenplatte befestigt. Vorgehen:
-Schrauben locker, Z-Achse mehrmals über den ganzen Weg fahren, **dann**
-festziehen. Der Block findet dabei die Lage, die die Gewindestange vorgibt —
-eine krumme Stange kämpft so nicht gegen die Linearführung. Zusammen mit der
-flexiblen Kupplung 5→6 mm bleibt der Rundlauffehler oben, wo er nicht stört.
+| | Folge |
+|---|---|
+| `pad_hoehe` 12 → 18 mm | Platte rückt nach vorn, Strahlachse wandert 58,5 → 64,5, Wagenschrauben M3×20 |
+| **Regal über die Plattenoberkante legen** | nichts anderes ändert sich ← gewählt |
 
-### Umstieg auf eine Trapezgewindespindel
+Also sitzt das Regal **0,5 mm über der Oberkante der Schlittenplatte** und der
+Flansch liegt frei über ihr. `pad_hoehe`, die Laserlage und die Strahlachse
+bleiben unverändert.
 
-**Wenn, dann T8×2 — nicht TR8×8.** Hier stand vorher „T8/TR8x8" als Option,
-das war falsch: mit 8 mm Steigung liegt der Steigungswinkel bei 20° und die
-Spindel ist **nicht selbsthemmend**. Der Toolhead würde absinken, sobald der
-Motor stromlos ist. Die Zahlen:
+| Teil des Winkels | Lage | Maß |
+|---|---|---|
+| **Rücken** (senkrecht) | Y 27 … 35, X 16 … 44 | 8 mm dick, 35,5 mm hoch |
+| **Regal** (waagerecht) | Y 17,5 … 39,5, X 16 … 44 | 10 mm dick, Oberkante zc + 27,5 |
+
+Die Spindel läuft **mitten durch den Rücken** (Achse Y = 28,5, Rücken Y = 27 …
+35). Die Durchgangsbohrung Ø8,6 nimmt ihm die Mitte: es bleiben zwei Schenkel
+von je 9,7 mm — jeder trägt eine Schraube — und davor eine **Haut von 2,2 mm**,
+die beide Schenkel verbindet und die Anlagefläche an der Lasche durchgehend
+hält. Der Kanal ist nach hinten offen und druckt ohne Stützen.
+
+### Gewinde im Druckteil
+
+Die vier Befestigungslöcher im Flansch sind **Durchgangslöcher Ø3,5, kein
+Gewinde**. Das Gewinde muss also im Regal sitzen: 4 × M3-Messingeinsatz
+(Einpressbohrung Ø4,6 × 7 mm) von oben, darunter bleiben 3 mm Material.
+
+Der Lochkreis Ø16 ist um **45° gedreht** eingebaut: so liegen die Bohrungen bei
+± 5,66 mm statt ± 8 mm in Y, und das Regal bleibt in Y so schlank, dass es an
+der Säulenrippe vorbeiläuft (3,5 mm Luft). Der Flansch ist rund und lässt sich
+beliebig drehen — die Lage ist frei wählbar.
+
+**Engste Stelle im Teil: 1,4 mm** zwischen Einsatzbohrung und Spindelbohrung.
+Das ist Kaufteilgeometrie (Lochkreis 16, Spindel Ø8) und nicht zu vergrößern.
+Beim Einschmelzen also wenig Druck, Einsatz bündig, nicht überhitzen — dieselbe
+Vorsicht wie am Schienensockel (dort 2,2 mm).
+
+### Schwimmend verschraubt — das bleibt
+
+Der Winkel hängt wie vorher der Block mit **zwei M3×16 durch Ø4,6-Bohrungen**
+(statt 3,4) plus großen Scheiben (DIN 9021 Ø9) an der Lasche der
+Schlittenplatte. Die M3-Muttern sitzen in Sechskanttaschen im Rücken (SW +
+0,15 mm) und müssen beim Anziehen nicht von hinten gegengehalten werden.
+
+Vorgehen: Schrauben locker, Z-Achse mehrmals über den ganzen Weg fahren,
+**dann** festziehen. Der Winkel findet dabei die Lage, die die Spindel vorgibt
+— eine krumme Spindel kämpft so nicht gegen die Linearführung.
+
+**Drucklage:** Regaloberseite (der Flanschsitz) aufs Bett, Aufbaurichtung
+= −Maschine Z. Der Rücken hängt vollständig unter dem Regalgrundriss, jede
+Schicht steht auf Material, Spindel- und Einsatzbohrungen werden rund. Keine
+Stützen. Die Prüfung rechnet das nach, statt es zu behaupten.
+
+### Was die Garnitur an Verfahrweg kostet
+
+Die Garnitur steht **nach oben** auf dem Regal — nach unten ist kein Platz,
+dort sitzt die Schlittenplatte. Mit geschätzt 45 mm Bauhöhe (Flanschmutter 15 +
+Feder vorgespannt + Gleitmutter 15) ist ihre Oberkante das oberste bewegte
+Teil und bindet den Verfahrweg: **80,6 mm statt 136,1 mm**. Gebraucht werden
+für 0–50 mm Werkstückdicke rund 30 mm, die Reserve ist also weiterhin groß.
+
+Die 45 mm sind der einzige Wert, der am gelieferten Teil nachzumessen ist
+(`t8_garnitur_h`); er geht in keine Geometrie ein, sondern nur in diese Grenze.
+
+**Spindellänge:** gebraucht werden 146,6 mm, bestellt sind 200 mm. Ungekürzt
+hängt das untere Ende bis Z = −71 und ist damit — wie Schiene und
+Plattenunterkante — ein festes Hindernis auf seiner Höhe: das dickste Werkstück
+sinkt von 59 auf **54 mm**. Auf ~150 mm gekürzt bleiben es 59 mm.
+
+### Selbsthemmung und Drehmoment
+
+**Tr8×2, nicht TR8×8.** Hier stand einmal „T8/TR8x8" als Option, das war
+falsch: mit 8 mm Steigung liegt der Steigungswinkel bei 20° und die Spindel ist
+**nicht selbsthemmend** — der Toolhead würde absinken, sobald der Motor
+stromlos ist.
 
 | | Steigungswinkel | selbsthemmend |
 |---|---|---|
-| M6 × 1 (jetzt) | 3,4° | ja |
-| T8 × 2 | 5,2° | ja |
+| M6 × 1 (vorher) | 3,4° | ja |
+| **Tr8 × 2 (eingebaut)** | **5,2°** | **ja** |
 | TR8 × 8 | 20,0° | **nein** |
 
-Was der Umstieg bringt: eine gekaufte Anti-Backlash-Mutter statt des
-gedruckten Doppelmutterblocks, weniger Rundlauffehler, und die **flachen
-Trapezspitzen** sind eine deutlich bessere Klemmfläche für die Kupplung als das
-V-Gewinde von M6. Was er nicht löst: ein Drehmomentproblem gibt es nicht, siehe
-unten.
+Ein Drehmomentproblem gibt es nicht. Bei 510 g bewegter Masse an Z braucht das
+Heben **6,4 mNm**, die Federvorspannung der Garnitur kostet rund **64 mNm** —
+zusammen **≈ 70 mNm** im Betrieb. Eine Klemmnabe überträgt auf Ø8 rund
+240–680 mNm, auf Gewindespitzen konservativ die Hälfte; der Bedarf ist also
+mehrfach gedeckt. Beim Blockieren sieht die Kupplung die 400 mNm des NEMA 17 —
+rutscht sie dann, ist das eher Schutz als Fehler.
 
-Maße der üblichen Anti-Backlash-Garnitur stehen in `hardware-notizen.md`. Zu
-ändern wäre der Mutternblock: statt Sechskanttaschen ein **waagerechter
-Flanschsitz** (Ø22, Lochkreis 16, 4 × Ø3,5) — der Flansch sitzt senkrecht zur
-Spindelachse, das Teil wird also ein Winkel statt eines Blocks. Dazu eine
-Kupplung 5→8 mm.
+Wichtig ist eine **Klemmnabe statt reiner Madenschraube**. Eine Klauenkupplung
+würde statt dessen Verdrehspiel mitbringen und wäre hier der falsche Tausch:
+die flachen Trapezspitzen sind eine gute Klemmfläche, das Problem, das sie
+lösen soll, gibt es nicht.
 
-### Das Drehmoment ist nicht das Problem
-
-Bei 510 g bewegter Masse an Z braucht das Heben **3,2 mNm**; die
-Federvorspannung der Doppelmutter kostet rund 32 mNm, macht **≈ 35 mNm** im
-Betrieb. Eine Klemmnabe überträgt auf 6 mm 240–680 mNm, auf Gewindespitzen
-konservativ die Hälfte — der Bedarf ist also drei- bis zehnfach gedeckt. Beim
-Blockieren sieht die Kupplung die 400 mNm des NEMA 17; rutscht sie dann, ist
-das eher Schutz als Fehler. Wichtig ist nur eine **Klemmnabe statt reiner
-Madenschraube**; eine Klauenkupplung bringt statt dessen Verdrehspiel mit und
-wäre hier der falsche Tausch.
+Auflösung: 2 mm Vorschub je Umdrehung, bei 1/16-Schritt **0,63 µm** je
+Mikroschritt. Gegenüber M6 (1 mm) ist der Vorschub doppelt so grob und die
+Achse dafür doppelt so schnell.
 
 ## Verschraubung
 
@@ -424,13 +484,15 @@ wäre hier der falsche Tausch.
 | NEMA 17 → Konsole | **4 × M3×12** | 4 mm Eingriff; Führungsrippen zentrieren, Zentrierbund in Ø22,4 |
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +2,8 mm** |
-| Mutternblock → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe | Ø4,6-Bohrung, ausrichten dann festziehen |
+| Mutternwinkel → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe DIN 9021 Ø9 | Ø4,6-Bohrung, ausrichten dann festziehen |
+| Antriebsmutter → Regal | **4 × M3×8 + 4 × Messing-Einsatz M3** | Lochkreis Ø16, 45° gedreht; Einsatzbohrung Ø4,6 × 7 mm, **1,4 mm Wand zur Spindelbohrung** |
 | Endschalterhalter → Sockel | 2 × M3×12 + 2 × Messing-Einsatz M3 | Langloch ±4 mm für den Schaltpunkt |
 | Lichtschranke → Halter | 2 × M2×6 + 2 × Heat Insert M2 (Ø3,2 × 2,5) | Ø2,8 × 3 mm Sackloch in der 4-mm-Wand, dahinter Ø2,4 frei |
 
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
-Welle 5 mm) · M6-Gewindestange, Zuschnitt **190 mm** (187 mm werden gebraucht)
-· flexible Kupplung 5→6 mm, 25 mm lang · 2 × M6-Mutter · Druckfeder Ø8 × 11 mm.
+Welle 5 mm) · **Tr8×2-Trapezgewindespindel 200 mm** (146,6 mm werden gebraucht)
+· **Anti-Backlash-Garnitur Tr8×2** (Flanschmutter Ø22 + Feder + Gleitmutter)
+· **Klemmkupplung 5→8 mm**, 25 mm lang.
 
 ## Montagereihenfolge und Werkzeugzugang
 
@@ -446,10 +508,10 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 2 | **Trägerplatte an den X-Wagen**, 4 × M3×12 + Scheibe | Inbus von vorn | frei, aber der Korridor streift den Z-Wagen um 0,5 mm → schlanken Schlüssel nehmen, keinen dicken Bit-Halter |
 | 3 | Z-Schiene auf den Sockel, 10 × M3×10 Senkkopf DIN 7991 | Inbus von vorn | der Wagen verdeckt je Stellung zwei Schrauben: erst mit dem Wagen unten acht setzen, dann hochschieben und die letzten zwei |
 | 4 | **Schlittenplatte auf den Z-Wagen**, 4 × M3×14 | Inbus von vorn durch die Ø6,5-Freibohrungen | frei — **nur solange der Laser nicht dran ist** |
-| 5 | Mutternblock bestücken: 2 × M6-Mutter eindrücken, Feder einlegen, 2 × M3-Mutter in die Sechskanttaschen | Finger | — |
+| 5 | Mutternwinkel bestücken: 4 × Messing-Einsatz M3 ins Regal einschmelzen (**1,4 mm Wand zur Spindelbohrung**), 2 × M3-Mutter in die Sechskanttaschen des Rücken | Lötkolben, Finger | — |
 | 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 164 mm mit dem Z-Schlitten unten, 28 mm mit ihm oben — beides reicht, unten ist es bequemer |
-| 7 | Kupplung und Gewindestange einsetzen | — | — |
-| 8 | Mutternblock an die Schlittenplatte, 2 × M3×16: locker lassen, Achse mehrmals durchfahren, dann festziehen | Inbus von vorn | frei |
+| 7 | **Mutternwinkel an die Schlittenplatte**, 2 × M3×16 + große Scheibe: locker lassen | Inbus von vorn | frei |
+| 8 | Garnitur auf die Spindel drehen, Flansch aufs Regal (4 × M3×8 von oben), Spindel oben in die Kupplung. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Inbus von oben, neben der Spindel | 128 mm mit dem Schlitten unten |
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | 27 mm, mit dem Schlitten ganz unten frei |
 | 10 | Endschalterhalter auf den Sockel (2 × M3×12 in die Einsätze), Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen | Inbus von vorn | frei |
 
@@ -531,7 +593,7 @@ reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 |---|---|---|
 | Trägerplatte (mit Konsole) | Rückseite (Passfläche) unten | Platte, Sockel, Konsole, Säulen- und Führungsrippen stehen alle auf dem Bett — keine Stützen, alle Kräfte in der Schicht. 222 mm lang, passt liegend in den A1 |
 | Schlittenplatte | Laser-Anschraubfläche unten | Brücke 11 mm zwischen den Rippen; die Langlöcher liegen in der Wand, keine Stützen |
-| Mutternblock | Unterseite unten | Spindelbohrung wird rund |
+| Mutternwinkel | Regaloberseite (Flanschsitz) unten | der Rücken hängt vollständig unter dem Regalgrundriss, Spindel- und Einsatzbohrungen werden rund, keine Stützen |
 | Endschalterhalter | Flansch unten | Wand steht nach oben, keine Stützen |
 
 4 Wandlinien, ≥ 40 % Infill. An jeder Auflagefläche sitzt eine Fase von
@@ -552,10 +614,10 @@ einblenden, drucken, ans reale Teil halten.
 **Eine Lehre gibt es nur für Lochbilder von Kaufteilen** — also für Teile, die
 dieses Skript nicht selbst erzeugt. Damit weicht das bewusst von der
 Konvention des `fusion-python`-Skills ab, die auch für Verbindungen zwischen
-zwei getrennt gedruckten Teilen eine Lehre vorsieht. Für Mutternblock ↔
+zwei getrennt gedruckten Teilen eine Lehre vorsieht. Für Mutternwinkel ↔
 Schlittenplatte wäre sie ohne Nutzen: beide Lochbilder hängen an derselben
-Variable (`block_schraube_x`), und die Bohrung in der Platte ist mit Ø4,6
-gegen Ø3,4 absichtlich übergroß, damit sich der Block schwimmend ausrichten
+Variable (`winkel_schraube_x`), und die Bohrung in der Platte ist mit Ø4,6
+gegen Ø3,4 absichtlich übergroß, damit sich der Winkel schwimmend ausrichten
 lässt. Was eine Lehre dort prüfen würde, ist als Verstellbarkeit eingebaut —
 und die prüft `toolhead_check.py` als „Ausrichtspiel der schwimmenden
 Verschraubung".
@@ -593,8 +655,8 @@ verlässt sich deshalb an drei Stellen nicht auf Annahmen (Rev. 2):
 
 Zusätzlich prüft das Skript nach jedem Teil die **Bounding Box gegen den
 erwarteten Bauraum** und schreibt Abweichungen in den Validierungsbericht.
-Steht dort eine Zeile wie `Mutternblock: Y liegt -29.0..-12.0, erwartet
-12.0..29.0`, ist eine Achse gespiegelt — dann bitte melden, die Zeile sagt
+Steht dort eine Zeile wie `Mutternwinkel: Y liegt -39.5..-17.5, erwartet
+17.5..39.5`, ist eine Achse gespiegelt — dann bitte melden, die Zeile sagt
 genau, welche.
 
 ## Parametrik
@@ -620,6 +682,8 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `inbus_frei_d` | 6,0 mm | Werkzeugkorridor, begrenzt die Langlochstellung |
 | `traeger_dicke` | 8 mm | Dicke der Trägerplatte |
 | `motor_rippe_hoehe` | 3 mm | Höhe der Führungsrippen am Motorflansch |
-| `m3_uebermass` | 4,6 mm | Ausrichtspiel des Mutternblocks |
+| `m3_uebermass` | 4,6 mm | Ausrichtspiel des Mutternwinkels |
 | `tasche_spiel` | 0,15 mm | Spiel der Mutterntaschen auf die Schlüsselweite |
-| `tasche_klemmung` | 0,20 mm | Untermaß im Mundstück — hält die M6-Mutter |
+| `t8_garnitur_h` | 45 mm `[?]` | Bauhöhe der Garnitur — bindet den Verfahrweg nach oben, am Teil nachmessen |
+| `winkel_regal_dicke` | 10 mm | Flanschregal; muss den M3-Einsatz (7 mm) aufnehmen |
+| `winkel_luft` | 0,5 mm | Luft Regal → Oberkante Schlittenplatte |

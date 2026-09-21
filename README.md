@@ -34,16 +34,17 @@ tools/geometrie_check.py       Prüfung der Einzelplatte
 
 Kompletter Toolhead als Baugruppe aus vier gedruckten Teilen: **Trägerplatte**
 am MGN15H-Wagen des Portals — mit angeformter Motorkonsole für den NEMA 17 —,
-**Schlittenplatte** auf dem MGN9H-Z-Wagen mit dem Laser, ein **Mutternblock**
-mit zwei federverspannten M6-Muttern, der schwimmend verschraubt ist, und ein
-**Endschalterhalter** für die Gabellichtschranke.
+**Schlittenplatte** auf dem MGN9H-Z-Wagen mit dem Laser, ein **Mutternwinkel**
+als Flanschsitz für die Tr8×2-Anti-Backlash-Garnitur, schwimmend verschraubt,
+und ein **Endschalterhalter** für die Gabellichtschranke.
 
-Nutzbarer Z-Verfahrweg **136,1 mm** (MGN9-Schiene 200 mm), Strahlachse 58,5 mm
+Nutzbarer Z-Verfahrweg **80,6 mm** (MGN9-Schiene 200 mm), Strahlachse 58,5 mm
 vor der X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Die
 Laserhöhe ist über senkrechte Langlöcher ±8 mm verstellbar, damit der
 Fokusabstand des Moduls nicht in der Geometrie steckt. Werkstückhöhe bis 59 mm
 — begrenzt nicht vom Verfahrweg, sondern von der Plattenunterkante, die in X
-mitfährt. Details in [docs/toolhead-z.md](docs/toolhead-z.md).
+mitfährt (mit der ungekürzten 200-mm-Spindel 54 mm). Details in
+[docs/toolhead-z.md](docs/toolhead-z.md).
 
 ### Toolhead-Grundplatte (überholt)
 

@@ -129,35 +129,54 @@ am Rahmen. Achtung: Schließer meldet bei Kabelbruch nicht; der Öffner
 | dickstes Werkstück | **50 mm** | Vorgabe |
 
 Beide stehen als `bett_abstand` und `werkstueck_max` im Skript — sie erzeugen
-keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt die
-harte Grenze **f ≤ 27,1 mm**, damit 0–50 mm Werkstückdicke erreichbar bleiben;
-darüber sind es `77,1 mm − f`. Grund: die obere Laser-Schraubenreihe muss beim
-Verschrauben neben dem Z-Wagen liegen, und das begrenzt, wie hoch der Laser
-sitzen darf.
+keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt das
+Fenster **f = 11 … 53 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben.
+Nach oben begrenzt es die Montage (die obere Laser-Schraubenreihe muss beim
+Verschrauben neben dem Z-Wagen liegen, also höchstens +2,8 mm über Lochmitte),
+nach unten der Langlochhub von −8 mm. Mit der 95-mm-Schiene stand hier einmal
+`f ≤ 27,1 mm` — das war die alte, kurze Z-Achse.
 
 Eine dickere Opferplatte wirkt wie eine Langlochstellung nach unten (1 mm
 dicker = 1 mm tiefer) und verschiebt das Fenster nur in diese Richtung.
 
-## Option: Trapezgewindespindel T8×2 mit Anti-Backlash-Garnitur `[w]`
+## Z-Antrieb: Trapezgewindespindel Tr8×2 mit Anti-Backlash-Garnitur `[w]`
 
-Aus den Herstellerbildern zweier Angebote (nicht am Teil gemessen):
+**Bestellt** (Spindel + Garnitur + Kupplung), Maße aus den Herstellerbildern
+der Angebote — noch nicht am Teil gemessen:
 
-| Wert | Maß |
-|---|---|
-| Spindel | Tr8×2, 1-gängig, Steigung = Vorschub 2 mm, 200 mm lang |
-| Ende | kein angedrehter Zapfen — Ø8 ist der Gewindeaußendurchmesser |
-| Flanschmutter: Flansch | **Ø22 mm**, Bauhöhe **15 mm** |
-| Flanschmutter: Lochkreis | **Ø16 mm**, **4 × Ø3,5 durchgehend** (kein Gewinde!) |
-| Gleitmutter (zweite Hälfte) | **Ø14 × 15 mm**, mit Mitnehmernut |
-| Druckfeder | **Ø12 × 50 mm** freie Länge |
+| Wert | Maß | Status |
+|---|---|---|
+| Spindel | Tr8×2, 1-gängig, Steigung = Vorschub 2 mm, 200 mm lang | `[w]` |
+| Ende | kein angedrehter Zapfen — Ø8 ist der Gewindeaußendurchmesser | `[w]` |
+| Flanschmutter: Flansch | **Ø22 mm**, Bauhöhe **15 mm** | `[w]` |
+| Flanschmutter: Lochkreis | **Ø16 mm**, **4 × Ø3,5 durchgehend** (kein Gewinde!) | `[w]` |
+| Gleitmutter (zweite Hälfte) | **Ø14 × 15 mm**, mit Mitnehmernut | `[w]` |
+| Druckfeder | **Ø12 × 50 mm** freie Länge | `[w]` |
+| Kupplung | Klemmkupplung 5 → 8 mm, Ø19 × 25 mm | `[w]` |
 
 Wichtig für den Entwurf: die Befestigungslöcher sind **Durchgangslöcher**, das
 Gewinde muss also im Druckteil sitzen — mit den vorhandenen M3-Messingeinsätzen
-(Ø4,6 × 7) braucht der Flanschsitz mindestens 9 mm Material.
+(Ø4,6 × 7) braucht der Flanschsitz mindestens 9 mm Material. Das Regal des
+Mutternwinkels ist deshalb 10 mm dick.
 
-Offen bleibt die **Einbaulänge der Garnitur in Z**: Flanschmutter 15 + Feder
-(gekürzt oder vorgespannt) + Gleitmutter 15. Die entscheidet, wie viel
-Verfahrweg oben verloren geht — muss am gelieferten Teil gemessen werden.
+Im Skript steckt das als `spindel_d` 8,0 · `spindel_durchgang` 8,6 ·
+`t8_flansch_d` 22 · `t8_lochkreis` 16 · `t8_garnitur_h` 45.
+
+**Am gelieferten Teil zu prüfen (drei Dinge):**
+
+1. **Einbauhöhe der Garnitur in Z** (`t8_garnitur_h`, angenommen 45 mm =
+   Flanschmutter 15 + Feder vorgespannt + Gleitmutter 15). Sie bindet den
+   Verfahrweg nach oben (jetzt 80,6 mm) und sonst nichts.
+2. **Flanschfläche plan?** Ein Zentrierbund auf der Unterseite bräuchte eine
+   Freibohrung im Regal — im Entwurf ist keiner vorgesehen.
+3. **Spindel kürzen oder nicht.** Gebraucht werden 146,6 mm. Ungekürzt hängt
+   das untere Ende bis Z = −71 und drückt die mögliche Werkstückhöhe von 59 auf
+   54 mm.
+
+Steigungswinkel 5,2° am Flankendurchmesser → **selbsthemmend** (TR8×8 mit 20°
+wäre es nicht). Betriebsmoment ≈ 70 mNm, davon 64 mNm allein die
+Federvorspannung der Garnitur; eine Klemmnabe auf Ø8 trägt ein Mehrfaches,
+auch auf Gewindespitzen. Rechnung in `tools/toolhead_check.py`, Abschnitt 7.
 
 ## Normteile (aus hardware.md, `[w]`)
 
@@ -166,5 +185,5 @@ Verfahrweg oben verloren geht — muss am gelieferten Teil gemessen werden.
 | M3 | 3,4 | 5,5 | 3,0 |
 
 Scheiben M3: DIN 125 Ø 7 × 0,5 am Laser (Langloch 4,0 breit, 1,5 mm Auflage je
-Seite) · DIN 9021 Ø 9 × 0,8 am schwimmenden Mutternblock (deckt dort das
+Seite) · DIN 9021 Ø 9 × 0,8 am schwimmenden Mutternwinkel (deckt dort das
 Übermaß Ø4,6).

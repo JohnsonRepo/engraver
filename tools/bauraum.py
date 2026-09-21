@@ -71,7 +71,9 @@ def bauraeume(w, L):
     """(feste, bewegte, erlaubte_paare). Die bewegten Quader stehen relativ
     zur Wagenmitte zc = 0 und werden mit .verschoben(zc) positioniert."""
     sx, sy = w('spindel_x'), w('spindel_y')
-    r_kup, r_spi = w('kupplung_d') / 2.0, w('spindel_durchgang') / 2.0
+    # Fuer die Kollisionspruefung zaehlt das Kaufteil, nicht die Bohrung:
+    # die Spindel ist Ø8 (Gewindeaussendurchmesser).
+    r_kup, r_spi = w('kupplung_d') / 2.0, w('spindel_d') / 2.0
 
     feste = [
         Quader('Portalprofil 2020', w('traeger_x_links') - 10,
@@ -136,7 +138,7 @@ def bauraeume(w, L):
                'kaufteil'),
         Quader('Kupplung', sx - r_kup, sx + r_kup, sy - r_kup, sy + r_kup,
                L['kupplung_z0'], L['kupplung_z1'], 'kaufteil'),
-        Quader('M6-Gewindestange', sx - r_spi, sx + r_spi, sy - r_spi,
+        Quader('Tr8x2-Spindel', sx - r_spi, sx + r_spi, sy - r_spi,
                sy + r_spi, L['spindel_z0'], L['spindel_z1'], 'kaufteil'),
     ]
     bewegte = [
@@ -149,14 +151,24 @@ def bauraeume(w, L):
         # Die Platte ist an der oberen linken Ecke verbreitert — sie traegt
         # dort die Schaltfahne.
         Quader('Schlittenplatte', L['ls_fahne_x0'],
-               w('block_x_rechts'), L['schlitten_y1'], L['laser_y'],
+               w('winkel_x_rechts'), L['schlitten_y1'], L['laser_y'],
                L['schlitten_unten_rel'], L['schlitten_oben_rel']),
         Quader('Schaltfahne', L['ls_fahne_x0'], L['ls_fahne_x1'],
                L['ls_fahne_y0'], L['schlitten_y1'],
                L['ls_fahne_z0_rel'], L['ls_fahne_z1_rel']),
-        Quader('Mutternblock', w('block_x_links'), w('block_x_rechts'),
-               w('block_y_hinten'), L['schlitten_y1'], L['block_unten_rel'],
-               L['block_oben_rel']),
+        # Mutternwinkel: senkrechter Ruecken an der Platte, Regal darueber,
+        # und darauf die Garnitur (Flanschmutter + Feder + Gleitmutter).
+        Quader('Winkel Ruecken', w('winkel_x_links'), w('winkel_x_rechts'),
+               L['winkel_y0'], L['schlitten_y1'], L['winkel_unten_rel'],
+               L['regal_z1_rel']),
+        Quader('Winkel Regal', w('winkel_x_links'), w('winkel_x_rechts'),
+               L['regal_y0'], L['regal_y1'],
+               L['regal_z0_rel'], L['regal_z1_rel']),
+        Quader('Antriebsmutter Tr8x2',
+               w('spindel_x') - w('t8_flansch_d') / 2,
+               w('spindel_x') + w('t8_flansch_d') / 2,
+               L['regal_y0'], L['regal_y1'],
+               L['regal_z1_rel'], L['garnitur_z1_rel'], 'kaufteil'),
         Quader('Diodenlaser', -w('laser_breite') / 2, w('laser_breite') / 2,
                L['laser_y'], L['laser_vorn_y'], L['laser_unten_rel'],
                L['laser_oben_rel'], 'kaufteil'),
@@ -167,9 +179,25 @@ def bauraeume(w, L):
         ('Z-Wagen MGN9H', 'Schlitten Pad/Rippen'),
         ('Schlitten Pad/Rippen', 'Schlittenplatte'),
         ('Schlittenplatte', 'Diodenlaser'),
-        ('Schlittenplatte', 'Mutternblock'),
-        ('Mutternblock', 'M6-Gewindestange'),
-        ('Kupplung', 'M6-Gewindestange'),
+        ('Schlittenplatte', 'Winkel Ruecken'),
+        ('Winkel Ruecken', 'Winkel Regal'),
+        # Das Regal liegt mit winkel_luft ueber der Plattenoberkante — die
+        # Stirnflaechen laufen mit Absicht dicht aneinander vorbei.
+        ('Schlittenplatte', 'Winkel Regal'),
+        ('Schlitten Pad/Rippen', 'Winkel Regal'),
+        ('Winkel Regal', 'Antriebsmutter Tr8x2'),
+        ('Winkel Regal', 'Tr8x2-Spindel'),
+        ('Winkel Ruecken', 'Tr8x2-Spindel'),
+        ('Winkel Ruecken', 'Antriebsmutter Tr8x2'),
+        # Die Spindel laeuft mit Absicht dicht hinter der Schlittenplatte —
+        # spindel_y ist nach hinten durch den Zugang zu den Motorschrauben
+        # und nach vorn durch genau diesen Abstand festgelegt. Er ist ueber
+        # den ganzen Verfahrweg konstant (die Platte haengt ueber den
+        # Mutternwinkel starr an der Spindelmutter) und wird in
+        # toolhead_check.py Abschnitt 7 einzeln geprueft.
+        ('Schlittenplatte', 'Tr8x2-Spindel'),
+        ('Antriebsmutter Tr8x2', 'Tr8x2-Spindel'),
+        ('Kupplung', 'Tr8x2-Spindel'),
         ('Motorkonsole', 'NEMA 17'),
         ('Motorkonsole', 'Fuehrungsrippe links'),
         ('Motorkonsole', 'Fuehrungsrippe rechts'),

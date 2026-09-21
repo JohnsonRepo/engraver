@@ -379,10 +379,41 @@ festziehen. Der Block findet dabei die Lage, die die Gewindestange vorgibt —
 eine krumme Stange kämpft so nicht gegen die Linearführung. Zusammen mit der
 flexiblen Kupplung 5→6 mm bleibt der Rundlauffehler oben, wo er nicht stört.
 
-**Wenn du später doch auf T8/TR8x8 umsteigen willst:** nur der Mutternblock wird
-neu gedruckt, alles andere bleibt. Dafür brauche ich das Flanschlochbild deiner
-POM-Antibacklash-Mutter — das steht nicht in `hardware.md` und will gemessen
-werden.
+### Umstieg auf eine Trapezgewindespindel
+
+**Wenn, dann T8×2 — nicht TR8×8.** Hier stand vorher „T8/TR8x8" als Option,
+das war falsch: mit 8 mm Steigung liegt der Steigungswinkel bei 20° und die
+Spindel ist **nicht selbsthemmend**. Der Toolhead würde absinken, sobald der
+Motor stromlos ist. Die Zahlen:
+
+| | Steigungswinkel | selbsthemmend |
+|---|---|---|
+| M6 × 1 (jetzt) | 3,4° | ja |
+| T8 × 2 | 5,2° | ja |
+| TR8 × 8 | 20,0° | **nein** |
+
+Was der Umstieg bringt: eine gekaufte Anti-Backlash-Mutter statt des
+gedruckten Doppelmutterblocks, weniger Rundlauffehler, und die **flachen
+Trapezspitzen** sind eine deutlich bessere Klemmfläche für die Kupplung als das
+V-Gewinde von M6. Was er nicht löst: ein Drehmomentproblem gibt es nicht, siehe
+unten.
+
+Maße der üblichen Anti-Backlash-Garnitur stehen in `hardware-notizen.md`. Zu
+ändern wäre der Mutternblock: statt Sechskanttaschen ein **waagerechter
+Flanschsitz** (Ø22, Lochkreis 16, 4 × Ø3,5) — der Flansch sitzt senkrecht zur
+Spindelachse, das Teil wird also ein Winkel statt eines Blocks. Dazu eine
+Kupplung 5→8 mm.
+
+### Das Drehmoment ist nicht das Problem
+
+Bei 510 g bewegter Masse an Z braucht das Heben **3,2 mNm**; die
+Federvorspannung der Doppelmutter kostet rund 32 mNm, macht **≈ 35 mNm** im
+Betrieb. Eine Klemmnabe überträgt auf 6 mm 240–680 mNm, auf Gewindespitzen
+konservativ die Hälfte — der Bedarf ist also drei- bis zehnfach gedeckt. Beim
+Blockieren sieht die Kupplung die 400 mNm des NEMA 17; rutscht sie dann, ist
+das eher Schutz als Fehler. Wichtig ist nur eine **Klemmnabe statt reiner
+Madenschraube**; eine Klauenkupplung bringt statt dessen Verdrehspiel mit und
+wäre hier der falsche Tausch.
 
 ## Verschraubung
 

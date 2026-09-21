@@ -138,6 +138,27 @@ sitzen darf.
 Eine dickere Opferplatte wirkt wie eine Langlochstellung nach unten (1 mm
 dicker = 1 mm tiefer) und verschiebt das Fenster nur in diese Richtung.
 
+## Option: Trapezgewindespindel T8×2 mit Anti-Backlash-Garnitur `[w]`
+
+Aus den Herstellerbildern zweier Angebote (nicht am Teil gemessen):
+
+| Wert | Maß |
+|---|---|
+| Spindel | Tr8×2, 1-gängig, Steigung = Vorschub 2 mm, 200 mm lang |
+| Ende | kein angedrehter Zapfen — Ø8 ist der Gewindeaußendurchmesser |
+| Flanschmutter: Flansch | **Ø22 mm**, Bauhöhe **15 mm** |
+| Flanschmutter: Lochkreis | **Ø16 mm**, **4 × Ø3,5 durchgehend** (kein Gewinde!) |
+| Gleitmutter (zweite Hälfte) | **Ø14 × 15 mm**, mit Mitnehmernut |
+| Druckfeder | **Ø12 × 50 mm** freie Länge |
+
+Wichtig für den Entwurf: die Befestigungslöcher sind **Durchgangslöcher**, das
+Gewinde muss also im Druckteil sitzen — mit den vorhandenen M3-Messingeinsätzen
+(Ø4,6 × 7) braucht der Flanschsitz mindestens 9 mm Material.
+
+Offen bleibt die **Einbaulänge der Garnitur in Z**: Flanschmutter 15 + Feder
+(gekürzt oder vorgespannt) + Gleitmutter 15. Die entscheidet, wie viel
+Verfahrweg oben verloren geht — muss am gelieferten Teil gemessen werden.
+
 ## Normteile (aus hardware.md, `[w]`)
 
 | Gewinde | Durchgang | Kopf-Ø | Kopfhöhe |

@@ -464,6 +464,22 @@ def main():
          w('m3_uebermass') - w('m3_durchgang'), 0.8)
     p.ok('Grosse Scheibe deckt das Uebermass',
          SCHEIBE_GROSS - w('m3_uebermass'), 2.0)
+    # Antriebsmoment und Selbsthemmung: die Frage, ob die Kupplung auf der
+    # Gewindestange durchrutscht, entscheidet sich hier und nicht am Gefuehl.
+    masse_z = 0.510                                  # bewegte Masse an Z, kg
+    steigung = 0.001                                 # M6: 1 mm
+    eta, feder = 0.25, 25.0                          # Wirkungsgrad, Feder je Mutter
+    moment = lambda kraft: kraft * steigung / (2 * math.pi * eta)
+    p.info('Drehmoment zum Heben', moment(masse_z * 9.81) * 1000, 'mNm')
+    p.info('Drehmoment durch die Federvorspannung',
+           moment(2 * feder) * 1000, 'mNm')
+    p.ok('Klemmnabe uebertraegt das Betriebsmoment (konservativ 120 mNm)',
+         120.0 - (moment(masse_z * 9.81) + moment(2 * feder)) * 1000, 0.0,
+         '>=', 'mNm')
+    winkel = math.degrees(math.atan(steigung * 1000 / (math.pi * 5.35)))
+    p.ok('Spindel selbsthemmend (Steigungswinkel unter dem Reibwinkel)',
+         6.0 - winkel, 0.0, '>=', 'Grad')
+    p.info('Steigungswinkel M6x1', winkel, 'Grad')
 
     p.titel('8) Schlittenplatte und Laser (Konzept aus ToolheadGrundplatte)')
     p.ok('Platte deckt das Laserlochbild quer',

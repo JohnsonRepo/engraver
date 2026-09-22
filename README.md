@@ -40,7 +40,7 @@ als Flanschsitz für die Tr8×2-Anti-Backlash-Garnitur, schwimmend verschraubt,
 ein **Flanschring**, der den Zentrierbund der Mutter freihält, und ein
 **Endschalterhalter** für die Gabellichtschranke.
 
-Nutzbarer Z-Verfahrweg **73,3 mm** (MGN9-Schiene 200 mm), Strahlachse 58,5 mm
+Nutzbarer Z-Verfahrweg **74,3 mm** (MGN9-Schiene 200 mm), Strahlachse 58,5 mm
 vor der X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Die
 Laserhöhe ist über senkrechte Langlöcher ±8 mm verstellbar, damit der
 Fokusabstand des Moduls nicht in der Geometrie steckt. Werkstückhöhe bis 59 mm

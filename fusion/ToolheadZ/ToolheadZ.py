@@ -26,7 +26,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 25
+REVISION = 26
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -98,14 +98,14 @@ MASSE = {
     # geschaetzt [?] — am gelieferten Teil messen, der Wert allein bestimmt
     # die obere Verfahrgrenze (siehe zc_grenzen).
     't8_garnitur_h':       (45.0,  'Tr8x2 Garnitur: Bauhoehe ueber dem Regal'),
-    # Der Flansch hat unten einen Zentrierbund. Ø10 ist am Teil gemessen [v],
-    # die Hoehe noch nicht [?] — sie bestimmt nur die Dicke des Flanschrings.
+    # Der Flansch hat unten einen Zentrierbund, Ø10 x 2 — beides am Teil
+    # gemessen [v], ebenso die Flanschdicke 3,5.
     # Warum ein eigener Ring und keine Freibohrung im Regal: eine Ø10,4-
     # Freibohrung laesst zur Einsatzbohrung (Ø4,6 auf Lochkreis 16) nur
     # 0,50 mm Wand. Der Ring braucht dort nur Ø3,4 Durchgang und hat 1,10 mm.
     't8_bund_d':           (10.0,  'Tr8x2 Flanschmutter: Zentrierbund Ø'),
-    't8_bund_h':            (3.0,  'Tr8x2 Flanschmutter: Zentrierbund Hoehe'),
-    't8_flansch_dicke':     (4.0,  'Tr8x2 Flanschmutter: Dicke des Flansches'),
+    't8_bund_h':            (2.0,  'Tr8x2 Flanschmutter: Zentrierbund Hoehe'),
+    't8_flansch_dicke':     (3.5,  'Tr8x2 Flanschmutter: Dicke des Flansches'),
     'ring_luft':            (0.3,  'Flanschring: Luft unter dem Zentrierbund'),
     # Erzeugen keine Geometrie, nur Bericht und Pruefung: die bestellte Laenge
     # und die Laenge, auf die sie gekuerzt wird. Kuerzen ist nicht optional —

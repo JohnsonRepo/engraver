@@ -475,6 +475,54 @@ Auflösung: 2 mm Vorschub je Umdrehung, bei 1/16-Schritt **0,63 µm** je
 Mikroschritt. Gegenüber M6 (1 mm) ist der Vorschub doppelt so grob und die
 Achse dafür doppelt so schnell.
 
+### Braucht die Spindel oben ein Lager?
+
+**Nein.** Die Spindel hängt am Lager des NEMA 17, und das reicht in allen drei
+Punkten, die dafür zählen:
+
+| | Wert | Grenze |
+|---|---|---|
+| Axiallast im Motorlager | **5,6 N** (Schlitten 5,0 + Spindel 0,6) | ~10 N Datenblatt `[w]` |
+| kritische Biegedrehzahl (128,6 mm frei) | **50 000 1/min** | 300 1/min bei 10 mm/s |
+| Radiallast | ~9 N bei 0,2° Winkelfehler | ~28 N Datenblatt `[w]` |
+
+Zum Vergleich: an einem Ender 3 hängt das ganze X-Portal (1,5–2 kg, also
+15–20 N) am selben Lagertyp, und das läuft jahrelang.
+
+Dazu kommt ein praktischer Grund, der schwerer wiegt als die Rechnung: **die
+Spindel hat keinen angedrehten Zapfen.** Ø8 ist der Gewindeaußendurchmesser.
+Eine Gleitbuchse oder ein Kugellager würde also auf den Gewindespitzen laufen —
+Punktberührung, Verschleiß, Messingstaub, und nach kurzer Zeit mehr Spiel als
+ohne Lager. Ein Lager braucht eine glatte Lagerstelle; die gibt es nur mit
+einer anderen Spindel (mit Zapfen) plus Lagerblock.
+
+Und es kostet: ein Lagerblock unter der Kupplung müsste zwischen Z = 100 und
+116 sitzen, und die Antriebsmutter muss darunter bleiben — das wären
+**16 mm weniger Verfahrweg** (80,6 → 64,5 mm). Am unteren Spindelende wäre ein
+Lager billiger zu haben (dort ist Platz), würde aber die Werkstückhöhe weiter
+drücken und die Spindel zwischen zwei Festpunkten einspannen: mit gedruckten
+Teilen ist das überbestimmt, nicht genauer.
+
+**Was oben wirklich zählt, ist die Kupplung, nicht ein Lager.** Die schwimmende
+Verschraubung des Mutternwinkels nimmt den *parallelen* Versatz zwischen
+Motorachse und Führung auf — einen *Winkelfehler* nicht: der schiebt die Mutter
+über den Verfahrweg seitlich (0,2° ≈ 0,28 mm) und stützt sich mit rund 9 N auf
+dem MGN9H ab. Für die Führung ist das harmlos, es kostet nur Reibung und
+überträgt Rundlauffehler nach unten.
+
+* **Starre Klemmhülse** (liegt T8-Sets meist bei): funktioniert, überträgt
+  diesen Fehler aber voll — das ist genau die Ursache des berüchtigten
+  Z-Wobbles am Ender 3.
+* **Flexible Klemmkupplung mit Helix-Schnitt**: nimmt Winkel und Versatz auf,
+  hat *kein* Verdrehspiel und kostet ein paar Euro. Die bessere Wahl.
+* **Klauenkupplung mit Elastomer**: nimmt den Fehler auch auf, bringt aber
+  Verdrehspiel mit — für eine Positionierachse der falsche Tausch.
+
+Für einen Diodenlaser ist die Auswirkung ohnehin gering: ein Zehntelmillimeter
+Höhenfehler liegt innerhalb der Schärfentiefe. Wichtig bleibt nur die
+**Klemmnabe statt Madenschraube** — und die Gewindespitzen sind dafür sogar
+günstig, sie sichern die Klemmung zusätzlich gegen axiales Rutschen.
+
 ## Verschraubung
 
 | Verbindung | Schrauben | Hinweis |

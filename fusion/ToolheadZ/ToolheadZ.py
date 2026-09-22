@@ -1432,6 +1432,10 @@ def hinweise_bauen(L, zc, fehler):
         '  Die Garnitur steht NACH OBEN: nach unten ist kein Platz. Sie',
         '  begrenzt damit den Verfahrweg nach oben (Bauhoehe {:.0f} mm [?]).'.format(
             w('t8_garnitur_h')),
+        '  OBEN KEIN LAGER: die Spindel haengt am Motorlager, das traegt',
+        '  Schlitten und Spindel zusammen (5,6 N gegen typ. 10 N) und die',
+        '  kritische Biegedrehzahl liegt bei 50000 1/min gegen 300 im',
+        '  Betrieb. Ein Gleitlager kaeme ohnehin nur auf die Gewindespitzen.',
         '  GEWINDE IM DRUCKTEIL: die Flanschloecher sind Durchgangsloecher,',
         '  also 4x M3-Messingeinsatz Ø{:.1f} x {:.0f} von oben ins Regal.'.format(
             w('insert_m3_d'), w('insert_m3_t')),

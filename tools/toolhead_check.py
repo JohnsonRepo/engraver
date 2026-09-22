@@ -561,6 +561,45 @@ def main():
     p.info('Aufloesung bei 1/16-Schritt', steigung * 1000 / 3200.0 * 1000,
            'um')
 
+    # --- Braucht die Spindel oben ein Lager? -------------------------------
+    # Die Frage entscheidet sich an drei Groessen: Axiallast im Motorlager,
+    # kritische Biegedrehzahl und Seitenkraft aus einem Winkelfehler. Ein
+    # Gleit- oder Kugellager kaeme ausserdem nur auf die Gewindespitzen —
+    # die Spindel hat keinen angedrehten Zapfen.
+    rho, e_stahl = 7850.0, 2.0e11          # Stahl: kg/m3, N/m2
+    d2_m = d2 / 1000.0                     # Flankendurchmesser in m
+    flaeche = math.pi / 4 * d2_m ** 2
+    m_lang = rho * flaeche                 # Masse je Meter
+    m_spindel = m_lang * w('spindel_bestellt') / 1000.0
+    p.info('Masse der Spindel ({:.0f} mm Stahl)'.format(w('spindel_bestellt')),
+           m_spindel * 1000, 'g')
+    # Der Motor haelt die Spindel axial: an seinem Lager haengt der ganze
+    # Z-Schlitten plus die Spindel selbst.
+    p.ok('Axiallast im Motorlager (NEMA17 Datenblatt typ. 10 N)',
+         10.0 - (masse_z + m_spindel) * 9.81, 0.0, '>=', 'N')
+    # Kritische Biegedrehzahl der laengsten freien Laenge (Kupplung bis
+    # Mutter in der tiefsten Stellung), gelenkig/gelenkig und damit
+    # konservativ gerechnet.
+    l_frei = (L['kupplung_z0'] - (L['zc_min'] + L['regal_z1_rel'])) / 1000.0
+    traegheit = math.pi * d2_m ** 4 / 64.0
+    n_krit = 60.0 / (2 * math.pi) * (math.pi / l_frei) ** 2 \
+        * math.sqrt(e_stahl * traegheit / m_lang)
+    z_vorschub = 10.0                      # mm/s, schnell fuer eine Z-Achse
+    n_betrieb = z_vorschub / (steigung * 1000) * 60.0
+    p.info('freie Spindellaenge Kupplung -> Mutter', l_frei * 1000)
+    p.info('Betriebsdrehzahl bei {:.0f} mm/s'.format(z_vorschub),
+           n_betrieb, '1/min')
+    p.ok('kritische Biegedrehzahl mit Faktor 10 ueber Betrieb',
+         n_krit - 10 * n_betrieb, 0.0, '>=', '1/min')
+    p.info('kritische Biegedrehzahl', n_krit, '1/min')
+    # Was oben wirklich zaehlt, ist nicht ein Lager, sondern der Winkelfehler
+    # der Spindelachse: er schiebt die Mutter ueber den Verfahrweg seitlich
+    # und stuetzt sich auf der Linearfuehrung ab. Die schwimmende
+    # Verschraubung nimmt nur den parallelen Versatz auf, nicht den Winkel.
+    drift = L['z_weg'] * math.tan(math.radians(0.2)) / 1000.0
+    p.info('Seitenkraft auf die Fuehrung bei 0,2 Grad Winkelfehler',
+           3 * e_stahl * traegheit * drift / l_frei ** 3, 'N')
+
     p.titel('8) Schlittenplatte und Laser (Konzept aus ToolheadGrundplatte)')
     p.ok('Platte deckt das Laserlochbild quer',
          w('schlitten_breite_l')

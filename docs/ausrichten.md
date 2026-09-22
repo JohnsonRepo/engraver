@@ -56,6 +56,46 @@ Die 60-mm-Spalte ist zugleich die Warnung — die Box steht selbst nur auf rund
 60 mm Grundfläche, 0,1 mm Schmutz unter einer Kante sind schon 0,1° Fehler.
 Fläche abwischen, Box immer in derselben Orientierung auf dieselbe Stelle.
 
+## Verwindung („windschief")
+
+Der Fehler, um den es beim Ausrichten der Profile hauptsächlich geht: das
+Profil ist um seine **eigene Längsachse** verdreht, und zwar unterschiedlich
+stark über die Länge. Die Oberseite ist dann keine Ebene mehr, sondern eine
+Wendelfläche — vorn liegt sie waagerecht, hinten gekippt. Das Tückische: ein
+Lineal quer aufgelegt liegt an *jeder* Stelle sauber auf, und längs aufgelegt
+auch. Nur der **Querneigungswinkel** wandert von vorn nach hinten. Genau das
+sieht die Box und sonst kein Werkzeug in der Werkstatt.
+
+Warum es hier zählt: die Y-Wagen laufen auf dieser Fläche. Wandert die
+Querneigung, rollt das Portal beim Fahren — und der 130-mm-Hebel des Toolheads
+macht daraus Strahlversatz (0,1° = 0,23 mm, Tabelle oben). Verwinden sich die
+beiden Profile *unterschiedlich*, wird das Portal zusätzlich verspannt: die
+Wagen laufen schwerer und verschleißen einseitig.
+
+Woher sie kommt, in dieser Reihenfolge der Häufigkeit:
+
+1. **Aus der Montage.** Nutensteine und Winkel zwingen das Profil in die Form,
+   die die Teile darunter vorgeben. Ein Rahmen auf vier nicht in einer Ebene
+   liegenden Füßen verwindet sich wie ein wackliger Tisch — und gibt das nach
+   oben weiter.
+2. **Aus der Strangpresse.** Verwindung ist eine normale Profiltoleranz,
+   je nach Güte 0,5–1,5° pro Meter `[w]`. Das ist bis zu zehnmal unsere
+   Zielgenauigkeit — deshalb lohnt das Messen, statt es anzunehmen.
+
+**Erst feststellen, wo sie sitzt.** Profil einzeln auf eine flache Fläche
+legen (Küchenarbeitsplatte, Tischkreissägentisch, MDF-Platte), nichts
+festschrauben, und die Querneigung an beiden Enden messen. Wandert sie schon
+so, ist das Profil selbst windschief — dann hilft Unterlegen am Rahmen nicht,
+es verschiebt den Fehler nur. Steht sie frei und wandert erst nach dem
+Anschrauben, ist es Montagespannung, und die lässt sich wegnehmen.
+
+**Entdrillen heißt dann:** Schrauben lösen, damit sich das Profil entspannt,
+an der tiefen Ecke unterlegen (Fühlerlehrenblech, Alufolie ≈ 0,02 mm je Lage,
+gedruckte Shims), von der Mitte nach außen wieder anziehen, neu messen. Der
+schnelle Vorab-Test am fertigen Rahmen: auf eine flache Fläche stellen und an
+einer Ecke drücken. Hebt sich die *gegenüberliegende* Ecke mit, ist der Rahmen
+verwunden — wie ein Tisch, der diagonal kippelt.
+
 ## Vier Tricks
 
 **1. Nullen statt nivellieren.** Box auf die linke Führung an den Anfang
@@ -96,9 +136,12 @@ Toolhead ist dafür das ehrlichere Werkzeug als jeder Winkelmesser.
 ## Reihenfolge
 
 1. **Gestell grob waagerecht** (Sensor in den besten Bereich bringen).
-2. **Jedes 2040 einzeln entdrillen.** Box längs auf das Profil, nullen, alle
-   100 mm ablesen. Änderung = Verwindung. Erst hier, solange die Profile noch
-   frei zugänglich sind.
+2. **Jedes 2040 einzeln entdrillen.** Box **quer** auf das Profil (die
+   Messachse über die 40 mm, nicht über die Länge — längs liest man die
+   Steigung, quer die Verwindung), nullen, alle 100 mm ablesen. Änderung =
+   Verwindung. Auf der genuteten Fläche steht die Box nur auf den beiden
+   äußeren Stegen; sicherer ist ein kurzes gerades Stück quer aufgelegt und
+   die Box darauf. Erst hier messen, solange die Profile frei zugänglich sind.
 3. **Die beiden 2040er koplanar.** Box auf Profil A nullen, auf Profil B an
    derselben Y-Station ablesen, Station für Station. Unterlegen/nachziehen, bis
    die Anzeige über die Länge steht.
@@ -115,7 +158,9 @@ Toolhead ist dafür das ehrlichere Werkzeug als jeder Winkelmesser.
 
 ## Was die Box am Gestell prinzipiell nicht leisten kann
 
-2040-Profil kommt mit rund 0,2–0,5 mm Krümmung je Meter aus der Strangpresse.
+2040-Profil kommt krumm aus der Strangpresse: EN 12020-2 erlaubt für
+Präzisionsprofile 0,3 mm Geradheitsabweichung je 300 mm Abschnitt `[w]`,
+einfachere Güten mehr.
 Diese Krümmung ist mit Ausrichten nicht wegzubekommen — sie geht in die
 Bewegung ein, sobald die Führung darauf sitzt. Ausrichten kann nur Verwindung
 und Verkippung beseitigen. Wenn die Gravur später eine gleichmäßige Welle über

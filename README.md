@@ -22,6 +22,7 @@ docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
+docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
 tools/toolhead_check.py        rechnerische Prüfung der Baugruppe (ohne Fusion)
 tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung

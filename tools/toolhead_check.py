@@ -112,9 +112,15 @@ def main():
     p.ok('nutzbarer Z-Verfahrweg', L['z_weg'], 40.0)
     p.ok('Kupplung bleibt unter der Konsole',
          L['konsole_z0'] - L['kupplung_z1'], 2.0)
-    p.ok('Kupplung greift die Welle', w('kupplung_griff'), 8.0)
-    p.ok('Spindel wird von der Kupplung gegriffen',
-         w('kupplung_l') - w('kupplung_griff'), 8.0)
+    p.ok('Klemmlaenge je Seite (massive Nabe der Wendelkupplung)',
+         w('kupplung_griff'), 6.0)
+    p.info('Klemmlaenge bezogen auf den Spindeldurchmesser',
+           w('kupplung_griff') / w('spindel_d'), 'x D')
+    # Der Wendelschnitt in der Mitte muss frei bleiben. Stossen Motorwelle und
+    # Spindel dort zusammen, ist die Nachgiebigkeit ueberbrueckt — aus der
+    # Ausgleichskupplung wird eine starre Huelse.
+    p.ok('Wendelbereich frei: Welle und Spindel stossen nicht zusammen',
+         L['kupplung_frei'], 5.0)
     p.info('benoetigte Laenge der Tr8x2-Spindel', L['spindel_laenge'])
     p.info('Laser-Unterkante (Linse) tiefste Stellung',
            L['zc_min'] + L['laser_unten_rel'])
@@ -533,10 +539,17 @@ def main():
     p.ok('Verfahrweg trotz der Garnitur ueber dem Werkstueckbedarf',
          L['z_weg'] - w('werkstueck_max'), 10.0)
     p.info('benoetigte Spindellaenge', L['spindel_laenge'])
-    p.ok('bestellte Spindel ({:.0f} mm) reicht'.format(L['spindel_zuschnitt']),
-         L['spindel_zuschnitt'] - L['spindel_laenge'], 0.0)
-    p.ok('ungekuerzte Spindel laesst das dickste Werkstueck noch zu',
-         L['werkstueck_frei_lang'] - w('werkstueck_max'), 0.0)
+    p.ok('Zuschnitt ({:.0f} mm) deckt die benoetigte Laenge'.format(
+             w('spindel_zuschnitt')),
+         w('spindel_zuschnitt') - L['spindel_laenge'], 0.0)
+    p.ok('Zuschnitt geht aus der bestellten Laenge hervor',
+         w('spindel_bestellt') - w('spindel_zuschnitt'), 0.0)
+    p.ok('gekuerzte Spindel laesst das dickste Werkstueck zu',
+         L['werkstueck_frei_ist'] - w('werkstueck_max'), 0.0)
+    # Warum ueberhaupt kuerzen: ungekuerzt haengt das untere Ende tiefer als
+    # Plattenunterkante und Schienenende und wird selbst zur Grenze.
+    p.info('Werkstueckhoehe ungekuerzt (deshalb kuerzen)',
+           L['werkstueck_frei_lang'])
     # Antriebsmoment und Selbsthemmung: die Frage, ob die Klemmnabe auf den
     # Gewindespitzen durchrutscht, entscheidet sich hier und nicht am Gefuehl.
     masse_z = 0.510                                  # bewegte Masse an Z, kg
@@ -788,9 +801,12 @@ def main():
             'MGN9 Linearschiene {:.0f} mm + Wagen MGN9H'.format(
                 w('z_schiene_laenge')),
             'NEMA 17, Koerper {:.0f} mm, Welle 5 mm'.format(w('motor_laenge')),
-            'Tr8x2-Trapezgewindespindel {:.0f} mm ({:.0f} mm gebraucht)'.format(
-                L['spindel_zuschnitt'], L['spindel_laenge']),
-            'Klemmkupplung 5 -> 8 mm, {:.0f} mm lang'.format(w('kupplung_l')),
+            'Tr8x2-Trapezgewindespindel {:.0f} mm, auf {:.0f} mm kuerzen '
+            '({:.0f} mm gebraucht)'.format(
+                w('spindel_bestellt'), w('spindel_zuschnitt'),
+                L['spindel_laenge']),
+            'Wendelkupplung 5 -> 8 mm, {:.0f} mm lang, Klemmnaben'.format(
+                w('kupplung_l')),
             'Anti-Backlash-Garnitur Tr8x2 (Flanschmutter Ø{:.0f} + Feder + '
             'Gleitmutter)'.format(w('t8_flansch_d')),
             '4x M3x8 + 4x Messing-Einsatz M3 Ø5 (Garnitur -> Regal)',

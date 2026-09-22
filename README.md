@@ -39,12 +39,12 @@ am MGN15H-Wagen des Portals — mit angeformter Motorkonsole für den NEMA 17 �
 als Flanschsitz für die Tr8×2-Anti-Backlash-Garnitur, schwimmend verschraubt,
 und ein **Endschalterhalter** für die Gabellichtschranke.
 
-Nutzbarer Z-Verfahrweg **80,6 mm** (MGN9-Schiene 200 mm), Strahlachse 58,5 mm
+Nutzbarer Z-Verfahrweg **76,6 mm** (MGN9-Schiene 200 mm), Strahlachse 58,5 mm
 vor der X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Die
 Laserhöhe ist über senkrechte Langlöcher ±8 mm verstellbar, damit der
 Fokusabstand des Moduls nicht in der Geometrie steckt. Werkstückhöhe bis 59 mm
 — begrenzt nicht vom Verfahrweg, sondern von der Plattenunterkante, die in X
-mitfährt (mit der ungekürzten 200-mm-Spindel 54 mm). Details in
+mitfährt — die 200-mm-Spindel wird dafür auf 150 mm gekürzt. Details in
 [docs/toolhead-z.md](docs/toolhead-z.md).
 
 ### Toolhead-Grundplatte (überholt)

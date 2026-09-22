@@ -167,7 +167,7 @@ der Angebote — noch nicht am Teil gemessen:
 | Flanschmutter: Lochkreis | **Ø16 mm**, **4 × Ø3,5 durchgehend** (kein Gewinde!) | `[w]` |
 | Gleitmutter (zweite Hälfte) | **Ø14 × 15 mm**, mit Mitnehmernut | `[w]` |
 | Druckfeder | **Ø12 × 50 mm** freie Länge | `[w]` |
-| Kupplung | Klemmkupplung 5 → 8 mm, Ø19 × 25 mm | `[w]` |
+| Kupplung | **Wendelkupplung** 5 → 8 mm, Ø19 × 25 mm, Klemmnaben | `[w]` |
 
 Wichtig für den Entwurf: die Befestigungslöcher sind **Durchgangslöcher**, das
 Gewinde muss also im Druckteil sitzen — mit den vorhandenen M3-Messingeinsätzen
@@ -180,22 +180,27 @@ Im Skript steckt das als `spindel_d` 8,0 · `spindel_durchgang` 8,6 ·
 **Zur Kupplung:** weil es kein oberes Spindellager gibt, hängt der Z-Schlitten
 (5,6 N) axial an der Kupplung. Damit sind **Oldham- und Klauenkupplungen
 ausgeschlossen** — ihre Naben sind nicht axial verbunden, sie setzen Wellen
-voraus, die jede für sich gelagert sind. Bleiben die einteiligen: die starre
-Klemmhülse aus dem Set (ausreichend, Z steht während der Gravur still) oder
-eine Wendelkupplung 5 × 8, Ø19 × 25 in Klemmausführung. In beiden Fällen
-Klemmnabe, keine Madenschraube — Begründung und Zahlen in
-`toolhead-z.md`.
+voraus, die jede für sich gelagert sind. Bleiben die einteiligen: starre
+Klemmhülse oder Wendelkupplung. Im Set war keine Hülse, verbaut wird die
+**Wendelkupplung**; sie überträgt den Zug, federt dabei aber (≈ 0,1 mm,
+konstant). Klemmnabe, keine Madenschraube, und **nur bis zur Nabe einstecken**
+— Begründung und Zahlen in `toolhead-z.md`.
 
 **Am gelieferten Teil zu prüfen (drei Dinge):**
 
 1. **Einbauhöhe der Garnitur in Z** (`t8_garnitur_h`, angenommen 45 mm =
    Flanschmutter 15 + Feder vorgespannt + Gleitmutter 15). Sie bindet den
-   Verfahrweg nach oben (jetzt 80,6 mm) und sonst nichts.
+   Verfahrweg nach oben (jetzt 76,6 mm) und sonst nichts.
 2. **Flanschfläche plan?** Ein Zentrierbund auf der Unterseite bräuchte eine
    Freibohrung im Regal — im Entwurf ist keiner vorgesehen.
-3. **Spindel kürzen oder nicht.** Gebraucht werden 146,6 mm. Ungekürzt hängt
-   das untere Ende bis Z = −71 und drückt die mögliche Werkstückhöhe von 59 auf
-   54 mm.
+3. **Nabenlänge der Wendelkupplung** (`kupplung_griff`, angenommen 8 mm). Nur
+   so tief einstecken, sonst wird der Wendelbereich überbrückt. Der Wert
+   verschiebt die Kupplung in Z und damit den Verfahrweg.
+
+Und eine Entscheidung, die daraus schon feststeht: **die Spindel wird
+gekürzt**, auf `spindel_zuschnitt` = 150 mm (gebraucht 137,6 mm). Ungekürzt
+hängt das untere Ende bis Z = −80 und drückt die mögliche Werkstückhöhe von 59
+auf 45 mm — unter die geforderten 50.
 
 Steigungswinkel 5,2° am Flankendurchmesser → **selbsthemmend** (TR8×8 mit 20°
 wäre es nicht). Betriebsmoment ≈ 70 mNm, davon 64 mNm allein die

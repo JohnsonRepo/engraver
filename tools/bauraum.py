@@ -138,8 +138,10 @@ def bauraeume(w, L):
                'kaufteil'),
         Quader('Kupplung', sx - r_kup, sx + r_kup, sy - r_kup, sy + r_kup,
                L['kupplung_z0'], L['kupplung_z1'], 'kaufteil'),
+        # Die Spindel in ihrer gekuerzten Laenge — sie haengt unter der
+        # Mutter frei weiter und ist dort die tiefste feste Kante.
         Quader('Tr8x2-Spindel', sx - r_spi, sx + r_spi, sy - r_spi,
-               sy + r_spi, L['spindel_z0'], L['spindel_z1'], 'kaufteil'),
+               sy + r_spi, L['spindel_z0_ist'], L['spindel_z1'], 'kaufteil'),
     ]
     bewegte = [
         Quader('Z-Wagen MGN9H', -w('z_wagen_breite') / 2,

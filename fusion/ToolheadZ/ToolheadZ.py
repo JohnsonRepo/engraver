@@ -24,7 +24,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 23
+REVISION = 24
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -78,9 +78,15 @@ MASSE = {
     # Das traegt (siehe Momentenrechnung in toolhead_check.py, Abschnitt 7).
     'spindel_d':           (8.0,   'Tr8x2: Gewindeaussendurchmesser'),
     'spindel_durchgang':   (8.6,   'Tr8x2 Durchgang (+0,6 wie M6 vorher)'),
-    'kupplung_d':          (19.0,  'Klemmkupplung 5->8: Durchmesser'),
-    'kupplung_l':          (25.0,  'Klemmkupplung 5->8: Laenge'),
-    'kupplung_griff':      (12.0,  'Kupplung: Einstecktiefe je Seite'),
+    'kupplung_d':          (19.0,  'Wendelkupplung 5->8: Durchmesser'),
+    'kupplung_l':          (25.0,  'Wendelkupplung 5->8: Laenge'),
+    # Einstecktiefe = Laenge der massiven KLEMMNABE, nicht die halbe Kupplung:
+    # in der Mitte sitzt der Wendelschnitt, und der muss frei bleiben. Stossen
+    # Welle und Spindel dort zusammen, ist die Nachgiebigkeit ueberbrueckt —
+    # aus der Ausgleichskupplung wird eine starre Huelse, im schlimmsten Fall
+    # reisst der Steg. 8 mm ist geschaetzt [?] (= ein Spindeldurchmesser, die
+    # uebliche Klemmlaenge); am gelieferten Teil die Nabenlaenge messen.
+    'kupplung_griff':       (8.0,  'Wendelkupplung: Klemmlaenge je Seite'),
     # Die Garnitur: Flanschmutter auf dem Regal, Feder und Gleitmutter
     # darueber. Die Befestigungsloecher im Flansch sind DURCHGANGSloecher,
     # das Gewinde sitzt also im Druckteil (M3-Messingeinsaetze).
@@ -90,8 +96,12 @@ MASSE = {
     # geschaetzt [?] — am gelieferten Teil messen, der Wert allein bestimmt
     # die obere Verfahrgrenze (siehe zc_grenzen).
     't8_garnitur_h':       (45.0,  'Tr8x2 Garnitur: Bauhoehe ueber dem Regal'),
-    # Erzeugt keine Geometrie, nur Bericht und Pruefung: die bestellte Laenge.
+    # Erzeugen keine Geometrie, nur Bericht und Pruefung: die bestellte Laenge
+    # und die Laenge, auf die sie gekuerzt wird. Kuerzen ist nicht optional —
+    # ungekuerzt haengt das untere Ende tiefer als die Plattenunterkante und
+    # wird selbst zur Werkstueckgrenze (siehe werkstueck_frei_lang).
     'spindel_bestellt':   (200.0,  'Tr8x2: bestellte Spindellaenge'),
+    'spindel_zuschnitt':  (150.0,  'Tr8x2: Laenge nach dem Kuerzen'),
 
     # --- Kaufteil: Diodenlaser (Nutzerangabe + hardware.md) ----------------
     # 40,5 x 16,5 — am 2026-09-17 mit Bohrlehre_Laser (Ø3,4 Rundloecher) am
@@ -319,7 +329,10 @@ def lage():
     L['welle_z0'] = L['motor_flansch_z'] - w('motor_welle_l')
     L['kupplung_z1'] = L['welle_z0'] + w('kupplung_griff')
     L['kupplung_z0'] = L['kupplung_z1'] - w('kupplung_l')
-    L['spindel_z1'] = L['welle_z0']                          # Oberkante Gewindestange
+    # Oberkante der Spindel: so weit in die untere Klemmnabe, wie diese lang
+    # ist — NICHT bis an die Motorwelle. Dazwischen bleibt der Wendelbereich.
+    L['spindel_z1'] = L['kupplung_z0'] + w('kupplung_griff')
+    L['kupplung_frei'] = L['welle_z0'] - L['spindel_z1']
 
     # ---- Schlittenplatte und Laser, relativ zur Wagenmitte zc ---------------
     lochmitte = w('laser_versatz_z')                         # Lochbildmitte ueber zc
@@ -389,9 +402,8 @@ def lage():
     L['werkstueck_frei'] = min(
         w('traeger_z_unten'), L['z_schiene_z0']) + w('bett_abstand') - 5.0
     # Dasselbe gilt fuer das untere Spindelende: es haengt frei nach unten und
-    # faehrt in X mit. Gekuerzt auf die benoetigte Laenge stoert es nicht,
-    # ungekuerzt ist es die niedrigste feste Kante.
-    L['spindel_zuschnitt'] = w('spindel_bestellt')
+    # faehrt in X mit. Auf spindel_zuschnitt gekuerzt stoert es nicht,
+    # ungekuerzt ist es die niedrigste Kante der ganzen Maschine.
 
     # ---- Endschalter: Gabellichtschranke links neben der Saeule ------------
     # Geschaltet wird beim Hochfahren: die Oberkante der Schaltfahne (= die
@@ -467,10 +479,12 @@ def lage():
     # nach oben) plus 5 mm Anlauf.
     L['spindel_z0'] = L['zc_min'] + L['regal_z1_rel'] - 5.0
     L['spindel_laenge'] = L['spindel_z1'] - L['spindel_z0']
-    # Ungekuerzt reicht die Spindel entsprechend tiefer hinunter.
-    L['spindel_z0_lang'] = L['spindel_z1'] - L['spindel_zuschnitt']
-    L['werkstueck_frei_lang'] = min(
-        L['werkstueck_frei'], L['spindel_z0_lang'] + w('bett_abstand') - 5.0)
+    # Unteres Ende nach dem Kuerzen — und was ungekuerzt daraus wuerde.
+    L['spindel_z0_ist'] = L['spindel_z1'] - w('spindel_zuschnitt')
+    L['spindel_z0_lang'] = L['spindel_z1'] - w('spindel_bestellt')
+    frei = lambda z: min(L['werkstueck_frei'], z + w('bett_abstand') - 5.0)
+    L['werkstueck_frei_ist'] = frei(L['spindel_z0_ist'])
+    L['werkstueck_frei_lang'] = frei(L['spindel_z0_lang'])
 
     # ---- Lochbilder (absolute Lagen, X/Z) -----------------------------------
     L['x_wagen_loecher'] = [
@@ -1389,12 +1403,14 @@ def hinweise_bauen(L, zc, fehler):
         '  Laser-Unterkante: {:+.1f} bis {:+.1f} mm'.format(
             L['zc_min'] + L['laser_unten_rel'],
             L['zc_max'] + L['laser_unten_rel']),
-        '  Tr8x2-Spindel: {:.0f} mm benoetigt, {:.0f} mm bestellt'.format(
-            L['spindel_laenge'], L['spindel_zuschnitt']),
-        '    ungekuerzt haengt sie bis {:+.1f} mm hinunter — dann sind nur'.format(
+        '  Tr8x2-Spindel: {:.0f} mm benoetigt, {:.0f} mm bestellt,'.format(
+            L['spindel_laenge'], w('spindel_bestellt')),
+        '    KUERZEN auf {:.0f} mm (unteres Ende dann bei {:+.1f} mm).'.format(
+            w('spindel_zuschnitt'), L['spindel_z0_ist']),
+        '    Ungekuerzt haengt sie bis {:+.1f} mm und laesst nur noch'.format(
             L['spindel_z0_lang']),
-        '    noch {:.0f} mm Werkstueck moeglich (gekuerzt {:.0f} mm)'.format(
-            L['werkstueck_frei_lang'], L['werkstueck_frei']),
+        '    {:.0f} mm Werkstueck zu statt {:.0f} mm.'.format(
+            L['werkstueck_frei_lang'], L['werkstueck_frei_ist']),
         '',
         'MOTORBEFESTIGUNG: NEMA17 hat Gewinde im Flansch, es wird also von',
         '  UNTEN verschraubt — durchstecken von oben geht nicht. Alle VIER',
@@ -1440,6 +1456,12 @@ def hinweise_bauen(L, zc, fehler):
         '  (starre Klemmhuelse oder Wendelkupplung). Oldham- und Klauen-',
         '  kupplungen halten ihre Naben nicht axial zusammen — der Schlitten',
         '  wuerde absinken. Klemmnabe statt Madenschraube, nachziehen.',
+        '  WENDELKUPPLUNG: nur bis zur massiven Nabe einstecken ({:.0f} mm je'.format(
+            w('kupplung_griff')),
+        '  Seite), dazwischen bleibt der Wendelschnitt ueber {:.0f} mm frei.'.format(
+            L['kupplung_frei']),
+        '  Stossen Welle und Spindel dort zusammen, ist die Nachgiebigkeit',
+        '  ueberbrueckt — dann ist es eine starre Huelse mit Sollbruchstelle.',
         '  GEWINDE IM DRUCKTEIL: die Flanschloecher sind Durchgangsloecher,',
         '  also 4x M3-Messingeinsatz Ø{:.1f} x {:.0f} von oben ins Regal.'.format(
             w('insert_m3_d'), w('insert_m3_t')),
@@ -1469,10 +1491,13 @@ def hinweise_bauen(L, zc, fehler):
         '     2x M3-Mutter in die Taschen des Ruecken',
         '  6. Motor zwischen die Fuehrungsrippen, 4x M3x12 von unten —',
         '     mit dem Z-Schlitten unten bequemer (164 statt 28 mm Platz)',
-        '  7. Mutternwinkel an die Lasche (2x M3x{:.0f} + grosse Scheibe von'.format(
+        '  7. Spindel auf {:.0f} mm kuerzen, entgraten, anfasen. Mutternwinkel'.format(
+            w('spindel_zuschnitt')),
+        '     an die Lasche (2x M3x{:.0f} + grosse Scheibe von'.format(
             L['winkel_schraube']),
         '     vorn). Garnitur auf die Spindel drehen, Flansch aufs Regal',
-        '     (4x M3x8 von oben), dann die Spindel oben in die Kupplung.',
+        '     (4x M3x8 von oben), dann die Spindel oben in die Kupplung —',
+        '     nur bis zur Nabe, nicht bis an die Motorwelle.',
         '     Alles lose lassen, mehrmals durchfahren, DANN festziehen',
         '  8. Laser ZULETZT, 4x M3x10 + Scheibe von hinten, Z-Schlitten',
         '     dafuer nach unten fahren ({:.0f} mm freier Korridor)'.format(

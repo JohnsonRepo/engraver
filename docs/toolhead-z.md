@@ -10,7 +10,7 @@ Geprüft mit `python3 tools/toolhead_check.py`, Layout in
 
 Der Toolhead hängt am **MGN15H-Wagen der Portalführung** und bringt seine
 eigene Z-Achse mit: eine MGN9-Führung, angetrieben von einem NEMA 17 über eine
-Klemmkupplung auf eine **Tr8×2-Trapezgewindespindel mit Anti-Backlash-Garnitur**.
+Wendelkupplung auf eine **Tr8×2-Trapezgewindespindel mit Anti-Backlash-Garnitur**.
 Der Laser sitzt auf dem Z-Schlitten.
 
 | Pos | Teil | Material | Funktion |
@@ -81,27 +81,27 @@ hoch die Schürze des MGN9H über der Schienenauflage endet.
 | −110,8 | Laser-Unterkante (Linse), tiefste Stellung |
 | −66,0 | Unterkante Trägerplatte |
 | −60,0 | Unterkante MGN9-Schiene (**200 mm lang, 10 Schrauben**) |
-| −40,1 … +40,5 | Bereich der Wagenmitte `zc` |
-| +68,0 | Oberkante der Antriebsmutter in der höchsten Stellung |
-| +116,0 … +141,0 | Klemmkupplung 5 → 8 mm |
+| −40,1 … +36,5 | Bereich der Wagenmitte `zc` |
+| +64,0 | Oberkante der Antriebsmutter in der höchsten Stellung |
+| +112,0 … +137,0 | Wendelkupplung 5 → 8 mm |
 | +140,0 | Oberkante MGN9-Schiene |
 | +145,0 | Unterseite Motorkonsole = Oberkante Trägerplatte |
 | +153,0 | Motorflansch |
 | +193,0 | Oberkante NEMA 17 |
 
-**Nutzbarer Verfahrweg: 80,6 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
+**Nutzbarer Verfahrweg: 76,6 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
 alle vier aus und nennt die bindende:
 
 | Grenze | zc max |
 |---|---|
-| **Antriebsmutter gegen Kupplung** | **+40,5** ← bindend |
-| Schlittenplatte gegen Kupplung | +96,0 |
+| **Antriebsmutter gegen Kupplung** | **+36,5** ← bindend |
+| Schlittenplatte gegen Kupplung | +92,0 |
 | Laser-Oberkante gegen Motorkonsole | +113,2 |
 | Wagen am oberen Schienenende | +120,1 |
 
 Die Anti-Backlash-Garnitur steht **nach oben** auf dem Regal des
 Mutternwinkels (Flanschmutter + Feder + Gleitmutter, zusammen 45 mm) und ist
-damit das oberste bewegte Teil — sie kostet 55 mm Weg gegenüber der alten
+damit das oberste bewegte Teil — sie kostet rund 60 mm Weg gegenüber der alten
 M6-Lösung. Gebraucht werden für ein 50-mm-Werkstück rund 30 mm, die Grenze
 liegt also weit außerhalb des Nutzbereichs; die 45 mm sind außerdem geschätzt
 und werden am gelieferten Teil nachgemessen.
@@ -170,7 +170,7 @@ vorbei — und prüft die Luft zur Trägerplatte als eigene Größe.
 Trägerplatte, Z-Schiene und Spindel bleiben davon unberührt. Der
 Verfahrweg lag damals bei 50,45 mm; er ist mit Rev. 14 auf 55,1 mm gewachsen
 (Laser tiefer, also nicht mehr die Motorkonsole als Grenze), mit Rev. 16 auf
-136,1 mm (Schiene 200 mm) und liegt mit Rev. 23 bei 80,6 mm (die
+136,1 mm (Schiene 200 mm) und liegt mit Rev. 24 bei 76,6 mm (die
 Anti-Backlash-Garnitur baut nach oben auf).
 
 **Beim Anziehen beachten:** die Z-Wagen-Schrauben klemmen jetzt **12 mm PETG**
@@ -206,8 +206,8 @@ Modul — deshalb sind die vier Laserbefestigungen **senkrechte Langlöcher**,
 **Nach oben nutzbar sind +2,8 mm** — nicht weil der Hub endet, sondern weil die
 obere Schraubenreihe sonst hinter dem Z-Wagen verschwindet und nicht mehr
 verschraubbar ist. Mit 55 mm Verfahrweg (Schiene 95 mm) war das die bindende
-Grenze und ergab `f ≤ 27,1 mm`; mit 80,6 mm Weg reicht das Fenster von
-**f = 11 bis 53 mm**. Du musst *f* also nicht kennen, um die Platte zu drucken;
+Grenze und ergab `f ≤ 27,1 mm`; mit 76,6 mm Weg reicht das Fenster von
+**f = 11 bis 49 mm**. Du musst *f* also nicht kennen, um die Platte zu drucken;
 nur zum Einstellen beim Zusammenbau.
 
 Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
@@ -360,7 +360,7 @@ der ganzen Z-Achse bestimmt.
 Vorher war es eine M6-Gewindestange mit zwei federverspannten Muttern in einem
 gedruckten Block. Jetzt sind **Spindel, Garnitur und Kupplung gekauft**: eine
 Tr8×2-Trapezgewindespindel (200 mm), eine Anti-Backlash-Garnitur
-(Flanschmutter + Feder + Gleitmutter) und eine Klemmkupplung 5 → 8 mm. Die
+(Flanschmutter + Feder + Gleitmutter) und eine Wendelkupplung 5 → 8 mm. Die
 Spielfreiheit kommt damit aus dem Kaufteil; das Druckteil liefert nur noch den
 **Flanschsitz**.
 
@@ -435,16 +435,19 @@ Stützen. Die Prüfung rechnet das nach, statt es zu behaupten.
 Die Garnitur steht **nach oben** auf dem Regal — nach unten ist kein Platz,
 dort sitzt die Schlittenplatte. Mit geschätzt 45 mm Bauhöhe (Flanschmutter 15 +
 Feder vorgespannt + Gleitmutter 15) ist ihre Oberkante das oberste bewegte
-Teil und bindet den Verfahrweg: **80,6 mm statt 136,1 mm**. Gebraucht werden
+Teil und bindet den Verfahrweg: **76,6 mm statt 136,1 mm**. Gebraucht werden
 für 0–50 mm Werkstückdicke rund 30 mm, die Reserve ist also weiterhin groß.
 
 Die 45 mm sind der einzige Wert, der am gelieferten Teil nachzumessen ist
 (`t8_garnitur_h`); er geht in keine Geometrie ein, sondern nur in diese Grenze.
 
-**Spindellänge:** gebraucht werden 146,6 mm, bestellt sind 200 mm. Ungekürzt
-hängt das untere Ende bis Z = −71 und ist damit — wie Schiene und
-Plattenunterkante — ein festes Hindernis auf seiner Höhe: das dickste Werkstück
-sinkt von 59 auf **54 mm**. Auf ~150 mm gekürzt bleiben es 59 mm.
+**Spindellänge: kürzen ist Pflicht.** Gebraucht werden 137,6 mm, bestellt sind
+200 mm. Ungekürzt hängt das untere Ende bis Z = −80 und ist damit — wie Schiene
+und Plattenunterkante — ein festes Hindernis auf seiner Höhe: das dickste
+Werkstück sinkt von 59 auf **45 mm** und verfehlt die geforderten 50 mm. Der
+Zuschnitt steht als `spindel_zuschnitt` = **150 mm** im Skript (12 mm Reserve
+über dem Bedarf); unteres Ende dann bei Z = −30, also unkritisch. Am unteren
+Ende absägen, entgraten und anfasen, damit die Mutter noch aufläuft.
 
 ### Selbsthemmung und Drehmoment
 
@@ -498,9 +501,9 @@ Punktberührung, Verschleiß, Messingstaub, und nach kurzer Zeit mehr Spiel als
 ohne Lager. Ein Lager braucht eine glatte Lagerstelle; die gibt es nur mit
 einer anderen Spindel (mit Zapfen) plus Lagerblock.
 
-Und es kostet: ein Lagerblock unter der Kupplung müsste zwischen Z = 100 und
-116 sitzen, und die Antriebsmutter muss darunter bleiben — das wären
-**16 mm weniger Verfahrweg** (80,6 → 64,5 mm). Am unteren Spindelende wäre ein
+Und es kostet: ein Lagerblock unter der Kupplung müsste zwischen Z = 96 und
+112 sitzen, und die Antriebsmutter muss darunter bleiben — das wären
+**16 mm weniger Verfahrweg** (76,6 → 60,6 mm). Am unteren Spindelende wäre ein
 Lager billiger zu haben (dort ist Platz), würde aber die Werkstückhöhe weiter
 drücken und die Spindel zwischen zwei Festpunkten einspannen: mit gedruckten
 Teilen ist das überbestimmt, nicht genauer.
@@ -528,14 +531,31 @@ zusammen, das übernehmen sonst die Lager der beiden Wellen:
 Mit Oldham oder Klauenkupplung würde der Schlitten also absinken, sobald sich
 die Naben trennen. Bleiben die einteiligen: starre Hülse oder Wendelkupplung.
 
-**Und für einen Laser ist der Unterschied zwischen diesen beiden klein.**
-Z stellt nur den Fokus und steht während der Gravur still — Z-Wobble,
-Rundlauffehler und alles, weswegen ein 3D-Drucker eine Ausgleichskupplung
-braucht, wirkt nur, wenn Z *während* des Jobs fährt. Bei uns bewegt sich Z
-zwischen den Durchgängen, und ein Zehntelmillimeter Höhenfehler liegt in der
-Schärfentiefe. Die **starre Klemmhülse aus dem Set reicht**; die
-Wendelkupplung (5 × 8, Ø19 × 25, Klemmausführung) ist eine Verbesserung für
-ein paar Euro, kein Muss.
+**Für einen Laser ist der Unterschied zwischen diesen beiden klein.** Z stellt
+nur den Fokus und steht während der Gravur still — Z-Wobble, Rundlauffehler
+und alles, weswegen ein 3D-Drucker eine Ausgleichskupplung braucht, wirkt nur,
+wenn Z *während* des Jobs fährt. Bei uns bewegt sich Z zwischen den
+Durchgängen, und ein Zehntelmillimeter Höhenfehler liegt in der Schärfentiefe.
+Beide Bauarten gehen also.
+
+**Verbaut wird die Wendelkupplung** (5 × 8, Ø19 × 25, Klemmausführung) — im
+gelieferten Spindelset war keine starre Hülse dabei. Daraus folgt eine Regel
+für den Zusammenbau:
+
+> **Nur bis zur massiven Nabe einstecken, nicht bis an die Motorwelle.**
+
+In der Mitte der Kupplung sitzt der Wendelschnitt. Stoßen Welle und Spindel
+dort zusammen, ist die Nachgiebigkeit überbrückt — aus der Ausgleichskupplung
+wird eine starre Hülse mit einer Sollbruchstelle in der Mitte. Im Modell
+stehen dafür `kupplung_griff` = 8 mm Klemmlänge je Seite und 9 mm freier
+Wendelbereich dazwischen; die Prüfung wacht darüber. **Die 8 mm sind
+geschätzt** — am gelieferten Teil die Nabenlänge messen und den Parameter
+nachziehen, er verschiebt die Kupplung und damit den Verfahrweg.
+
+Eine Nebenwirkung der Nachgiebigkeit: unter den 5,6 N Z-Last längt sich die
+Kupplung um schätzungsweise ein Zehntelmillimeter `[?]`. Das ist ein
+**konstanter** Versatz (die Last ändert sich nicht) und verschiebt nur den
+Z-Nullpunkt — der Fokus wird ohnehin am Werkstück eingestellt.
 
 Was bei beiden zählt: **Klemmnabe statt Madenschraube.** Eine Madenschraube
 drückt auf eine einzelne Gewindespitze, verformt sie und arbeitet sich los.
@@ -560,9 +580,10 @@ nach den ersten Betriebsstunden nachziehen.
 | Lichtschranke → Halter | 2 × M2×6 + 2 × Heat Insert M2 (Ø3,2 × 2,5) | Ø2,8 × 3 mm Sackloch in der 4-mm-Wand, dahinter Ø2,4 frei |
 
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
-Welle 5 mm) · **Tr8×2-Trapezgewindespindel 200 mm** (146,6 mm werden gebraucht)
-· **Anti-Backlash-Garnitur Tr8×2** (Flanschmutter Ø22 + Feder + Gleitmutter)
-· **Klemmkupplung 5→8 mm**, 25 mm lang.
+Welle 5 mm) · **Tr8×2-Trapezgewindespindel 200 mm, auf 150 mm kürzen**
+(137,6 mm werden gebraucht) · **Anti-Backlash-Garnitur Tr8×2** (Flanschmutter
+Ø22 + Feder + Gleitmutter) · **Wendelkupplung 5→8 mm**, 25 mm lang, mit
+Klemmnaben.
 
 ## Montagereihenfolge und Werkzeugzugang
 
@@ -581,7 +602,7 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 5 | Mutternwinkel bestücken: 4 × Messing-Einsatz M3 ins Regal einschmelzen (**1,4 mm Wand zur Spindelbohrung**), 2 × M3-Mutter in die Sechskanttaschen des Rücken | Lötkolben, Finger | — |
 | 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 164 mm mit dem Z-Schlitten unten, 28 mm mit ihm oben — beides reicht, unten ist es bequemer |
 | 7 | **Mutternwinkel an die Schlittenplatte**, 2 × M3×16 + große Scheibe: locker lassen | Inbus von vorn | frei |
-| 8 | Garnitur auf die Spindel drehen, Flansch aufs Regal (4 × M3×8 von oben), Spindel oben in die Kupplung. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Inbus von oben, neben der Spindel | 128 mm mit dem Schlitten unten |
+| 8 | **Spindel auf 150 mm kürzen**, entgraten, anfasen. Garnitur aufdrehen, Flansch aufs Regal (4 × M3×8 von oben), Spindel oben in die Kupplung — **nur bis zur Nabe**. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Säge, Inbus von oben neben der Spindel | 125 mm mit dem Schlitten unten |
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | 27 mm, mit dem Schlitten ganz unten frei |
 | 10 | Endschalterhalter auf den Sockel (2 × M3×12 in die Einsätze), Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen | Inbus von vorn | frei |
 

@@ -600,6 +600,24 @@ def main():
     p.info('Seitenkraft auf die Fuehrung bei 0,2 Grad Winkelfehler',
            3 * e_stahl * traegheit * drift / l_frei ** 3, 'N')
 
+    # --- Wie fein kann die Achse ueberhaupt stehen? -----------------------
+    # Die Frage "A4988 (max. 1/16) oder TMC (bis 1/256)?" entscheidet sich
+    # hier: der Rotor rueckt erst weiter, wenn das Moment die Reibung
+    # ueberwindet (T = T_halt * sin(elektrischer Winkel), 90 el. Grad = ein
+    # Vollschritt = 1,8 mech. Grad). Unterhalb dieser Totzone ist ein
+    # feinerer Mikroschritt nur eine Zahl im Controller.
+    m_halt = 0.400                                   # NEMA 17 Haltemoment, Nm
+    m_reib = moment(masse_z * 9.81) + moment(2 * feder)
+    winkel_el = math.degrees(math.asin(min(1.0, m_reib / m_halt)))
+    totzone = winkel_el / 90.0 * 1.8 / 360.0 * steigung * 1e6
+    mikroschritt = steigung * 1e6 / 3200.0           # 1/16 bei 200 Schritten
+    p.info('Positions-Totzone aus Reibung + Federvorspannung', totzone, 'um')
+    p.ja('1/16 Mikroschritt ist schon feiner als die Totzone',
+         mikroschritt <= totzone,
+         '   ({:.2f} um Schritt gegen {:.2f} um Totzone — feineres '
+         'Microstepping bringt keine Genauigkeit, nur Laufruhe)'.format(
+             mikroschritt, totzone))
+
     p.titel('8) Schlittenplatte und Laser (Konzept aus ToolheadGrundplatte)')
     p.ok('Platte deckt das Laserlochbild quer',
          w('schlitten_breite_l')

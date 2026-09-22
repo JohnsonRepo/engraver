@@ -193,6 +193,77 @@ wäre es nicht). Betriebsmoment ≈ 70 mNm, davon 64 mNm allein die
 Federvorspannung der Garnitur; eine Klemmnabe auf Ø8 trägt ein Mehrfaches,
 auch auf Gewindespitzen. Rechnung in `tools/toolhead_check.py`, Abschnitt 7.
 
+## Schrittmotortreiber: A4988 oder TMC? `[w]`
+
+**Empfehlung: TMC2209 — aber nicht wegen des Microsteppings.** Das ist der
+verbreitete Denkfehler, und die Zahlen dieser Achse zeigen warum.
+
+### Warum die Auflösung kein Argument ist
+
+| | 1/16 (A4988-Maximum) | 1/256 (TMC) |
+|---|---|---|
+| Z, Tr8×2 | 1600 Schritte/mm → **0,63 µm** | 25 600/mm → 0,04 µm |
+| X/Y, GT2-20T (40 mm/U, angenommen) | 80 Schritte/mm → **12,5 µm** | 1280/mm → 0,8 µm |
+
+Zwei Gründe, warum das untere Ende dieser Tabelle nichts bringt:
+
+1. **Reibungstotzone.** Der Rotor rückt erst weiter, wenn das Moment die
+   Reibung überwindet: `T = T_halt · sin(el. Winkel)`, 90 el. Grad = ein
+   Vollschritt = 1,8 mech. Grad. Bei 70 mNm Reibung (davon 64 mNm allein die
+   Federvorspannung der Anti-Backlash-Garnitur) gegen 400 mNm Haltemoment sind
+   das 0,20 mech. Grad, also **1,1 µm Totzone** in Z. Ein 1/16-Mikroschritt ist
+   mit 0,63 µm schon feiner als das, was die Achse überhaupt auflösen kann.
+   `toolhead_check.py` Abschnitt 7 rechnet beide Werte mit.
+2. **Schrittrate.** 1/256 extern ist bei Gravurgeschwindigkeit nicht
+   übertragbar: 300 mm/s auf X wären bei 1/16 schon 24 kHz Schrittrate (nahe
+   am Limit eines 8-Bit-GRBL), bei 1/256 rechnerisch 384 kHz. Deshalb
+   **interpoliert** der TMC intern (MicroPlyer): man füttert ihn mit 1/16 und
+   bekommt die Laufruhe von 1/256, ohne Schrittrate zu bezahlen. Das ist der
+   eigentliche Nutzen — Laufruhe, nicht Genauigkeit.
+
+### Was der TMC wirklich bringt
+
+* **Leise.** StealthChop2 arbeitet oberhalb des Hörbereichs. Bei
+  Gravurjobs über Stunden ist das der praktisch größte Unterschied.
+* **Kühler und sauberer geregelt.** Weniger Stromwelligkeit heißt weniger
+  Motorerwärmung und weniger Resonanz — Resonanz zeigt sich in der Gravur als
+  Streifen.
+* **Strom per UART setzen** (TMC2209) statt Vref-Poti abgleichen; dazu
+  Diagnose (Übertemperatur, Leitungsbruch) und CoolStep.
+* StallGuard4 könnte sensorlos referenzieren — brauchen wir nicht, die
+  Z-Achse hat die Gabellichtschranke.
+
+Dagegen der A4988: **billiger** (~1,50 € gegen 4–6 €), robust, nichts zu
+konfigurieren, und er verträgt bis 35 V. Für 3 Achsen ist der Aufpreis rund
+15 € — gegenüber Spindel plus Garnitur belanglos.
+
+| | A4988 | TMC2209 |
+|---|---|---|
+| Versorgung | 8–35 V | ~5–28 V (abs. max 29) |
+| Strom | bis 2 A/Phase (IC), ohne Kühlung real ~1 A | bis 2 A RMS (IC), Modul je nach Kühlkörper ~1,2–1,4 A |
+| Microstepping | max. 1/16 | 8/16/32/64 extern, intern auf 1/256 interpoliert |
+| Konfiguration | Jumper + Vref-Poti | Jumper oder UART |
+
+Bei 24 V passen beide. Über 29 V fällt der TMC2209 aus (dann TMC2130/5160
+oder DRV8825). Nur wenn die Motoren 2-A-Typen sind, wird es am 2209-Modul eng.
+
+### Fallstricke, falls es TMC wird
+
+* **Nicht mitten in der Bewegung zwischen StealthChop und SpreadCycle
+  umschalten** (`TPWMTHRS`): der Sprung ist beim Laser als Linie sichtbar. Für
+  X/Y einen Modus über den ganzen Geschwindigkeitsbereich wählen — SpreadCycle,
+  wenn schnell gefahren wird. Für Z ist StealthChop unkritisch, die Achse
+  fährt nur zwischen den Jobs.
+* **Drehrichtung.** In einem A4988-Sockel läuft ein TMC-Modul
+  spiegelbildlich (DIR-Logik), also Stecker drehen oder in der Firmware
+  invertieren.
+* Standalone-Betrieb kann StealthChop bei hoher Beschleunigung Schritte
+  verlieren — mit UART ist das einstellbar, ohne nicht.
+
+Offen: **welches Board** die Maschine bekommt. Nur mit UART-Anbindung
+(SKR/Octopus, FluidNC am ESP32 o. ä.) sind Strom und Chopper einstellbar; auf
+einem klassischen Uno-CNC-Shield bleibt es beim Standalone-Modus mit Jumpern.
+
 ## Normteile (aus hardware.md, `[w]`)
 
 | Gewinde | Durchgang | Kopf-Ø | Kopfhöhe |

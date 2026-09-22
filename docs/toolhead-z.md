@@ -469,7 +469,9 @@ rutscht sie dann, ist das eher Schutz als Fehler.
 Wichtig ist eine **Klemmnabe statt reiner Madenschraube**. Eine Klauenkupplung
 würde statt dessen Verdrehspiel mitbringen und wäre hier der falsche Tausch:
 die flachen Trapezspitzen sind eine gute Klemmfläche, das Problem, das sie
-lösen soll, gibt es nicht.
+lösen soll, gibt es nicht. Dazu kommt ein härterer Grund — sie kann den
+hängenden Schlitten nicht halten, siehe
+[Braucht die Spindel oben ein Lager?](#braucht-die-spindel-oben-ein-lager).
 
 Auflösung: 2 mm Vorschub je Umdrehung, bei 1/16-Schritt **0,63 µm** je
 Mikroschritt. Gegenüber M6 (1 mm) ist der Vorschub doppelt so grob und die
@@ -510,18 +512,38 @@ Motorachse und Führung auf — einen *Winkelfehler* nicht: der schiebt die Mutt
 dem MGN9H ab. Für die Führung ist das harmlos, es kostet nur Reibung und
 überträgt Rundlauffehler nach unten.
 
-* **Starre Klemmhülse** (liegt T8-Sets meist bei): funktioniert, überträgt
-  diesen Fehler aber voll — das ist genau die Ursache des berüchtigten
-  Z-Wobbles am Ender 3.
-* **Flexible Klemmkupplung mit Helix-Schnitt**: nimmt Winkel und Versatz auf,
-  hat *kein* Verdrehspiel und kostet ein paar Euro. Die bessere Wahl.
-* **Klauenkupplung mit Elastomer**: nimmt den Fehler auch auf, bringt aber
-  Verdrehspiel mit — für eine Positionierachse der falsche Tausch.
+**Aber: die Kupplung trägt hier die Z-Last axial.** Weil es kein oberes Lager
+gibt, hängt der Schlitten (5,6 N) über die Spindel an der Kupplung. Das ist
+das *erste* Auswahlkriterium und es schließt zwei der üblichen
+Ausgleichskupplungen aus — sie halten ihre beiden Naben gar nicht axial
+zusammen, das übernehmen sonst die Lager der beiden Wellen:
 
-Für einen Diodenlaser ist die Auswirkung ohnehin gering: ein Zehntelmillimeter
-Höhenfehler liegt innerhalb der Schärfentiefe. Wichtig bleibt nur die
-**Klemmnabe statt Madenschraube** — und die Gewindespitzen sind dafür sogar
-günstig, sie sichern die Klemmung zusätzlich gegen axiales Rutschen.
+| Kupplung | Zug axial | Ausgleich | Verdrehspiel |
+|---|---|---|---|
+| **starre Klemmhülse** (liegt T8-Sets bei) | ✔ voll | keiner | keins |
+| **Wendelkupplung** (Helix, einteilig) | ✔ aber federnd (≈ 0,1 mm) | Winkel + Versatz | keins |
+| Oldham | ✘ **Naben nur aufgesteckt** | Parallelversatz | gering |
+| Klauenkupplung mit Elastomer | ✘ **Klauen nicht axial verbunden** | Winkel + Versatz | ja |
+
+Mit Oldham oder Klauenkupplung würde der Schlitten also absinken, sobald sich
+die Naben trennen. Bleiben die einteiligen: starre Hülse oder Wendelkupplung.
+
+**Und für einen Laser ist der Unterschied zwischen diesen beiden klein.**
+Z stellt nur den Fokus und steht während der Gravur still — Z-Wobble,
+Rundlauffehler und alles, weswegen ein 3D-Drucker eine Ausgleichskupplung
+braucht, wirkt nur, wenn Z *während* des Jobs fährt. Bei uns bewegt sich Z
+zwischen den Durchgängen, und ein Zehntelmillimeter Höhenfehler liegt in der
+Schärfentiefe. Die **starre Klemmhülse aus dem Set reicht**; die
+Wendelkupplung (5 × 8, Ø19 × 25, Klemmausführung) ist eine Verbesserung für
+ein paar Euro, kein Muss.
+
+Was bei beiden zählt: **Klemmnabe statt Madenschraube.** Eine Madenschraube
+drückt auf eine einzelne Gewindespitze, verformt sie und arbeitet sich los.
+Eine Klemmnabe greift über die Klemmlänge auf rund sechs Gewindegänge — bei
+Tr8×2 sind die Spitzen etwa 0,7 mm breit abgeflacht, das sind über 12 mm
+Klemmlänge rund 100 mm² Anlagefläche, und der Formschluss der Spitzen sichert
+zusätzlich gegen axiales Rutschen. Weil die Klemmung die ganze Z-Last hält:
+nach den ersten Betriebsstunden nachziehen.
 
 ## Verschraubung
 

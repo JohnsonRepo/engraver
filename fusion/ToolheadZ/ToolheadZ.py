@@ -1436,6 +1436,10 @@ def hinweise_bauen(L, zc, fehler):
         '  Schlitten und Spindel zusammen (5,6 N gegen typ. 10 N) und die',
         '  kritische Biegedrehzahl liegt bei 50000 1/min gegen 300 im',
         '  Betrieb. Ein Gleitlager kaeme ohnehin nur auf die Gewindespitzen.',
+        '  Damit traegt die KUPPLUNG die Z-Last axial: nur einteilige nehmen',
+        '  (starre Klemmhuelse oder Wendelkupplung). Oldham- und Klauen-',
+        '  kupplungen halten ihre Naben nicht axial zusammen — der Schlitten',
+        '  wuerde absinken. Klemmnabe statt Madenschraube, nachziehen.',
         '  GEWINDE IM DRUCKTEIL: die Flanschloecher sind Durchgangsloecher,',
         '  also 4x M3-Messingeinsatz Ø{:.1f} x {:.0f} von oben ins Regal.'.format(
             w('insert_m3_d'), w('insert_m3_t')),

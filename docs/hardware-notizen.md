@@ -177,6 +177,15 @@ Mutternwinkels ist deshalb 10 mm dick.
 Im Skript steckt das als `spindel_d` 8,0 · `spindel_durchgang` 8,6 ·
 `t8_flansch_d` 22 · `t8_lochkreis` 16 · `t8_garnitur_h` 45.
 
+**Zur Kupplung:** weil es kein oberes Spindellager gibt, hängt der Z-Schlitten
+(5,6 N) axial an der Kupplung. Damit sind **Oldham- und Klauenkupplungen
+ausgeschlossen** — ihre Naben sind nicht axial verbunden, sie setzen Wellen
+voraus, die jede für sich gelagert sind. Bleiben die einteiligen: die starre
+Klemmhülse aus dem Set (ausreichend, Z steht während der Gravur still) oder
+eine Wendelkupplung 5 × 8, Ø19 × 25 in Klemmausführung. In beiden Fällen
+Klemmnabe, keine Madenschraube — Begründung und Zahlen in
+`toolhead-z.md`.
+
 **Am gelieferten Teil zu prüfen (drei Dinge):**
 
 1. **Einbauhöhe der Garnitur in Z** (`t8_garnitur_h`, angenommen 45 mm =

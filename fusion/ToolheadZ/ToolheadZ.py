@@ -1,6 +1,6 @@
 # ToolheadZ.py — kompletter Laser-Toolhead mit NEMA17-Z-Achse
 #
-# Baugruppe (vier gedruckte Teile), weil sich Teile relativ zueinander bewegen:
+# Baugruppe (fuenf gedruckte Teile), weil sich Teile relativ zueinander bewegen:
 #   Traegerplatte   — geerdet, sitzt auf dem MGN15H-Wagen der Portalfuehrung,
 #                     traegt die MGN9-Z-Schiene (Sockel) und die Motorkonsole
 #   Motorhalter     — U-Konsole oben, traegt den NEMA 17 (Welle nach unten)
@@ -8,6 +8,8 @@
 #   Mutternwinkel   — Winkel fuer die Tr8x2-Anti-Backlash-Garnitur: Regal
 #                     ueber der Plattenoberkante, Ruecken schwimmend an der
 #                     Schlittenplatte verschraubt
+#   Flanschring     — Scheibe zwischen Flanschmutter und Regal, haelt den
+#                     Zentrierbund des Flansches frei
 #
 # Koordinatensystem = Maschinenkoordinaten, global fuer alle Komponenten:
 #   X = quer, laengs des Portals          Y = nach vorn, weg vom Portal
@@ -24,7 +26,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 24
+REVISION = 25
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -96,6 +98,15 @@ MASSE = {
     # geschaetzt [?] — am gelieferten Teil messen, der Wert allein bestimmt
     # die obere Verfahrgrenze (siehe zc_grenzen).
     't8_garnitur_h':       (45.0,  'Tr8x2 Garnitur: Bauhoehe ueber dem Regal'),
+    # Der Flansch hat unten einen Zentrierbund. Ø10 ist am Teil gemessen [v],
+    # die Hoehe noch nicht [?] — sie bestimmt nur die Dicke des Flanschrings.
+    # Warum ein eigener Ring und keine Freibohrung im Regal: eine Ø10,4-
+    # Freibohrung laesst zur Einsatzbohrung (Ø4,6 auf Lochkreis 16) nur
+    # 0,50 mm Wand. Der Ring braucht dort nur Ø3,4 Durchgang und hat 1,10 mm.
+    't8_bund_d':           (10.0,  'Tr8x2 Flanschmutter: Zentrierbund Ø'),
+    't8_bund_h':            (3.0,  'Tr8x2 Flanschmutter: Zentrierbund Hoehe'),
+    't8_flansch_dicke':     (4.0,  'Tr8x2 Flanschmutter: Dicke des Flansches'),
+    'ring_luft':            (0.3,  'Flanschring: Luft unter dem Zentrierbund'),
     # Erzeugen keine Geometrie, nur Bericht und Pruefung: die bestellte Laenge
     # und die Laenge, auf die sie gekuerzt wird. Kuerzen ist nicht optional —
     # ungekuerzt haengt das untere Ende tiefer als die Plattenunterkante und
@@ -363,9 +374,14 @@ def lage():
     # Das Regal traegt den runden Flansch, also genau dessen Durchmesser tief.
     L['regal_y0'] = w('spindel_y') - w('t8_flansch_d') / 2.0
     L['regal_y1'] = w('spindel_y') + w('t8_flansch_d') / 2.0
+    # Zwischen Regal und Flansch liegt der Flanschring: er haelt den
+    # Zentrierbund frei, ohne dass ins Regal eine Freibohrung muss.
+    L['ring_dicke'] = w('t8_bund_h') + w('ring_luft')
+    L['ring_bohrung'] = w('t8_bund_d') + w('spiel_locker')
+    L['ring_z1_rel'] = L['regal_z1_rel'] + L['ring_dicke']
     # Garnitur: Flanschmutter, Feder und Gleitmutter stehen NACH OBEN auf dem
-    # Regal. Nach unten waere kein Platz — dort sitzt die Schlittenplatte.
-    L['garnitur_z1_rel'] = L['regal_z1_rel'] + w('t8_garnitur_h')
+    # Ring. Nach unten waere kein Platz — dort sitzt die Schlittenplatte.
+    L['garnitur_z1_rel'] = L['ring_z1_rel'] + w('t8_garnitur_h')
     # Lochkreis um 45 Grad gedreht: so bleibt der Flanschsitz in Y schlank
     # (Loecher bei +-lochkreis/(2*sqrt2) statt +-lochkreis/2). Der runde
     # Flansch laesst sich beliebig drehen, die Lage ist also frei waehlbar.
@@ -463,6 +479,14 @@ def lage():
     # Parameteraenderung stillschweigend nicht mehr.
     L['z_wagen_schraube'] = 2.0 * int((w('pad_hoehe') + 1.5) / 2.0 + 0.999)
     L['z_wagen_eingriff'] = L['z_wagen_schraube'] - w('pad_hoehe')
+
+    # ---- Schraubenlaenge Flansch -> Regal (durch den Ring) ------------------
+    # Flansch + Ring ueberbrueckt die Schraube, dann greift sie in den Einsatz.
+    # Mindestens 4 mm Gewindeeingriff, aufgerundet auf die naechste gerade
+    # Laenge; der Einsatz sitzt in einem {insert_m3_t} tiefen Sackloch, eine
+    # etwas zu lange Schraube setzt also nicht auf.
+    L['flansch_klemm'] = w('t8_flansch_dicke') + L['ring_dicke']
+    L['flansch_schraube'] = 2.0 * int((L['flansch_klemm'] + 4.0) / 2.0 + 0.999)
 
     # ---- Schraubenlaenge Mutternwinkel -> Schlittenplatte -------------------
     # Geklemmt werden Platte + Ruecken bis zur Mutter, die in der Tasche
@@ -1330,6 +1354,47 @@ def bau_mutternwinkel(app, design, comp, L, zc, fehler):
     return koerper
 
 
+def bau_flanschring(app, design, comp, L, zc, fehler):
+    """Scheibe zwischen Flanschmutter und Regal, die den Zentrierbund des
+    Flansches freihaelt.
+
+    Warum ein eigenes Teil und keine Freibohrung im Regal: der Bund hat Ø10,
+    der Lochkreis nur Ø16. Eine Ø10,4-Freibohrung neben den
+    Einsatzbohrungen (Ø4,6) liesse dort 0,50 mm Wand stehen — beim
+    Einschmelzen verdraengt der Einsatz das bisschen Material in die
+    Freibohrung, und der Bund sitzt nicht mehr. Der Ring braucht an derselben
+    Stelle nur einen Ø3,4-Durchgang und hat 1,10 mm Wand.
+
+    Nebenbei bleibt das Regal genau so, wie es geprueft ist.
+
+    Drucklage: flach aufs Bett, 3,3 mm hoch — ein Teil fuer fuenf Minuten.
+    Eine Scheibe aus Stahl oder Messing tut es genauso, sie braucht nur die
+    vier Durchgangsloecher auf dem Lochkreis."""
+    e_ring = ebene_z(comp, zc + L['regal_z1_rel'] + L['ring_dicke'] / 2.0,
+                     'E_Flanschring_mitte')
+    sx, sy = w('spindel_x'), w('spindel_y')
+
+    # Aussenkreis, Bundfreibohrung und die vier Durchgaenge in EINER Skizze:
+    # das flaechengroesste Profil ist dann bereits der fertige Ring.
+    sk = skizze(comp, e_ring, 'Sk_Flanschring')
+    kreis(sk, sx, sy, w('t8_flansch_d'))
+    kreis(sk, sx, sy, L['ring_bohrung'])
+    for x, y in L['t8_loecher']:
+        kreis(sk, x, y, w('m3_durchgang'))
+    koerper = neu_mittig(comp, groesstes_profil(sk),
+                         L['ring_dicke']).bodies.item(0)
+    koerper.name = 'Flanschring'
+
+    fussfase(comp, koerper, 'y', zc + L['regal_z1_rel'], w('fase_fuss'),
+             fehler, 'Flanschring')
+    r = w('t8_flansch_d') / 2.0
+    bbox_pruefen(koerper, 'Flanschring',
+                 ((sx - r, sx + r), (sy - r, sy + r),
+                  (zc + L['regal_z1_rel'], zc + L['ring_z1_rel'])), fehler)
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
+    return koerper
+
+
 def bau_bohrlehren(app, design, comp, L, zc, fehler):
     """Duenne Lehrenplatten mit den kritischen Lochbildern — auflegen,
     anzeichnen, pruefen. Nach dem Lauf ausgeblendet (Konvention SKILL.md).
@@ -1465,6 +1530,15 @@ def hinweise_bauen(L, zc, fehler):
         '  GEWINDE IM DRUCKTEIL: die Flanschloecher sind Durchgangsloecher,',
         '  also 4x M3-Messingeinsatz Ø{:.1f} x {:.0f} von oben ins Regal.'.format(
             w('insert_m3_d'), w('insert_m3_t')),
+        '  FLANSCHRING: der Flansch hat unten einen Zentrierbund Ø{:.0f}, der'.format(
+            w('t8_bund_d')),
+        '  nicht in die Ø{:.1f}-Bohrung passt. Eine Freibohrung ins Regal'.format(
+            w('spindel_durchgang')),
+        '  ginge nicht — neben der Einsatzbohrung blieben 0,50 mm Wand.',
+        '  Also ein {:.1f} mm dicker Ring dazwischen: dort genuegt Ø{:.1f}'.format(
+            L['ring_dicke'], w('m3_durchgang')),
+        '  Durchgang und es bleiben 1,10 mm. Eine gebohrte Stahlscheibe',
+        '  derselben Dicke tut es genauso.',
         '  Der Lochkreis ist um 45 Grad gedreht, damit das Regal in Y',
         '  schlank bleibt; der runde Flansch laesst sich beliebig drehen.',
         '  Die beiden M3-Muttern der schwimmenden Verschraubung sitzen in',
@@ -1491,12 +1565,15 @@ def hinweise_bauen(L, zc, fehler):
         '     2x M3-Mutter in die Taschen des Ruecken',
         '  6. Motor zwischen die Fuehrungsrippen, 4x M3x12 von unten —',
         '     mit dem Z-Schlitten unten bequemer (164 statt 28 mm Platz)',
-        '  7. Spindel auf {:.0f} mm kuerzen, entgraten, anfasen. Mutternwinkel'.format(
+        '  7. Flanschring drucken/auflegen, Spindel auf {:.0f} mm kuerzen,'.format(
             w('spindel_zuschnitt')),
-        '     an die Lasche (2x M3x{:.0f} + grosse Scheibe von'.format(
+        '     entgraten, anfasen.',
+        '     Mutternwinkel an die Lasche (2x M3x{:.0f} + grosse Scheibe von'.format(
             L['winkel_schraube']),
         '     vorn). Garnitur auf die Spindel drehen, Flansch aufs Regal',
-        '     (4x M3x8 von oben), dann die Spindel oben in die Kupplung —',
+        '     (Ring unterlegen, 4x M3x{:.0f} von oben), dann die Spindel'.format(
+            L['flansch_schraube']),
+        '     oben in die Kupplung —',
         '     nur bis zur Nabe, nicht bis an die Motorwelle.',
         '     Alles lose lassen, mehrmals durchfahren, DANN festziehen',
         '  8. Laser ZULETZT, 4x M3x10 + Scheibe von hinten, Z-Schlitten',
@@ -1602,6 +1679,8 @@ def hinweise_bauen(L, zc, fehler):
         '  Mutternwinkel ... Regaloberseite (Flanschsitz) aufs Bett. Der',
         '                    Ruecken haengt darunter, Spindel- und Einsatz-',
         '                    bohrungen werden rund, keine Stuetzen.',
+        '  Flanschring .... flach aufs Bett, {:.1f} mm hoch'.format(
+            L['ring_dicke']),
         '  4 Wandlinien, >=40% Infill. PETG wegen der Abwaerme des Lasers.',
         '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
@@ -1645,8 +1724,8 @@ def run(context):
         # stehen sie bereits richtig zueinander und As-Built-Joints genuegen.
         einheit = adsk.core.Matrix3D.create()
         occ = {}
-        for name in ('Traegerplatte', 'Schlittenplatte',
-                     'Mutternwinkel', 'Endschalterhalter', 'Bohrlehren'):
+        for name in ('Traegerplatte', 'Schlittenplatte', 'Mutternwinkel',
+                     'Flanschring', 'Endschalterhalter', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -1656,6 +1735,8 @@ def run(context):
                             L, zc, fehler)
         bau_mutternwinkel(app, design, occ['Mutternwinkel'].component,
                           L, zc, fehler)
+        bau_flanschring(app, design, occ['Flanschring'].component, L, zc,
+                        fehler)
         bau_endschalterhalter(app, design,
                               occ['Endschalterhalter'].component, L, fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, zc, fehler)
@@ -1665,7 +1746,8 @@ def run(context):
         occ['Bohrlehren'].isGrounded = True
 
         # Starrer As-Built-Joint fuer die feste Verschraubung ...
-        for a, b in (('Mutternwinkel', 'Schlittenplatte'),):
+        for a, b in (('Mutternwinkel', 'Schlittenplatte'),
+                     ('Flanschring', 'Mutternwinkel')):
             try:
                 ein = root.asBuiltJoints.createInput(occ[a], occ[b], None)
                 ein.setAsRigidJointMotion()

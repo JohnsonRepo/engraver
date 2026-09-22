@@ -164,6 +164,8 @@ der Angebote — noch nicht am Teil gemessen:
 | Spindel | Tr8×2, 1-gängig, Steigung = Vorschub 2 mm, 200 mm lang | `[w]` |
 | Ende | kein angedrehter Zapfen — Ø8 ist der Gewindeaußendurchmesser | `[w]` |
 | Flanschmutter: Flansch | **Ø22 mm**, Bauhöhe **15 mm** | `[w]` |
+| Flanschmutter: Zentrierbund unten | **Ø10 mm** | `[v]` am Teil gemessen |
+| Flanschmutter: Bundhöhe | 3 mm angenommen | `[?]` |
 | Flanschmutter: Lochkreis | **Ø16 mm**, **4 × Ø3,5 durchgehend** (kein Gewinde!) | `[w]` |
 | Gleitmutter (zweite Hälfte) | **Ø14 × 15 mm**, mit Mitnehmernut | `[w]` |
 | Druckfeder | **Ø12 × 50 mm** freie Länge | `[w]` |
@@ -190,12 +192,21 @@ konstant). Klemmnabe, keine Madenschraube, und **nur bis zur Nabe einstecken**
 
 1. **Einbauhöhe der Garnitur in Z** (`t8_garnitur_h`, angenommen 45 mm =
    Flanschmutter 15 + Feder vorgespannt + Gleitmutter 15). Sie bindet den
-   Verfahrweg nach oben (jetzt 76,6 mm) und sonst nichts.
-2. **Flanschfläche plan?** Ein Zentrierbund auf der Unterseite bräuchte eine
-   Freibohrung im Regal — im Entwurf ist keiner vorgesehen.
+   Verfahrweg nach oben (jetzt 73,3 mm) und sonst nichts.
+2. ~~Flanschfläche plan?~~ **Erledigt**: der Bund ist da, Ø10 `[v]` — dafür
+   gibt es jetzt den Flanschring.
 3. **Nabenlänge der Wendelkupplung** (`kupplung_griff`, angenommen 8 mm). Nur
    so tief einstecken, sonst wird der Wendelbereich überbrückt. Der Wert
    verschiebt die Kupplung in Z und damit den Verfahrweg.
+4. **Höhe des Zentrierbunds** am Flansch (`t8_bund_h`, angenommen 3 mm) und
+   **Dicke des Flansches** (`t8_flansch_dicke`, angenommen 4 mm). Die erste
+   bestimmt die Dicke des Flanschrings, die zweite zusammen mit ihr die
+   Schraubenlänge (jetzt M3×12).
+
+Der Bund Ø10 ist der Grund für den **Flanschring**: eine Freibohrung dafür
+direkt im Regal ließe neben der Einsatzbohrung nur 0,50 mm Wand stehen, im
+Ring sind es 1,10 mm (dort genügt ein Ø3,4-Durchgang). Rechnung in
+`toolhead-z.md`.
 
 Und eine Entscheidung, die daraus schon feststeht: **die Spindel wird
 gekürzt**, auf `spindel_zuschnitt` = 150 mm (gebraucht 137,6 mm). Ungekürzt

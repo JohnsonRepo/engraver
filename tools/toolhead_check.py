@@ -401,13 +401,15 @@ def main():
         eigen + winkel_eigen)
     zugang('Mutternwinkel -> Platte (von vorn, zuletzt)', d, wer)
 
-    # 5b) Garnitur aufs Regal: von OBEN. Darueber steht irgendwann die
-    #     Kupplung im Weg, der Schlitten wird dafuer heruntergefahren.
+    # 5b) Garnitur aufs Regal: von OBEN, durch den Flanschring hindurch.
+    #     Darueber steht irgendwann die Kupplung im Weg, der Schlitten wird
+    #     dafuer heruntergefahren.
     alle_namen = tuple(kasten) + tuple(q.name for q in bewegte)
     d, wer, zc_g = beste_stellung(
-        [(x, y, L['regal_z1_rel']) for x, y in L['t8_loecher']], 'z', +1,
+        [(x, y, L['ring_z1_rel']) for x, y in L['t8_loecher']], 'z', +1,
         alle_namen,
-        winkel_eigen + ('Antriebsmutter Tr8x2', 'Tr8x2-Spindel'))
+        winkel_eigen + ('Flanschring', 'Antriebsmutter Tr8x2',
+                        'Tr8x2-Spindel'))
     zugang('Garnitur -> Regal (4x M3 von oben, Schlitten bei zc={:+.1f})'
            .format(zc_g), d, wer)
 
@@ -459,6 +461,36 @@ def main():
          w('t8_flansch_d') / 2 - (r_lk + r_ein), 0.5)
     p.ok('Spindel laeuft frei durchs Regal',
          w('spindel_durchgang') - w('spindel_d'), 0.4)
+
+    # --- Flanschring: haelt den Zentrierbund des Flansches frei ------------
+    # Der Bund (Ø10, am Teil gemessen) passt nicht in die Ø8,6-Bohrung des
+    # Regals. Eine Freibohrung ins Regal geht nicht: neben der Einsatzbohrung
+    # bliebe zu wenig Wand. Deshalb ein Ring dazwischen, der an derselben
+    # Stelle nur einen Ø3,4-Durchgang braucht.
+    wand_regal = (r_lk - r_ein) - (w('t8_bund_d') + w('spiel_locker')) / 2
+    p.ja('Bundfreibohrung direkt im Regal waere zu duenn — daher der Ring',
+         wand_regal < 1.0,
+         '   (dort nur {:.2f} mm Wand zur Einsatzbohrung, im Ring {:.2f} mm)'
+         .format(wand_regal,
+                 (r_lk - w('m3_durchgang') / 2) - L['ring_bohrung'] / 2))
+    p.info('Flanschring: Dicke', L['ring_dicke'])
+    p.ok('Ring dicker als der Zentrierbund (Bund haengt frei)',
+         L['ring_dicke'] - w('t8_bund_h'), 0.2)
+    p.ok('Bundfreibohrung laesst den Bund durch',
+         L['ring_bohrung'] - w('t8_bund_d'), 0.2)
+    p.ok('Wand Durchgang -> Bundfreibohrung im Ring',
+         (r_lk - w('m3_durchgang') / 2) - L['ring_bohrung'] / 2, 1.0)
+    p.ok('Wand Durchgang -> Ringaussenkante',
+         w('t8_flansch_d') / 2 - (r_lk + w('m3_durchgang') / 2), 1.0)
+    p.ok('Ring traegt den Flansch auf voller Breite',
+         w('t8_flansch_d') - (L['ring_bohrung'] + 2 * 1.0), 0.0)
+    p.info('Flansch + Ring bis zum Einsatz', L['flansch_klemm'])
+    p.ok('Schraube M3x{:.0f} greift in den Einsatz'.format(
+             L['flansch_schraube']),
+         L['flansch_schraube'] - L['flansch_klemm'], 4.0)
+    p.ok('Schraube setzt im Sackloch nicht auf',
+         w('insert_m3_t') - (L['flansch_schraube'] - L['flansch_klemm']),
+         0.5)
 
     # --- Ruecken: schwimmende Verschraubung an der Lasche -----------------
     p.info('Ruecken: Dicke', w('winkel_ruecken'))
@@ -790,6 +822,7 @@ def main():
              L['schlitten_oben_rel'] - L['schlitten_unten_rel']),
             ('Mutternwinkel', w('winkel_x_rechts') - w('winkel_x_links'),
              L['regal_z1_rel'] - L['winkel_unten_rel']),
+            ('Flanschring', w('t8_flansch_d'), L['ring_dicke']),
             ('Endschalterhalter', w('ls_sockel_x1') - L['ls_wand_x0'],
              L['ls_sockel_z1'] - L['ls_sockel_z0'])):
         p.ok('{}: groesste Kante'.format(name), max(a, b), 250.0, '<=')
@@ -809,7 +842,8 @@ def main():
                 w('kupplung_l')),
             'Anti-Backlash-Garnitur Tr8x2 (Flanschmutter Ø{:.0f} + Feder + '
             'Gleitmutter)'.format(w('t8_flansch_d')),
-            '4x M3x8 + 4x Messing-Einsatz M3 Ø5 (Garnitur -> Regal)',
+            '4x M3x{:.0f} + 4x Messing-Einsatz M3 Ø5 (Garnitur -> Regal, '
+            'durch den Flanschring)'.format(L['flansch_schraube']),
             '4x M3x12 Zylinderkopf + Scheibe (Traegerplatte -> X-Wagen)',
             '{}x M3x10 Senkkopf DIN 7991 + {}x Messing-Einsatz M3 Ø5 '
             '(Z-Schiene -> Sockel)'

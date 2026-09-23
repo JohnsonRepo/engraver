@@ -1482,8 +1482,11 @@ def hinweise_bauen(L, zc, fehler):
             w('t8_flansch_d'), w('spindel_y')),
         '  und wuerde hinter der Platte (Y={:.0f}) nicht durchgehen.'.format(
             L['schlitten_y1']),
-        '  Die Garnitur steht NACH OBEN: nach unten ist kein Platz. Sie',
-        '  begrenzt damit den Verfahrweg nach oben (Bauhoehe {:.0f} mm [?]).'.format(
+        '  Die Garnitur steht NACH OBEN, Feder und Gleitmutter zum Motor:',
+        '  nach unten ist kein Platz, und so traegt die Flanschmutter das',
+        '  Gewicht direkt — die Feder liegt nie im Lastpfad, sie nimmt nur',
+        '  das Spiel heraus. Die Gleitmutter begrenzt damit den Verfahrweg',
+        '  nach oben (Bauhoehe der Garnitur {:.0f} mm [?]).'.format(
             w('t8_garnitur_h')),
         '  OBEN KEIN LAGER: die Spindel haengt am Motorlager, das traegt',
         '  Schlitten und Spindel zusammen (5,6 N gegen typ. 10 N) und die',

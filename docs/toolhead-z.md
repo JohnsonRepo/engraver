@@ -506,8 +506,26 @@ Stützen. Die Prüfung rechnet das nach, statt es zu behaupten.
 
 ### Was die Garnitur an Verfahrweg kostet
 
-Die Garnitur steht **nach oben** auf dem Regal — nach unten ist kein Platz,
-dort sitzt die Schlittenplatte. Mit geschätzt 45 mm Bauhöhe (Flanschmutter 15 +
+Die Garnitur steht **nach oben** auf dem Regal, Feder und Gleitmutter zeigen
+zum Motor. Dafür gibt es zwei Gründe:
+
+1. **Platz:** nach unten ist keiner, dort sitzt die Schlittenplatte.
+2. **Lastpfad:** der Schlitten hängt an der Flanschmutter, sein Gewicht drückt
+   sie auf die oberen Gewindeflanken. Die Feder drückt die Gleitmutter nach
+   oben gegen die *unteren* Flanken und die Flanschmutter mit ihrer Reaktion
+   zusätzlich nach unten — also auf dieselben Flanken wie das Gewicht. Beim
+   Heben schiebt das Gewinde die Flanschmutter direkt, beim Senken folgt sie
+   durch Gewicht und Feder. **Die Feder liegt in keiner Richtung im
+   Lastpfad**, sie nimmt nur das Spiel heraus. Umgekehrt montiert, also mit
+   der Feder nach unten, würde jedes Anheben über die Feder laufen. Das geht,
+   solange ihre Vorspannung (etwa 50 N) über der Hublast (etwa 6 N) liegt,
+   ist aber die weichere Lösung.
+
+Die Gleitmutter ist damit das oberste bewegte Teil. Sie läuft beim Hochfahren
+als Erstes gegen die Kupplung und wird dabei gegen die Feder gedrückt — das
+ist die obere Verfahrgrenze, und der Endschalter schaltet 8 mm davor.
+
+Mit geschätzt 45 mm Bauhöhe (Flanschmutter 15 +
 Feder vorgespannt + Gleitmutter 15) ist ihre Oberkante das oberste bewegte
 Teil und bindet den Verfahrweg: **76,6 mm statt 136,1 mm**. Davon sind 68,6 mm
 Arbeitsweg bis zum Endschalter; gebraucht werden für 0–50 mm Werkstück 50 mm,

@@ -566,6 +566,15 @@ def main():
          L['winkel_schraube'] - (L['winkel_klemm'] + 0.8), 0.5)
     p.ok('Ausrichtspiel der schwimmenden Verschraubung',
          w('m3_uebermass') - w('m3_durchgang'), 0.8)
+    # Der Winkel liegt nur mit dem Ruecken an der Lasche an (Y). Zur Seite
+    # braucht er Luft zum Auflagepad, sonst kann er beim Durchfahren nicht
+    # dorthin schwimmen, wo die Spindel ihn haben will. Schwimmweg je
+    # Richtung: Schraube im Ø4,6 der Lasche plus im Ø3,4 des Ruecken.
+    schwimm = ((w('m3_uebermass') - M3_SCHAFT_D) / 2
+               + (w('m3_durchgang') - M3_SCHAFT_D) / 2)
+    p.info('Schwimmweg des Winkels je Richtung', schwimm)
+    p.ok('Luft Ruecken -> Auflagepad deckt den Schwimmweg',
+         (w('winkel_x_links') - w('pad_breite') / 2) - schwimm, 0.0)
     p.ok('Grosse Scheibe deckt das Uebermass',
          SCHEIBE_GROSS - w('m3_uebermass'), 2.0)
     # Gegenstueck an der Lasche der Schlittenplatte: Ø4,6-Bohrung und die

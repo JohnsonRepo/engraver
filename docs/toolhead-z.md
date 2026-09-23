@@ -564,6 +564,19 @@ Vorgehen: Schrauben locker, Z-Achse mehrmals über den ganzen Weg fahren,
 **dann** festziehen. Der Winkel findet dabei die Lage, die die Spindel vorgibt
 — eine krumme Spindel kämpft so nicht gegen die Linearführung.
 
+**Wo er anliegt und wo nicht.** Der Winkel liegt nur mit der Vorderseite
+seines Rückens flächig an der Lasche — dort darf nach dem Festziehen kein
+Spalt bleiben. Sonst hat er mit Absicht Luft: **1,0 mm zur Seite** bis zum
+Auflagepad der Schlittenplatte und **0,5 mm** zwischen Regal und
+Plattenoberkante. Das ist der Schwimmweg: die Schraube hat im Ø4,6-Loch der
+Lasche 0,8 mm und im Ø3,4-Loch des Rückens 0,2 mm Spiel, zusammen 1,0 mm je
+Richtung. Läge der Rücken am Pad an, könnte der Winkel nur noch vom Pad weg
+ausweichen; braucht die Spindel ihn näher dran, drückt sie seitlich gegen die
+Führung. Je nachdem, wo er sich beim Durchfahren einstellt, ist der Spalt zum
+Pad danach 0 bis 2 mm breit und der unter dem Regal 0 bis 1,5 mm — alles in
+Ordnung. `toolhead_check.py` prüft, dass die Luft zum Pad den Schwimmweg
+deckt.
+
 **Drucklage:** Regaloberseite (der Flanschsitz) aufs Bett, Aufbaurichtung
 = −Maschine Z. Der Rücken hängt vollständig unter dem Regalgrundriss, jede
 Schicht steht auf Material, Spindel- und Einsatzbohrungen werden rund. Keine

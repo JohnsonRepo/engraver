@@ -596,12 +596,48 @@ zum Motor. Dafür gibt es zwei Gründe:
    durch Gewicht und Feder. **Die Feder liegt in keiner Richtung im
    Lastpfad**, sie nimmt nur das Spiel heraus. Umgekehrt montiert, also mit
    der Feder nach unten, würde jedes Anheben über die Feder laufen. Das geht,
-   solange ihre Vorspannung (etwa 50 N) über der Hublast (etwa 6 N) liegt,
-   ist aber die weichere Lösung.
+   solange ihre Vorspannung über der Hublast (etwa 5 N) liegt, ist aber die
+   weichere Lösung.
 
 Die Gleitmutter ist damit das oberste bewegte Teil. Sie läuft beim Hochfahren
 als Erstes gegen die Kupplung und wird dabei gegen die Feder gedrückt — das
 ist die obere Verfahrgrenze, und der Endschalter schaltet 8 mm davor.
+
+### Wie stark die Feder vorspannen?
+
+**Leicht: 5–10 N**, auf der Küchenwaage 0,5–1 kg. In dieser Einbaulage nimmt
+schon das Gewicht des Schlittens (5 N) das Spiel der Flanschmutter heraus. Die
+Feder muss nur die Gleitmutter sicher an ihre Flanken drücken und kleine
+Kräfte nach oben abfangen (Reibung der Führung beim Absenken, Kabelzug). Mehr
+Vorspannung macht die Achse nicht genauer, nur schwergängiger: beide
+Mutternhälften reiben mit der Federkraft, jedes Newton kostet 2,5 mNm
+Moment, dazu Verschleiß am Messing.
+
+| Federkraft | Waage | Moment gesamt (mit Heben) | |
+|---|---|---|---|
+| 5 N | 0,5 kg | 19 mNm | reicht |
+| **10 N** | **1 kg** | **32 mNm** | **empfohlen** |
+| 25 N | 2,5 kg | 70 mNm | Annahme der Prüfung, geht noch |
+| 45 N | 4,5 kg | 121 mNm | Grenze: die Klemmnabe rutscht auf den Gewindespitzen (konservativ 120 mNm) |
+
+**Messen:** Feder allein auf die Küchenwaage stellen und mit einem flachen
+Gegenstand so weit zusammendrücken, wie sie in der Garnitur sitzt — den
+Abstand zwischen Flanschmutter und Gleitmutter vorher mit dem Messschieber
+nehmen. 100 g sind etwa 1 N.
+
+**Einstellen:** die Vorspannung hängt davon ab, wie weit die Gleitmutter
+gegen die Flanschmutter versetzt ist, wenn die Mitnehmernut einrastet. Eine
+Umdrehung sind bei Tr8×2 genau 2 mm Federweg. Ist die Feder zu stramm, die
+Gleitmutter abnehmen und eine Umdrehung weniger weit gegen die Feder wieder
+aufschrauben, bis die Nut wieder fasst. Jede Umdrehung weniger macht die
+Garnitur 2 mm höher und kostet 2 mm Verfahrweg — bei 28,6 mm Reserve
+unkritisch. Danach die Bauhöhe messen (Unterseite Flansch bis Oberkante
+Gleitmutter): das ist der noch offene Wert `t8_garnitur_h`.
+
+**Gefühlsprobe:** Flanschmutter festhalten, Spindel von Hand drehen — sie
+läuft spürbar strammer als mit der Flanschmutter allein, aber gleichmäßig und
+ohne zu haken. Und axial lässt sich die Flanschmutter nicht gegen die
+Spindel klappern.
 
 Mit geschätzt 45 mm Bauhöhe (Flanschmutter 15 +
 Feder vorgespannt + Gleitmutter 15) ist ihre Oberkante das oberste bewegte

@@ -622,9 +622,15 @@ def main():
     # Gewindespitzen durchrutscht, entscheidet sich hier und nicht am Gefuehl.
     masse_z = 0.510                                  # bewegte Masse an Z, kg
     steigung = 0.002                                 # Tr8x2: 2 mm
+    # Federkraft der Garnitur: 25 N als Obergrenze angenommen, empfohlen
+    # sind 5..10 N (toolhead-z.md, "Wie stark die Feder vorspannen?"). Die
+    # Feder drueckt beide Mutternhaelften an, daher 2 * feder im Moment.
     eta, feder = 0.25, 25.0                          # Wirkungsgrad, Federkraft
     moment = lambda kraft: kraft * steigung / (2 * math.pi * eta)
     p.info('Drehmoment zum Heben', moment(masse_z * 9.81) * 1000, 'mNm')
+    p.info('Federkraft der Garnitur (Annahme; empfohlen 5..10 N)', feder, 'N')
+    p.info('groesste Federkraft, die die Klemmnabe noch treibt',
+           (0.120 - moment(masse_z * 9.81)) / moment(2.0), 'N')
     p.info('Drehmoment durch die Federvorspannung der Garnitur',
            moment(2 * feder) * 1000, 'mNm')
     p.ok('Klemmnabe uebertraegt das Betriebsmoment (konservativ 120 mNm)',

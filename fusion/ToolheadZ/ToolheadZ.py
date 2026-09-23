@@ -80,14 +80,14 @@ MASSE = {
     # Das traegt (siehe Momentenrechnung in toolhead_check.py, Abschnitt 7).
     'spindel_d':           (8.0,   'Tr8x2: Gewindeaussendurchmesser'),
     'spindel_durchgang':   (8.6,   'Tr8x2 Durchgang (+0,6 wie M6 vorher)'),
-    'kupplung_d':          (19.0,  'Wendelkupplung 5->8: Durchmesser'),
-    'kupplung_l':          (25.0,  'Wendelkupplung 5->8: Laenge'),
-    # Einstecktiefe. Bei einer Wendelkupplung = Laenge der massiven Nabe, der
-    # Wendelschnitt in der Mitte muss frei bleiben. Bei einer starren Huelse
-    # eher 12 mm (ueber alle Madenschrauben hinaus) — dann sitzt die Kupplung
-    # hoeher als modelliert, die 8 mm liegen fuer den Verfahrweg also auf der
-    # sicheren Seite. Bestellt ist laut Titel eine starre; am Teil messen [?].
-    'kupplung_griff':       (8.0,  'Wendelkupplung: Klemmlaenge je Seite'),
+    'kupplung_d':          (19.0,  'Klemmkupplung 5->8: Durchmesser'),
+    'kupplung_l':          (25.0,  'Klemmkupplung 5->8: Laenge'),
+    # Einstecktiefe. Bestellt ist eine starre Klemmkupplung: beide Wellen
+    # fuellen ihren Klemmbereich, eher 12 mm je Seite. Modelliert sind noch
+    # 8 mm (aus der Annahme Wendelkupplung) — die Kupplung sitzt damit tiefer
+    # als in echt, die Verfahrgrenze liegt auf der sicheren Seite. Am Teil
+    # Laenge und Klemmschlitz messen, dann nachziehen [?].
+    'kupplung_griff':       (8.0,  'Kupplung: Einstecktiefe je Seite'),
     # Die Garnitur: Flanschmutter auf dem Regal, Feder und Gleitmutter
     # darueber. Die Befestigungsloecher im Flansch sind DURCHGANGSloecher,
     # das Gewinde sitzt also im Druckteil (M3-Messingeinsaetze).
@@ -339,8 +339,8 @@ def lage():
     L['welle_z0'] = L['motor_flansch_z'] - w('motor_welle_l')
     L['kupplung_z1'] = L['welle_z0'] + w('kupplung_griff')
     L['kupplung_z0'] = L['kupplung_z1'] - w('kupplung_l')
-    # Oberkante der Spindel: so weit in die untere Klemmnabe, wie diese lang
-    # ist — NICHT bis an die Motorwelle. Dazwischen bleibt der Wendelbereich.
+    # Oberkante der Spindel: so weit in die untere Haelfte der Kupplung wie
+    # die Welle in die obere — die Enden beruehren sich nicht.
     L['spindel_z1'] = L['kupplung_z0'] + w('kupplung_griff')
     L['kupplung_frei'] = L['welle_z0'] - L['spindel_z1']
 
@@ -1520,12 +1520,10 @@ def hinweise_bauen(L, zc, fehler):
         '  (starre Klemmhuelse oder Wendelkupplung). Oldham- und Klauen-',
         '  kupplungen halten ihre Naben nicht axial zusammen — der Schlitten',
         '  wuerde absinken. Klemmnabe statt Madenschraube, nachziehen.',
-        '  EINSTECKEN haengt an der Bauart (bestellt: laut Titel starr):',
-        '  starre Huelse — beide Wellen ueber ALLE Madenschrauben hinaus,',
-        '    Schraubensicherung, auf der Spindel eine Flaeche anfeilen.',
-        '  Wendelkupplung — nur bis zur Nabe ({:.0f} mm je Seite), der'.format(
-            w('kupplung_griff')),
-        '    Wendelschnitt bleibt frei, sonst ist er ueberbrueckt.',
+        '  KUPPLUNG: starre Klemmkupplung (UniTak3D 5x8, seitliche Klemm-',
+        '  schrauben). Beide Wellen ueber den GANZEN Klemmbereich einstecken,',
+        '  etwa bis zur Mitte, Enden nicht aneinander. Fest, nicht mit Gewalt',
+        '  (Aluminiumgewinde), nach den ersten Betriebsstunden nachziehen.',
         '  GEWINDE IM DRUCKTEIL: die Flanschloecher sind Durchgangsloecher,',
         '  also 4x M3-Messingeinsatz Ø{:.1f} x {:.0f} von oben ins Regal.'.format(
             w('insert_m3_d'), w('insert_m3_t')),

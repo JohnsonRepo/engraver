@@ -112,15 +112,13 @@ def main():
     p.ok('nutzbarer Z-Verfahrweg', L['z_weg'], 40.0)
     p.ok('Kupplung bleibt unter der Konsole',
          L['konsole_z0'] - L['kupplung_z1'], 2.0)
-    p.ok('Klemmlaenge je Seite (massive Nabe der Wendelkupplung)',
-         w('kupplung_griff'), 6.0)
+    p.ok('Einstecktiefe je Seite', w('kupplung_griff'), 6.0)
     p.info('Klemmlaenge bezogen auf den Spindeldurchmesser',
            w('kupplung_griff') / w('spindel_d'), 'x D')
-    # Der Wendelschnitt in der Mitte muss frei bleiben. Stossen Motorwelle und
-    # Spindel dort zusammen, ist die Nachgiebigkeit ueberbrueckt — aus der
-    # Ausgleichskupplung wird eine starre Huelse.
-    p.ok('Wendelbereich frei: Welle und Spindel stossen nicht zusammen',
-         L['kupplung_frei'], 5.0)
+    # Motorwelle und Spindel duerfen sich in der Kupplung nicht beruehren —
+    # sonst drueckt das Anziehen der Klemmung auf das Motorlager.
+    p.ok('Welle und Spindel stossen in der Kupplung nicht zusammen',
+         L['kupplung_frei'], 0.5)
     p.info('benoetigte Laenge der Tr8x2-Spindel', L['spindel_laenge'])
     p.info('Laser-Unterkante (Linse) tiefste Stellung',
            L['zc_min'] + L['laser_unten_rel'])
@@ -838,8 +836,8 @@ def main():
             '({:.0f} mm gebraucht)'.format(
                 w('spindel_bestellt'), w('spindel_zuschnitt'),
                 L['spindel_laenge']),
-            'Kupplung 5 -> 8 mm, {:.0f} mm lang (bestellt: UniTak3D, laut '
-            'Titel starr mit Madenschrauben)'.format(w('kupplung_l')),
+            'Starre Klemmkupplung 5 -> 8 mm, {:.0f} mm lang '
+            '(UniTak3D, seitliche Klemmschrauben)'.format(w('kupplung_l')),
             'Anti-Backlash-Garnitur Tr8x2 (Flanschmutter Ø{:.0f} + Feder + '
             'Gleitmutter)'.format(w('t8_flansch_d')),
             '4x M3x{:.0f} + 4x Messing-Einsatz M3 Ø5 (Garnitur -> Regal, '

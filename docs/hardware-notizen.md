@@ -145,10 +145,11 @@ am Rahmen. Achtung: Schließer meldet bei Kabelbruch nicht; der Öffner
 
 Beide stehen als `bett_abstand` und `werkstueck_max` im Skript — sie erzeugen
 keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt das
-Fenster **f = 6 … 50 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben
+Fenster **f = 6 … 57 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben
 (oben gerechnet bis zum Schaltpunkt des Endschalters, nicht bis zur
-mechanischen Grenze — bis Rev. 28 stand hier fälschlich 49; bis Rev. 29, ohne
-den 10-mm-Motoradapter, waren es 40).
+mechanischen Grenze — bis Rev. 28 stand hier fälschlich 49; mit dem
+10-mm-Motoradapter und der gemessenen Garnitur von 38 mm sind es seit
+Rev. 31 57 mm).
 Nach oben begrenzt es die Montage (die obere Laser-Schraubenreihe muss beim
 Verschrauben neben dem Z-Wagen liegen, also höchstens +7,8 mm über Lochmitte),
 nach unten der Langlochhub von −8 mm. Seit Rev. 27 hängt der Laser dafür 5 mm
@@ -174,6 +175,7 @@ der Angebote — noch nicht am Teil gemessen:
 | Flanschmutter: Lochkreis | **Ø16 mm**, **4 × Ø3,5 durchgehend** (kein Gewinde!) | `[w]` |
 | Gleitmutter (zweite Hälfte) | **Ø14 × 15 mm**, mit Mitnehmernut | `[w]` |
 | Druckfeder | **Ø12 × 50 mm** freie Länge | `[w]` |
+| Garnitur eingebaut (Unterseite Flansch bis Oberkante Gleitmutter) | **38 mm** | `[v]` am Teil gemessen |
 | Kupplung | UniTak3D 5 → 8 mm (B096G1GZH5), **starre Klemmkupplung**, seitliche Klemmschrauben | `[w]`, Maße am Teil messen |
 
 Wichtig für den Entwurf: die Befestigungslöcher sind **Durchgangslöcher**, das
@@ -196,9 +198,9 @@ zur Mitte — Begründung in `toolhead-z.md`.
 
 **Am gelieferten Teil zu prüfen (drei Dinge):**
 
-1. **Einbauhöhe der Garnitur in Z** (`t8_garnitur_h`, angenommen 45 mm =
-   Flanschmutter 15 + Feder vorgespannt + Gleitmutter 15). Sie bindet den
-   Verfahrweg nach oben (jetzt 86,6 mm) und sonst nichts.
+1. ~~Einbauhöhe der Garnitur~~ **Erledigt** `[v]`: **38 mm** gemessen
+   (`t8_garnitur_h`, bis Rev. 30 auf 45 mm geschätzt). Sie bindet den
+   Verfahrweg nach oben, der damit 93,6 mm beträgt.
 2. ~~Flanschfläche plan?~~ **Erledigt** `[v]`: die Unterseite des Flansches
    ist glatt, der Bund Ø10 × 2 sitzt oben. Die glatte Seite liegt auf dem
    Regal, es braucht keinen Freiraum und keinen Zwischenring (Rev. 25–27 gab

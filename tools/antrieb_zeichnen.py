@@ -350,8 +350,7 @@ def main():
               'Schrauben und Einsätze in die Schnittebene gedreht.', 8.5,
               GRAU),
          text(18, 49, 'Maßstäblich aus ToolheadZ.py Rev. {} · hell = liegt '
-              'hinter der Schnittebene · [?] = Maß noch nicht am Teil '
-              'gemessen'.format(mod.REVISION), 8.5, GRAU)]
+              'hinter der Schnittebene'.format(mod.REVISION), 8.5, GRAU)]
 
     # Z-Skala
     for z in range(-60, 201, 20):
@@ -394,7 +393,7 @@ def main():
          'Gleitmutter Ø{:.0f}, verdrehgesichert — oberstes bewegtes '
          'Teil'.format(GLEIT_D)),
         feder_punkt(w, L, zc_o, i_feder) + (
-            'Feder drückt die Gleitmutter nach oben (Länge geschätzt)',),
+            'Feder drückt die Gleitmutter nach oben',),
         (sy + DETAIL_Y[1], oben + DETAIL_Z[1] - 4,
          'Flansch, Schrauben, Regal: siehe Einzelheit A'),
         (sy + r_wand(w) + 0.9, zc_o + 4,
@@ -421,7 +420,7 @@ def main():
     t += masslinie_z(a, y_g, z_r, z_g, BRAUN)
     x, y_mitte = a.px(y_g - 1.5, (z_r + z_g) / 2)
     t.append(text(x, y_mitte - 2, 'Garnitur', 8, BRAUN, 'end', halo=True))
-    t.append(text(x, y_mitte + 9, '{} mm [?]'.format(
+    t.append(text(x, y_mitte + 9, '{} mm'.format(
         de(w('t8_garnitur_h'))), 8, BRAUN, 'end', True, halo=True))
     # Luft: zu klein fuer Pfeile innen, also von aussen
     x, ya = a.px(y_l, z_k)

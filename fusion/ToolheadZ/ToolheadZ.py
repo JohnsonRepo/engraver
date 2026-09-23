@@ -27,7 +27,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 30
+REVISION = 31
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -97,10 +97,11 @@ MASSE = {
     # das Gewinde sitzt also im Druckteil (M3-Messingeinsaetze).
     't8_flansch_d':        (22.0,  'Tr8x2 Flanschmutter: Flanschdurchmesser'),
     't8_lochkreis':        (16.0,  'Tr8x2 Flanschmutter: Lochkreis (4x M3)'),
-    # 45 = Flanschmutter 15 + Feder vorgespannt ~15 + Gleitmutter 15. Nur
-    # geschaetzt [?] — am gelieferten Teil messen, der Wert allein bestimmt
-    # die obere Verfahrgrenze (siehe zc_grenzen).
-    't8_garnitur_h':       (45.0,  'Tr8x2 Garnitur: Bauhoehe ueber dem Regal'),
+    # Am Teil gemessen [v]: 38 mm von der Unterseite des Flansches bis zur
+    # Oberkante der Gleitmutter (bis Rev. 30 geschaetzt 45). Der Wert allein
+    # bestimmt die obere Verfahrgrenze (siehe zc_grenzen) und haengt an der
+    # Federvorspannung: eine Umdrehung weniger vorgespannt = 2 mm hoeher.
+    't8_garnitur_h':       (38.0,  'Tr8x2 Garnitur: Bauhoehe ueber dem Regal'),
     # Flanschdicke am Teil gemessen [v]. Die GLATTE Seite des Flansches liegt
     # auf dem Regal; der Ø10x2-Bund auf der anderen Seite zeigt nach oben zu
     # Feder und Gleitmutter und braucht im Regal keinen Freiraum. (Rev. 25-27
@@ -1029,7 +1030,7 @@ def langloch_stellung(L, f_mm, dicke_mm):
 
 
 def fokus_zeilen(L, w, kandidaten=(10.0, 15.0, 20.0, 25.0, 30.0, 35.0,
-                                   40.0, 45.0, 50.0)):
+                                   40.0, 45.0, 50.0, 55.0)):
     """Berichtszeilen: welche Langlochstellung passt zu welchem Fokusabstand?
     Geht eine Dicke nicht mehr auf, wird gesagt, was stattdessen erreichbar
     ist — die Stellung ist nach oben durch die Montage begrenzt."""
@@ -1584,11 +1585,11 @@ def hinweise_bauen(L, zc, fehler):
         '  nach unten ist kein Platz, und so traegt die Flanschmutter das',
         '  Gewicht direkt — die Feder liegt nie im Lastpfad, sie nimmt nur',
         '  das Spiel heraus. Die Gleitmutter begrenzt damit den Verfahrweg',
-        '  nach oben (Bauhoehe der Garnitur {:.0f} mm [?]).'.format(
+        '  nach oben (Bauhoehe der Garnitur {:.0f} mm, gemessen).'.format(
             w('t8_garnitur_h')),
         '  OBEN KEIN LAGER: die Spindel haengt am Motorlager, das traegt',
         '  Schlitten und Spindel zusammen (5,6 N gegen typ. 10 N) und die',
-        '  kritische Biegedrehzahl liegt bei 50000 1/min gegen 300 im',
+        '  kritische Biegedrehzahl liegt bei 46000 1/min gegen 300 im',
         '  Betrieb. Ein Gleitlager kaeme ohnehin nur auf die Gewindespitzen.',
         '  Damit traegt die KUPPLUNG die Z-Last axial: nur einteilige nehmen',
         '  (starre Klemmhuelse oder Wendelkupplung). Oldham- und Klauen-',

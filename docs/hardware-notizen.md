@@ -145,7 +145,7 @@ am Rahmen. Achtung: Schließer meldet bei Kabelbruch nicht; der Öffner
 
 Beide stehen als `bett_abstand` und `werkstueck_max` im Skript — sie erzeugen
 keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt das
-Fenster **f = 6 … 46 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben.
+Fenster **f = 6 … 49 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben.
 Nach oben begrenzt es die Montage (die obere Laser-Schraubenreihe muss beim
 Verschrauben neben dem Z-Wagen liegen, also höchstens +7,8 mm über Lochmitte),
 nach unten der Langlochhub von −8 mm. Seit Rev. 27 hängt der Laser dafür 5 mm
@@ -166,7 +166,7 @@ der Angebote — noch nicht am Teil gemessen:
 | Spindel | Tr8×2, 1-gängig, Steigung = Vorschub 2 mm, 200 mm lang | `[w]` |
 | Ende | kein angedrehter Zapfen — Ø8 ist der Gewindeaußendurchmesser | `[w]` |
 | Flanschmutter: Flansch | **Ø22 mm**, Bauhöhe **15 mm** | `[w]` |
-| Flanschmutter: Zentrierbund unten | **Ø10 × 2 mm** | `[v]` am Teil gemessen |
+| Flanschmutter: Bund Ø10 × 2 mm | auf der **Oberseite**, Flansch unten **glatt** | `[v]` am Teil |
 | Flanschmutter: Dicke der Flanschplatte | **3,5 mm** | `[v]` am Teil gemessen |
 | Flanschmutter: Lochkreis | **Ø16 mm**, **4 × Ø3,5 durchgehend** (kein Gewinde!) | `[w]` |
 | Gleitmutter (zweite Hälfte) | **Ø14 × 15 mm**, mit Mitnehmernut | `[w]` |
@@ -195,17 +195,15 @@ zur Mitte — Begründung in `toolhead-z.md`.
 
 1. **Einbauhöhe der Garnitur in Z** (`t8_garnitur_h`, angenommen 45 mm =
    Flanschmutter 15 + Feder vorgespannt + Gleitmutter 15). Sie bindet den
-   Verfahrweg nach oben (jetzt 74,3 mm) und sonst nichts.
-2. ~~Flanschfläche plan?~~ **Erledigt**: der Bund ist da, Ø10 `[v]` — dafür
-   gibt es jetzt den Flanschring.
+   Verfahrweg nach oben (jetzt 76,6 mm) und sonst nichts.
+2. ~~Flanschfläche plan?~~ **Erledigt** `[v]`: die Unterseite des Flansches
+   ist glatt, der Bund Ø10 × 2 sitzt oben. Die glatte Seite liegt auf dem
+   Regal, es braucht keinen Freiraum und keinen Zwischenring (Rev. 25–27 gab
+   es einen Flanschring, weil der Bund unten vermutet war). Mit 3,5 mm
+   Flanschdicke genügen **M3×8** bei 4,5 mm Eingriff.
 3. **Maße der Kupplung**: Länge, Durchmesser, Länge des Klemmschlitzes.
    Daraus folgt `kupplung_griff` (modelliert 8 mm, für diese Kupplung eher 12).
    Der Wert verschiebt die Kupplung in Z und damit den Verfahrweg.
-Der Bund Ø10 ist der Grund für den **Flanschring**: eine Freibohrung dafür
-direkt im Regal ließe neben der Einsatzbohrung nur 0,50 mm Wand stehen, im
-Ring sind es 1,10 mm (dort genügt ein Ø3,4-Durchgang). Aus Bundhöhe 2 und
-Flanschdicke 3,5 folgen **Ring 2,3 mm** und **M3×10** mit 4,2 mm Eingriff.
-Rechnung in `toolhead-z.md`.
 
 Und eine Entscheidung, die daraus schon feststeht: **die Spindel wird
 gekürzt**, auf `spindel_zuschnitt` = 150 mm (gebraucht 137,6 mm). Ungekürzt

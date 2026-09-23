@@ -1,6 +1,6 @@
 # Toolhead Z-Achse — kompletter Aufbau
 
-Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, fünf gedruckte Teile).
+Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, vier gedruckte Teile).
 Geprüft mit `python3 tools/toolhead_check.py`, Layout in
 [toolhead-z-layout.svg](toolhead-z-layout.svg).
 
@@ -18,8 +18,7 @@ Der Laser sitzt auf dem Z-Schlitten.
 | 1 | **Trägerplatte** mit angeformter **Motorkonsole** | PETG, 8 mm | sitzt auf dem X-Wagen, trägt Schienensockel, Konsole, Säulen- und Führungsrippen |
 | 2 | **Schlittenplatte** | PETG | auf dem MGN9H-Z-Wagen, trägt den Laser und die Schaltfahne |
 | 3 | **Mutternwinkel** | PETG | Flanschsitz für die Tr8×2-Garnitur, schwimmend verschraubt |
-| 4 | **Flanschring** | PETG | Scheibe zwischen Flanschmutter und Regal, hält den Zentrierbund frei |
-| 5 | **Endschalterhalter** | PETG | hält die Gabellichtschranke, Schaltpunkt über Langlöcher justierbar |
+| 4 | **Endschalterhalter** | PETG | hält die Gabellichtschranke, Schaltpunkt über Langlöcher justierbar |
 
 Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
 [Motorbefestigung](#motorbefestigung-alle-vier-schrauben-erreichbar).
@@ -82,20 +81,20 @@ hoch die Schürze des MGN9H über der Schienenauflage endet.
 | −115,8 | Laser-Unterkante (Linse), tiefste Stellung |
 | −66,0 | Unterkante Trägerplatte |
 | −60,0 | Unterkante MGN9-Schiene (**200 mm lang, 10 Schrauben**) |
-| −40,1 … +34,2 | Bereich der Wagenmitte `zc` |
-| +64,0 | Oberkante der Antriebsmutter in der höchsten Stellung |
+| −40,1 … +36,5 | Bereich der Wagenmitte `zc` |
+| +109,0 | Oberkante der Garnitur in der höchsten Stellung (3 mm unter der Kupplung) |
 | +112,0 … +137,0 | Kupplung 5 → 8 mm (modelliert mit 8 mm Einstecktiefe) |
 | +140,0 | Oberkante MGN9-Schiene |
 | +145,0 | Unterseite Motorkonsole = Oberkante Trägerplatte |
 | +153,0 | Motorflansch |
 | +193,0 | Oberkante NEMA 17 |
 
-**Nutzbarer Verfahrweg: 74,3 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
+**Nutzbarer Verfahrweg: 76,6 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
 alle vier aus und nennt die bindende:
 
 | Grenze | zc max |
 |---|---|
-| **Antriebsmutter gegen Kupplung** | **+34,2** ← bindend |
+| **Antriebsmutter gegen Kupplung** | **+36,5** ← bindend |
 | Schlittenplatte gegen Kupplung | +92,0 |
 | Laser-Oberkante gegen Motorkonsole | +113,2 |
 | Wagen am oberen Schienenende | +120,1 |
@@ -171,7 +170,7 @@ vorbei — und prüft die Luft zur Trägerplatte als eigene Größe.
 Trägerplatte, Z-Schiene und Spindel bleiben davon unberührt. Der
 Verfahrweg lag damals bei 50,45 mm; er ist mit Rev. 14 auf 55,1 mm gewachsen
 (Laser tiefer, also nicht mehr die Motorkonsole als Grenze), mit Rev. 16 auf
-136,1 mm (Schiene 200 mm) und liegt mit Rev. 26 bei 74,3 mm (die
+136,1 mm (Schiene 200 mm) und liegt mit Rev. 28 bei 76,6 mm (die
 Anti-Backlash-Garnitur baut nach oben auf).
 
 **Beim Anziehen beachten:** die Z-Wagen-Schrauben klemmen jetzt **12 mm PETG**
@@ -207,7 +206,7 @@ die Höhe wird beim Zusammenbau eingestellt:
 
 **Nach oben nutzbar sind +7,8 mm** — nicht weil der Hub endet, sondern weil die
 obere Schraubenreihe sonst hinter dem Z-Wagen verschwindet und nicht mehr
-verschraubbar ist. Das Fenster reicht damit von **f = 6 bis 46 mm**. Du musst
+verschraubbar ist. Das Fenster reicht damit von **f = 6 bis 49 mm**. Du musst
 *f* also nicht kennen, um die Platte zu drucken; nur zum Einstellen beim
 Zusammenbau.
 
@@ -339,7 +338,6 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 | Trägerplatte mit Konsole | ≈ 124 cm³ | **≈ 157 g** | 78 × 222 × 56 mm | Rev. 16 + Sockel |
 | Schlittenplatte | ≈ 43,4 cm³ | **≈ 55 g** | 71 × 102 × 24 mm | Rev. 14 + Fahne + 5 mm (Rev. 27) |
 | Mutternwinkel | ≈ 11,3 cm³ | **≈ 14 g** | 28 × 36 × 22 mm | gerechnet |
-| Flanschring | ≈ 0,6 cm³ | **≈ 1 g** | 22 × 22 × 2,3 mm | gerechnet |
 | Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet |
 | **Druckteile zusammen** | ≈ 180 cm³ | **≈ 228 g** | | |
 
@@ -433,34 +431,23 @@ Das ist Kaufteilgeometrie (Lochkreis 16, Spindel Ø8) und nicht zu vergrößern.
 Beim Einschmelzen also wenig Druck, Einsatz bündig, nicht überhitzen — dieselbe
 Vorsicht wie am Schienensockel (dort 2,2 mm).
 
-### Der Flanschring — warum ein eigenes Teil
+### Flansch: glatte Seite aufs Regal
 
-Am gelieferten Teil gemessen: der Flansch hat unten einen **Zentrierbund
-Ø10 × 2 mm** `[v]`, die Flanschplatte selbst ist **3,5 mm** dick `[v]`. Der
-Bund passt nicht in die Ø8,6-Spindelbohrung des Regals — die Mutter würde auf
-dem Bund stehen statt auf dem Flansch.
+Die Flanschmutter hat auf einer Seite einen **Bund Ø10 × 2 mm**, die andere
+Seite des Flansches ist **glatt** `[v]`. Die glatte Seite liegt auf dem Regal;
+der Bund zeigt nach oben, dorthin, wo Feder und Gleitmutter sitzen. Im Regal
+muss damit nichts freigehalten werden — die Ø8,6-Spindelbohrung und die vier
+Einsätze bleiben, wie sie sind.
 
-Die naheliegende Lösung — eine Ø10,4-Freibohrung oben ins Regal — geht nicht:
+Zur Geschichte, weil sie im Code-Kommentar steht: in Rev. 25–27 lag ein
+2,3 mm dicker **Flanschring** unter dem Flansch, weil der Bund zunächst auf
+der Regalseite vermutet war. Eine Ø10,4-Freibohrung direkt im Regal hätte
+neben den Einsatzbohrungen (Ø4,6 auf Lochkreis 16) nur 0,50 mm Wand
+gelassen — der Ring brauchte an derselben Stelle nur einen Ø3,4-Durchgang.
+Mit der glatten Seite unten ist das alles hinfällig.
 
-| Bohrung auf dem Lochkreis | Innenkante | Wand zur Ø10,4-Freibohrung |
-|---|---|---|
-| **M3-Einsatz Ø4,6** (im Regal) | r = 5,70 | **0,50 mm** ✗ |
-| M3-Durchgang Ø3,4 (im Ring) | r = 6,30 | **1,10 mm** ✓ |
-
-0,5 mm hält das Einschmelzen nicht aus: der Einsatz verdrängt genau dieses
-bisschen Material in die Freibohrung, und der Bund sitzt wieder nicht. Der
-Lochkreis Ø16 und der Bund Ø10 lassen radial nur 3 mm — für eine
-Ø4,6-Einsatzbohrung zu wenig.
-
-Deshalb ein **Ring zwischen Flansch und Regal**: Ø22 außen, Ø10,4 innen,
-4 × Ø3,4 auf dem Lochkreis, **2,3 mm dick** (Bundhöhe 2 + 0,3 Luft, der Bund
-hängt also frei). Er braucht an der kritischen Stelle nur den Durchgang, nicht
-die Einsatzbohrung — damit sind es 1,10 mm. Das Regal bleibt exakt so, wie es
-geprüft ist.
-
-Kosten: ein Fünf-Minuten-Druckteil, 2,3 mm Verfahrweg und M3×10 statt M3×8
-(3,5 mm Flansch + 2,3 mm Ring geklemmt, 4,2 mm Gewindeeingriff im Einsatz).
-Eine gebohrte Stahl- oder Messingscheibe derselben Dicke tut es genauso.
+Verschraubung: 4 × M3×8 von oben durch den 3,5 mm dicken Flansch, 4,5 mm
+Gewindeeingriff im Einsatz, 2,5 mm Rest im Sackloch.
 
 ### Schwimmend verschraubt — das bleibt
 
@@ -483,9 +470,8 @@ Stützen. Die Prüfung rechnet das nach, statt es zu behaupten.
 Die Garnitur steht **nach oben** auf dem Regal — nach unten ist kein Platz,
 dort sitzt die Schlittenplatte. Mit geschätzt 45 mm Bauhöhe (Flanschmutter 15 +
 Feder vorgespannt + Gleitmutter 15) ist ihre Oberkante das oberste bewegte
-Teil und bindet den Verfahrweg: **74,3 mm statt 136,1 mm** (der Flanschring
-legt sie nochmal 2,3 mm höher). Gebraucht werden für 0–50 mm Werkstückdicke
-rund 30 mm, die Reserve ist also weiterhin groß.
+Teil und bindet den Verfahrweg: **76,6 mm statt 136,1 mm**. Gebraucht werden
+für 0–50 mm Werkstückdicke rund 30 mm, die Reserve ist also weiterhin groß.
 
 Die 45 mm sind der einzige Wert, der am gelieferten Teil nachzumessen ist
 (`t8_garnitur_h`); er geht in keine Geometrie ein, sondern nur in diese Grenze.
@@ -552,7 +538,7 @@ einer anderen Spindel (mit Zapfen) plus Lagerblock.
 
 Und es kostet: ein Lagerblock unter der Kupplung müsste zwischen Z = 96 und
 112 sitzen, und die Antriebsmutter muss darunter bleiben — das wären
-**16 mm weniger Verfahrweg** (74,3 → 58,3 mm). Am unteren Spindelende wäre ein
+**16 mm weniger Verfahrweg** (76,6 → 60,6 mm). Am unteren Spindelende wäre ein
 Lager billiger zu haben (dort ist Platz), würde aber die Werkstückhöhe weiter
 drücken und die Spindel zwischen zwei Festpunkten einspannen: mit gedruckten
 Teilen ist das überbestimmt, nicht genauer.
@@ -634,7 +620,7 @@ der Parameter nachgezogen.
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +7,8 mm** |
 | Mutternwinkel → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe DIN 9021 Ø9 | Ø4,6-Bohrung, ausrichten dann festziehen |
-| Antriebsmutter → Regal | **4 × M3×10 + 4 × Messing-Einsatz M3** | durch den Flanschring; Lochkreis Ø16, 45° gedreht; Einsatzbohrung Ø4,6 × 7 mm, **1,4 mm Wand zur Spindelbohrung** |
+| Antriebsmutter → Regal | **4 × M3×8 + 4 × Messing-Einsatz M3** | glatte Flanschseite aufs Regal; Lochkreis Ø16, 45° gedreht; Einsatzbohrung Ø4,6 × 7 mm, **1,4 mm Wand zur Spindelbohrung** |
 | Endschalterhalter → Sockel | 2 × M3×12 + 2 × Messing-Einsatz M3 | Langloch ±4 mm für den Schaltpunkt |
 | Lichtschranke → Halter | 2 × M2×6 + 2 × Heat Insert M2 (Ø3,2 × 2,5) | Ø2,8 × 3 mm Sackloch in der 4-mm-Wand, dahinter Ø2,4 frei |
 
@@ -661,7 +647,7 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 5 | Mutternwinkel bestücken: 4 × Messing-Einsatz M3 ins Regal einschmelzen (**1,4 mm Wand zur Spindelbohrung**), 2 × M3-Mutter in die Sechskanttaschen des Rücken | Lötkolben, Finger | — |
 | 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 164 mm mit dem Z-Schlitten unten, 28 mm mit ihm oben — beides reicht, unten ist es bequemer |
 | 7 | **Mutternwinkel an die Schlittenplatte**, 2 × M3×16 + große Scheibe: locker lassen | Inbus von vorn | frei |
-| 8 | **Spindel auf 150 mm kürzen**, entgraten, anfasen. Garnitur aufdrehen, **Flanschring unterlegen**, Flansch aufs Regal (4 × M3×10 von oben), Spindel oben in die Kupplung — **nur bis zur Nabe**. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Säge, Inbus von oben neben der Spindel | 122 mm mit dem Schlitten unten |
+| 8 | **Spindel auf 150 mm kürzen**, entgraten, anfasen. Garnitur aufdrehen, Flansch **mit der glatten Seite** aufs Regal (4 × M3×8 von oben), Spindel oben in die Kupplung — **über den ganzen Klemmbereich**, Enden nicht aneinander. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Säge, Inbus von oben neben der Spindel | 125 mm mit dem Schlitten unten |
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | Schlitten ganz unten: beide Reihen liegen dann unter der Trägerplatte, freie Bahn |
 | 10 | Endschalterhalter auf den Sockel (2 × M3×12 in die Einsätze), Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen | Inbus von vorn | frei |
 
@@ -745,7 +731,6 @@ reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 | Trägerplatte (mit Konsole) | Rückseite (Passfläche) unten | Platte, Sockel, Konsole, Säulen- und Führungsrippen stehen alle auf dem Bett — keine Stützen, alle Kräfte in der Schicht. 222 mm lang, passt liegend in den A1 |
 | Schlittenplatte | Laser-Anschraubfläche unten | Brücke 11 mm zwischen den Rippen; die Langlöcher liegen in der Wand, keine Stützen |
 | Mutternwinkel | Regaloberseite (Flanschsitz) unten | der Rücken hängt vollständig unter dem Regalgrundriss, Spindel- und Einsatzbohrungen werden rund, keine Stützen |
-| Flanschring | flach unten | 2,3 mm hoch, fünf Minuten |
 | Endschalterhalter | Flansch unten | Wand steht nach oben, keine Stützen |
 
 4 Wandlinien, ≥ 40 % Infill. An jeder Auflagefläche sitzt eine Fase von

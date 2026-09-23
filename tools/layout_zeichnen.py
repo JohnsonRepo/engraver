@@ -26,6 +26,12 @@ ANZEIGE = {          # Anzeigenamen (bauraum.py haelt die Schluessel in ASCII)
     'Winkel Regal': 'Mutternwinkel: Regal',
     'Antriebsmutter Tr8x2': 'Antriebsmutter Tr8×2 (Garnitur)',
     'Tr8x2-Spindel': 'Tr8×2-Spindel',
+    'Gabel hinten': 'Gabel: Arm hinten',
+    'Gabel vorn': 'Gabel: Arm vorn',
+    'Gabel Boden': 'Gabel: Boden des Schlitzes',
+    'Schaltfahne Fuss': 'Schaltfahne: Fuß',
+    'Schaltfahne Steg': 'Schaltfahne: Steg',
+    'Schaltfahne': 'Schaltfahne: Blatt',
 }
 FARBE = {
     'druck':    ('#c9d9ec', '#2f5d92'),      # gedruckte Teile

@@ -449,9 +449,20 @@ def main():
         eigen + winkel_eigen)
     zugang('Mutternwinkel -> Platte (von vorn, zuletzt)', d, wer)
 
+    # 5a) Schaltfahne: von vorn in die Lasche, Laser und Halter sind dran.
+    #     Gemessen ab der Lasche, in der Mitte des Langlochs.
+    alle_namen = tuple(kasten) + tuple(q.name for q in bewegte)
+    fahne_eigen = ('Fahnenlasche', 'Schaltfahne Fuss', 'Schaltfahne Steg',
+                   'Schaltfahne')
+    d, wer, zc_f = beste_stellung(
+        [(L['ls_fahne_schraub_x'], L['laser_y'], rel)
+         for rel in L['ls_fahne_schraub_rel']], 'y', +1, alle_namen,
+        fahne_eigen)
+    zugang('Schaltfahne -> Lasche (von vorn, Laser dran, zc={:+.1f})'.format(
+        zc_f), d, wer)
+
     # 5b) Garnitur aufs Regal: von OBEN. Darueber steht irgendwann die
     #     Kupplung im Weg, der Schlitten wird dafuer heruntergefahren.
-    alle_namen = tuple(kasten) + tuple(q.name for q in bewegte)
     d, wer, zc_g = beste_stellung(
         [(x, y, L['regal_z1_rel']) for x, y in L['t8_loecher']], 'z', +1,
         alle_namen,
@@ -814,18 +825,109 @@ def main():
         w('werkstueck_max')), f_max)
 
     p.titel('9) Endschalter: Gabellichtschranke und Schaltfahne')
-    p.info('Schaltpunkt (Strahlachse)', L['ls_strahl_z'])
+    # Seit Rev. 32 liegt der Strahl fest (Sockel und Halter sind gedruckt
+    # und eingebaut), und die Fahne wird so lang, dass sie ihn am Schaltpunkt
+    # erreicht. Gemessen: Sockel C = 18 mm unter der Konsole, Gabel a..e.
+    p.info('Sockel (gedruckt): Einsaetze bei Z = {:+.0f} / {:+.0f}'.format(
+        *L['ls_schraub_z']))
+    p.ok('Halterstellung liegt im Langloch',
+         w('ls_justage') - abs(w('ls_halter_stellung')), 0.0)
+    p.info('Halter: Stellung im Langloch', w('ls_halter_stellung'))
+    p.info('Strahl der Gabel', L['ls_strahl_z'])
+    p.info('Schaltpunkt: Wagenmitte zc', L['zc_arbeit_max'])
     p.ok('Weg nach dem Schalten bis zur mechanischen Grenze',
          w('ls_ueberfahrt'), 5.0)
-    p.ok('Fahne passt in den Gabelspalt (Luft je Seite)',
-         (w('ls_schlitz') - w('ls_fahne_dicke')) / 2, 2.0)
-    p.ok('Fahne deckt die Strahlhoehe ab (Tiefe quer zur Platine)',
-         w('ls_fahne_tiefe'), 6.0)
-    p.info('abgedeckte Strahlhoehe ueber der Platine: {:.1f} bis {:.1f} mm'
-           .format(w('ls_fahne_luft_pcb'),
-                   w('ls_fahne_luft_pcb') + w('ls_fahne_tiefe')))
-    p.ok('Fahne bleibt vom Z-Wagen weg',
-         -w('z_wagen_breite') / 2 - L['ls_fahne_x1'], w('luft_bau'))
+    p.ok('Fahnenoberkante erreicht den Strahl genau am Schaltpunkt',
+         abs(L['zc_arbeit_max'] + L['ls_fahne_z1_rel'] - L['ls_strahl_z']),
+         0.01, '<=')
+    p.info('Fahne: Oberkante ueber der Wagenmitte', L['ls_fahne_z1_rel'])
+    # Quer zum Spalt fuer BEIDE Halterstaende: welcher eingebaut ist (Platine
+    # 3 oder 1 mm ueber dem Flansch), ist offen — die Fahne muss in beide
+    # Schlitzlagen passen.
+    for stand, luft_pcb in (('Rev. 21/22', w('ls_pcb_luft')),
+                            ('Rev. 20', w('ls_pcb_luft_alt'))):
+        dy = luft_pcb - w('ls_pcb_luft')
+        p.ok('Fahne im Spalt, Halter {}: Luft hinten'.format(stand),
+             L['ls_fahne_y0'] - (L['ls_schlitz_y'][0] + dy), 2.0)
+        p.ok('Fahne im Spalt, Halter {}: Luft vorn'.format(stand),
+             (L['ls_schlitz_y'][1] + dy) - L['ls_fahne_y1'], 2.0)
+    # Quer zur Platine: ueber das Lichtfenster hinweg, aber nicht bis an den
+    # Boden des Schlitzes (der ist geschaetzt, nicht gemessen).
+    p.ok('Fahne reicht ueber das Lichtfenster hinaus zur Platine',
+         L['ls_strahl_x'] - L['ls_fahne_x0'], 1.0)
+    p.ok('Fahne bleibt ueber dem Schlitzboden (geschaetzt!)',
+         L['ls_fahne_x0'] - L['ls_boden_x'], 1.0)
+    p.ok('Fahne ragt ueber die offene Seite der Gabel',
+         L['ls_fahne_x1'] - L['ls_gabel_x1'], 1.0)
+    p.ok('Fahne bleibt von der Bauteilseite der Platine weg',
+         L['ls_fahne_x0'] - L['ls_pcb_x1'], 5.0)
+    # Am mechanischen Anschlag (Gleitmutter an der Kupplung) und mit der
+    # Fahne ganz oben im Langloch: ausser dem Blatt darf nichts an Gabel,
+    # Platine oder Halter kommen.
+    anschlag = L['zc_max'] + w('luft_bau')
+    endschalter = [q for q in feste if q.name.startswith(
+        ('Gabel', 'Lichtschranke', 'Halter', 'Endschaltersockel'))]
+    engste = (float('inf'), '')
+    for q in bewegte:
+        auf = w('ls_fahne_verstellung') if q.name.startswith(
+            'Schaltfahne') else 0.0
+        bq = q.verschoben(anschlag + auf)
+        for f in endschalter:
+            if ((q.name, f.name) in paare_erlaubt
+                    or (f.name, q.name) in paare_erlaubt):
+                continue
+            d = bq.abstand(f)
+            if d < engste[0]:
+                engste = (d, '{} <-> {}'.format(q.name, f.name))
+    p.ok('am Anschlag, Fahne ganz oben: ' + engste[1], engste[0], 1.0)
+    p.info('Blatt am Anschlag ueber der Gabeloberkante',
+           anschlag + L['ls_fahne_z1_rel'] - L['ls_gabel_z1'])
+    p.info('Verstellbereich Fahne in der Lasche (+-)',
+           w('ls_fahne_verstellung'))
+    p.info('Verstellbereich Halter nach oben',
+           w('ls_justage') - w('ls_halter_stellung'))
+    # --- Lasche an der Schlittenplatte, Fuss der Fahne ---------------------
+    sx_f = L['ls_fahne_schraub_x']
+    ll = w('ls_fahne_verstellung') + w('m3_durchgang') / 2
+    p.ok('Lasche: Langloch bleibt in der Lasche (unten)',
+         (L['ls_fahne_schraub_rel'][0] - ll) - L['ls_lasche_z0_rel'], 2.0)
+    p.ok('Lasche: Langloch bleibt in der Lasche (oben)',
+         L['ls_lasche_z1_rel'] - (L['ls_fahne_schraub_rel'][1] + ll), 2.0)
+    p.ok('Lasche: Wand neben dem Langloch',
+         min(sx_f - L['ls_lasche_x0'], L['ls_lasche_x1'] - sx_f)
+         - w('m3_durchgang') / 2, 2.0)
+    p.ok('Lasche: haengt an der Platte (Anbindung in Z)',
+         L['schlitten_oben_rel'] - L['ls_lasche_z0_rel'], 15.0)
+    p.ok('Scheibe liegt ganz auf der Lasche',
+         (sx_f - SCHEIBE_NORM / 2) - L['ls_lasche_x0'], 0.0)
+    # Das Lasergehaeuse sitzt gleich rechts daneben; seine Lage in X hat
+    # +-0,5 mm (Ø4,0 auf Schaft Ø3).
+    p.ok('Scheibe bleibt vom Lasergehaeuse weg (bei 0,5 mm Versatz)',
+         (-w('laser_breite') / 2 - 0.5) - (sx_f + SCHEIBE_NORM / 2), 0.5)
+    eck_f = (w('m3_mutter_sw') + w('tasche_spiel')) / 2   # Flanken quer zu X
+    p.ok('Muttertasche: Wand zur Kante des Fusses',
+         min(sx_f - L['ls_fuss_x0'], L['ls_fuss_x1'] - sx_f) - eck_f, 1.5)
+    r_ecke = (w('m3_mutter_sw') + w('tasche_spiel')) / math.sqrt(3.0)
+    p.ok('Muttertasche: Material unter der unteren Tasche',
+         (L['ls_fahne_schraub_rel'][0] - r_ecke) - L['ls_fuss_z0_rel'], 1.5)
+    p.ok('Muttertasche: Material bis zur Lasche',
+         (L['ls_fuss_y1'] - L['ls_fuss_y0']) - (w('m3_mutter_h') + 0.3), 2.0)
+    # Schraube von vorn: Scheibe + Lasche + Fuss; die Mutter liegt am Boden
+    # der Tasche, die Spitze muss durch die ganze Mutter.
+    spitze = L['laser_y'] + w('m3_scheibe_h') - L['ls_fahne_schraube']
+    mutter_hinten = L['ls_fuss_y0'] + 0.3
+    p.ok('Schraube M3x{:.0f} fasst die Mutter ganz (mit Scheibe)'.format(
+        L['ls_fahne_schraube']), mutter_hinten - spitze, 0.0)
+    p.ok('Schraubenspitze steht hinten nicht weit ueber',
+         L['ls_fuss_y0'] - (spitze - w('m3_scheibe_h')), 1.0, '<=')
+    p.ok('Steg bleibt ganz unten verstellt ueber der Seitenrippe',
+         (L['ls_steg_z0_rel'] - w('ls_fahne_verstellung'))
+         - L['schlitten_oben_rel'], 1.0)
+    p.ok('Fuss laeuft an der Seitenrippe vorbei',
+         -w('schlitten_breite_l') - L['ls_fuss_x1'], 0.3)
+    p.ok('Blatt haengt am Steg (Ueberdeckung in X)',
+         L['ls_fahne_x1'] - L['ls_fuss_x1'], 5.0)
+    # --- Sockel und Halter (gedruckt, Rev. 22) ------------------------------
     p.ok('Sockel bleibt vom Z-Wagen weg',
          -w('z_wagen_breite') / 2 - w('ls_sockel_x1'), w('luft_bau'))
     # Der Sockel ist nur so breit, wie er sein darf — also gilt fuer den
@@ -835,8 +937,8 @@ def main():
     p.ok('Material hinter dem Einsatz im Endschaltersockel',
          w('ls_sockel_hoehe') + w('traeger_dicke') - w('insert_m3_t'), 2.0)
     p.ok('Halter: Langloch bleibt im Flansch',
-         (L['ls_schraub_z'][0] - w('ls_justage') - w('m3_durchgang') / 2)
-         - L['ls_sockel_z0'], 2.0)
+         (L['ls_langloch_z'][0] - w('ls_justage') - w('m3_durchgang') / 2)
+         - L['ls_halter_z0'], 2.0)
     p.ok('Halter: Platinenloecher liegen in der Wand',
          L['ls_wand_y1'] - (L['ls_pcb_loch_y'][-1] + w('ls_pcb_loch_d') / 2),
          1.0)
@@ -855,15 +957,6 @@ def main():
          w('ls_halter_dicke') - w('ls_pcb_loch_t'), 0.5)
     p.ok('Platine ragt nicht ueber den Halter hinaus (oben)',
          L['ls_halter_z1'] - L['ls_pcb_z1'], 2.0)
-    # Der Sockel ist gedruckt und steht fest; der Halter nimmt den Versatz
-    # des Schaltpunkts auf (Motoradapter). Seine Langloecher liegen auf den
-    # Einsaetzen, die Platine sitzt ls_versatz hoeher.
-    p.info('Platine im Halter hoeher als bis Rev. 29', L['ls_versatz'])
-    p.ok('Halter: Langloecher liegen auf dem Sockel (unten)',
-         (L['ls_schraub_z'][0] - w('ls_justage')) - L['ls_sockel_z0'], 2.0)
-    p.ok('Halter: Langloecher liegen auf dem Sockel (oben)',
-         L['ls_sockel_z1'] - (L['ls_schraub_z'][1] + w('ls_justage')), 2.0)
-    p.info('Verstellbereich des Schaltpunkts', 2 * w('ls_justage'))
     p.info('Toolhead-Breite links (Halterwand)', L['ls_wand_x0'])
     p.ja('Halter bleibt im Schatten des X-Wagens',
          L['ls_wand_x0'] >= -w('x_wagen_laenge') / 2 - 3.0,
@@ -874,8 +967,11 @@ def main():
             ('Traegerplatte (mit Konsole)',
              w('traeger_x_kopf') - w('traeger_x_links'),
              L['motor_rippe_z1'] - w('traeger_z_unten')),
-            ('Schlittenplatte', w('winkel_x_rechts') + w('schlitten_breite_l'),
-             L['schlitten_oben_rel'] - L['schlitten_unten_rel']),
+            ('Schlittenplatte', w('winkel_x_rechts') - L['ls_lasche_x0'],
+             max(L['schlitten_oben_rel'], L['ls_lasche_z1_rel'])
+             - L['schlitten_unten_rel']),
+            ('Schaltfahne', L['ls_fahne_x1'] - L['ls_fuss_x0'],
+             L['ls_fahne_z1_rel'] - L['ls_fuss_z0_rel']),
             ('Mutternwinkel', w('winkel_x_rechts') - w('winkel_x_links'),
              L['regal_z1_rel'] - L['winkel_unten_rel']),
             ('Endschalterhalter', w('ls_sockel_x1') - L['ls_wand_x0'],
@@ -911,7 +1007,10 @@ def main():
             '(Mutternwinkel, schwimmend)'.format(L['winkel_schraube']),
             '4x M3x{:.0f} Zylinderkopf   (NEMA 17 -> Adapter -> Konsole, alle '
             'vier)'.format(L['motor_schraube']),
-            '2x M3x12 + 2x Messing-Einsatz M3 Ø5 (Endschalterhalter -> Sockel)',
+            '2x M3x12 + 2x Messing-Einsatz M3 Ø5 (Endschalterhalter -> Sockel, '
+            'vorhanden)',
+            '2x M3x{:.0f} + 2x M3-Mutter + 2x Scheibe DIN 125 '
+            '(Schaltfahne -> Lasche)'.format(L['ls_fahne_schraube']),
             '2x M2x6 + 2x Heat Insert M2 (Ø3,2 x 2,5) '
             '(Lichtschranke -> Halter)',
             'Gabellichtschranke LM393, Platine {:.0f} x {:.0f} mm, '

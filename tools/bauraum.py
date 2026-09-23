@@ -132,10 +132,21 @@ def bauraeume(w, L):
         Quader('Halter Wand', L['ls_wand_x0'], L['ls_wand_x1'],
                L['ls_sockel_y1'], L['ls_wand_y1'],
                L['ls_halter_z0'], L['ls_halter_z1']),
-        Quader('Lichtschranke', L['ls_wand_x1'],
-               L['ls_wand_x1'] + w('ls_pcb_dicke'),
+        Quader('Lichtschranke', L['ls_wand_x1'], L['ls_pcb_x1'],
                L['ls_pcb_y0'], L['ls_pcb_y1'],
                L['ls_pcb_z0'], L['ls_pcb_z1'], 'kaufteil'),
+        # Die Gabel steht auf der Platine nach +X: zwei Arme, dazwischen der
+        # Schlitz mit seinem Boden. Ihr Grundriss liegt ueber Platte,
+        # Seitenrippe und Pad — nur das Blatt der Schaltfahne darf hinein.
+        Quader('Gabel hinten', L['ls_pcb_x1'], L['ls_gabel_x1'],
+               L['ls_gabel_y'][0], L['ls_schlitz_y'][0],
+               L['ls_gabel_z0'], L['ls_gabel_z1'], 'kaufteil'),
+        Quader('Gabel vorn', L['ls_pcb_x1'], L['ls_gabel_x1'],
+               L['ls_schlitz_y'][1], L['ls_gabel_y'][1],
+               L['ls_gabel_z0'], L['ls_gabel_z1'], 'kaufteil'),
+        Quader('Gabel Boden', L['ls_pcb_x1'], L['ls_boden_x'],
+               L['ls_schlitz_y'][0], L['ls_schlitz_y'][1],
+               L['ls_gabel_z0'], L['ls_gabel_z1'], 'kaufteil'),
         Quader('NEMA 17', sx - w('motor_flansch') / 2,
                sx + w('motor_flansch') / 2, sy - w('motor_flansch') / 2,
                sy + w('motor_flansch') / 2, L['motor_flansch_z'], L['motor_z1'],
@@ -154,14 +165,24 @@ def bauraeume(w, L):
         Quader('Schlitten Pad/Rippen', -w('pad_breite') / 2,
                w('pad_breite') / 2, L['schlitten_y0'], L['schlitten_y1'],
                L['schlitten_unten_rel'], L['schlitten_oben_rel']),
-        # Die Platte ist an der oberen linken Ecke verbreitert — sie traegt
-        # dort die Schaltfahne.
-        Quader('Schlittenplatte', L['ls_fahne_x0'],
+        Quader('Schlittenplatte', -w('schlitten_breite_l'),
                w('winkel_x_rechts'), L['schlitten_y1'], L['laser_y'],
                L['schlitten_unten_rel'], L['schlitten_oben_rel']),
+        # Lasche links an der Platte, dahinter die Schaltfahne (eigenes
+        # Teil): Fuss, Steg ueber der Seitenrippe und das Blatt fuer die
+        # Gabel. Gezeigt in der Mitte ihres Langlochs.
+        Quader('Fahnenlasche', L['ls_lasche_x0'], L['ls_lasche_x1'],
+               L['schlitten_y1'], L['laser_y'],
+               L['ls_lasche_z0_rel'], L['ls_lasche_z1_rel']),
+        Quader('Schaltfahne Fuss', L['ls_fuss_x0'], L['ls_fuss_x1'],
+               L['ls_fuss_y0'], L['ls_fuss_y1'],
+               L['ls_fuss_z0_rel'], L['ls_fuss_z1_rel']),
+        Quader('Schaltfahne Steg', L['ls_fuss_x1'], L['ls_fahne_x1'],
+               L['ls_fuss_y0'], L['ls_fuss_y1'],
+               L['ls_steg_z0_rel'], L['ls_fuss_z1_rel']),
         Quader('Schaltfahne', L['ls_fahne_x0'], L['ls_fahne_x1'],
-               L['ls_fahne_y0'], L['schlitten_y1'],
-               L['ls_fahne_z0_rel'], L['ls_fahne_z1_rel']),
+               L['ls_fahne_y0'], L['ls_fahne_y1'],
+               L['ls_steg_z0_rel'], L['ls_fahne_z1_rel']),
         # Mutternwinkel: senkrechter Ruecken an der Platte, Regal darueber,
         # und darauf die Garnitur (Flanschmutter + Feder + Gleitmutter).
         Quader('Winkel Ruecken', w('winkel_x_links'), w('winkel_x_rechts'),
@@ -224,11 +245,28 @@ def bauraeume(w, L):
         ('Endschaltersockel', 'Halter Flansch'),
         ('Halter Flansch', 'Halter Wand'),
         ('Halter Wand', 'Lichtschranke'),
-        ('Schlittenplatte', 'Schaltfahne'),
-        ('Schlitten Pad/Rippen', 'Schaltfahne'),
-        # Die Fahne laeuft mit Absicht dicht an der Platine vorbei — sie muss
-        # in den Gabelspalt. Der Abstand wird einzeln geprueft.
-        ('Schaltfahne', 'Lichtschranke'),
+        ('Lichtschranke', 'Gabel hinten'),
+        ('Lichtschranke', 'Gabel vorn'),
+        ('Lichtschranke', 'Gabel Boden'),
+        ('Gabel hinten', 'Gabel Boden'),
+        ('Gabel vorn', 'Gabel Boden'),
+        # Lasche und Fahne: verschraubt bzw. ein Teil
+        ('Schlittenplatte', 'Fahnenlasche'),
+        ('Fahnenlasche', 'Schaltfahne Fuss'),
+        ('Fahnenlasche', 'Schaltfahne Steg'),
+        # Die Lasche setzt die Anschraubflaeche der Platte nach links fort:
+        # der Laser liegt in derselben Ebene und stoesst nur an ihre Kante.
+        # Kopf und Scheibe der Fahnenschrauben daneben prueft Abschnitt 9.
+        ('Diodenlaser', 'Fahnenlasche'),
+        ('Schaltfahne Fuss', 'Schaltfahne Steg'),
+        ('Schaltfahne Fuss', 'Schaltfahne'),
+        ('Schaltfahne Steg', 'Schaltfahne'),
+        # Das Blatt laeuft mit Absicht durch den Gabelspalt, 2,5 mm neben
+        # den Armen und ueber dem Schlitzboden — einzeln geprueft in
+        # toolhead_check.py, Abschnitt 9.
+        ('Schaltfahne', 'Gabel hinten'),
+        ('Schaltfahne', 'Gabel vorn'),
+        ('Schaltfahne', 'Gabel Boden'),
         ('Traegerplatte Hauptsaeule', 'Saeulenrippe links'),
         ('Traegerplatte Hauptsaeule', 'Saeulenrippe rechts'),
         ('Traegerplatte Kopf', 'Saeulenrippe links'),

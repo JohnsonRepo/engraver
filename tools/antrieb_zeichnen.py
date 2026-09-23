@@ -365,10 +365,12 @@ def main():
         t += a.ausschnitt(name, zeichne_seite(a, w, L, zc))
         t.append(text(a.ox, OBEN - 8, '{}  (zc = {})'.format(
             titel, de(zc, 2, True)), 10, BLAU, fett=True))
-        # Schaltpunkt: dort erreicht die Oberkante der Schlittenplatte (und
-        # der Schaltfahne) den Strahl der Gabellichtschranke
-        xa, ya = a.px(Y_BEREICH[0], L['ls_strahl_z'])
-        xb, _ = a.px(Y_BEREICH[1], L['ls_strahl_z'])
+        # Schaltpunkt: die Schaltfahne sitzt links neben der Saeule, nicht
+        # in diesem Schnitt. Eingezeichnet ist deshalb, wie hoch die
+        # Gleitmutter steht, wenn die Fahne den Strahl erreicht.
+        z_schalt = L['zc_arbeit_max'] + L['garnitur_z1_rel']
+        xa, ya = a.px(Y_BEREICH[0], z_schalt)
+        xb, _ = a.px(Y_BEREICH[1], z_schalt)
         t.append(linie(xa, ya, xb, ya, ROT, 0.9, '4 3'))
 
     # ---- rechte Ansicht: Beschriftung --------------------------------------
@@ -459,10 +461,12 @@ def main():
         t.append(rect_px(x, ly, x + 14, ly + 9, art))
         t.append(text(x + 19, ly + 8, s, 8.5))
     t.append(linie(18, ly + 23, 32, ly + 23, ROT, 0.9, '4 3'))
-    t.append(text(37, ly + 26, 'Endschalter (Gabellichtschranke): schaltet, '
-                  'wenn die Oberkante der Schlittenplatte diese Linie '
-                  'erreicht — {} mm vor der oberen Grenze des '
-                  'Verfahrwegs'.format(de(w('ls_ueberfahrt'))), 8.5))
+    t.append(text(37, ly + 26, 'Endschalter: die Schaltfahne (links neben '
+                  'der Säule) erreicht den Strahl, wenn die Oberkante der '
+                  'Gleitmutter hier steht — {} mm vor der oberen Grenze, '
+                  '{} mm unter der Kupplung'.format(
+                      de(w('ls_ueberfahrt')),
+                      de(w('ls_ueberfahrt') + w('luft_bau'))), 8.5))
 
     svg = '\n'.join([
         '<svg xmlns="http://www.w3.org/2000/svg" width="{:.0f}" '

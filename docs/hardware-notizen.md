@@ -116,19 +116,32 @@ bekannt ist, hier eintragen und auf `[v]` setzen.
 |---|---|---|
 | Typ | Gabellichtschranke LM393 (Hailege) | `[v]` |
 | Platine | **25 × 20 mm** | `[v]` gemessen |
-| Gabelspalt | **10 mm** | `[v]` |
+| Gabelspalt | **10 mm**, mittig (5 mm vom Platinenrand) | `[v]` |
 | Lage der Gabel | 1 mm von der 20-mm-Kante | `[v]` |
+| Gabel: Höhe über der Platine | **15 mm** | `[v]` gemessen (a) |
+| Gabel: außen, quer zum Schlitz | **18,5 mm** | `[v]` gemessen (b) |
+| Gabel: Dicke entlang der Platine | **6 mm** → Strahl **4 mm** über der Stirnkante | `[v]` gemessen (c) |
+| Lichtfenster über der Platine | **9 mm** | `[v]` gemessen (d) |
+| Boden des Schlitzes über der Platine | 6 mm geschätzt, muss ≤ 6,5 mm sein | `[?]` nicht gemessen |
 | Bohrbild | 2 × M3 in den Ecken der Gegenseite, Lochrand 1 mm von beiden Kanten → **Lochmitten 2,5 mm, Abstand 15 mm** | `[v]` gemessen, Lochmitte abgeleitet |
-| Strahlhöhe über der Platine | **5 mm angenommen** | `[?]` nicht gemessen |
 | Versorgung | 3,3 / 5 V, D0 digital | `[w]` |
 | Befestigung | 2 × M2×6 in Heat Inserts **M2 Ø3,2 × 2,5** | `[v]` vorhanden |
 
 Einpressbohrung für die M2-Einsätze: **Ø2,8 × 3 mm**, also 0,4 mm unter dem
 Außendurchmesser — dieselbe Regel wie bei den M3-Einsätzen am Schienensockel.
 
-Die angenommene Strahlhöhe ist der Grund, warum der Halter ein eigenes
-Druckteil ist: er kostet 6 g statt 154. Die Schaltfahne deckt zudem 3,5 bis
-12,5 mm über der Platine ab.
+Wie es eingebaut ist, am Toolhead gemessen (2026-09-23, noch ohne
+Motoradapter, Wagen oben an der Kupplung):
+
+| Wert | Maß | Status |
+|---|---|---|
+| Konsolenunterseite → Mitte oberer Einsatz des Sockels (C) | **18 mm** → Einsätze bei Z = +127 / +107 | `[v]` |
+| Konsolenunterseite → Unterkante Kupplung (D) | **20 mm** | `[v]` |
+| Unterkante Platine → Oberkante alte Fahne (B) | **32 mm** → Halter steht ganz oben im Langloch | `[v]` |
+
+Daraus folgt Rev. 32: der Halter bleibt und kommt ganz nach unten, die
+angeformte Fahne weicht einer eigenen schwarzen Schaltfahne, die bis an den
+Strahl reicht — siehe `toolhead-z.md`, Endschalter.
 
 Ebenfalls vorhanden: **induktiver Näherungsschalter LJ12A3-4-Z/BX** (M12,
 Sn 4 mm, NPN Schließer, 6–36 V). Für Z am Toolhead ungeeignet — 60 g,
@@ -184,7 +197,7 @@ Gewinde muss also im Druckteil sitzen — mit den vorhandenen M3-Messingeinsätz
 Mutternwinkels ist deshalb 10 mm dick.
 
 Im Skript steckt das als `spindel_d` 8,0 · `spindel_durchgang` 8,6 ·
-`t8_flansch_d` 22 · `t8_lochkreis` 16 · `t8_garnitur_h` 45.
+`t8_flansch_d` 22 · `t8_lochkreis` 16 · `t8_garnitur_h` 38.
 
 **Zur Kupplung:** weil es kein oberes Spindellager gibt, hängt der Z-Schlitten
 (5,6 N) axial an der Kupplung. Damit sind **Oldham- und Klauenkupplungen
@@ -212,7 +225,9 @@ zur Mitte — Begründung in `toolhead-z.md`.
    Motoradapter (Rev. 30) kommt die Kupplung ohnehin nur 8 mm auf die
    Motorwelle, sonst rutscht ihre obere Klemmschraube in die Konsole — also
    auch nachsehen, **wo die Klemmschrauben sitzen** (angenommen: Mitte der
-   Nabe).
+   Nabe). Gemessen ist bisher nur ihre Lage ohne Adapter: 20 mm unter der
+   Konsole. Bei 24 mm Motorwelle steckt die Spindel darin **höchstens 4 mm**
+   tief — beim Einbau des Adapters neu setzen (`toolhead-z.md`, Kupplung).
 
 Und eine Entscheidung, die daraus schon feststeht: **die Spindel wird
 gekürzt**, auf `spindel_zuschnitt` = 160 mm (gebraucht 147,6 mm). Ungekürzt

@@ -1,6 +1,6 @@
 # ToolheadZ.py — kompletter Laser-Toolhead mit NEMA17-Z-Achse
 #
-# Baugruppe (fuenf gedruckte Teile), weil sich Teile relativ zueinander bewegen:
+# Baugruppe (sechs gedruckte Teile), weil sich Teile relativ zueinander bewegen:
 #   Traegerplatte   — geerdet, sitzt auf dem MGN15H-Wagen der Portalfuehrung,
 #                     traegt die MGN9-Z-Schiene (Sockel) und die angeformte
 #                     Motorkonsole
@@ -11,6 +11,8 @@
 #                     ueber der Plattenoberkante, Ruecken schwimmend an der
 #                     Schlittenplatte verschraubt
 #   Endschalterhalter — traegt die Gabellichtschranke am Sockel der Platte
+#   Schaltfahne     — duennes schwarzes Blatt fuer die Gabel, an einer Lasche
+#                     links an der Schlittenplatte verschraubt
 #
 # Koordinatensystem = Maschinenkoordinaten, global fuer alle Komponenten:
 #   X = quer, laengs des Portals          Y = nach vorn, weg vom Portal
@@ -27,7 +29,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 31
+REVISION = 32
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -217,10 +219,20 @@ MASSE = {
     'ls_pcb_dicke':        (1.8,  'Lichtschranke: Platinendicke'),
     'ls_pcb_rand':         (2.5,  'Lichtschranke: Lochmitte von der Kante'),
     'ls_schlitz':         (10.0,  'Lichtschranke: Schlitzbreite (Gabelspalt)'),
-    # ANGENOMMEN: Strahlachse 5 mm ueber der Stirnkante der Platine. Genau
-    # dafuer sitzen die Anschraubloecher des Halters in Langloechern — der
-    # Schaltpunkt wird beim Einstellen gefunden, das Mass muss nicht stimmen.
-    'ls_strahl_ab_kante':  (5.0,  'Lichtschranke: Strahlachse ueber der Stirnkante'),
+    # Gabel am Modul gemessen [v] (2026-09-23): 15 mm hoch ueber der Platine,
+    # aussen 18,5 mm quer zum Schlitz, 6 mm dick entlang der Platine, der
+    # Schlitz liegt mittig (5 mm vom Rand), das Lichtfenster 9 mm ueber der
+    # Platine. Der Strahl liegt damit 1 + 6/2 = 4 mm ueber der Stirnkante
+    # (bis Rev. 31 mit 5 mm angenommen).
+    'ls_gabel_rand':       (1.0,  'Gabel: Abstand zur Stirnkante der Platine'),
+    'ls_gabel_dicke':      (6.0,  'Gabel: Dicke entlang der Platine (in Z)'),
+    'ls_gabel_hoehe':     (15.0,  'Gabel: Hoehe ueber der Platine'),
+    'ls_gabel_breite':    (18.5,  'Gabel: aussen, quer zum Schlitz'),
+    'ls_strahl_hoehe':     (9.0,  'Gabel: Lichtfenster ueber der Platine'),
+    # NICHT gemessen: wie tief der Schlitz ist. Geschaetzt liegt sein Boden
+    # 6 mm ueber der Platine; die Fahne reicht bis 7,5 mm hinunter. Vor dem
+    # Druck am Modul nachsehen [?] — siehe toolhead-z.md.
+    'ls_schlitz_boden':    (6.0,  'Gabel: Boden des Schlitzes ueber der Platine'),
     'ls_halter_dicke':     (4.0,  'Endschalterhalter: Wandstaerke'),
     'ls_wand_versatz':     (6.0,  'Endschalterhalter: Wand links neben der Platte'),
     'ls_flansch_dicke':    (3.0,  'Endschalterhalter: Dicke des Anschraubflansches'),
@@ -228,12 +240,18 @@ MASSE = {
     'ls_schraub_abstand': (20.0,  'Endschalterhalter: Abstand der Anschraubpunkte'),
     'ls_sockel_hoehe':     (8.0,  'Endschaltersockel an der Platte: Hoehe in Y'),
     'ls_sockel_x1':      (-13.0,  'Endschaltersockel: rechte Kante'),
-    # Der Sockel gehoert zur Traegerplatte, und die ist gedruckt (Stand
-    # Rev. 28/29, Einsaetze bei Z = +43,5 und +63,5). Er bleibt deshalb, wo
-    # er ist, auch wenn der Schaltpunkt wandert — den Unterschied gleicht der
-    # Halter aus, ein eigenes kleines Teil: seine Platine sitzt entsprechend
-    # hoeher ueber den Langloechern (ls_versatz in lage()).
-    'ls_sockel_unten':    (35.5,  'Endschaltersockel: Unterkante (gedruckt)'),
+    # Sockel und Halter sind gedruckt und eingebaut. Am Toolhead gemessen
+    # [v]: Konsolenunterseite bis Mitte oberer Einsatz 18 mm — Einsaetze also
+    # bei Z = 127 und 107, Sockel ab 99 (das Modell von Rev. 20-22 haette
+    # 22 mm ergeben; die 4 mm fangen die Langloecher auf). Bis Rev. 31 stand
+    # hier 35,5: angenommen war der Sockel aus Rev. 28/29, und die Platine
+    # wanderte im Halter 17 mm nach oben — in die falsche Richtung.
+    'ls_sockel_unten':    (99.0,  'Endschaltersockel: Unterkante (gedruckt)'),
+    # Wo der Halter in seinen Langloechern steht (-ls_justage .. +ls_justage).
+    # Gemessen stand er ganz oben: Platinenunterkante 32 mm ueber der alten
+    # Fahne bei Wagen am Anschlag. Fuer die neue Fahne ganz nach unten — der
+    # Strahl kommt 8 mm naeher an den Schlitten.
+    'ls_halter_stellung': (-4.0,  'Endschalterhalter: Stellung im Langloch'),
     # Die vorhandenen M2-Einsaetze haben 3,2 mm Aussendurchmesser und sind
     # 2,5 mm lang [v] — Ø2,8 ist dafuer die Einpressbohrung (0,4 mm Untermass,
     # dieselbe Regel wie bei den M3 am Schienensockel). Dahinter bleibt eine
@@ -247,13 +265,17 @@ MASSE = {
     # gedruckten Teil aufgefallen). Mit 3 mm bleibt unter dem Loch 1,6 mm
     # Wand stehen.
     'ls_pcb_luft':         (3.0,  'Lichtschranke: Platine ueber dem Flansch'),
-    'ls_fahne_hoehe':     (15.0,  'Schaltfahne: Hoehe in Z'),
-    'ls_fahne_dicke':      (2.0,  'Schaltfahne: Dicke (laeuft im Gabelspalt)'),
-    # 9 mm Tiefe, 3,5 mm vor der Platine: die Fahne deckt damit jede
-    # Strahlhoehe zwischen 3,5 und 12,5 mm ueber der Platine ab und bleibt
-    # trotzdem 3,7 mm vom Z-Wagen weg.
-    'ls_fahne_tiefe':      (9.0,  'Schaltfahne: Tiefe quer zur Platine'),
-    'ls_fahne_luft_pcb':   (3.5,  'Schaltfahne: Luft zur Platinenoberflaeche'),
+    # Der erste Halter (Rev. 20) hatte hier 1 mm. Welcher eingebaut ist, ist
+    # offen — die Fahne laeuft deshalb mittig zwischen beiden Schlitzlagen.
+    'ls_pcb_luft_alt':     (1.0,  'Lichtschranke: dasselbe am Halter von Rev. 20'),
+    # --- Schaltfahne (Rev. 32): eigenes schwarzes Teil hinter einer Lasche
+    # links an der Schlittenplatte. Nur ein duennes Blatt darf in die Gabel:
+    # sie steht mit 18,5 x 15 mm genau ueber Platte, Seitenrippe und Pad.
+    'ls_fahne_dicke':      (3.0,  'Schaltfahne: Dicke im Gabelspalt'),
+    'ls_fahne_ueber_strahl': (1.5, 'Schaltfahne: reicht so weit ueber den Strahl'),
+    'ls_fahne_verstellung': (5.0,  'Schaltfahne: Langloch in der Lasche je Richtung'),
+    'ls_fahne_schraub_abstand': (16.0, 'Schaltfahne: Abstand der zwei Schrauben'),
+    'ls_lasche_breite':   (10.0,  'Fahnenlasche: Breite links neben der Platte'),
     'ls_ueberfahrt':       (8.0,  'Weg nach dem Schaltpunkt bis zur Grenze'),
 
     # --- Schlittenplatte (Konzept aus ToolheadGrundplatte) -----------------
@@ -458,27 +480,32 @@ def lage():
     # ungekuerzt ist es die niedrigste Kante der ganzen Maschine.
 
     # ---- Endschalter: Gabellichtschranke links neben der Saeule ------------
-    # Geschaltet wird beim Hochfahren: die Oberkante der Schaltfahne (= die
-    # der Schlittenplatte) erreicht den Strahl, kurz bevor der Wagen
-    # mechanisch ansteht. ls_ueberfahrt ist der Rest bis dahin.
-    L['ls_strahl_z'] = (L['zc_max'] - w('ls_ueberfahrt')
-                        + L['schlitten_oben_rel'])
-    L['ls_pcb_z0'] = L['ls_strahl_z'] - w('ls_strahl_ab_kante')
-    L['ls_pcb_z1'] = L['ls_pcb_z0'] + w('ls_pcb_laenge')
-    # Sockel: gedruckt, steht fest (siehe ls_sockel_unten). Bis Rev. 29 lag
-    # er je 5 mm unter und ueber der Platine; um so viel, wie die Platine
-    # heute hoeher sitzt, ist der Halter ueber dem Sockel verlaengert.
+    # Seit Rev. 32 laeuft die Kette andersherum: Sockel und Halter sind
+    # gedruckt und eingebaut, der Strahl liegt also fest. Die Schaltfahne am
+    # Schlitten bekommt die Laenge, mit der ihre Oberkante den Strahl genau
+    # dann erreicht, wenn der Wagen ls_ueberfahrt unter der Grenze steht.
     L['ls_sockel_z0'] = w('ls_sockel_unten')
     L['ls_sockel_z1'] = L['ls_sockel_z0'] + w('ls_pcb_laenge') + 10.0
-    L['ls_versatz'] = L['ls_pcb_z0'] - 5.0 - L['ls_sockel_z0']
-    L['ls_halter_z0'] = min(L['ls_sockel_z0'], L['ls_pcb_z0'] - 5.0)
-    L['ls_halter_z1'] = max(L['ls_sockel_z1'], L['ls_pcb_z1'] + 5.0)
     # Sockel an der Plattenvorderseite: die 8 mm dicke Platte allein traegt
     # keinen Gewindeeinsatz (Wand 1,7 mm), mit Sockel sind es 16 mm Material.
     L['ls_sockel_y1'] = L['traeger_y1'] + w('ls_sockel_hoehe')
     L['ls_schraub_x'] = (w('traeger_x_links') + w('ls_sockel_x1')) / 2.0
     L['ls_schraub_z'] = [L['ls_sockel_z0'] + 8.0,
                          L['ls_sockel_z0'] + 8.0 + w('ls_schraub_abstand')]
+    # Halter wie gedruckt (Rev. 22): Flansch und Wand so hoch wie der
+    # Sockel, die Platine 5 mm ueber seiner Unterkante — alles um die
+    # Stellung in den Langloechern verschoben. Die Einsaetze stehen fest,
+    # die Langloecher wandern mit dem Halter.
+    L['ls_halter_z0'] = L['ls_sockel_z0'] + w('ls_halter_stellung')
+    L['ls_halter_z1'] = L['ls_sockel_z1'] + w('ls_halter_stellung')
+    L['ls_langloch_z'] = [z + w('ls_halter_stellung')
+                          for z in L['ls_schraub_z']]
+    L['ls_pcb_z0'] = L['ls_halter_z0'] + 5.0
+    L['ls_pcb_z1'] = L['ls_pcb_z0'] + w('ls_pcb_laenge')
+    # Die Gabel sitzt an der unteren Stirnkante, der Strahl in ihrer Mitte.
+    L['ls_gabel_z0'] = L['ls_pcb_z0'] + w('ls_gabel_rand')
+    L['ls_gabel_z1'] = L['ls_gabel_z0'] + w('ls_gabel_dicke')
+    L['ls_strahl_z'] = (L['ls_gabel_z0'] + L['ls_gabel_z1']) / 2.0
     # Halter: Flansch auf dem Sockel, Wand links davon traegt die Platine.
     L['ls_flansch_y1'] = L['ls_sockel_y1'] + w('ls_flansch_dicke')
     L['ls_wand_x1'] = w('traeger_x_links') - w('ls_wand_versatz')
@@ -488,22 +515,57 @@ def lage():
     L['ls_pcb_y0'] = L['ls_flansch_y1'] + w('ls_pcb_luft')
     L['ls_pcb_y1'] = L['ls_pcb_y0'] + w('ls_pcb_breite')
     L['ls_wand_y1'] = L['ls_pcb_y1'] + 1.0
-    # Die Fahne laeuft in der Schlitzmitte der Gabel, also mittig zur Platine.
-    L['ls_fahne_y0'] = ((L['ls_pcb_y0'] + L['ls_pcb_y1']) / 2.0
-                        - w('ls_fahne_dicke') / 2.0)
-    L['ls_fahne_y1'] = L['ls_fahne_y0'] + w('ls_fahne_dicke')
     L['ls_pcb_loch_y'] = [L['ls_pcb_y0'] + w('ls_pcb_rand'),
                           L['ls_pcb_y1'] - w('ls_pcb_rand')]
     L['ls_pcb_loch_z'] = L['ls_pcb_z1'] - w('ls_pcb_rand')
-    # Fahne in X: vor der Platine beginnen, damit sie den Strahl quert, und
-    # vor dem Z-Wagen enden.
-    L['ls_fahne_x0'] = (L['ls_wand_x1'] + w('ls_pcb_dicke')
-                        + w('ls_fahne_luft_pcb'))
-    L['ls_fahne_x1'] = L['ls_fahne_x0'] + w('ls_fahne_tiefe')
-    # Oberkante der Fahne = Oberkante der Schlittenplatte; sie schaltet also,
-    # wenn die Platte in die Gabel einfaehrt.
-    L['ls_fahne_z1_rel'] = L['schlitten_oben_rel']
-    L['ls_fahne_z0_rel'] = L['ls_fahne_z1_rel'] - w('ls_fahne_hoehe')
+    # Gabel auf der Bauteilseite der Platine (nach +X), Schlitz mittig.
+    L['ls_pcb_x1'] = L['ls_wand_x1'] + w('ls_pcb_dicke')
+    L['ls_gabel_x1'] = L['ls_pcb_x1'] + w('ls_gabel_hoehe')   # offene Seite
+    L['ls_strahl_x'] = L['ls_pcb_x1'] + w('ls_strahl_hoehe')
+    L['ls_boden_x'] = L['ls_pcb_x1'] + w('ls_schlitz_boden')
+    mitte = (L['ls_pcb_y0'] + L['ls_pcb_y1']) / 2.0
+    L['ls_gabel_y'] = [mitte - w('ls_gabel_breite') / 2.0,
+                       mitte + w('ls_gabel_breite') / 2.0]
+    L['ls_schlitz_y'] = [mitte - w('ls_schlitz') / 2.0,
+                         mitte + w('ls_schlitz') / 2.0]
+
+    # ---- Schaltfahne, relativ zur Wagenmitte zc ----------------------------
+    # Quer zum Schlitz mittig zwischen den Schlitzlagen beider Halter-
+    # staende (Platine 3 bzw. 1 mm ueber dem Flansch): dann ist gleich,
+    # welcher Halter eingebaut ist.
+    fahne_y = mitte + (w('ls_pcb_luft_alt') - w('ls_pcb_luft')) / 2.0
+    L['ls_fahne_y0'] = fahne_y - w('ls_fahne_dicke') / 2.0
+    L['ls_fahne_y1'] = fahne_y + w('ls_fahne_dicke') / 2.0
+    # In X ueber das Lichtfenster hinweg bis ueber die offene Seite der Gabel.
+    L['ls_fahne_x0'] = L['ls_strahl_x'] - w('ls_fahne_ueber_strahl')
+    L['ls_fahne_x1'] = L['ls_gabel_x1'] + 2.0
+    # Oberkante = Strahl, wenn der Wagen am Schaltpunkt steht.
+    L['ls_fahne_z1_rel'] = L['ls_strahl_z'] - L['zc_arbeit_max']
+    # Lasche: verlaengert die Platte nach links, Y wie die Platte.
+    L['ls_lasche_x1'] = -w('schlitten_breite_l')
+    L['ls_lasche_x0'] = L['ls_lasche_x1'] - w('ls_lasche_breite')
+    # Zwei Schrauben von vorn durch Langloecher in der Lasche, die Muttern
+    # sitzen in Taschen hinten im Fuss der Fahne.
+    L['ls_fahne_schraub_rel'] = [5.0, 5.0 + w('ls_fahne_schraub_abstand')]
+    rand_ll = w('ls_fahne_verstellung') + 4.0      # Langloch + 2,3 mm Wand
+    L['ls_lasche_z0_rel'] = L['ls_fahne_schraub_rel'][0] - rand_ll
+    L['ls_lasche_z1_rel'] = L['ls_fahne_schraub_rel'][1] + rand_ll
+    # Fuss hinter der Lasche: hinten buendig mit der Fahne (das Teil liegt
+    # flach auf dem Bett), vorn an der Lasche, 0,5 mm neben der Seitenrippe.
+    L['ls_fuss_y0'] = L['ls_fahne_y0']
+    L['ls_fuss_y1'] = L['schlitten_y1']
+    L['ls_fuss_x0'] = L['ls_lasche_x0']
+    L['ls_fuss_x1'] = L['ls_lasche_x1'] - 0.5
+    L['ls_fahne_schraub_x'] = (L['ls_fuss_x0'] + L['ls_fuss_x1']) / 2.0
+    L['ls_fuss_z0_rel'] = L['ls_fahne_schraub_rel'][0] - 6.0
+    # Steg: traegt die Fahne ueber Seitenrippe und Plattenkante hinweg und
+    # bleibt auch ganz nach unten verstellt 1 mm darueber.
+    L['ls_steg_z0_rel'] = (L['schlitten_oben_rel'] + w('ls_fahne_verstellung')
+                           + 1.0)
+    L['ls_fuss_z1_rel'] = L['ls_steg_z0_rel'] + 8.0
+    # Schraube: Lasche + Fuss bis durch die Mutter, naechste gerade Laenge.
+    L['ls_fahne_klemm'] = L['laser_y'] - L['ls_fuss_y0']
+    L['ls_fahne_schraube'] = 2.0 * int(L['ls_fahne_klemm'] / 2.0 + 0.999)
 
     # ---- Grenzen der Langlochstellung (mm nach oben, 0 = Lochmitte).
     #      Nach oben bindet die MONTAGE: schiebt man den Laser hoch, wandert
@@ -1201,7 +1263,8 @@ def bau_motoradapter(app, design, comp, L, fehler):
 
 def bau_schlittenplatte(app, design, comp, L, zc, fehler):
     """Auf dem MGN9H-Z-Wagen: Auflagepad + Rippen, davor die Platte mit dem
-    Laser-Lochbild, rechts eine Lasche fuer den Mutternwinkel.
+    Laser-Lochbild, rechts eine Lasche fuer den Mutternwinkel, links eine
+    fuer die Schaltfahne.
     Drucklage: Laser-Anschraubflaeche aufs Bett, Aufbaurichtung = -Maschine Y
     (im Slicer spiegeln/drehen), oder Pad-Rueckseite unten mit Stuetzen."""
     e_pad = ebene_y(comp, L['schlitten_y0'], 'E_Pad_hinten')
@@ -1271,21 +1334,23 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
                                w('laser_langloch_hub'))
     weg(comp, alle_profile(sk), w('schlitten_dicke'), koerper)
 
-    # Schaltfahne fuer die Gabellichtschranke: ein Block an der linken oberen
-    # Ecke. Er waechst aus der Seitenrippe heraus und ist nach hinten von der
-    # verbreiterten Plattenecke getragen — in der Drucklage (Laserflaeche auf
-    # dem Bett, Aufbaurichtung -Y) steht damit jede Schicht auf Material.
-    sk = skizze(comp, e_platte, 'Sk_Fahnenecke')
-    rechteck(sk, L['ls_fahne_x0'], zc + L['ls_fahne_z0_rel'],
-             -w('schlitten_breite_l'), zc + L['ls_fahne_z1_rel'])
+    # Lasche fuer die Schaltfahne (Rev. 32), links neben der Platte und so
+    # dick wie sie. Bis Rev. 31 war die Fahne hier angeformt — mit
+    # Plattenecke 10 mm dick, so breit wie der ganze Gabelspalt. Ein duennes
+    # Blatt in Spaltmitte laesst sich in dieser Drucklage (Laserflaeche auf
+    # dem Bett) nicht anformen: es hinge in der Luft. Deshalb ein eigenes
+    # Teil, das hier angeschraubt wird.
+    sk = skizze(comp, e_platte, 'Sk_Fahnenlasche')
+    rechteck(sk, L['ls_lasche_x0'], zc + L['ls_lasche_z0_rel'],
+             L['ls_lasche_x1'], zc + L['ls_lasche_z1_rel'])
     dazu(comp, groesstes_profil(sk), w('schlitten_dicke'), koerper)
 
-    sk = skizze(comp, ebene_y(comp, L['ls_fahne_y0'], 'E_LS_Fahne'),
-                'Sk_Schaltfahne')
-    rechteck(sk, L['ls_fahne_x0'], zc + L['ls_fahne_z0_rel'],
-             L['ls_fahne_x1'], zc + L['ls_fahne_z1_rel'])
-    dazu(comp, groesstes_profil(sk),
-         L['schlitten_y1'] - L['ls_fahne_y0'], koerper)
+    # Senkrechte Langloecher: der Schaltpunkt wird an der Fahne eingestellt.
+    sk = skizze(comp, e_platte, 'Sk_Langloecher_Fahne')
+    for rel in L['ls_fahne_schraub_rel']:
+        langloch_senkrecht(sk, L['ls_fahne_schraub_x'], zc + rel,
+                           w('m3_durchgang'), w('ls_fahne_verstellung'))
+    weg(comp, alle_profile(sk), w('schlitten_dicke'), koerper)
 
     # Schwimmende Verschraubung des Mutternwinkels: Uebermass zum Ausrichten
     sk = skizze(comp, e_platte, 'Sk_Bohrungen_Mutternwinkel')
@@ -1295,10 +1360,72 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
 
     fussfase(comp, koerper, 'z', L['schlitten_y0'], w('fase_fuss'), fehler,
              'Schlittenplatte')
-    # Die Platte reicht links bis an die Schaltfahne heran.
+    # Links reicht die Platte mit der Fahnenlasche weiter, die auch oben
+    # ueber die Plattenkante hinausgeht.
     bbox_pruefen(koerper, 'Schlittenplatte',
-                 ((L['ls_fahne_x0'], w('winkel_x_rechts')),
-                  (L['schlitten_y0'], L['laser_y']), (z_u, z_o)), fehler)
+                 ((L['ls_lasche_x0'], w('winkel_x_rechts')),
+                  (L['schlitten_y0'], L['laser_y']),
+                  (z_u, max(z_o, zc + L['ls_lasche_z1_rel']))), fehler)
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
+    return koerper
+
+
+def bau_schaltfahne(app, design, comp, L, zc, fehler):
+    """Schaltfahne fuer die Gabellichtschranke (Rev. 32), eigenes Teil.
+
+    In die Gabel darf nur ein duennes Blatt: die Gabel steht mit ihrem
+    ganzen Grundriss ueber Platte, Seitenrippe und Pad, der Rest des
+    Schlittens muss darunter bleiben. Das Blatt ist 3 mm dick und laeuft in
+    der Mitte des 10-mm-Spalts; es ist so lang, dass seine Oberkante den
+    Strahl erreicht, wenn der Wagen ls_ueberfahrt unter der Grenze steht.
+
+    Aufbau: FUSS hinter der Lasche der Schlittenplatte (zwei Muttertaschen
+    hinten), STEG ueber Seitenrippe und Plattenkante nach rechts, darauf das
+    BLATT. Der Fuss sitzt mit zwei M3 von vorn in den Langloechern der
+    Lasche: +-ls_fahne_verstellung, um den Schaltpunkt einzustellen.
+
+    Drucklage: Rueckseite (Seite der Muttertaschen) aufs Bett — Fuss, Steg
+    und Blatt beginnen alle auf dieser Flaeche, keine Stuetzen. SCHWARZ
+    drucken: helles PETG laesst das Infrarot der Schranke durch."""
+    e_hinten = ebene_y(comp, L['ls_fuss_y0'], 'E_Fahne_hinten')
+    fuss = L['ls_fuss_y1'] - L['ls_fuss_y0']
+
+    sk = skizze(comp, e_hinten, 'Sk_Fahne_Fuss')
+    rechteck(sk, L['ls_fuss_x0'], zc + L['ls_fuss_z0_rel'],
+             L['ls_fuss_x1'], zc + L['ls_fuss_z1_rel'])
+    koerper = neu(comp, groesstes_profil(sk), fuss).bodies.item(0)
+    koerper.name = 'Schaltfahne'
+
+    sk = skizze(comp, e_hinten, 'Sk_Fahne_Steg')
+    rechteck(sk, L['ls_fuss_x1'], zc + L['ls_steg_z0_rel'],
+             L['ls_fahne_x1'], zc + L['ls_fuss_z1_rel'])
+    dazu(comp, groesstes_profil(sk), fuss, koerper)
+
+    sk = skizze(comp, e_hinten, 'Sk_Fahne_Blatt')
+    rechteck(sk, L['ls_fahne_x0'], zc + L['ls_steg_z0_rel'],
+             L['ls_fahne_x1'], zc + L['ls_fahne_z1_rel'])
+    dazu(comp, groesstes_profil(sk), w('ls_fahne_dicke'), koerper)
+
+    sk = skizze(comp, e_hinten, 'Sk_Fahne_Bohrungen')
+    for rel in L['ls_fahne_schraub_rel']:
+        kreis(sk, L['ls_fahne_schraub_x'], zc + rel, w('m3_durchgang'))
+    durch(comp, alle_profile(sk), koerper)
+
+    # Flanken quer zu X: so bleibt zu beiden Kanten des Fusses mehr Wand
+    # als mit der Ecke zur Seite.
+    sk = skizze(comp, e_hinten, 'Sk_Fahne_Muttertaschen')
+    for rel in L['ls_fahne_schraub_rel']:
+        sechskant(sk, L['ls_fahne_schraub_x'], zc + rel,
+                  w('m3_mutter_sw') + w('tasche_spiel'), flach_quer=False)
+    weg(comp, alle_profile(sk), w('m3_mutter_h') + 0.3, koerper)
+
+    fussfase(comp, koerper, 'z', L['ls_fuss_y0'], w('fase_fuss'), fehler,
+             'Schaltfahne')
+    bbox_pruefen(koerper, 'Schaltfahne',
+                 ((L['ls_fuss_x0'], L['ls_fahne_x1']),
+                  (L['ls_fuss_y0'], L['ls_fuss_y1']),
+                  (zc + L['ls_fuss_z0_rel'], zc + L['ls_fahne_z1_rel'])),
+                 fehler)
     material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
 
@@ -1306,17 +1433,15 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
 def bau_endschalterhalter(app, design, comp, L, fehler):
     """Haelt die Gabellichtschranke links neben der Saeule.
 
-    Eigenes Druckteil, mit Absicht: die genaue Gabelgeometrie des Moduls ist
-    nicht vermessen (Strahlhoehe ueber der Platine angenommen). Ein Irrtum
-    kostet hier 4 g statt der 154-g-Traegerplatte, und der Schaltpunkt bleibt
-    ueber die Langloecher justierbar.
+    Der Halter ist gedruckt und eingebaut (Stand Rev. 22) — das Modell zeigt
+    ihn so, wie er ist, in der Stellung ls_halter_stellung in seinen
+    Langloechern. Nicht neu drucken: den Schaltpunkt stellt seit Rev. 32 die
+    Schaltfahne ein.
     Drucklage: Flansch aufs Bett, Wand steht nach oben — keine Stuetzen.
     """
     e_flansch = ebene_y(comp, L['ls_sockel_y1'], 'E_LS_Flansch')
 
-    # Flansch und Wand reichen vom Sockel bis ueber die Platine. Seit dem
-    # Motoradapter sitzt die Platine hoeher als der (gedruckte) Sockel, der
-    # Flansch steht dann oben ueber den Sockel hinaus.
+    # Flansch und Wand so hoch wie der Sockel, um die Stellung verschoben.
     sk = skizze(comp, e_flansch, 'Sk_LS_Flansch')
     rechteck(sk, L['ls_wand_x0'], L['ls_halter_z0'],
              w('ls_sockel_x1'), L['ls_halter_z1'])
@@ -1330,10 +1455,10 @@ def bau_endschalterhalter(app, design, comp, L, fehler):
     dazu(comp, groesstes_profil(sk),
          L['ls_wand_y1'] - L['ls_sockel_y1'], koerper)
 
-    # Anschraubung an den Sockel: Langloecher, damit der Schaltpunkt um
-    # +-ls_justage verschoben werden kann, ohne neu zu drucken.
+    # Anschraubung an den Sockel: Langloecher +-ls_justage, sie wandern mit
+    # dem Halter — die Einsaetze im Sockel stehen fest.
     sk = skizze(comp, e_flansch, 'Sk_LS_Anschraubung')
-    for z in L['ls_schraub_z']:
+    for z in L['ls_langloch_z']:
         langloch_senkrecht(sk, L['ls_schraub_x'], z, w('m3_durchgang'),
                            w('ls_justage'))
     weg(comp, alle_profile(sk), w('ls_flansch_dicke'), koerper)
@@ -1659,8 +1784,11 @@ def hinweise_bauen(L, zc, fehler):
             < w('traeger_z_unten')
             else '{:.0f} mm Korridor bis zur Traegerplatte'.format(
                 L['schlitten_y1'] - L['traeger_y1'])),
-        '  9. Endschalterhalter auf den Sockel (2x M3x12 in die Einsaetze),',
-        '     Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen',
+        '  9. Endschalterhalter (vorhanden) ganz nach unten in seine Lang-',
+        '     loecher schieben und festziehen. Schaltfahne: 2x M3-Mutter in',
+        '     die Taschen, hinter die Lasche, 2x M3x{:.0f} + Scheibe von vorn.'
+        .format(L['ls_fahne_schraube']),
+        '     Schaltpunkt einstellen: siehe ENDSCHALTER',
         '',
         'FOKUS UND LANGLOCH (senkrechte Langloecher, +-{:.0f} mm):'.format(
             w('laser_langloch_hub')),
@@ -1681,30 +1809,38 @@ def hinweise_bauen(L, zc, fehler):
     ] + fokus_zeilen(L, w) + [
         '',
         'ENDSCHALTER: Gabellichtschranke (LM393-Modul) links neben der',
-        '  Saeule, Schaltfahne an der oberen linken Ecke der Schlittenplatte.',
+        '  Saeule im vorhandenen Halter. Die SCHALTFAHNE ist ein eigenes',
+        '  schwarzes Teil an einer Lasche links an der Schlittenplatte.',
         '  Referenziert wird NACH OBEN, weg vom Werkstueck.',
-        '  Schaltpunkt (Strahlachse) ... Z = {:+.1f} mm'.format(L['ls_strahl_z']),
-        '  danach bis zur Grenze ....... {:.0f} mm'.format(w('ls_ueberfahrt')),
-        '  justierbar ueber Langloecher  +-{:.0f} mm'.format(w('ls_justage')),
-    ] + ([
-        '  Der Sockel auf der Traegerplatte ist gedruckt und bleibt, wo er',
-        '  ist. Der Motoradapter hebt den Schaltpunkt, deshalb sitzt die',
-        '  Platine im Halter {:.0f} mm hoeher ueber den Langloechern als bis'
-        .format(L['ls_versatz']),
-        '  Rev. 29: den Halter neu drucken (kleines Teil), der Flansch steht',
-        '  dann oben ueber den Sockel hinaus.',
-    ] if abs(L['ls_versatz']) > 0.05 else []) + [
-        '  Die Strahlhoehe ueber der Platine ist ANGENOMMEN ({:.0f} mm). Die'.format(
-            w('ls_strahl_ab_kante')),
-        '  Fahne deckt {:.1f} bis {:.1f} mm ab, der Halter justiert den Rest.'.format(
-            w('ls_fahne_luft_pcb'),
-            w('ls_fahne_luft_pcb') + w('ls_fahne_tiefe')),
-        '  Fahne {:.0f} mm dick im {:.0f}-mm-Spalt — je Seite {:.0f} mm Luft.'.format(
-            w('ls_fahne_dicke'), w('ls_schlitz'),
-            (w('ls_schlitz') - w('ls_fahne_dicke')) / 2),
-        '  VOR DEM DRUCK: Modul an den Halter halten und pruefen, dass die',
-        '  Gabel zur Fahne zeigt. Die Fahne muss undurchsichtig sein —',
-        '  helles PETG laesst Infrarot durch, also dunkel drucken.',
+        '  Strahl (Halter {:+.0f} mm im Langloch) ... Z = {:+.1f} mm'.format(
+            w('ls_halter_stellung'), L['ls_strahl_z']),
+        '  Schaltpunkt: Wagenmitte zc = {:+.1f} mm, danach {:.0f} mm bis'.format(
+            L['zc_arbeit_max'], w('ls_ueberfahrt')),
+        '    zur Grenze',
+        '  Fahne {:.0f} mm dick im {:.0f}-mm-Spalt, Oberkante {:.1f} mm ueber zc'
+        .format(w('ls_fahne_dicke'), w('ls_schlitz'), L['ls_fahne_z1_rel']),
+        '  einstellbar: Fahne +-{:.0f} mm in der Lasche, Halter bis {:.0f} mm'
+        .format(w('ls_fahne_verstellung'),
+                w('ls_justage') - w('ls_halter_stellung')),
+        '    hoeher',
+        '  HALTER bleibt, wie er gedruckt ist: ganz nach unten in seine',
+        '  Langloecher schieben. Gemessen stand er ganz oben, die Platine',
+        '  32 mm ueber der alten Fahne; die war mit Plattenecke 10 mm dick,',
+        '  so breit wie der ganze Spalt, und kam an die Gabel nie heran.',
+        '  EINSTELLEN: Z hochfahren, bis ein {:.0f}-mm-Inbus gerade noch'.format(
+            w('luft_bau')),
+        '  zwischen Gleitmutter und Kupplung passt, dann {:.0f} mm zurueck.'
+        .format(w('ls_ueberfahrt')),
+        '  Fahne von unten an den Strahl schieben, bis die LED am Modul',
+        '  umschaltet, festziehen.',
+        '  VOR DEM DRUCK der Fahne in den Schlitz schauen: sie reicht bis',
+        '  {:.1f} mm ueber die Platine hinunter (Lichtfenster bei {:.0f} mm),'
+        .format(w('ls_strahl_hoehe') - w('ls_fahne_ueber_strahl'),
+                w('ls_strahl_hoehe')),
+        '  der Boden des Schlitzes muss tiefer liegen (geschaetzt {:.0f} mm).'
+        .format(w('ls_schlitz_boden')),
+        '  Die Fahne muss undurchsichtig sein — helles PETG laesst das',
+        '  Infrarot durch, also SCHWARZ drucken.',
         '',
         'GEWINDEEINSAETZE (Z-Schiene -> Sockel, {:.0f} Stueck):'.format(
             len(L['z_schiene_loecher'])),
@@ -1769,6 +1905,8 @@ def hinweise_bauen(L, zc, fehler):
         '  Mutternwinkel ... Regaloberseite (Flanschsitz) aufs Bett. Der',
         '                    Ruecken haengt darunter, Spindel- und Einsatz-',
         '                    bohrungen werden rund, keine Stuetzen.',
+        '  Schaltfahne ..... Rueckseite (Muttertaschen) aufs Bett, SCHWARZ.',
+        '                    Fuss, Steg und Blatt beginnen alle dort.',
         '  4 Wandlinien, >=40% Infill. PETG wegen der Abwaerme des Lasers.',
         '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
@@ -1813,7 +1951,8 @@ def run(context):
         einheit = adsk.core.Matrix3D.create()
         occ = {}
         for name in ('Traegerplatte', 'Motoradapter', 'Schlittenplatte',
-                     'Mutternwinkel', 'Endschalterhalter', 'Bohrlehren'):
+                     'Mutternwinkel', 'Schaltfahne', 'Endschalterhalter',
+                     'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -1824,6 +1963,8 @@ def run(context):
                             L, zc, fehler)
         bau_mutternwinkel(app, design, occ['Mutternwinkel'].component,
                           L, zc, fehler)
+        bau_schaltfahne(app, design, occ['Schaltfahne'].component,
+                        L, zc, fehler)
         bau_endschalterhalter(app, design,
                               occ['Endschalterhalter'].component, L, fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, zc, fehler)
@@ -1833,8 +1974,9 @@ def run(context):
         occ['Endschalterhalter'].isGrounded = True
         occ['Bohrlehren'].isGrounded = True
 
-        # Starrer As-Built-Joint fuer die feste Verschraubung ...
-        for a, b in (('Mutternwinkel', 'Schlittenplatte'),):
+        # Starre As-Built-Joints fuer die festen Verschraubungen ...
+        for a, b in (('Mutternwinkel', 'Schlittenplatte'),
+                     ('Schaltfahne', 'Schlittenplatte')):
             try:
                 ein = root.asBuiltJoints.createInput(occ[a], occ[b], None)
                 ein.setAsRigidJointMotion()

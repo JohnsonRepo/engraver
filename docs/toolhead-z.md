@@ -1,6 +1,6 @@
 # Toolhead Z-Achse — kompletter Aufbau
 
-Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, fünf gedruckte Teile).
+Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, sechs gedruckte Teile).
 Geprüft mit `python3 tools/toolhead_check.py`, Layout in
 [toolhead-z-layout.svg](toolhead-z-layout.svg).
 
@@ -16,9 +16,11 @@ Der Laser sitzt auf dem Z-Schlitten.
 | Pos | Teil | Material | Funktion |
 |---|---|---|---|
 | 1 | **Trägerplatte** mit angeformter **Motorkonsole** | PETG, 8 mm | sitzt auf dem X-Wagen, trägt Schienensockel, Konsole, Säulen- und Führungsrippen |
-| 2 | **Schlittenplatte** | PETG | auf dem MGN9H-Z-Wagen, trägt den Laser und die Schaltfahne |
-| 3 | **Mutternwinkel** | PETG | Flanschsitz für die Tr8×2-Garnitur, schwimmend verschraubt |
-| 4 | **Endschalterhalter** | PETG | hält die Gabellichtschranke, Schaltpunkt über Langlöcher justierbar |
+| 2 | **Motoradapter** | PETG, 10 mm | Distanzplatte zwischen Konsole und Motor, hebt den Motor (Rev. 30) |
+| 3 | **Schlittenplatte** | PETG | auf dem MGN9H-Z-Wagen, trägt den Laser und die Lasche für die Schaltfahne |
+| 4 | **Mutternwinkel** | PETG | Flanschsitz für die Tr8×2-Garnitur, schwimmend verschraubt |
+| 5 | **Schaltfahne** | PETG **schwarz** | dünnes Blatt für die Gabellichtschranke, Schaltpunkt über Langlöcher einstellbar (Rev. 32) |
+| 6 | **Endschalterhalter** | PETG | hält die Gabellichtschranke — gedruckt und eingebaut, bleibt |
 
 Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
 [Motorbefestigung](#motorbefestigung-alle-vier-schrauben-erreichbar).
@@ -155,11 +157,12 @@ Was sich sonst ändert:
 | Fokusfenster | f = 6 … 47 mm | **f = 6 … 57 mm** |
 | Motorschrauben | 4 × M3×12 | **4 × M3×22** |
 | Spindel | auf 150 mm kürzen | **auf 160 mm** (147,6 mm gebraucht) |
-| Endschalterhalter | Platine über den Langlöchern | Platine **17 mm höher**, Halter neu drucken (≈ 10 g) |
+| Endschalter | Oberkante der Platte schaltet | **eigene Schaltfahne**, Halter bleibt (Rev. 32) |
 
-Beide Spalten mit der gemessenen Garnitur (38 mm). Die 17 mm am
-Endschalterhalter sind 10 mm Adapter plus die 7 mm, um die die Garnitur
-niedriger ist als geschätzt — der Sockel war für 45 mm gedruckt.
+Beide Spalten mit der gemessenen Garnitur (38 mm). In Rev. 30/31 stand in der
+letzten Zeile, die Platine müsse im Halter 17 mm höher sitzen — das war falsch
+herum gerechnet, der Sockel ist anders gedruckt als angenommen. Richtig ist
+es unter [Endschalter](#endschalter-gabellichtschranke).
 
 Zwei Grenzen hat der Adapter:
 
@@ -330,57 +333,141 @@ Fokus nicht mehr.
 
 Referenziert wird **nach oben**, weg vom Werkstück. Die Lichtschranke
 (LM393-Modul, Platine 25 × 20 mm, Gabelspalt 10 mm) sitzt **links neben der
-Säule** — dort ist über die ganze Z-Höhe nichts, und der X-Wagen ragt mit
-−29,4 mm ohnehin weiter nach außen als der Halter mit −32 mm. Die Schaltfahne
-wächst aus der oberen linken Ecke der Schlittenplatte.
+Säule** im vorhandenen Halter — dort ist über die ganze Z-Höhe nichts, und der
+X-Wagen ragt mit −29,4 mm ohnehin weiter nach außen als der Halter mit
+−32 mm. Geschaltet wird seit Rev. 32 von einer **eigenen, schwarzen
+Schaltfahne**, die an einer Lasche links an der Schlittenplatte sitzt.
 
 | Maß | Wert |
 |---|---|
-| Schaltpunkt (Strahlachse) | Z = +62,5 |
-| Weg danach bis zur mechanischen Grenze | 8 mm |
-| Justierbereich über die Langlöcher | ±4 mm |
-| Platine im Halter über den Langlöchern | 17 mm höher als bis Rev. 29 (Motoradapter 10 mm + Garnitur 7 mm niedriger) |
-| Fahne im 10-mm-Spalt | 2 mm dick, 4 mm Luft je Seite |
-| Fahne deckt Strahlhöhe ab | 3,5 … 12,5 mm über der Platine |
+| Strahl (Halter ganz unten im Langloch) | Z = +104 |
+| Schaltpunkt | Wagenmitte zc = +45,5 — 8 mm unter der Grenze (+53,5) |
+| Blatt der Fahne im 10-mm-Spalt | 3 mm dick, 2,5 und 4,5 mm Luft zu den Armen, bei beiden Halterständen |
+| Blatt quer zur Platine | ab 7,5 mm über der Platine bis 2 mm über die offene Seite der Gabel |
+| Oberkante der Fahne | 58,5 mm über der Wagenmitte |
+| einstellbar | Fahne ±5 mm in der Lasche, Halter bis 8 mm nach oben |
 
-**Der Halter ist mit Absicht ein eigenes Druckteil (≈ 6 g).** Die Strahlhöhe
-über der Platine konnte ich nicht messen — sie ist mit 5 mm angenommen. Liegt
-sie anders, kostet das einen 6-g-Nachdruck und nicht die 154-g-Trägerplatte;
-außerdem fängt die Fahne mit 9 mm Tiefe ohnehin jede Höhe zwischen 3,5 und
-12,5 mm ab.
+### Was an Rev. 30/31 falsch war
+
+Zwei Fehler, beide an deinem Aufbau aufgefallen:
+
+* **Die Fahne war zu dick.** Das Blatt selbst war 2 mm dick, aber die
+  Plattenecke dahinter wäre mit in die Gabel gefahren: zusammen 10 mm, der
+  ganze Spalt. Die Gabel stand gar nicht im Modell, nur die Platine — die
+  Kollisionsprüfung konnte das nicht sehen. Jetzt stehen ihre beiden Arme und
+  der Boden des Schlitzes als eigene Bauräume drin.
+* **Die Platine wanderte in die falsche Richtung.** Ich hatte angenommen,
+  dein Sockel sei nach Rev. 28/29 gedruckt (Einsätze bei +43,5 und +63,5),
+  und die Platine im Halter um 17 mm nach oben gesetzt, damit der Strahl dem
+  gestiegenen Verfahrweg folgt. Gedruckt ist aber ein früher Stand mit den
+  Einsätzen 18 mm unter der Konsole, rund 60 mm höher. Der Strahl lag schon
+  bisher 36 mm über der alten Fahne, wenn der Wagen oben anstand — nach oben
+  verschoben wäre es noch schlimmer geworden.
+
+### Was die Messungen ergeben
+
+| Messung | Wert | daraus |
+|---|---|---|
+| a Gabelhöhe über der Platine | 15 mm | offene Seite der Gabel bei X = −11,2 |
+| b Gabel außen, quer zum Schlitz | 18,5 mm | Grundriss der Gabel 18,5 × 15 mm |
+| c Gabeldicke entlang der Platine | 6 mm | Strahl 1 + 3 = **4 mm** über der Stirnkante (angenommen waren 5) |
+| d Lichtfenster über der Platine | 9 mm | Strahl bei X = −17,2 |
+| e Platinenrand bis Schlitz | 5 mm | Schlitz mittig |
+| C Konsole bis Mitte oberer Einsatz | 18 mm | Einsätze bei +127 und +107, Sockel ab +99 |
+| D Konsole bis Unterkante Kupplung | 20 mm | Kupplung unten bei +125 (noch ohne Adapter) |
+| B Platine bis Oberkante Fahne, Wagen oben | 32 mm | Platine unten bei +108,5 |
+
+Mit der Garnitur (38 mm) auf dem Regal steht der Wagen an, wenn zc = 125 −
+65,5 = +59,5 ist. Die alte Fahne endet dann bei +76,5, die Platine beginnt
+32 mm darüber bei +108,5. Ganz unten in seinen Langlöchern hätte sie bei +100
+gelegen: **dein Halter steht am oberen Ende** (+4,5 gegen ±4 Langloch, im
+Rahmen der Messgenauigkeit). Nach dem Modell von Rev. 20–22 hätte C 22 mm sein
+müssen; die 4 mm Unterschied fangen die Langlöcher auf.
+
+### Die neue Schaltfahne
+
+Die Gabel steht mit ihrem ganzen Grundriss genau über Schlittenplatte,
+Seitenrippe und Auflagepad. Hinein darf deshalb **nur ein dünnes Blatt**,
+der Rest des Schlittens muss darunter bleiben. Selbst am mechanischen
+Anschlag und mit der Fahne ganz oben im Langloch bleiben zu Gabel, Platine
+und Halter mindestens 2,5 mm (`toolhead_check.py`, Abschnitt 9).
+
+* **Blatt:** 3 mm dick, in der Mitte zwischen den Schlitzlagen beider
+  Halterstände — bei Rev. 20 sitzt die Platine 1 mm über dem Flansch, ab
+  Rev. 21 3 mm, und welcher Halter eingebaut ist, weiß ich nicht. So bleiben
+  in beiden Fällen je Seite mindestens 2,5 mm. Quer zur Platine reicht es
+  1,5 mm über das Lichtfenster hinaus und 2 mm über die offene Seite der
+  Gabel.
+* **Oberkante:** 58,5 mm über der Wagenmitte, sie erreicht den Strahl, wenn
+  der Wagen 8 mm unter der Grenze steht. Am Anschlag steht das Blatt 8 mm
+  über der Gabel, 7,5 mm vor der Platine.
+* **Fuß** hinter einer neuen **Lasche** links an der Schlittenplatte: zwei
+  M3×12 mit Scheibe von vorn durch senkrechte Langlöcher (±5 mm), die Muttern
+  sitzen in Taschen hinten im Fuß. Ein **Steg** trägt das Blatt über
+  Seitenrippe und Plattenkante, auch ganz nach unten verstellt noch 1 mm
+  darüber.
+* **Eigenes Teil**, weil ein dünnes Blatt in Spaltmitte an der
+  Schlittenplatte nicht druckbar ist: die liegt mit der Laserfläche auf dem
+  Bett, das Blatt hinge in der Luft. Und weil es **schwarz** sein muss — helles PETG
+  lässt das Infrarot der Schranke durch.
+
+Gedruckt wird die Fahne mit der Rückseite (Seite der Muttertaschen) auf dem
+Bett; Fuß, Steg und Blatt beginnen alle dort. 18 × 60 × 5,5 mm, rund 3,4 g.
+
+**Die Schlittenplatte muss dafür neu gedruckt werden**, die Lasche gibt es
+erst ab Rev. 32. An einer alten Platte stört die angeformte Fahne nicht mehr
+(sie bleibt 27 mm unter der Gabel), sie nützt nur nichts — und ihre
+Plattenecke sitzt genau dort, wo jetzt der Fuß hingehört.
+
+### Der Halter bleibt — nur ganz nach unten
+
+Halter und Sockel sind gedruckt und eingebaut. Das Modell zeigt den Halter
+so, wie er ist (Stand Rev. 22), und stellt ihn in seinen Langlöchern **ganz
+nach unten** (`ls_halter_stellung` = −4): der Strahl kommt 8 mm näher an den
+Schlitten, die Fahne wird entsprechend kürzer. Der Halter aus Rev. 30/31 mit
+der um 17 mm höheren Platine ist hinfällig — **nicht drucken**.
+
+### Einstellen
+
+1. Halter lösen, ganz nach unten schieben (die Schrauben stehen dann am oberen
+   Ende der Langlöcher), festziehen.
+2. Fahne mit den Muttern in den Taschen hinter die Lasche, 2 × M3×12 mit
+   Scheibe von vorn, noch lose.
+3. Z hochfahren, bis ein 3-mm-Inbus gerade noch zwischen Gleitmutter und
+   Kupplung passt — das ist die Grenze des Verfahrwegs. Dann **8 mm zurück**.
+4. Fahne von unten an den Strahl schieben, bis die LED am Modul umschaltet,
+   festziehen.
+5. Probe: referenzieren lassen. Steht die Achse, bleiben zwischen Gleitmutter
+   und Kupplung 11 mm.
+
+Das gilt für den Aufbau **mit Motoradapter** und der Kupplung 8 mm auf der
+Motorwelle. Ohne Adapter steht die Grenze 10 mm tiefer, und die Fahne käme
+nicht mehr an den Strahl.
+
+Zwei Dinge vor dem Druck der Fahne:
+
+* **In den Schlitz schauen.** Seine Tiefe ist nicht gemessen: das Blatt
+  reicht bis 7,5 mm über die Platine hinunter, der Boden des Schlitzes muss
+  mindestens 1 mm tiefer liegen, also höchstens 6,5 mm über der Platine.
+  Geschätzt sind 6 mm (`ls_schlitz_boden`). Liegt er höher, den Wert
+  eintragen und `ls_fahne_ueber_strahl` verkleinern, bis die Prüfung wieder
+  durchgeht — sie sagt auch, ob das Blatt dann noch über das Fenster reicht.
+* **Über der Gabel** fährt das Blatt am Anschlag noch 8 mm weiter, 7,5 mm vor
+  der Platine. Was dort auf der Platine sitzt (LEDs, Widerstände), muss
+  flacher sein — bei den üblichen Modulen ist es das.
+
+### Halter und Sockel (gedruckt)
 
 Die Platine wird mit **M2 in Heat Inserts** (Ø3,2 × 2,5 mm) gehalten. Die
 Wand ist nur 4 mm dick — für M3-Einsätze mit 7 mm Einpresstiefe wäre das zu
 wenig, für M2 reicht es: Ø2,8 Sackloch, 3 mm tief, dahinter Ø2,4 frei für die
 Schraubenspitze. Damit sitzt der Einsatz auf Anschlag und kann beim
-Einschmelzen nicht durchrutschen. Muttern auf der Rückseite wären die
-schlechtere Wahl — die Wandrückseite ist mit X = −32 die äußerste Kante des
-Toolheads, eine Mutter baute dort 4,8 mm auf.
+Einschmelzen nicht durchrutschen.
 
 Die Platine sitzt **3 mm über dem Flansch** (`ls_pcb_luft`). Beim ersten
 gedruckten Halter stand der Flansch 0,9 mm in die untere Platinenbohrung
 hinein — geprüft wurde bis dahin nur der Abstand nach oben. Jetzt prüft
 `toolhead_check.py` beide Seiten; unter dem Loch bleiben 4,1 mm.
-
-Zwei Dinge vor dem Druck:
-
-* **Modul an den Halter halten** und prüfen, dass die Gabel zur Fahne zeigt
-  (also nach +X) und die Löcher passen. Ich bin von Lochmitten 2,5 mm von
-  jeder Kante ausgegangen — bei „1 mm von beiden Kanten" kann das nur der
-  Lochrand gewesen sein. Weil die Platine M3-Löcher hat und dort M2-Schrauben
-  durchgehen, bleibt ringsum 0,6 mm Luft: ein halber Millimeter Abweichung im
-  Lochabstand ist damit egal.
-* **Die Fahne muss undurchsichtig sein.** Helles oder naturfarbenes PETG lässt
-  Infrarot durch, dann schaltet die Schranke nie sauber — dunkel drucken.
-
-**Seit Rev. 30 bleibt der Sockel, wo er gedruckt ist** (Einsätze bei
-Z = +43,5 und +63,5, also 101,5 und 81,5 mm unter der Konsolenunterseite). Er
-war für den Motor direkt auf der Konsole und eine 45 mm hohe Garnitur gemacht.
-Der Motoradapter hebt den Schaltpunkt um 10 mm, die gemessene Garnitur (38 mm)
-um weitere 7 mm; das nimmt der Halter auf: seine Platine sitzt 17 mm höher
-über den Langlöchern, der Flansch steht oben 17 mm über den Sockel hinaus. Die
-Schaltfahne am Schlitten bleibt, wo sie ist — so fährt die Platte genau so an
-der Gabel vorbei wie bisher.
 
 Der Sockel an der Trägerplatte trägt zwei Gewindeeinsätze. Er ist nötig, weil
 die 8 mm dicke Platte allein für einen Ø4,6-Einsatz nur 1,7 mm Wand ließe; mit
@@ -441,15 +528,18 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 | Teil | Volumen | Masse PETG | Bauraum | Lauf |
 |---|---|---|---|---|
 | Trägerplatte mit Konsole | ≈ 124 cm³ | **≈ 157 g** | 78 × 222 × 56 mm | Rev. 16 + Sockel |
-| Schlittenplatte | ≈ 43,4 cm³ | **≈ 55 g** | 71 × 102 × 24 mm | Rev. 14 + Fahne + 5 mm (Rev. 27) |
+| Motoradapter | ≈ 13,6 cm³ | **≈ 17 g** | 42 × 42 × 10 mm | gerechnet |
+| Schlittenplatte | ≈ 44,1 cm³ | **≈ 56 g** | 72 × 115 × 18 mm | Rev. 14 + 5 mm (Rev. 27) + Fahnenlasche (Rev. 32) |
 | Mutternwinkel | ≈ 11,3 cm³ | **≈ 14 g** | 28 × 36 × 22 mm | gerechnet |
-| Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet |
-| **Druckteile zusammen** | ≈ 180 cm³ | **≈ 228 g** | | |
+| Schaltfahne | ≈ 2,6 cm³ | **≈ 3,4 g** | 18 × 60 × 5,5 mm | gerechnet |
+| Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet (gedruckt, bleibt) |
+| **Druckteile zusammen** | ≈ 201 cm³ | **≈ 255 g** | | |
 
 Die Werte für Trägerplatte und Schlittenplatte sind gemessen (154,3 / 50,9 g)
-plus die gerechneten Zuwächse durch Endschaltersockel (+3 g) und Schaltfahne
-(+2 g); der Halter ist ganz gerechnet. **Maßgeblich ist der nächste
-Fusion-Lauf.**
+plus die gerechneten Zuwächse: Endschaltersockel (+3 g), an der
+Schlittenplatte die 5 mm aus Rev. 27 und die Fahnenlasche anstelle der
+angeformten Fahne (+1 g). Motoradapter, Schaltfahne und Halter sind ganz
+gerechnet. **Maßgeblich ist der nächste Fusion-Lauf.**
 
 Die Trägerplatte ist mit Rev. 16 von 145 auf 222 mm gewachsen (Schiene 200 mm,
 Konsole auf +145) und wog vorher 98,4 g. Gerechnet hatte ich 154 g, gemessen
@@ -467,9 +557,9 @@ Druckgewicht rund ein Drittel darunter; maßgeblich ist die Anzeige im Slicer.
 Die Werte hier dienen der Plausibilitätskontrolle und der Abschätzung der
 bewegten Masse.
 
-Bewegte Masse auf der X-Achse, grob: 218 g Druckteile + 280 g NEMA 17 + 400 g
+Bewegte Masse auf der X-Achse, grob: 255 g Druckteile + 280 g NEMA 17 + 400 g
 Laser + 115 g MGN9-Schiene (200 mm) und Wagen + 71 g Gewindestange und
-Kupplung ≈ **1,08 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
+Kupplung ≈ **1,12 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
 im zweistelligen Nm-Bereich, hier rund 1 Nm).
 
 Die Trägerplatte ist mit 121,5 cm³ das schwerste Teil, davon etwa 23 cm³
@@ -790,15 +880,23 @@ berühren (sonst drückt man beim Anziehen auf das Motorlager).
 Klemmschrauben fest, aber nicht mit Gewalt — Aluminiumgewinde. Weil die
 Kupplung die ganze Z-Last hält: nach den ersten Betriebsstunden nachziehen.
 
+**Gemessen, noch ohne Adapter: die Kupplung sitzt 20 mm unter der Konsole**
+(Messung D, Rev. 32). Bei 24 mm Motorwelle stecken damit etwa 21 mm Welle in
+der 25-mm-Kupplung, und für die Spindel bleiben **höchstens 4 mm** — die
+Klemmung hält die hängende Z-Last dann auf gut zwei Gewindegängen. Beim
+Einbau des Adapters wird die Kupplung ohnehin neu gesetzt: 8 mm auf die
+Motorwelle, die Spindel mindestens 8 mm hinein. Hat dein Motor eine kürzere
+Welle, stimmt die Rechnung nicht — dann bitte nachmessen.
+
 Zum Vergleich, falls je getauscht wird: eine *Wendel*kupplung hätte die
 umgekehrte Regel — nur bis zur Nabe, der Wendelschnitt in der Mitte muss frei
 bleiben.
 
-Das Modell rechnet noch mit `kupplung_griff` = 8 mm Einstecktiefe. Für diese
-Kupplung werden es eher 12 mm je Seite; die Kupplung sitzt dann 4 mm höher
-als modelliert, die Verfahrgrenze liegt also auf der sicheren Seite. Wenn sie
-da ist: **Länge, Durchmesser und Länge des Klemmschlitzes** messen, dann wird
-der Parameter nachgezogen.
+Das Modell rechnet mit `kupplung_griff` = 8 mm Einstecktiefe je Seite. Auf
+der Motorseite ist das mit dem Adapter das Höchste (siehe oben); auf der
+Spindelseite darf es mehr sein, zwischen den Enden bleiben 9 mm. Wenn die
+Kupplung ausgemessen ist (**Länge, Durchmesser, Lage der Klemmschrauben**),
+wird der Parameter nachgezogen.
 
 ## Verschraubung
 
@@ -811,7 +909,8 @@ der Parameter nachgezogen.
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +7,8 mm** |
 | Mutternwinkel → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe DIN 9021 Ø9 | Ø4,6-Bohrung, ausrichten dann festziehen |
 | Antriebsmutter → Regal | **4 × M3×8 + 4 × Messing-Einsatz M3** | glatte Flanschseite aufs Regal; Lochkreis Ø16, 45° gedreht; Einsatzbohrung Ø4,6 × 7 mm, **1,4 mm Wand zur Spindelbohrung** |
-| Endschalterhalter → Sockel | 2 × M3×12 + 2 × Messing-Einsatz M3 | Langloch ±4 mm für den Schaltpunkt |
+| Endschalterhalter → Sockel | 2 × M3×12 + 2 × Messing-Einsatz M3 | vorhanden; Langloch ±4 mm, **ganz nach unten** schieben |
+| Schaltfahne → Lasche | **2 × M3×12 + 2 × Mutter M3 + 2 × Scheibe DIN 125** | von vorn durch die Langlöcher der Lasche (±5 mm), Muttern in den Taschen der Fahne; Scheibe 1,75 mm neben dem Lasergehäuse |
 | Lichtschranke → Halter | 2 × M2×6 + 2 × Heat Insert M2 (Ø3,2 × 2,5) | Ø2,8 × 3 mm Sackloch in der 4-mm-Wand, dahinter Ø2,4 frei |
 
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
@@ -839,7 +938,7 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 7 | **Mutternwinkel an die Schlittenplatte**, 2 × M3×16 + große Scheibe: locker lassen | Inbus von vorn | frei |
 | 8 | **Spindel auf 160 mm kürzen**, entgraten, anfasen. Garnitur aufdrehen, Flansch **mit der glatten Seite** aufs Regal (4 × M3×8 von oben), Kupplung **8 mm** auf die Motorwelle (obere Klemmschraube bleibt unter der Konsole), Spindel von unten ebenso weit hinein, Enden nicht aneinander. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Säge, Inbus von oben neben der Spindel | 125 mm mit dem Schlitten unten |
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | Schlitten ganz unten: beide Reihen liegen dann unter der Trägerplatte, freie Bahn |
-| 10 | Endschalterhalter auf den Sockel (2 × M3×12 in die Einsätze), Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen | Inbus von vorn | frei |
+| 10 | Endschalterhalter (vorhanden) **ganz nach unten** in seine Langlöcher schieben, festziehen. **Schaltfahne** mit 2 × M3-Mutter in den Taschen hinter die Lasche, 2 × M3×12 + Scheibe von vorn, Schaltpunkt einstellen ([Endschalter](#einstellen)) | Inbus von vorn | frei, auch mit dem Laser daneben |
 
 Schritt 4 und Schritt 9 haben sich bis Rev. 13 gegenseitig zugebaut: das
 Gewinde der Laserbefestigung sitzt im Modul, also wird von hinten verschraubt —
@@ -920,9 +1019,10 @@ reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 |---|---|---|
 | Motoradapter | Unterseite (Konsolenseite) unten | flache Platte, alle Bohrungen senkrecht und rund; die Fußfase hält den Elefantenfuß aus den 0,2 mm Spiel zwischen den Führungsrippen |
 | Trägerplatte (mit Konsole) | Rückseite (Passfläche) unten | Platte, Sockel, Konsole, Säulen- und Führungsrippen stehen alle auf dem Bett — keine Stützen, alle Kräfte in der Schicht. 222 mm lang, passt liegend in den A1 |
-| Schlittenplatte | Laser-Anschraubfläche unten | Brücke 11 mm zwischen den Rippen; die Langlöcher liegen in der Wand, keine Stützen |
+| Schlittenplatte | Laser-Anschraubfläche unten | Brücke 11 mm zwischen den Rippen; die Langlöcher liegen in der Wand, die Fahnenlasche mit auf dem Bett, keine Stützen |
 | Mutternwinkel | Regaloberseite (Flanschsitz) unten | der Rücken hängt vollständig unter dem Regalgrundriss, Spindel- und Einsatzbohrungen werden rund, keine Stützen |
-| Endschalterhalter | Flansch unten | Wand steht nach oben, keine Stützen |
+| Schaltfahne | Rückseite (Muttertaschen) unten, **schwarzes PETG** | Fuß, Steg und Blatt beginnen alle auf dem Bett, keine Stützen; die Taschen liegen unten, ihr Deckel ist eine kurze Brücke |
+| Endschalterhalter | Flansch unten | gedruckt und eingebaut — **nicht neu drucken** |
 
 4 Wandlinien, ≥ 40 % Infill. An jeder Auflagefläche sitzt eine Fase von
 0,4 × 45° — ohne sie hebt der Elefantenfuß der ersten Schicht das Teil von der
@@ -1016,6 +1116,9 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `tasche_spiel` | 0,15 mm | Spiel der Mutterntaschen auf die Schlüsselweite |
 | `t8_garnitur_h` | 38 mm `[v]` | Bauhöhe der Garnitur, am Teil gemessen — bindet den Verfahrweg nach oben |
 | `motor_adapter` | 10 mm | Dicke des Motoradapters — hebt Motor und Kupplung, Trägerplatte bleibt |
-| `ls_sockel_unten` | 35,5 mm | Unterkante des gedruckten Endschaltersockels; der Halter gleicht den Schaltpunkt aus |
+| `ls_sockel_unten` | 99 mm `[v]` | Unterkante des gedruckten Endschaltersockels, aus der Messung C = 18 mm |
+| `ls_halter_stellung` | −4 mm | Stellung des Halters in seinen Langlöchern (ganz unten) — legt den Strahl fest |
+| `ls_schlitz_boden` | 6 mm `[?]` | Boden des Gabelschlitzes über der Platine, geschätzt; das Blatt reicht bis 7,5 mm |
+| `ls_fahne_verstellung` | 5 mm | Langloch der Fahne in der Lasche, je Richtung |
 | `winkel_regal_dicke` | 10 mm | Flanschregal; muss den M3-Einsatz (7 mm) aufnehmen |
 | `winkel_luft` | 0,5 mm | Luft Regal → Oberkante Schlittenplatte |

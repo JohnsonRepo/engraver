@@ -24,7 +24,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 28
+REVISION = 29
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -402,11 +402,18 @@ def lage():
     L['zc_max'] = min(grenzen.values())
     L['zc_bindend'] = min(grenzen, key=lambda k: grenzen[k])
     L['z_weg'] = L['zc_max'] - L['zc_min']
+    # Gearbeitet wird nur bis zum Schaltpunkt des Endschalters: nach dem
+    # Referenzieren steht Z dort, und die letzten ls_ueberfahrt mm bis zur
+    # mechanischen Grenze sind Sicherheitsweg, kein Arbeitsweg.
+    L['zc_arbeit_max'] = L['zc_max'] - w('ls_ueberfahrt')
+    L['z_arbeit'] = L['zc_arbeit_max'] - L['zc_min']
 
     # ---- Fokusfenster: Hoehe der Gehaeuseunterkante ueber dem Bett. Reine
-    #      Rechnung fuer den Bericht, keine Geometrie.
+    #      Rechnung fuer den Bericht, keine Geometrie. Oben zaehlt der
+    #      Schaltpunkt, nicht die mechanische Grenze.
     L['linse_tief'] = w('bett_abstand') + L['laser_unten_rel'] + L['zc_min']
-    L['linse_hoch'] = w('bett_abstand') + L['laser_unten_rel'] + L['zc_max']
+    L['linse_hoch'] = (w('bett_abstand') + L['laser_unten_rel']
+                       + L['zc_arbeit_max'])
     # Die festen Teile (Plattenunterkante, Schienenende) haengen auf einer
     # Hoehe und fahren in X mit: sie begrenzen die Werkstueckhoehe unabhaengig
     # vom Verfahrweg. Mit langem Verfahrweg ist das die eigentliche Grenze.
@@ -1424,8 +1431,11 @@ def hinweise_bauen(L, zc, fehler):
         'Z-ACHSE:',
         '  Wagenmitte zc von {:+.1f} bis {:+.1f} mm'.format(
             L['zc_min'], L['zc_max']),
-        '  nutzbarer Verfahrweg: {:.1f} mm'.format(L['z_weg']),
+        '  mechanischer Verfahrweg: {:.1f} mm'.format(L['z_weg']),
         '  begrenzt durch: {}'.format(L['zc_bindend']),
+        '  Arbeitsweg bis zum Endschalter: {:.1f} mm (gebraucht {:.0f} mm'.format(
+            L['z_arbeit'], w('werkstueck_max')),
+        '    fuer 0..{:.0f} mm Werkstueck)'.format(w('werkstueck_max')),
         '  gebaut bei zc = {:+.1f} mm (Mitte des Verfahrwegs)'.format(zc),
         '  Laser-Unterkante: {:+.1f} bis {:+.1f} mm'.format(
             L['zc_min'] + L['laser_unten_rel'],

@@ -102,9 +102,23 @@ alle vier aus und nennt die bindende:
 Die Anti-Backlash-Garnitur steht **nach oben** auf dem Regal des
 Mutternwinkels (Flanschmutter + Feder + Gleitmutter, zusammen 45 mm) und ist
 damit das oberste bewegte Teil — sie kostet rund 60 mm Weg gegenüber der alten
-M6-Lösung. Gebraucht werden für ein 50-mm-Werkstück rund 30 mm, die Grenze
-liegt also weit außerhalb des Nutzbereichs; die 45 mm sind außerdem geschätzt
-und werden am gelieferten Teil nachgemessen.
+M6-Lösung. Die 45 mm sind geschätzt und werden am gelieferten Teil
+nachgemessen.
+
+**Was davon gebraucht wird:** für 0–50 mm Werkstück muss die Linse **50 mm**
+fahren können. Gearbeitet wird aber nur bis zum Schaltpunkt des Endschalters,
+der 8 mm unter der mechanischen Grenze liegt (`ls_ueberfahrt`). Also:
+
+| | mm |
+|---|---|
+| mechanischer Verfahrweg | 76,6 |
+| − Überfahrweg über dem Endschalter | 8,0 |
+| = **Arbeitsweg** | **68,6** |
+| − gebraucht für 0…50 mm Werkstück | 50,0 |
+| = **Reserve** | **18,6** |
+
+Hier stand bis Rev. 28 „gebraucht werden rund 30 mm". Das war falsch — es sind
+50 mm plus der Überfahrweg des Endschalters.
 
 ### Die Schiene sitzt in Z fest — das begrenzt die Werkstückhöhe
 
@@ -193,20 +207,22 @@ weg als halbe Wagenlänge plus Werkzeugradius (19,95 + 3 = 22,95 mm).
 
 **Fokus.** Gemessen sind **130 mm** von der Bezugsebene bis zur Bettoberfläche
 (`bett_abstand`) und **50 mm** dickstes Werkstück (`werkstueck_max`). Die
-Gehäuseunterkante des Lasers liegt in Lochmitte zwischen **14,2 und 88,5 mm**
-über dem Bett. Der Fokusabstand *f* des Moduls steht nicht auf dem Modul —
+Gehäuseunterkante des Lasers liegt in Lochmitte zwischen **14,2 und 82,8 mm**
+über dem Bett (oben am Schaltpunkt des Endschalters, nicht an der mechanischen
+Grenze). Der Fokusabstand *f* des Moduls steht nicht auf dem Modul —
 deshalb sind die vier Laserbefestigungen **senkrechte Langlöcher**, ±8 mm, und
 die Höhe wird beim Zusammenbau eingestellt:
 
 | f | Langlochstellung | Bemerkung |
 |---|---|---|
 | 10 mm | 4,2 mm nach unten | die Linse kommt sonst nicht tief genug für dünnes Material |
-| 15 … 35 mm | Lochmitte (0) | in beide Richtungen voller Verstellweg |
-| 40 mm | 1,5 mm nach oben | sonst reicht es oben nicht für 50 mm Werkstück |
+| 15 … 30 mm | Lochmitte (0) | in beide Richtungen voller Verstellweg |
+| 35 mm | 2,2 mm nach oben | sonst reicht es oben nicht für 50 mm Werkstück |
+| 40 mm | 7,2 mm nach oben | fast am Anschlag (+7,8) |
 
 **Nach oben nutzbar sind +7,8 mm** — nicht weil der Hub endet, sondern weil die
 obere Schraubenreihe sonst hinter dem Z-Wagen verschwindet und nicht mehr
-verschraubbar ist. Das Fenster reicht damit von **f = 6 bis 49 mm**. Du musst
+verschraubbar ist. Das Fenster reicht damit von **f = 6 bis 40 mm**. Du musst
 *f* also nicht kennen, um die Platte zu drucken; nur zum Einstellen beim
 Zusammenbau.
 
@@ -223,9 +239,32 @@ mindestens 3 mm. Z also nicht mit Werkstück oder Wabenplatte ganz nach unten
 fahren — die Referenzfahrt geht ohnehin nach oben, ein Z-Softlimit in der
 Firmware fängt den Rest ab.
 
-Der Motor spielt dabei übrigens keine Rolle: die untere Grenze legt das
-Schienenende fest. Motor und Kupplung tiefer zu setzen würde nur oben Weg
-kosten — die Garnitur stößt dann früher an die Kupplung.
+### Motor tiefer setzen?
+
+Die untere Grenze legt das Schienenende fest, daran ändert der Motor nichts.
+Motor, Konsole und Kupplung tiefer zu setzen verschiebt nur die **obere**
+Grenze — die Garnitur fährt mit dem Schlitten von unten an die Kupplung heran
+und stößt früher an. Das geht zulasten der Reserve von 18,6 mm, Millimeter für
+Millimeter, und damit auch zulasten des Fokusfensters nach oben:
+
+| Motor tiefer | Arbeitsweg | Reserve | Fokusfenster | Durchbiegung am Motor |
+|---|---|---|---|---|
+| 0 (heute) | 68,6 | 18,6 | f = 6…40 mm | 0,24 mm |
+| 5 mm | 63,6 | 13,6 | f = 6…35 mm | 0,21 mm |
+| 10 mm | 58,6 | 8,6 | f = 6…30 mm | 0,19 mm |
+| 15 mm | 53,6 | 3,6 | f = 6…25 mm | 0,17 mm |
+
+Der Gewinn ist eine kürzere, steifere Säule (der Hebel zum Motor wird kürzer,
+die Durchbiegung geht mit der dritten Potenz). Der Preis ist das obere Ende des
+Fokusfensters. Solange *f* nicht bekannt ist, bleibt der Motor, wo er ist; bei
+einem Modul mit f ≤ 25 mm wären 10 mm tiefer eine saubere Verbesserung —
+allerdings mit neu gedruckter Trägerplatte.
+
+Die Feder der Garnitur ändert dabei nichts: Flanschmutter und Gleitmutter sind
+über die Mitnehmernut verdrehgesichert und fahren gemeinsam, die Garnitur ist
+beim Verfahren ein starrer Block. Die Feder wird nur zusammengedrückt, wenn die
+Gleitmutter gegen etwas läuft — oben ist das die Kupplung, und das ist eine
+harte Kollision, kein weicher Anschlag.
 
 Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
 (1 mm dicker = 1 mm tiefer) — mit dem langen Verfahrweg brauchst du sie für den
@@ -470,8 +509,9 @@ Stützen. Die Prüfung rechnet das nach, statt es zu behaupten.
 Die Garnitur steht **nach oben** auf dem Regal — nach unten ist kein Platz,
 dort sitzt die Schlittenplatte. Mit geschätzt 45 mm Bauhöhe (Flanschmutter 15 +
 Feder vorgespannt + Gleitmutter 15) ist ihre Oberkante das oberste bewegte
-Teil und bindet den Verfahrweg: **76,6 mm statt 136,1 mm**. Gebraucht werden
-für 0–50 mm Werkstückdicke rund 30 mm, die Reserve ist also weiterhin groß.
+Teil und bindet den Verfahrweg: **76,6 mm statt 136,1 mm**. Davon sind 68,6 mm
+Arbeitsweg bis zum Endschalter; gebraucht werden für 0–50 mm Werkstück 50 mm,
+es bleiben 18,6 mm Reserve (Tabelle oben).
 
 Die 45 mm sind der einzige Wert, der am gelieferten Teil nachzumessen ist
 (`t8_garnitur_h`); er geht in keine Geometrie ein, sondern nur in diese Grenze.

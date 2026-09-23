@@ -109,7 +109,12 @@ def main():
     for text, wert in sorted(L['zc_grenzen'].items(), key=lambda t: t[1]):
         p.info('  Grenze: ' + text, wert)
     p.info('bindende Grenze: ' + L['zc_bindend'])
-    p.ok('nutzbarer Z-Verfahrweg', L['z_weg'], 40.0)
+    p.info('mechanischer Z-Verfahrweg', L['z_weg'])
+    # Gearbeitet wird nur bis zum Schaltpunkt des Endschalters. Fuer 0 bis
+    # werkstueck_max mm Werkstueck muss die Linse genau so weit fahren koennen.
+    p.ok('Arbeitsweg bis zum Endschalter deckt 0..{:.0f} mm Werkstueck'.format(
+             w('werkstueck_max')),
+         L['z_arbeit'] - w('werkstueck_max'), 5.0)
     p.ok('Kupplung bleibt unter der Konsole',
          L['konsole_z0'] - L['kupplung_z1'], 2.0)
     p.ok('Einstecktiefe je Seite', w('kupplung_griff'), 6.0)
@@ -543,8 +548,8 @@ def main():
     p.ja('die Garnitur bindet den Verfahrweg nach oben',
          L['zc_bindend'] == 'Antriebsmutter gegen Kupplung',
          '   (bindend ist: {})'.format(L['zc_bindend']))
-    p.ok('Verfahrweg trotz der Garnitur ueber dem Werkstueckbedarf',
-         L['z_weg'] - w('werkstueck_max'), 10.0)
+    p.info('Reserve im Arbeitsweg ueber dem Werkstueckbedarf',
+           L['z_arbeit'] - w('werkstueck_max'))
     p.info('benoetigte Spindellaenge', L['spindel_laenge'])
     p.ok('Zuschnitt ({:.0f} mm) deckt die benoetigte Laenge'.format(
              w('spindel_zuschnitt')),

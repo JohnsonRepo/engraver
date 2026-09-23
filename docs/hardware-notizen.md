@@ -145,7 +145,9 @@ am Rahmen. Achtung: Schließer meldet bei Kabelbruch nicht; der Öffner
 
 Beide stehen als `bett_abstand` und `werkstueck_max` im Skript — sie erzeugen
 keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt das
-Fenster **f = 6 … 49 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben.
+Fenster **f = 6 … 40 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben
+(oben gerechnet bis zum Schaltpunkt des Endschalters, nicht bis zur
+mechanischen Grenze — bis Rev. 28 stand hier fälschlich 49).
 Nach oben begrenzt es die Montage (die obere Laser-Schraubenreihe muss beim
 Verschrauben neben dem Z-Wagen liegen, also höchstens +7,8 mm über Lochmitte),
 nach unten der Langlochhub von −8 mm. Seit Rev. 27 hängt der Laser dafür 5 mm

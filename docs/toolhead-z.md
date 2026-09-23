@@ -78,8 +78,8 @@ hoch die Schürze des MGN9H über der Schienenauflage endet.
 | Z | Ebene |
 |---|---|
 | −130,0 | Bettoberfläche (`bett_abstand`) |
-| −120,3 | Unterkante Schlittenplatte, tiefste Stellung |
-| −110,8 | Laser-Unterkante (Linse), tiefste Stellung |
+| −125,3 | Unterkante Schlittenplatte, tiefste Stellung |
+| −115,8 | Laser-Unterkante (Linse), tiefste Stellung |
 | −66,0 | Unterkante Trägerplatte |
 | −60,0 | Unterkante MGN9-Schiene (**200 mm lang, 10 Schrauben**) |
 | −40,1 … +34,2 | Bereich der Wagenmitte `zc` |
@@ -193,23 +193,40 @@ Z-Wagen davor und der Inbus hat 12 mm Platz — zu wenig. Die Reihe muss weiter
 weg als halbe Wagenlänge plus Werkzeugradius (19,95 + 3 = 22,95 mm).
 
 **Fokus.** Gemessen sind **130 mm** von der Bezugsebene bis zur Bettoberfläche
-(`bett_abstand`) und **50 mm** dickstes Werkstück (`werkstueck_max`). Mit der
-200-mm-Schiene liegt die Gehäuseunterkante des Lasers über dem Bett zwischen
-**19,2 und 155,2 mm**. Der Fokusabstand *f* des Moduls steht nicht auf dem
-Modul — deshalb sind die vier Laserbefestigungen **senkrechte Langlöcher**,
-±8 mm, und die Höhe wird beim Zusammenbau eingestellt:
+(`bett_abstand`) und **50 mm** dickstes Werkstück (`werkstueck_max`). Die
+Gehäuseunterkante des Lasers liegt in Lochmitte zwischen **14,2 und 88,5 mm**
+über dem Bett. Der Fokusabstand *f* des Moduls steht nicht auf dem Modul —
+deshalb sind die vier Laserbefestigungen **senkrechte Langlöcher**, ±8 mm, und
+die Höhe wird beim Zusammenbau eingestellt:
 
 | f | Langlochstellung | Bemerkung |
 |---|---|---|
-| 15 mm | 4,2 mm nach unten | die Linse kommt sonst nicht tief genug für dünnes Material |
-| 20 … 35 mm | Lochmitte (0) | in beide Richtungen Luft zum Nachstellen |
+| 10 mm | 4,2 mm nach unten | die Linse kommt sonst nicht tief genug für dünnes Material |
+| 15 … 35 mm | Lochmitte (0) | in beide Richtungen voller Verstellweg |
+| 40 mm | 1,5 mm nach oben | sonst reicht es oben nicht für 50 mm Werkstück |
 
-**Nach oben nutzbar sind +2,8 mm** — nicht weil der Hub endet, sondern weil die
+**Nach oben nutzbar sind +7,8 mm** — nicht weil der Hub endet, sondern weil die
 obere Schraubenreihe sonst hinter dem Z-Wagen verschwindet und nicht mehr
-verschraubbar ist. Mit 55 mm Verfahrweg (Schiene 95 mm) war das die bindende
-Grenze und ergab `f ≤ 27,1 mm`; mit 74,3 mm Weg reicht das Fenster von
-**f = 11 bis 46 mm**. Du musst *f* also nicht kennen, um die Platte zu drucken;
-nur zum Einstellen beim Zusammenbau.
+verschraubbar ist. Das Fenster reicht damit von **f = 6 bis 46 mm**. Du musst
+*f* also nicht kennen, um die Platte zu drucken; nur zum Einstellen beim
+Zusammenbau.
+
+**Warum der Laser seit Rev. 27 5 mm tiefer hängt** (`laser_versatz_z` −46 →
+−51): unten reicht die Linse damit 5 mm näher ans Bett (Fenster ab f = 6 statt
+11 mm), und oben kostet es nichts — um genau so viel, wie die Linse oben
+verliert, wächst der Langloch-Weg nach oben (vorher +2,8, jetzt +7,8 mm), weil
+die obere Schraubenreihe weiter vom Z-Wagen wegrückt. Bis −51,2 geht diese
+Rechnung auf, darunter ist der Hub von 8 mm ausgeschöpft. Den Preis zahlt die
+Unterkante der Schlittenplatte: sie ragt 9,5 mm unter das Lasergehäuse (sie
+muss die untere Langlochreihe samt Hub tragen) und kommt in der tiefsten
+Stellung bis auf **4,7 mm** ans Bett (vorher 9,7). Die Prüfung verlangt dort
+mindestens 3 mm. Z also nicht mit Werkstück oder Wabenplatte ganz nach unten
+fahren — die Referenzfahrt geht ohnehin nach oben, ein Z-Softlimit in der
+Firmware fängt den Rest ab.
+
+Der Motor spielt dabei übrigens keine Rolle: die untere Grenze legt das
+Schienenende fest. Motor und Kupplung tiefer zu setzen würde nur oben Weg
+kosten — die Garnitur stößt dann früher an die Kupplung.
 
 Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
 (1 mm dicker = 1 mm tiefer) — mit dem langen Verfahrweg brauchst du sie für den
@@ -320,7 +337,7 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 | Teil | Volumen | Masse PETG | Bauraum | Lauf |
 |---|---|---|---|---|
 | Trägerplatte mit Konsole | ≈ 124 cm³ | **≈ 157 g** | 78 × 222 × 56 mm | Rev. 16 + Sockel |
-| Schlittenplatte | ≈ 41,8 cm³ | **≈ 53 g** | 71 × 97 × 24 mm | Rev. 14 + Fahne |
+| Schlittenplatte | ≈ 43,4 cm³ | **≈ 55 g** | 71 × 102 × 24 mm | Rev. 14 + Fahne + 5 mm (Rev. 27) |
 | Mutternwinkel | ≈ 11,3 cm³ | **≈ 14 g** | 28 × 36 × 22 mm | gerechnet |
 | Flanschring | ≈ 0,6 cm³ | **≈ 1 g** | 22 × 22 × 2,3 mm | gerechnet |
 | Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet |
@@ -615,7 +632,7 @@ der Parameter nachgezogen.
 | Z-Schiene → Sockel | **10 × M3×10 Senkkopf DIN 7991 + 10 × Messing-Einsatz M3** | Einsätze (Ø5 mm außen) vor der Montage einschmelzen, Bohrung Ø4,6 × 7 mm; Randabstand 10 mm, Lochabstand 20 mm |
 | NEMA 17 → Konsole | **4 × M3×12** | 4 mm Eingriff; Führungsrippen zentrieren, Zentrierbund in Ø22,4 |
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
-| Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +2,8 mm** |
+| Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +7,8 mm** |
 | Mutternwinkel → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe DIN 9021 Ø9 | Ø4,6-Bohrung, ausrichten dann festziehen |
 | Antriebsmutter → Regal | **4 × M3×10 + 4 × Messing-Einsatz M3** | durch den Flanschring; Lochkreis Ø16, 45° gedreht; Einsatzbohrung Ø4,6 × 7 mm, **1,4 mm Wand zur Spindelbohrung** |
 | Endschalterhalter → Sockel | 2 × M3×12 + 2 × Messing-Einsatz M3 | Langloch ±4 mm für den Schaltpunkt |
@@ -645,22 +662,23 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 164 mm mit dem Z-Schlitten unten, 28 mm mit ihm oben — beides reicht, unten ist es bequemer |
 | 7 | **Mutternwinkel an die Schlittenplatte**, 2 × M3×16 + große Scheibe: locker lassen | Inbus von vorn | frei |
 | 8 | **Spindel auf 150 mm kürzen**, entgraten, anfasen. Garnitur aufdrehen, **Flanschring unterlegen**, Flansch aufs Regal (4 × M3×10 von oben), Spindel oben in die Kupplung — **nur bis zur Nabe**. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Säge, Inbus von oben neben der Spindel | 122 mm mit dem Schlitten unten |
-| 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | 27 mm, mit dem Schlitten ganz unten frei |
+| 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | Schlitten ganz unten: beide Reihen liegen dann unter der Trägerplatte, freie Bahn |
 | 10 | Endschalterhalter auf den Sockel (2 × M3×12 in die Einsätze), Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen | Inbus von vorn | frei |
 
 Schritt 4 und Schritt 9 haben sich bis Rev. 13 gegenseitig zugebaut: das
 Gewinde der Laserbefestigung sitzt im Modul, also wird von hinten verschraubt —
 lag die obere Lochreihe auf der Wagenmitte, standen der Z-Wagen (12 mm) davor,
 und umgekehrt deckte das Lasergehäuse die Ø6,5-Freibohrungen der Wagenschrauben
-ab (6 mm). Keine der beiden Reihenfolgen ging auf. Seit der Laser 25,75 mm
-tiefer hängt, liegen beide Lochreihen unter Wagen und Trägerplatte: die Platte
+ab (6 mm). Keine der beiden Reihenfolgen ging auf. Seit der Laser tiefer
+hängt (Rev. 14 um 25,75 mm, Rev. 27 um weitere 5 mm), liegen beide
+Lochreihen in der tiefsten Stellung unter Wagen und Trägerplatte: die Platte
 kommt zuerst an den Wagen, der Laser zuletzt. Das prüft `toolhead_check.py`
 jetzt als eigene Frage — „gibt es überhaupt eine Reihenfolge?" — und nicht mehr
 nur „ist der Korridor frei?".
 
 Zwei Dinge, die dabei leicht untergehen:
 
-* Die **Langlochstellung nach oben** ist auf +2,8 mm begrenzt, weil die obere
+* Die **Langlochstellung nach oben** ist auf +7,8 mm begrenzt, weil die obere
   Schraubenreihe sonst wieder hinter dem Wagen liegt — siehe
   [Laserhöhe](#laserhöhe-langloch-statt-rechnen).
 * Für Schritt 6 und Schritt 9 den **Z-Schlitten nach unten** fahren. Nötig
@@ -810,8 +828,8 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `traeger_kopf_unten` | 115 mm | ab hier wird die Platte breit (trägt die Konsole) |
 | `saeule_rippe_x0` / `_x1` / `_tiefe` | 18 / 22 / 6,5 mm | Versteifungsrippen der Säule |
 | `spindel_x` / `spindel_y` | 30 / 28,5 mm | Lage der Spindelachse; `spindel_y` bestimmt den Schraubzugang |
-| `laser_versatz_z` | −46 mm | Lage des Lasers am Schlitten — bindet Montagezugang **und** Fokusfenster |
-| `laser_langloch_hub` | 8 mm | senkrechter Verstellweg je Richtung (nach oben nutzbar: +2,8 mm) |
+| `laser_versatz_z` | −51 mm | Lage des Lasers am Schlitten — bindet Montagezugang, Fokusfenster **und** die Bodenfreiheit der Platte |
+| `laser_langloch_hub` | 8 mm | senkrechter Verstellweg je Richtung (nach oben nutzbar: +7,8 mm) |
 | `laser_loch_d` | 4,0 mm | Langlochbreite; ±1,0 mm Lochbildtoleranz quer |
 | `bett_abstand` | 130 mm | gemessen: Bezugsebene → Bettoberfläche (nur Bericht) |
 | `werkstueck_max` | 50 mm | dickstes Werkstück (nur Bericht) |

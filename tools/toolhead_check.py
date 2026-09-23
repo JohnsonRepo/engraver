@@ -744,6 +744,12 @@ def main():
     for vz in (-w('z_wagen_loch_laengs') / 2, w('z_wagen_loch_laengs') / 2):
         p.ok('Langlochende <-> Freibohrung Z-Wagen',
              abs(L['laser_loch_oben_rel'] + hub - vz) - r_sen - r_schlitz, 1.5)
+    # Die Schlittenplatte reicht 9,5 mm unter die Laserunterkante (sie muss
+    # die untere Langlochreihe samt Hub tragen). In der tiefsten Stellung ist
+    # sie damit das Teil, das dem Bett am naechsten kommt — die Grenze dafuer,
+    # wie tief der Laser am Schlitten haengen darf.
+    p.ok('Plattenunterkante bleibt in tiefster Stellung ueber dem Bett',
+         L['platte_ueber_bett'], 3.0)
     p.ok('untere Laserreihe liegt ausserhalb des Pads',
          abs(L['laser_loch_unten_rel']) - w('pad_laenge') / 2 - SCHEIBE_NORM / 2,
          1.0)

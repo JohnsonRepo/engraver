@@ -26,7 +26,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 26
+REVISION = 27
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -256,16 +256,20 @@ MASSE = {
     # 13,5: die Scheibe der Laserschraube liegt zwischen Mittel- und
     # Seitenrippe. Mit der DIN-125-Scheibe (Ø7) bleiben dort 1,75 mm Luft.
     'rippe_seite_innen':   (13.5,  'Seitenrippe links: Innenkante'),
-    # -46: zwei Bedingungen zugleich. (1) MONTAGE — das Gewinde der
+    # -51: zwei Bedingungen zugleich. (1) MONTAGE — das Gewinde der
     # Laserbefestigung sitzt im Modul, also wird von hinten verschraubt. Liegt
     # die obere Lochreihe auf der Wagenmitte, steht der Z-Wagen davor und der
     # Inbus hat nur 12 mm Platz. Sie muss um mehr als halbe Wagenlaenge plus
     # Werkzeugradius (19,95 + 3) von der Wagenmitte weg — das gilt auch fuer
     # die eingestellte Langlochstellung, siehe langloch_auf_max in lage().
-    # (2) FOKUS — mit bett_abstand und werkstueck_max liegt das Fokusfenster
-    # damit richtig; der Bericht rechnet die Langlochstellung je Fokusabstand
-    # aus. -46 statt -44 laesst 2,8 mm statt 0,8 mm Luft nach oben.
-    'laser_versatz_z':     (-46.0, 'Laser-Lochbildmitte gegen die Wagenmitte'),
+    # (2) FOKUS — tiefer gehaengt kommt die Linse naeher ans Bett (kurze
+    # Fokusabstaende), oben kostet es bis -51,2 nichts: um genau so viel, wie
+    # die Linse oben verliert, waechst der Langloch-Weg nach oben, weil die
+    # obere Schraubenreihe weiter vom Z-Wagen wegrueckt. Darunter ist der Hub
+    # von 8 mm ausgeschoepft. Grenze nach unten: die Plattenunterkante muss in
+    # der tiefsten Stellung ueber dem Bett bleiben (Pruefung Abschnitt 8).
+    # Rev. 14..26 stand hier -46, Fokusfenster f = 11..46 statt 6..46 mm.
+    'laser_versatz_z':     (-51.0, 'Laser-Lochbildmitte gegen die Wagenmitte'),
     # Senkrechter Verstellweg: damit haengt die Laserhoehe nicht am genauen
     # Fokusabstand des Moduls, der auf dem Modul nicht steht.
     'laser_langloch_hub':   (8.0,  'Laser-Befestigung: Verstellweg je Richtung'),
@@ -471,6 +475,12 @@ def lage():
         - L['laser_loch_oben_rel']
     L['langloch_auf_max'] = min(L['langloch_auf_max'], w('laser_langloch_hub'))
     L['langloch_ab_max'] = -w('laser_langloch_hub')
+    # Obere Laserschraubenreihe in der tiefsten Stellung (fuer den Montage-
+    # hinweis: liegt sie dort unter der Traegerplatte, ist der Weg frei).
+    L['laser_oben_z_min'] = L['zc_min'] + L['laser_loch_oben_rel']
+    # Plattenunterkante in der tiefsten Stellung, ueber dem Bett gemessen.
+    L['platte_ueber_bett'] = (w('bett_abstand') + L['zc_min']
+                              + L['schlitten_unten_rel'])
 
     # ---- Schraubenlaenge Schlittenplatte -> Z-Wagen -------------------------
     # Naechste gerade Laenge ueber pad_hoehe + Mindesteingriff. Nicht
@@ -975,7 +985,8 @@ def langloch_stellung(L, f_mm, dicke_mm):
     return (dicke_mm + f_mm - L['linse_hoch'], f_mm - L['linse_tief'])
 
 
-def fokus_zeilen(L, w, kandidaten=(15.0, 20.0, 25.0, 30.0, 35.0)):
+def fokus_zeilen(L, w, kandidaten=(10.0, 15.0, 20.0, 25.0, 30.0, 35.0,
+                                   40.0)):
     """Berichtszeilen: welche Langlochstellung passt zu welchem Fokusabstand?
     Geht eine Dicke nicht mehr auf, wird gesagt, was stattdessen erreichbar
     ist — die Stellung ist nach oben durch die Montage begrenzt."""
@@ -1156,7 +1167,8 @@ def bau_schlittenplatte(app, design, comp, L, zc, fehler):
 
     # Freiraum im Pad fuer Kopf + Scheibe der OBEREN Laserschraubenreihe —
     # nur noetig, solange diese Reihe ueberhaupt im Pad liegt. Seit der Laser
-    # tiefer haengt (laser_versatz_z = -46), liegt sie darunter: kein Schnitt,
+    # tiefer haengt (laser_versatz_z = -46 und tiefer), liegt sie darunter:
+    # kein Schnitt,
     # volle Auflage auf dem Wagen, und der Kanal wird auch nicht als
     # Werkzeugzugang gebraucht (der Laser kommt jetzt zuletzt dran).
     if L['laser_oben_im_pad']:
@@ -1574,8 +1586,12 @@ def hinweise_bauen(L, zc, fehler):
         '     nur bis zur Nabe, nicht bis an die Motorwelle.',
         '     Alles lose lassen, mehrmals durchfahren, DANN festziehen',
         '  8. Laser ZULETZT, 4x M3x10 + Scheibe von hinten, Z-Schlitten',
-        '     dafuer nach unten fahren ({:.0f} mm freier Korridor)'.format(
-            L['schlitten_y1'] - L['traeger_y1']),
+        '     dafuer ganz nach unten fahren ({})'.format(
+            'frei unter der Traegerplatte'
+            if L['laser_oben_z_min'] + w('inbus_frei_d') / 2
+            < w('traeger_z_unten')
+            else '{:.0f} mm Korridor bis zur Traegerplatte'.format(
+                L['schlitten_y1'] - L['traeger_y1'])),
         '  9. Endschalterhalter auf den Sockel (2x M3x12 in die Einsaetze),',
         '     Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen',
         '',

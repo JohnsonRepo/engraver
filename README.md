@@ -85,6 +85,6 @@ im Skript benutzte Maß- und Lageschlüssel existiert. Exit-Code 0 = alles
 bestanden.
 
 **Stand:** alle Prüfungen bestanden (Rev. 14). Der Zugangskonflikt zwischen
-Laser und Z-Wagen ist gelöst, indem der Laser 25,75 mm tiefer hängt und über
+Laser und Z-Wagen ist gelöst, indem der Laser 30,75 mm tiefer hängt und über
 senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

@@ -103,7 +103,7 @@ Teil.
 `hardware.md` führt als Kandidaten das *Laser Tree LT-20W-A* mit „Fokus
 einstellbar 20–35 mm" `[w]` — ob es dasselbe Modul ist, ist offen. Deshalb
 steckt f **nicht** in der Geometrie: die Laserhöhe wird über senkrechte
-Langlöcher (±8 mm, nach oben nutzbar +2,8 mm) eingestellt. Der
+Langlöcher (±8 mm, nach oben nutzbar +7,8 mm) eingestellt. Der
 Validierungsbericht rechnet die Stellung je f aus.
 
 Selbst messen: Papier aufs Bett, 1–2 % Leistung, Höhe variieren bis der Punkt
@@ -145,11 +145,13 @@ am Rahmen. Achtung: Schließer meldet bei Kabelbruch nicht; der Öffner
 
 Beide stehen als `bett_abstand` und `werkstueck_max` im Skript — sie erzeugen
 keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt das
-Fenster **f = 11 … 53 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben.
+Fenster **f = 6 … 46 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben.
 Nach oben begrenzt es die Montage (die obere Laser-Schraubenreihe muss beim
-Verschrauben neben dem Z-Wagen liegen, also höchstens +2,8 mm über Lochmitte),
-nach unten der Langlochhub von −8 mm. Mit der 95-mm-Schiene stand hier einmal
-`f ≤ 27,1 mm` — das war die alte, kurze Z-Achse.
+Verschrauben neben dem Z-Wagen liegen, also höchstens +7,8 mm über Lochmitte),
+nach unten der Langlochhub von −8 mm. Seit Rev. 27 hängt der Laser dafür 5 mm
+tiefer am Schlitten; vorher reichte das Fenster erst ab f = 11 mm.
+Mit der 95-mm-Schiene stand hier einmal `f ≤ 27,1 mm` — das war die alte,
+kurze Z-Achse.
 
 Eine dickere Opferplatte wirkt wie eine Langlochstellung nach unten (1 mm
 dicker = 1 mm tiefer) und verschiebt das Fenster nur in diese Richtung.

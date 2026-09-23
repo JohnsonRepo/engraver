@@ -23,7 +23,7 @@ S = 2.0                     # px/mm in den Seitenansichten
 S_DETAIL = 5.0              # px/mm in der Einzelheit A
 S_DRAUF = 4.0               # px/mm in der Draufsicht
 Y_BEREICH = (-6.0, 62.0)    # Maschinen-Y in den Seitenansichten
-Z_BEREICH = (-72.0, 200.0)  # Maschinen-Z
+Z_BEREICH = (-72.0, 212.0)  # Maschinen-Z
 OBEN = 80                   # Platz fuer Titel
 # Ausschnitt der Einzelheit A, relativ zu Spindelachse und Regaloberseite
 DETAIL_Y = (-12.5, 13.5)
@@ -243,7 +243,11 @@ def zeichne_seite(a, w, L, zc):
                      (0.0, L['konsole_z1'])], 'druck'))
     t.append(a.rect(sy + r_zb, w('konsole_y_vorn'), L['konsole_z0'],
                     L['konsole_z1'], 'druck'))
-    # Motor: sitzt auf der Konsole, Zentrierbund in der Bohrung, Welle unten
+    # Motoradapter auf der Konsole: so gross wie der Motorflansch, dieselbe
+    # Bohrung Ø22,4 (geschnitten)
+    for y0, y1 in ((sy - r_mot, sy - r_zb), (sy + r_zb, sy + r_mot)):
+        t.append(a.rect(y0, y1, L['adapter_z0'], L['adapter_z1'], 'druck'))
+    # Motor: sitzt auf dem Adapter, Zentrierbund in dessen Bohrung
     t.append(a.rect(sy - r_mot, sy + r_mot, L['motor_flansch_z'],
                     L['motor_z1'], 'kauf'))
     bund_z0 = L['motor_flansch_z'] - w('motor_bund_h')
@@ -373,12 +377,16 @@ def main():
     i_feder = 5                            # ein Knick rechts, etwa mittig
     t += beschriften(a, [
         (sy - 6, L['motor_z1'] - 14,
-         'NEMA 17 oben auf der Konsole, Zentrierbund in Ø{}'.format(
-             de(w('motor_bund_d') + w('spiel_locker')))),
-        (sy + WELLE_D / 2, (L['kupplung_z1'] + L['konsole_z0']) / 2,
+         'NEMA 17, Zentrierbund in der Bohrung des Adapters'),
+        (sy + w('motor_flansch') / 2 - 3, (L['adapter_z0']
+                                           + L['adapter_z1']) / 2,
+         'Motoradapter {:.0f} mm (neu) auf der Konsole, die bleibt'.format(
+             w('motor_adapter'))),
+        (sy + WELLE_D / 2, (L['kupplung_z1'] + L['adapter_z0']) / 2,
          'Motorwelle Ø{:.0f}, zeigt nach unten'.format(WELLE_D)),
-        (sy + w('kupplung_d') / 2, L['kupplung_z1'] - 5,
-         'starre Klemmkupplung 5→8, {:.0f} mm'.format(w('kupplung_l'))),
+        (sy + w('kupplung_d') / 2, L['kupplung_z1'] - 7,
+         'Klemmkupplung 5→8, {:.0f} mm, oben {:.0f} mm in der Konsole'.format(
+             w('kupplung_l'), max(L['kupplung_in_konsole'], 0.0))),
         (sy, (L['spindel_z1'] + L['welle_z0']) / 2,
          '{:.0f} mm Spalt: Welle und Spindel je {:.0f} mm drin'.format(
              L['kupplung_frei'], w('kupplung_griff'))),

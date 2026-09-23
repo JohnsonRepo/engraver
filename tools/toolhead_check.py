@@ -101,7 +101,8 @@ def main():
                        ('Kupplung unten', 'kupplung_z0'),
                        ('Kupplung oben', 'kupplung_z1'),
                        ('Motorkonsole unten', 'konsole_z0'),
-                       ('Motorflansch / Konsole oben', 'motor_flansch_z'),
+                       ('Motorkonsole oben / Adapter unten', 'adapter_z0'),
+                       ('Motorflansch / Adapter oben', 'motor_flansch_z'),
                        ('Motor oben', 'motor_z1')):
         p.info(text, L[schl])
     p.info('Wagenmitte zc von', L['zc_min'])
@@ -115,8 +116,17 @@ def main():
     p.ok('Arbeitsweg bis zum Endschalter deckt 0..{:.0f} mm Werkstueck'.format(
              w('werkstueck_max')),
          L['z_arbeit'] - w('werkstueck_max'), 5.0)
-    p.ok('Kupplung bleibt unter der Konsole',
-         L['konsole_z0'] - L['kupplung_z1'], 2.0)
+    # Mit dem Motoradapter ragt die Kupplung oben in die Bundbohrung der
+    # Konsole. Das darf sie, solange sie dort frei dreht und ihre obere
+    # Klemmschraube (etwa in der Mitte der oberen Nabe) unter der Konsole
+    # erreichbar bleibt — Kopf und Inbus brauchen dort je ~3 mm.
+    p.info('Kupplung ragt in die Bundbohrung der Konsole',
+           max(L['kupplung_in_konsole'], 0.0))
+    p.ok('Kupplung dreht frei in der Bundbohrung (Luft rundum)',
+         (w('motor_bund_d') + w('spiel_locker') - w('kupplung_d')) / 2, 1.0)
+    p.ok('obere Klemmschraube der Kupplung unter der Konsole erreichbar',
+         L['konsole_z0'] - L['kupplung_klemm_z'], 3.0)
+    p.info('Motorwelle unter der Konsole', L['konsole_z0'] - L['welle_z0'])
     p.ok('Einstecktiefe je Seite', w('kupplung_griff'), 6.0)
     p.info('Klemmlaenge bezogen auf den Spindeldurchmesser',
            w('kupplung_griff') / w('spindel_d'), 'x D')
@@ -246,8 +256,43 @@ def main():
     p.ok('Rippen bleiben in der Konsole (rechts)',
          L['konsole_x1'] - L['motor_rippe_x'][1][1], 0.0)
     p.ok('Rippenhoehe fasst den Flansch', w('motor_rippe_hoehe'), 2.0)
-    p.ok('Motorschraube M3x12: Gewindeeingriff',
-         12.0 - w('konsole_dicke'), 3.5)
+    p.info('Motorschraube klemmt Konsole + Adapter', L['motor_klemm'])
+    p.ok('Motorschraube M3x{:.0f}: Gewindeeingriff'.format(L['motor_schraube']),
+         L['motor_eingriff'], 3.5)
+    p.ok('Motorschraube setzt im Motorgewinde nicht auf',
+         w('motor_gewinde_tiefe') - L['motor_eingriff'], 0.3)
+    # --- Motoradapter: Distanzplatte zwischen Konsole und Motor ----------
+    p.info('Motoradapter: Dicke = Motor hoeher als ohne', w('motor_adapter'))
+    p.ok('Adapter passt zwischen die Fuehrungsrippen (Spiel gesamt)',
+         L['motor_rippe_x'][1][0] - L['motor_rippe_x'][0][1]
+         - w('motor_flansch'), 0.2)
+    p.ok('Adapter ragt ueber die Rippen hinaus (Motor liegt frei auf)',
+         w('motor_adapter') - w('motor_rippe_hoehe'), 2.0)
+    p.ok('Adapter: Wand Bundbohrung -> Schraubenloch',
+         math.hypot(w('motor_loch') / 2, w('motor_loch') / 2)
+         - (w('motor_bund_d') + w('spiel_locker')) / 2
+         - w('m3_durchgang') / 2, 2.0)
+    p.ok('Adapter: Wand Schraubenloch -> Aussenkante',
+         (w('motor_flansch') - w('motor_loch')) / 2 - w('m3_durchgang') / 2,
+         2.0)
+    # Die Traegerplatte ist gedruckt — der Adapter darf an ihr nichts
+    # aendern. Gegenprobe: dieselbe Lage ohne Adapter.
+    ohne = dict(mod.MASSE)
+    ohne['motor_adapter'] = (0.0, ohne['motor_adapter'][1])
+    alt, mod.MASSE = mod.MASSE, ohne
+    try:
+        L0 = mod.lage()
+    finally:
+        mod.MASSE = alt
+    traeger = ('konsole_z0', 'konsole_z1', 'konsole_x0', 'konsole_x1',
+               'motor_rippe_x', 'motor_rippe_y1', 'motor_rippe_z1',
+               'motor_schrauben', 'z_schiene_z0', 'z_schiene_z1',
+               'z_schiene_loecher', 'saeule_rippe_x', 'x_wagen_loecher',
+               'ls_sockel_z0', 'ls_sockel_z1', 'ls_schraub_z', 'ls_sockel_y1')
+    anders = [k for k in traeger if L0[k] != L[k]]
+    p.ja('Traegerplatte haengt nicht vom Motoradapter ab (bleibt wie '
+         'gedruckt)', not anders,
+         '   (anders: {})'.format(', '.join(anders)) if anders else '')
 
     # Der Zugangsfehler, der beim ersten Aufbau aufgefallen ist: NEMA17 hat
     # Gewinde im Flansch, also wird von UNTEN verschraubt. Jede benutzte
@@ -415,10 +460,12 @@ def main():
            .format(zc_g), d, wer)
 
     # 6) Motorschrauben: von unten, der Z-Schlitten wird dafuer weggefahren.
-    motor_eigen = ('NEMA 17', 'Motorkonsole', 'Fuehrungsrippe links',
-                   'Fuehrungsrippe rechts')
+    #    Gemessen ab dem Kopf, also ab der Konsolenunterseite — Konsole und
+    #    Adapter liegen zwischen Kopf und Motor und zaehlen nicht.
+    motor_eigen = ('NEMA 17', 'Motoradapter', 'Motorkonsole',
+                   'Fuehrungsrippe links', 'Fuehrungsrippe rechts')
     d, wer, zc_m = beste_stellung(
-        [(x, y, L['motor_flansch_z']) for x, y in L['motor_schrauben']],
+        [(x, y, L['konsole_z0']) for x, y in L['motor_schrauben']],
         'z', -1, alle_namen, motor_eigen, mitbewegt=False)
     zugang('Motor -> Konsole (von unten, Z-Schlitten bei zc={:+.1f})'.format(
         zc_m), d, wer)
@@ -792,7 +839,15 @@ def main():
     p.ok('Halter: Wand tiefer als die Einpressbohrung',
          w('ls_halter_dicke') - w('ls_pcb_loch_t'), 0.5)
     p.ok('Platine ragt nicht ueber den Halter hinaus (oben)',
-         L['ls_sockel_z1'] - L['ls_pcb_z1'], 2.0)
+         L['ls_halter_z1'] - L['ls_pcb_z1'], 2.0)
+    # Der Sockel ist gedruckt und steht fest; der Halter nimmt den Versatz
+    # des Schaltpunkts auf (Motoradapter). Seine Langloecher liegen auf den
+    # Einsaetzen, die Platine sitzt ls_versatz hoeher.
+    p.info('Platine im Halter hoeher als bis Rev. 29', L['ls_versatz'])
+    p.ok('Halter: Langloecher liegen auf dem Sockel (unten)',
+         (L['ls_schraub_z'][0] - w('ls_justage')) - L['ls_sockel_z0'], 2.0)
+    p.ok('Halter: Langloecher liegen auf dem Sockel (oben)',
+         L['ls_sockel_z1'] - (L['ls_schraub_z'][1] + w('ls_justage')), 2.0)
     p.info('Verstellbereich des Schaltpunkts', 2 * w('ls_justage'))
     p.info('Toolhead-Breite links (Halterwand)', L['ls_wand_x0'])
     p.ja('Halter bleibt im Schatten des X-Wagens',
@@ -809,7 +864,8 @@ def main():
             ('Mutternwinkel', w('winkel_x_rechts') - w('winkel_x_links'),
              L['regal_z1_rel'] - L['winkel_unten_rel']),
             ('Endschalterhalter', w('ls_sockel_x1') - L['ls_wand_x0'],
-             L['ls_sockel_z1'] - L['ls_sockel_z0'])):
+             L['ls_halter_z1'] - L['ls_halter_z0']),
+            ('Motoradapter', w('motor_flansch'), w('motor_flansch'))):
         p.ok('{}: groesste Kante'.format(name), max(a, b), 250.0, '<=')
     p.ok('Bruecke Schlittenplatte zwischen den Rippen',
          w('rippe_seite_innen') - w('rippe_mitte_breite') / 2, 25.0, '<=')
@@ -838,7 +894,8 @@ def main():
             '4x M3x10 + 4x Scheibe DIN 125 (Laser -> Schlittenplatte)',
             '2x M3x{:.0f} + 2x M3-Mutter + 2x Scheibe DIN 9021 Ø9 '
             '(Mutternwinkel, schwimmend)'.format(L['winkel_schraube']),
-            '4x M3x12 Zylinderkopf   (NEMA 17 -> Konsole, alle vier)',
+            '4x M3x{:.0f} Zylinderkopf   (NEMA 17 -> Adapter -> Konsole, alle '
+            'vier)'.format(L['motor_schraube']),
             '2x M3x12 + 2x Messing-Einsatz M3 Ø5 (Endschalterhalter -> Sockel)',
             '2x M2x6 + 2x Heat Insert M2 (Ø3,2 x 2,5) '
             '(Lichtschranke -> Halter)',

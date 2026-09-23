@@ -145,9 +145,10 @@ am Rahmen. Achtung: Schließer meldet bei Kabelbruch nicht; der Öffner
 
 Beide stehen als `bett_abstand` und `werkstueck_max` im Skript — sie erzeugen
 keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt das
-Fenster **f = 6 … 40 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben
+Fenster **f = 6 … 50 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben
 (oben gerechnet bis zum Schaltpunkt des Endschalters, nicht bis zur
-mechanischen Grenze — bis Rev. 28 stand hier fälschlich 49).
+mechanischen Grenze — bis Rev. 28 stand hier fälschlich 49; bis Rev. 29, ohne
+den 10-mm-Motoradapter, waren es 40).
 Nach oben begrenzt es die Montage (die obere Laser-Schraubenreihe muss beim
 Verschrauben neben dem Z-Wagen liegen, also höchstens +7,8 mm über Lochmitte),
 nach unten der Langlochhub von −8 mm. Seit Rev. 27 hängt der Laser dafür 5 mm
@@ -197,7 +198,7 @@ zur Mitte — Begründung in `toolhead-z.md`.
 
 1. **Einbauhöhe der Garnitur in Z** (`t8_garnitur_h`, angenommen 45 mm =
    Flanschmutter 15 + Feder vorgespannt + Gleitmutter 15). Sie bindet den
-   Verfahrweg nach oben (jetzt 76,6 mm) und sonst nichts.
+   Verfahrweg nach oben (jetzt 86,6 mm) und sonst nichts.
 2. ~~Flanschfläche plan?~~ **Erledigt** `[v]`: die Unterseite des Flansches
    ist glatt, der Bund Ø10 × 2 sitzt oben. Die glatte Seite liegt auf dem
    Regal, es braucht keinen Freiraum und keinen Zwischenring (Rev. 25–27 gab
@@ -205,10 +206,14 @@ zur Mitte — Begründung in `toolhead-z.md`.
    Flanschdicke genügen **M3×8** bei 4,5 mm Eingriff.
 3. **Maße der Kupplung**: Länge, Durchmesser, Länge des Klemmschlitzes.
    Daraus folgt `kupplung_griff` (modelliert 8 mm, für diese Kupplung eher 12).
-   Der Wert verschiebt die Kupplung in Z und damit den Verfahrweg.
+   Der Wert verschiebt die Kupplung in Z und damit den Verfahrweg. Seit dem
+   Motoradapter (Rev. 30) kommt die Kupplung ohnehin nur 8 mm auf die
+   Motorwelle, sonst rutscht ihre obere Klemmschraube in die Konsole — also
+   auch nachsehen, **wo die Klemmschrauben sitzen** (angenommen: Mitte der
+   Nabe).
 
 Und eine Entscheidung, die daraus schon feststeht: **die Spindel wird
-gekürzt**, auf `spindel_zuschnitt` = 150 mm (gebraucht 137,6 mm). Ungekürzt
+gekürzt**, auf `spindel_zuschnitt` = 160 mm (gebraucht 147,6 mm). Ungekürzt
 hängt das untere Ende bis Z = −80 und drückt die mögliche Werkstückhöhe von 59
 auf 45 mm — unter die geforderten 50.
 

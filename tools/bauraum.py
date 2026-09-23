@@ -117,6 +117,10 @@ def bauraeume(w, L):
         Quader('Fuehrungsrippe rechts', L['motor_rippe_x'][1][0],
                L['motor_rippe_x'][1][1], 0.0, L['motor_rippe_y1'],
                L['konsole_z1'], L['motor_rippe_z1']),
+        # Distanzplatte zwischen Konsole und Motor, eigenes Druckteil
+        Quader('Motoradapter', sx - w('motor_flansch') / 2,
+               sx + w('motor_flansch') / 2, sy - w('motor_flansch') / 2,
+               sy + w('motor_flansch') / 2, L['adapter_z0'], L['adapter_z1']),
         # Endschalter: Sockel an der Platte, Halter (Flansch + Wand) und die
         # Platine der Gabellichtschranke.
         Quader('Endschaltersockel', w('traeger_x_links'), w('ls_sockel_x1'),
@@ -124,10 +128,10 @@ def bauraeume(w, L):
                L['ls_sockel_z0'], L['ls_sockel_z1']),
         Quader('Halter Flansch', L['ls_wand_x0'], w('ls_sockel_x1'),
                L['ls_sockel_y1'], L['ls_flansch_y1'],
-               L['ls_sockel_z0'], L['ls_sockel_z1']),
+               L['ls_halter_z0'], L['ls_halter_z1']),
         Quader('Halter Wand', L['ls_wand_x0'], L['ls_wand_x1'],
                L['ls_sockel_y1'], L['ls_wand_y1'],
-               L['ls_sockel_z0'], L['ls_sockel_z1']),
+               L['ls_halter_z0'], L['ls_halter_z1']),
         Quader('Lichtschranke', L['ls_wand_x1'],
                L['ls_wand_x1'] + w('ls_pcb_dicke'),
                L['ls_pcb_y0'], L['ls_pcb_y1'],
@@ -201,6 +205,12 @@ def bauraeume(w, L):
         ('Antriebsmutter Tr8x2', 'Tr8x2-Spindel'),
         ('Kupplung', 'Tr8x2-Spindel'),
         ('Motorkonsole', 'NEMA 17'),
+        ('Motorkonsole', 'Motoradapter'),
+        ('Motoradapter', 'NEMA 17'),
+        # Mit Adapter ragt die Kupplung oben in die Bundbohrung der Konsole.
+        # Der Quader der Konsole kennt die Bohrung nicht; Luft rundum und
+        # Erreichbarkeit der Klemmschraube prueft toolhead_check.py, Abschnitt 2.
+        ('Motorkonsole', 'Kupplung'),
         ('Motorkonsole', 'Fuehrungsrippe links'),
         ('Motorkonsole', 'Fuehrungsrippe rechts'),
         ('Fuehrungsrippe links', 'NEMA 17'),

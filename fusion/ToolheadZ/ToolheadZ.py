@@ -1,13 +1,16 @@
 # ToolheadZ.py — kompletter Laser-Toolhead mit NEMA17-Z-Achse
 #
-# Baugruppe (vier gedruckte Teile), weil sich Teile relativ zueinander bewegen:
+# Baugruppe (fuenf gedruckte Teile), weil sich Teile relativ zueinander bewegen:
 #   Traegerplatte   — geerdet, sitzt auf dem MGN15H-Wagen der Portalfuehrung,
-#                     traegt die MGN9-Z-Schiene (Sockel) und die Motorkonsole
-#   Motorhalter     — U-Konsole oben, traegt den NEMA 17 (Welle nach unten)
+#                     traegt die MGN9-Z-Schiene (Sockel) und die angeformte
+#                     Motorkonsole
+#   Motoradapter    — Distanzplatte zwischen Konsole und NEMA 17 (Welle nach
+#                     unten); hebt den Motor, ohne die Traegerplatte zu aendern
 #   Schlittenplatte — auf dem MGN9H-Z-Wagen, traegt den Diodenlaser
 #   Mutternwinkel   — Winkel fuer die Tr8x2-Anti-Backlash-Garnitur: Regal
 #                     ueber der Plattenoberkante, Ruecken schwimmend an der
 #                     Schlittenplatte verschraubt
+#   Endschalterhalter — traegt die Gabellichtschranke am Sockel der Platte
 #
 # Koordinatensystem = Maschinenkoordinaten, global fuer alle Komponenten:
 #   X = quer, laengs des Portals          Y = nach vorn, weg vom Portal
@@ -24,7 +27,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 29
+REVISION = 30
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -70,6 +73,9 @@ MASSE = {
     'motor_bund_h':        (2.0,   'NEMA17: Zentrierbund Hoehe'),
     'motor_welle_l':       (24.0,  'NEMA17: Wellenlaenge'),
     'motor_laenge':        (40.0,  'NEMA17: Koerperlaenge (nur Freigang)'),
+    # Die Motorschraube darf im Flanschgewinde nicht aufsetzen, sonst klemmt
+    # sie nichts. Ueblich sind 4,5 mm Gewindetiefe [w].
+    'motor_gewinde_tiefe':  (4.5,  'NEMA17: Gewindetiefe im Flansch'),
 
     # --- Kaufteil: Antrieb -------------------------------------------------
     # Trapezgewinde Tr8x2 mit Anti-Backlash-Garnitur (hardware.md). Die
@@ -107,7 +113,10 @@ MASSE = {
     # ungekuerzt haengt das untere Ende tiefer als die Plattenunterkante und
     # wird selbst zur Werkstueckgrenze (siehe werkstueck_frei_lang).
     'spindel_bestellt':   (200.0,  'Tr8x2: bestellte Spindellaenge'),
-    'spindel_zuschnitt':  (150.0,  'Tr8x2: Laenge nach dem Kuerzen'),
+    # 160 seit dem Motoradapter (Rev. 30): das obere Ende sitzt 10 mm hoeher.
+    # Eine schon auf 150 gekuerzte Spindel reicht auch noch (2,5 mm Reserve),
+    # dann aber nicht tiefer als kupplung_griff in die Kupplung stecken.
+    'spindel_zuschnitt':  (160.0,  'Tr8x2: Laenge nach dem Kuerzen'),
 
     # --- Kaufteil: Diodenlaser (Nutzerangabe + hardware.md) ----------------
     # 40,5 x 16,5 — am 2026-09-17 mit Bohrlehre_Laser (Ø3,4 Rundloecher) am
@@ -186,6 +195,16 @@ MASSE = {
     'konsole_rand':        (4.5,   'Motorkonsole: Rand neben den Fuehrungsrippen'),
     'motor_rippe_breite':  (3.0,   'Fuehrungsrippe am Motorflansch: Breite'),
     'motor_rippe_hoehe':   (3.0,   'Fuehrungsrippe: Hoehe ueber der Konsole'),
+    # Motoradapter (Rev. 30): Distanzplatte zwischen Konsole und Motor. Jeder
+    # mm hebt Motor und Kupplung und damit die obere Verfahrgrenze um 1 mm —
+    # ohne die gedruckte Traegerplatte anzufassen. Unten steht er zwischen den
+    # Fuehrungsrippen der Konsole, oben sitzt der Zentrierbund des Motors in
+    # seiner Bohrung; die vier Motorschrauben gehen durch beide Teile.
+    # Grenze nach oben: die Motorwelle ragt nur noch motor_welle_l
+    # - konsole_dicke - motor_adapter unter der Konsole heraus, die obere
+    # Klemmschraube der Kupplung muss darunter erreichbar bleiben
+    # (toolhead_check.py, Abschnitt 2).
+    'motor_adapter':       (10.0,  'Motoradapter: Dicke (hebt den Motor)'),
     # --- Endschalter: Gabellichtschranke (LM393-Modul) ---------------------
     # Platine 25 x 20 mm, Gabel an einer Stirnseite (1 mm von der 20-mm-Kante),
     # Schlitzbreite 10 mm, zwei M3-Loecher in den Ecken der Gegenseite [v].
@@ -208,6 +227,12 @@ MASSE = {
     'ls_schraub_abstand': (20.0,  'Endschalterhalter: Abstand der Anschraubpunkte'),
     'ls_sockel_hoehe':     (8.0,  'Endschaltersockel an der Platte: Hoehe in Y'),
     'ls_sockel_x1':      (-13.0,  'Endschaltersockel: rechte Kante'),
+    # Der Sockel gehoert zur Traegerplatte, und die ist gedruckt (Stand
+    # Rev. 28/29, Einsaetze bei Z = +43,5 und +63,5). Er bleibt deshalb, wo
+    # er ist, auch wenn der Schaltpunkt wandert — den Unterschied gleicht der
+    # Halter aus, ein eigenes kleines Teil: seine Platine sitzt entsprechend
+    # hoeher ueber den Langloechern (ls_versatz in lage()).
+    'ls_sockel_unten':    (35.5,  'Endschaltersockel: Unterkante (gedruckt)'),
     # Die vorhandenen M2-Einsaetze haben 3,2 mm Aussendurchmesser und sind
     # 2,5 mm lang [v] — Ø2,8 ist dafuer die Einpressbohrung (0,4 mm Untermass,
     # dieselbe Regel wie bei den M3 am Schienensockel). Dahinter bleibt eine
@@ -334,7 +359,10 @@ def lage():
     L['z_schiene_z1'] = L['z_schiene_z0'] + w('z_schiene_laenge')
     L['konsole_z0'] = w('konsole_unten')
     L['konsole_z1'] = L['konsole_z0'] + w('konsole_dicke')
-    L['motor_flansch_z'] = L['konsole_z1']                   # Motor sitzt oben auf
+    # Motoradapter auf der Konsole, der Motor sitzt oben auf dem Adapter
+    L['adapter_z0'] = L['konsole_z1']
+    L['adapter_z1'] = L['adapter_z0'] + w('motor_adapter')
+    L['motor_flansch_z'] = L['adapter_z1']
     L['motor_z1'] = L['motor_flansch_z'] + w('motor_laenge')
     L['welle_z0'] = L['motor_flansch_z'] - w('motor_welle_l')
     L['kupplung_z1'] = L['welle_z0'] + w('kupplung_griff')
@@ -343,6 +371,11 @@ def lage():
     # die Welle in die obere — die Enden beruehren sich nicht.
     L['spindel_z1'] = L['kupplung_z0'] + w('kupplung_griff')
     L['kupplung_frei'] = L['welle_z0'] - L['spindel_z1']
+    # Mit Adapter ragt die Kupplung oben in die Bundbohrung der Konsole
+    # (positiv = so weit drin). Ihre obere Klemmschraube sitzt etwa in der
+    # Mitte der oberen Nabe und muss unter der Konsole erreichbar bleiben.
+    L['kupplung_in_konsole'] = L['kupplung_z1'] - L['konsole_z0']
+    L['kupplung_klemm_z'] = L['kupplung_z1'] - w('kupplung_l') / 4.0
 
     # ---- Schlittenplatte und Laser, relativ zur Wagenmitte zc ---------------
     lochmitte = w('laser_versatz_z')                         # Lochbildmitte ueber zc
@@ -431,8 +464,14 @@ def lage():
                         + L['schlitten_oben_rel'])
     L['ls_pcb_z0'] = L['ls_strahl_z'] - w('ls_strahl_ab_kante')
     L['ls_pcb_z1'] = L['ls_pcb_z0'] + w('ls_pcb_laenge')
-    L['ls_sockel_z0'] = L['ls_pcb_z0'] - 5.0
-    L['ls_sockel_z1'] = L['ls_pcb_z1'] + 5.0
+    # Sockel: gedruckt, steht fest (siehe ls_sockel_unten). Bis Rev. 29 lag
+    # er je 5 mm unter und ueber der Platine; um so viel, wie die Platine
+    # heute hoeher sitzt, ist der Halter ueber dem Sockel verlaengert.
+    L['ls_sockel_z0'] = w('ls_sockel_unten')
+    L['ls_sockel_z1'] = L['ls_sockel_z0'] + w('ls_pcb_laenge') + 10.0
+    L['ls_versatz'] = L['ls_pcb_z0'] - 5.0 - L['ls_sockel_z0']
+    L['ls_halter_z0'] = min(L['ls_sockel_z0'], L['ls_pcb_z0'] - 5.0)
+    L['ls_halter_z1'] = max(L['ls_sockel_z1'], L['ls_pcb_z1'] + 5.0)
     # Sockel an der Plattenvorderseite: die 8 mm dicke Platte allein traegt
     # keinen Gewindeeinsatz (Wand 1,7 mm), mit Sockel sind es 16 mm Material.
     L['ls_sockel_y1'] = L['traeger_y1'] + w('ls_sockel_hoehe')
@@ -549,6 +588,11 @@ def lage():
         (w('spindel_x') + sx * w('motor_loch') / 2.0,
          w('spindel_y') + sy * w('motor_loch') / 2.0)
         for sy in (-1, 1) for sx in (-1, 1)]
+    # Eine Schraube klemmt Konsole und Adapter und greift dann in den Motor:
+    # mindestens 4 mm Eingriff, aufgerundet auf die naechste gerade Laenge.
+    L['motor_klemm'] = w('konsole_dicke') + w('motor_adapter')
+    L['motor_schraube'] = 2.0 * int((L['motor_klemm'] + 4.0) / 2.0 + 0.999)
+    L['motor_eingriff'] = L['motor_schraube'] - L['motor_klemm']
     # Freie Luft zwischen dem Zugangskorridor der hinteren Reihe und der
     # Vorderseite der Traegerplatte — die Groesse, die spindel_y bestimmt.
     L['korridor_luft'] = (w('spindel_y') - w('motor_loch') / 2.0
@@ -985,7 +1029,7 @@ def langloch_stellung(L, f_mm, dicke_mm):
 
 
 def fokus_zeilen(L, w, kandidaten=(10.0, 15.0, 20.0, 25.0, 30.0, 35.0,
-                                   40.0)):
+                                   40.0, 45.0, 50.0)):
     """Berichtszeilen: welche Langlochstellung passt zu welchem Fokusabstand?
     Geht eine Dicke nicht mehr auf, wird gesagt, was stattdessen erreichbar
     ist — die Stellung ist nach oben durch die Montage begrenzt."""
@@ -1115,6 +1159,45 @@ def bau_traegerplatte(app, design, comp, L, fehler):
     return koerper
 
 
+def bau_motoradapter(app, design, comp, L, fehler):
+    """Distanzplatte zwischen Konsole und NEMA 17 (Rev. 30).
+
+    Hebt Motor und Kupplung um motor_adapter und damit die obere Verfahr-
+    grenze, ohne die gedruckte Traegerplatte zu aendern. So gross wie der
+    Motorflansch: unten steht der Adapter zwischen den Fuehrungsrippen der
+    Konsole, die ihn wie vorher den Motor gegen Verdrehen halten. Oben sitzt
+    der Zentrierbund des Motors in der Bohrung Ø22,4, die wie in der Konsole
+    durchgeht. Die vier Motorschrauben gehen von unten durch Konsole UND
+    Adapter in den Motor — ein Satz Schrauben klemmt alle drei Teile.
+
+    Drucklage: Unterseite (Konsolenseite) aufs Bett, die Fussfase haelt den
+    Elefantenfuss aus dem 0,2-mm-Spiel zwischen den Rippen heraus."""
+    sx, sy = w('spindel_x'), w('spindel_y')
+    r = w('motor_flansch') / 2.0
+    e_mitte = ebene_z(comp, (L['adapter_z0'] + L['adapter_z1']) / 2.0,
+                      'E_Adapter_mitte')
+
+    sk = skizze(comp, e_mitte, 'Sk_Motoradapter')
+    rechteck(sk, sx - r, sy - r, sx + r, sy + r)
+    koerper = neu_mittig(comp, groesstes_profil(sk),
+                         w('motor_adapter')).bodies.item(0)
+    koerper.name = 'Motoradapter'
+
+    sk = skizze(comp, e_mitte, 'Sk_Adapter_Bohrungen')
+    kreis(sk, sx, sy, w('motor_bund_d') + w('spiel_locker'))
+    for x, y in L['motor_schrauben']:
+        kreis(sk, x, y, w('m3_durchgang'))
+    durch(comp, alle_profile(sk), koerper)
+
+    fussfase(comp, koerper, 'y', L['adapter_z0'], w('fase_fuss'), fehler,
+             'Motoradapter')
+    bbox_pruefen(koerper, 'Motoradapter',
+                 ((sx - r, sx + r), (sy - r, sy + r),
+                  (L['adapter_z0'], L['adapter_z1'])), fehler)
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
+    return koerper
+
+
 def bau_schlittenplatte(app, design, comp, L, zc, fehler):
     """Auf dem MGN9H-Z-Wagen: Auflagepad + Rippen, davor die Platte mit dem
     Laser-Lochbild, rechts eine Lasche fuer den Mutternwinkel.
@@ -1230,16 +1313,19 @@ def bau_endschalterhalter(app, design, comp, L, fehler):
     """
     e_flansch = ebene_y(comp, L['ls_sockel_y1'], 'E_LS_Flansch')
 
+    # Flansch und Wand reichen vom Sockel bis ueber die Platine. Seit dem
+    # Motoradapter sitzt die Platine hoeher als der (gedruckte) Sockel, der
+    # Flansch steht dann oben ueber den Sockel hinaus.
     sk = skizze(comp, e_flansch, 'Sk_LS_Flansch')
-    rechteck(sk, L['ls_wand_x0'], L['ls_sockel_z0'],
-             w('ls_sockel_x1'), L['ls_sockel_z1'])
+    rechteck(sk, L['ls_wand_x0'], L['ls_halter_z0'],
+             w('ls_sockel_x1'), L['ls_halter_z1'])
     koerper = neu(comp, groesstes_profil(sk),
                   w('ls_flansch_dicke')).bodies.item(0)
     koerper.name = 'Endschalterhalter'
 
     sk = skizze(comp, e_flansch, 'Sk_LS_Wand')
-    rechteck(sk, L['ls_wand_x0'], L['ls_sockel_z0'],
-             L['ls_wand_x1'], L['ls_sockel_z1'])
+    rechteck(sk, L['ls_wand_x0'], L['ls_halter_z0'],
+             L['ls_wand_x1'], L['ls_halter_z1'])
     dazu(comp, groesstes_profil(sk),
          L['ls_wand_y1'] - L['ls_sockel_y1'], koerper)
 
@@ -1271,7 +1357,7 @@ def bau_endschalterhalter(app, design, comp, L, fehler):
     bbox_pruefen(koerper, 'Endschalterhalter',
                  ((L['ls_wand_x0'], w('ls_sockel_x1')),
                   (L['ls_sockel_y1'], L['ls_wand_y1']),
-                  (L['ls_sockel_z0'], L['ls_sockel_z1'])), fehler)
+                  (L['ls_halter_z0'], L['ls_halter_z1'])), fehler)
     material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
 
@@ -1437,6 +1523,9 @@ def hinweise_bauen(L, zc, fehler):
             L['z_arbeit'], w('werkstueck_max')),
         '    fuer 0..{:.0f} mm Werkstueck)'.format(w('werkstueck_max')),
         '  gebaut bei zc = {:+.1f} mm (Mitte des Verfahrwegs)'.format(zc),
+        '  Motoradapter {:.0f} mm: Motor und Kupplung sitzen entsprechend'.format(
+            w('motor_adapter')),
+        '    hoeher, die Traegerplatte bleibt, wie sie gedruckt ist.',
         '  Laser-Unterkante: {:+.1f} bis {:+.1f} mm'.format(
             L['zc_min'] + L['laser_unten_rel'],
             L['zc_max'] + L['laser_unten_rel']),
@@ -1451,7 +1540,8 @@ def hinweise_bauen(L, zc, fehler):
         '',
         'MOTORBEFESTIGUNG: NEMA17 hat Gewinde im Flansch, es wird also von',
         '  UNTEN verschraubt — durchstecken von oben geht nicht. Alle VIER',
-        '  Schrauben (4x M3x12) sind erreichbar: die hintere Reihe liegt bei',
+        '  Schrauben (4x M3x{:.0f}) sind erreichbar: die hintere Reihe liegt bei'
+        .format(L['motor_schraube']),
         '  Y={:+.1f} und damit {:.1f} mm vor der Traegerplatte (Y=0..{:.0f}).'.format(
             w('spindel_y') - w('motor_loch') / 2, L['korridor_luft'],
             w('traeger_dicke')),
@@ -1459,9 +1549,17 @@ def hinweise_bauen(L, zc, fehler):
             w('spindel_y')),
         '  Schlittenplatte entsprechend weiter vorn (pad_hoehe={:.0f}).'.format(
             w('pad_hoehe')),
-        '  Zwei Fuehrungsrippen ({:.0f} mm hoch) fassen den Flansch seitlich —'.format(
+        '  Zwei Fuehrungsrippen ({:.0f} mm hoch) fassen den Motoradapter'.format(
             w('motor_rippe_hoehe')),
-        '  der Motor findet beim Einsetzen selbst seine Lage.',
+        '  seitlich — er findet beim Einsetzen selbst seine Lage, der Motor',
+        '  zentriert sich mit seinem Bund in der Adapterbohrung.',
+        '  MOTORADAPTER ({:.0f} mm, seit Rev. 30): hebt Motor und Kupplung und'
+        .format(w('motor_adapter')),
+        '  damit die obere Verfahrgrenze, ohne die gedruckte Traegerplatte zu',
+        '  aendern. Die Schrauben gehen durch Konsole und Adapter ({:.0f} mm)'
+        .format(L['motor_klemm']),
+        '  und greifen {:.1f} mm in den Motor (Gewindetiefe {:.1f} mm).'.format(
+            L['motor_eingriff'], w('motor_gewinde_tiefe')),
         '  Die Konsole ist an die Traegerplatte angeformt: ein Druckteil,',
         '  keine Verschraubung Halter/Platte.',
         '',
@@ -1497,9 +1595,18 @@ def hinweise_bauen(L, zc, fehler):
         '  kupplungen halten ihre Naben nicht axial zusammen — der Schlitten',
         '  wuerde absinken. Klemmnabe statt Madenschraube, nachziehen.',
         '  KUPPLUNG: starre Klemmkupplung (UniTak3D 5x8, seitliche Klemm-',
-        '  schrauben). Beide Wellen ueber den GANZEN Klemmbereich einstecken,',
-        '  etwa bis zur Mitte, Enden nicht aneinander. Fest, nicht mit Gewalt',
-        '  (Aluminiumgewinde), nach den ersten Betriebsstunden nachziehen.',
+        '  schrauben). Jede Welle muss unter ihrer Klemmschraube durchgehen,',
+        '  die Enden beruehren sich nicht. Mit dem Motoradapter steht die',
+        '  Motorwelle nur noch {:.0f} mm unter der Konsole heraus: Kupplung'
+        .format(L['konsole_z0'] - L['welle_z0']),
+        '  {:.0f} mm auf die Welle schieben, sie ragt dann {:.0f} mm in die'
+        .format(w('kupplung_griff'), max(L['kupplung_in_konsole'], 0.0)),
+        '  Bundbohrung der Konsole ({:.1f} mm Luft rundum), und die obere'
+        .format((w('motor_bund_d') + w('spiel_locker') - w('kupplung_d')) / 2),
+        '  Klemmschraube bleibt {:.1f} mm unter der Konsole erreichbar.'.format(
+            L['konsole_z0'] - L['kupplung_klemm_z']),
+        '  Fest, nicht mit Gewalt (Aluminiumgewinde), nach den ersten',
+        '  Betriebsstunden nachziehen.',
         '  GEWINDE IM DRUCKTEIL: die Flanschloecher sind Durchgangsloecher,',
         '  also 4x M3-Messingeinsatz Ø{:.1f} x {:.0f} von oben ins Regal.'.format(
             w('insert_m3_d'), w('insert_m3_t')),
@@ -1529,8 +1636,10 @@ def hinweise_bauen(L, zc, fehler):
         '     Freibohrungen) — nur solange der Laser NICHT dran ist',
         '  5. Gewindeeinsaetze ins Regal des Mutternwinkels einschmelzen,',
         '     2x M3-Mutter in die Taschen des Ruecken',
-        '  6. Motor zwischen die Fuehrungsrippen, 4x M3x12 von unten —',
-        '     mit dem Z-Schlitten unten bequemer (164 statt 28 mm Platz)',
+        '  6. Motoradapter zwischen die Fuehrungsrippen, Motor darauf (Bund',
+        '     in die Bohrung), 4x M3x{:.0f} von unten durch Konsole und'.format(
+            L['motor_schraube']),
+        '     Adapter — mit dem Z-Schlitten unten ist mehr Platz fuer den Inbus',
         '  7. Spindel auf {:.0f} mm kuerzen, entgraten, anfasen.'.format(
             w('spindel_zuschnitt')),
         '     Mutternwinkel an die Lasche (2x M3x{:.0f} + grosse Scheibe von'.format(
@@ -1538,8 +1647,9 @@ def hinweise_bauen(L, zc, fehler):
         '     vorn). Garnitur auf die Spindel drehen, Flansch mit der',
         '     glatten Seite aufs Regal (4x M3x{:.0f} von oben), dann die'.format(
             L['flansch_schraube']),
-        '     Spindel oben in die Kupplung — ueber den ganzen Klemmbereich,',
-        '     Enden nicht aneinander.',
+        '     Spindel oben in die Kupplung — mindestens {:.0f} mm, unter der'.format(
+            w('kupplung_griff')),
+        '     Klemmschraube durch, Enden nicht aneinander.',
         '     Alles lose lassen, mehrmals durchfahren, DANN festziehen',
         '  8. Laser ZULETZT, 4x M3x10 + Scheibe von hinten, Z-Schlitten',
         '     dafuer ganz nach unten fahren ({})'.format(
@@ -1575,6 +1685,14 @@ def hinweise_bauen(L, zc, fehler):
         '  Schaltpunkt (Strahlachse) ... Z = {:+.1f} mm'.format(L['ls_strahl_z']),
         '  danach bis zur Grenze ....... {:.0f} mm'.format(w('ls_ueberfahrt')),
         '  justierbar ueber Langloecher  +-{:.0f} mm'.format(w('ls_justage')),
+    ] + ([
+        '  Der Sockel auf der Traegerplatte ist gedruckt und bleibt, wo er',
+        '  ist. Der Motoradapter hebt den Schaltpunkt, deshalb sitzt die',
+        '  Platine im Halter {:.0f} mm hoeher ueber den Langloechern als bis'
+        .format(L['ls_versatz']),
+        '  Rev. 29: den Halter neu drucken (kleines Teil), der Flansch steht',
+        '  dann oben ueber den Sockel hinaus.',
+    ] if abs(L['ls_versatz']) > 0.05 else []) + [
         '  Die Strahlhoehe ueber der Platine ist ANGENOMMEN ({:.0f} mm). Die'.format(
             w('ls_strahl_ab_kante')),
         '  Fahne deckt {:.1f} bis {:.1f} mm ab, der Halter justiert den Rest.'.format(
@@ -1640,6 +1758,8 @@ def hinweise_bauen(L, zc, fehler):
         '  sich mehr als eine kurze.',
         '',
         'DRUCK (PETG, Bambu Lab A1):',
+        '  Motoradapter .... Unterseite (Konsolenseite) aufs Bett, Fussfase',
+        '                    haelt ihn zwischen den Rippen; keine Stuetzen.',
         '  Traegerplatte ... Rueckseite (Passflaeche) aufs Bett. Platte, Sockel,',
         '                    Konsole, Saeulen- und Fuehrungsrippen stehen alle',
         '                    auf dem Bett — keine Stuetzen, alle Kraefte in',
@@ -1691,13 +1811,14 @@ def run(context):
         # stehen sie bereits richtig zueinander und As-Built-Joints genuegen.
         einheit = adsk.core.Matrix3D.create()
         occ = {}
-        for name in ('Traegerplatte', 'Schlittenplatte', 'Mutternwinkel',
-                     'Endschalterhalter', 'Bohrlehren'):
+        for name in ('Traegerplatte', 'Motoradapter', 'Schlittenplatte',
+                     'Mutternwinkel', 'Endschalterhalter', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
 
         bau_traegerplatte(app, design, occ['Traegerplatte'].component, L, fehler)
+        bau_motoradapter(app, design, occ['Motoradapter'].component, L, fehler)
         bau_schlittenplatte(app, design, occ['Schlittenplatte'].component,
                             L, zc, fehler)
         bau_mutternwinkel(app, design, occ['Mutternwinkel'].component,
@@ -1707,6 +1828,7 @@ def run(context):
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, zc, fehler)
 
         occ['Traegerplatte'].isGrounded = True
+        occ['Motoradapter'].isGrounded = True
         occ['Endschalterhalter'].isGrounded = True
         occ['Bohrlehren'].isGrounded = True
 

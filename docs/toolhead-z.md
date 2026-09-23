@@ -1,6 +1,6 @@
 # Toolhead Z-Achse — kompletter Aufbau
 
-Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, vier gedruckte Teile).
+Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, fünf gedruckte Teile).
 Geprüft mit `python3 tools/toolhead_check.py`, Layout in
 [toolhead-z-layout.svg](toolhead-z-layout.svg).
 
@@ -81,22 +81,23 @@ hoch die Schürze des MGN9H über der Schienenauflage endet.
 | −115,8 | Laser-Unterkante (Linse), tiefste Stellung |
 | −66,0 | Unterkante Trägerplatte |
 | −60,0 | Unterkante MGN9-Schiene (**200 mm lang, 10 Schrauben**) |
-| −40,1 … +36,5 | Bereich der Wagenmitte `zc` |
-| +109,0 | Oberkante der Garnitur in der höchsten Stellung (3 mm unter der Kupplung) |
-| +112,0 … +137,0 | Kupplung 5 → 8 mm (modelliert mit 8 mm Einstecktiefe) |
+| −40,1 … +46,5 | Bereich der Wagenmitte `zc` |
+| +119,0 | Oberkante der Garnitur in der höchsten Stellung (3 mm unter der Kupplung) |
+| +122,0 … +147,0 | Kupplung 5 → 8 mm (modelliert mit 8 mm Einstecktiefe), oben 2 mm in der Bundbohrung der Konsole |
 | +140,0 | Oberkante MGN9-Schiene |
 | +145,0 | Unterseite Motorkonsole = Oberkante Trägerplatte |
-| +153,0 | Motorflansch |
-| +193,0 | Oberkante NEMA 17 |
+| +153,0 | Oberseite Konsole = Unterseite Motoradapter |
+| +163,0 | Motorflansch (Motoradapter 10 mm, seit Rev. 30) |
+| +203,0 | Oberkante NEMA 17 |
 
-**Nutzbarer Verfahrweg: 76,6 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
+**Nutzbarer Verfahrweg: 86,6 mm.** Vier Dinge begrenzen ihn; das Skript rechnet
 alle vier aus und nennt die bindende:
 
 | Grenze | zc max |
 |---|---|
-| **Antriebsmutter gegen Kupplung** | **+36,5** ← bindend |
-| Schlittenplatte gegen Kupplung | +92,0 |
-| Laser-Oberkante gegen Motorkonsole | +113,2 |
+| **Antriebsmutter gegen Kupplung** | **+46,5** ← bindend |
+| Schlittenplatte gegen Kupplung | +102,0 |
+| Laser-Oberkante gegen Motorkonsole | +118,2 |
 | Wagen am oberen Schienenende | +120,1 |
 
 Die Anti-Backlash-Garnitur steht **nach oben** auf dem Regal des
@@ -111,14 +112,69 @@ der 8 mm unter der mechanischen Grenze liegt (`ls_ueberfahrt`). Also:
 
 | | mm |
 |---|---|
-| mechanischer Verfahrweg | 76,6 |
+| mechanischer Verfahrweg | 86,6 |
 | − Überfahrweg über dem Endschalter | 8,0 |
-| = **Arbeitsweg** | **68,6** |
+| = **Arbeitsweg** | **78,6** |
 | − gebraucht für 0…50 mm Werkstück | 50,0 |
-| = **Reserve** | **18,6** |
+| = **Reserve** | **28,6** |
 
 Hier stand bis Rev. 28 „gebraucht werden rund 30 mm". Das war falsch — es sind
 50 mm plus der Überfahrweg des Endschalters.
+
+### Motoradapter: 10 mm mehr Weg ohne neue Trägerplatte (Rev. 30)
+
+Bis Rev. 29 saß der Motor direkt auf der Konsole, der Arbeitsweg war 68,6 mm
+und das Fokusfenster reichte bis f = 40 mm. Jeder Millimeter, den Motor und
+Kupplung höher sitzen, bringt oben 1 mm Weg und 1 mm Fokusfenster. Statt die
+Konsole anzuheben (neue, 10 mm längere Trägerplatte) sitzt jetzt eine
+**Distanzplatte zwischen Konsole und Motor**, der `Motoradapter`:
+
+* so groß wie der Motorflansch (42,3 × 42,3 × 10 mm, rund 17 g bei voller Füllung), unten
+  zwischen den Führungsrippen der Konsole, die ihn wie vorher den Motor gegen
+  Verdrehen halten;
+* Bohrung Ø22,4 durch, wie in der Konsole — oben sitzt der Zentrierbund des
+  Motors darin;
+* die vier Motorschrauben gehen von unten durch Konsole **und** Adapter:
+  **M3×22** (8 + 10 mm geklemmt, 4 mm Eingriff, 0,5 mm vor dem Gewindegrund).
+
+Die **Trägerplatte bleibt, wie sie gedruckt ist.** `toolhead_check.py` prüft
+das eigens: dieselbe Lage ohne Adapter gerechnet, dann müssen Konsole,
+Rippen, Schraubenbilder, Schiene und Endschaltersockel exakt gleich bleiben.
+Auch die Durchbiegung der Säule bleibt bei 0,24 mm — die Säule wird nicht
+länger, das Gewicht des Motors hängt am selben Hebel. Mit einer um 10 mm
+längeren Trägerplatte wären es 0,30 mm gewesen.
+
+Was sich sonst ändert:
+
+| | bis Rev. 29 | Rev. 30 |
+|---|---|---|
+| Motorflansch | +153 | **+163** |
+| Kupplung | +112 … +137 | **+122 … +147**, oben 2 mm in der Bundbohrung (Ø19 in Ø22,4: 1,7 mm Luft rundum) |
+| Arbeitsweg / Reserve | 68,6 / 18,6 mm | **78,6 / 28,6 mm** |
+| Fokusfenster | f = 6 … 40 mm | **f = 6 … 50 mm** |
+| Motorschrauben | 4 × M3×12 | **4 × M3×22** |
+| Spindel | auf 150 mm kürzen | **auf 160 mm** (147,6 mm gebraucht) |
+| Endschalterhalter | Platine über den Langlöchern | Platine **10 mm höher**, Halter neu drucken (≈ 9 g) |
+
+Zwei Grenzen hat der Adapter:
+
+* **Die obere Klemmschraube der Kupplung muss erreichbar bleiben.** Die
+  Motorwelle ragt nur noch 6 mm unter der Konsole heraus. Die Kupplung kommt
+  deshalb nur **8 mm** auf die Welle (nicht bis zur Mitte), dann liegt ihre
+  obere Klemmschraube — etwa in der Mitte der oberen Nabe — 4,3 mm unter der
+  Konsole. Ab 12 mm Adapter kommt der Inbus nicht mehr an sie heran.
+* **Schraubenlänge.** M3×22 ist eine seltenere Länge. Ohne sie: entweder
+  **8 mm Adapter mit M3×20** (2 mm weniger Weg, f bis 48 mm), oder die vier
+  Löcher unten in der Konsole mit einem Ø6-Bohrer **2 mm tief ansenken** und
+  M3×20 nehmen. Nicht M3×25: die setzt im 4,5 mm tiefen Motorgewinde auf und
+  klemmt nichts.
+
+| Motoradapter | Arbeitsweg | Reserve | Fokusfenster | Klemmschraube unter der Konsole | Motorschraube |
+|---|---|---|---|---|---|
+| 0 (bis Rev. 29) | 68,6 | 18,6 | f = 6 … 40 mm | 14,3 mm | M3×12 |
+| 8 mm | 76,6 | 26,6 | f = 6 … 48 mm | 6,3 mm | M3×20 |
+| **10 mm** | **78,6** | **28,6** | **f = 6 … 50 mm** | **4,3 mm** | **M3×22** |
+| 12 mm | 80,6 | 30,6 | f = 6 … 52 mm | 2,3 mm ✗ | M3×24 |
 
 ### Die Schiene sitzt in Z fest — das begrenzt die Werkstückhöhe
 
@@ -165,7 +221,10 @@ Y = +13,0 mm, also **13 mm vor der Trägerplatte**.
 Zusätzlich fassen **zwei Führungsrippen** (3 mm hoch) den Motorflansch links und
 rechts mit 0,4 mm Spiel: der Motor findet beim Einsetzen selbst seine Lage, und
 die Schrauben müssen kein Moment übertragen (bei 0,4 Nm Haltemoment wären es
-rund 9 N je Rippe).
+rund 9 N je Rippe). Seit Rev. 30 fassen die Rippen den **Motoradapter**, der
+genau so groß ist wie der Flansch; der Motor darauf zentriert sich mit seinem
+Bund in der Adapterbohrung, und die vier Schrauben (M3×22) gehen durch Konsole
+und Adapter.
 
 `toolhead_check.py` prüft für **jede** der vier Schrauben einen freien
 senkrechten Korridor von Ø6 mm gegen alle festen Teile — auch an der Kupplung
@@ -184,8 +243,9 @@ vorbei — und prüft die Luft zur Trägerplatte als eigene Größe.
 Trägerplatte, Z-Schiene und Spindel bleiben davon unberührt. Der
 Verfahrweg lag damals bei 50,45 mm; er ist mit Rev. 14 auf 55,1 mm gewachsen
 (Laser tiefer, also nicht mehr die Motorkonsole als Grenze), mit Rev. 16 auf
-136,1 mm (Schiene 200 mm) und liegt mit Rev. 28 bei 76,6 mm (die
-Anti-Backlash-Garnitur baut nach oben auf).
+136,1 mm (Schiene 200 mm), mit Rev. 28 bei 76,6 mm (die
+Anti-Backlash-Garnitur baut nach oben auf) und liegt mit Rev. 30 bei 86,6 mm
+(Motoradapter).
 
 **Beim Anziehen beachten:** die Z-Wagen-Schrauben klemmen jetzt **12 mm PETG**
 statt 6 (der Kopf sitzt in der Ø6,5-Freibohrung auf der Pad-Vorderseite). Eine
@@ -207,7 +267,7 @@ weg als halbe Wagenlänge plus Werkzeugradius (19,95 + 3 = 22,95 mm).
 
 **Fokus.** Gemessen sind **130 mm** von der Bezugsebene bis zur Bettoberfläche
 (`bett_abstand`) und **50 mm** dickstes Werkstück (`werkstueck_max`). Die
-Gehäuseunterkante des Lasers liegt in Lochmitte zwischen **14,2 und 82,8 mm**
+Gehäuseunterkante des Lasers liegt in Lochmitte zwischen **14,2 und 92,8 mm**
 über dem Bett (oben am Schaltpunkt des Endschalters, nicht an der mechanischen
 Grenze). Der Fokusabstand *f* des Moduls steht nicht auf dem Modul —
 deshalb sind die vier Laserbefestigungen **senkrechte Langlöcher**, ±8 mm, und
@@ -216,13 +276,14 @@ die Höhe wird beim Zusammenbau eingestellt:
 | f | Langlochstellung | Bemerkung |
 |---|---|---|
 | 10 mm | 4,2 mm nach unten | die Linse kommt sonst nicht tief genug für dünnes Material |
-| 15 … 30 mm | Lochmitte (0) | in beide Richtungen voller Verstellweg |
-| 35 mm | 2,2 mm nach oben | sonst reicht es oben nicht für 50 mm Werkstück |
-| 40 mm | 7,2 mm nach oben | fast am Anschlag (+7,8) |
+| 15 … 40 mm | Lochmitte (0) | in beide Richtungen voller Verstellweg |
+| 45 mm | 2,2 mm nach oben | sonst reicht es oben nicht für 50 mm Werkstück |
+| 50 mm | 7,2 mm nach oben | fast am Anschlag (+7,8) |
 
 **Nach oben nutzbar sind +7,8 mm** — nicht weil der Hub endet, sondern weil die
 obere Schraubenreihe sonst hinter dem Z-Wagen verschwindet und nicht mehr
-verschraubbar ist. Das Fenster reicht damit von **f = 6 bis 40 mm**. Du musst
+verschraubbar ist. Das Fenster reicht damit von **f = 6 bis 50 mm** (bis
+Rev. 29, ohne Motoradapter, bis 40 mm). Du musst
 *f* also nicht kennen, um die Platte zu drucken; nur zum Einstellen beim
 Zusammenbau.
 
@@ -239,26 +300,15 @@ mindestens 3 mm. Z also nicht mit Werkstück oder Wabenplatte ganz nach unten
 fahren — die Referenzfahrt geht ohnehin nach oben, ein Z-Softlimit in der
 Firmware fängt den Rest ab.
 
-### Motor tiefer setzen?
+### Motor höher oder tiefer?
 
 Die untere Grenze legt das Schienenende fest, daran ändert der Motor nichts.
-Motor, Konsole und Kupplung tiefer zu setzen verschiebt nur die **obere**
-Grenze — die Garnitur fährt mit dem Schlitten von unten an die Kupplung heran
-und stößt früher an. Das geht zulasten der Reserve von 18,6 mm, Millimeter für
-Millimeter, und damit auch zulasten des Fokusfensters nach oben:
-
-| Motor tiefer | Arbeitsweg | Reserve | Fokusfenster | Durchbiegung am Motor |
-|---|---|---|---|---|
-| 0 (heute) | 68,6 | 18,6 | f = 6…40 mm | 0,24 mm |
-| 5 mm | 63,6 | 13,6 | f = 6…35 mm | 0,21 mm |
-| 10 mm | 58,6 | 8,6 | f = 6…30 mm | 0,19 mm |
-| 15 mm | 53,6 | 3,6 | f = 6…25 mm | 0,17 mm |
-
-Der Gewinn ist eine kürzere, steifere Säule (der Hebel zum Motor wird kürzer,
-die Durchbiegung geht mit der dritten Potenz). Der Preis ist das obere Ende des
-Fokusfensters. Solange *f* nicht bekannt ist, bleibt der Motor, wo er ist; bei
-einem Modul mit f ≤ 25 mm wären 10 mm tiefer eine saubere Verbesserung —
-allerdings mit neu gedruckter Trägerplatte.
+Motor und Kupplung verschieben nur die **obere** Grenze — die Garnitur fährt
+mit dem Schlitten von unten an die Kupplung heran. Höher heißt also mehr Weg
+und ein größeres Fokusfenster, Millimeter für Millimeter; tiefer das
+Gegenteil. Umgesetzt ist **10 mm höher über den Motoradapter** (Tabelle oben),
+weil so die gedruckte Trägerplatte bleiben kann und die Säule nicht länger
+wird.
 
 Die Feder der Garnitur ändert dabei nichts: Flanschmutter und Gleitmutter sind
 über die Mitnehmernut verdrehgesichert und fahren gemeinsam, die Garnitur ist
@@ -280,9 +330,10 @@ wächst aus der oberen linken Ecke der Schlittenplatte.
 
 | Maß | Wert |
 |---|---|
-| Schaltpunkt (Strahlachse) | Z = +105,0 |
+| Schaltpunkt (Strahlachse) | Z = +55,5 |
 | Weg danach bis zur mechanischen Grenze | 8 mm |
 | Justierbereich über die Langlöcher | ±4 mm |
+| Platine im Halter über den Langlöchern | 10 mm höher als bis Rev. 29 (Motoradapter) |
 | Fahne im 10-mm-Spalt | 2 mm dick, 4 mm Luft je Seite |
 | Fahne deckt Strahlhöhe ab | 3,5 … 12,5 mm über der Platine |
 
@@ -315,6 +366,13 @@ Zwei Dinge vor dem Druck:
   Lochabstand ist damit egal.
 * **Die Fahne muss undurchsichtig sein.** Helles oder naturfarbenes PETG lässt
   Infrarot durch, dann schaltet die Schranke nie sauber — dunkel drucken.
+
+**Seit Rev. 30 bleibt der Sockel, wo er gedruckt ist** (Einsätze bei
+Z = +43,5 und +63,5, also 101,5 und 81,5 mm unter der Konsolenunterseite). Der
+Motoradapter hebt den Schaltpunkt um 10 mm; das nimmt der Halter auf: seine
+Platine sitzt 10 mm höher über den Langlöchern, der Flansch steht oben 10 mm
+über den Sockel hinaus. Die Schaltfahne am Schlitten bleibt, wo sie ist — so
+fährt die Platte genau so an der Gabel vorbei wie bisher.
 
 Der Sockel an der Trägerplatte trägt zwei Gewindeeinsätze. Er ist nötig, weil
 die 8 mm dicke Platte allein für einen Ø4,6-Einsatz nur 1,7 mm Wand ließe; mit
@@ -534,19 +592,22 @@ ist die obere Verfahrgrenze, und der Endschalter schaltet 8 mm davor.
 
 Mit geschätzt 45 mm Bauhöhe (Flanschmutter 15 +
 Feder vorgespannt + Gleitmutter 15) ist ihre Oberkante das oberste bewegte
-Teil und bindet den Verfahrweg: **76,6 mm statt 136,1 mm**. Davon sind 68,6 mm
-Arbeitsweg bis zum Endschalter; gebraucht werden für 0–50 mm Werkstück 50 mm,
-es bleiben 18,6 mm Reserve (Tabelle oben).
+Teil und bindet den Verfahrweg: **86,6 mm statt 136,1 mm** (mit dem
+Motoradapter; ohne waren es 76,6). Davon sind 78,6 mm Arbeitsweg bis zum
+Endschalter; gebraucht werden für 0–50 mm Werkstück 50 mm, es bleiben
+28,6 mm Reserve (Tabelle oben).
 
 Die 45 mm sind der einzige Wert, der am gelieferten Teil nachzumessen ist
 (`t8_garnitur_h`); er geht in keine Geometrie ein, sondern nur in diese Grenze.
 
-**Spindellänge: kürzen ist Pflicht.** Gebraucht werden 137,6 mm, bestellt sind
+**Spindellänge: kürzen ist Pflicht.** Gebraucht werden 147,6 mm, bestellt sind
 200 mm. Ungekürzt hängt das untere Ende bis Z = −80 und ist damit — wie Schiene
 und Plattenunterkante — ein festes Hindernis auf seiner Höhe: das dickste
 Werkstück sinkt von 59 auf **45 mm** und verfehlt die geforderten 50 mm. Der
-Zuschnitt steht als `spindel_zuschnitt` = **150 mm** im Skript (12 mm Reserve
-über dem Bedarf); unteres Ende dann bei Z = −30, also unkritisch. Am unteren
+Zuschnitt steht als `spindel_zuschnitt` = **160 mm** im Skript (12,4 mm Reserve
+über dem Bedarf); unteres Ende dann bei Z = −30, also unkritisch. Ist sie schon
+auf 150 mm gekürzt (bis Rev. 29 der Zuschnitt), reicht das auch: 2,5 mm
+Reserve, dann aber nicht tiefer als 8 mm in die Kupplung stecken. Am unteren
 Ende absägen, entgraten und anfasen, damit die Mutter noch aufläuft.
 
 ### Selbsthemmung und Drehmoment
@@ -601,9 +662,9 @@ Punktberührung, Verschleiß, Messingstaub, und nach kurzer Zeit mehr Spiel als
 ohne Lager. Ein Lager braucht eine glatte Lagerstelle; die gibt es nur mit
 einer anderen Spindel (mit Zapfen) plus Lagerblock.
 
-Und es kostet: ein Lagerblock unter der Kupplung müsste zwischen Z = 96 und
-112 sitzen, und die Antriebsmutter muss darunter bleiben — das wären
-**16 mm weniger Verfahrweg** (76,6 → 60,6 mm). Am unteren Spindelende wäre ein
+Und es kostet: ein Lagerblock unter der Kupplung müsste zwischen Z = 106 und
+122 sitzen, und die Antriebsmutter muss darunter bleiben — das wären
+**16 mm weniger Verfahrweg** (86,6 → 70,6 mm). Am unteren Spindelende wäre ein
 Lager billiger zu haben (dort ist Platz), würde aber die Werkstückhöhe weiter
 drücken und die Spindel zwischen zwei Festpunkten einspannen: mit gedruckten
 Teilen ist das überbestimmt, nicht genauer.
@@ -658,10 +719,16 @@ glatte Ø8-Bohrung klemmt auf den Gewindespitzen der Spindel, deren
 Außendurchmesser genau 8 mm ist. „Threaded Spindle" im Titel meint die
 Spindel, nicht die Kupplung.
 
-**Einbau:** beide Wellen so tief einstecken, dass sie den **ganzen
-Klemmbereich** ihrer Hälfte füllen — etwa bis zur Mitte. Eine nur halb
-eingesteckte Welle wird vom Schlitz schief gezogen. Die Wellenenden sollen
-sich nicht berühren (sonst drückt man beim Anziehen auf das Motorlager).
+**Einbau:** jede Welle muss **unter ihrer Klemmschraube durchgehen** und
+darüber hinaus, sonst zieht der Schlitz sie schief; am besten füllt sie den
+ganzen Klemmbereich ihrer Hälfte. Mit dem Motoradapter geht das auf der
+Motorseite nicht mehr ganz: die Welle ragt nur 6 mm unter der Konsole heraus,
+und die obere Klemmschraube muss unter der Konsole erreichbar bleiben. Also
+**Kupplung 8 mm auf die Motorwelle** — ihre obere Klemmschraube liegt dann
+etwa 4 mm unter der Konsole, die Kupplung ragt oben 2 mm in die Bundbohrung.
+Vor dem Festziehen nachsehen, dass die Welle unter der Schraube durchgeht.
+Die Spindel von unten ebenso weit hinein. Die Wellenenden sollen sich nicht
+berühren (sonst drückt man beim Anziehen auf das Motorlager).
 Klemmschrauben fest, aber nicht mit Gewalt — Aluminiumgewinde. Weil die
 Kupplung die ganze Z-Last hält: nach den ersten Betriebsstunden nachziehen.
 
@@ -681,7 +748,7 @@ der Parameter nachgezogen.
 |---|---|---|
 | Trägerplatte → X-Wagen (MGN15H) | 4 × M3×12 + Scheibe | 3,5 mm Gewindeeingriff bei 4 mm verfügbarer Tiefe |
 | Z-Schiene → Sockel | **10 × M3×10 Senkkopf DIN 7991 + 10 × Messing-Einsatz M3** | Einsätze (Ø5 mm außen) vor der Montage einschmelzen, Bohrung Ø4,6 × 7 mm; Randabstand 10 mm, Lochabstand 20 mm |
-| NEMA 17 → Konsole | **4 × M3×12** | 4 mm Eingriff; Führungsrippen zentrieren, Zentrierbund in Ø22,4 |
+| NEMA 17 → Motoradapter → Konsole | **4 × M3×22** | durch Konsole (8) und Adapter (10), 4 mm Eingriff, 0,5 mm vor dem Gewindegrund; die Führungsrippen fassen den Adapter, der Zentrierbund sitzt in dessen Bohrung Ø22,4 |
 | Schlittenplatte → Z-Wagen (MGN9H) | 4 × **M3×14** | nur 2 mm Eingriff — MGN9 hat ~2,5 mm Gewinde, **nicht länger**. Länge wird aus `pad_hoehe` abgeleitet |
 | Laser → Schlittenplatte | 4 × M3×10 + Scheibe DIN 125 | senkrechtes Langloch 4,0 × ±8 mm; Höhe nach Fokusabstand einstellen, **nach oben max. +7,8 mm** |
 | Mutternwinkel → Schlittenplatte | 2 × M3×16 + Mutter + Scheibe DIN 9021 Ø9 | Ø4,6-Bohrung, ausrichten dann festziehen |
@@ -690,8 +757,8 @@ der Parameter nachgezogen.
 | Lichtschranke → Halter | 2 × M2×6 + 2 × Heat Insert M2 (Ø3,2 × 2,5) | Ø2,8 × 3 mm Sackloch in der 4-mm-Wand, dahinter Ø2,4 frei |
 
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
-Welle 5 mm) · **Tr8×2-Trapezgewindespindel 200 mm, auf 150 mm kürzen**
-(137,6 mm werden gebraucht) · **Anti-Backlash-Garnitur Tr8×2** (Flanschmutter
+Welle 5 mm) · **Tr8×2-Trapezgewindespindel 200 mm, auf 160 mm kürzen**
+(147,6 mm werden gebraucht) · **Anti-Backlash-Garnitur Tr8×2** (Flanschmutter
 Ø22 + Feder + Gleitmutter) · **starre Klemmkupplung 5→8 mm** (UniTak3D,
 seitliche Klemmschrauben).
 
@@ -710,9 +777,9 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 3 | Z-Schiene auf den Sockel, 10 × M3×10 Senkkopf DIN 7991 | Inbus von vorn | der Wagen verdeckt je Stellung zwei Schrauben: erst mit dem Wagen unten acht setzen, dann hochschieben und die letzten zwei |
 | 4 | **Schlittenplatte auf den Z-Wagen**, 4 × M3×14 | Inbus von vorn durch die Ø6,5-Freibohrungen | frei — **nur solange der Laser nicht dran ist** |
 | 5 | Mutternwinkel bestücken: 4 × Messing-Einsatz M3 ins Regal einschmelzen (**1,4 mm Wand zur Spindelbohrung**), 2 × M3-Mutter in die Sechskanttaschen des Rücken | Lötkolben, Finger | — |
-| 6 | NEMA 17 zwischen die Führungsrippen, 4 × M3×12 von unten | Inbus von unten | 164 mm mit dem Z-Schlitten unten, 28 mm mit ihm oben — beides reicht, unten ist es bequemer |
+| 6 | **Motoradapter** zwischen die Führungsrippen, NEMA 17 darauf (Bund in die Bohrung), 4 × M3×22 von unten durch Konsole und Adapter | Inbus von unten | 161 mm unter dem Kopf mit dem Z-Schlitten unten — dort ist es am bequemsten |
 | 7 | **Mutternwinkel an die Schlittenplatte**, 2 × M3×16 + große Scheibe: locker lassen | Inbus von vorn | frei |
-| 8 | **Spindel auf 150 mm kürzen**, entgraten, anfasen. Garnitur aufdrehen, Flansch **mit der glatten Seite** aufs Regal (4 × M3×8 von oben), Spindel oben in die Kupplung — **über den ganzen Klemmbereich**, Enden nicht aneinander. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Säge, Inbus von oben neben der Spindel | 125 mm mit dem Schlitten unten |
+| 8 | **Spindel auf 160 mm kürzen**, entgraten, anfasen. Garnitur aufdrehen, Flansch **mit der glatten Seite** aufs Regal (4 × M3×8 von oben), Kupplung **8 mm** auf die Motorwelle (obere Klemmschraube bleibt unter der Konsole), Spindel von unten ebenso weit hinein, Enden nicht aneinander. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Säge, Inbus von oben neben der Spindel | 125 mm mit dem Schlitten unten |
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | Schlitten ganz unten: beide Reihen liegen dann unter der Trägerplatte, freie Bahn |
 | 10 | Endschalterhalter auf den Sockel (2 × M3×12 in die Einsätze), Lichtschranke aufschrauben, Schaltpunkt im Langloch einstellen | Inbus von vorn | frei |
 
@@ -793,6 +860,7 @@ reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 
 | Teil | Lage aufs Bett | Warum |
 |---|---|---|
+| Motoradapter | Unterseite (Konsolenseite) unten | flache Platte, alle Bohrungen senkrecht und rund; die Fußfase hält den Elefantenfuß aus den 0,2 mm Spiel zwischen den Führungsrippen |
 | Trägerplatte (mit Konsole) | Rückseite (Passfläche) unten | Platte, Sockel, Konsole, Säulen- und Führungsrippen stehen alle auf dem Bett — keine Stützen, alle Kräfte in der Schicht. 222 mm lang, passt liegend in den A1 |
 | Schlittenplatte | Laser-Anschraubfläche unten | Brücke 11 mm zwischen den Rippen; die Langlöcher liegen in der Wand, keine Stützen |
 | Mutternwinkel | Regaloberseite (Flanschsitz) unten | der Rücken hängt vollständig unter dem Regalgrundriss, Spindel- und Einsatzbohrungen werden rund, keine Stützen |

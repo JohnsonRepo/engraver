@@ -838,8 +838,8 @@ def main():
             '({:.0f} mm gebraucht)'.format(
                 w('spindel_bestellt'), w('spindel_zuschnitt'),
                 L['spindel_laenge']),
-            'Wendelkupplung 5 -> 8 mm, {:.0f} mm lang, Klemmnaben'.format(
-                w('kupplung_l')),
+            'Kupplung 5 -> 8 mm, {:.0f} mm lang (bestellt: UniTak3D, laut '
+            'Titel starr mit Madenschrauben)'.format(w('kupplung_l')),
             'Anti-Backlash-Garnitur Tr8x2 (Flanschmutter Ø{:.0f} + Feder + '
             'Gleitmutter)'.format(w('t8_flansch_d')),
             '4x M3x{:.0f} + 4x Messing-Einsatz M3 Ø5 (Garnitur -> Regal, '

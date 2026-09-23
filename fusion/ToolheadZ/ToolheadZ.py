@@ -82,12 +82,11 @@ MASSE = {
     'spindel_durchgang':   (8.6,   'Tr8x2 Durchgang (+0,6 wie M6 vorher)'),
     'kupplung_d':          (19.0,  'Wendelkupplung 5->8: Durchmesser'),
     'kupplung_l':          (25.0,  'Wendelkupplung 5->8: Laenge'),
-    # Einstecktiefe = Laenge der massiven KLEMMNABE, nicht die halbe Kupplung:
-    # in der Mitte sitzt der Wendelschnitt, und der muss frei bleiben. Stossen
-    # Welle und Spindel dort zusammen, ist die Nachgiebigkeit ueberbrueckt —
-    # aus der Ausgleichskupplung wird eine starre Huelse, im schlimmsten Fall
-    # reisst der Steg. 8 mm ist geschaetzt [?] (= ein Spindeldurchmesser, die
-    # uebliche Klemmlaenge); am gelieferten Teil die Nabenlaenge messen.
+    # Einstecktiefe. Bei einer Wendelkupplung = Laenge der massiven Nabe, der
+    # Wendelschnitt in der Mitte muss frei bleiben. Bei einer starren Huelse
+    # eher 12 mm (ueber alle Madenschrauben hinaus) — dann sitzt die Kupplung
+    # hoeher als modelliert, die 8 mm liegen fuer den Verfahrweg also auf der
+    # sicheren Seite. Bestellt ist laut Titel eine starre; am Teil messen [?].
     'kupplung_griff':       (8.0,  'Wendelkupplung: Klemmlaenge je Seite'),
     # Die Garnitur: Flanschmutter auf dem Regal, Feder und Gleitmutter
     # darueber. Die Befestigungsloecher im Flansch sind DURCHGANGSloecher,
@@ -1521,12 +1520,12 @@ def hinweise_bauen(L, zc, fehler):
         '  (starre Klemmhuelse oder Wendelkupplung). Oldham- und Klauen-',
         '  kupplungen halten ihre Naben nicht axial zusammen — der Schlitten',
         '  wuerde absinken. Klemmnabe statt Madenschraube, nachziehen.',
-        '  WENDELKUPPLUNG: nur bis zur massiven Nabe einstecken ({:.0f} mm je'.format(
+        '  EINSTECKEN haengt an der Bauart (bestellt: laut Titel starr):',
+        '  starre Huelse — beide Wellen ueber ALLE Madenschrauben hinaus,',
+        '    Schraubensicherung, auf der Spindel eine Flaeche anfeilen.',
+        '  Wendelkupplung — nur bis zur Nabe ({:.0f} mm je Seite), der'.format(
             w('kupplung_griff')),
-        '  Seite), dazwischen bleibt der Wendelschnitt ueber {:.0f} mm frei.'.format(
-            L['kupplung_frei']),
-        '  Stossen Welle und Spindel dort zusammen, ist die Nachgiebigkeit',
-        '  ueberbrueckt — dann ist es eine starre Huelse mit Sollbruchstelle.',
+        '    Wendelschnitt bleibt frei, sonst ist er ueberbrueckt.',
         '  GEWINDE IM DRUCKTEIL: die Flanschloecher sind Durchgangsloecher,',
         '  also 4x M3-Messingeinsatz Ø{:.1f} x {:.0f} von oben ins Regal.'.format(
             w('insert_m3_d'), w('insert_m3_t')),

@@ -169,7 +169,7 @@ der Angebote — noch nicht am Teil gemessen:
 | Flanschmutter: Lochkreis | **Ø16 mm**, **4 × Ø3,5 durchgehend** (kein Gewinde!) | `[w]` |
 | Gleitmutter (zweite Hälfte) | **Ø14 × 15 mm**, mit Mitnehmernut | `[w]` |
 | Druckfeder | **Ø12 × 50 mm** freie Länge | `[w]` |
-| Kupplung | **Wendelkupplung** 5 → 8 mm, Ø19 × 25 mm, Klemmnaben | `[w]` |
+| Kupplung | UniTak3D 5 → 8 mm (B096G1GZH5), laut Titel **starr, Madenschrauben** | `[?]` am Teil prüfen |
 
 Wichtig für den Entwurf: die Befestigungslöcher sind **Durchgangslöcher**, das
 Gewinde muss also im Druckteil sitzen — mit den vorhandenen M3-Messingeinsätzen
@@ -183,10 +183,10 @@ Im Skript steckt das als `spindel_d` 8,0 · `spindel_durchgang` 8,6 ·
 (5,6 N) axial an der Kupplung. Damit sind **Oldham- und Klauenkupplungen
 ausgeschlossen** — ihre Naben sind nicht axial verbunden, sie setzen Wellen
 voraus, die jede für sich gelagert sind. Bleiben die einteiligen: starre
-Klemmhülse oder Wendelkupplung. Im Set war keine Hülse, verbaut wird die
-**Wendelkupplung**; sie überträgt den Zug, federt dabei aber (≈ 0,1 mm,
-konstant). Klemmnabe, keine Madenschraube, und **nur bis zur Nabe einstecken**
-— Begründung und Zahlen in `toolhead-z.md`.
+Klemmhülse oder Wendelkupplung. Bestellt ist die UniTak3D 5 × 8 — laut Titel
+eine **starre** Hülse mit Madenschrauben, keine Wendelkupplung. Beides geht;
+die Einbauregel unterscheidet sich (starr: über alle Madenschrauben hinaus
+einstecken; Wendel: nur bis zur Nabe) — Tabelle in `toolhead-z.md`.
 
 **Am gelieferten Teil zu prüfen (drei Dinge):**
 
@@ -195,8 +195,9 @@ konstant). Klemmnabe, keine Madenschraube, und **nur bis zur Nabe einstecken**
    Verfahrweg nach oben (jetzt 74,3 mm) und sonst nichts.
 2. ~~Flanschfläche plan?~~ **Erledigt**: der Bund ist da, Ø10 `[v]` — dafür
    gibt es jetzt den Flanschring.
-3. **Nabenlänge der Wendelkupplung** (`kupplung_griff`, angenommen 8 mm). Nur
-   so tief einstecken, sonst wird der Wendelbereich überbrückt. Der Wert
+3. **Bauart und Maße der Kupplung**: Spiralschlitz oder glatter Zylinder,
+   Länge, Durchmesser, Lage der innersten Madenschraube. Daraus folgt
+   `kupplung_griff` (modelliert 8 mm, für eine starre Hülse eher 12). Der Wert
    verschiebt die Kupplung in Z und damit den Verfahrweg.
 Der Bund Ø10 ist der Grund für den **Flanschring**: eine Freibohrung dafür
 direkt im Regal ließe neben der Einsatzbohrung nur 0,50 mm Wand stehen, im

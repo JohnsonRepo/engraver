@@ -10,7 +10,7 @@ Geprüft mit `python3 tools/toolhead_check.py`, Layout in
 
 Der Toolhead hängt am **MGN15H-Wagen der Portalführung** und bringt seine
 eigene Z-Achse mit: eine MGN9-Führung, angetrieben von einem NEMA 17 über eine
-Wendelkupplung auf eine **Tr8×2-Trapezgewindespindel mit Anti-Backlash-Garnitur**.
+Kupplung 5 → 8 mm auf eine **Tr8×2-Trapezgewindespindel mit Anti-Backlash-Garnitur**.
 Der Laser sitzt auf dem Z-Schlitten.
 
 | Pos | Teil | Material | Funktion |
@@ -84,7 +84,7 @@ hoch die Schürze des MGN9H über der Schienenauflage endet.
 | −60,0 | Unterkante MGN9-Schiene (**200 mm lang, 10 Schrauben**) |
 | −40,1 … +34,2 | Bereich der Wagenmitte `zc` |
 | +64,0 | Oberkante der Antriebsmutter in der höchsten Stellung |
-| +112,0 … +137,0 | Wendelkupplung 5 → 8 mm |
+| +112,0 … +137,0 | Kupplung 5 → 8 mm (modelliert mit 8 mm Einstecktiefe) |
 | +140,0 | Oberkante MGN9-Schiene |
 | +145,0 | Unterseite Motorkonsole = Oberkante Trägerplatte |
 | +153,0 | Motorflansch |
@@ -362,7 +362,7 @@ der ganzen Z-Achse bestimmt.
 Vorher war es eine M6-Gewindestange mit zwei federverspannten Muttern in einem
 gedruckten Block. Jetzt sind **Spindel, Garnitur und Kupplung gekauft**: eine
 Tr8×2-Trapezgewindespindel (200 mm), eine Anti-Backlash-Garnitur
-(Flanschmutter + Feder + Gleitmutter) und eine Wendelkupplung 5 → 8 mm. Die
+(Flanschmutter + Feder + Gleitmutter) und eine Kupplung 5 → 8 mm. Die
 Spielfreiheit kommt damit aus dem Kaufteil; das Druckteil liefert nur noch den
 **Flanschsitz**.
 
@@ -570,32 +570,39 @@ wenn Z *während* des Jobs fährt. Bei uns bewegt sich Z zwischen den
 Durchgängen, und ein Zehntelmillimeter Höhenfehler liegt in der Schärfentiefe.
 Beide Bauarten gehen also.
 
-**Verbaut wird die Wendelkupplung** (5 × 8, Ø19 × 25, Klemmausführung) — im
-gelieferten Spindelset war keine starre Hülse dabei. Daraus folgt eine Regel
-für den Zusammenbau:
+**Bestellt ist die UniTak3D 5 × 8** (Amazon B096G1GZH5). Der Titel sagt
+„Rigid Coupling", „Aluminum Casing": das ist eine **starre Hülse mit
+seitlichen Madenschrauben**, keine Wendelkupplung — auch wenn der
+Beschreibungstext Ausgleich verspricht (der ist aus Angeboten für flexible
+Kupplungen kopiert). Welche Bauart ankommt, sieht man am Teil: **Spiralschlitz
+um die Mitte = Wendelkupplung, glatter Zylinder = starre Hülse.** Beide halten
+den hängenden Schlitten, die Einbauregel ist aber gegensätzlich:
 
-> **Nur bis zur massiven Nabe einstecken, nicht bis an die Motorwelle.**
+| | starre Hülse (bestellt) | Wendelkupplung |
+|---|---|---|
+| Einstecken | beide Wellen **über alle Madenschrauben hinaus**, etwa bis zur Mitte | **nur bis zur massiven Nabe** — der Wendelschnitt bleibt frei, sonst ist er überbrückt |
+| Befestigung | Madenschrauben mit Schraubensicherung; Motorseite auf die Abflachung der Welle; auf der Spindel eine kleine Fläche anfeilen | Klemmschrauben, Nabe nicht überdrehen |
+| Nebenwirkung | überträgt Winkelfehler — beim Laser egal, Z steht während der Gravur | längt sich unter der Z-Last um ≈ 0,1 mm, konstant |
 
-In der Mitte der Kupplung sitzt der Wendelschnitt. Stoßen Welle und Spindel
-dort zusammen, ist die Nachgiebigkeit überbrückt — aus der Ausgleichskupplung
-wird eine starre Hülse mit einer Sollbruchstelle in der Mitte. Im Modell
-stehen dafür `kupplung_griff` = 8 mm Klemmlänge je Seite und 9 mm freier
-Wendelbereich dazwischen; die Prüfung wacht darüber. **Die 8 mm sind
-geschätzt** — am gelieferten Teil die Nabenlänge messen und den Parameter
-nachziehen, er verschiebt die Kupplung und damit den Verfahrweg.
+**Kein Gewinde in der Bohrung ist richtig so.** Keine Kupplung hat eins: die
+glatte Ø8-Bohrung greift auf die Gewindespitzen der Spindel, deren
+Außendurchmesser genau 8 mm ist. „Threaded Spindle" im Titel meint die
+Spindel, nicht die Kupplung.
 
-Eine Nebenwirkung der Nachgiebigkeit: unter den 5,6 N Z-Last längt sich die
-Kupplung um schätzungsweise ein Zehntelmillimeter `[?]`. Das ist ein
-**konstanter** Versatz (die Last ändert sich nicht) und verschiebt nur den
-Z-Nullpunkt — der Fokus wird ohnehin am Werkstück eingestellt.
+Das Modell rechnet mit `kupplung_griff` = 8 mm, der Wendel-Annahme. Für eine
+starre Hülse wären es eher 12 mm je Seite — dann sitzt die Kupplung 4 mm höher
+als modelliert, die Verfahrgrenze liegt also auf der sicheren Seite. Nach dem
+Eintreffen Länge, Durchmesser und Lage der innersten Madenschraube messen und
+den Parameter nachziehen.
 
-Was bei beiden zählt: **Klemmnabe statt Madenschraube.** Eine Madenschraube
-drückt auf eine einzelne Gewindespitze, verformt sie und arbeitet sich los.
-Eine Klemmnabe greift über die Klemmlänge auf rund sechs Gewindegänge — bei
-Tr8×2 sind die Spitzen etwa 0,7 mm breit abgeflacht, das sind über 12 mm
-Klemmlänge rund 100 mm² Anlagefläche, und der Formschluss der Spitzen sichert
-zusätzlich gegen axiales Rutschen. Weil die Klemmung die ganze Z-Last hält:
-nach den ersten Betriebsstunden nachziehen.
+**Klemmnabe ist besser als Madenschraube.** Eine Madenschraube drückt auf eine
+einzelne Gewindespitze, verformt sie und kann sich losarbeiten; eine Klemmnabe
+greift über die Klemmlänge auf rund sechs Gewindegänge — bei Tr8×2 sind die
+Spitzen etwa 0,7 mm breit abgeflacht, über 12 mm Klemmlänge rund 100 mm²
+Anlagefläche. Für die Last hier reichen Madenschrauben trotzdem (5,6 N axial,
+≈ 70 mNm): die angefeilte Fläche gibt ihnen eine ebene Auflage statt einer
+Gewindespitze, und die Schraubensicherung hält sie fest. Weil die Kupplung die
+ganze Z-Last hält: nach den ersten Betriebsstunden nachziehen.
 
 ## Verschraubung
 
@@ -614,8 +621,8 @@ nach den ersten Betriebsstunden nachziehen.
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
 Welle 5 mm) · **Tr8×2-Trapezgewindespindel 200 mm, auf 150 mm kürzen**
 (137,6 mm werden gebraucht) · **Anti-Backlash-Garnitur Tr8×2** (Flanschmutter
-Ø22 + Feder + Gleitmutter) · **Wendelkupplung 5→8 mm**, 25 mm lang, mit
-Klemmnaben.
+Ø22 + Feder + Gleitmutter) · **Kupplung 5→8 mm** (bestellt: UniTak3D, laut
+Titel starr mit Madenschrauben).
 
 ## Montagereihenfolge und Werkzeugzugang
 

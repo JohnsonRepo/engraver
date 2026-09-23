@@ -420,6 +420,13 @@ Tr8×2-Trapezgewindespindel (200 mm), eine Anti-Backlash-Garnitur
 Spielfreiheit kommt damit aus dem Kaufteil; das Druckteil liefert nur noch den
 **Flanschsitz**.
 
+Wie alles zusammensitzt, zeigt die Skizze — maßstäblich aus dem Modell, mit
+einer vergrößerten Einzelheit des Flanschsitzes und einer Draufsicht auf das
+Regal ([toolhead-z-antrieb.svg](toolhead-z-antrieb.svg), neu erzeugen mit
+`python3 tools/antrieb_zeichnen.py`):
+
+![Z-Antrieb](toolhead-z-antrieb.svg)
+
 Die Spindel hat **keinen angedrehten Zapfen** — Ø8 ist der Gewindeaußen­
 durchmesser, die Klemmnabe greift auf die Gewindespitzen. Das hält, siehe
 [Drehmoment](#selbsthemmung-und-drehmoment).

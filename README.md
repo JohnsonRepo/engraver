@@ -20,12 +20,14 @@ fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← a
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
+docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
 tools/toolhead_check.py        rechnerische Prüfung der Baugruppe (ohne Fusion)
 tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
+tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/geometrie_check.py       Prüfung der Einzelplatte
 ```
 
@@ -71,6 +73,7 @@ Montagereihenfolge.
 ```sh
 python3 tools/toolhead_check.py     # Maßkette, Kollisionen, Schrauben, Druck
 python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
+python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 ```
 

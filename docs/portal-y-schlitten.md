@@ -39,21 +39,24 @@ sie mit „[Referenz, nicht drucken]“.
 
 | Gruppe | Inhalt |
 |---|---|
-| `Ref_Profile` | Portalrohr 2020 (500 mm) und beide 2040 hochkant, V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
+| `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter, V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 mit MGN12H, X-Schiene MGN15 mit MGN15H |
 | `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite die zwei Enden des Y-Riemens in den Klemmtürmen und sein Rücklauf in der oberen Nut des 2040 |
 | `Ref_Antrieb` | NEMA 17 mit Welle, Ritzel und Umlenkrolle; der Riemenhalter des Toolheads |
 
 Was dabei angenommen ist:
 
-* Die **2040 und Y-Schienen sind 500 mm lang** gezeichnet `[?]` und liegen
-  mittig unter dem Y-Wagen. Die echte Länge ändert `rahmen_laenge`.
+* Die **2040 sind 600 mm lang** und liegen mittig unter dem Y-Wagen, das
+  Portal steht also in der Mitte des Rahmens. Die **Y-Schienen** sind
+  genauso lang gezeichnet `[?]`.
+* Die **2060** liegen quer und hochkant unter den Enden der 2040, bündig mit
+  deren Außenseiten, also 534 mm lang `[?]`.
 * Der **Toolhead** steht in der Mitte des X-Wegs; von ihm sind nur X-Wagen
   und Riemenhalter drin. Die Umlenkrolle steht in der Mitte ihres Spannwegs.
 * Der **Y-Rücklauf** liegt mittig in der oberen Nut (Z −42 bis −36). Die
   Klemme hält den Riemen 2,9 mm tiefer, wie v8; zu den Ritzeln an den
   Y-Enden hin gleicht der Riemen das aus. Diese Ritzel sind nicht
-  gezeichnet, ebenso die **2060** unter den 2040 — ihre Lage kenne ich nicht.
+  gezeichnet, ihre Lage kenne ich nicht.
 * Ritzel und Rolle sind am Fuß der Verzahnung gezeichnet, damit der Riemen
   sie nicht durchdringt. Die Massen der Referenzteile stimmen nur grob.
 
@@ -353,4 +356,4 @@ die Prüfung als Erstes.
 | `rolle_u` / `rolle_weg` | 26,35 / 4 mm | Umlenkrolle in Mittelstellung und ihr Weg je Richtung |
 | `rolle_d` | 18 mm `[?]` | Außendurchmesser der Umlenkrolle |
 | `motor_laenge` | 48 mm `[?]` | Länge des X-Motors |
-| `rahmen_laenge` | 500 mm `[?]` | Länge der 2040 und Y-Schienen, nur für die Referenzteile |
+| `rahmen_laenge` / `quer_h` | 600 / 60 mm | Länge der 2040 (und Y-Schienen) und Höhe der 2060, nur für die Referenzteile |

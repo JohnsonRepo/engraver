@@ -6,7 +6,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil, darauf 2 × 2040 Aluprofil |
+| Gestell | 2 × 2060 Aluprofil quer, darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
 | Y-Achse | 2 Linearführungen MGN12H oben auf den 2040ern, GT2-Riemen |
 | Portal | Y-Schlitten auf den MGN12H-Wagen, dazwischen ein 2020-V-Slot-Profil (500 mm); Y-Schienen 514 mm Mitte zu Mitte |
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
@@ -121,7 +121,7 @@ bestanden.
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 6). Der
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 7). Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

@@ -12,6 +12,7 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 |---|---|
 | Gestell | 2 × 2060 Aluprofil, darauf 2 × 2040 Aluprofil |
 | Y-Achse | 2 Linearführungen oben auf den 2040ern |
+| Y-Antrieb | je Seite eine senkrechte Edelstahlwelle Ø5 hinter der hinteren 2060, NEMA 17 mittig an der 2060 |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 Aluprofil |
 | X-Achse | Linearführung am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |
@@ -309,6 +310,29 @@ oder DRV8825). Nur wenn die Motoren 2-A-Typen sind, wird es am 2209-Modul eng.
 Offen: **welches Board** die Maschine bekommt. Nur mit UART-Anbindung
 (SKR/Octopus, FluidNC am ESP32 o. ä.) sind Strom und Chopper einstellbar; auf
 einem klassischen Uno-CNC-Shield bleibt es beim Standalone-Modus mit Jumpern.
+
+## Y-Antrieb
+
+Nutzerangaben vom 2026-09-24, Halter in `fusion/YMotorhalter/`, Doku in
+`y-motorhalter.md`.
+
+| Wert | Maß | Status |
+|---|---|---|
+| Hintere Traverse | **2060 hochkant**, Nuten auf der Rückseite 10 / 30 / 50 mm unter der Oberkante | Nutzerangabe, Nutlage `[w]` |
+| Y-Wellen | je Seite eine **senkrechte Edelstahlwelle Ø5** in 625ZZ, hinter der hinteren 2060 | Nutzerangabe |
+| Ritzel je Welle | zwei: **unten** Motorriemen (Höhe der obersten Nut, auf der Welle verschiebbar), **oben** Y-Riemen | Nutzerangabe |
+| Zähnezahl | 20 Z, Bohrung 5, an Motor und Wellen (1:1, 40 mm je Umdrehung) | angenommen |
+| Wellen hinter der 2060 (`welle_y`) | 20 mm; der Halter passt ohne neuen Lauf für 14 … 30 mm | `[?]` nicht gemessen |
+| Wellenabstand S (`welle_abstand`) | 500 mm | `[?]` nicht gemessen |
+| Motorriemen | Endlosriemen GT2 6 mm, **L = 2·S + 56,8 + 2·Ω**, Ω = 30 … 50 mm | gerechnet |
+| Umlenkrollen | je 2× F625ZZ Rücken an Rücken, laufen auf dem Riemenrücken | `[w]` |
+| Nutensteine M5, Nut 6 | Lippe 1,8, Gewinde 4, Platz in der Nut 6 mm → M5×12 + Scheibe | `[w]` |
+| Y-Motor | NEMA 17, Körper 48 mm angenommen (nur Freiraum) | `[?]` |
+
+**Drehrichtung:** ein Riemen treibt beide Wellen **gleichsinnig**. Die
+Y-Wagen müssen deshalb am selben Trum ihres Y-Riemens hängen (vom Bediener
+aus beide rechts oder beide links), nicht spiegelbildlich. Das hängt an den
+Riemenklemmen der Wagen, nicht am Motorhalter — beim Einbau prüfen.
 
 ## Normteile (aus hardware.md, `[w]`)
 

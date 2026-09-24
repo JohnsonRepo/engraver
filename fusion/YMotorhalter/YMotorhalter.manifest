@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Motorhalter fuer den NEMA 17 der Y-Achse an der Rueckseite der hinteren 2060 (hochkant), mit vier M5-Nutensteinen. Der Motor steht auf einem auskragenden Boden, Ritzel und zwei Umlenkrollen (je 2x F625ZZ) haengen darunter und legen den geschlossenen GT2-Riemen als Omega um das Motorritzel. Gespannt wird ueber Langloecher und eine Spannschraube in einem Messingeinsatz."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

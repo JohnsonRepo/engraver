@@ -1,6 +1,6 @@
 # Portal.py — Y-Schlitten des Portals (MGN12H) mit X-Antrieb
 #
-# Baugruppe aus elf Druckteilen. Getrennt, weil jedes Teil nur so ohne
+# Baugruppe aus neun Druckteilen. Getrennt, weil jedes Teil nur so ohne
 # Stuetzmaterial druckbar ist — die Y-Klemmtuerme haengen unter der Platte,
 # die Rohrhalterung steht auf ihr:
 #   Schlitten_links/rechts     Platte auf dem MGN12H-Wagen. Das Portalrohr
@@ -8,12 +8,10 @@
 #                              Nutensteinen) und ein Stirnblock (M5 in die
 #                              Kernbohrung) halten es. Die Vorderseite bleibt
 #                              frei — dort sitzt die X-Schiene.
-#   Klemmturm_links/rechts     vorderer Y-Klemmturm wie in v8: haelt das
-#                              vordere Riemenende fest (Rippen, Querstift).
-#   Spannturm_links/rechts     hinterer Y-Klemmturm mit dem Spanner: Kanal
-#                              fuer den Spannschieber, Anschlag mit Mutter.
-#   Spannschieber_links/rechts haelt das hintere Riemenende; eine M3 von
-#                              hinten drueckt ihn nach vorn und spannt.
+#   Klemmturm_vorn/hinten_*    zwei gleiche Y-Klemmtuerme je Schlitten wie
+#                              in v8, einer je Riemenende: Schlitz mit
+#                              Rippen, Querstift unter dem Riemen. Gespannt
+#                              wird wie bisher an den Ritzeln der Y-Enden.
 #   Motorhalter                X-Motor (NEMA 17) stehend ueber dem linken
 #                              Rohrende, Welle nach unten.
 #   Umlenkhalter + Spannklotz  X-Umlenkung rechts: 20-Z-Rolle mit Lager auf
@@ -40,7 +38,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 3
+REVISION = 4
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -141,7 +139,6 @@ MASSE = {
     # darf dann um 2 mm streuen, ohne aufzusetzen.
     'insert_tief_t':        (9.0, 'Gewindeeinsatz M3: tiefes Sackloch'),
     'inbus_frei_d':         (6.0, 'Werkzeugkorridor fuer den Inbus'),
-    'kanal_spiel':          (0.2, 'Spannschieber: Spiel je Seite im Kanal'),
     'spiel_locker':         (0.4, 'Montagespiel, diametral'),
     'luft_bau':             (3.0, 'Mindestfreigang zu bewegten Teilen'),
     'fase_fuss':            (0.4, 'Fase gegen Elefantenfuss'),
@@ -173,24 +170,14 @@ MASSE = {
     'halter_schraube_y1': (-41.0, 'Halterschrauben: Y hinten'),
     'halter_schraube_y2': (-34.5, 'Halterschrauben: Y vorn'),
 
-    # --- Y-Klemmtuerme (wie v8) und Spannschieber ---------------------------
-    # Zwei getrennte Tuerme je Schlitten wie in v8, symmetrisch zur
-    # Wagenmitte: vorn der feste Klemmturm, hinten der Spannturm.
+    # --- Y-Klemmtuerme (wie v8) ---------------------------------------------
+    # Zwei gleiche Tuerme je Schlitten wie in v8, symmetrisch zur Wagenmitte,
+    # einer je Riemenende. Gespannt wird an den Ritzeln der Y-Enden.
     'turm_abstand':        (40.5, 'Y-Klemmtuerme: Aussenkante ab Wagenmitte (v8)'),
     'kt_laenge':           (18.0, 'Klemmturm: Laenge (v8)'),
     'kt_wand':              (3.5, 'Klemmturm: Wand neben dem Schlitz (v8)'),
     'kt_boden':             (3.4, 'Klemmturm: Material unter der Stiftbohrung (v8)'),
     'kt_rand':              (2.0, 'Klemmturm: rippenfreier Rand an den Enden (v8)'),
-    'st_u0':               (14.5, 'Spannturm: Seite zur Schiene (u)'),
-    'st_boden':             (5.6, 'Spannturm: Boden unter dem Riemen'),
-    'schieber_breite':      (7.5, 'Spannschieber: Breite'),
-    'schieber_hoehe':      (15.2, 'Spannschieber: Hoehe'),
-    'schieber_laenge':     (20.0, 'Spannschieber: Laenge'),
-    'schieber_weg':        (14.0, 'Spannschieber: Verstellweg'),
-    # 8 mm: die Mutter drueckt gegen die hintere Wand ihrer Tasche, dort
-    # bleiben so 2,65 mm
-    'anschlag_dicke':       (8.0, 'Spannturm: Anschlag mit Mutter'),
-    'druck_ueber_riemen':   (4.4, 'Druckschraube: Achse ueber der Riemenoberkante'),
 
     # --- Motorhalter (links) ------------------------------------------------
     # Motorachse ueber dem Rohrende: weiter innen stiesse der Flansch am
@@ -296,79 +283,47 @@ def lage():
     L['kern_schraube'] = 5.0 * int((w('kern_steg') + 10.0) / 5.0 + 0.999)
     L['kern_gewinde'] = L['kern_schraube'] - w('kern_steg')
 
-    # ---- Y-Klemmtuerme: zwei getrennte Tuerme wie v8 ------------------------
-    # Symmetrisch zur Wagenmitte. Hinten der Spannturm: Kanal fuer den
-    # Spannschieber (hinten offen, dort kommt das hintere Riemenende herein)
-    # und Anschlag mit der Mutter der Druckschraube. Vorn der feste
-    # Klemmturm wie in v8: Schlitz mit Rippen, unten offen, Querstift unter
-    # dem Riemen. Dazwischen laeuft kein Riemen, beide Enden enden im Turm.
+    # ---- Y-Klemmtuerme: zwei gleiche Tuerme wie v8 ---------------------------
+    # Symmetrisch zur Wagenmitte, je einer vor und hinter dem Wagen; jeder
+    # haelt ein Riemenende: Schlitz mit Rippen an der Wand zur Schiene,
+    # unten und an beiden Enden offen, Querstift Ø3 unter dem Riemen.
+    # Dazwischen laeuft kein Riemen. Gespannt wird an den Ritzeln der Y-Enden.
     L['stift_z'] = L['yr_z0'] - w('klemm_stift_d') / 2.0
-    y0 = w('wagen_y') - w('turm_abstand')
-    L['st_y'] = (y0, y0 + w('schieber_laenge') + w('schieber_weg')
-                 + w('anschlag_dicke'))
-    L['st_u'] = (w('st_u0'), L['platte_u'][1])
-    L['st_z'] = (L['yr_z0'] - w('st_boden'), L['platte_z0'])
-    y1 = w('wagen_y') + w('turm_abstand')
-    L['kt_y'] = (y1 - w('kt_laenge'), y1)
     L['kt_u'] = (L['yr_rippe_u0'] - w('kt_wand'),
                  L['yr_wand_u'] + w('kt_wand'))
     L['kt_z'] = (L['stift_z'] - w('klemm_stift_d') / 2.0 - w('kt_boden'),
                  L['platte_z0'])
-    L['kt_stift_y'] = (L['kt_y'][0] + L['kt_y'][1]) / 2.0
-    # Spannturm von hinten: Kanal fuer den Spannschieber, dann der Anschlag
-    L['kanal_y'] = (y0, y0 + w('schieber_laenge') + w('schieber_weg'))
-    L['anschlag_y'] = (L['kanal_y'][1], L['st_y'][1])
-    # Spannschieber mittig auf dem Klemmschlitz; Kanal mit Spiel drumherum.
-    # Er steht auf dem Kanalboden, der Riemen darin auch.
-    hb = w('schieber_breite') / 2.0
-    L['sch_u'] = (L['yr_mitte_u'] - hb, L['yr_mitte_u'] + hb)
-    L['sch_z'] = (L['yr_z0'], L['yr_z0'] + w('schieber_hoehe'))
-    L['kanal_u'] = (L['sch_u'][0] - w('kanal_spiel'),
-                    L['sch_u'][1] + w('kanal_spiel'))
-    L['kanal_z'] = (L['sch_z'][0], L['sch_z'][1] + w('kanal_spiel'))
-    L['druck_z'] = L['yr_z1'] + w('druck_ueber_riemen')
-    L['mutter_y'] = (L['anschlag_y'][0] + L['anschlag_y'][1]) / 2.0
-    # Stellung im Modell: Mitte des Verstellwegs
-    L['sch_y'] = (L['kanal_y'][0] + w('schieber_weg') / 2.0,
-                  L['kanal_y'][0] + w('schieber_weg') / 2.0
-                  + w('schieber_laenge'))
-    # Druckschraube: Kopf hinten am Schieber. Ganz entspannt (Schieber
-    # hinten) muss sie 0,5 mm durch die Mutter reichen; ganz gespannt ragt
-    # die Spitze vorn aus dem Spannturm — ueber der Riemenhoehe, vor dem
-    # Klemmturm.
-    reicht = (L['mutter_y'] + w('m3_mutter_h') / 2.0 + 0.5) - L['kanal_y'][0]
-    L['druck_schraube'] = 5.0 * int(reicht / 5.0 + 0.999)
-    L['druck_spitze_max'] = (L['kanal_y'][1] - w('schieber_laenge')
-                             + L['druck_schraube'])
-    # Schrauben Platte -> Tuerme: Platte unter der Senkung, dann mindestens
-    # 5 mm im Einsatz, ohne im Sackloch aufzusetzen. Spannturm: hinten und
-    # knapp vor dem Anschlag. Klemmturm: zwei laengs neben dem Stift — sie
-    # liegen unter dem Rohr, der Turm kommt also vor dem Rohr an die Platte.
+    wy, ta, tl = w('wagen_y'), w('turm_abstand'), w('kt_laenge')
+    L['kt_y_hinten'] = (wy - ta, wy - ta + tl)
+    L['kt_y_vorn'] = (wy + ta - tl, wy + ta)
+    for t in ('hinten', 'vorn'):
+        L['kt_stift_y_' + t] = (L['kt_y_' + t][0] + L['kt_y_' + t][1]) / 2.0
+    # Schrauben Platte -> Turm: Platte unter der Senkung, dann mindestens
+    # 5 mm im Einsatz, ohne im Sackloch aufzusetzen. Zwei je Turm, laengs
+    # in der Mitte. Die des vorderen liegen unter dem Rohr (der Turm kommt
+    # vor dem Rohr an die Platte): hinten 1 mm Luft zwischen Senkung und
+    # Rueckwand, vorn 2 mm Wand vor dem Einsatz.
     L['turm_schraube'] = 2.0 * int((L['wagen_klemm'] + 5.0) / 2.0 + 0.999)
     L['turm_eingriff'] = L['turm_schraube'] - L['wagen_klemm']
-    um = (L['st_u'][0] + L['st_u'][1]) / 2.0
-    L['st_schrauben'] = [(um, L['st_y'][0] + 7.0),
-                         (um, L['kanal_y'][1] - 1.0)]
-    # Klemmturm: hinten 1 mm Luft zwischen Senkung und Rueckwand, vorn 2 mm
-    # Wand vor dem Einsatz
     km = (L['kt_u'][0] + L['kt_u'][1]) / 2.0
-    y_h = max(L['kt_y'][0] + w('insert_m3_d') / 2.0 + 2.0,
+    m = L['kt_stift_y_hinten']
+    L['kt_schrauben_hinten'] = [(km, m - 4.5), (km, m + 4.5)]
+    y_h = max(L['kt_y_vorn'][0] + w('insert_m3_d') / 2.0 + 2.0,
               L['rueck_y1'] + w('m3_senkung') / 2.0 + 1.0)
-    y_v = L['kt_y'][1] - w('insert_m3_d') / 2.0 - 2.2
-    L['kt_schrauben'] = [(km, y_h), (km, y_v)]
+    y_v = L['kt_y_vorn'][1] - w('insert_m3_d') / 2.0 - 2.2
+    L['kt_schrauben_vorn'] = [(km, y_h), (km, y_v)]
     # Querstift durch beide Waende: Turmbreite + 1 mm, auf gerade Laenge
     L['kt_stift_l'] = 2.0 * int((L['kt_u'][1] - L['kt_u'][0] + 1.0) / 2.0
                                 + 0.999)
-    # Rippen: Teilung 2, im Klemmturm (rippenfreier Rand wie v8) und im
-    # Spannschieber
+    # Rippen: Teilung 2, rippenfreier Rand an den Turmenden wie v8
     def rippen(y0, y1):
         n = int((y1 - y0 - w('klemm_rippe_b')) / w('riemen_teilung')) + 1
         rand = (y1 - y0 - (n - 1) * w('riemen_teilung')
                 - w('klemm_rippe_b')) / 2.0
         return [y0 + rand + i * w('riemen_teilung') for i in range(n)]
-    L['kt_rippen_y'] = rippen(L['kt_y'][0] + w('kt_rand'),
-                              L['kt_y'][1] - w('kt_rand'))
-    L['sch_rippen_y'] = rippen(L['sch_y'][0] + 1.0, L['sch_y'][1] - 1.0)
+    for t in ('hinten', 'vorn'):
+        y0, y1 = L['kt_y_' + t]
+        L['kt_rippen_y_' + t] = rippen(y0 + w('kt_rand'), y1 - w('kt_rand'))
     # Ruecklauf-Trum: laeuft in der oberen Nut des 2040, auf der Seite zur
     # Schiene — Ritzel mit senkrechter Achse an beiden Enden, Abstand der
     # Trume = Teilkreis. Die Zaehne zeigen damit zur Schiene (Innenseite der
@@ -929,8 +884,8 @@ def bau_schlitten(app, design, comp, L, s, fehler):
     # von oben, der Kopf verschwindet in der Platte (die des Klemmturms
     # liegen unter dem Rohr).
     for name, lagen in (('Wagen', L['wagen_loecher']),
-                        ('Spannturm', L['st_schrauben']),
-                        ('Klemmturm', L['kt_schrauben'])):
+                        ('Klemmturm_hinten', L['kt_schrauben_hinten']),
+                        ('Klemmturm_vorn', L['kt_schrauben_vorn'])):
         pkt = [(xu(u), y) for u, y in lagen]
         bohrung(comp, name + '_' + n, 'z', pkt, w('m3_durchgang'),
                 L['platte_z0'] - 1.0, L['platte_z1'] + 1.0, k)
@@ -966,130 +921,48 @@ def bau_schlitten(app, design, comp, L, s, fehler):
     return k
 
 
-def bau_spannturm(app, design, comp, L, s, fehler):
-    """Hinterer Y-Klemmturm mit dem Spanner. Haengt unter der Platte neben
-    dem Wagen, auf der Riemenlinie von v8 (hochkant, Zaehne zur Schiene).
-
-    Von hinten nach vorn: Kanal fuer den Spannschieber (hinten offen, dort
-    kommt das hintere Riemenende herein), Anschlag mit der Mutter der
-    Druckschraube. Die Schraube laeuft vorn aus dem Turm heraus, ueber der
-    Riemenhoehe; ganz gespannt bleibt ihre Spitze vor dem Klemmturm.
-
-    Die Mutter wird von oben in ihre Tasche gelegt, bevor der Turm an die
-    Platte kommt — die Platte haelt sie dann.
-
-    Drucklage: auf der Rueckseite stehend, der Kanal laeuft senkrecht."""
-    n = seite(s)
-    xu = lambda u: xs(L, s, u)
-    x_turm = xb(L, s, *L['st_u'])
-    k = quader(comp, 'Spannturm_' + n, x_turm, L['st_y'], L['st_z'],
-               'neu').bodies.item(0)
-    k.name = 'Spannturm_' + n
-
-    # Kanal fuer den Spannschieber, hinten offen
-    quader(comp, 'Kanal_' + n, xb(L, s, *L['kanal_u']),
-           (L['kanal_y'][0] - 1.0, L['kanal_y'][1]), L['kanal_z'], 'weg', k)
-    # Druckschraube: durch den Anschlag, vorn frei heraus
-    bohrung(comp, 'Druckschraube_' + n, 'y',
-            [(xu(L['yr_mitte_u']), L['druck_z'])], w('m3_durchgang'),
-            L['anschlag_y'][0] - 1.0, L['st_y'][1] + 1.0, k)
-    # Mutterntasche im Anschlag, von oben; Mutter liegt auf einer Flanke
-    ueber_eck = (w('m3_mutter_sw') / math.cos(math.radians(30.0))
-                 + w('tasche_spiel'))
-    dick = w('m3_mutter_h') + 0.3
-    quader(comp, 'Mutter_' + n,
-           xb(L, s, L['yr_mitte_u'] - ueber_eck / 2.0,
-              L['yr_mitte_u'] + ueber_eck / 2.0),
-           (L['mutter_y'] - dick / 2.0, L['mutter_y'] + dick / 2.0),
-           (L['druck_z'] - (w('m3_mutter_sw') + w('tasche_spiel')) / 2.0,
-            L['st_z'][1] + 1.0), 'weg', k)
-    # Gewindeeinsaetze fuer die Schrauben von der Platte, von oben
-    bohrung(comp, 'ST_Einsatz_' + n, 'z',
-            [(xu(u), y) for u, y in L['st_schrauben']], w('insert_m3_d'),
-            L['st_z'][1] - w('insert_m3_t'), L['st_z'][1] + 1.0, k)
-
-    fussfase(comp, k, 'z', L['st_y'][0], w('fase_fuss'), fehler,
-             'Spannturm ' + n)
-    bbox_pruefen(k, 'Spannturm ' + n, (x_turm, L['st_y'], L['st_z']),
-                 fehler)
-    material_zuweisen(app, design, k, 'PETG', fehler)
-    return k
-
-
-def bau_klemmturm(app, design, comp, L, s, fehler):
-    """Vorderer Y-Klemmturm, fest — wie ein Turm aus v8: senkrechter
-    Schlitz auf der Riemenlinie, unten und an beiden Enden offen, Rippen an
-    der Wand zur Schiene (dorthin zeigen die Zaehne), Querstift Ø3 unter
-    dem Riemen. Riemenende von unten in den Schlitz druecken, dann den
-    Stift von innen quer durchschieben — er traegt den Riemen.
+def bau_klemmturm(app, design, comp, L, s, t, fehler):
+    """Y-Klemmturm wie in v8, t = 'vorn' oder 'hinten' — beide gleich:
+    senkrechter Schlitz auf der Riemenlinie, unten und an beiden Enden
+    offen, Rippen an der Wand zur Schiene (dorthin zeigen die Zaehne),
+    Querstift Ø3 unter dem Riemen. Riemenende von unten in den Schlitz
+    druecken, dann den Stift von innen quer durchschieben — er traegt den
+    Riemen. Befestigt mit zwei M3 von oben durch die Platte.
 
     Drucklage: Oberseite (Plattenseite) aufs Bett. Der Schlitz oeffnet nach
     oben, die Rippen stehen senkrecht, die Stiftbohrung liegt waagerecht."""
     n = seite(s)
+    name = 'Klemmturm_{}_{}'.format(t, n)
     xu = lambda u: xs(L, s, u)
     x_turm = xb(L, s, *L['kt_u'])
-    k = quader(comp, 'Klemmturm_' + n, x_turm, L['kt_y'], L['kt_z'],
-               'neu').bodies.item(0)
-    k.name = 'Klemmturm_' + n
+    ty = L['kt_y_' + t]
+    k = quader(comp, name, x_turm, ty, L['kt_z'], 'neu').bodies.item(0)
+    k.name = name
 
     # Klemmschlitz ueber die ganze Laenge, unten offen
-    quader(comp, 'KT_Schlitz_' + n, xb(L, s, L['yr_rippe_u0'],
+    quader(comp, 'Schlitz_' + name, xb(L, s, L['yr_rippe_u0'],
                                         L['yr_wand_u']),
-           (L['kt_y'][0] - 1.0, L['kt_y'][1] + 1.0),
+           (ty[0] - 1.0, ty[1] + 1.0),
            (L['kt_z'][0] - 1.0, L['yr_decke_z']), 'weg', k)
     xr = xb(L, s, L['yr_rippe_u0'], L['yr_rippe_u1'])
-    rippen(comp, 'KT_Rippen_' + n,
+    rippen(comp, 'Rippen_' + name,
            [(xr[0], y, xr[1], y + w('klemm_rippe_b'))
-            for y in L['kt_rippen_y']],
+            for y in L['kt_rippen_y_' + t]],
            L['kt_z'][0], L['yr_decke_z'], k)
     # Querstift unter dem Riemen, von innen durch beide Waende
     a0, a1 = xb(L, s, L['kt_u'][0] - 1.0, L['kt_u'][1] + 1.0)
-    bohrung(comp, 'KT_Stift_' + n, 'x', [(L['kt_stift_y'], L['stift_z'])],
-            w('klemm_stift_d'), a0, a1, k)
+    bohrung(comp, 'Stift_' + name, 'x',
+            [(L['kt_stift_y_' + t], L['stift_z'])], w('klemm_stift_d'),
+            a0, a1, k)
     # Gewindeeinsaetze fuer die Schrauben von der Platte, von oben
-    bohrung(comp, 'KT_Einsatz_' + n, 'z',
-            [(xu(u), y) for u, y in L['kt_schrauben']], w('insert_m3_d'),
-            L['kt_z'][1] - w('insert_m3_t'), L['kt_z'][1] + 1.0, k)
+    bohrung(comp, 'Einsatz_' + name, 'z',
+            [(xu(u), y) for u, y in L['kt_schrauben_' + t]],
+            w('insert_m3_d'), L['kt_z'][1] - w('insert_m3_t'),
+            L['kt_z'][1] + 1.0, k)
 
     fussfase(comp, k, 'y', L['kt_z'][1], w('fase_fuss'), fehler,
-             'Klemmturm ' + n)
-    bbox_pruefen(k, 'Klemmturm ' + n, (x_turm, L['kt_y'], L['kt_z']),
-                 fehler)
-    material_zuweisen(app, design, k, 'PETG', fehler)
-    return k
-
-
-def bau_spannschieber(app, design, comp, L, s, fehler):
-    """Haelt das hintere Ende des Y-Riemens im Kanal des Spannturms.
-    Riemen von unten in den Schlitz druecken (Zaehne zu den Rippen), dann
-    den Schieber von hinten in den Kanal schieben — der Kanalboden haelt
-    den Riemen unten. Die Druckschraube (Kopf hinten) geht durch den
-    Schieber in die Mutter im Anschlag: eindrehen schiebt ihn nach vorn
-    und spannt. Gezeichnet in der Mitte seines Wegs.
-
-    Drucklage: auf der Rueckseite stehend (Rippen als waagerechte Stege)."""
-    n = seite(s)
-    xu = lambda u: xs(L, s, u)
-    x_sch = xb(L, s, *L['sch_u'])
-    k = quader(comp, 'Spannschieber_' + n, x_sch, L['sch_y'], L['sch_z'],
-               'neu').bodies.item(0)
-    k.name = 'Spannschieber_' + n
-    quader(comp, 'Schieber_Schlitz_' + n,
-           xb(L, s, L['yr_rippe_u0'], L['yr_wand_u']),
-           (L['sch_y'][0] - 1.0, L['sch_y'][1] + 1.0),
-           (L['sch_z'][0] - 1.0, L['yr_decke_z']), 'weg', k)
-    xr = xb(L, s, L['yr_rippe_u0'], L['yr_rippe_u1'])
-    rippen(comp, 'Schieber_Rippen_' + n,
-           [(xr[0], y, xr[1], y + w('klemm_rippe_b'))
-            for y in L['sch_rippen_y']],
-           L['sch_z'][0], L['yr_decke_z'], k)
-    bohrung(comp, 'Schieber_Schraube_' + n, 'y',
-            [(xu(L['yr_mitte_u']), L['druck_z'])], w('m3_durchgang'),
-            L['sch_y'][0] - 1.0, L['sch_y'][1] + 1.0, k)
-    fussfase(comp, k, 'z', L['sch_y'][0], w('fase_fuss'), fehler,
-             'Spannschieber ' + n)
-    bbox_pruefen(k, 'Spannschieber ' + n, (x_sch, L['sch_y'], L['sch_z']),
-                 fehler)
+             name.replace('_', ' '))
+    bbox_pruefen(k, name.replace('_', ' '), (x_turm, ty, L['kt_z']), fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
@@ -1311,27 +1184,20 @@ def hinweise_bauen(L, fehler):
         .format(L['yr_rueck_u']),
         '  der Schienenmitte). Die Zaehne zeigen zur Innenseite der Schleife,',
         '  also zur Schiene: dort stehen die Rippen beider Klemmen.',
-        '  Zwei getrennte Tuerme je Schlitten wie v8, {:.1f} mm vor und hinter'
+        '  Zwei gleiche Klemmtuerme je Schlitten wie v8, {:.1f} mm vor und'
         .format(w('turm_abstand')),
-        '  der Wagenmitte (Aussenkante), einer je Riemenende:',
-        '  VORN Klemmturm (fest): Riemen von unten in den Schlitz druecken,',
-        '  Stift Ø3x{0:.0f} (oder M3x{0:.0f}) quer von innen unter ihm'
+        '  hinter der Wagenmitte (Aussenkante), einer je Riemenende: Riemen',
+        '  von unten in den Schlitz druecken, Stift Ø3x{0:.0f} (oder M3x{0:.0f})'
         .format(L['kt_stift_l']),
-        '  durchschieben.',
-        '  HINTEN Spannturm mit Spannschieber: Riemen von unten einlegen,',
-        '  Schieber von hinten in den Kanal, M3x{:.0f} von hinten durch den'
-        .format(L['druck_schraube']),
-        '  Schieber in die Mutter im Anschlag. Eindrehen schiebt ihn nach',
-        '  vorn = spannen.',
-        '  Weg {:.0f} mm; reicht er nicht, das Riemenende einen Zahn weiter'
-        .format(w('schieber_weg')),
-        '  in die vordere Klemme setzen (2 mm).',
+        '  quer von innen unter ihm durchschieben. Gespannt wird wie bisher',
+        '  an den Ritzeln der Y-Enden.',
         '  Klemmschlitz {:.1f} mm, Rippen {:.1f} mm: laesst sich der Riemen'
         .format(w('klemm_schlitz'), w('klemm_rippe')),
         '  nicht eindruecken, klemm_schlitz um 0,1 erhoehen; rutscht er,',
         '  verringern (gilt auch fuer den Riemenhalter in ToolheadZ.py).',
-        '  Rechtwinklig stellen: beide Seiten ueber den Spannschieber, bis',
-        '  das Portal an beiden Schienenenden gleich weit steht.',
+        '  Rechtwinklig stellen: ein Riemenende in seiner Klemme um einen',
+        '  Zahn (2 mm) versetzen, bis das Portal an beiden Schienenenden',
+        '  gleich weit steht.',
         '',
         'X-ANTRIEB (GT2 20 Z, Riemen hochkant, Unterkante Z={:+.2f}):'.format(
             L['xr_z0']),
@@ -1361,13 +1227,10 @@ def hinweise_bauen(L, fehler):
         '  (ToolheadZ.py) — mit der Rolle in Mittelstellung ablaengen.',
         '',
         'MONTAGEREIHENFOLGE:',
-        '  1. Einsaetze einschmelzen: 2 je Spannturm, 2 je Klemmturm, 2 je',
-        '     Stirnblock (alle oben).',
-        '  2. M3-Mutter von oben in die Tasche des Spannturms. Spannturm und',
-        '     Klemmturm unter die Platte, je 2x M3x{:.0f} von oben — die Platte'
+        '  1. Einsaetze einschmelzen: 2 je Klemmturm, 2 je Stirnblock (oben).',
+        '  2. Beide Klemmtuerme unter die Platte, je 2x M3x{:.0f} von oben.'
         .format(L['turm_schraube']),
-        '     haelt die Mutter. VOR dem Rohr: die Schrauben des Klemmturms',
-        '     liegen unter dem Rohr.',
+        '     VOR dem Rohr: die Schrauben des vorderen liegen unter dem Rohr.',
         '  3. Schlitten auf die Y-Wagen, 4x M3x{:.0f} (Kopf in der Senkung).'
         .format(L['wagen_schraube']),
         '  4. Hammermuttern in die hintere Nut des Rohrs, Kernbohrungen M5',
@@ -1384,19 +1247,17 @@ def hinweise_bauen(L, fehler):
         '     Rolle und M5 einsetzen, Zugschraube lose.',
         '  7. X-Riemen: ein Ende in den Riemenhalter, um Motor und Rolle,',
         '     zweites Ende einlegen, spannen.',
-        '  8. Y-Riemen wie oben (vorn fest, hinten Spannschieber).',
+        '  8. Y-Riemen in beide Klemmtuerme, an den Ritzeln spannen.',
         '',
         'DRUCK (PETG, Bambu Lab A1, 4 Wandlinien, >=40 % Infill):',
         '  Schlitten ....... Unterseite aufs Bett, Waende stehen darauf',
-        '  Spannturm ....... auf der Rueckseite stehend (Kanal senkrecht)',
-        '  Klemmturm ....... Oberseite (Plattenseite) aufs Bett, Schlitz',
+        '  Klemmturm (4x) .. Oberseite (Plattenseite) aufs Bett, Schlitz',
         '                    nach oben offen, Rippen senkrecht',
-        '  Spannschieber ... auf der Rueckseite stehend',
         '  Motorhalter ..... Motorplatte (Oberseite) aufs Bett',
         '  Umlenkhalter .... auf der Rueckseite (Saeule) stehend',
         '  Spannklotz ...... Unterseite aufs Bett',
-        '  Keine Stuetzen noetig. Rechter Schlitten, Spannturm, Klemmturm',
-        '  und Spannschieber sind gespiegelt — im Slicer NICHT spiegeln, die',
+        '  Keine Stuetzen noetig. Rechter Schlitten und rechte Klemmtuerme',
+        '  sind gespiegelt — im Slicer NICHT spiegeln, die',
         '  Koerper so exportieren, wie sie im Modell liegen.',
         '',
         'NICHT GEMESSEN — vor dem Druck pruefen [?]:',
@@ -1448,11 +1309,11 @@ def run(context):
         # Spanner sind Einstellungen), also alles fixiert statt Joints.
         einheit = adsk.core.Matrix3D.create()
         occ = {}
-        for name in ('Schlitten_links', 'Spannturm_links',
-                     'Klemmturm_links', 'Spannschieber_links', 'Motorhalter',
-                     'Schlitten_rechts', 'Spannturm_rechts',
-                     'Klemmturm_rechts', 'Spannschieber_rechts',
-                     'Umlenkhalter', 'Spannklotz', 'Bohrlehren'):
+        for name in ('Schlitten_links', 'Klemmturm_hinten_links',
+                     'Klemmturm_vorn_links', 'Motorhalter',
+                     'Schlitten_rechts', 'Klemmturm_hinten_rechts',
+                     'Klemmturm_vorn_rechts', 'Umlenkhalter', 'Spannklotz',
+                     'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -1461,13 +1322,10 @@ def run(context):
             n = seite(s)
             bau_schlitten(app, design, occ['Schlitten_' + n].component, L, s,
                           fehler)
-            bau_spannturm(app, design, occ['Spannturm_' + n].component,
-                          L, s, fehler)
-            bau_klemmturm(app, design, occ['Klemmturm_' + n].component,
-                          L, s, fehler)
-            bau_spannschieber(app, design,
-                              occ['Spannschieber_' + n].component, L, s,
-                              fehler)
+            for t in ('hinten', 'vorn'):
+                bau_klemmturm(app, design,
+                              occ['Klemmturm_{}_{}'.format(t, n)].component,
+                              L, s, t, fehler)
         bau_motorhalter(app, design, occ['Motorhalter'].component, L, fehler)
         bau_umlenkhalter(app, design, occ['Umlenkhalter'].component, L,
                          fehler)

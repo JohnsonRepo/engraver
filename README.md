@@ -17,11 +17,11 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/Portal/                 Baugruppe: Y-Schlitten, X-Antrieb, beide Spanner  ← neu
+fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
-docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Spanner, Montage, Druck
-docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch die Spanner
+docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
+docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
@@ -63,10 +63,10 @@ Riemenklemmenschlitten für die **MGN12H-Wagen (20 × 20)**, links und rechts
 gespiegelt. Sie tragen das Portalrohr von unten und verschrauben es hinten
 (Rückwand, 2 × M5 in Hammermuttern) und an der Stirn (M5 in die
 Kernbohrung) — die Vorderseite bleibt frei für die X-Schiene. Unter jeder
-Platte hängen **zwei getrennte Klemmtürme wie bei v8**: vorn ein fester mit
-Rippen und Querstift, hinten einer mit **eigenem Y-Spanner**, einem
-Spannschieber, den eine M3 von hinten nachzieht. Links steht der **X-Motor** über dem Rohrende, rechts die
-**Umlenkung** mit einer 20-Z-Rolle, die ein Spannklotz nach außen zieht.
+Platte hängen **zwei gleiche Klemmtürme wie bei v8** mit Rippen und
+Querstift, einer je Riemenende; gespannt wird wie bisher an den Ritzeln.
+Links steht der **X-Motor** über dem Rohrende, rechts die **Umlenkung** mit
+einer 20-Z-Rolle, die ein Spannklotz nach außen zieht.
 
 X-Weg **391,2 mm** — die ganze Schiene minus Wagen. Der Toolhead fährt an
 beiden Enden mit mindestens 3 mm an Motor, Umlenkung, Schlitten und Y-Riemen
@@ -118,7 +118,7 @@ bestanden.
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 3). Der
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 4). Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

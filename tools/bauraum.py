@@ -343,7 +343,7 @@ def portal_bauraeume(w, L):
     gespiegelt, die Namen tragen die Seite. Was das Portal nur in Y bewegt
     (Y-Schiene, Rahmen, Y-Riemen), laeuft als langer Quader durch.
 
-    Spannschieber, Spannklotz und Umlenkrolle stehen als Huelle ueber ihren
+    Spannklotz und Umlenkrolle stehen als Huelle ueber ihren
     ganzen Stellweg; der Riemen als Koerper um seine Wirklinie."""
     R = L['R']
     lang = 800.0
@@ -373,12 +373,12 @@ def portal_bauraeume(w, L):
               (L['rueck_y0'], L['rueck_y1']), (L['platte_z1'], L['wand_z1'])),
             q('Stirnblock ' + n, xb(s, *L['stirn_u']), L['stirn_y'],
               (L['platte_z1'], L['wand_z1'])),
-            q('Spannturm ' + n, xb(s, *L['st_u']), L['st_y'], L['st_z']),
-            q('Klemmturm ' + n, xb(s, *L['kt_u']), L['kt_y'], L['kt_z']),
+            q('Klemmturm hinten ' + n, xb(s, *L['kt_u']), L['kt_y_hinten'],
+              L['kt_z']),
+            q('Klemmturm vorn ' + n, xb(s, *L['kt_u']), L['kt_y_vorn'],
+              L['kt_z']),
             # Schieber ueber den ganzen Weg, hinten mit dem Kopf der
             # Druckschraube (ganz entspannt)
-            q('Spannschieber ' + n, xb(s, *L['sch_u']),
-              (L['kanal_y'][0] - 3.0, L['kanal_y'][1]), L['sch_z']),
             q('Y-Wagen ' + n,
               xb(s, -w('y_wagen_breite') / 2, w('y_wagen_breite') / 2),
               (L['wagen_y0'], L['wagen_y1']),
@@ -483,12 +483,11 @@ def portal_bauraeume(w, L):
             ('Portalrohr', 'Stirnblock ' + n),
             ('Platte ' + n, 'Rueckwand ' + n), ('Platte ' + n, 'Stirnblock ' + n),
             ('Rueckwand ' + n, 'Stirnblock ' + n),
-            ('Platte ' + n, 'Spannturm ' + n), ('Platte ' + n, 'Klemmturm ' + n),
+            ('Platte ' + n, 'Klemmturm hinten ' + n),
+            ('Platte ' + n, 'Klemmturm vorn ' + n),
             ('Platte ' + n, 'Y-Wagen ' + n),
-            ('Spannturm ' + n, 'Spannschieber ' + n),
-            ('Spannturm ' + n, 'Y-Riemen ' + n),
-            ('Klemmturm ' + n, 'Y-Riemen ' + n),
-            ('Spannschieber ' + n, 'Y-Riemen ' + n),
+            ('Klemmturm hinten ' + n, 'Y-Riemen ' + n),
+            ('Klemmturm vorn ' + n, 'Y-Riemen ' + n),
             ('Y-Wagen ' + n, 'Y-Schiene ' + n),
             ('Y-Schiene ' + n, 'Rahmen 2040 ' + n),
             ('Y-Ruecklauf ' + n, 'Rahmen 2040 ' + n),   # laeuft in der Nut

@@ -1,6 +1,6 @@
-# Portal — Y-Schlitten, X-Antrieb und Spanner
+# Portal — Y-Schlitten, Y-Klemmtürme und X-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, elf gedruckte Teile).
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, neun gedruckte Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnung in
 [portal-y-schlitten.svg](portal-y-schlitten.svg).
@@ -13,18 +13,16 @@ Die beiden Y-Schlitten sind die Riemenklemmenschlitten für die **MGN12H-Wagen
 (20 × 20)**. Sie tragen das **2020-V-Slot-Portalrohr (500 mm)**, ohne seine
 Vorderseite zu berühren — dort sitzt die **MGN15-Schiene (450 mm)** der
 X-Achse. Links steht der X-Motor, rechts die Umlenkung mit Spanner. Den
-Y-Riemen halten zwei getrennte Klemmtürme wie bei v8 unter jeder Platte,
-im hinteren sitzt ein eigener Spanner.
+Y-Riemen halten zwei gleiche Klemmtürme wie bei v8 unter jeder Platte;
+gespannt wird er wie bisher an den Ritzeln der Y-Enden.
 
 | Pos | Teil | Stück | Funktion |
 |---|---|---|---|
 | 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende |
-| 2 | **Klemmturm** | 2 (gespiegelt) | vorn, fest, wie ein Turm aus v8: Schlitz mit Rippen, Querstift unter dem Riemen |
-| 2 | **Spannturm** | 2 (gespiegelt) | hinten: Kanal für den Spannschieber und Anschlag mit der Mutter der Druckschraube |
-| 3 | **Spannschieber** | 2 (gespiegelt) | hält das hintere Riemenende; eine M3 von hinten schiebt ihn nach vorn und spannt |
-| 4 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten |
-| 5 | **Umlenkhalter** | 1 | rechts: 20-Z-Rolle mit Lager auf einer M5 im Langloch |
-| 6 | **Spannklotz** | 1 | eine M3 von außen zieht ihn und damit die Rolle nach außen |
+| 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende |
+| 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten |
+| 4 | **Umlenkhalter** | 1 | rechts: 20-Z-Rolle mit Lager auf einer M5 im Langloch |
+| 5 | **Spannklotz** | 1 | eine M3 von außen zieht ihn und damit die Rolle nach außen |
 | — | **Riemenhalter** | 1 | am Toolhead (ToolheadZ.py Rev. 33), klemmt beide Enden des X-Riemens |
 
 Warum so viele Teile: Jedes ist nur so **ohne Stützmaterial** druckbar. Die
@@ -87,7 +85,7 @@ Rohrvorderseite, damit der X-Wagen am Ende seines Wegs daran vorbeifährt.
 unter der Rohrmitte. Die Länge des Y-Wegs ändert sich nicht, nur seine Lage
 zum Rahmen.
 
-## Y-Riemen und Y-Spanner
+## Y-Riemen und Klemmtürme
 
 Die Riemenlage ist die von `RiemenklemmeSchlitten` v8, damit der Riemen am
 Rahmen weiterläuft wie bisher: **21,6 mm innen** neben der Schienenmitte,
@@ -103,23 +101,18 @@ Rippen beider Klemmen auf der Schienenseite: Nur so greifen sie in die Zähne
 und nicht auf den glatten Rücken. `portal_check.py` prüft genau das. Der
 Rücklauf liegt im Profil und kommt dem Toolhead nie nahe.
 
-**Zwei getrennte Klemmtürme je Schlitten wie bei v8**, einer je
-Riemenende, symmetrisch zur Wagenmitte: Ihre Außenkanten liegen 40,5 mm
-vor und hinter der Wagenmitte, dazwischen bleiben 21 mm frei. Schnitt A–A
-der Zeichnung zeigt sie von innen.
+**Zwei gleiche Klemmtürme je Schlitten wie bei v8**, einer je
+Riemenende, an derselben Stelle wie bei v8: 22,5 bis 40,5 mm vor und hinter
+der Wagenmitte. Schnitt A–A der Zeichnung zeigt sie von innen.
 
-**Klemmturm, vorn — fest**, wie ein Turm aus v8: 18 mm lang, der Schlitz
-ist unten und an beiden Enden offen, 7 Rippen an der Wand zur Schiene. Den
-Riemen von unten in den Schlitz drücken, dann einen **Stift Ø3 × 10 (oder
-eine M3×10) quer von innen** unter ihm durchschieben — er trägt den Riemen
-wie bei v8. Die zwei Schrauben des Klemmturms liegen unter dem Rohr: Er
-kommt **vor dem Rohr** an die Platte.
+Jeder Turm ist 18 mm lang, der Schlitz ist unten und an beiden Enden
+offen, 7 Rippen stehen an der Wand zur Schiene. Den Riemen von unten in
+den Schlitz drücken, dann einen **Stift Ø3 × 10 (oder eine M3×10) quer von
+innen** unter ihm durchschieben — er trägt den Riemen wie bei v8. Jeder
+Turm hängt an zwei M3×8 von oben durch die Platte. Die des vorderen liegen
+unter dem Rohr: Er kommt **vor dem Rohr** an die Platte.
 
-**Spannturm, hinten — Spannschieber.** Den Riemen von unten in den Schlitz des Schiebers
-legen, den Schieber von hinten in den Kanal schieben, **M3×40 von hinten**
-durch den Schieber in die Mutter im Anschlag. Eindrehen schiebt den Schieber
-nach vorn — das spannt. **Weg 14 mm**; reicht er nicht, das Riemenende in der
-vorderen Klemme einen Zahn weiter setzen (2 mm).
+**Spannen** wie bisher an den Ritzeln der Y-Enden — die Türme sind starr.
 
 **Klemmschlitz:** 1,6 mm vom Rippengrund bis zur glatten Wand, der Riemen ist
 1,38 mm dick. Die Rippen sind 0,8 mm hoch (Teilung 2 mm) und greifen auch dann **0,58 mm**
@@ -128,8 +121,8 @@ waren es im schlechtesten Fall 0,08 mm. Lässt sich der Riemen nicht
 eindrücken, `klemm_schlitz` um 0,1 mm erhöhen; rutscht er, verringern. Das gilt
 genauso für den Riemenhalter am Toolhead — beide lesen denselben Wert.
 
-**Rechtwinklig stellen:** Über die beiden Spannschieber, bis das Portal an
-beiden Schienenenden gleich weit steht.
+**Rechtwinklig stellen:** Ein Riemenende in seinem Klemmturm um einen Zahn
+(2 mm) versetzen, bis das Portal an beiden Schienenenden gleich weit steht.
 
 ## X-Antrieb
 
@@ -201,12 +194,10 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 
 ## Montagereihenfolge
 
-1. Einsätze einschmelzen: 2 je Spannturm, 2 je Klemmturm, 2 je Stirnblock
-   (alle oben).
-2. M3-Mutter von oben in die Tasche des Spannturms. Spannturm und
-   Klemmturm unter die Platte, je 2 × M3×8 von oben — die Platte hält die
-   Mutter. Das muss **vor dem Rohr** passieren: die Schrauben des
-   Klemmturms liegen unter dem Rohr.
+1. Einsätze einschmelzen: 2 je Klemmturm, 2 je Stirnblock (alle oben).
+2. Beide Klemmtürme unter die Platte, je 2 × M3×8 von oben. Das muss
+   **vor dem Rohr** passieren: die Schrauben des vorderen liegen unter dem
+   Rohr.
 3. Schlitten auf die Y-Wagen, 4 × M3×6 (Kopf in der Senkung).
 4. Hammermuttern in die hintere Nut des Rohrs, Kernbohrungen M5 schneiden.
    Portal (Rohr mit X-Schiene und Toolhead) auf die Platten legen: je Seite
@@ -218,24 +209,22 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 7. Riemenhalter an den Toolhead (siehe oben).
 8. X-Riemen: ein Ende in den Riemenhalter, um Motor und Rolle, zweites Ende
    einlegen, spannen.
-9. Y-Riemen: vorn fest, hinten in den Spannschieber, spannen, Portal
-   rechtwinklig stellen.
+9. Y-Riemen: beide Enden in die Klemmtürme, an den Ritzeln spannen,
+   Portal rechtwinklig stellen.
 
 ## Druck (PETG, Bambu Lab A1)
 
 | Teil | Lage aufs Bett |
 |---|---|
 | Schlitten | Unterseite, die Wände stehen darauf |
-| Spannturm | auf der Rückseite stehend, der Kanal senkrecht |
-| Klemmturm | Oberseite (Plattenseite) unten: Schlitz nach oben offen, Rippen senkrecht |
-| Spannschieber | auf der Rückseite stehend |
+| Klemmturm (4×) | Oberseite (Plattenseite) unten: Schlitz nach oben offen, Rippen senkrecht |
 | Motorhalter | Motorplatte (Oberseite) unten |
 | Umlenkhalter | auf der Rückseite (Säule) stehend |
 | Spannklotz | Unterseite |
 | Riemenhalter (Toolhead) | Unterseite (Wagenflanke), Schlitz und Rippen stehen senkrecht |
 
-Keine Stützen. 4 Wandlinien, ≥ 40 % Infill. Rechter Schlitten, Spannturm,
-Klemmturm und Spannschieber sind gespiegelt modelliert — **im Slicer nicht spiegeln**,
+Keine Stützen. 4 Wandlinien, ≥ 40 % Infill. Rechter Schlitten und die
+rechten Klemmtürme sind gespiegelt modelliert — **im Slicer nicht spiegeln**,
 die Körper so exportieren, wie sie im Modell liegen.
 
 Massen (Vollmaterial, PETG 1,27 g/cm³, aus einer Nachbildung der Fusion-API
@@ -244,13 +233,11 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Teil | Volumen | Masse | Bauraum |
 |---|---|---|---|
 | Schlitten (je) | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
-| Spannturm (je) | 17,9 cm³ | ≈ 23 g | 16 × 42 × 35 mm |
-| Klemmturm (je) | 5,0 cm³ | ≈ 6 g | 9 × 18 × 36 mm |
-| Spannschieber (je) | 2,0 cm³ | ≈ 2,5 g | 8 × 20 × 15 mm |
+| Klemmturm (je, 4×) | 5,0 cm³ | ≈ 6 g | 9 × 18 × 36 mm |
 | Motorhalter | 40,8 cm³ | ≈ 52 g | 50 × 51 × 34 mm |
 | Umlenkhalter | 35,1 cm³ | ≈ 45 g | 59 × 42 × 30 mm |
 | Spannklotz | 1,7 cm³ | ≈ 2,2 g | 25 × 12 × 7 mm |
-| **Portal zusammen** | 211 cm³ | **≈ 268 g** | |
+| **Portal zusammen** | 181 cm³ | **≈ 230 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
@@ -262,11 +249,10 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
 | Menge | Teil | wofür |
 |---|---|---|
 | 8 | M3×6 Zylinderkopf | Schlitten → Y-Wagen |
-| 8 + 8 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Spannturm und Klemmturm → Platte |
+| 8 + 8 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Klemmtürme → Platte |
 | 4 + 4 | M5×12 Zylinderkopf + Hammermutter M5 (Nut 6) | Rückwand → Rohr |
 | 2 | M5×25 Zylinderkopf | Stirnblock → Kernbohrung (M5 schneiden) |
-| 2 + 2 | M3×40 Zylinderkopf + M3-Mutter | Druckschraube Spannschieber |
-| 2 | Stift Ø3 × 10 oder M3×10 | Querstift im Klemmturm |
+| 4 | Stift Ø3 × 10 oder M3×10 | Querstift im Klemmturm |
 | 4 | Messing-Einsatz M3 | Stirnblöcke, für die Halter |
 | 4 | M3×12 Zylinderkopf | NEMA 17 → Motorhalter |
 | 2 | M3×40 Zylinderkopf | Motorhalter → Stirnblock |
@@ -302,7 +288,7 @@ die Prüfung als Erstes.
 | `wagen_y` | −60 mm | Lage des Y-Wagens hinter dem Rohr |
 | `y_riemen_linie` | 21,6 mm | Y-Riemen innen neben der Schienenmitte (wie v8) |
 | `klemm_schlitz` / `klemm_rippe` | 1,6 / 0,8 mm | Klemmschlitz und Rippen, auch im Riemenhalter |
-| `schieber_weg` | 14 mm | Weg des Y-Spanners |
+| `turm_abstand` / `kt_laenge` | 40,5 / 18 mm | Lage der Klemmtürme (Außenkante ab Wagenmitte) und ihre Länge, wie v8 |
 | `x_riemen_z0` / `x_riemen_y` | 20,25 / −10 mm | Lage des X-Riemens, auch in ToolheadZ.py |
 | `motor_u` | 7 mm | Motorachse innen neben der Schienenmitte |
 | `rolle_u` / `rolle_weg` | 26,35 / 4 mm | Umlenkrolle in Mittelstellung und ihr Weg je Richtung |

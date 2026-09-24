@@ -27,6 +27,7 @@
 <rect x="156.7" y="260.0" width="21.0" height="12.6" fill="#e8ded0" fill-opacity="0.45" stroke="#8a6d3b" stroke-width="0.9"/>
 <rect x="115.4" y="58.4" width="88.8" height="84.0" fill="#e8ded0" fill-opacity="0.45" stroke="#8a6d3b" stroke-width="0.9"/>
 <rect x="139.9" y="176.0" width="39.9" height="52.5" fill="#e8ded0" fill-opacity="0.45" stroke="#8a6d3b" stroke-width="0.9"/>
+<rect x="70.6" y="417.5" width="29.4" height="33.6" fill="#c9d9ec" fill-opacity="0.95" stroke="#2f5d92" stroke-width="0.9"/>
 <rect x="151.5" y="211.7" width="16.8" height="336.0" fill="#e8ded0" fill-opacity="0.45" stroke="#8a6d3b" stroke-width="0.9"/>
 <rect x="127.3" y="330.5" width="21.0" height="83.8" fill="none" stroke="#55555e" stroke-width="0.9" stroke-dasharray="4 3" opacity="0.75"/>
 <rect x="148.3" y="336.7" width="25.2" height="214.7" fill="none" stroke="#2f5d92" stroke-width="0.9" stroke-dasharray="4 3" opacity="0.75"/>
@@ -72,18 +73,19 @@
 <circle cx="167.2" cy="280.8" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="167.2" y="280.8" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">20</text>
 <circle cx="159.8" cy="100.4" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="159.8" y="100.4" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">21</text>
 <circle cx="159.8" cy="231.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="159.8" y="231.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">22</text>
-<circle cx="159.8" cy="379.7" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="159.8" y="379.7" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">23</text>
-<circle cx="137.8" cy="568.8" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="137.8" y="568.8" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">24</text>
-<circle cx="160.9" cy="640.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="160.9" y="640.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">25</text>
-<circle cx="179.8" cy="640.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="179.8" y="640.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">26</text>
-<circle cx="179.8" cy="541.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="179.8" y="541.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">27</text>
-<circle cx="167.7" cy="566.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="167.7" y="566.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">28</text>
-<circle cx="167.7" cy="512.1" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="167.7" y="512.1" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">29</text>
-<circle cx="165.1" cy="483.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="165.1" y="483.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">30</text>
-<circle cx="165.1" cy="548.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="165.1" y="548.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">31</text>
-<circle cx="159.8" cy="594.1" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="159.8" y="594.1" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">32</text>
-<circle cx="159.8" cy="529.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="159.8" y="529.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">33</text>
-<circle cx="222.9" cy="623.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="222.9" y="623.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">34</text>
+<circle cx="85.3" cy="434.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="85.3" y="434.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">23</text>
+<circle cx="159.8" cy="379.7" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="159.8" y="379.7" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">24</text>
+<circle cx="137.8" cy="568.8" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="137.8" y="568.8" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">25</text>
+<circle cx="160.9" cy="640.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="160.9" y="640.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">26</text>
+<circle cx="179.8" cy="640.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="179.8" y="640.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">27</text>
+<circle cx="179.8" cy="541.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="179.8" y="541.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">28</text>
+<circle cx="167.7" cy="566.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="167.7" y="566.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">29</text>
+<circle cx="167.7" cy="512.1" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="167.7" y="512.1" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">30</text>
+<circle cx="165.1" cy="483.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="165.1" y="483.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">31</text>
+<circle cx="165.1" cy="548.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="165.1" y="548.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">32</text>
+<circle cx="159.8" cy="594.1" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="159.8" y="594.1" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">33</text>
+<circle cx="159.8" cy="529.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="159.8" y="529.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">34</text>
+<circle cx="222.9" cy="623.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="222.9" y="623.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">35</text>
 <text x="380.6" y="42.0" font-size="10" font-weight="600" fill="#2f5d92">Vorderansicht (Blick entlang Y)</text>
 <line x1="449.2" y1="484.7" x2="463.2" y2="484.7" stroke="#b4342f" stroke-width="0.7"/>
 <line x1="456.2" y1="477.7" x2="456.2" y2="491.7" stroke="#b4342f" stroke-width="0.7"/>
@@ -109,6 +111,7 @@
 <rect x="401.2" y="260.0" width="12.6" height="12.6" fill="#e8ded0" fill-opacity="0.45" stroke="#8a6d3b" stroke-width="0.9"/>
 <rect x="474.8" y="58.4" width="88.8" height="84.0" fill="#e8ded0" fill-opacity="0.45" stroke="#8a6d3b" stroke-width="0.9"/>
 <rect x="499.2" y="176.0" width="39.9" height="52.5" fill="#e8ded0" fill-opacity="0.45" stroke="#8a6d3b" stroke-width="0.9"/>
+<rect x="410.0" y="417.5" width="92.4" height="33.6" fill="#c9d9ec" fill-opacity="0.95" stroke="#2f5d92" stroke-width="0.9"/>
 <rect x="510.8" y="211.7" width="16.8" height="336.0" fill="#e8ded0" fill-opacity="0.45" stroke="#8a6d3b" stroke-width="0.9"/>
 <rect x="435.2" y="330.5" width="42.0" height="83.8" fill="none" stroke="#55555e" stroke-width="0.9" stroke-dasharray="4 3" opacity="0.75"/>
 <rect x="424.7" y="336.7" width="63.0" height="214.7" fill="none" stroke="#2f5d92" stroke-width="0.9" stroke-dasharray="4 3" opacity="0.75"/>
@@ -154,18 +157,19 @@
 <circle cx="407.5" cy="309.8" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="407.5" y="309.8" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">20</text>
 <circle cx="519.2" cy="100.4" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="100.4" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">21</text>
 <circle cx="519.2" cy="202.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="202.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">22</text>
-<circle cx="519.2" cy="379.7" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="379.7" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">23</text>
-<circle cx="456.2" cy="568.8" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="456.2" y="568.8" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">24</text>
-<circle cx="456.2" cy="640.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="456.2" y="640.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">25</text>
-<circle cx="484.0" cy="640.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="484.0" y="640.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">26</text>
-<circle cx="409.0" cy="541.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="409.0" y="541.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">27</text>
-<circle cx="408.4" cy="566.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="408.4" y="566.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">28</text>
-<circle cx="427.6" cy="512.1" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="427.6" y="512.1" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">29</text>
-<circle cx="426.9" cy="483.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="426.9" y="483.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">30</text>
-<circle cx="519.2" cy="548.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="548.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">31</text>
-<circle cx="519.2" cy="521.6" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="521.6" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">32</text>
-<circle cx="519.2" cy="471.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="471.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">33</text>
-<circle cx="456.2" cy="623.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="456.2" y="623.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">34</text>
+<circle cx="456.2" cy="448.8" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="456.2" y="448.8" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">23</text>
+<circle cx="519.2" cy="379.7" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="379.7" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">24</text>
+<circle cx="456.2" cy="568.8" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="456.2" y="568.8" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">25</text>
+<circle cx="456.2" cy="640.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="456.2" y="640.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">26</text>
+<circle cx="484.0" cy="640.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="484.0" y="640.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">27</text>
+<circle cx="409.0" cy="541.5" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="409.0" y="541.5" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">28</text>
+<circle cx="408.4" cy="566.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="408.4" y="566.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">29</text>
+<circle cx="427.6" cy="512.1" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="427.6" y="512.1" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">30</text>
+<circle cx="426.9" cy="483.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="426.9" y="483.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">31</text>
+<circle cx="519.2" cy="548.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="548.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">32</text>
+<circle cx="519.2" cy="521.6" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="521.6" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">33</text>
+<circle cx="519.2" cy="471.2" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="519.2" y="471.2" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">34</text>
+<circle cx="456.2" cy="623.3" r="6.5" fill="#ffffff" stroke="#1c2733" stroke-width="0.8"/><text x="456.2" y="623.3" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="#1c2733">35</text>
 <line x1="100.0" y1="50.0" x2="100.0" y2="758.2" stroke="#7a8a9e" stroke-width="0.5" stroke-dasharray="2 4"/>
 <text x="103.0" y="762.2" font-size="7.5" fill="#5b6472" transform="rotate(-90 103.0 762.2)" text-anchor="start">X-Wagen-Stirnfläche  Y=0</text>
 <line x1="116.8" y1="50.0" x2="116.8" y2="758.2" stroke="#7a8a9e" stroke-width="0.5" stroke-dasharray="2 4"/>
@@ -213,16 +217,17 @@
 <text x="226" y="909.2" font-size="8" fill="#1c2733">20&#160;&#160;Gabel: Boden des Schlitzes</text>
 <text x="226" y="920.2" font-size="8" fill="#1c2733">21&#160;&#160;NEMA 17</text>
 <text x="226" y="931.2" font-size="8" fill="#1c2733">22&#160;&#160;Kupplung</text>
-<text x="226" y="942.2" font-size="8" fill="#1c2733">23&#160;&#160;Tr8×2-Spindel</text>
-<text x="226" y="953.2" font-size="8" fill="#1c2733">24&#160;&#160;Z-Wagen MGN9H</text>
-<text x="436" y="832.2" font-size="8" fill="#1c2733">25&#160;&#160;Schlitten Pad/Rippen</text>
-<text x="436" y="843.2" font-size="8" fill="#1c2733">26&#160;&#160;Schlittenplatte</text>
-<text x="436" y="854.2" font-size="8" fill="#1c2733">27&#160;&#160;Fahnenlasche</text>
-<text x="436" y="865.2" font-size="8" fill="#1c2733">28&#160;&#160;Schaltfahne: Fuß</text>
-<text x="436" y="876.2" font-size="8" fill="#1c2733">29&#160;&#160;Schaltfahne: Steg</text>
-<text x="436" y="887.2" font-size="8" fill="#1c2733">30&#160;&#160;Schaltfahne: Blatt</text>
-<text x="436" y="898.2" font-size="8" fill="#1c2733">31&#160;&#160;Mutternwinkel: Rücken</text>
-<text x="436" y="909.2" font-size="8" fill="#1c2733">32&#160;&#160;Mutternwinkel: Regal</text>
-<text x="436" y="920.2" font-size="8" fill="#1c2733">33&#160;&#160;Antriebsmutter Tr8×2 (Garnitur)</text>
-<text x="436" y="931.2" font-size="8" fill="#1c2733">34&#160;&#160;Diodenlaser</text>
+<text x="226" y="942.2" font-size="8" fill="#1c2733">23&#160;&#160;Riemenhalter</text>
+<text x="226" y="953.2" font-size="8" fill="#1c2733">24&#160;&#160;Tr8×2-Spindel</text>
+<text x="436" y="832.2" font-size="8" fill="#1c2733">25&#160;&#160;Z-Wagen MGN9H</text>
+<text x="436" y="843.2" font-size="8" fill="#1c2733">26&#160;&#160;Schlitten Pad/Rippen</text>
+<text x="436" y="854.2" font-size="8" fill="#1c2733">27&#160;&#160;Schlittenplatte</text>
+<text x="436" y="865.2" font-size="8" fill="#1c2733">28&#160;&#160;Fahnenlasche</text>
+<text x="436" y="876.2" font-size="8" fill="#1c2733">29&#160;&#160;Schaltfahne: Fuß</text>
+<text x="436" y="887.2" font-size="8" fill="#1c2733">30&#160;&#160;Schaltfahne: Steg</text>
+<text x="436" y="898.2" font-size="8" fill="#1c2733">31&#160;&#160;Schaltfahne: Blatt</text>
+<text x="436" y="909.2" font-size="8" fill="#1c2733">32&#160;&#160;Mutternwinkel: Rücken</text>
+<text x="436" y="920.2" font-size="8" fill="#1c2733">33&#160;&#160;Mutternwinkel: Regal</text>
+<text x="436" y="931.2" font-size="8" fill="#1c2733">34&#160;&#160;Antriebsmutter Tr8×2 (Garnitur)</text>
+<text x="436" y="942.2" font-size="8" fill="#1c2733">35&#160;&#160;Diodenlaser</text>
 </svg>

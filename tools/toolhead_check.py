@@ -470,6 +470,16 @@ def main():
     zugang('Garnitur -> Regal (4x M3 von oben, Schlitten bei zc={:+.1f})'
            .format(zc_g), d, wer)
 
+    # 5c) Riemenhalter (Rev. 33): von vorn durch die Traegerplatte, gemessen
+    #     ab dem Kopf unten in der Senkung. Alles andere ist schon montiert,
+    #     der Z-Schlitten wird dafuer verfahren.
+    d, wer, zc_r = beste_stellung(
+        [(x, L['traeger_y1'] - w('rh_senkung_t'), z)
+         for x, z in L['rh_schrauben']], 'y', +1, alle_namen,
+        ('Traegerplatte Hauptsaeule', 'Riemenhalter'), mitbewegt=False)
+    zugang('Riemenhalter -> Traegerplatte (von vorn, Z-Schlitten bei '
+           'zc={:+.1f})'.format(zc_r), d, wer)
+
     # 6) Motorschrauben: von unten, der Z-Schlitten wird dafuer weggefahren.
     #    Gemessen ab dem Kopf, also ab der Konsolenunterseite — Konsole und
     #    Adapter liegen zwischen Kopf und Motor und zaehlen nicht.
@@ -962,6 +972,57 @@ def main():
          L['ls_wand_x0'] >= -w('x_wagen_laenge') / 2 - 3.0,
          '   (X-Wagen bis {:.1f} mm)'.format(-w('x_wagen_laenge') / 2))
 
+    p.titel('9b) X-Riemenhalter (Rev. 33)')
+    # Lage des Riemens: ueber dem X-Wagen und im Klemmschlitz
+    p.ok('Riemenunterkante ueber der Flanke des X-Wagens',
+         w('x_riemen_z0') - w('x_wagen_breite') / 2, 3.0)
+    p.ok('Boden unter dem Klemmschlitz',
+         L['rh_boden_z'] - L['rh_z0'], 3.0)
+    steg = w('riemen_dicke') - w('riemen_zahn_h')
+    ruecken = w('x_riemen_y') + steg - w('riemen_pld')
+    p.ok('glatte Wand = Riemenruecken (Wirklinie + Steg - pld)',
+         -abs(L['rh_wand_y'] - ruecken), -0.01)
+    # Die Rippen muessen zwischen die Zaehne greifen, auch wenn der Riemen
+    # an der glatten Wand liegt: Rippe minus Luft im Schlitz.
+    luft = w('klemm_schlitz') - w('riemen_dicke')
+    p.ok('Schlitz nimmt den Riemen auf (Luft)', luft, 0.1)
+    p.ok('Rippen greifen zwischen die Zaehne (schlechtester Fall)',
+         w('klemm_rippe') - luft, 0.5)
+    p.ok('Rippen nicht hoeher als der Zahn tief ist',
+         w('riemen_zahn_h') + 0.1 - w('klemm_rippe'), 0.0)
+    p.info('Rippen im Schlitz', len(L['rh_rippen_x']), 'Stk')
+    p.ok('Stiftbohrung ueber dem Riemen',
+         L['rh_stift_z'] - w('klemm_stift_d') / 2
+         - (w('x_riemen_z0') + w('riemen_breite')), 0.1)
+    p.ok('Wand ueber der Stiftbohrung',
+         L['rh_z1'] - L['rh_stift_z'] - w('klemm_stift_d') / 2, 1.5)
+    # Befestigung
+    p.ok('Einsatz endet vor dem Klemmschlitz (Wand)',
+         (L['rh_y1'] - w('insert_m3_t')) - L['rh_wand_y'], 2.0)
+    p.ok('Einsatz: Wand nach unten (Halterunterkante)',
+         w('rh_schraube_z') - w('insert_m3_d') / 2 - L['rh_z0'], 2.0)
+    p.ok('Einsatz: Wand zur Stiftbohrung (in Y)',
+         (L['rh_y1'] - w('insert_m3_t'))
+         - (L['rh_stift_y'] + w('klemm_stift_d') / 2), 1.0)
+    p.ok('Senkung: Wand zur Saeulenrippe',
+         w('saeule_rippe_x0') - w('rh_schraube_x') - w('m3_senkung') / 2, 1.0)
+    p.ok('Senkung: Wand zum Schienensockel',
+         w('rh_schraube_x') - w('m3_senkung') / 2 - w('sockel_breite') / 2,
+         2.0)
+    # Vor der Platte faehrt der Z-Schlitten: der Kopf darf nicht vorstehen.
+    p.ok('Kopf versenkt (Senkung tiefer als der Kopf)',
+         w('rh_senkung_t') - M3_KOPF_H, 0.0)
+    p.ok('Bohrung ueber der Wagenflanke (Lochrand)',
+         w('rh_schraube_z') - w('m3_durchgang') / 2
+         - w('x_wagen_breite') / 2, 3.0)
+    p.ok('Abstand zur oberen X-Wagen-Schraube (Kopf vorn)',
+         w('rh_schraube_z') - w('m3_senkung') / 2
+         - (w('x_wagen_loch_quer') / 2 + M3_KOPF_D / 2), 2.0)
+    p.ok('M3x{:.0f}: Gewinde im Einsatz'.format(L['rh_schraube']),
+         L['rh_eingriff'], 4.0)
+    p.ok('M3x{:.0f}: setzt im Sackloch nicht auf'.format(L['rh_schraube']),
+         w('insert_m3_t') - L['rh_eingriff'], 0.5)
+
     p.titel('10) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
     for name, a, b in (
             ('Traegerplatte (mit Konsole)',
@@ -976,7 +1037,9 @@ def main():
              L['regal_z1_rel'] - L['winkel_unten_rel']),
             ('Endschalterhalter', w('ls_sockel_x1') - L['ls_wand_x0'],
              L['ls_halter_z1'] - L['ls_halter_z0']),
-            ('Motoradapter', w('motor_flansch'), w('motor_flansch'))):
+            ('Motoradapter', w('motor_flansch'), w('motor_flansch')),
+            ('Riemenhalter', w('traeger_x_rechts') - w('traeger_x_links'),
+             w('rh_hoehe'))):
         p.ok('{}: groesste Kante'.format(name), max(a, b), 250.0, '<=')
     p.ok('Bruecke Schlittenplatte zwischen den Rippen',
          w('rippe_seite_innen') - w('rippe_mitte_breite') / 2, 25.0, '<=')
@@ -1015,7 +1078,12 @@ def main():
             '(Lichtschranke -> Halter)',
             'Gabellichtschranke LM393, Platine {:.0f} x {:.0f} mm, '
             'Schlitz {:.0f} mm'.format(w('ls_pcb_laenge'), w('ls_pcb_breite'),
-                                       w('ls_schlitz'))):
+                                       w('ls_schlitz')),
+            '2x M3x{:.0f} Zylinderkopf + 2x Messing-Einsatz M3 Ø5 '
+            '(Riemenhalter, von vorn)'.format(L['rh_schraube']),
+            '2x Stift Ø3 x {:.0f} (oder M3x20) (Riemenhalter, '
+            'Sicherung ueber dem Riemen)'.format(
+                (w('traeger_x_rechts') - w('traeger_x_links')) / 2.0 - 2.0)):
         p.info(zeile)
 
     p.titel('12) Statische Pruefung der Schluessel im Skript')

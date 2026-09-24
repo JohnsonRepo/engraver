@@ -13,6 +13,9 @@
 #   Endschalterhalter — traegt die Gabellichtschranke am Sockel der Platte
 #   Schaltfahne     — duennes schwarzes Blatt fuer die Gabel, an einer Lasche
 #                     links an der Schlittenplatte verschraubt
+#   Riemenhalter    — klemmt beide Enden des X-Riemens, hinten an der
+#                     Traegerplatte ueber dem X-Wagen (Motor und Umlenkung
+#                     sitzen auf den Y-Schlitten, fusion/Portal)
 #
 # Koordinatensystem = Maschinenkoordinaten, global fuer alle Komponenten:
 #   X = quer, laengs des Portals          Y = nach vorn, weg vom Portal
@@ -29,7 +32,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 32
+REVISION = 33
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -336,6 +339,43 @@ MASSE = {
     # darunter Material lassen (hardware.md: mindestens 9 mm).
     'winkel_regal_dicke':  (10.0,  'Mutternwinkel: Dicke des Flanschregals'),
     'winkel_luft':         (0.5,   'Mutternwinkel: Luft Regal -> Plattenoberkante'),
+
+    # --- X-Antrieb: Riemenhalter hinten an der Traegerplatte (Rev. 33) -----
+    # Der X-Riemen (GT2, 6 mm) laeuft hinter der Traegerplatte ueber dem
+    # X-Wagen; Motor links und Umlenkung rechts sitzen auf den Y-Schlitten
+    # (fusion/Portal). Der Riemenhalter klemmt beide Riemenenden. Die Lage
+    # des Riemens steht gleich in Portal.py, tools/portal_check.py
+    # vergleicht die Werte.
+    # -10: Vor dem Klemmschlitz braucht der Halter 7 mm fuer die Gewinde-
+    # einsaetze seiner Befestigung (von vorn durch die Traegerplatte). Weiter
+    # vorn waeren sie nicht unterzubringen, weiter hinten rueckt die ganze
+    # Riemenschleife ueber das Portalrohr.
+    'x_riemen_y':        (-10.0,  'X-Riemen: Wirklinie des gezogenen Trums'),
+    # 4,25 mm ueber der Flanke des X-Wagens (Z = +16): die Umlenkrolle ist
+    # 8,5 breit und steht unten 1,25 ueber — so bleibt sie am rechten Ende
+    # des X-Wegs 3 mm ueber dem Wagen (tools/portal_check.py).
+    'x_riemen_z0':       (20.25,  'X-Riemen: Unterkante'),
+    'riemen_breite':       (6.0,  'GT2: Riemenbreite'),
+    'riemen_dicke':       (1.38,  'GT2: Gesamtdicke'),
+    'riemen_zahn_h':      (0.75,  'GT2: Zahnhoehe'),
+    'riemen_pld':        (0.254,  'GT2: Wirklinie ueber dem Zahngrund'),
+    'riemen_teilung':      (2.0,  'GT2: Teilung'),
+    # Klemmschlitz: Riemenruecken an der glatten Wand, die Rippen greifen
+    # zwischen die Zaehne bis 0,17 mm vor den Zahngrund. Im alten
+    # RiemenklemmeSchlitten (v8) lagen 0,9-mm-Rippen in einem 2,2-mm-
+    # Schlitz: lag der Riemen an der glatten Wand, ueberdeckten sich Zahn
+    # und Rippe nur 0,08 mm.
+    'klemm_schlitz':       (1.6,  'Riemenklemme: Rippengrund bis glatte Wand'),
+    'klemm_rippe':         (0.8,  'Riemenklemme: Rippenhoehe'),
+    'klemm_rippe_b':       (1.0,  'Riemenklemme: Rippenbreite'),
+    'klemm_stift_d':       (3.2,  'Riemenklemme: Bohrung fuer den Sicherungsstift'),
+    'rh_tiefe':           (14.0,  'Riemenhalter: Tiefe hinter der Traegerplatte'),
+    'rh_hoehe':           (16.0,  'Riemenhalter: Hoehe ueber der Wagenflanke'),
+    # Zwischen Schienensockel (4,5) und Saeulenrippe (18): die Senkung Ø6,5
+    # laesst 1,25 mm zur Rippe, der Kopf verschwindet ganz in der Platte.
+    'rh_schraube_x':      (13.5,  'Riemenhalter: Schrauben bei +-X'),
+    'rh_schraube_z':      (24.0,  'Riemenhalter: Schrauben bei Z'),
+    'rh_senkung_t':        (3.2,  'Riemenhalter: Senkung vorn in der Traegerplatte'),
 
     # --- Druckgerecht + Freigaenge -----------------------------------------
     'luft_bau':            (3.0,   'Mindestfreigang zwischen bewegten Teilen'),
@@ -675,6 +715,37 @@ def lage():
         (w('spindel_x') + sx * w('motor_loch') / 2.0,
          w('spindel_y') + sy * w('motor_loch') / 2.0)
         for sx in (-1, 1) for sy in (-1, 1)]
+
+    # ---- X-Riemenhalter (Rev. 33) -------------------------------------------
+    # Gezogener Trum: die Zaehne zeigen nach hinten (Innenseite der Riemen-
+    # schleife, die Ritzelmitten liegen dahinter), der Ruecken liegt vorn an
+    # der glatten Wand des Klemmschlitzes. Die Wirklinie liegt pld ueber dem
+    # Zahngrund im Steg, der Ruecken also (Steg - pld) davor.
+    steg = w('riemen_dicke') - w('riemen_zahn_h')
+    L['rh_wand_y'] = w('x_riemen_y') + steg - w('riemen_pld')
+    L['rh_rippe_y0'] = L['rh_wand_y'] - w('klemm_schlitz')     # Rippengrund
+    L['rh_rippe_y1'] = L['rh_rippe_y0'] + w('klemm_rippe')     # Rippenspitze
+    L['rh_y1'] = L['traeger_y0']                  # liegt hinten an der Platte
+    L['rh_y0'] = L['rh_y1'] - w('rh_tiefe')
+    L['rh_z0'] = w('x_wagen_breite') / 2.0        # steht auf der Wagenflanke
+    L['rh_z1'] = L['rh_z0'] + w('rh_hoehe')
+    L['rh_boden_z'] = w('x_riemen_z0')            # Riemen steht auf dem Boden
+    # Stift ueber dem Riemen, quer durch den Schlitz (laengs durch den Halter)
+    L['rh_stift_y'] = L['rh_wand_y'] - w('klemm_schlitz') / 2.0
+    L['rh_stift_z'] = (w('x_riemen_z0') + w('riemen_breite') + 0.2
+                       + w('klemm_stift_d') / 2.0)
+    L['rh_rippen_x'] = []
+    xa = w('traeger_x_links') + (w('riemen_teilung') - w('klemm_rippe_b')) / 2
+    while xa + w('klemm_rippe_b') <= w('traeger_x_rechts') + 1e-9:
+        L['rh_rippen_x'].append(xa)
+        xa += w('riemen_teilung')
+    L['rh_schrauben'] = [(sx * w('rh_schraube_x'), w('rh_schraube_z'))
+                         for sx in (-1, 1)]
+    # Kopf in der Senkung, Rest der Platte bis zum Einsatz, dann mindestens
+    # 4 mm Gewinde; aufgerundet auf die naechste gerade Laenge.
+    L['rh_klemm'] = w('traeger_dicke') - w('rh_senkung_t')
+    L['rh_schraube'] = 2.0 * int((L['rh_klemm'] + 4.0) / 2.0 + 0.999)
+    L['rh_eingriff'] = L['rh_schraube'] - L['rh_klemm']
     return L
 
 
@@ -1213,6 +1284,18 @@ def bau_traegerplatte(app, design, comp, L, fehler):
         kreis(sk, L['ls_schraub_x'], z, w('insert_m3_d'))
     weg(comp, alle_profile(sk), -w('insert_m3_t'), koerper)
 
+    # Riemenhalter (Rev. 33): zwei Bohrungen, vorn angesenkt — der Kopf
+    # verschwindet in der Platte, davor faehrt der Z-Schlitten. Eine schon
+    # gedruckte Platte wird mit Bohrlehre_Riemenhalter nachgebohrt.
+    sk = skizze(comp, e_hinten, 'Sk_Bohrungen_Riemenhalter')
+    for x, z in L['rh_schrauben']:
+        kreis(sk, x, z, w('m3_durchgang'))
+    durch(comp, alle_profile(sk), koerper)
+    sk = skizze(comp, e_vorn, 'Sk_Senkungen_Riemenhalter')
+    for x, z in L['rh_schrauben']:
+        kreis(sk, x, z, w('m3_senkung'))
+    weg(comp, alle_profile(sk), -w('rh_senkung_t'), koerper)
+
     fussfase(comp, koerper, 'z', 0.0, w('fase_fuss'), fehler, 'Traegerplatte')
     bbox_pruefen(koerper, 'Traegerplatte',
                  ((w('traeger_x_links'), w('traeger_x_kopf')),
@@ -1576,6 +1659,61 @@ def bau_mutternwinkel(app, design, comp, L, zc, fehler):
     return koerper
 
 
+def bau_riemenhalter(app, design, comp, L, fehler):
+    """X-Riemenhalter (Rev. 33): Klotz hinter der Traegerplatte, der auf der
+    Flanke des X-Wagens steht. Ein senkrechter Klemmschlitz nimmt beide
+    Riemenenden auf — von links das vom Motor, von rechts das von der
+    Umlenkung. Die Rippen an der Rueckwand des Schlitzes greifen zwischen die
+    Zaehne, ein Stift Ø3 ueber dem Riemen haelt ihn unten.
+
+    Befestigung: 2x M3 von vorn durch die Traegerplatte in Gewindeeinsaetze;
+    die Koepfe sitzen versenkt, vor der Platte faehrt der Z-Schlitten.
+
+    Drucklage: Unterseite (Wagenflanke) aufs Bett. Schlitz und Rippen stehen
+    senkrecht; Einsatz- und Stiftbohrungen liegen waagerecht (Ø4,6 bzw.
+    Ø3,2, ohne Stuetzen)."""
+    x0, x1 = w('traeger_x_links'), w('traeger_x_rechts')
+    sk = skizze(comp, ebene_y(comp, L['rh_y0'], 'E_RH_hinten'),
+                'Sk_Riemenhalter')
+    rechteck(sk, x0, L['rh_z0'], x1, L['rh_z1'])
+    koerper = neu(comp, groesstes_profil(sk), w('rh_tiefe')).bodies.item(0)
+    koerper.name = 'Riemenhalter'
+
+    # Klemmschlitz vom Rippengrund bis zur glatten Wand, nach oben offen
+    sk = skizze(comp, ebene_y(comp, L['rh_rippe_y0'], 'E_RH_Schlitz'),
+                'Sk_RH_Schlitz')
+    rechteck(sk, x0 - 1.0, L['rh_boden_z'], x1 + 1.0, L['rh_z1'] + 1.0)
+    weg(comp, groesstes_profil(sk), w('klemm_schlitz'), koerper)
+
+    # Rippen zurueck in den Schlitz, ueber die ganze Schlitzhoehe
+    zm = (L['rh_boden_z'] + L['rh_z1']) / 2.0
+    sk = skizze(comp, ebene_z(comp, zm, 'E_RH_Rippen'), 'Sk_RH_Rippen')
+    for xa in L['rh_rippen_x']:
+        rechteck(sk, xa, L['rh_rippe_y0'], xa + w('klemm_rippe_b'),
+                 L['rh_rippe_y1'])
+    dazu_mittig(comp, alle_profile(sk), L['rh_z1'] - L['rh_boden_z'],
+                koerper)
+
+    # Sicherungsstift ueber dem Riemen, laengs durch den ganzen Halter
+    sk = skizze(comp, ebene_x(comp, 0.0, 'E_RH_Stift'), 'Sk_RH_Stift')
+    kreis(sk, L['rh_stift_y'], L['rh_stift_z'], w('klemm_stift_d'))
+    durch(comp, alle_profile(sk), koerper)
+
+    # Gewindeeinsaetze fuer die Befestigung, von der Vorderseite her
+    sk = skizze(comp, ebene_y(comp, L['rh_y1'], 'E_RH_vorn'), 'Sk_RH_Inserts')
+    for x, z in L['rh_schrauben']:
+        kreis(sk, x, z, w('insert_m3_d'))
+    weg(comp, alle_profile(sk), -w('insert_m3_t'), koerper)
+
+    fussfase(comp, koerper, 'y', L['rh_z0'], w('fase_fuss'), fehler,
+             'Riemenhalter')
+    bbox_pruefen(koerper, 'Riemenhalter',
+                 ((x0, x1), (L['rh_y0'], L['rh_y1']),
+                  (L['rh_z0'], L['rh_z1'])), fehler)
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
+    return koerper
+
+
 def bau_bohrlehren(app, design, comp, L, zc, fehler):
     """Duenne Lehrenplatten mit den kritischen Lochbildern — auflegen,
     anzeichnen, pruefen. Nach dem Lauf ausgeblendet (Konvention SKILL.md).
@@ -1618,6 +1756,34 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
         lehre.name = 'Bohrlehre_' + name
         material_zuweisen(app, design, lehre, 'PLA', fehler)
         lehre.isLightBulbOn = False
+
+    # Riemenhalter (Rev. 33): die Traegerplatte ist schon gedruckt, die zwei
+    # Bohrungen kommen von Hand dazu. Die Lehre liegt hinten an der Platte,
+    # zwei Lippen fassen die Saeulenkanten (X), die Unterkante steht auf der
+    # Flanke des X-Wagens (Z) — beides Kanten, die es schon gibt. 6 mm dick,
+    # damit sie den Bohrer fuehrt. Gebaut abseits (um dx versetzt), wie die
+    # anderen Lehren; die Lippen zeigen nach vorn (+Y).
+    dx, dicke, lippe, spiel = 120.0, 6.0, 2.5, 0.2
+    y_vorn = -40.0 + dicke
+    ax0 = w('traeger_x_links') - spiel - lippe
+    ax1 = w('traeger_x_rechts') + spiel + lippe
+    z0, z1 = L['rh_z0'], L['rh_z1'] + 5.0
+    sk = skizze(comp, ebene, 'Sk_Bohrlehre_Riemenhalter')
+    rechteck(sk, dx + ax0, z0, dx + ax1, z1)
+    lehre = neu(comp, groesstes_profil(sk), dicke).bodies.item(0)
+    lehre.name = 'Bohrlehre_Riemenhalter'
+    sk = skizze(comp, ebene_y(comp, y_vorn, 'E_Lehre_RH_Lippen'),
+                'Sk_Lehre_RH_Lippen')
+    for a, b in ((ax0, w('traeger_x_links') - spiel),
+                 (w('traeger_x_rechts') + spiel, ax1)):
+        rechteck(sk, dx + a, z0, dx + b, z1)
+    dazu(comp, alle_profile(sk), w('traeger_dicke') - 2.0, lehre)
+    sk = skizze(comp, ebene, 'Sk_Lehre_RH_Loecher')
+    for x, z in L['rh_schrauben']:
+        kreis(sk, dx + x, z, w('m3_durchgang'))
+    durch(comp, alle_profile(sk), lehre)
+    material_zuweisen(app, design, lehre, 'PLA', fehler)
+    lehre.isLightBulbOn = False
 
 
 def hinweise_bauen(L, zc, fehler):
@@ -1748,6 +1914,28 @@ def hinweise_bauen(L, zc, fehler):
         '  schraubt: Z-Achse mehrmals durchfahren, DANN festziehen. So',
         '  kaempft die krumme Spindel nicht gegen die Linearfuehrung.',
         '',
+        'X-RIEMENHALTER (Rev. 33): steht hinten an der Traegerplatte auf der',
+        '  Flanke des X-Wagens und klemmt beide Enden des X-Riemens (GT2,',
+        '  Wirklinie Y={:+.1f}, Unterkante Z={:+.2f}). Motor und Umlenkung'.format(
+            w('x_riemen_y'), w('x_riemen_z0')),
+        '  sitzen auf den Y-Schlitten (fusion/Portal, dort dieselbe Lage).',
+        '  Riemenende von oben in den Schlitz druecken, Zaehne nach hinten,',
+        '  dann einen Stift Ø3 (oder M3x20) seitlich ueber dem Riemen durch',
+        '  die Stiftbohrung schieben. Rippen {:.1f} mm hoch, Schlitz {:.1f} mm:'.format(
+            w('klemm_rippe'), w('klemm_schlitz')),
+        '  laesst sich der Riemen nicht eindruecken, klemm_schlitz um 0,1',
+        '  erhoehen; rutscht er, verringern.',
+        '  Befestigung: 2x M3x{:.0f} von VORN durch die Traegerplatte (Kopf in'
+        .format(L['rh_schraube']),
+        '  der Senkung Ø{:.1f} x {:.1f}) in Gewindeeinsaetze im Halter,'.format(
+            w('m3_senkung'), w('rh_senkung_t')),
+        '  {:.1f} mm Gewinde. Die gedruckte Traegerplatte hat die Loecher'.format(
+            L['rh_eingriff']),
+        '  noch nicht: Bohrlehre_Riemenhalter hinten anlegen (Lippen an den',
+        '  Saeulenkanten, Unterkante auf der Wagenflanke), Ø3,4 bohren, dann',
+        '  vorn Ø{:.1f} x {:.1f} ansenken.'.format(w('m3_senkung'),
+                                                w('rh_senkung_t')),
+        '',
         'MONTAGEREIHENFOLGE (wichtig, sonst kommt man nicht mehr dran):',
         '  1. Gewindeeinsaetze in den Schienensockel einschmelzen',
         '  2. Traegerplatte an den X-Wagen (4x M3x12 + Scheibe) — die Koepfe',
@@ -1789,6 +1977,11 @@ def hinweise_bauen(L, zc, fehler):
         '     die Taschen, hinter die Lasche, 2x M3x{:.0f} + Scheibe von vorn.'
         .format(L['ls_fahne_schraube']),
         '     Schaltpunkt einstellen: siehe ENDSCHALTER',
+        ' 10. Riemenhalter: Einsaetze einschmelzen, hinten an die Platte',
+        '     (steht auf der Wagenflanke), 2x M3x{:.0f} von vorn, Z-Schlitten'
+        .format(L['rh_schraube']),
+        '     dafuer ganz nach unten. Riemen erst einlegen, wenn Motor und',
+        '     Umlenkung auf den Y-Schlitten sitzen.',
         '',
         'FOKUS UND LANGLOCH (senkrechte Langloecher, +-{:.0f} mm):'.format(
             w('laser_langloch_hub')),
@@ -1907,6 +2100,8 @@ def hinweise_bauen(L, zc, fehler):
         '                    bohrungen werden rund, keine Stuetzen.',
         '  Schaltfahne ..... Rueckseite (Muttertaschen) aufs Bett, SCHWARZ.',
         '                    Fuss, Steg und Blatt beginnen alle dort.',
+        '  Riemenhalter .... Unterseite (Wagenflanke) aufs Bett, Schlitz und',
+        '                    Rippen stehen senkrecht; keine Stuetzen.',
         '  4 Wandlinien, >=40% Infill. PETG wegen der Abwaerme des Lasers.',
         '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
@@ -1952,7 +2147,7 @@ def run(context):
         occ = {}
         for name in ('Traegerplatte', 'Motoradapter', 'Schlittenplatte',
                      'Mutternwinkel', 'Schaltfahne', 'Endschalterhalter',
-                     'Bohrlehren'):
+                     'Riemenhalter', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -1967,11 +2162,14 @@ def run(context):
                         L, zc, fehler)
         bau_endschalterhalter(app, design,
                               occ['Endschalterhalter'].component, L, fehler)
+        bau_riemenhalter(app, design, occ['Riemenhalter'].component, L,
+                         fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, zc, fehler)
 
         occ['Traegerplatte'].isGrounded = True
         occ['Motoradapter'].isGrounded = True
         occ['Endschalterhalter'].isGrounded = True
+        occ['Riemenhalter'].isGrounded = True
         occ['Bohrlehren'].isGrounded = True
 
         # Starre As-Built-Joints fuer die festen Verschraubungen ...

@@ -13,16 +13,18 @@ import types
 
 SKRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                       'fusion', 'ToolheadZ', 'ToolheadZ.py')
+PORTAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                      'fusion', 'Portal', 'Portal.py')
 
 
-def modul_laden():
+def modul_laden(pfad=SKRIPT, name='toolhead_z'):
     """Importiert das Fusion-Skript ohne Fusion: adsk wird nur innerhalb der
     Funktionen benutzt, der Modulimport laeuft also mit einem Stub durch."""
-    for name in ('adsk', 'adsk.core', 'adsk.fusion'):
-        sys.modules.setdefault(name, types.ModuleType(name))
+    for n in ('adsk', 'adsk.core', 'adsk.fusion'):
+        sys.modules.setdefault(n, types.ModuleType(n))
     sys.modules['adsk'].core = sys.modules['adsk.core']
     sys.modules['adsk'].fusion = sys.modules['adsk.fusion']
-    spec = importlib.util.spec_from_file_location('toolhead_z', SKRIPT)
+    spec = importlib.util.spec_from_file_location(name, pfad)
     modul = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(modul)
     return modul
@@ -38,9 +40,9 @@ class Quader:
         self.y = (min(y0, y1), max(y0, y1))
         self.z = (min(z0, z1), max(z0, z1))
 
-    def verschoben(self, dz):
-        return Quader(self.name, self.x[0], self.x[1], self.y[0], self.y[1],
-                      self.z[0] + dz, self.z[1] + dz, self.art)
+    def verschoben(self, dz, dx=0.0):
+        return Quader(self.name, self.x[0] + dx, self.x[1] + dx, self.y[0],
+                      self.y[1], self.z[0] + dz, self.z[1] + dz, self.art)
 
     def abstand(self, other):
         """Kleinster Achsabstand; >= 0 heisst: in mindestens einer Achse
@@ -76,6 +78,10 @@ def bauraeume(w, L):
     r_kup, r_spi = w('kupplung_d') / 2.0, w('spindel_d') / 2.0
 
     feste = [
+        # Kein 20 x 20: eine Wand ueber die ganze Hoehe der Traegerplatte.
+        # Sie steht fuer "hinter dem Toolhead ist das Portal" und haelt
+        # Werkzeugkorridore von hinten ehrlich. Das echte Rohr (Z -10..+10)
+        # steht in tools/portal_check.py.
         Quader('Portalprofil 2020', w('traeger_x_links') - 10,
                w('traeger_x_kopf') + 10, L['portal_y'] - 20, L['portal_y'],
                w('traeger_z_unten'), L['konsole_z1'], 'kaufteil'),
@@ -153,6 +159,13 @@ def bauraeume(w, L):
                'kaufteil'),
         Quader('Kupplung', sx - r_kup, sx + r_kup, sy - r_kup, sy + r_kup,
                L['kupplung_z0'], L['kupplung_z1'], 'kaufteil'),
+        # X-Riemenhalter (Rev. 33): hinten an der Traegerplatte, steht auf
+        # der Flanke des X-Wagens. Den Riemen selbst, Motor und Umlenkung
+        # prueft tools/portal_check.py — dort liegt das Portalrohr richtig
+        # (20 x 20), nicht als die Wand, die es hier fuer den Werkzeug-
+        # zugang von hinten darstellt.
+        Quader('Riemenhalter', w('traeger_x_links'), w('traeger_x_rechts'),
+               L['rh_y0'], L['rh_y1'], L['rh_z0'], L['rh_z1']),
         # Die Spindel in ihrer gekuerzten Laenge — sie haengt unter der
         # Mutter frei weiter und ist dort die tiefste feste Kante.
         Quader('Tr8x2-Spindel', sx - r_spi, sx + r_spi, sy - r_spi,
@@ -286,6 +299,9 @@ def bauraeume(w, L):
         # Die Traegerplatte steht nur so weit vor, wie der X-Wagen hoch ist.
         ('Traegerplatte Hauptsaeule', 'X-Schiene MGN15'),
         ('Traegerplatte Kopf', 'X-Schiene MGN15'),
+        # Riemenhalter: verschraubt an der Platte, steht auf der Wagenflanke
+        ('Riemenhalter', 'Traegerplatte Hauptsaeule'),
+        ('Riemenhalter', 'X-Wagen MGN15H'),
     }
     return feste, bewegte, erlaubt
 
@@ -318,3 +334,166 @@ def freier_korridor(punkt, achse, richtung, r, boxen, ausser=()):
         if d < laenge:
             laenge, schuld = d, q.name
     return laenge, schuld
+
+
+# --- Portal: Y-Schlitten, X-Antrieb, Rahmen (fusion/Portal) --------------------
+def portal_bauraeume(w, L):
+    """(feste, erlaubte_paare) des Portals in Portal-Koordinaten: X = 0 in
+    der Mitte des Portalrohrs, Y und Z wie beim Toolhead. Links und rechts
+    gespiegelt, die Namen tragen die Seite. Was das Portal nur in Y bewegt
+    (Y-Schiene, Rahmen, Y-Riemen), laeuft als langer Quader durch.
+
+    Spannschieber, Spannklotz und Umlenkrolle stehen als Huelle ueber ihren
+    ganzen Stellweg; der Riemen als Koerper um seine Wirklinie."""
+    R = L['R']
+    lang = 800.0
+    fl = w('motor_flansch') / 2.0
+
+    def xb(s, u0, u1):
+        a, b = s * (R - u0), s * (R - u1)
+        return min(a, b), max(a, b)
+
+    def q(name, x, y, z, art='druck'):
+        return Quader(name, x[0], x[1], y[0], y[1], z[0], z[1], art)
+
+    feste = [
+        q('Portalrohr', (-w('profil_laenge') / 2, w('profil_laenge') / 2),
+          (L['profil_y0'], L['portal_y']), (L['profil_z0'], L['profil_z1']),
+          'kaufteil'),
+        q('X-Schiene', L['x_schiene_x'], (L['portal_y'], L['x_schiene_y1']),
+          (-w('x_schiene_b') / 2, w('x_schiene_b') / 2), 'fuehrung'),
+    ]
+    for s in (-1, 1):
+        n = 'links' if s < 0 else 'rechts'
+        feste += [
+            q('Platte ' + n, xb(s, *L['platte_u']),
+              (L['platte_y0'], L['platte_y1']),
+              (L['platte_z0'], L['platte_z1'])),
+            q('Rueckwand ' + n, xb(s, *L['rueck_u']),
+              (L['rueck_y0'], L['rueck_y1']), (L['platte_z1'], L['wand_z1'])),
+            q('Stirnblock ' + n, xb(s, *L['stirn_u']), L['stirn_y'],
+              (L['platte_z1'], L['wand_z1'])),
+            q('Riemenblock ' + n, xb(s, *L['rb_u']), L['rb_y'], L['rb_z']),
+            # Schieber ueber den ganzen Weg, hinten mit dem Kopf der
+            # Druckschraube (ganz entspannt)
+            q('Spannschieber ' + n, xb(s, *L['sch_u']),
+              (L['kanal_y'][0] - 3.0, L['kanal_y'][1]), L['sch_z']),
+            q('Y-Wagen ' + n,
+              xb(s, -w('y_wagen_breite') / 2, w('y_wagen_breite') / 2),
+              (L['wagen_y0'], L['wagen_y1']),
+              (L['y_wagen_z0'], L['y_wagen_z1']), 'fuehrung'),
+            q('Y-Schiene ' + n,
+              xb(s, -w('y_schiene_b') / 2, w('y_schiene_b') / 2),
+              (-lang, lang), (L['y_schiene_z0'], L['y_schiene_z1']),
+              'fuehrung'),
+            q('Rahmen 2040 ' + n,
+              xb(s, -w('rahmen_b') / 2, w('rahmen_b') / 2), (-lang, lang),
+              (L['rahmen_z0'], L['rahmen_z1']), 'kaufteil'),
+            q('Y-Riemen ' + n,
+              xb(s, w('y_riemen_linie') - w('riemen_dicke') / 2,
+                 w('y_riemen_linie') + w('riemen_dicke') / 2),
+              (-lang, lang), (L['yr_z0'], L['yr_z1']), 'riemen'),
+        ]
+    s = -1
+    xm, yc = s * (R - w('motor_u')), L['xr_yc']
+    feste += [
+        q('Motorplatte', xb(s, *L['mp_u']), L['mp_y'],
+          (L['mp_z0'], L['mp_z1'])),
+        q('Motorhalter Saeule hinten', xb(s, *L['mh_hinten_u']),
+          L['mh_hinten_y'], L['mh_z']),
+        q('Motorhalter Saeule aussen', xb(s, *L['mh_aussen_u']),
+          (L['mh_hinten_y'][1], L['mp_y'][1]), L['mh_z']),
+        q('X-Motor', (xm - fl, xm + fl), (yc - fl, yc + fl),
+          (L['mp_z1'], L['motor_z1']), 'kaufteil'),
+        q('X-Ritzel', (xm - w('ritzel_flansch_d') / 2,
+                       xm + w('ritzel_flansch_d') / 2),
+          (yc - w('ritzel_flansch_d') / 2, yc + w('ritzel_flansch_d') / 2),
+          (L['ritzel_z0'], L['ritzel_z1']), 'kaufteil'),
+    ]
+    s = 1
+    ru = L['rolle_u']
+    rr = w('rolle_d') / 2.0
+    kopf = w('m5_kopf_d') / 2.0
+    feste += [
+        q('Umlenkhalter Saeule', xb(s, *L['uh_saeule_u']), L['uh_saeule_y'],
+          (L['wand_z1'], L['uh_oben_z'][1])),
+        q('Umlenkhalter oben', xb(s, *L['uh_oben_u']), L['uh_y'],
+          L['uh_oben_z']),
+        q('Umlenkhalter unten', xb(s, L['uh_oben_u'][0], L['uh_innen_u']),
+          L['uh_y'], L['uh_unten_z']),
+        q('Umlenkhalter Steg', xb(s, L['uh_oben_u'][0], L['uh_steg_u1']),
+          L['uh_y'], (L['uh_unten_z'][1], L['uh_oben_z'][0])),
+        q('Umlenkhalter Lasche', xb(s, *L['uh_lasche_u']), L['klotz_y'],
+          (L['uh_oben_z'][1], L['klotz_z'][1])),
+        q('Spannklotz', xb(s, ru[0] + L['klotz_u_rel'][0],
+                           ru[1] + L['klotz_u_rel'][1]),
+          L['klotz_y'], L['klotz_z']),
+        q('X-Umlenkrolle', xb(s, ru[0] - rr, ru[1] + rr), (yc - rr, yc + rr),
+          (L['rolle_z0'], L['rolle_z1']), 'kaufteil'),
+        q('M5-Kopf Umlenkung', xb(s, ru[0] - kopf, ru[1] + kopf),
+          (yc - kopf, yc + kopf),
+          (L['klotz_z'][1] + w('m5_scheibe_h'), L['uh_kopf_z1']), 'stahl'),
+        q('Zugschraube Kopf', xb(s, L['uh_lasche_u'][0] - 3.0,
+                                 L['uh_lasche_u'][0]),
+          (yc - 2.75, yc + 2.75), (L['uh_zug_z'] - 2.75, L['uh_zug_z'] + 2.75),
+          'stahl'),
+        # Ruecklauf des X-Riemens: fest zwischen Motor und Umlenkung
+        q('X-Riemen Ruecklauf', (L['x_motor'], L['x_rolle_bereich'][1]),
+          (L['xr_y_rueck'] - L['riemen_aussen'],
+           L['xr_y_rueck'] + L['riemen_innen']),
+          (L['xr_z0'], L['xr_z1']), 'riemen'),
+    ]
+    erlaubt = {
+        ('Portalrohr', 'X-Schiene'),
+        ('Motorplatte', 'Motorhalter Saeule hinten'),
+        ('Motorplatte', 'Motorhalter Saeule aussen'),
+        ('Motorhalter Saeule hinten', 'Motorhalter Saeule aussen'),
+        ('Motorplatte', 'X-Motor'),
+        # der Motorhalter steht auf Stirnblock, Rueckwand und Rohr
+        ('Motorhalter Saeule hinten', 'Stirnblock links'),
+        ('Motorhalter Saeule hinten', 'Rueckwand links'),
+        ('Motorhalter Saeule hinten', 'Portalrohr'),
+        ('Motorhalter Saeule aussen', 'Stirnblock links'),
+        ('Umlenkhalter Saeule', 'Umlenkhalter oben'),
+        ('Umlenkhalter Saeule', 'Umlenkhalter Steg'),
+        ('Umlenkhalter Saeule', 'Umlenkhalter unten'),
+        ('Umlenkhalter oben', 'Umlenkhalter Steg'),
+        ('Umlenkhalter unten', 'Umlenkhalter Steg'),
+        ('Umlenkhalter oben', 'Umlenkhalter Lasche'),
+        ('Umlenkhalter Saeule', 'Stirnblock rechts'),
+        ('Umlenkhalter Saeule', 'Rueckwand rechts'),
+        ('Umlenkhalter Saeule', 'Portalrohr'),
+        ('Umlenkhalter unten', 'Portalrohr'),
+        ('Umlenkhalter unten', 'Stirnblock rechts'),
+        ('Umlenkhalter oben', 'Spannklotz'),
+        ('Umlenkhalter Lasche', 'Zugschraube Kopf'),
+        # der Riemen laeuft um Ritzel und Rolle
+        ('X-Riemen Ruecklauf', 'X-Ritzel'),
+        ('X-Riemen Ruecklauf', 'X-Umlenkrolle'),
+    }
+    for n in ('links', 'rechts'):
+        erlaubt |= {
+            ('Portalrohr', 'Platte ' + n), ('Portalrohr', 'Rueckwand ' + n),
+            ('Portalrohr', 'Stirnblock ' + n),
+            ('Platte ' + n, 'Rueckwand ' + n), ('Platte ' + n, 'Stirnblock ' + n),
+            ('Rueckwand ' + n, 'Stirnblock ' + n),
+            ('Platte ' + n, 'Riemenblock ' + n), ('Platte ' + n, 'Y-Wagen ' + n),
+            ('Riemenblock ' + n, 'Spannschieber ' + n),
+            ('Riemenblock ' + n, 'Y-Riemen ' + n),
+            ('Spannschieber ' + n, 'Y-Riemen ' + n),
+            ('Y-Wagen ' + n, 'Y-Schiene ' + n),
+            ('Y-Schiene ' + n, 'Rahmen 2040 ' + n),
+        }
+    return feste, erlaubt
+
+
+def x_riemen_trume(L, xw, rh_x0, rh_x1):
+    """Die beiden Stuecke des gezogenen Trums bei X-Wagenmitte xw: vom Motor
+    bis zum Riemenhalter und vom Riemenhalter bis zur Umlenkrolle (Mitte des
+    Spannwegs). rh_x0/rh_x1: Enden des Riemenhalters relativ zum X-Wagen."""
+    y0 = L['xr_y'] - L['riemen_innen']
+    y1 = L['xr_y'] + L['riemen_aussen']
+    return [Quader('X-Riemen links', L['x_motor'], xw + rh_x0, y0, y1,
+                   L['xr_z0'], L['xr_z1'], 'riemen'),
+            Quader('X-Riemen rechts', xw + rh_x1, L['x_rolle'], y0, y1,
+                   L['xr_z0'], L['xr_z1'], 'riemen')]

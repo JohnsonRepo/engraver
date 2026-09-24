@@ -64,8 +64,14 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | X-Schiene | MGN15, **450 mm** | `[v]` |
 | Riemen, Ritzel | GT2 6 mm, **20 Z** | `[v]` |
 | Umlenkrollen | **glatt, Bohrung 5 mm**; 20-Z-Ritzel mit Kugellager vorhanden | `[v]` |
+| X-Umlenkung | **20-Z-Rolle mit Kugellager**, Bohrung 5 — in der Schleife läuft die Zahnseite auf der Rolle, eine glatte gehört auf den Riemenrücken | gewählt (Portal.py) |
+| Umlenkrolle 20 Z | Außendurchmesser (Bord) **18 mm**, Breite **8,5 mm** | `[?]` angenommen, nicht gemessen |
+| X-Motor | NEMA 17, Länge **48 mm** | `[?]` angenommen, geht nur in den Freigang ein |
 | Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Mitte ≈ 26 mm unter der Wagenoberseite (liegt auf dem Ø3,2-Sicherungsstift), Zähne zur Schiene | `[v]` aus v8 |
-| Abstand der Y-Schienen | noch offen — mindestens **514 mm** Mitte zu Mitte, damit der Toolhead den ganzen X-Weg nutzen kann | Rechnung, siehe unten |
+| Y-Riemen, Rücklauf | wo er am Rahmen läuft — direkt unter dem gezogenen Trum blieben 1,1 mm zum Riemenblock | `[?]` offen |
+| Abstand der Y-Schienen | **514 mm** Mitte zu Mitte = Rohr 500 + 2 × 7 mm; ergibt sich beim Aufbau aus dem verschraubten Portal | gesetzt (Portal.py), Rechnung siehe unten |
+| Kernbohrung 2020 V-Slot | Ø4,2 — für die Stirnschraube **M5 schneiden, ≥ 15 mm tief** | `[w]` |
+| Hammermuttern | M5, Nut 6, in der hinteren Nut des Portalrohrs | `[w]` |
 
 Das ältere `RiemenklemmeSchlitten.py` trug noch das Lochbild 25 × 25
 (MGN15H) — für die Y-Achse falsch, gilt nur für den X-Wagen.
@@ -78,6 +84,11 @@ Wagen ±195,6 mm; mit 3 mm Luft zum Riemen ergibt das 513,3 mm. Die X-Schiene
 sitzt dafür 8 mm nach links versetzt auf dem Rohr, dann sind beide Seiten
 gleich. Das gilt, solange der Rahmen unter den Schienen nicht weiter nach
 innen ragt als der Riemen (22 mm neben der Schienenmitte).
+
+Umgesetzt in `fusion/Portal/Portal.py`: 514 mm, X-Schiene 8,25 mm nach links
+versetzt. `portal_check.py` misst an beiden Enden 3,4 mm zwischen Toolhead und
+Y-Riemen, über den ganzen Z-Weg. Details in
+[portal-y-schlitten.md](portal-y-schlitten.md).
 
 ## Diodenlaser
 

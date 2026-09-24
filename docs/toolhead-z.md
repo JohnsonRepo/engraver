@@ -1,6 +1,6 @@
 # Toolhead Z-Achse — kompletter Aufbau
 
-Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, sechs gedruckte Teile).
+Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, sieben gedruckte Teile).
 Geprüft mit `python3 tools/toolhead_check.py`, Layout in
 [toolhead-z-layout.svg](toolhead-z-layout.svg).
 
@@ -21,6 +21,7 @@ Der Laser sitzt auf dem Z-Schlitten.
 | 4 | **Mutternwinkel** | PETG | Flanschsitz für die Tr8×2-Garnitur, schwimmend verschraubt |
 | 5 | **Schaltfahne** | PETG **schwarz** | dünnes Blatt für die Gabellichtschranke, Schaltpunkt über Langlöcher einstellbar (Rev. 32) |
 | 6 | **Endschalterhalter** | PETG | hält die Gabellichtschranke — gedruckt und eingebaut, bleibt |
+| 7 | **Riemenhalter** | PETG | hinten an der Trägerplatte, klemmt beide Enden des X-Riemens (Rev. 33) |
 
 Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
 [Motorbefestigung](#motorbefestigung-alle-vier-schrauben-erreichbar).
@@ -521,6 +522,50 @@ Du hast es selbst vorgeschlagen, und es ist die bessere Lösung:
 Das Bauteil wird damit 78 × 222 × 56 mm groß und passt liegend in den A1
 (Bett 256 mm).
 
+## X-Riemenhalter (Rev. 33)
+
+Der X-Antrieb sitzt auf den Y-Schlitten (`fusion/Portal`, siehe
+[portal-y-schlitten.md](portal-y-schlitten.md)): der Motor über dem linken
+Rohrende, die Umlenkung über dem rechten. Am Toolhead bleibt nur, den Riemen
+festzuhalten. Das macht der **Riemenhalter**, ein Klotz 44 × 14 × 16 mm hinten
+an der Trägerplatte. Er steht auf der Flanke des X-Wagens und klemmt **beide
+Enden** des X-Riemens.
+
+| Maß | Wert |
+|---|---|
+| Riemen | GT2 6 mm hochkant, Wirklinie Y = −10, Unterkante Z = +20,25 |
+| Luft Riemen ↔ Flanke des X-Wagens | 4,25 mm |
+| Klemmschlitz | 1,6 mm vom Rippengrund bis zur glatten Wand, Rippen 0,8 mm hoch, Teilung 2 |
+| Eingriff der Rippen, schlechtester Fall | 0,58 mm (Riemen liegt an der glatten Wand) |
+| glatte Wand | genau am Riemenrücken, der Riemen läuft gerade hinein |
+| Befestigung | 2 × M3×10 von vorn durch die Trägerplatte in Einsätze, 5,2 mm Gewinde |
+
+Die Lage des Riemens steht in **beiden** Skripten (`x_riemen_y`,
+`x_riemen_z0`), ebenso Schlitz und Rippen. `portal_check.py` prüft als Erstes,
+dass die Werte übereinstimmen. Die Unterkante liegt bei +20,25 statt direkt
+über dem Wagen, damit die Umlenkrolle am rechten Ende 3 mm über dem X-Wagen
+bleibt.
+
+**Einlegen:** Riemenende von oben in den Schlitz drücken, **Zähne nach
+hinten**, dann einen Stift Ø3 (oder eine M3×20) seitlich über dem Riemen durch
+die Stiftbohrung schieben. Lässt sich der Riemen nicht eindrücken,
+`klemm_schlitz` um 0,1 erhöhen; rutscht er, verringern.
+
+**Befestigung:** Die Köpfe sitzen vorn in einer Senkung Ø6,5 × 3,2 mm und
+stehen nicht vor, vor der Platte fährt der Z-Schlitten. Mit dem Z-Schlitten
+ganz unten ist der Weg für den Inbus frei (Abschnitt 6 der Prüfung).
+
+**Die gedruckte Trägerplatte hat die zwei Löcher noch nicht.** Eine neu
+gedruckte Platte bekommt sie aus dem Modell. Für die vorhandene gibt es die
+`Bohrlehre_Riemenhalter`, 6 mm dick, damit sie den Bohrer führt:
+
+1. Z-Schlitten ganz nach unten fahren.
+2. Lehre hinten an die Trägerplatte legen: zwei Lippen fassen die Kanten der
+   Säule, die Unterkante steht auf der Flanke des X-Wagens.
+3. Ø3,4 von hinten durchbohren. Einen langen Bohrer nehmen, damit das
+   Bohrfutter hinter dem Portalrohr bleibt.
+4. Vorn Ø6,5 × 3,2 mm ansenken.
+
 ## Massen
 
 Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Rev. 16 = Rev. 17, dort hat sich nur Berichtstext geändert):
@@ -533,21 +578,23 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 | Mutternwinkel | ≈ 11,3 cm³ | **≈ 14 g** | 28 × 36 × 22 mm | gerechnet |
 | Schaltfahne | ≈ 2,6 cm³ | **≈ 3,4 g** | 18 × 60 × 5,5 mm | gerechnet |
 | Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet (gedruckt, bleibt) |
-| **Druckteile zusammen** | ≈ 201 cm³ | **≈ 255 g** | | |
+| Riemenhalter | ≈ 8,8 cm³ | **≈ 11 g** | 44 × 14 × 16 mm | gerechnet (Rev. 33) |
+| **Druckteile zusammen** | ≈ 210 cm³ | **≈ 266 g** | | |
 
 Die Werte für Trägerplatte und Schlittenplatte sind gemessen (154,3 / 50,9 g)
 plus die gerechneten Zuwächse: Endschaltersockel (+3 g), an der
 Schlittenplatte die 5 mm aus Rev. 27 und die Fahnenlasche anstelle der
-angeformten Fahne (+1 g). Motoradapter, Schaltfahne und Halter sind ganz
-gerechnet. **Maßgeblich ist der nächste Fusion-Lauf.**
+angeformten Fahne (+1 g). Motoradapter, Schaltfahne, Halter und
+Riemenhalter sind ganz gerechnet. **Maßgeblich ist der nächste Fusion-Lauf.**
 
 Die Trägerplatte ist mit Rev. 16 von 145 auf 222 mm gewachsen (Schiene 200 mm,
 Konsole auf +145) und wog vorher 98,4 g. Gerechnet hatte ich 154 g, gemessen
 sind es 154,3 g. Der Mutternwinkel ersetzt den 12,4 g schweren Mutternblock;
 die Schlittenplatte ändert sich nur an der Lasche (wenige Zehntel Gramm).
 
-Dazu die drei Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
-werden: 6,1 g (X-Wagen) · 3,6 g (Z-Wagen) · 6,7 g (Laser).
+Dazu die vier Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
+werden: 6,1 g (X-Wagen) · 3,6 g (Z-Wagen) · 6,7 g (Laser) · 8,4 g
+(Riemenhalter).
 
 Das sind **Vollmaterial-Massen** (100 % Füllung) und damit eine Obergrenze.
 Für den Druck selbst ist die Dichte in Fusion ohne Bedeutung — Bambu Studio
@@ -557,9 +604,9 @@ Druckgewicht rund ein Drittel darunter; maßgeblich ist die Anzeige im Slicer.
 Die Werte hier dienen der Plausibilitätskontrolle und der Abschätzung der
 bewegten Masse.
 
-Bewegte Masse auf der X-Achse, grob: 255 g Druckteile + 280 g NEMA 17 + 400 g
+Bewegte Masse auf der X-Achse, grob: 266 g Druckteile + 280 g NEMA 17 + 400 g
 Laser + 115 g MGN9-Schiene (200 mm) und Wagen + 71 g Gewindestange und
-Kupplung ≈ **1,12 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
+Kupplung ≈ **1,13 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
 im zweistelligen Nm-Bereich, hier rund 1 Nm).
 
 Die Trägerplatte ist mit 121,5 cm³ das schwerste Teil, davon etwa 23 cm³
@@ -912,6 +959,8 @@ wird der Parameter nachgezogen.
 | Endschalterhalter → Sockel | 2 × M3×12 + 2 × Messing-Einsatz M3 | vorhanden; Langloch ±4 mm, **ganz nach unten** schieben |
 | Schaltfahne → Lasche | **2 × M3×12 + 2 × Mutter M3 + 2 × Scheibe DIN 125** | von vorn durch die Langlöcher der Lasche (±5 mm), Muttern in den Taschen der Fahne; Scheibe 1,75 mm neben dem Lasergehäuse |
 | Lichtschranke → Halter | 2 × M2×6 + 2 × Heat Insert M2 (Ø3,2 × 2,5) | Ø2,8 × 3 mm Sackloch in der 4-mm-Wand, dahinter Ø2,4 frei |
+| Riemenhalter → Trägerplatte | **2 × M3×10 + 2 × Messing-Einsatz M3** | von vorn, Kopf in der Senkung Ø6,5 × 3,2; 5,2 mm Gewinde, 1,8 mm vor dem Grund des Sacklochs. In einer schon gedruckten Platte mit `Bohrlehre_Riemenhalter` nachbohren |
+| X-Riemen → Riemenhalter | 2 × Stift Ø3 × 20 (oder M3×20) | seitlich über dem Riemen durch die Stiftbohrung |
 
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
 Welle 5 mm) · **Tr8×2-Trapezgewindespindel 200 mm, auf 160 mm kürzen**
@@ -939,6 +988,7 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 8 | **Spindel auf 160 mm kürzen**, entgraten, anfasen. Garnitur aufdrehen, Flansch **mit der glatten Seite** aufs Regal (4 × M3×8 von oben), Kupplung **8 mm** auf die Motorwelle (obere Klemmschraube bleibt unter der Konsole), Spindel von unten ebenso weit hinein, Enden nicht aneinander. Achse mehrmals durchfahren, **dann** die zwei M3×16 festziehen | Säge, Inbus von oben neben der Spindel | 125 mm mit dem Schlitten unten |
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | Schlitten ganz unten: beide Reihen liegen dann unter der Trägerplatte, freie Bahn |
 | 10 | Endschalterhalter (vorhanden) **ganz nach unten** in seine Langlöcher schieben, festziehen. **Schaltfahne** mit 2 × M3-Mutter in den Taschen hinter die Lasche, 2 × M3×12 + Scheibe von vorn, Schaltpunkt einstellen ([Endschalter](#einstellen)) | Inbus von vorn | frei, auch mit dem Laser daneben |
+| 11 | **Riemenhalter**: 2 × Einsatz einschmelzen, hinten an die Platte stellen (steht auf der Wagenflanke), 2 × M3×10 von vorn. Den Riemen erst einlegen, wenn Motor und Umlenkung auf den Y-Schlitten sitzen ([X-Riemenhalter](#x-riemenhalter-rev-33)) | Inbus von vorn | frei mit dem Z-Schlitten ganz unten |
 
 Schritt 4 und Schritt 9 haben sich bis Rev. 13 gegenseitig zugebaut: das
 Gewinde der Laserbefestigung sitzt im Modul, also wird von hinten verschraubt —
@@ -1023,6 +1073,7 @@ reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 | Mutternwinkel | Regaloberseite (Flanschsitz) unten | der Rücken hängt vollständig unter dem Regalgrundriss, Spindel- und Einsatzbohrungen werden rund, keine Stützen |
 | Schaltfahne | Rückseite (Muttertaschen) unten, **schwarzes PETG** | Fuß, Steg und Blatt beginnen alle auf dem Bett, keine Stützen; die Taschen liegen unten, ihr Deckel ist eine kurze Brücke |
 | Endschalterhalter | Flansch unten | gedruckt und eingebaut — **nicht neu drucken** |
+| Riemenhalter | Unterseite (Wagenflanke) unten | Schlitz und Rippen stehen senkrecht, die Stiftbohrung liegt waagerecht darüber; keine Stützen |
 
 4 Wandlinien, ≥ 40 % Infill. An jeder Auflagefläche sitzt eine Fase von
 0,4 × 45° — ohne sie hebt der Elefantenfuß der ersten Schicht das Teil von der
@@ -1030,7 +1081,7 @@ Passfläche ab.
 
 ## Vor dem Druck prüfen
 
-Das Skript legt drei **ausgeblendete Bohrlehren** an (3 mm, PLA): im Browser
+Das Skript legt vier **ausgeblendete Bohrlehren** an (PLA): im Browser
 einblenden, drucken, ans reale Teil halten.
 
 | Lehre | prüft |
@@ -1038,9 +1089,12 @@ einblenden, drucken, ans reale Teil halten.
 | `Bohrlehre_XWagen` | 25 × 25 mm — MGN15H, am 2026-09-21 am Teil bestätigt `[v]` |
 | `Bohrlehre_ZWagen` | 16 × 15 mm — MGN9H, am 2026-09-17 am Teil bestätigt `[v]` |
 | `Bohrlehre_Laser` | 40,5 × 16,5 mm — am 2026-09-17 am Teil bestätigt `[v]` |
+| `Bohrlehre_Riemenhalter` | keine Prüflehre, sondern eine Bohrhilfe (6 mm): zwei Löcher Ø3,4 in der schon gedruckten Trägerplatte (Rev. 33) |
 
 **Eine Lehre gibt es nur für Lochbilder von Kaufteilen** — also für Teile, die
-dieses Skript nicht selbst erzeugt. Damit weicht das bewusst von der
+dieses Skript nicht selbst erzeugt. Die Ausnahme ist die Lehre für den
+Riemenhalter: Die Trägerplatte ist schon gedruckt, die zwei Löcher werden
+von Hand gebohrt. Damit weicht das bewusst von der
 Konvention des `fusion-python`-Skills ab, die auch für Verbindungen zwischen
 zwei getrennt gedruckten Teilen eine Lehre vorsieht. Für Mutternwinkel ↔
 Schlittenplatte wäre sie ohne Nutzen: beide Lochbilder hängen an derselben
@@ -1122,3 +1176,5 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `ls_fahne_verstellung` | 5 mm | Langloch der Fahne in der Lasche, je Richtung |
 | `winkel_regal_dicke` | 10 mm | Flanschregal; muss den M3-Einsatz (7 mm) aufnehmen |
 | `winkel_luft` | 0,5 mm | Luft Regal → Oberkante Schlittenplatte |
+| `x_riemen_y` / `x_riemen_z0` | −10 / 20,25 mm | Lage des X-Riemens (Wirklinie, Unterkante) — steht gleich in `Portal.py`, `portal_check.py` vergleicht |
+| `klemm_schlitz` / `klemm_rippe` | 1,6 / 0,8 mm | Klemmschlitz und Rippen des Riemenhalters; lässt sich der Riemen nicht eindrücken, Schlitz +0,1 |

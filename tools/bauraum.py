@@ -398,7 +398,7 @@ def portal_bauraeume(w, L):
             q('Y-Ruecklauf ' + n,
               xb(s, L['yr_rueck_u'] - w('riemen_dicke') / 2,
                  L['yr_rueck_u'] + w('riemen_dicke') / 2),
-              (-lang, lang), (L['yr_z0'], L['yr_z1']), 'riemen'),
+              (-lang, lang), L['yr_rueck_z'], 'riemen'),
         ]
     s = -1
     xm, yc = s * (R - w('motor_u')), L['xr_yc']

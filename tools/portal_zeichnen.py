@@ -466,7 +466,8 @@ def schnitt_motor(f, w, L, tw, TL):
     t.append(f.rect(xm - 6.1, xm + 6.1, z0 + bo, z0 + bo + sp, 'stahl'))
     t.append(f.rect(xm - rf, xm + rf, z0 + bo + sp, L['ritzel_nabe_z0'],
                     'stahl'))
-    t.append(f.rect(xm - 6.5, xm + 6.5, L['ritzel_nabe_z0'], L['ritzel_z1'],
+    rn = w('ritzel_nabe_d') / 2
+    t.append(f.rect(xm - rn, xm + rn, L['ritzel_nabe_z0'], L['ritzel_z1'],
                     'stahl'))
     # Welle im Ritzel (verdeckt) und Madenschraube vorn in der Nabe
     t.append(f.rect(xm - 2.5, xm + 2.5, L['welle_z0'], L['ritzel_z1'],

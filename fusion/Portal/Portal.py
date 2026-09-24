@@ -21,6 +21,10 @@
 #                              einer M5 im Langloch; eine M3 von aussen zieht
 #                              den Spannklotz und damit die Rolle nach aussen.
 #   Bohrlehren                 ausgeblendet
+#   Referenz_nicht_drucken     nur zur Ansicht, NICHT drucken: Aluprofile,
+#                              Linearfuehrungen, X- und Y-Riemen, X-Motor
+#                              mit Ritzel, Umlenkrolle und der Riemenhalter
+#                              des Toolheads
 #
 # Den X-Riemen klemmt der Riemenhalter hinten an der Traegerplatte
 # (ToolheadZ.py, Rev. 33). Seine Lage (x_riemen_y, x_riemen_z0) steht in
@@ -41,7 +45,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 5
+REVISION = 6
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -59,6 +63,7 @@ MASSE = {
     'x_wagen_laenge':      (58.8, 'MGN15H: Wagenlaenge'),
     'x_wagen_breite':      (32.0, 'MGN15H: Wagenbreite (in Z)'),
     'x_wagen_hoehe':       (16.0, 'MGN15: Montagehoehe'),
+    'x_wagen_boden':        (4.0, 'MGN15: Luft unter dem Wagenkoerper'),
 
     # --- Y-Achse: MGN12H auf 2040 hochkant ----------------------------------
     # 514 = kleinster Abstand, bei dem die ganze X-Schiene nutzbar bleibt:
@@ -98,10 +103,12 @@ MASSE = {
     # Spur fuer den 6-mm-Riemen; der Rest der 16 mm ist die Nabe mit den
     # Madenschrauben in ihrer Mitte [w]
     'ritzel_spur':          (7.0, 'GT2 20 Z Ritzel: Spur zwischen den Borden'),
+    'ritzel_nabe_d':       (13.0, 'GT2 20 Z Ritzel: Nabe'),
     # Umlenkung: 20-Z-Rolle mit Kugellager, Bohrung 5 [w]. Aussendurchmesser
     # nicht gemessen — 18 ist die Huelle mit Bord [?].
     'rolle_d':             (18.0, 'Umlenkrolle 20 Z: Huelle (Bord)'),
     'rolle_breite':         (8.5, 'Umlenkrolle: Breite'),
+    'rolle_bohrung':        (5.0, 'Umlenkrolle: Bohrung'),
 
     # --- X-Riemen: Lage wie in ToolheadZ.py (Riemenhalter) -----------------
     'x_riemen_y':         (-10.0, 'X-Riemen: Wirklinie des gezogenen Trums'),
@@ -118,6 +125,7 @@ MASSE = {
     'motor_loch':          (31.0, 'NEMA17: Lochbild 31 x 31'),
     'motor_bund_d':        (22.0, 'NEMA17: Zentrierbund'),
     'motor_bund_h':         (2.0, 'NEMA17: Zentrierbund, Hoehe'),
+    'motor_welle_d':        (5.0, 'NEMA17: Wellendurchmesser'),
     # 20 mm: Angabe am Aufbau [v]. Ab der Flanschflaeche gerechnet — ist
     # sie ab dem Bund gemessen, steht die Welle 2 mm weiter vor.
     'motor_welle_l':       (20.0, 'NEMA17: Wellenlaenge ab Flansch'),
@@ -209,6 +217,22 @@ MASSE = {
     'klotz_dicke':          (7.0, 'Spannklotz: Dicke'),
     'klotz_versatz':       (16.0, 'Spannklotz: Mutter so weit aussen neben der Achse'),
     'uh_lasche_b':          (5.0, 'Umlenkhalter: Lasche fuer die Zugschraube'),
+
+    # --- Referenz (nicht drucken, nur zur Ansicht) --------------------------
+    # Laenge der 2040 und der Y-Schienen ist nicht bekannt [?]; gezeichnet
+    # mittig unter dem Y-Wagen. V-Slot vereinfacht: Nutoeffnung 6,2 und
+    # Kernbohrung 4,2 [w], dahinter eine 8 mm breite Kammer.
+    'rahmen_laenge':      (500.0, 'Referenz: Laenge der 2040 und Y-Schienen'),
+    'nut_b':                (6.2, 'V-Slot: Nutoeffnung'),
+    'nut_t':                (2.0, 'V-Slot vereinfacht: Tiefe der Oeffnung'),
+    'nut_kammer_b':         (8.0, 'V-Slot vereinfacht: Breite der Kammer'),
+    'nut_kammer_t':         (5.5, 'V-Slot vereinfacht: Tiefe bis Kammergrund'),
+    'kern_d':               (4.2, 'V-Slot: Kernbohrung'),
+    # Riemenhalter des Toolheads (ToolheadZ.py), portal_check.py vergleicht
+    'traeger_x_links':    (-22.0, 'Toolhead: linke Kante (Riemenhalter)'),
+    'traeger_x_rechts':    (22.0, 'Toolhead: rechte Kante (Riemenhalter)'),
+    'rh_tiefe':            (14.0, 'Riemenhalter: Tiefe hinter der Traegerplatte'),
+    'rh_hoehe':            (16.0, 'Riemenhalter: Hoehe ueber der Wagenflanke'),
 }
 
 
@@ -343,6 +367,12 @@ def lage():
     # Schleife), deshalb stehen die Rippen der Klemmen auf der Schienenseite.
     L['yr_rueck_u'] = w('y_riemen_linie') - w('ritzel_teilkreis')
     L['rahmen_flanke_u'] = w('rahmen_b') / 2.0
+    # Hoehe des Ruecklaufs: mittig in der oberen Seitennut des 2040. Die
+    # Klemme haelt den Riemen tiefer (wie v8); dazwischen gleicht er das
+    # zu den Ritzeln an den Y-Enden hin aus.
+    L['nut_z'] = L['rahmen_z1'] - w('rahmen_b') / 2.0
+    L['yr_rueck_z'] = (L['nut_z'] - w('riemen_breite') / 2.0,
+                       L['nut_z'] + w('riemen_breite') / 2.0)
 
     # ---- X-Riemen -------------------------------------------------------------
     L['xr_y'] = w('x_riemen_y')                            # gezogener Trum
@@ -445,6 +475,17 @@ def lage():
     L['x_motor'] = x_m
     L['x_rolle'] = x_u
     L['x_rolle_bereich'] = (R - L['rolle_u'][1], R - L['rolle_u'][0])
+
+    # ---- Referenz (nicht drucken) ---------------------------------------------
+    # Rahmen mittig unter dem Y-Wagen, Toolhead in der Mitte des X-Wegs.
+    # Ritzel und Rolle mit dem Fuss der Verzahnung: dort liegen die Zaehne
+    # des Riemens an, der Riemenkoerper durchdringt sie so nicht.
+    L['rahmen_y'] = (w('wagen_y') - w('rahmen_laenge') / 2.0,
+                     w('wagen_y') + w('rahmen_laenge') / 2.0)
+    L['xw_mitte'] = (L['xw_min'] + L['xw_max']) / 2.0
+    L['rh_x'] = (L['xw_mitte'] + w('traeger_x_links'),
+                 L['xw_mitte'] + w('traeger_x_rechts'))
+    L['ritzel_fuss_d'] = w('ritzel_teilkreis') - 2.0 * L['riemen_innen']
     return L
 
 
@@ -468,12 +509,21 @@ def lage():
 #   3. Bleibt die Dichte daneben, landet das als Zeile im Bericht statt
 #      stillschweigend falsche Massen zu melden.
 
-ZIELDICHTE = {'PLA': 1.24, 'PETG': 1.27}        # g/cm3
+ZIELDICHTE = {'PLA': 1.24, 'PETG': 1.27,        # g/cm3
+              'Gummi': 1.25}                   # nur die Riemen der Referenz
 # Kandidaten fuer das Basismaterial, aus dem kopiert wird (Reihenfolge = Vorzug)
 BASIS_KANDIDATEN = ('ABS Plastic', 'ABS', 'ABS-Kunststoff', 'Nylon',
                     'Polycarbonate', 'Polyethylene', 'Polypropylene',
                     'Kunststoff', 'Plastic')
 DICHTE_PROPERTY = ('Density', 'Dichte')
+# Bibliotheksmaterialien der Referenzteile: Namen sind je nach Installation
+# lokalisiert, deshalb Ausweichnamen (erst exakt, dann als Teilstring —
+# jede Aluminium- bzw. Stahlsorte taugt fuer eine Ansicht).
+BIBLIOTHEK_KANDIDATEN = {
+    'Aluminum 6061': ('Aluminum 6061', 'Aluminium 6061', 'Aluminum',
+                      'Aluminium'),
+    'Steel': ('Steel', 'Stahl'),
+}
 
 
 def _dichte(ziel):
@@ -525,7 +575,8 @@ def material_zuweisen(app, design, ziel, name, fehler=None):
             basis = (_bibliotheksmaterial(app, BASIS_KANDIDATEN)
                      or _irgendein_material(app))
         else:
-            basis = _bibliotheksmaterial(app, (name,))
+            basis = _bibliotheksmaterial(
+                app, BIBLIOTHEK_KANDIDATEN.get(name, (name,)))
         mat = design.materials.addByCopy(basis, name) if basis else None
     if not mat:
         if fehler is not None:
@@ -573,6 +624,8 @@ def validierungs_bericht(app, design, ui, hinweise=None):
                       (bb.maxPoint.z - bb.minPoint.z) * 10)
                 praefix = '' if comps.count == 1 else comp.name + ' > '
                 status = '' if b.isLightBulbOn else '  [ausgeblendet]'
+                if comp.name.startswith('Ref_'):
+                    status += '  [Referenz, nicht drucken]'
                 # Material und Dichte mit ausgeben: eine fehlgeschlagene
                 # Materialzuweisung faellt sonst nur ueber eine unplausibel
                 # grosse Masse auf.
@@ -865,6 +918,62 @@ def langloch_x(sk, xa, xe, y, breite):
     kreis(sk, xa, y, breite)
     kreis(sk, xe, y, breite)
     rechteck(sk, min(xa, xe), y - r, max(xa, xe), y + r)
+
+
+def prismen(comp, name, achse, rechtecke, a0, a1, art, ziel=None):
+    """Rechtecke (u0, v0, u1, v1) quer zu `achse`, entlang `achse` von a0
+    bis a1 — symmetrisch um die Mitte extrudiert, unabhaengig von der
+    Richtung der Ebenennormale. u, v wie bei bohrung: fuer 'y' (X, Z),
+    fuer 'x' (Y, Z), fuer 'z' (X, Y)."""
+    m = (a0 + a1) / 2.0
+    sk = skizze(comp, _ebene(comp, achse, m, 'E_{}_{}{:.1f}'.format(
+        comp.name, achse.upper(), m)), 'Sk_' + name)
+    for u0, v0, u1, v1 in rechtecke:
+        rechteck(sk, u0, v0, u1, v1)
+    return _symmetrisch(comp, alle_profile(sk), abs(a1 - a0), _op(art), ziel)
+
+
+def zylinder(comp, name, achse, mitte, d, a0, a1, art, ziel=None):
+    """Zylinder Ø d entlang `achse` von a0 bis a1; mitte in der Ebene wie
+    bei bohrung."""
+    m = (a0 + a1) / 2.0
+    sk = skizze(comp, _ebene(comp, achse, m, 'E_{}_{}{:.1f}'.format(
+        comp.name, achse.upper(), m)), 'Sk_' + name)
+    kreis(sk, mitte[0], mitte[1], d)
+    return _symmetrisch(comp, groesstes_profil(sk), abs(a1 - a0), _op(art),
+                        ziel)
+
+
+# Farbe fuer die Riemen der Referenz. Namen der Bibliothek sind lokalisiert,
+# deshalb mehrere Kandidaten; findet sich keiner, bleibt die Optik des
+# Materials. Wird in run() geleert (gehoert zum Dokument).
+SCHWARZ = ('Rubber - Black', 'Gummi - schwarz', '(Black)', '(Schwarz)')
+_AUSSEHEN = {}
+
+
+def aussehen(app, design, koerper, kandidaten):
+    """Appearance aus der Bibliothek zuweisen — nur Optik, scheitert still."""
+    try:
+        if kandidaten not in _AUSSEHEN:
+            _AUSSEHEN[kandidaten] = None
+            libs = app.materialLibraries
+            for kand in kandidaten:
+                for j in range(libs.count):
+                    aps = libs.item(j).appearances
+                    for i in range(aps.count):
+                        a = aps.item(i)
+                        if kand.lower() in a.name.lower():
+                            _AUSSEHEN[kandidaten] = \
+                                design.appearances.addByCopy(a, a.name)
+                            break
+                    if _AUSSEHEN[kandidaten]:
+                        break
+                if _AUSSEHEN[kandidaten]:
+                    break
+        if _AUSSEHEN[kandidaten]:
+            koerper.appearance = _AUSSEHEN[kandidaten]
+    except:
+        pass
 
 
 def seite(s):
@@ -1160,6 +1269,196 @@ def bau_bohrlehren(app, design, comp, L, fehler):
     lehre.isLightBulbOn = False
 
 
+# --- Referenz (nicht drucken) --------------------------------------------------
+def bau_profil(comp, name, laengs, bereich, quer, z):
+    """Aluprofil als Referenz, V-Slot vereinfacht: an jeder 20er-Teilung
+    aller vier Seiten eine Nut (Oeffnung nut_b, dahinter die breitere
+    Kammer), in jeder Zelle die Kernbohrung. laengs: 'x' oder 'y';
+    bereich: laengs, quer: waagerecht quer dazu, z: senkrecht (mm)."""
+    b = w('rahmen_b')                           # 20er Raster
+    if laengs == 'y':
+        k = quader(comp, name, quer, bereich, z, 'neu').bodies.item(0)
+    else:
+        k = quader(comp, name, bereich, quer, z, 'neu').bodies.item(0)
+    k.name = name
+    (q0, q1), (z0, z1) = quer, z
+    qm = [q0 + b / 2.0 + i * b for i in range(int(round((q1 - q0) / b)))]
+    zm = [z0 + b / 2.0 + i * b for i in range(int(round((z1 - z0) / b)))]
+    r = []
+    for breite, t0, t1 in ((w('nut_b'), -1.0, w('nut_t')),
+                           (w('nut_kammer_b'), w('nut_t'),
+                            w('nut_kammer_t'))):
+        h = breite / 2.0
+        for m in qm:                            # oben und unten
+            r.append((m - h, z1 - t1, m + h, z1 - t0))
+            r.append((m - h, z0 + t0, m + h, z0 + t1))
+        for m in zm:                            # beide Seiten
+            r.append((q0 + t0, m - h, q0 + t1, m + h))
+            r.append((q1 - t1, m - h, q1 - t0, m + h))
+    prismen(comp, 'Nuten_' + name, laengs, r, bereich[0] - 1.0,
+            bereich[1] + 1.0, 'weg', k)
+    bohrung(comp, 'Kern_' + name, laengs, [(a, c) for a in qm for c in zm],
+            w('kern_d'), bereich[0] - 1.0, bereich[1] + 1.0, k)
+    return k
+
+
+def bau_referenz(app, design, teile, L, fehler):
+    """Kaufteile und Riemen, nur zur Ansicht — NICHT drucken. teile: die
+    Komponenten Ref_Profile, Ref_Fuehrungen, Ref_Riemen, Ref_Antrieb.
+
+    Der Rahmen liegt mittig unter dem Y-Wagen, der Toolhead (hier nur X-Wagen
+    und Riemenhalter) steht in der Mitte des X-Wegs, die Umlenkrolle in der
+    Mitte ihres Spannwegs. Nicht gezeichnet: die Ritzel an den Y-Enden und
+    die 2060 unter den 2040 — ihre Lage ist nicht bekannt."""
+    d = w('riemen_dicke')
+    xp, xu, yc = L['x_motor'], L['x_rolle'], L['xr_yc']
+
+    def fertig(k, name, erwartet, material, farbe=None):
+        k.name = name
+        bbox_pruefen(k, name.replace('_', ' '), erwartet, fehler)
+        material_zuweisen(app, design, k, material, fehler)
+        if farbe:
+            aussehen(app, design, k, farbe)
+        return k
+
+    # ---- Aluprofile ----------------------------------------------------------
+    c = teile['Ref_Profile']
+    rohr = ((-w('profil_laenge') / 2.0, w('profil_laenge') / 2.0),
+            (L['profil_y0'], L['portal_y']), (L['profil_z0'], L['profil_z1']))
+    fertig(bau_profil(c, 'Portalrohr_2020', 'x', rohr[0], rohr[1], rohr[2]),
+           'Portalrohr_2020', rohr, 'Aluminum 6061')
+    for s in (-1, 1):
+        n = seite(s)
+        quer = xb(L, s, -w('rahmen_b') / 2.0, w('rahmen_b') / 2.0)
+        zr = (L['rahmen_z0'], L['rahmen_z1'])
+        fertig(bau_profil(c, 'Rahmen_2040_' + n, 'y', L['rahmen_y'], quer,
+                          zr),
+               'Rahmen_2040_' + n, (quer, L['rahmen_y'], zr), 'Aluminum 6061')
+
+    # ---- Linearfuehrungen: Schienen und Wagen (mit Kanal fuer die Schiene) --
+    c = teile['Ref_Fuehrungen']
+    for s in (-1, 1):
+        n = seite(s)
+        xsch = xb(L, s, -w('y_schiene_b') / 2.0, w('y_schiene_b') / 2.0)
+        zsch = (L['y_schiene_z0'], L['y_schiene_z1'])
+        k = quader(c, 'Y-Schiene_' + n, xsch, L['rahmen_y'], zsch,
+                   'neu').bodies.item(0)
+        fertig(k, 'Y-Schiene_' + n, (xsch, L['rahmen_y'], zsch), 'Steel')
+        xwg = xb(L, s, -w('y_wagen_breite') / 2.0, w('y_wagen_breite') / 2.0)
+        ywg = (L['wagen_y0'], L['wagen_y1'])
+        zwg = (L['y_wagen_z0'], L['y_wagen_z1'])
+        k = quader(c, 'Y-Wagen_' + n, xwg, ywg, zwg, 'neu').bodies.item(0)
+        quader(c, 'Y-Wagen_Kanal_' + n, xsch, (ywg[0] - 1.0, ywg[1] + 1.0),
+               (zwg[0] - 1.0, zsch[1]), 'weg', k)
+        fertig(k, 'Y-Wagen_' + n, (xwg, ywg, zwg), 'Steel')
+    zsch = (-w('x_schiene_b') / 2.0, w('x_schiene_b') / 2.0)
+    ysch = (L['portal_y'], L['x_schiene_y1'])
+    k = quader(c, 'X-Schiene', L['x_schiene_x'], ysch, zsch,
+               'neu').bodies.item(0)
+    fertig(k, 'X-Schiene', (L['x_schiene_x'], ysch, zsch), 'Steel')
+    xwg = (L['xw_mitte'] - w('x_wagen_laenge') / 2.0,
+           L['xw_mitte'] + w('x_wagen_laenge') / 2.0)
+    ywg = (L['portal_y'] + w('x_wagen_boden'), 0.0)
+    zwg = (-w('x_wagen_breite') / 2.0, w('x_wagen_breite') / 2.0)
+    k = quader(c, 'X-Wagen', xwg, ywg, zwg, 'neu').bodies.item(0)
+    quader(c, 'X-Wagen_Kanal', (xwg[0] - 1.0, xwg[1] + 1.0),
+           (ywg[0] - 1.0, ysch[1]), zsch, 'weg', k)
+    fertig(k, 'X-Wagen', (xwg, ywg, zwg), 'Steel')
+
+    # ---- Riemen ----------------------------------------------------------------
+    c = teile['Ref_Riemen']
+    # X-Riemen: eine Schleife um Ritzel und Umlenkrolle, beide Enden im
+    # Riemenhalter. Zaehne innen, Wirklinie auf dem Teilkreis.
+    rw = w('ritzel_teilkreis') / 2.0
+    ra, ri = rw + L['riemen_aussen'], rw - L['riemen_innen']
+    x0, x1 = L['rh_x']
+    sk = skizze(c, _ebene(c, 'z', L['xr_zm'], 'E_Ref_X-Riemen'),
+                'Sk_X-Riemen')
+    zug = [((x0, yc + ra), (xp, yc + ra)),
+           ((xp, yc + ra), (xp - ra, yc), (xp, yc - ra)),
+           ((xp, yc - ra), (xu, yc - ra)),
+           ((xu, yc - ra), (xu + ra, yc), (xu, yc + ra)),
+           ((xu, yc + ra), (x1, yc + ra)),
+           ((x1, yc + ra), (x1, yc + ri)),
+           ((x1, yc + ri), (xu, yc + ri)),
+           ((xu, yc + ri), (xu + ri, yc), (xu, yc - ri)),
+           ((xu, yc - ri), (xp, yc - ri)),
+           ((xp, yc - ri), (xp - ri, yc), (xp, yc + ri)),
+           ((xp, yc + ri), (x0, yc + ri)),
+           ((x0, yc + ri), (x0, yc + ra))]
+    for pkt in zug:
+        pp = [punkt(sk, u, v) for u, v in pkt]
+        if len(pp) == 2:
+            sk.sketchCurves.sketchLines.addByTwoPoints(*pp)
+        else:
+            sk.sketchCurves.sketchArcs.addByThreePoints(*pp)
+    k = neu_mittig(c, groesstes_profil(sk), w('riemen_breite')).bodies.item(0)
+    fertig(k, 'X-Riemen', ((xp - ra, xu + ra), (yc - ra, yc + ra),
+                           (L['xr_z0'], L['xr_z1'])), 'Gummi', SCHWARZ)
+    # Y-Riemen je Seite: zwei Enden in den Klemmtuermen, der Ruecklauf in
+    # der oberen Nut des 2040
+    zy = (L['yr_z0'], L['yr_z1'])
+    for s in (-1, 1):
+        n = seite(s)
+        xr = xb(L, s, w('y_riemen_linie') - d / 2.0,
+                w('y_riemen_linie') + d / 2.0)
+        for name, yr in (('Y-Riemen_vorn_' + n,
+                          (L['kt_y_vorn'][0] + 1.0, L['rahmen_y'][1])),
+                         ('Y-Riemen_hinten_' + n,
+                          (L['rahmen_y'][0], L['kt_y_hinten'][1] - 1.0))):
+            k = quader(c, name, xr, yr, zy, 'neu').bodies.item(0)
+            fertig(k, name, (xr, yr, zy), 'Gummi', SCHWARZ)
+        xr = xb(L, s, L['yr_rueck_u'] - d / 2.0, L['yr_rueck_u'] + d / 2.0)
+        k = quader(c, 'Y-Ruecklauf_' + n, xr, L['rahmen_y'], L['yr_rueck_z'],
+                   'neu').bodies.item(0)
+        fertig(k, 'Y-Ruecklauf_' + n, (xr, L['rahmen_y'], L['yr_rueck_z']),
+               'Gummi', SCHWARZ)
+
+    # ---- X-Antrieb: Motor, Ritzel, Umlenkrolle, Riemenhalter -----------------
+    c = teile['Ref_Antrieb']
+    fl = w('motor_flansch') / 2.0
+    mx, my = (xp - fl, xp + fl), (yc - fl, yc + fl)
+    k = quader(c, 'NEMA17_X', mx, my, (L['mp_z1'], L['motor_z1']),
+               'neu').bodies.item(0)
+    zylinder(c, 'NEMA17_Bund', 'z', (xp, yc), w('motor_bund_d'),
+             L['bund_z0'], L['mp_z1'], 'dazu', k)
+    zylinder(c, 'NEMA17_Welle', 'z', (xp, yc), w('motor_welle_d'),
+             L['welle_z0'], L['bund_z0'], 'dazu', k)
+    fertig(k, 'NEMA17_X', (mx, my, (L['welle_z0'], L['motor_z1'])), 'Steel')
+    bo, sp, rf = w('ritzel_bord'), w('ritzel_spur'), w('ritzel_flansch_d')
+    z0 = L['ritzel_z0']
+    k = zylinder(c, 'Ritzel_X', 'z', (xp, yc), rf, z0, z0 + bo,
+                 'neu').bodies.item(0)
+    zylinder(c, 'Ritzel_Spur', 'z', (xp, yc), L['ritzel_fuss_d'], z0 + bo,
+             z0 + bo + sp, 'dazu', k)
+    zylinder(c, 'Ritzel_Bord', 'z', (xp, yc), rf, z0 + bo + sp,
+             L['ritzel_nabe_z0'], 'dazu', k)
+    zylinder(c, 'Ritzel_Nabe', 'z', (xp, yc), w('ritzel_nabe_d'),
+             L['ritzel_nabe_z0'], L['ritzel_z1'], 'dazu', k)
+    bohrung(c, 'Ritzel_Bohrung', 'z', [(xp, yc)], w('motor_welle_d'),
+            z0 - 1.0, L['ritzel_z1'] + 1.0, k)
+    fertig(k, 'Ritzel_X', ((xp - rf / 2.0, xp + rf / 2.0),
+                           (yc - rf / 2.0, yc + rf / 2.0),
+                           (z0, L['ritzel_z1'])), 'Aluminum 6061')
+    rz0, rz1, rd = L['rolle_z0'], L['rolle_z1'], w('rolle_d')
+    k = zylinder(c, 'Umlenkrolle_X', 'z', (xu, yc), rd, rz0, rz0 + bo,
+                 'neu').bodies.item(0)
+    zylinder(c, 'Rolle_Spur', 'z', (xu, yc), L['ritzel_fuss_d'], rz0 + bo,
+             rz1 - bo, 'dazu', k)
+    zylinder(c, 'Rolle_Bord', 'z', (xu, yc), rd, rz1 - bo, rz1, 'dazu', k)
+    bohrung(c, 'Rolle_Bohrung', 'z', [(xu, yc)], w('rolle_bohrung'),
+            rz0 - 1.0, rz1 + 1.0, k)
+    fertig(k, 'Umlenkrolle_X', ((xu - rd / 2.0, xu + rd / 2.0),
+                                (yc - rd / 2.0, yc + rd / 2.0), (rz0, rz1)),
+           'Aluminum 6061')
+    yrh = (-w('rh_tiefe'), 0.0)
+    zrh = (w('x_wagen_breite') / 2.0, w('x_wagen_breite') / 2.0
+           + w('rh_hoehe'))
+    k = quader(c, 'Riemenhalter_Toolhead', L['rh_x'], yrh, zrh,
+               'neu').bodies.item(0)
+    fertig(k, 'Riemenhalter_Toolhead', (L['rh_x'], yrh, zrh), 'PETG')
+
+
 def hinweise_bauen(L, fehler):
     """Hinweiszeilen des Validierungsberichts. Modulebene, damit der Block
     ohne Fusion getestet werden kann (tools/portal_check.py)."""
@@ -1307,6 +1606,26 @@ def hinweise_bauen(L, fehler):
         .format(L['mp_z1'] - L['profil_z1'] - 1.0),
         '    Rohr.',
         '',
+        'REFERENZ (Komponente Referenz_nicht_drucken): nur zur Ansicht,',
+        '  NICHT drucken und beim Export weglassen. Eine Gluehbirne blendet',
+        '  alles aus.',
+        '  Profile: Portalrohr 2020 und beide 2040, V-Slot vereinfacht. Die',
+        '    2040 sind {:.0f} mm lang angenommen [?], mittig unter dem Y-Wagen.'
+        .format(w('rahmen_laenge')),
+        '    Die 2060 darunter fehlen (Lage nicht bekannt).',
+        '  Fuehrungen: MGN12 mit MGN12H, MGN15 mit MGN15H. Vom Toolhead nur',
+        '    X-Wagen und Riemenhalter, in der Mitte des X-Wegs.',
+        '  X-Riemen: Schleife um Ritzel und Umlenkrolle, beide Enden im',
+        '    Riemenhalter.',
+        '  Y-Riemen: je Seite zwei Enden in den Klemmtuermen, der Ruecklauf',
+        '    mittig in der oberen Nut des 2040 (Z {:+.1f} bis {:+.1f}). Die'
+        .format(*L['yr_rueck_z']),
+        '    Klemme haelt den Riemen {:.1f} mm tiefer (wie v8), zu den Ritzeln'
+        .format(L['nut_z'] - (L['yr_z0'] + L['yr_z1']) / 2.0),
+        '    an den Y-Enden hin gleicht er das aus. Diese Ritzel fehlen.',
+        '  Ritzel und Rolle sind am Fuss der Verzahnung gezeichnet, die',
+        '    Massen der Referenzteile stimmen nur grob.',
+        '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
         '  Lagen rechnet lage() in Python — nach einer Parameteraenderung das',
         '  Skript neu laufen lassen und tools/portal_check.py ausfuehren.',
@@ -1323,6 +1642,7 @@ def run(context):
         app = adsk.core.Application.get()
         ui = app.userInterface
         _EBENEN.clear()
+        _AUSSEHEN.clear()
 
         doc = app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
         try:
@@ -1374,6 +1694,19 @@ def run(context):
 
         for o in occ.values():
             o.isGrounded = True
+
+        # Referenz: eine Komponente, darunter die Gruppen — eine Gluehbirne
+        # blendet alles aus, was nicht gedruckt wird
+        ref = root.occurrences.addNewComponent(einheit)
+        ref.component.name = 'Referenz_nicht_drucken'
+        teile = {}
+        for name in ('Ref_Profile', 'Ref_Fuehrungen', 'Ref_Riemen',
+                     'Ref_Antrieb'):
+            o = ref.component.occurrences.addNewComponent(einheit)
+            o.component.name = name
+            teile[name] = o.component
+        bau_referenz(app, design, teile, L, fehler)
+        ref.isGrounded = True
 
         if design.snapshots.hasPendingSnapshot:
             design.snapshots.add()

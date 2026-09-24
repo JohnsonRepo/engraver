@@ -43,7 +43,9 @@ def main():
     for name in ('x_riemen_y', 'x_riemen_z0', 'riemen_breite', 'riemen_dicke',
                  'riemen_zahn_h', 'riemen_pld', 'klemm_schlitz', 'klemm_rippe',
                  'klemm_rippe_b', 'klemm_stift_d', 'x_wagen_laenge',
-                 'x_wagen_breite', 'x_wagen_hoehe', 'insert_m3_d'):
+                 'x_wagen_breite', 'x_wagen_hoehe', 'insert_m3_d',
+                 'traeger_x_links', 'traeger_x_rechts', 'rh_tiefe',
+                 'rh_hoehe'):
         p.ja('{} gleich in beiden Skripten'.format(name),
              abs(tw(name) - w(name)) < 1e-9,
              '   ({} / {})'.format(tw(name), w(name)))
@@ -281,6 +283,16 @@ def main():
            L['rahmen_z1'] - L['yr_z1'])
     p.info('Riemen: Unterkante unter der Oberkante des 2040',
            L['rahmen_z1'] - L['yr_z0'])
+    # Ruecklauf mittig in der oberen Seitennut: er muss in die Oeffnung
+    # passen, in der Hoehe wie in der Tiefe
+    p.ok('Ruecklauf passt in die Nutoeffnung (Hoehe)',
+         w('nut_b') / 2 - (abs((L['yr_rueck_z'][0] + L['yr_rueck_z'][1]) / 2
+                               - L['nut_z']) + w('riemen_breite') / 2), 0.05)
+    p.ok('Ruecklauf steckt nicht tiefer als die Nutoeffnung',
+         (L['yr_rueck_u'] - w('riemen_dicke') / 2)
+         - (L['rahmen_flanke_u'] - w('nut_t')), 0.0)
+    p.info('Klemme haelt den Riemen tiefer als die Nutmitte',
+           L['nut_z'] - (L['yr_z0'] + L['yr_z1']) / 2)
 
     # ------------------------------------------------------------------
     p.titel('7) Schlitten: Waende, Schrauben, Wagen')

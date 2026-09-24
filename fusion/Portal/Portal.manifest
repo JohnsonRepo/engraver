@@ -3,7 +3,7 @@
     "type": "script",
     "author": "Johnson",
     "description": {
-        "": "Y-Schlitten des Portals als Baugruppe: Riemenklemmenschlitten fuer MGN12H (20 x 20) links und rechts, die das 2020-Portalrohr unten tragen und hinten sowie an der Stirn verschrauben (Vorderseite frei fuer die MGN15-Schiene). Darunter je zwei gleiche Y-Klemmtuerme wie in v8 (Rippen, Querstift unter dem Riemen). Links der Motorhalter fuer den X-NEMA-17 (duenne Platte, die 20-mm-Welle traegt das ganze Ritzel), rechts der Umlenkhalter mit 20-Z-Rolle und Spannklotz (M3 von aussen). Plus ausgeblendete Bohrlehre fuer den Y-Wagen."
+        "": "Y-Schlitten des Portals als Baugruppe: Riemenklemmenschlitten fuer MGN12H (20 x 20) links und rechts, die das 2020-Portalrohr unten tragen und hinten sowie an der Stirn verschrauben (Vorderseite frei fuer die MGN15-Schiene). Darunter je zwei gleiche Y-Klemmtuerme wie in v8 (Rippen, Querstift unter dem Riemen). Links der Motorhalter fuer den X-NEMA-17 (duenne Platte, die 20-mm-Welle traegt das ganze Ritzel), rechts der Umlenkhalter mit 20-Z-Rolle und Spannklotz (M3 von aussen). Plus ausgeblendete Bohrlehre fuer den Y-Wagen und, nur zur Ansicht, Aluprofile, Linearfuehrungen, Riemen und X-Motor als Referenz (nicht drucken)."
     },
     "supportedOS": "windows|mac",
     "editEnabled": true

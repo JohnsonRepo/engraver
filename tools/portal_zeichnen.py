@@ -2,7 +2,7 @@
 """Zeichnung des Portals: Y-Schlitten, X-Antrieb und beide Spanner.
 
 Draufsicht auf beide Portalenden mit dem Toolhead am Ende des X-Wegs,
-Schnitt durch den Riemenblock (Y-Spanner), Schnitte durch Umlenkung und
+Schnitt durch die Y-Klemmtuerme (Spanner), Schnitte durch Umlenkung und
 Motorhalter. Alle Masse kommen aus Portal.py und ToolheadZ.py; die
 Zeichnung ist massstaeblich und wandert mit den Parametern.
 
@@ -170,20 +170,21 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
     xu = lambda u: s * (R - u)
     t = []
     gestr = {'stroke_dasharray': '4 3', 'fill_opacity': '0.35'}
-    # Rahmen, Schiene, Wagen, Riemenblock: unter der Platte
+    # Rahmen, Schiene, Wagen, Klemmtuerme: unter der Platte
     for u0, u1, art in ((-w('rahmen_b') / 2, w('rahmen_b') / 2, 'profil'),
                         (-w('y_schiene_b') / 2, w('y_schiene_b') / 2,
                          'fuehrung')):
         t.append(f.rect(xu(u0), xu(u1), f.b[0] - 5, f.b[1] + 5, art, **gestr))
     t.append(f.rect(xu(-w('y_wagen_breite') / 2), xu(w('y_wagen_breite') / 2),
                     L['wagen_y0'], L['wagen_y1'], 'fuehrung', **gestr))
-    t.append(f.rect(xu(L['rb_u'][0]), xu(L['rb_u'][1]), *L['rb_y'], 'neu',
-                    stroke_dasharray='4 3', fill_opacity='0.3'))
+    for tu, ty in ((L['st_u'], L['st_y']), (L['kt_u'], L['kt_y'])):
+        t.append(f.rect(xu(tu[0]), xu(tu[1]), *ty, 'neu',
+                        stroke_dasharray='4 3', fill_opacity='0.3'))
     # Y-Riemen (unter der Platte): zwei Enden, je eine Klemme — hinten im
     # Spannschieber, vorn in der festen Klemme. Der Ruecklauf laeuft in der
     # oberen Nut des 2040.
     enden = ((f.b[0] - 5, L['sch_y'][1] - 1.0),
-             (L['luecke_y'][0] + 1.0, f.b[1] + 5))
+             (L['kt_y'][0] + 1.0, f.b[1] + 5))
     for y0, y1 in enden:
         t.append(f.linie(xu(w('y_riemen_linie')), y0,
                          xu(w('y_riemen_linie')), y1, RIEMEN, 2.0, '7 3'))
@@ -195,12 +196,13 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
     for (u0, u1), (y0, y1) in ((L['rueck_u'], (L['rueck_y0'], L['rueck_y1'])),
                                (L['stirn_u'], L['stirn_y'])):
         t.append(f.rect(xu(u0), xu(u1), y0, y1, 'neu', fill='#efbf91'))
-    for u, y in L['wagen_loecher'] + L['rb_schrauben']:
+    for u, y in L['wagen_loecher'] + L['st_schrauben'] + L['kt_schrauben']:
         t.append(f.kreis(xu(u), y, w('m3_senkung') / 2, 'neu',
                          fill='#ffffff'))
-    # verdeckt unter der Platte: Innenkante des Riemenblocks, Y-Riemen
-    t.append(f.linie(xu(L['rb_u'][0]), L['rb_y'][0], xu(L['rb_u'][0]),
-                     L['rb_y'][1], ORANGE, 0.8, '4 3'))
+    # verdeckt unter der Platte: Kanten der Klemmtuerme, Y-Riemen
+    for tu, ty in ((L['st_u'], L['st_y']), (L['kt_u'], L['kt_y'])):
+        t.append(f.rect(xu(tu[0]), xu(tu[1]), *ty, 'neu', fill='none',
+                        stroke_dasharray='4 3'))
     for y0, y1 in enden:
         y0, y1 = max(y0, L['platte_y0']), min(y1, L['platte_y1'])
         t.append(f.linie(xu(w('y_riemen_linie')), y0,
@@ -284,15 +286,20 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
                          L['xr_yc'], '#4a4f57', 2.0))
         for u, y in L['halter_schrauben']:
             t.append(f.kreis(xu(u), y, 2.75, 'stahl'))
+    # Der Klemmturm liegt unter Motor- bzw. Umlenkhalter: Umriss obendrauf
+    t.append(f.rect(xu(L['kt_u'][0]), xu(L['kt_u'][1]), *L['kt_y'], 'neu',
+                    fill='none', stroke_dasharray='3 2'))
     return t
 
 
-# ---- Schnitt durch den Riemenblock (Y-Spanner) ---------------------------
-def schnitt_riemenblock(f, w, L):
+# ---- Schnitt durch die Y-Klemmtuerme --------------------------------------
+def schnitt_tuerme(f, w, L):
     """Schnitt in der Mitte des Klemmschlitzes, rechte Seite, Blick von der
-    Maschinenmitte nach aussen: vorn rechts. Was naeher an der Schiene
+    Maschinenmitte nach aussen: vorn rechts. Hinten der Spannturm mit dem
+    Spannschieber, vorn der feste Klemmturm. Was naeher an der Schiene
     liegt (Rippen, Wagen, Schiene, Rahmen), ist hell dahinter gezeichnet.
-    Erst der volle Block, dann die Hohlraeume weiss, dann was darin sitzt."""
+    Erst die vollen Tuerme, dann die Hohlraeume weiss, dann was darin
+    sitzt."""
     t = []
     lang = (f.a[0] - 5, f.a[1] + 5)
     weiss = {'fill': '#ffffff', 'stroke': 'none'}
@@ -310,27 +317,28 @@ def schnitt_riemenblock(f, w, L):
                     L['wand_z1'], 'neu'))
     t.append(f.rect(L['profil_y0'], L['portal_y'], L['profil_z0'],
                     L['profil_z1'], 'profil'))
-    # Riemenblock voll, dann die Hohlraeume
-    rb0, rb1 = L['rb_y']
-    z0, z1 = L['rb_z']
-    t.append(f.rect(rb0, rb1, z0, z1, 'neu'))
-    t.append(f.rect(rb0 - 1, L['kanal_y'][1], *L['kanal_z'], 'neu', **weiss))
-    t.append(f.rect(L['luecke_y'][0], rb1 + 1, z0 - 1, L['yr_decke_z'], 'neu',
-                    **weiss))
+    # Spannturm voll, dann Kanal, Mutterntasche und Schraubenbohrung
+    s0, s1 = L['st_y']
+    sz0, sz1 = L['st_z']
+    t.append(f.rect(s0, s1, sz0, sz1, 'neu'))
+    t.append(f.rect(s0 - 1, L['kanal_y'][1], *L['kanal_z'], 'neu', **weiss))
     dick = w('m3_mutter_h') + 0.3
     t.append(f.rect(L['mutter_y'] - dick / 2, L['mutter_y'] + dick / 2,
-                    L['druck_z'] - 2.8, z1, 'neu', **weiss))
-    t.append(f.rect(L['anschlag_y'][0], rb1 + 1, L['druck_z'] - 1.7,
+                    L['druck_z'] - 2.8, sz1, 'neu', **weiss))
+    t.append(f.rect(L['anschlag_y'][0], s1 + 1, L['druck_z'] - 1.7,
                     L['druck_z'] + 1.7, 'neu', **weiss))
-    # Umriss der Hohlraeume nachziehen (die weissen Flaechen haben keinen)
-    for y0, y1, za, zb in ((rb0, L['kanal_y'][1], *L['kanal_z']),
-                           (L['luecke_y'][0], rb1, z0, L['yr_decke_z'])):
-        t.append(f.rect(y0, y1, za, zb, 'neu', fill='none'))
-    # Rippen der festen Klemme: dahinter, an der Schlitzwand zur Schiene
-    for y in L['rb_rippen_y']:
-        t.append(f.rect(y, y + w('klemm_rippe_b'), L['yr_z0'] - 1.0,
-                        L['yr_decke_z'], 'hinten', fill='#f1d9c2',
-                        stroke='#d9a67c', stroke_width='0.5'))
+    t.append(f.rect(s0, L['kanal_y'][1], *L['kanal_z'], 'neu', fill='none'))
+    # Klemmturm: nur das Dach ueber dem Schlitz ist geschnitten, darunter
+    # die Wand zur Schiene mit den Rippen (dahinter)
+    k0, k1 = L['kt_y']
+    kz0, kz1 = L['kt_z']
+    t.append(f.rect(k0, k1, kz0, L['yr_decke_z'], 'neu', fill='#f1d9c2',
+                    stroke='#d9a67c'))
+    for y in L['kt_rippen_y']:
+        t.append(f.rect(y, y + w('klemm_rippe_b'), kz0, L['yr_decke_z'],
+                        'hinten', fill='#e8c19c', stroke='#d9a67c',
+                        stroke_width='0.5'))
+    t.append(f.rect(k0, k1, L['yr_decke_z'], kz1, 'neu'))
     # Spannschieber in der Mitte seines Wegs: Waende und Rippen hinter der
     # Ebene hell, nur das Dach ueber dem Schlitz ist geschnitten
     sy0, sy1 = L['sch_y']
@@ -343,16 +351,13 @@ def schnitt_riemenblock(f, w, L):
     t.append(f.rect(sy0, sy1, L['yr_decke_z'], L['sch_z'][1], 'neu'))
     t.append(f.rect(sy0, sy1, L['druck_z'] - 1.7, L['druck_z'] + 1.7, 'neu',
                     **weiss))
-    # Y-Riemen: hinteres Ende im Schieber, vorderes in der festen Klemme
-    for ya_, yb_ in ((f.a[0] - 5, sy1 - 1.0),
-                     (L['luecke_y'][0] + 1.0, f.a[1] + 5)):
+    # Y-Riemen: hinteres Ende im Schieber, vorderes im Klemmturm
+    for ya_, yb_ in ((f.a[0] - 5, sy1 - 1.0), (k0 + 1.0, f.a[1] + 5)):
         t.append(f.rect(ya_, yb_, L['yr_z0'], L['yr_z1'], 'riemen',
                         fill_opacity='0.9'))
-    # Stift unter dem vorderen Riemenende (M3x20 von vorn)
-    t.append(f.rect(L['klemme_y'][0], rb1, L['stift_z'] - 1.5,
-                    L['stift_z'] + 1.5, 'stahl'))
-    t.append(f.rect(rb1, rb1 + 2.0, L['stift_z'] - 2.75,
-                    L['stift_z'] + 2.75, 'stahl'))
+    # Querstift unter dem Riemen (geht quer durch den Klemmturm)
+    t.append(f.kreis(L['kt_stift_y'], L['stift_z'],
+                     w('klemm_stift_d') / 2 - 0.1, 'stahl'))
     # Druckschraube: Kopf hinten am Schieber, durch Schieber und Mutter
     t.append(f.rect(sy0 - 3.0, sy0, L['druck_z'] - 2.75,
                     L['druck_z'] + 2.75, 'stahl'))
@@ -517,7 +522,7 @@ def main():
 
     # ---- Reihe 1: Draufsichten, Beschriftung in Randspalten --------------
     s1 = 2.55
-    yb = (-95.0, 84.0)
+    yb = (-112.0, 84.0)
     fl_ = Feld(230, 92, (-R - 36, -R + 76), yb, s1, b_runter=True)
     fr_ = Feld(fl_.ox + fl_.breite + 36, 92, (R - 76, R + 36), yb, s1,
                b_runter=True)
@@ -530,8 +535,9 @@ def main():
     u_rw = (L['mp_u'][1] + L['rueck_u'][1]) / 2
     t += fl_.spalte([
         (xu(10, -1), -70, 'Y-Wagen MGN12H, 4× M3 von oben'),
-        (xu(26, -1), -63, 'Riemenblock: zwei Klemmen, vorn fest,\n'
-         'hinten Spannschieber (unter der Platte)'),
+        (xu(26, -1), -85, 'Spannturm hinten: Klemme mit\n'
+         'Spannschieber (unter der Platte)'),
+        (xu(19, -1), -21.5, 'Klemmturm vorn, fest\n(unter dem Motorhalter)'),
         (xu(w('y_riemen_linie'), -1), -90, 'Y-Riemen (zwei Enden)'),
         (xu(L['yr_rueck_u'], -1), -80, 'Y-Rücklauf in der oberen\n'
          'Nut des 2040'),
@@ -547,7 +553,8 @@ def main():
         fl_.ox - 12, 'end')
     t += fr_.spalte([
         (xu(-10, 1), -70, 'Y-Wagen MGN12H'),
-        (xu(26, 1), -63, 'Riemenblock: zwei Klemmen\n(unter der Platte)'),
+        (xu(26, 1), -85, 'Spannturm (hinten)'),
+        (xu(19, 1), -21.5, 'Klemmturm (vorn, fest)'),
         (xu(w('y_riemen_linie'), 1), -90, 'Y-Riemen'),
         (xu(0, 1), -38, 'Umlenkhalter'),
         # der Stirnblock schaut rechts neben der oberen Platte heraus
@@ -571,10 +578,10 @@ def main():
 
     # ---- Reihe 2: Schnitt A-A (Y-Spanner) und B-B (X-Umlenkung) ---------
     y2 = fl_.oy + fl_.hoehe + 78
-    s2 = 4.6
-    fc = Feld(60, y2, (-92.0, -8.0), (-58.0, 14.0), s2)
-    t += fc.ausschnitt('schnitt_rb', schnitt_riemenblock(fc, w, L))
-    t += fc.rahmen('Schnitt A–A: Y-Spanner im Riemenblock')
+    s2 = 3.9
+    fc = Feld(60, y2, (-112.0, -8.0), (-58.0, 14.0), s2)
+    t += fc.ausschnitt('schnitt_rb', schnitt_tuerme(fc, w, L))
+    t += fc.rahmen('Schnitt A–A: Y-Klemmtürme (vorn fest, hinten Spanner)')
     t.append(text(fc.ox, fc.oy + fc.hoehe + 14,
                   'rechte Seite, Mitte des Klemmschlitzes, Blick von der '
                   'Maschinenmitte; vorn rechts', 8.0, GRAU))
@@ -583,23 +590,27 @@ def main():
         (-26, 3, 'Portalrohr'),
         (-41, 3, 'Rückwand'),
         (-70, L['platte_z0'] + 3, 'Platte des Schlittens'),
-        (sm, L['sch_z'][1] - 2, 'Klemme 2 (hinten): Spannschieber'),
+        (sm, L['sch_z'][1] - 2, 'Spannschieber'),
         (L['sch_y'][0] - 1.5, L['druck_z'] + 1.0,
          'Druckschraube M3×{}: Kopf hinten\nam Schieber, drückt ihn nach vorn'
          .format(de(L['druck_schraube'], 0))),
         (L['mutter_y'], L['druck_z'] + 2.2, 'Mutter im Anschlag, von oben '
          'eingelegt'),
-        (-24, L['yr_z0'] + 3, 'Klemme 1 (vorn, fest): die Rippen\n'
-         'greifen in die Zähne'),
-        (-20.5, L['stift_z'], 'Stift Ø3 unter dem Riemen'),
+        (L['kt_rippen_y'][-2] + 0.5, L['yr_z0'] + 3,
+         'Rippen an der Wand zur Schiene\n(dahinter), greifen in die Zähne'),
+        (L['kt_stift_y'], L['stift_z'], 'Querstift Ø3×{} unter dem Riemen'
+         .format(de(L['kt_stift_l'], 0))),
+        (L['kt_stift_y'], L['kt_z'][1] - 5, 'Klemmturm vorn (fest)'),
         (-13, (L['y_schiene_z0'] + L['y_schiene_z1']) / 2,
          'Y-Schiene und Rahmen\n(dahinter)'),
-        (L['sch_y'][1] - 6.0, L['rb_z'][0] + 2.5, 'Riemenblock')],
+        (L['st_y'][0] + 4.0, L['st_z'][0] + 2.5,
+         'Spannturm hinten (mit Spanner)')],
         fc.ox + fc.breite + 12, 'start', abstand=24.0,
         unten=fc.oy + fc.hoehe + 16)
-    xa, ya = fc.px(-88.0, L['yr_z1'])
-    _, yo = fc.px(-88.0, L['platte_z1'] + 3.0)
-    t += fc.zeiger(-88.0, L['yr_z1'] - 1.0, 0.0, yo - ya, 'Y-Riemen hinten, '
+    ah = L['st_y'][0] - 6.0
+    xa, ya = fc.px(ah, L['yr_z1'])
+    _, yo = fc.px(ah, L['platte_z1'] + 3.0)
+    t += fc.zeiger(ah, L['yr_z1'] - 1.0, 0.0, yo - ya, 'Y-Riemen hinten, '
                    'zum Ritzel')
     x0, y0 = fc.px(L['sch_y'][1] + 1.0, L['sch_z'][0] - 3.0)
     t += [linie(x0, y0, x0 + 26, y0, ORANGE, 1.4),
@@ -701,6 +712,9 @@ def main():
         ('Y-Riemen', 'Linie wie v8: {} mm innen, Unterkante {} mm'.format(
             de(w('y_riemen_linie'), 1), de(L['yr_z0'], 1))),
         ('', 'Rücklauf in der oberen Nut des 2040, Zähne zur Schiene'),
+        ('Y-Klemmen', 'zwei Türme wie v8, je {} mm vor und hinter'.format(
+            de(w('turm_abstand'), 1))),
+        ('', 'der Wagenmitte; hinten der Spanner'),
         ('Y-Spanner', '{} mm Weg, M3×{} von hinten'.format(
             de(w('schieber_weg'), 0), de(L['druck_schraube'], 0))),
         ('X-Riemen', 'Unterkante {} mm, Schleife ≈ {} mm'.format(

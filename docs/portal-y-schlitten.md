@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, X-Antrieb und Spanner
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, neun gedruckte Teile).
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, elf gedruckte Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnung in
 [portal-y-schlitten.svg](portal-y-schlitten.svg).
@@ -13,12 +13,14 @@ Die beiden Y-Schlitten sind die Riemenklemmenschlitten für die **MGN12H-Wagen
 (20 × 20)**. Sie tragen das **2020-V-Slot-Portalrohr (500 mm)**, ohne seine
 Vorderseite zu berühren — dort sitzt die **MGN15-Schiene (450 mm)** der
 X-Achse. Links steht der X-Motor, rechts die Umlenkung mit Spanner. Den
-Y-Riemen spannt ein eigener Spanner im Riemenblock unter jeder Platte.
+Y-Riemen halten zwei getrennte Klemmtürme wie bei v8 unter jeder Platte,
+im hinteren sitzt ein eigener Spanner.
 
 | Pos | Teil | Stück | Funktion |
 |---|---|---|---|
 | 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende |
-| 2 | **Riemenblock** | 2 (gespiegelt) | hängt unter der Platte neben dem Wagen und klemmt den Y-Riemen: vorn fest, hinten über den Spannschieber |
+| 2 | **Klemmturm** | 2 (gespiegelt) | vorn, fest, wie ein Turm aus v8: Schlitz mit Rippen, Querstift unter dem Riemen |
+| 2 | **Spannturm** | 2 (gespiegelt) | hinten: Kanal für den Spannschieber und Anschlag mit der Mutter der Druckschraube |
 | 3 | **Spannschieber** | 2 (gespiegelt) | hält das hintere Riemenende; eine M3 von hinten schiebt ihn nach vorn und spannt |
 | 4 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten |
 | 5 | **Umlenkhalter** | 1 | rechts: 20-Z-Rolle mit Lager auf einer M5 im Langloch |
@@ -26,7 +28,7 @@ Y-Riemen spannt ein eigener Spanner im Riemenblock unter jeder Platte.
 | — | **Riemenhalter** | 1 | am Toolhead (ToolheadZ.py Rev. 33), klemmt beide Enden des X-Riemens |
 
 Warum so viele Teile: Jedes ist nur so **ohne Stützmaterial** druckbar. Die
-Riemenklemme hängt unter der Platte, die Rohrhalterung steht auf ihr — an
+Klemmtürme hängen unter der Platte, die Rohrhalterung steht auf ihr — an
 einem Stück wäre eine der beiden Seiten ein Überhang.
 
 ## Koordinaten
@@ -89,7 +91,7 @@ zum Rahmen.
 
 Die Riemenlage ist die von `RiemenklemmeSchlitten` v8, damit der Riemen am
 Rahmen weiterläuft wie bisher: **21,6 mm innen** neben der Schienenmitte,
-hochkant, **Zähne zur Schiene**, Unterkante Z = −44,9. Der Riemenblock hängt
+hochkant, **Zähne zur Schiene**, Unterkante Z = −44,9. Beide Klemmtürme hängen
 nach unten bis auf die Höhe der **oberen Nutreihe des 2040**: Der Riemen
 liegt 9,9 bis 15,9 mm unter der Oberkante des Profils, genau wie bei v8.
 
@@ -101,13 +103,19 @@ Rippen beider Klemmen auf der Schienenseite: Nur so greifen sie in die Zähne
 und nicht auf den glatten Rücken. `portal_check.py` prüft genau das. Der
 Rücklauf liegt im Profil und kommt dem Toolhead nie nahe.
 
-**Zwei Klemmen je Schlitten**, eine je Riemenende, beide im Riemenblock.
-Schnitt A–A der Zeichnung zeigt sie von innen.
+**Zwei getrennte Klemmtürme je Schlitten wie bei v8**, einer je
+Riemenende, symmetrisch zur Wagenmitte: Ihre Außenkanten liegen 40,5 mm
+vor und hinter der Wagenmitte, dazwischen bleiben 21 mm frei. Schnitt A–A
+der Zeichnung zeigt sie von innen.
 
-**Klemme 1, vorn — fest.** Den Riemen von unten in den Schlitz drücken, dann
-einen **Stift Ø3 × 20 (oder eine M3×20) von vorn** unter ihm durchschieben.
+**Klemmturm, vorn — fest**, wie ein Turm aus v8: 18 mm lang, der Schlitz
+ist unten und an beiden Enden offen, 7 Rippen an der Wand zur Schiene. Den
+Riemen von unten in den Schlitz drücken, dann einen **Stift Ø3 × 10 (oder
+eine M3×10) quer von innen** unter ihm durchschieben — er trägt den Riemen
+wie bei v8. Die zwei Schrauben des Klemmturms liegen unter dem Rohr: Er
+kommt **vor dem Rohr** an die Platte.
 
-**Klemme 2, hinten — Spannschieber.** Den Riemen von unten in den Schlitz des Schiebers
+**Spannturm, hinten — Spannschieber.** Den Riemen von unten in den Schlitz des Schiebers
 legen, den Schieber von hinten in den Kanal schieben, **M3×40 von hinten**
 durch den Schieber in die Mutter im Anschlag. Eindrehen schiebt den Schieber
 nach vorn — das spannt. **Weg 14 mm**; reicht er nicht, das Riemenende in der
@@ -184,7 +192,7 @@ Portalteile und beide Riemen. Keine Stelle liegt unter 3 mm:
 |---|---|
 | 3,0 mm | Motor ↔ Trägerplatte, am linken Ende des X-Wegs |
 | 3,0 mm | Umlenkrolle ↔ X-Wagen (in Z), am rechten Ende |
-| 3,0 mm | Schlittenplatte und Riemenblock ↔ X-Wagen, am linken Ende |
+| 3,0 mm | Schlittenplatte ↔ X-Wagen, am linken Ende (Klemmturm 3,5 mm) |
 | 3,4 mm | Toolhead ↔ Y-Riemen, an beiden Enden |
 
 Dazu wird geprüft, dass sich jede Schraube mit mindestens 20 mm Inbus
@@ -193,9 +201,12 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 
 ## Montagereihenfolge
 
-1. Einsätze einschmelzen: 2 je Riemenblock (oben), 2 je Stirnblock (oben).
-2. M3-Mutter von oben in die Tasche des Riemenblocks, Block unter die Platte
-   (2 × M3×8 von oben) — die Platte hält die Mutter.
+1. Einsätze einschmelzen: 2 je Spannturm, 2 je Klemmturm, 2 je Stirnblock
+   (alle oben).
+2. M3-Mutter von oben in die Tasche des Spannturms. Spannturm und
+   Klemmturm unter die Platte, je 2 × M3×8 von oben — die Platte hält die
+   Mutter. Das muss **vor dem Rohr** passieren: die Schrauben des
+   Klemmturms liegen unter dem Rohr.
 3. Schlitten auf die Y-Wagen, 4 × M3×6 (Kopf in der Senkung).
 4. Hammermuttern in die hintere Nut des Rohrs, Kernbohrungen M5 schneiden.
    Portal (Rohr mit X-Schiene und Toolhead) auf die Platten legen: je Seite
@@ -215,15 +226,16 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 | Teil | Lage aufs Bett |
 |---|---|
 | Schlitten | Unterseite, die Wände stehen darauf |
-| Riemenblock | auf der Rückseite stehend: Kanal senkrecht, Rippen als waagerechte Stege |
+| Spannturm | auf der Rückseite stehend, der Kanal senkrecht |
+| Klemmturm | Oberseite (Plattenseite) unten: Schlitz nach oben offen, Rippen senkrecht |
 | Spannschieber | auf der Rückseite stehend |
 | Motorhalter | Motorplatte (Oberseite) unten |
 | Umlenkhalter | auf der Rückseite (Säule) stehend |
 | Spannklotz | Unterseite |
 | Riemenhalter (Toolhead) | Unterseite (Wagenflanke), Schlitz und Rippen stehen senkrecht |
 
-Keine Stützen. 4 Wandlinien, ≥ 40 % Infill. Rechter Schlitten, Riemenblock
-und Spannschieber sind gespiegelt modelliert — **im Slicer nicht spiegeln**,
+Keine Stützen. 4 Wandlinien, ≥ 40 % Infill. Rechter Schlitten, Spannturm,
+Klemmturm und Spannschieber sind gespiegelt modelliert — **im Slicer nicht spiegeln**,
 die Körper so exportieren, wie sie im Modell liegen.
 
 Massen (Vollmaterial, PETG 1,27 g/cm³, aus einer Nachbildung der Fusion-API
@@ -231,13 +243,14 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 
 | Teil | Volumen | Masse | Bauraum |
 |---|---|---|---|
-| Schlitten (je) | 37,1 cm³ | ≈ 47 g | 52 × 64 × 26 mm |
-| Riemenblock (je) | 29,0 cm³ | ≈ 37 g | 16 × 64 × 35 mm |
+| Schlitten (je) | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
+| Spannturm (je) | 17,9 cm³ | ≈ 23 g | 16 × 42 × 35 mm |
+| Klemmturm (je) | 5,0 cm³ | ≈ 6 g | 9 × 18 × 36 mm |
 | Spannschieber (je) | 2,0 cm³ | ≈ 2,5 g | 8 × 20 × 15 mm |
 | Motorhalter | 40,8 cm³ | ≈ 52 g | 50 × 51 × 34 mm |
 | Umlenkhalter | 35,1 cm³ | ≈ 45 g | 59 × 42 × 30 mm |
 | Spannklotz | 1,7 cm³ | ≈ 2,2 g | 25 × 12 × 7 mm |
-| **Portal zusammen** | 214 cm³ | **≈ 272 g** | |
+| **Portal zusammen** | 211 cm³ | **≈ 268 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
@@ -249,11 +262,11 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
 | Menge | Teil | wofür |
 |---|---|---|
 | 8 | M3×6 Zylinderkopf | Schlitten → Y-Wagen |
-| 4 + 4 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Riemenblock → Platte |
+| 8 + 8 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Spannturm und Klemmturm → Platte |
 | 4 + 4 | M5×12 Zylinderkopf + Hammermutter M5 (Nut 6) | Rückwand → Rohr |
 | 2 | M5×25 Zylinderkopf | Stirnblock → Kernbohrung (M5 schneiden) |
 | 2 + 2 | M3×40 Zylinderkopf + M3-Mutter | Druckschraube Spannschieber |
-| 2 | Stift Ø3 × 20 oder M3×20 | feste Y-Klemme |
+| 2 | Stift Ø3 × 10 oder M3×10 | Querstift im Klemmturm |
 | 4 | Messing-Einsatz M3 | Stirnblöcke, für die Halter |
 | 4 | M3×12 Zylinderkopf | NEMA 17 → Motorhalter |
 | 2 | M3×40 Zylinderkopf | Motorhalter → Stirnblock |

@@ -196,7 +196,7 @@ def main():
                             / math.cos(math.radians(30)) / 2 + 0.2), 2.0)
 
     # ------------------------------------------------------------------
-    p.titel('6) Y-Riemen und Riemenblock')
+    p.titel('6) Y-Riemen und Klemmtuerme (wie v8)')
     p.info('Riemen Unterkante', L['yr_z0'])
     luft = w('klemm_schlitz') - w('riemen_dicke')
     p.ok('Klemmschlitz nimmt den Riemen auf (Luft)', luft, 0.1)
@@ -204,19 +204,28 @@ def main():
     p.ok('Riemenmitte auf der Linie von v8',
          -abs((L['yr_wand_u'] - w('riemen_dicke') / 2)
               - w('y_riemen_linie')), -0.01)
-    p.info('Rippen in der festen Klemme', len(L['rb_rippen_y']), 'Stk')
+    p.info('Rippen im Klemmturm', len(L['kt_rippen_y']), 'Stk')
     p.info('Rippen im Spannschieber', len(L['sch_rippen_y']), 'Stk')
-    p.ok('Riemenblock neben dem Y-Wagen', w('rb_u0')
-         - w('y_wagen_breite') / 2, 0.8)
-    p.ok('Riemenblock neben dem Rahmen (2040)', w('rb_u0')
-         - w('rahmen_b') / 2, 3.0)
-    p.ok('Kanal: Wand zur Schiene', L['kanal_u'][0] - L['rb_u'][0], 2.5)
-    p.ok('Kanal: Wand nach innen', L['rb_u'][1] - L['kanal_u'][1], 2.5)
-    p.ok('Kanal: Boden unter dem Riemen', L['kanal_z'][0] - L['rb_z'][0], 3.0)
-    p.ok('Kanal: Decke bis zur Platte', L['rb_z'][1] - L['kanal_z'][1], 6.0)
-    p.ok('Stiftbohrung: Boden darunter', (L['stift_z']
-                                         - w('klemm_stift_d') / 2)
-         - L['rb_z'][0], 2.0)
+    # Zwei getrennte Tuerme wie in v8, symmetrisch zur Wagenmitte
+    p.ok('Tuerme symmetrisch zur Wagenmitte (wie v8)',
+         -abs((w('wagen_y') - L['st_y'][0])
+              - (L['kt_y'][1] - w('wagen_y'))), -0.01)
+    p.ok('Luecke zwischen den Tuermen', L['kt_y'][0] - L['st_y'][1], 10.0)
+    p.ok('Klemmturm hinter der Plattenkante (X-Wagen faehrt vorbei)',
+         L['platte_y1'] - L['kt_y'][1], 0.0)
+    p.ok('Spannturm auf der Platte (hinten)',
+         L['st_y'][0] - L['platte_y0'], 0.0)
+    for name, (u0, u1) in (('Spannturm', L['st_u']), ('Klemmturm', L['kt_u'])):
+        p.ok('{} neben dem Y-Wagen'.format(name),
+             u0 - w('y_wagen_breite') / 2, 0.8)
+        p.ok('{} neben dem Rahmen (2040)'.format(name),
+             u0 - w('rahmen_b') / 2, 3.0)
+        p.ok('{} unter der Platte'.format(name), L['platte_u'][1] - u1, 0.0)
+    # Spannturm: Kanal, Anschlag, Druckschraube, Einsaetze
+    p.ok('Kanal: Wand zur Schiene', L['kanal_u'][0] - L['st_u'][0], 2.5)
+    p.ok('Kanal: Wand nach innen', L['st_u'][1] - L['kanal_u'][1], 2.5)
+    p.ok('Kanal: Boden unter dem Riemen', L['kanal_z'][0] - L['st_z'][0], 3.0)
+    p.ok('Kanal: Decke bis zur Platte', L['st_z'][1] - L['kanal_z'][1], 6.0)
     mutter_dick = w('m3_mutter_h') + 0.3
     p.ok('Anschlag: Wand hinter der Mutter (traegt den Riemenzug)',
          (L['mutter_y'] - mutter_dick / 2) - L['anschlag_y'][0], 2.5)
@@ -230,18 +239,41 @@ def main():
         L['druck_schraube']),
          L['kanal_y'][0] + L['druck_schraube']
          - (L['mutter_y'] + w('m3_mutter_h') / 2), 0.5)
-    p.ok('Druckschraube: gespannt noch im Block (vorn)',
-         L['rb_y'][1] - L['druck_spitze_max'], 0.0)
+    p.ok('Druckschraube gespannt: Spitze vor dem Klemmturm',
+         L['kt_y'][0] - L['druck_spitze_max'], 3.0)
     p.ok('Spannschieber: Weg', L['kanal_y'][1] - L['kanal_y'][0]
          - w('schieber_laenge'), 10.0)
-    p.ok('Einsaetze ueber dem Kanal', (L['rb_z'][1] - w('insert_m3_t'))
-         - L['kanal_z'][1], 3.0)
-    for i, (u, y) in enumerate(L['rb_schrauben']):
-        p.ok('Einsatz {} ueber Kanal/Anschlag im Block (Y)'.format(i + 1),
-             min(y - L['rb_y'][0], L['rb_y'][1] - y), 5.0)
-    p.ok('Mutterntasche neben dem vorderen Einsatz (Y)',
+    p.ok('Spannturm: Einsaetze ueber dem Kanal',
+         (L['st_z'][1] - w('insert_m3_t')) - L['kanal_z'][1], 3.0)
+    for i, (u, y) in enumerate(L['st_schrauben']):
+        p.ok('Spannturm: Einsatz {}, Wand zum Turmende (Y)'.format(i + 1),
+             min(y - L['st_y'][0], L['st_y'][1] - y)
+             - w('insert_m3_d') / 2, 2.0)
+    p.ok('Spannturm: Mutterntasche neben dem vorderen Einsatz (Y)',
          (L['mutter_y'] - mutter_dick / 2)
-         - (L['rb_schrauben'][0][1] + w('insert_m3_d') / 2), 1.0)
+         - (max(y for _, y in L['st_schrauben']) + w('insert_m3_d') / 2),
+         1.0)
+    # Klemmturm: wie v8 — Schlitz mit Rippen, Querstift unter dem Riemen
+    p.ok('Klemmturm: Wand neben dem Schlitz (zur Schiene)',
+         L['yr_rippe_u0'] - L['kt_u'][0], 3.0)
+    p.ok('Klemmturm: Wand neben dem Schlitz (innen)',
+         L['kt_u'][1] - L['yr_wand_u'], 3.0)
+    p.ok('Klemmturm: Stift traegt den Riemen (Oberkante = Unterkante Riemen)',
+         -abs(L['stift_z'] + w('klemm_stift_d') / 2 - L['yr_z0']), -0.01)
+    p.ok('Klemmturm: Boden unter der Stiftbohrung',
+         (L['stift_z'] - w('klemm_stift_d') / 2) - L['kt_z'][0], 3.0)
+    p.ok('Klemmturm: Stift reicht durch beide Waende',
+         L['kt_stift_l'] - (L['kt_u'][1] - L['kt_u'][0]), 0.5)
+    p.ok('Klemmturm: Einsaetze ueber der Schlitzdecke',
+         (L['kt_z'][1] - w('insert_m3_t')) - L['yr_decke_z'], 3.0)
+    p.ok('Klemmturm: Einsatz, Wand seitlich',
+         (L['kt_u'][1] - L['kt_u'][0] - w('insert_m3_d')) / 2, 1.5)
+    ys = [y for _, y in L['kt_schrauben']]
+    p.ok('Klemmturm: Einsatz, Wand zu den Enden (Y)',
+         min(min(ys) - L['kt_y'][0], L['kt_y'][1] - max(ys))
+         - w('insert_m3_d') / 2, 2.0)
+    p.ok('Klemmturm: Steg zwischen den Einsaetzen',
+         (max(ys) - min(ys)) - w('insert_m3_d'), 2.0)
     # Riemenfuehrung am Aufbau: Ritzel mit senkrechter Achse an beiden
     # Enden, der Ruecklauf laeuft in der oberen Nut des 2040. Die Zaehne
     # zeigen zur Innenseite der Schleife, also zum Ruecklauf — nur dort
@@ -256,8 +288,9 @@ def main():
     p.ok('Ruecklauf liegt in der Nut des 2040 (hinter der Flanke)',
          L['rahmen_flanke_u'] - (L['yr_rueck_u'] + w('riemen_dicke') / 2),
          0.0)
-    p.ok('Riemenblock neben dem Ruecklauf',
-         L['rb_u'][0] - (L['yr_rueck_u'] + w('riemen_dicke') / 2), 3.0)
+    p.ok('Klemmtuerme neben dem Ruecklauf',
+         min(L['st_u'][0], L['kt_u'][0])
+         - (L['yr_rueck_u'] + w('riemen_dicke') / 2), 3.0)
     p.info('Riemen: Oberkante unter der Oberkante des 2040',
            L['rahmen_z1'] - L['yr_z1'])
     p.info('Riemen: Unterkante unter der Oberkante des 2040',
@@ -283,13 +316,22 @@ def main():
          w('y_gewinde_tiefe') - (L['wagen_schraube'] - L['wagen_klemm']), 0.0)
     p.ok('Wagenschraube: Gewinde im Wagen',
          L['wagen_schraube'] - L['wagen_klemm'], 3.0)
-    for u, y in L['rb_schrauben']:
-        p.ok('Riemenblock-Schraube bei Y={:+.0f}: hinter der Rueckwand'.format(
+    for u, y in L['st_schrauben']:
+        p.ok('Spannturm-Schraube bei Y={:+.0f}: hinter der Rueckwand'.format(
             y), L['rueck_y0'] - (y + INBUS_FREI_D / 2), 0.9)
-    p.ok('Riemenblock-Schraube M3x{:.0f}: Gewinde im Einsatz'.format(
-        L['rb_schraube']), L['rb_eingriff'], 4.0)
-    p.ok('Riemenblock-Schraube: setzt nicht auf',
-         w('insert_m3_t') - L['rb_eingriff'], 0.5)
+    # Die Schrauben des Klemmturms liegen unter dem Rohr: der Turm kommt
+    # vor dem Rohr an die Platte, der Kopf verschwindet ganz in der Senkung.
+    p.info('Klemmturm-Schrauben unter dem Rohr (vor dem Rohr montieren)',
+           len(L['kt_schrauben']), 'Stk')
+    p.ok('Klemmturm-Schrauben: Kopf unter der Auflage des Rohrs',
+         w('m3_senkung_t') - w('m3_kopf_h'), 0.0)
+    p.ok('Klemmturm-Schraube: Senkung neben der Rueckwand',
+         min(y for _, y in L['kt_schrauben']) - w('m3_senkung') / 2
+         - L['rueck_y1'], 0.5)
+    p.ok('Turmschraube M3x{:.0f}: Gewinde im Einsatz'.format(
+        L['turm_schraube']), L['turm_eingriff'], 4.0)
+    p.ok('Turmschraube: setzt nicht auf',
+         w('insert_m3_t') - L['turm_eingriff'], 0.5)
     p.ok('Rueckwand: Kopf versenkt, Wand darunter',
          w('rueckwand_dicke') - w('m5_senk_t'), 4.0)
     p.ok('Rueckwand: M5-Koepfe nebeneinander',
@@ -393,8 +435,11 @@ def main():
         korridor('Wagenschrauben {} (von oben, vor dem Rohr)'.format(n),
                  [(x(u), y, L['platte_z1']) for u, y in L['wagen_loecher']],
                  'z', +1, schlitten)
-        korridor('Riemenblock-Schrauben {} (von oben)'.format(n),
-                 [(x(u), y, L['platte_z1']) for u, y in L['rb_schrauben']],
+        korridor('Spannturm-Schrauben {} (von oben)'.format(n),
+                 [(x(u), y, L['platte_z1']) for u, y in L['st_schrauben']],
+                 'z', +1, schlitten)
+        korridor('Klemmturm-Schrauben {} (von oben, vor dem Rohr)'.format(n),
+                 [(x(u), y, L['platte_z1']) for u, y in L['kt_schrauben']],
                  'z', +1, schlitten)
         # mit Rohr und Haltern, die dann schon sitzen
         halter = (('Motorplatte', 'Motorhalter Saeule hinten',
@@ -409,7 +454,7 @@ def main():
         korridor('Rueckwand-Schrauben {} (von hinten)'.format(n),
                  [(x(u), L['rueck_y0'], L['kern_z'])
                   for u in L['rueck_schrauben_u']], 'y', -1,
-                 ohne_wand + ('Portalrohr', 'Riemenblock ' + n) + halter,
+                 ohne_wand + ('Portalrohr', 'Spannturm ' + n) + halter,
                  r=2.5)
         ohne_block = tuple(t for t in schlitten if t != 'Stirnblock ' + n)
         korridor('Kernschraube {} (von aussen)'.format(n),
@@ -417,13 +462,13 @@ def main():
                  ohne_block + ('Portalrohr',) + halter, r=2.5)
         korridor('Druckschraube Spannschieber {} (von hinten)'.format(n),
                  [(x(L['yr_mitte_u']), L['kanal_y'][0] - 3.0, L['druck_z'])],
-                 'y', -1, schlitten + ('Riemenblock ' + n, 'Y-Wagen ' + n,
+                 'y', -1, schlitten + ('Spannturm ' + n, 'Y-Wagen ' + n,
                                        'Y-Schiene ' + n, 'Rahmen 2040 ' + n),
                  r=2.5)
-        korridor('Stift feste Klemme {} (von vorn)'.format(n),
-                 [(x(L['yr_mitte_u']), L['rb_y'][1], L['stift_z'])],
-                 'y', +1, schlitten + ('Portalrohr', 'X-Schiene',
-                                       'Riemenblock ' + n, 'Y-Wagen ' + n,
+        # Querstift im Klemmturm: von innen (zur Maschinenmitte) quer rein
+        korridor('Querstift Klemmturm {} (von innen)'.format(n),
+                 [(x(L['kt_u'][1]), L['kt_stift_y'], L['stift_z'])],
+                 'x', -s, schlitten + ('Spannturm ' + n, 'Y-Wagen ' + n,
                                        'Y-Schiene ' + n, 'Rahmen 2040 ' + n),
                  r=2.0)
         korridor('Halterschrauben {} (von oben)'.format(n),
@@ -452,9 +497,12 @@ def main():
             ('Schlitten', (L['platte_u'][1] - L['platte_u'][0],
                            L['platte_y1'] - L['platte_y0'],
                            L['wand_z1'] - L['platte_z0'])),
-            ('Riemenblock', (L['rb_u'][1] - L['rb_u'][0],
-                             L['rb_y'][1] - L['rb_y'][0],
-                             L['rb_z'][1] - L['rb_z'][0])),
+            ('Spannturm', (L['st_u'][1] - L['st_u'][0],
+                           L['st_y'][1] - L['st_y'][0],
+                           L['st_z'][1] - L['st_z'][0])),
+            ('Klemmturm', (L['kt_u'][1] - L['kt_u'][0],
+                           L['kt_y'][1] - L['kt_y'][0],
+                           L['kt_z'][1] - L['kt_z'][0])),
             ('Motorhalter', (L['mp_u'][1] - L['mp_u'][0],
                              L['mp_y'][1] - L['mp_y'][0],
                              L['mp_z1'] - L['mh_z'][0])),
@@ -462,7 +510,7 @@ def main():
                               L['uh_y'][1] - L['uh_saeule_y'][0],
                               L['klotz_z'][1] - L['wand_z1']))):
         p.ok('{}: groesste Kante'.format(name), max(masse), 250.0, '<=')
-    p.ok('Bruecke im Riemenblock ueber dem Kanal (Anschlag, stehend)',
+    p.ok('Bruecke im Spannturm ueber dem Kanal (Anschlag, stehend)',
          L['kanal_u'][1] - L['kanal_u'][0], 25.0, '<=')
     p.ok('Bruecke Mutternschlitz Umlenkung (stehend)',
          (L['rolle_u'][1] - L['rolle_u'][0])
@@ -471,19 +519,21 @@ def main():
     # ------------------------------------------------------------------
     p.titel('11) Stueckliste Portal')
     for zeile in (
-            '2x Y-Schlitten, 2x Riemenblock, 2x Spannschieber (links/rechts '
-            'gespiegelt), 1x Motorhalter, 1x Umlenkhalter, 1x Spannklotz',
+            '2x Y-Schlitten, 2x Spannturm, 2x Klemmturm, 2x Spannschieber '
+            '(links/rechts gespiegelt), 1x Motorhalter, 1x Umlenkhalter, '
+            '1x Spannklotz',
             '8x M3x{:.0f} Zylinderkopf (Schlitten -> Y-Wagen)'.format(
                 L['wagen_schraube']),
-            '4x M3x{:.0f} Zylinderkopf + 4x Messing-Einsatz M3 Ø5 '
-            '(Riemenblock -> Platte)'.format(L['rb_schraube']),
+            '8x M3x{:.0f} Zylinderkopf + 8x Messing-Einsatz M3 Ø5 '
+            '(Spannturm und Klemmturm -> Platte)'.format(L['turm_schraube']),
             '4x M5x{:.0f} Zylinderkopf + 4x Hammermutter M5 Nut 6 '
             '(Rueckwand -> Rohr)'.format(L['rueck_schraube']),
             '2x M5x{:.0f} Zylinderkopf (Kernbohrung, M5 schneiden)'.format(
                 L['kern_schraube']),
             '2x M3x{:.0f} Zylinderkopf + 2x M3-Mutter (Druckschraube '
             'Spannschieber)'.format(L['druck_schraube']),
-            '2x Stift Ø3 x 20 oder M3x20 (feste Y-Klemme)',
+            '2x Stift Ø3 x {0:.0f} oder M3x{0:.0f} (Querstift im Klemmturm)'
+            .format(L['kt_stift_l']),
             '4x Messing-Einsatz M3 Ø5 (Stirnbloecke, fuer die Halter)',
             '4x M3x{:.0f} Zylinderkopf (NEMA 17 -> Motorhalter)'.format(
                 L['motor_schraube']),

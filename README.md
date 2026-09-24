@@ -63,9 +63,9 @@ Riemenklemmenschlitten für die **MGN12H-Wagen (20 × 20)**, links und rechts
 gespiegelt. Sie tragen das Portalrohr von unten und verschrauben es hinten
 (Rückwand, 2 × M5 in Hammermuttern) und an der Stirn (M5 in die
 Kernbohrung) — die Vorderseite bleibt frei für die X-Schiene. Unter jeder
-Platte hängt ein **Riemenblock mit eigenem Y-Spanner**: vorn klemmen Rippen
-und ein Stift das Riemenende, hinten zieht ein Spannschieber mit einer M3
-von hinten. Links steht der **X-Motor** über dem Rohrende, rechts die
+Platte hängen **zwei getrennte Klemmtürme wie bei v8**: vorn ein fester mit
+Rippen und Querstift, hinten einer mit **eigenem Y-Spanner**, einem
+Spannschieber, den eine M3 von hinten nachzieht. Links steht der **X-Motor** über dem Rohrende, rechts die
 **Umlenkung** mit einer 20-Z-Rolle, die ein Spannklotz nach außen zieht.
 
 X-Weg **391,2 mm** — die ganze Schiene minus Wagen. Der Toolhead fährt an
@@ -118,7 +118,7 @@ bestanden.
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 2). Der
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 3). Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

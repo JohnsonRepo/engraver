@@ -65,7 +65,8 @@ gespiegelt. Sie tragen das Portalrohr von unten und verschrauben es hinten
 Kernbohrung) — die Vorderseite bleibt frei für die X-Schiene. Unter jeder
 Platte hängen **zwei gleiche Klemmtürme wie bei v8** mit Rippen und
 Querstift, einer je Riemenende; gespannt wird wie bisher an den Ritzeln.
-Links steht der **X-Motor** über dem Rohrende, rechts die **Umlenkung** mit
+Links steht der **X-Motor** über dem Rohrende — so tief, dass seine
+20-mm-Welle das ganze Ritzel trägt —, rechts die **Umlenkung** mit
 einer 20-Z-Rolle, die ein Spannklotz nach außen zieht.
 
 X-Weg **391,2 mm** — die ganze Schiene minus Wagen. Der Toolhead fährt an
@@ -118,7 +119,7 @@ bestanden.
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 4). Der
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 5). Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

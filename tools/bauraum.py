@@ -455,6 +455,9 @@ def portal_bauraeume(w, L):
         ('Motorplatte', 'Motorhalter Saeule aussen'),
         ('Motorhalter Saeule hinten', 'Motorhalter Saeule aussen'),
         ('Motorplatte', 'X-Motor'),
+        # die Ritzelnabe taucht in die Bundbohrung der Motorplatte (Ø22,4
+        # um den Bord Ø16) — portal_check.py prueft die Luft rundum
+        ('Motorplatte', 'X-Ritzel'),
         # der Motorhalter steht auf Stirnblock, Rueckwand und Rohr
         ('Motorhalter Saeule hinten', 'Stirnblock links'),
         ('Motorhalter Saeule hinten', 'Rueckwand links'),

@@ -160,6 +160,16 @@ class Feld:
                 pfeil(x0, y0, -ux, -uy, ROT), pfeil(x1, y1, ux, uy, ROT),
                 text(x1 + dx, y1 + dy, s, 8.0, ROT, anker, True, halo=True)]
 
+    def mass(self, a, b0, b1, s, dx=5, b_text=None):
+        """Senkrechtes Mass bei a von b0 bis b1, Text rechts daneben (auf
+        Hoehe b_text, sonst in der Mitte)."""
+        (x, y0), (_, y1) = self.px(a, b0), self.px(a, b1)
+        yt = (y0 + y1) / 2 if b_text is None else self.px(a, b_text)[1]
+        return [linie(x, y0, x, y1, BLAU, 0.8),
+                linie(x - 3, y0, x + 3, y0, BLAU, 0.8),
+                linie(x - 3, y1, x + 3, y1, BLAU, 0.8),
+                text(x + dx, yt + 3, s, 8.0, BLAU, 'start', True, halo=True)]
+
 
 # ---- Draufsicht auf ein Portalende --------------------------------------
 def draufsicht(f, s, w, L, tw, TL, feste_th):
@@ -443,16 +453,26 @@ def schnitt_motor(f, w, L, tw, TL):
     t.append(f.rect(xm + rb, xu(L['mp_u'][1]), L['mp_z0'], L['mp_z1'], 'neu'))
     t.append(f.rect(xu(L['mh_aussen_u'][0]), xu(L['mh_aussen_u'][1]),
                     *L['mh_z'], 'neu'))
-    # Motor, Welle, Ritzel (Nabe oben), Riemen am Ritzel
+    # Motor mit Zentrierbund, Welle, Ritzel (Nabe oben, taucht in die
+    # Bundbohrung), Riemen am Ritzel
     t.append(f.rect(xm - fl, xm + fl, L['mp_z1'], L['motor_z1'], 'kauf'))
-    t.append(f.rect(xm - 2.5, xm + 2.5, L['welle_z0'], L['mp_z1'], 'stahl'))
+    t.append(f.rect(xm - w('motor_bund_d') / 2, xm + w('motor_bund_d') / 2,
+                    L['bund_z0'], L['mp_z1'], 'kauf'))
+    t.append(f.rect(xm - 2.5, xm + 2.5, L['welle_z0'], L['bund_z0'], 'stahl'))
     rf = w('ritzel_flansch_d') / 2
+    bo, sp = w('ritzel_bord'), w('ritzel_spur')
     z0 = L['ritzel_z0']
-    t.append(f.rect(xm - rf, xm + rf, z0, z0 + w('ritzel_bord'), 'stahl'))
-    t.append(f.rect(xm - 6.1, xm + 6.1, z0 + w('ritzel_bord'), z0 + 8.0,
+    t.append(f.rect(xm - rf, xm + rf, z0, z0 + bo, 'stahl'))
+    t.append(f.rect(xm - 6.1, xm + 6.1, z0 + bo, z0 + bo + sp, 'stahl'))
+    t.append(f.rect(xm - rf, xm + rf, z0 + bo + sp, L['ritzel_nabe_z0'],
                     'stahl'))
-    t.append(f.rect(xm - rf, xm + rf, z0 + 8.0, z0 + 9.0, 'stahl'))
-    t.append(f.rect(xm - 6.5, xm + 6.5, z0 + 9.0, L['ritzel_z1'], 'stahl'))
+    t.append(f.rect(xm - 6.5, xm + 6.5, L['ritzel_nabe_z0'], L['ritzel_z1'],
+                    'stahl'))
+    # Welle im Ritzel (verdeckt) und Madenschraube vorn in der Nabe
+    t.append(f.rect(xm - 2.5, xm + 2.5, L['welle_z0'], L['ritzel_z1'],
+                    'stahl', fill='none', stroke_dasharray='3 2'))
+    t.append(f.kreis(xm, L['madenschraube_z'], 1.5, 'stahl',
+                     fill='#555b66'))
     t.append(f.rect(xm - w('ritzel_teilkreis') / 2 - L['riemen_aussen'],
                     xm - w('ritzel_teilkreis') / 2 + L['riemen_innen'],
                     L['xr_z0'], L['xr_z1'], 'riemen'))
@@ -627,19 +647,26 @@ def main():
     t += fe.rahmen('Schnitt C–C: Motorhalter')
     t.append(text(fe.ox, fe.oy + fe.hoehe + 14, 'durch die Motorachse, '
                   'Blick von vorn', 8.0, GRAU))
+    t += fe.mass(L['x_motor'] + 9.8, L['welle_z0'], L['mp_z1'],
+                 'Welle {} mm'.format(de(w('motor_welle_l'), 0)), 4,
+                 L['welle_z0'] + 3.0)
     t += fe.spalte([
         (L['x_motor'] - 8, 72, 'NEMA 17'),
-        (L['x_motor'] + 16, L['mp_z1'] - 2, 'Motorplatte'),
-        (L['x_motor'] + 5, L['ritzel_z1'] - 3, 'Ritzel 20 Z, Nabe oben'),
+        (L['x_motor'] + 16, L['mp_z1'] - 2, 'Motorplatte {} mm'.format(
+            de(w('mp_dicke'), 1))),
+        (L['x_motor'] + 4, L['ritzel_z1'] - 0.8,
+         'Ritzel 20 Z, Nabe oben in der\nBundbohrung: ganz auf der Welle'),
+        (L['x_motor'] + 1.5, L['madenschraube_z'],
+         'Madenschraube, Inbus von vorn'),
         (L['x_motor'] - w('ritzel_teilkreis') / 2, L['xr_zm'],
-         'X-Riemen'),
+         'X-Riemen, mittig in der Spur'),
         (xu(-17, -1), 20, 'äußere Säule'),
-        (xu(20, -1), 30, 'hintere Säule (dahinter)'),
+        (xu(26, -1), 14, 'hintere Säule (dahinter)'),
         (-R + 25, 3, 'Portalrohr'),
         (xu(-10, -1), -3, 'Stirnblock (dahinter)'),
         (L['xw_min'] + tw('traeger_x_links') + 2, 85,
          'Trägerplatte am linken Ende\n(Umriss, liegt davor)')],
-        fe.ox + fe.breite + 12, 'start', abstand=24.0)
+        fe.ox + fe.breite + 12, 'start', abstand=22.0)
     t += fe.luft(L['x_motor'] + w('motor_flansch') / 2, 58,
                  L['xw_min'] + tw('traeger_x_links'), 58,
                  '{} mm'.format(de(L['xw_min'] + tw('traeger_x_links')
@@ -678,6 +705,10 @@ def main():
             de(L['xr_z0'], 2), de(riemen_x, 0))),
         ('X-Spanner', 'Rolle ±{} mm, M3×{} von außen'.format(
             de(w('rolle_weg'), 0), de(L['zug_schraube'], 0))),
+        ('X-Motor', 'Welle {} mm trägt das ganze Ritzel: Platte {} mm,'
+         .format(de(w('motor_welle_l'), 0), de(w('mp_dicke'), 1))),
+        ('', 'Nabe {} mm in der Bundbohrung'.format(
+            de(L['ritzel_z1'] - L['mp_z0'], 0))),
         ('engste Luft', '{} mm: Motor ↔ Trägerplatte, Rolle ↔ X-Wagen,'
          .format(de(min(luft_motor, luft_rolle), 1))),
         ('', 'Platte ↔ X-Wagen am Ende des X-Wegs'),

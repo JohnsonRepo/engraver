@@ -20,7 +20,7 @@ gespannt wird er wie bisher an den Ritzeln der Y-Enden.
 |---|---|---|---|
 | 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende |
 | 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende |
-| 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten |
+| 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten; dünne Motorplatte, damit die 20-mm-Welle das ganze Ritzel trägt |
 | 4 | **Umlenkhalter** | 1 | rechts: 20-Z-Rolle mit Lager auf einer M5 im Langloch |
 | 5 | **Spannklotz** | 1 | eine M3 von außen zieht ihn und damit die Rolle nach außen |
 | — | **Riemenhalter** | 1 | am Toolhead (ToolheadZ.py Rev. 33), klemmt beide Enden des X-Riemens |
@@ -132,10 +132,33 @@ Y = −10 in den Riemenhalter, der Rücklauf liegt bei Y = −22,73 und damit
 7,7 mm hinter dem Riemenhalter.
 
 **Motor links**, Achse X = −250, Y = −16,37: stehend, Welle nach unten, Ritzel
-**mit der Nabe nach oben** auf Riemenhöhe. Vier M3×12 von unten; alle vier
-sind erreichbar, der Inbus hat bis zum Rohr 22,75 mm. Der Motorhalter sitzt
-mit 2 × M3×40 von oben in den Gewindeeinsätzen des Stirnblocks. Der Motor
-steht 3 mm neben der Trägerplatte, wenn der Toolhead links anschlägt.
+**mit der Nabe nach oben** auf Riemenhöhe. Die Welle ist **20 mm** lang (ab
+Flanschfläche) und muss das ganze Ritzel tragen. Deshalb steht der Motor so
+tief wie möglich, auf einer nur 4,5 mm dicken Motorplatte, und die Nabe
+taucht in deren Bundbohrung (Rev. 5). Bis Rev. 4 lag eine 8-mm-Platte
+zwischen Motor und Ritzel: auf einer 20-mm-Welle hätte das Ritzel nur
+11,5 mm weit gesteckt, der Riemen wäre fast ganz unter dem Wellenende
+gelaufen.
+
+| Z | was |
+|---|---|
+| +38,25 | Flanschfläche = Oberseite der Motorplatte |
+| +36,25 | Unterkante Zentrierbund (2 mm hoch, steckt in der Bohrung Ø22,4) |
+| +34,75 | Oberkante Ritzel (Nabe), 1,5 mm unter dem Bund |
+| +33,75 | Unterseite der Motorplatte: die Nabe steht 1 mm in der Bohrung |
+| +31,25 | Madenschrauben (Mitte der Nabe), 2,5 mm unter der Platte |
+| +26,25 … +20,25 | X-Riemen, mittig in der 7-mm-Spur |
+| +18,75 | Unterkante Ritzel |
+| +18,25 | Wellenende, 0,5 mm unter dem Ritzel |
+
+Das Ritzel (Bord Ø16) dreht mit 3,2 mm Luft in der Bundbohrung und passt
+auch mit dem Motor von oben hindurch. Die Madenschrauben erreicht der Inbus
+von vorn, eine davon gehört auf die Abflachung der Welle. Eine längere Welle
+stört nicht: bis 27 mm endet sie noch über dem Rohr. Vier M3×8 von unten
+(3,5 mm im Flanschgewinde); alle vier sind erreichbar, der Inbus hat bis zum
+Rohr 20,75 mm. Der Motorhalter sitzt mit 2 × M3×35 von oben in den
+Gewindeeinsätzen des Stirnblocks. Der Motor steht 3 mm neben der
+Trägerplatte, wenn der Toolhead links anschlägt.
 
 **Umlenkung rechts**, Achse X = +230,65: eine **20-Z-Rolle mit Kugellager**
 (Bohrung 5) auf einer M5×30 von oben — Kopf auf dem Spannklotz, Scheibe über
@@ -202,13 +225,15 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 4. Hammermuttern in die hintere Nut des Rohrs, Kernbohrungen M5 schneiden.
    Portal (Rohr mit X-Schiene und Toolhead) auf die Platten legen: je Seite
    2 × M5×12 hinten, 1 × M5×25 stirnseitig.
-5. Motor auf den Motorhalter (4 × M3×12 von unten), Ritzel auf Riemenhöhe,
-   Halter aufs linke Rohrende (2 × M3×40).
+5. Motor von oben auf den Motorhalter, 4 × M3×8 von unten. Ritzel von unten
+   auf die Welle, Nabe voraus, bis die Welle 0,5 mm unten heraussteht;
+   Madenschrauben von vorn. Halter aufs linke Rohrende (2 × M3×35).
 6. Umlenkhalter aufs rechte Rohrende (2 × M3×30), Spannklotz, Rolle und M5
    einsetzen, Zugschraube lose.
 7. Riemenhalter an den Toolhead (siehe oben).
 8. X-Riemen: ein Ende in den Riemenhalter, um Motor und Rolle, zweites Ende
-   einlegen, spannen.
+   einlegen, spannen. Läuft er nicht mittig in der Spur, das Ritzel
+   nachstellen.
 9. Y-Riemen: beide Enden in die Klemmtürme, an den Ritzeln spannen,
    Portal rechtwinklig stellen.
 
@@ -234,10 +259,10 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 |---|---|---|---|
 | Schlitten (je) | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
 | Klemmturm (je, 4×) | 5,0 cm³ | ≈ 6 g | 9 × 18 × 36 mm |
-| Motorhalter | 40,8 cm³ | ≈ 52 g | 50 × 51 × 34 mm |
+| Motorhalter | 31,5 cm³ | ≈ 40 g | 50 × 51 × 28 mm |
 | Umlenkhalter | 35,1 cm³ | ≈ 45 g | 59 × 42 × 30 mm |
 | Spannklotz | 1,7 cm³ | ≈ 2,2 g | 25 × 12 × 7 mm |
-| **Portal zusammen** | 181 cm³ | **≈ 230 g** | |
+| **Portal zusammen** | 172 cm³ | **≈ 218 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
@@ -254,8 +279,8 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
 | 2 | M5×25 Zylinderkopf | Stirnblock → Kernbohrung (M5 schneiden) |
 | 4 | Stift Ø3 × 10 oder M3×10 | Querstift im Klemmturm |
 | 4 | Messing-Einsatz M3 | Stirnblöcke, für die Halter |
-| 4 | M3×12 Zylinderkopf | NEMA 17 → Motorhalter |
-| 2 | M3×40 Zylinderkopf | Motorhalter → Stirnblock |
+| 4 | M3×8 Zylinderkopf | NEMA 17 → Motorhalter |
+| 2 | M3×35 Zylinderkopf | Motorhalter → Stirnblock |
 | 2 | M3×30 Zylinderkopf | Umlenkhalter → Stirnblock |
 | 1 + 1 + 3 | M5×30 Zylinderkopf + M5-Mutter + Scheibe M5 | Achse der Umlenkrolle |
 | 1 + 1 | M3×20 + M3-Mutter | Zugschraube der Umlenkung |
@@ -271,7 +296,11 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
   angenommen. Maßgeblich für die Luft zu den Platten der Umlenkung (je 1 mm)
   und zum X-Wagen (3 mm).
 * **X-Motor:** Länge 48 mm angenommen — geht nur in den Freigang nach oben
-  ein.
+  ein. Die Welle (20 mm) ist deine Angabe; ist sie ab dem Bund gemessen,
+  steht sie 2 mm weiter unten heraus, das stört nicht.
+* **Ritzel 20 Z:** Spur 7 mm und Nabe 7 mm mit den Madenschrauben in der
+  Mitte sind angenommen `[w]`. Sitzen sie höher, bleibt weniger als 2,5 mm
+  Platz unter der Platte.
 
 ## Parametrik
 
@@ -291,6 +320,8 @@ die Prüfung als Erstes.
 | `turm_abstand` / `kt_laenge` | 40,5 / 18 mm | Lage der Klemmtürme (Außenkante ab Wagenmitte) und ihre Länge, wie v8 |
 | `x_riemen_z0` / `x_riemen_y` | 20,25 / −10 mm | Lage des X-Riemens, auch in ToolheadZ.py |
 | `motor_u` | 7 mm | Motorachse innen neben der Schienenmitte |
+| `motor_welle_l` | 20 mm | Wellenlänge ab Flansch; legt die Höhe des Motors fest |
+| `mp_dicke` / `welle_ueberstand` | 4,5 / 0,5 mm | Motorplatte und wie weit die Welle unter dem Ritzel heraussteht |
 | `rolle_u` / `rolle_weg` | 26,35 / 4 mm | Umlenkrolle in Mittelstellung und ihr Weg je Richtung |
 | `rolle_d` | 18 mm `[?]` | Außendurchmesser der Umlenkrolle |
 | `motor_laenge` | 48 mm `[?]` | Länge des X-Motors |

@@ -13,7 +13,10 @@
 #                              Rippen, Querstift unter dem Riemen. Gespannt
 #                              wird wie bisher an den Ritzeln der Y-Enden.
 #   Motorhalter                X-Motor (NEMA 17) stehend ueber dem linken
-#                              Rohrende, Welle nach unten.
+#                              Rohrende, Welle nach unten. Duenne Motor-
+#                              platte, die Ritzelnabe taucht in ihre Bund-
+#                              bohrung: die 20-mm-Welle traegt das ganze
+#                              Ritzel.
 #   Umlenkhalter + Spannklotz  X-Umlenkung rechts: 20-Z-Rolle mit Lager auf
 #                              einer M5 im Langloch; eine M3 von aussen zieht
 #                              den Spannklotz und damit die Rolle nach aussen.
@@ -38,7 +41,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 4
+REVISION = 5
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -91,7 +94,10 @@ MASSE = {
     'ritzel_teilkreis':   (12.73, 'GT2 20 Z: Teilkreis = Abstand der Trume'),
     'ritzel_flansch_d':    (16.0, 'GT2 20 Z Ritzel: Flansch'),
     'ritzel_laenge':       (16.0, 'GT2 20 Z Ritzel: Gesamtlaenge'),
-    'ritzel_bord':          (1.0, 'Ritzel: unterer Bord unter dem Riemen'),
+    'ritzel_bord':          (1.0, 'GT2 20 Z Ritzel: Bord (je Seite)'),
+    # Spur fuer den 6-mm-Riemen; der Rest der 16 mm ist die Nabe mit den
+    # Madenschrauben in ihrer Mitte [w]
+    'ritzel_spur':          (7.0, 'GT2 20 Z Ritzel: Spur zwischen den Borden'),
     # Umlenkung: 20-Z-Rolle mit Kugellager, Bohrung 5 [w]. Aussendurchmesser
     # nicht gemessen — 18 ist die Huelle mit Bord [?].
     'rolle_d':             (18.0, 'Umlenkrolle 20 Z: Huelle (Bord)'),
@@ -111,7 +117,10 @@ MASSE = {
     'motor_flansch':       (42.3, 'NEMA17: Flanschmass'),
     'motor_loch':          (31.0, 'NEMA17: Lochbild 31 x 31'),
     'motor_bund_d':        (22.0, 'NEMA17: Zentrierbund'),
-    'motor_welle_l':       (24.0, 'NEMA17: Wellenlaenge ab Flansch'),
+    'motor_bund_h':         (2.0, 'NEMA17: Zentrierbund, Hoehe'),
+    # 20 mm: Angabe am Aufbau [v]. Ab der Flanschflaeche gerechnet — ist
+    # sie ab dem Bund gemessen, steht die Welle 2 mm weiter vor.
+    'motor_welle_l':       (20.0, 'NEMA17: Wellenlaenge ab Flansch'),
     # Nicht gemessen: welcher Motor an X kommt. 48 ist der laengste
     # gaengige, fuer die Pruefung die sichere Seite [?].
     'motor_laenge':        (48.0, 'NEMA17: Koerperlaenge (nur Freigang)'),
@@ -183,8 +192,12 @@ MASSE = {
     # Motorachse ueber dem Rohrende: weiter innen stiesse der Flansch am
     # Ende des X-Wegs an die Traegerplatte (3 mm Luft, portal_check.py).
     'motor_u':              (7.0, 'X-Motor: Achse (u)'),
-    'mp_dicke':             (8.0, 'Motorplatte: Dicke'),
-    'ritzel_luft':          (0.5, 'Luft zwischen Ritzelnabe und Motorplatte'),
+    # Die Welle traegt das ganze Ritzel: der Motor steht so tief, dass sie
+    # welle_ueberstand unter dem Ritzel endet, die Nabe taucht dafuer in die
+    # Bundbohrung. 4,5 mm Platte: M3x8 fasst 3,5 mm im Flansch, und die
+    # Madenschrauben liegen 2,5 mm unter der Platte (Inbus von vorn).
+    'welle_ueberstand':     (0.5, 'X-Motor: Welle steht unter dem Ritzel vor'),
+    'mp_dicke':             (4.5, 'Motorplatte: Dicke'),
     'saeule_aussen_b':     (10.0, 'Motorhalter: aeussere Saeule, Breite'),
 
     # --- Umlenkhalter + Spannklotz (rechts) ---------------------------------
@@ -345,11 +358,18 @@ def lage():
 
     # ---- Motorhalter (links) --------------------------------------------------
     fl = w('motor_flansch') / 2.0
-    # Ritzel mit der Nabe nach oben: unterer Bord knapp unter dem Riemen
-    L['ritzel_z0'] = L['xr_z0'] - w('ritzel_bord')
+    # Ritzel mit der Nabe nach oben, der Riemen mittig in der Spur. Die
+    # Madenschrauben sitzen in der Mitte der Nabe.
+    L['ritzel_z0'] = L['xr_zm'] - w('ritzel_spur') / 2.0 - w('ritzel_bord')
     L['ritzel_z1'] = L['ritzel_z0'] + w('ritzel_laenge')
-    L['mp_z0'] = L['ritzel_z1'] + w('ritzel_luft')
-    L['mp_z1'] = L['mp_z0'] + w('mp_dicke')
+    L['ritzel_nabe_z0'] = (L['ritzel_z0'] + 2.0 * w('ritzel_bord')
+                           + w('ritzel_spur'))
+    L['madenschraube_z'] = (L['ritzel_nabe_z0'] + L['ritzel_z1']) / 2.0
+    # Flanschflaeche = Oberseite der Motorplatte, so tief, dass die Welle
+    # durch das ganze Ritzel reicht. Die Nabe steht dann in der Bundbohrung.
+    L['mp_z1'] = L['ritzel_z0'] - w('welle_ueberstand') + w('motor_welle_l')
+    L['mp_z0'] = L['mp_z1'] - w('mp_dicke')
+    L['bund_z0'] = L['mp_z1'] - w('motor_bund_h')
     L['motor_z1'] = L['mp_z1'] + w('motor_laenge')
     L['welle_z0'] = L['mp_z1'] - w('motor_welle_l')
     L['motor_schrauben'] = [(w('motor_u') + su * w('motor_loch') / 2.0,
@@ -971,6 +991,12 @@ def bau_motorhalter(app, design, comp, L, fehler):
     """X-Motor stehend ueber dem linken Rohrende, Welle nach unten. Das
     Ritzel sitzt mit der Nabe nach oben, seine Spur in Riemenhoehe.
 
+    Die Motorplatte ist duenn, und die Nabe taucht in ihre Bundbohrung
+    (Ø22,4 um den Bord Ø16): so reicht die 20-mm-Welle durch das ganze
+    Ritzel. Die Madenschrauben liegen unter der Platte und sind von vorn
+    erreichbar; das Ritzel passt auch mit dem Motor von oben durch die
+    Bohrung.
+
     Die Motorplatte ruht auf zwei Saeulen: hinten hinter den hinteren
     Motorschrauben, aussen neben den aeusseren. So bleiben alle vier
     Schrauben von unten erreichbar, und die Platte ist an zwei Kanten
@@ -1203,10 +1229,16 @@ def hinweise_bauen(L, fehler):
             L['xr_z0']),
         '  Motor links, Achse X={:+.1f} Y={:+.2f}: stehend, Welle nach unten,'
         .format(L['x_motor'], L['xr_yc']),
-        '  Ritzel mit der Nabe nach OBEN, Spur auf Riemenhoehe ({:+.1f} bis'
-        .format(L['ritzel_z0']),
-        '  {:+.1f}). 4x M3x{:.0f} von unten, alle vier erreichbar.'.format(
-            L['ritzel_z1'], L['motor_schraube']),
+        '  Flansch bei Z={:+.2f} auf der {:.1f}-mm-Motorplatte, 4x M3x{:.0f}'
+        .format(L['mp_z1'], w('mp_dicke'), L['motor_schraube']),
+        '  von unten. Ritzel mit der Nabe nach OBEN, Z {:+.2f} bis {:+.2f}:'
+        .format(L['ritzel_z0'], L['ritzel_z1']),
+        '  die Nabe taucht {:.1f} mm in die Bundbohrung, die {:.0f}-mm-Welle'
+        .format(L['ritzel_z1'] - L['mp_z0'], w('motor_welle_l')),
+        '  endet {:.1f} mm unter dem Ritzel. Madenschrauben {:.1f} mm unter der'
+        .format(L['ritzel_z0'] - L['welle_z0'],
+                L['mp_z0'] - L['madenschraube_z']),
+        '  Platte, Inbus von vorn; eine davon auf die Abflachung der Welle.',
         '  Motorhalter: 2x M3x{:.0f} von oben in die Einsaetze des Stirnblocks.'
         .format(L['mh_schraube']),
         '  Umlenkung rechts, Achse X={:+.2f} (Spannweg {:+.2f} bis {:+.2f}):'
@@ -1238,15 +1270,18 @@ def hinweise_bauen(L, fehler):
         '     Platten legen, an Rueckwand und Stirnblock: 2x M5x{:.0f} hinten,'
         .format(L['rueck_schraube']),
         '     1x M5x{:.0f} stirnseitig je Seite.'.format(L['kern_schraube']),
-        '  5. Motor auf den Motorhalter (4x M3x{:.0f} von unten), Ritzel auf'
+        '  5. Motor von oben auf den Motorhalter, 4x M3x{:.0f} von unten.'
         .format(L['motor_schraube']),
-        '     Riemenhoehe, Halter aufs linke Rohrende (2x M3x{:.0f}).'.format(
-            L['mh_schraube']),
+        '     Ritzel von unten auf die Welle, Nabe voraus, bis die Welle'
+        ' {:.1f} mm'.format(w('welle_ueberstand')),
+        '     unten heraussteht; Madenschrauben von vorn. Halter aufs linke',
+        '     Rohrende (2x M3x{:.0f}).'.format(L['mh_schraube']),
         '  6. Umlenkhalter aufs rechte Rohrende (2x M3x{:.0f}), Spannklotz,'
         .format(L['uh_schraube']),
         '     Rolle und M5 einsetzen, Zugschraube lose.',
         '  7. X-Riemen: ein Ende in den Riemenhalter, um Motor und Rolle,',
-        '     zweites Ende einlegen, spannen.',
+        '     zweites Ende einlegen, spannen. Laeuft er nicht mittig in der',
+        '     Spur, das Ritzel nachstellen.',
         '  8. Y-Riemen in beide Klemmtuerme, an den Ritzeln spannen.',
         '',
         'DRUCK (PETG, Bambu Lab A1, 4 Wandlinien, >=40 % Infill):',
@@ -1266,6 +1301,11 @@ def hinweise_bauen(L, fehler):
         '    angenommen (20-Z-Rolle mit Lager, Bohrung 5).',
         '  X-Motor: Laenge {:.0f} mm angenommen (nur Freigang).'.format(
             w('motor_laenge')),
+        '  Ritzel 20 Z: Spur {:.0f} mm, Nabe {:.0f} mm mit den Madenschrauben in'
+        .format(w('ritzel_spur'), L['ritzel_z1'] - L['ritzel_nabe_z0']),
+        '    der Mitte angenommen [w]. Bis {:.0f} mm Welle endet sie ueber dem'
+        .format(L['mp_z1'] - L['profil_z1'] - 1.0),
+        '    Rohr.',
         '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
         '  Lagen rechnet lage() in Python — nach einer Parameteraenderung das',

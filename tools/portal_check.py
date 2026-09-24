@@ -140,15 +140,26 @@ def main():
     p.ok('Riemen ueber der Flanke des X-Wagens',
          L['xr_z0'] - w('x_wagen_breite') / 2, 3.0)
     p.ok('Riemen ueber dem Rohr', L['xr_z0'] - L['profil_z1'], 3.0)
-    # Ritzel: Spur 7 mm zwischen den Borden, Riemen muss hineinpassen
+    # Ritzel: der Riemen laeuft mittig in der Spur zwischen den Borden
     spur0 = L['ritzel_z0'] + w('ritzel_bord')
-    p.ok('Riemen in der Spur des Ritzels (unten)', L['xr_z0'] - spur0 + 0.01,
-         0.0)
+    p.ok('Riemen in der Spur des Ritzels (unten)', L['xr_z0'] - spur0, 0.5)
     p.ok('Riemen in der Spur des Ritzels (oben)',
-         spur0 + 7.0 - L['xr_z1'], 0.5)
-    p.ok('Ritzelnabe unter der Motorplatte', L['mp_z0'] - L['ritzel_z1'], 0.3)
-    p.ok('Welle reicht in die Ritzelbohrung (Eingriff)',
-         L['ritzel_z1'] - L['welle_z0'], 12.0)
+         spur0 + w('ritzel_spur') - L['xr_z1'], 0.5)
+    # Welle 20 mm (Angabe am Aufbau): sie muss das ganze Ritzel tragen. Dafuer
+    # steht der Motor tief, und die Nabe taucht in die Bundbohrung.
+    p.ok('Welle ({:.0f} mm) reicht durch das ganze Ritzel'.format(
+        w('motor_welle_l')), L['ritzel_z0'] - L['welle_z0'], 0.0)
+    p.ok('Ritzel unter dem Zentrierbund (Luft)',
+         L['bund_z0'] - L['ritzel_z1'], 0.5)
+    p.ok('Ritzel dreht frei in der Bundbohrung (Luft rundum)',
+         (w('motor_bund_d') + w('spiel_locker') - w('ritzel_flansch_d')) / 2,
+         2.0)
+    p.info('Nabe taucht in die Bundbohrung', L['ritzel_z1'] - L['mp_z0'])
+    p.ok('Madenschrauben unter der Motorplatte (Inbus von vorn)',
+         L['mp_z0'] - L['madenschraube_z'], 2.0)
+    p.ok('Wellenende ueber dem Rohr', L['welle_z0'] - L['profil_z1'], 3.0)
+    p.info('laengste Welle, die noch 1 mm ueber dem Rohr endet',
+           L['mp_z1'] - L['profil_z1'] - 1.0)
     p.ok('Umlenkrolle mittig auf dem Riemen',
          -abs((L['rolle_z0'] + L['rolle_z1']) / 2 - L['xr_zm']), -0.01)
     p.ok('Riemen zwischen den Platten der Umlenkung (unten)',
@@ -161,7 +172,11 @@ def main():
          (L['xr_y_rueck'] - L['riemen_aussen']) - L['mh_hinten_y'][1], 3.0)
     p.ok('Ruecklauf vor der Saeule des Umlenkhalters',
          (L['xr_y_rueck'] - L['riemen_aussen']) - L['uh_saeule_y'][1], 3.0)
-    p.ok('Riemenhalter unter der Motorplatte', L['mp_z0'] - TL['rh_z1'], 3.0)
+    # Am linken Ende steht der Riemenhalter neben der Motorplatte (in X
+    # getrennt), nicht unter ihr
+    p.ok('Riemenhalter neben der Motorplatte (X, linkes Ende)',
+         (L['xw_min'] + tw('traeger_x_links'))
+         - (L['x_motor'] + w('motor_flansch') / 2.0), 3.0)
     # Motorflansch gegen Traegerplatte am linken Ende (auch in 3), hier
     # ausdruecklich, weil motor_u daran haengt
     p.ok('Motorflansch <-> Traegerplatte am linken Ende (X)',

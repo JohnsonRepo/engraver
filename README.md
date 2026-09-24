@@ -7,9 +7,9 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 | Ebene | Aufbau |
 |---|---|
 | Gestell | 2 × 2060 Aluprofil, darauf 2 × 2040 Aluprofil |
-| Y-Achse | 2 Linearführungen oben auf den 2040ern |
-| Portal | Halterungen auf den Y-Schlitten, dazwischen ein 2020 Aluprofil |
-| X-Achse | Linearführung MGN15 am Portalprofil |
+| Y-Achse | 2 Linearführungen MGN12H oben auf den 2040ern, GT2-Riemen |
+| Portal | Halterungen auf den Y-Schlitten, dazwischen ein 2020-V-Slot-Profil (500 mm) |
+| X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil |
 | Z-Achse | Toolhead am MGN15H-Wagen: eigene MGN9-Führung, NEMA 17 über Tr8×2-Spindel |
 | Werkzeug | Diodenlaser am Z-Schlitten |
 

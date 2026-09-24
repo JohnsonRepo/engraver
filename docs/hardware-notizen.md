@@ -11,9 +11,9 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 | Ebene | Aufbau |
 |---|---|
 | Gestell | 2 × 2060 Aluprofil, darauf 2 × 2040 Aluprofil |
-| Y-Achse | 2 Linearführungen oben auf den 2040ern |
-| Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 Aluprofil |
-| X-Achse | Linearführung am Portalprofil |
+| Y-Achse | 2 Linearführungen **MGN12H** oben auf den 2040ern, GT2-Riemen |
+| Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
+| X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |
 | Werkzeug | Diodenlaser am Toolhead |
 
@@ -54,6 +54,30 @@ längs), um die Baugröße zu entscheiden. Sie folgt jetzt dem Parameter
 
 Damit ist das Lochbild der Trägerplatte bestätigt — sie trägt den ganzen
 Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
+
+## Y-Achse und Portal
+
+| Wert | Maß | Status |
+|---|---|---|
+| Linearführung Y | **MGN12H**, Lochbild **20 × 20** (Breite 27, Länge 45,4) | `[v]` aus RiemenklemmeSchlitten v8 (.3mf), passt am Wagen |
+| Portalprofil | 2020 **V-Slot**, **500 mm** | `[v]` |
+| X-Schiene | MGN15, **450 mm** | `[v]` |
+| Riemen, Ritzel | GT2 6 mm, **20 Z** | `[v]` |
+| Umlenkrollen | **glatt, Bohrung 5 mm**; 20-Z-Ritzel mit Kugellager vorhanden | `[v]` |
+| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Mitte ≈ 26 mm unter der Wagenoberseite (liegt auf dem Ø3,2-Sicherungsstift), Zähne zur Schiene | `[v]` aus v8 |
+| Abstand der Y-Schienen | noch offen — mindestens **514 mm** Mitte zu Mitte, damit der Toolhead den ganzen X-Weg nutzen kann | Rechnung, siehe unten |
+
+Das ältere `RiemenklemmeSchlitten.py` trug noch das Lochbild 25 × 25
+(MGN15H) — für die Y-Achse falsch, gilt nur für den X-Wagen.
+
+**Mindestabstand der Y-Schienen:** Der Y-Riemen läuft genau in der Höhe, in
+der der Toolhead unten am Ende des X-Wegs vorbeifährt. Mit dem Z-Schlitten
+ganz unten ragen rechts Mutternwinkel und Winkel-Lasche 44 mm neben die
+Wagenmitte, links die Fahnenlasche 27,5 mm. Bei 450 mm Schiene fährt der
+Wagen ±195,6 mm; mit 3 mm Luft zum Riemen ergibt das 513,3 mm. Die X-Schiene
+sitzt dafür 8 mm nach links versetzt auf dem Rohr, dann sind beide Seiten
+gleich. Das gilt, solange der Rahmen unter den Schienen nicht weiter nach
+innen ragt als der Riemen (22 mm neben der Schienenmitte).
 
 ## Diodenlaser
 

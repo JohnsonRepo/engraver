@@ -572,6 +572,46 @@ def main():
         p.info('Bericht NICHT renderbar: {}'.format(exc))
         p.ok('Bericht rendert ohne Fehler', 0.0, 1.0, '>=', '')
 
+    # ------------------------------------------------------------------
+    # Referenz: die 2060 liegen quer unter den 2040. Laser und Schlittenplatte
+    # haengen tiefer als ihre Oberkante — mit Z unten begrenzt das vordere
+    # 2060 den Y-Weg, nicht die Schiene. Lage wie im Modell: Schienen und
+    # 2060 mittig zum Y-Wagen, Abstand der 2060 Mitte zu Mitte (angenommen).
+    p.titel('14) Y-Weg gegen die 2060 (Referenz, alles mittig angenommen)')
+    oben = L['quer_z'][1] + 3.0              # 3 mm Luft ueber dem 2060
+
+    def tief(zc):
+        return [q.verschoben(zc) for q in bewegte_th] + feste_th
+
+    def unter_oben(zc):
+        return [q for q in tief(zc) if q.z[0] < oben
+                and 'Portal' not in q.name and 'Schiene' not in q.name]
+
+    zc0 = TL['zc_min']
+    teile = unter_oben(zc0)
+    d_schiene = w('y_schiene_laenge') / 2 - w('y_wagen_laenge') / 2
+    p.info('Toolhead-Teile unter der 2060-Oberkante (Z unten): '
+           + ', '.join(sorted(set(q.name for q in teile))))
+    d_vorn = L['quer_y_vorn'][0] - 3.0 - max(q.y[1] for q in teile)
+    d_hinten = min(q.y[0] for q in teile) - 3.0 - L['quer_y_hinten'][1]
+    p.info('Y-Wagen ab Schienenmitte bis Schienenende', d_schiene)
+    p.info('ab Mitte nach vorn (Laserseite) bis 3 mm vor das 2060, Z unten',
+           d_vorn)
+    p.info('ab Mitte nach hinten bis 3 mm vor das 2060, Z unten', d_hinten)
+    strahl = TL['strahl_y'] - w('wagen_y')    # ab Rahmenmitte
+    p.info('Strahl erreicht mit Z unten ab Rahmenmitte von',
+           strahl - min(d_schiene, d_hinten))
+    p.info('                                          bis',
+           strahl + min(d_schiene, d_vorn))
+    zc_frei = next((zc / 10.0 for zc in range(int(zc0 * 10),
+                                              int(TL['zc_max'] * 10) + 1)
+                    if not unter_oben(zc / 10.0)), None)
+    if zc_frei is not None:
+        p.info('ueber die 2060 hinweg ab Wagenmitte zc', zc_frei)
+        p.info('Linse dann ueber dem Bett',
+               zc_frei + TL['laser_unten_rel'] + tw('bett_abstand'))
+
+
     return p.bericht()
 
 

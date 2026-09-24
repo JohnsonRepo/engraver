@@ -45,7 +45,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 7
+REVISION = 8
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -219,12 +219,15 @@ MASSE = {
     'uh_lasche_b':          (5.0, 'Umlenkhalter: Lasche fuer die Zugschraube'),
 
     # --- Referenz (nicht drucken, nur zur Ansicht) --------------------------
-    # 2040 600 mm lang [v], gezeichnet mittig unter dem Y-Wagen; die Y-Schienen
-    # gleich lang [?]. Darunter quer zwei 2060 hochkant [v], an den Enden der
-    # 2040 und buendig mit ihren Aussenseiten [?]. V-Slot vereinfacht:
-    # Nutoeffnung 6,2 und Kernbohrung 4,2 [w], dahinter eine 8 mm breite
-    # Kammer.
-    'rahmen_laenge':      (600.0, 'Referenz: Laenge der 2040 und Y-Schienen'),
+    # Angaben am Aufbau [v]: 2040 600 mm, Y-Schienen 500 mm, darunter quer
+    # zwei 2060 hochkant, 600 mm lang, 400 mm auseinander. Gezeichnet ist
+    # alles mittig zum Y-Wagen, der Abstand der 2060 als Mitte zu Mitte [?].
+    # V-Slot vereinfacht: Nutoeffnung 6,2 und Kernbohrung 4,2 [w], dahinter
+    # eine 8 mm breite Kammer.
+    'rahmen_laenge':      (600.0, 'Referenz: Laenge der 2040'),
+    'y_schiene_laenge':   (500.0, 'Referenz: Laenge der Y-Schienen'),
+    'quer_laenge':        (600.0, 'Referenz: 2060 quer: Laenge'),
+    'quer_abstand':       (400.0, 'Referenz: 2060 quer: Abstand Mitte zu Mitte'),
     'quer_h':              (60.0, 'Referenz: 2060 quer, hochkant: Hoehe'),
     'nut_b':                (6.2, 'V-Slot: Nutoeffnung'),
     'nut_t':                (2.0, 'V-Slot vereinfacht: Tiefe der Oeffnung'),
@@ -485,11 +488,14 @@ def lage():
     # des Riemens an, der Riemenkoerper durchdringt sie so nicht.
     L['rahmen_y'] = (w('wagen_y') - w('rahmen_laenge') / 2.0,
                      w('wagen_y') + w('rahmen_laenge') / 2.0)
-    # 2060 quer unter den Enden der 2040, buendig mit deren Aussenseiten
-    L['quer_x'] = (-(R + w('rahmen_b') / 2.0), R + w('rahmen_b') / 2.0)
+    L['y_schiene_y'] = (w('wagen_y') - w('y_schiene_laenge') / 2.0,
+                        w('wagen_y') + w('y_schiene_laenge') / 2.0)
+    # 2060 quer unter den 2040, symmetrisch zur Mitte
+    L['quer_x'] = (-w('quer_laenge') / 2.0, w('quer_laenge') / 2.0)
     L['quer_z'] = (L['rahmen_z0'] - w('quer_h'), L['rahmen_z0'])
-    L['quer_y_hinten'] = (L['rahmen_y'][0], L['rahmen_y'][0] + w('rahmen_b'))
-    L['quer_y_vorn'] = (L['rahmen_y'][1] - w('rahmen_b'), L['rahmen_y'][1])
+    for t, v in (('hinten', -1.0), ('vorn', 1.0)):
+        m = w('wagen_y') + v * w('quer_abstand') / 2.0
+        L['quer_y_' + t] = (m - w('rahmen_b') / 2.0, m + w('rahmen_b') / 2.0)
     L['xw_mitte'] = (L['xw_min'] + L['xw_max']) / 2.0
     L['rh_x'] = (L['xw_mitte'] + w('traeger_x_links'),
                  L['xw_mitte'] + w('traeger_x_rechts'))
@@ -1314,8 +1320,8 @@ def bau_referenz(app, design, teile, L, fehler):
     """Kaufteile und Riemen, nur zur Ansicht — NICHT drucken. teile: die
     Komponenten Ref_Profile, Ref_Fuehrungen, Ref_Riemen, Ref_Antrieb.
 
-    Der Rahmen liegt mittig unter dem Y-Wagen, die 2060 quer unter den
-    Enden der 2040. Der Toolhead (hier nur X-Wagen und Riemenhalter) steht
+    Rahmen, Y-Schienen und die 2060 quer darunter liegen mittig zum
+    Y-Wagen. Der Toolhead (hier nur X-Wagen und Riemenhalter) steht
     in der Mitte des X-Wegs, die Umlenkrolle in der Mitte ihres Spannwegs.
     Nicht gezeichnet: die Ritzel an den Y-Enden — ihre Lage ist nicht
     bekannt."""
@@ -1356,9 +1362,9 @@ def bau_referenz(app, design, teile, L, fehler):
         n = seite(s)
         xsch = xb(L, s, -w('y_schiene_b') / 2.0, w('y_schiene_b') / 2.0)
         zsch = (L['y_schiene_z0'], L['y_schiene_z1'])
-        k = quader(c, 'Y-Schiene_' + n, xsch, L['rahmen_y'], zsch,
+        k = quader(c, 'Y-Schiene_' + n, xsch, L['y_schiene_y'], zsch,
                    'neu').bodies.item(0)
-        fertig(k, 'Y-Schiene_' + n, (xsch, L['rahmen_y'], zsch), 'Steel')
+        fertig(k, 'Y-Schiene_' + n, (xsch, L['y_schiene_y'], zsch), 'Steel')
         xwg = xb(L, s, -w('y_wagen_breite') / 2.0, w('y_wagen_breite') / 2.0)
         ywg = (L['wagen_y0'], L['wagen_y1'])
         zwg = (L['y_wagen_z0'], L['y_wagen_z1'])
@@ -1624,15 +1630,14 @@ def hinweise_bauen(L, fehler):
         'REFERENZ (Komponente Referenz_nicht_drucken): nur zur Ansicht,',
         '  NICHT drucken und beim Export weglassen. Eine Gluehbirne blendet',
         '  alles aus.',
-        '  Profile: Portalrohr 2020, beide 2040 ({:.0f} mm, mittig unter dem'
+        '  Profile: Portalrohr 2020, beide 2040 ({:.0f} mm) und die zwei 2060'
         .format(w('rahmen_laenge')),
-        '    Y-Wagen) und die zwei 2060 quer darunter, V-Slot vereinfacht.',
-        '    Die 2060 liegen an den Enden der 2040, buendig mit deren',
-        '    Aussenseiten ({:.0f} mm lang) — angenommen [?].'.format(
-            L['quer_x'][1] - L['quer_x'][0]),
-        '  Fuehrungen: MGN12 mit MGN12H, MGN15 mit MGN15H. Die Y-Schienen',
-        '    sind so lang wie die 2040 gezeichnet [?]. Vom Toolhead nur',
-        '    X-Wagen und Riemenhalter, in der Mitte des X-Wegs.',
+        '    quer darunter ({:.0f} mm, {:.0f} mm Mitte zu Mitte), V-Slot'.format(
+            w('quer_laenge'), w('quer_abstand')),
+        '    vereinfacht. Alles mittig zum Y-Wagen gezeichnet [?].',
+        '  Fuehrungen: MGN12 ({:.0f} mm) mit MGN12H, MGN15 mit MGN15H. Vom'
+        .format(w('y_schiene_laenge')),
+        '    Toolhead nur X-Wagen und Riemenhalter, in der Mitte des X-Wegs.',
         '  X-Riemen: Schleife um Ritzel und Umlenkrolle, beide Enden im',
         '    Riemenhalter.',
         '  Y-Riemen: je Seite zwei Enden in den Klemmtuermen, der Ruecklauf',

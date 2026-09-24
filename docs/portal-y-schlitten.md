@@ -39,18 +39,17 @@ sie mit „[Referenz, nicht drucken]“.
 
 | Gruppe | Inhalt |
 |---|---|
-| `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter, V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
-| `Ref_Fuehrungen` | Y-Schienen MGN12 mit MGN12H, X-Schiene MGN15 mit MGN15H |
+| `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 400 mm auseinander), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
+| `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
 | `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite die zwei Enden des Y-Riemens in den Klemmtürmen und sein Rücklauf in der oberen Nut des 2040 |
 | `Ref_Antrieb` | NEMA 17 mit Welle, Ritzel und Umlenkrolle; der Riemenhalter des Toolheads |
 
 Was dabei angenommen ist:
 
-* Die **2040 sind 600 mm lang** und liegen mittig unter dem Y-Wagen, das
-  Portal steht also in der Mitte des Rahmens. Die **Y-Schienen** sind
-  genauso lang gezeichnet `[?]`.
-* Die **2060** liegen quer und hochkant unter den Enden der 2040, bündig mit
-  deren Außenseiten, also 534 mm lang `[?]`.
+* **2040** (600 mm), **Y-Schienen** (500 mm) und die zwei **2060** quer
+  darunter (600 mm, hochkant) liegen mittig zum Y-Wagen, das Portal steht
+  also in der Mitte seines Wegs. Mittig ist angenommen `[?]`, ebenso, dass
+  die 400 mm zwischen den 2060 von Mitte zu Mitte gemessen sind.
 * Der **Toolhead** steht in der Mitte des X-Wegs; von ihm sind nur X-Wagen
   und Riemenhalter drin. Die Umlenkrolle steht in der Mitte ihres Spannwegs.
 * Der **Y-Rücklauf** liegt mittig in der oberen Nut (Z −42 bis −36). Die
@@ -59,6 +58,27 @@ Was dabei angenommen ist:
   gezeichnet, ihre Lage kenne ich nicht.
 * Ritzel und Rolle sind am Fuß der Verzahnung gezeichnet, damit der Riemen
   sie nicht durchdringt. Die Massen der Referenzteile stimmen nur grob.
+
+### Y-Weg und die 2060
+
+Mit Z unten hängt die Schlittenplatte bis Z −125,3 und die Laserlinse bis
+Z −115,8; die 2060 beginnen oben bei Z −69. Über ein 2060 kommt der Toolhead
+deshalb nur hochgefahren, und das vordere 2060 (auf der Seite des Lasers)
+begrenzt den Y-Weg, nicht die Schiene. `portal_check.py` rechnet das in
+Abschnitt 14 nach, mit der Lage wie im Modell:
+
+| | |
+|---|---|
+| Y-Wagen ab Schienenmitte bis Schienenende | ± 227,3 mm |
+| nach vorn (Laserseite), Z unten, bis 3 mm vor das 2060 | **51 mm** |
+| nach hinten bis zum 2060 | 270 mm, die Schiene endet vorher |
+| Strahl erreicht mit Z unten, ab Rahmenmitte | −108,8 bis +169,5 mm (278 mm) |
+| über die 2060 hinweg | ab Wagenmitte zc = +19,3, Linse dann 73,5 mm über dem Bett |
+
+Den Y-Weg in der Firmware also vorn auf diese Grenze setzen, oder vor dem
+Verfahren Z hochfahren. Liegen Schienen oder 2060 anders als mittig, ändern
+sich die Zahlen — `quer_abstand` und `y_schiene_laenge` anpassen und die
+Prüfung neu laufen lassen.
 
 ## Koordinaten
 
@@ -356,4 +376,5 @@ die Prüfung als Erstes.
 | `rolle_u` / `rolle_weg` | 26,35 / 4 mm | Umlenkrolle in Mittelstellung und ihr Weg je Richtung |
 | `rolle_d` | 18 mm `[?]` | Außendurchmesser der Umlenkrolle |
 | `motor_laenge` | 48 mm `[?]` | Länge des X-Motors |
-| `rahmen_laenge` / `quer_h` | 600 / 60 mm | Länge der 2040 (und Y-Schienen) und Höhe der 2060, nur für die Referenzteile |
+| `rahmen_laenge` / `y_schiene_laenge` | 600 / 500 mm | Länge der 2040 und der Y-Schienen (Referenz, Y-Weg) |
+| `quer_laenge` / `quer_abstand` / `quer_h` | 600 / 400 / 60 mm | 2060 quer: Länge, Abstand Mitte zu Mitte, Höhe (Referenz, Y-Weg) |

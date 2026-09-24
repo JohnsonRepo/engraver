@@ -10,8 +10,8 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer, darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
-| Y-Achse | 2 Linearführungen **MGN12H** oben auf den 2040ern, GT2-Riemen |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
+| Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern, GT2-Riemen |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |

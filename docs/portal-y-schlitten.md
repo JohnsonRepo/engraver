@@ -89,13 +89,25 @@ zum Rahmen.
 
 Die Riemenlage ist die von `RiemenklemmeSchlitten` v8, damit der Riemen am
 Rahmen weiterläuft wie bisher: **21,6 mm innen** neben der Schienenmitte,
-hochkant, **Zähne zur Schiene**, Unterkante Z = −44,9. Schnitt A–A der
-Zeichnung zeigt den Riemenblock von innen.
+hochkant, **Zähne zur Schiene**, Unterkante Z = −44,9. Der Riemenblock hängt
+nach unten bis auf die Höhe der **oberen Nutreihe des 2040**: Der Riemen
+liegt 9,9 bis 15,9 mm unter der Oberkante des Profils, genau wie bei v8.
 
-**Vorn — feste Klemme.** Den Riemen von unten in den Schlitz drücken, dann
+**Riemenführung:** An beiden Y-Enden sitzen Ritzel mit senkrechter Achse.
+Der **Rücklauf läuft in der oberen Nut des 2040**, 8,9 mm neben der
+Schienenmitte, einen Teilkreis (12,7 mm) neben dem gezogenen Trum. Die Zähne
+zeigen zur Innenseite der Schleife, also zur Schiene. Deshalb stehen die
+Rippen beider Klemmen auf der Schienenseite: Nur so greifen sie in die Zähne
+und nicht auf den glatten Rücken. `portal_check.py` prüft genau das. Der
+Rücklauf liegt im Profil und kommt dem Toolhead nie nahe.
+
+**Zwei Klemmen je Schlitten**, eine je Riemenende, beide im Riemenblock.
+Schnitt A–A der Zeichnung zeigt sie von innen.
+
+**Klemme 1, vorn — fest.** Den Riemen von unten in den Schlitz drücken, dann
 einen **Stift Ø3 × 20 (oder eine M3×20) von vorn** unter ihm durchschieben.
 
-**Hinten — Spannschieber.** Den Riemen von unten in den Schlitz des Schiebers
+**Klemme 2, hinten — Spannschieber.** Den Riemen von unten in den Schlitz des Schiebers
 legen, den Schieber von hinten in den Kanal schieben, **M3×40 von hinten**
 durch den Schieber in die Mutter im Anschlag. Eindrehen schiebt den Schieber
 nach vorn — das spannt. **Weg 14 mm**; reicht er nicht, das Riemenende in der
@@ -261,9 +273,6 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
   und zum X-Wagen (3 mm).
 * **X-Motor:** Länge 48 mm angenommen — geht nur in den Freigang nach oben
   ein.
-* **Y-Riemen, Rücklauf:** Wo der Rücklauf am Rahmen läuft, ist offen. Läuft
-  er direkt unter dem gezogenen Trum, bleiben 1,1 mm zum Riemenblock (in v8
-  waren es 0,1 mm); läuft er innen daneben, 3,6 mm.
 
 ## Parametrik
 

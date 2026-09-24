@@ -393,6 +393,11 @@ def portal_bauraeume(w, L):
               xb(s, w('y_riemen_linie') - w('riemen_dicke') / 2,
                  w('y_riemen_linie') + w('riemen_dicke') / 2),
               (-lang, lang), (L['yr_z0'], L['yr_z1']), 'riemen'),
+            # Ruecklauf: in der oberen Nut des 2040, auf der Schienenseite
+            q('Y-Ruecklauf ' + n,
+              xb(s, L['yr_rueck_u'] - w('riemen_dicke') / 2,
+                 L['yr_rueck_u'] + w('riemen_dicke') / 2),
+              (-lang, lang), (L['yr_z0'], L['yr_z1']), 'riemen'),
         ]
     s = -1
     xm, yc = s * (R - w('motor_u')), L['xr_yc']
@@ -483,6 +488,7 @@ def portal_bauraeume(w, L):
             ('Spannschieber ' + n, 'Y-Riemen ' + n),
             ('Y-Wagen ' + n, 'Y-Schiene ' + n),
             ('Y-Schiene ' + n, 'Rahmen 2040 ' + n),
+            ('Y-Ruecklauf ' + n, 'Rahmen 2040 ' + n),   # laeuft in der Nut
         }
     return feste, erlaubt
 

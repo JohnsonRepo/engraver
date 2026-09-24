@@ -179,10 +179,16 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
                     L['wagen_y0'], L['wagen_y1'], 'fuehrung', **gestr))
     t.append(f.rect(xu(L['rb_u'][0]), xu(L['rb_u'][1]), *L['rb_y'], 'neu',
                     stroke_dasharray='4 3', fill_opacity='0.3'))
-    # Y-Riemen (unter der Platte): gezogener Trum
-    t.append(f.linie(xu(w('y_riemen_linie')), f.b[0] - 5,
-                     xu(w('y_riemen_linie')), f.b[1] + 5, RIEMEN, 2.0,
-                     '7 3'))
+    # Y-Riemen (unter der Platte): zwei Enden, je eine Klemme — hinten im
+    # Spannschieber, vorn in der festen Klemme. Der Ruecklauf laeuft in der
+    # oberen Nut des 2040.
+    enden = ((f.b[0] - 5, L['sch_y'][1] - 1.0),
+             (L['luecke_y'][0] + 1.0, f.b[1] + 5))
+    for y0, y1 in enden:
+        t.append(f.linie(xu(w('y_riemen_linie')), y0,
+                         xu(w('y_riemen_linie')), y1, RIEMEN, 2.0, '7 3'))
+    t.append(f.linie(xu(L['yr_rueck_u']), f.b[0] - 5, xu(L['yr_rueck_u']),
+                     f.b[1] + 5, RIEMEN, 1.2, '2 3'))
     # Schlitten
     t.append(f.rect(xu(L['platte_u'][0]), xu(L['platte_u'][1]),
                     L['platte_y0'], L['platte_y1'], 'neu'))
@@ -195,9 +201,13 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
     # verdeckt unter der Platte: Innenkante des Riemenblocks, Y-Riemen
     t.append(f.linie(xu(L['rb_u'][0]), L['rb_y'][0], xu(L['rb_u'][0]),
                      L['rb_y'][1], ORANGE, 0.8, '4 3'))
-    t.append(f.linie(xu(w('y_riemen_linie')), L['platte_y0'],
-                     xu(w('y_riemen_linie')), L['platte_y1'], RIEMEN, 1.2,
-                     '7 3'))
+    for y0, y1 in enden:
+        y0, y1 = max(y0, L['platte_y0']), min(y1, L['platte_y1'])
+        t.append(f.linie(xu(w('y_riemen_linie')), y0,
+                         xu(w('y_riemen_linie')), y1, RIEMEN, 1.2, '7 3'))
+    t.append(f.linie(xu(L['yr_rueck_u']), L['platte_y0'],
+                     xu(L['yr_rueck_u']), L['platte_y1'], RIEMEN, 1.0,
+                     '2 3'))
     # Portalrohr und X-Schiene
     t.append(f.rect(-w('profil_laenge') / 2, w('profil_laenge') / 2,
                     L['profil_y0'], L['portal_y'], 'profil'))
@@ -520,8 +530,11 @@ def main():
     u_rw = (L['mp_u'][1] + L['rueck_u'][1]) / 2
     t += fl_.spalte([
         (xu(10, -1), -70, 'Y-Wagen MGN12H, 4× M3 von oben'),
-        (xu(26, -1), -63, 'Riemenblock mit Y-Spanner\n(unter der Platte)'),
-        (xu(w('y_riemen_linie'), -1), -90, 'Y-Riemen'),
+        (xu(26, -1), -63, 'Riemenblock: zwei Klemmen, vorn fest,\n'
+         'hinten Spannschieber (unter der Platte)'),
+        (xu(w('y_riemen_linie'), -1), -90, 'Y-Riemen (zwei Enden)'),
+        (xu(L['yr_rueck_u'], -1), -80, 'Y-Rücklauf in der oberen\n'
+         'Nut des 2040'),
         (xu(u_rw, -1), L['rueck_y0'] + 1.0,
          'Rückwand: 2× M5 in\nHammermuttern'),
         (-215, -26, 'Portalrohr 2020'),
@@ -534,7 +547,7 @@ def main():
         fl_.ox - 12, 'end')
     t += fr_.spalte([
         (xu(-10, 1), -70, 'Y-Wagen MGN12H'),
-        (xu(26, 1), -63, 'Riemenblock mit Y-Spanner\n(unter der Platte)'),
+        (xu(26, 1), -63, 'Riemenblock: zwei Klemmen\n(unter der Platte)'),
         (xu(w('y_riemen_linie'), 1), -90, 'Y-Riemen'),
         (xu(0, 1), -38, 'Umlenkhalter'),
         # der Stirnblock schaut rechts neben der oberen Platte heraus
@@ -570,13 +583,13 @@ def main():
         (-26, 3, 'Portalrohr'),
         (-41, 3, 'Rückwand'),
         (-70, L['platte_z0'] + 3, 'Platte des Schlittens'),
-        (sm, L['sch_z'][1] - 2, 'Spannschieber'),
+        (sm, L['sch_z'][1] - 2, 'Klemme 2 (hinten): Spannschieber'),
         (L['sch_y'][0] - 1.5, L['druck_z'] + 1.0,
          'Druckschraube M3×{}: Kopf hinten\nam Schieber, drückt ihn nach vorn'
          .format(de(L['druck_schraube'], 0))),
         (L['mutter_y'], L['druck_z'] + 2.2, 'Mutter im Anschlag, von oben '
          'eingelegt'),
-        (-24, L['yr_z0'] + 3, 'Y-Riemen vorn: fest, die Rippen\n'
+        (-24, L['yr_z0'] + 3, 'Klemme 1 (vorn, fest): die Rippen\n'
          'greifen in die Zähne'),
         (-20.5, L['stift_z'], 'Stift Ø3 unter dem Riemen'),
         (-13, (L['y_schiene_z0'] + L['y_schiene_z1']) / 2,
@@ -687,6 +700,7 @@ def main():
         ('Rohr', 'liegt auf der 6-mm-Platte, Höhe wie bisher'),
         ('Y-Riemen', 'Linie wie v8: {} mm innen, Unterkante {} mm'.format(
             de(w('y_riemen_linie'), 1), de(L['yr_z0'], 1))),
+        ('', 'Rücklauf in der oberen Nut des 2040, Zähne zur Schiene'),
         ('Y-Spanner', '{} mm Weg, M3×{} von hinten'.format(
             de(w('schieber_weg'), 0), de(L['druck_schraube'], 0))),
         ('X-Riemen', 'Unterkante {} mm, Schleife ≈ {} mm'.format(

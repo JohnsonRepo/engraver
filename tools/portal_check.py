@@ -242,11 +242,26 @@ def main():
     p.ok('Mutterntasche neben dem vorderen Einsatz (Y)',
          (L['mutter_y'] - mutter_dick / 2)
          - (L['rb_schrauben'][0][1] + w('insert_m3_d') / 2), 1.0)
-    # Moegliche Lagen des Ruecklaufs am Rahmen — nicht bekannt, nur Bericht
-    p.info('Ruecklauf, falls direkt darunter: Luft zum Riemenblock',
-           L['rb_z'][0] - L['yr_unten_z'][1])
-    p.info('Ruecklauf, falls innen daneben: Luft zum Riemenblock',
-           (L['yr_innen_u'] - w('riemen_dicke') / 2) - L['rb_u'][1])
+    # Riemenfuehrung am Aufbau: Ritzel mit senkrechter Achse an beiden
+    # Enden, der Ruecklauf laeuft in der oberen Nut des 2040. Die Zaehne
+    # zeigen zur Innenseite der Schleife, also zum Ruecklauf — nur dort
+    # greifen die Rippen, auf dem glatten Ruecken rutscht der Riemen durch.
+    rippen_seite = math.copysign(1.0, L['yr_rippe_u1'] - L['yr_wand_u'])
+    rueck_seite = math.copysign(1.0, L['yr_rueck_u'] - w('y_riemen_linie'))
+    p.ja('Rippen auf der Zahnseite (zur Innenseite der Schleife)',
+         rippen_seite == rueck_seite,
+         '   (Ruecklauf {:.2f} mm neben der Schienenmitte, Rippen {})'.format(
+             L['yr_rueck_u'], 'zur Schiene' if rippen_seite < 0
+             else 'nach innen'))
+    p.ok('Ruecklauf liegt in der Nut des 2040 (hinter der Flanke)',
+         L['rahmen_flanke_u'] - (L['yr_rueck_u'] + w('riemen_dicke') / 2),
+         0.0)
+    p.ok('Riemenblock neben dem Ruecklauf',
+         L['rb_u'][0] - (L['yr_rueck_u'] + w('riemen_dicke') / 2), 3.0)
+    p.info('Riemen: Oberkante unter der Oberkante des 2040',
+           L['rahmen_z1'] - L['yr_z1'])
+    p.info('Riemen: Unterkante unter der Oberkante des 2040',
+           L['rahmen_z1'] - L['yr_z0'])
 
     # ------------------------------------------------------------------
     p.titel('7) Schlitten: Waende, Schrauben, Wagen')

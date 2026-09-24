@@ -39,7 +39,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -340,12 +340,12 @@ def lage():
         return [y0 + rand + i * w('riemen_teilung') for i in range(n)]
     L['rb_rippen_y'] = rippen(L['klemme_y'][0] + 1.0, L['klemme_y'][1] - 1.0)
     L['sch_rippen_y'] = rippen(L['sch_y'][0] + 1.0, L['sch_y'][1] - 1.0)
-    # Moegliche Lagen des Ruecklauf-Trums am Rahmen (nicht bekannt): unter
-    # dem gezogenen (Rolle mit waagerechter Achse) oder innen daneben
-    # (senkrechte Achse). Nur fuer die Pruefung.
-    L['yr_unten_z'] = (L['yr_z0'] - w('ritzel_teilkreis'),
-                       L['yr_z1'] - w('ritzel_teilkreis'))
-    L['yr_innen_u'] = w('y_riemen_linie') + w('ritzel_teilkreis')
+    # Ruecklauf-Trum: laeuft in der oberen Nut des 2040, auf der Seite zur
+    # Schiene — Ritzel mit senkrechter Achse an beiden Enden, Abstand der
+    # Trume = Teilkreis. Die Zaehne zeigen damit zur Schiene (Innenseite der
+    # Schleife), deshalb stehen die Rippen der Klemmen auf der Schienenseite.
+    L['yr_rueck_u'] = w('y_riemen_linie') - w('ritzel_teilkreis')
+    L['rahmen_flanke_u'] = w('rahmen_b') / 2.0
 
     # ---- X-Riemen -------------------------------------------------------------
     L['xr_y'] = w('x_riemen_y')                            # gezogener Trum
@@ -1249,6 +1249,11 @@ def hinweise_bauen(L, fehler):
         '  bisher): Mitte {:.1f} mm innen neben der Schienenmitte, hochkant,'
         .format(w('y_riemen_linie')),
         '  Zaehne zur Schiene, Unterkante Z={:+.1f}.'.format(L['yr_z0']),
+        '  Der Ruecklauf laeuft in der oberen Nut des 2040 ({:.1f} mm neben'
+        .format(L['yr_rueck_u']),
+        '  der Schienenmitte). Die Zaehne zeigen zur Innenseite der Schleife,',
+        '  also zur Schiene: dort stehen die Rippen beider Klemmen.',
+        '  Zwei Klemmen je Schlitten, eine je Riemenende:',
         '  VORN feste Klemme: Riemen von unten in den Schlitz druecken,',
         '  Stift Ø3 (oder M3x20) von vorn unter ihm durchschieben.',
         '  HINTEN Spannschieber: Riemen von unten einlegen, Schieber von',
@@ -1334,10 +1339,6 @@ def hinweise_bauen(L, fehler):
         '    angenommen (20-Z-Rolle mit Lager, Bohrung 5).',
         '  X-Motor: Laenge {:.0f} mm angenommen (nur Freigang).'.format(
             w('motor_laenge')),
-        '  Y-Riemen, Ruecklauf-Trum: wo er am Rahmen laeuft, ist offen.',
-        '    Der Riemenblock endet {:.1f} mm ueber seiner Lage, falls er'
-        .format(L['rb_z'][0] - L['yr_unten_z'][1]),
-        '    direkt unter dem gezogenen liegt (wie in v8: dort 0,1 mm).',
         '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
         '  Lagen rechnet lage() in Python — nach einer Parameteraenderung das',

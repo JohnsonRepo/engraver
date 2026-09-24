@@ -45,7 +45,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 8
+REVISION = 9
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -579,26 +579,45 @@ def _irgendein_material(app):
     return None
 
 
+# Bibliotheksmaterialien (Aluminium, Stahl) werden direkt zugewiesen, Fusion
+# legt sie dabei selbst im Design an. Eine Kopie unter dem Bibliotheksnamen
+# (addByCopy) liess sich dem zweiten Koerper nicht mehr zuweisen — Fusion
+# brach mit "InternalValidationError : assetInst" ab (Rev. 8, beim zweiten
+# Aluprofil). Kopiert werden nur die eigenen Materialien aus ZIELDICHTE, die
+# einen eigenen Namen tragen. Wird in run() geleert.
+_BIBLIOTHEK = {}
+
+
 def material_zuweisen(app, design, ziel, name, fehler=None):
     """Setzt das physikalische Material auf `ziel` (BRepBody oder Component).
     Fuer eigene Materialien (ZIELDICHTE) wird die Dichte nach der Zuweisung
-    eingemessen und korrigiert."""
-    mat = design.materials.itemByName(name)
-    if not mat:
-        if name in ZIELDICHTE:
+    eingemessen und korrigiert. Scheitert die Zuweisung, steht das in
+    `fehler` — ein Abbruch wegen Kosmetik darf nie passieren."""
+    if name in ZIELDICHTE:
+        mat = design.materials.itemByName(name)
+        if not mat:
             basis = (_bibliotheksmaterial(app, BASIS_KANDIDATEN)
                      or _irgendein_material(app))
-        else:
-            basis = _bibliotheksmaterial(
+            mat = design.materials.addByCopy(basis, name) if basis else None
+    else:
+        if name not in _BIBLIOTHEK:
+            _BIBLIOTHEK[name] = _bibliotheksmaterial(
                 app, BIBLIOTHEK_KANDIDATEN.get(name, (name,)))
-        mat = design.materials.addByCopy(basis, name) if basis else None
+        mat = _BIBLIOTHEK[name]
     if not mat:
         if fehler is not None:
             fehler.append('Material {} nicht gesetzt — Masse im Bericht ist '
                           'der Fusion-Default'.format(name))
         return None
 
-    ziel.material = mat
+    try:
+        ziel.material = mat
+    except Exception as exc:
+        if fehler is not None:
+            fehler.append('{}: Material {} nicht gesetzt ({}) — Masse im '
+                          'Bericht ist der Fusion-Default'.format(
+                              getattr(ziel, 'name', '?'), name, exc))
+        return None
     ziel_dichte = ZIELDICHTE.get(name)
     if ziel_dichte:
         ist = _dichte(ziel)
@@ -1324,9 +1343,20 @@ def bau_referenz(app, design, teile, L, fehler):
     Y-Wagen. Der Toolhead (hier nur X-Wagen und Riemenhalter) steht
     in der Mitte des X-Wegs, die Umlenkrolle in der Mitte ihres Spannwegs.
     Nicht gezeichnet: die Ritzel an den Y-Enden — ihre Lage ist nicht
-    bekannt."""
+    bekannt.
+
+    Jedes Teil wird fuer sich gebaut: scheitert eines, steht das im Bericht
+    und das Skript laeuft weiter. Die Druckteile sind dann schon fertig."""
     d = w('riemen_dicke')
     xp, xu, yc = L['x_motor'], L['x_rolle'], L['xr_yc']
+    bo, sp, rf = w('ritzel_bord'), w('ritzel_spur'), w('ritzel_flansch_d')
+
+    def sicher(name, bauen, *args):
+        try:
+            bauen(*args)
+        except Exception:
+            fehler.append('Referenz {} nicht gebaut: {}'.format(
+                name, traceback.format_exc().strip().splitlines()[-1]))
 
     def fertig(k, name, erwartet, material, farbe=None):
         k.name = name
@@ -1334,27 +1364,92 @@ def bau_referenz(app, design, teile, L, fehler):
         material_zuweisen(app, design, k, material, fehler)
         if farbe:
             aussehen(app, design, k, farbe)
-        return k
+
+    def profil(name, laengs, bereich, quer, z):
+        k = bau_profil(teile['Ref_Profile'], name, laengs, bereich, quer, z)
+        fertig(k, name, (bereich, quer, z) if laengs == 'x'
+               else (quer, bereich, z), 'Aluminum 6061')
+
+    def box(c, name, x, y, z, material, kanal=None, farbe=None):
+        """Quader; kanal = (x, y, z) wird herausgeschnitten (Wagen)."""
+        k = quader(c, name, x, y, z, 'neu').bodies.item(0)
+        if kanal:
+            quader(c, name + '_Kanal', kanal[0], kanal[1], kanal[2], 'weg', k)
+        fertig(k, name, (x, y, z), material, farbe)
+
+    def rad(c, name, mitte, stufen, bohrung_d, material):
+        """Ritzel oder Rolle: Zylinder (d, z0, z1) uebereinander, mittig
+        gebohrt. Die Spur hat den Fuss der Verzahnung als Durchmesser."""
+        k = None
+        for i, (dm, a0, a1) in enumerate(stufen):
+            f = zylinder(c, '{}_{}'.format(name, i), 'z', mitte, dm, a0, a1,
+                         'dazu' if k else 'neu', k)
+            k = k or f.bodies.item(0)
+        z0, z1 = stufen[0][1], stufen[-1][2]
+        bohrung(c, name + '_Bohrung', 'z', [mitte], bohrung_d, z0 - 1.0,
+                z1 + 1.0, k)
+        r = max(dm for dm, _, _ in stufen) / 2.0
+        fertig(k, name, ((mitte[0] - r, mitte[0] + r),
+                         (mitte[1] - r, mitte[1] + r), (z0, z1)), material)
+
+    def x_riemen():
+        """Eine Schleife um Ritzel und Umlenkrolle, beide Enden im
+        Riemenhalter. Zaehne innen, Wirklinie auf dem Teilkreis."""
+        c = teile['Ref_Riemen']
+        rw = w('ritzel_teilkreis') / 2.0
+        ra, ri = rw + L['riemen_aussen'], rw - L['riemen_innen']
+        x0, x1 = L['rh_x']
+        sk = skizze(c, _ebene(c, 'z', L['xr_zm'], 'E_Ref_X-Riemen'),
+                    'Sk_X-Riemen')
+        zug = [((x0, yc + ra), (xp, yc + ra)),
+               ((xp, yc + ra), (xp - ra, yc), (xp, yc - ra)),
+               ((xp, yc - ra), (xu, yc - ra)),
+               ((xu, yc - ra), (xu + ra, yc), (xu, yc + ra)),
+               ((xu, yc + ra), (x1, yc + ra)),
+               ((x1, yc + ra), (x1, yc + ri)),
+               ((x1, yc + ri), (xu, yc + ri)),
+               ((xu, yc + ri), (xu + ri, yc), (xu, yc - ri)),
+               ((xu, yc - ri), (xp, yc - ri)),
+               ((xp, yc - ri), (xp - ri, yc), (xp, yc + ri)),
+               ((xp, yc + ri), (x0, yc + ri)),
+               ((x0, yc + ri), (x0, yc + ra))]
+        for pkt in zug:
+            pp = [punkt(sk, u, v) for u, v in pkt]
+            if len(pp) == 2:
+                sk.sketchCurves.sketchLines.addByTwoPoints(*pp)
+            else:
+                sk.sketchCurves.sketchArcs.addByThreePoints(*pp)
+        k = neu_mittig(c, groesstes_profil(sk),
+                       w('riemen_breite')).bodies.item(0)
+        fertig(k, 'X-Riemen', ((xp - ra, xu + ra), (yc - ra, yc + ra),
+                               (L['xr_z0'], L['xr_z1'])), 'Gummi', SCHWARZ)
+
+    def motor():
+        c = teile['Ref_Antrieb']
+        fl = w('motor_flansch') / 2.0
+        mx, my = (xp - fl, xp + fl), (yc - fl, yc + fl)
+        k = quader(c, 'NEMA17_X', mx, my, (L['mp_z1'], L['motor_z1']),
+                   'neu').bodies.item(0)
+        zylinder(c, 'NEMA17_Bund', 'z', (xp, yc), w('motor_bund_d'),
+                 L['bund_z0'], L['mp_z1'], 'dazu', k)
+        zylinder(c, 'NEMA17_Welle', 'z', (xp, yc), w('motor_welle_d'),
+                 L['welle_z0'], L['bund_z0'], 'dazu', k)
+        fertig(k, 'NEMA17_X', (mx, my, (L['welle_z0'], L['motor_z1'])),
+               'Steel')
 
     # ---- Aluprofile ----------------------------------------------------------
-    c = teile['Ref_Profile']
-    rohr = ((-w('profil_laenge') / 2.0, w('profil_laenge') / 2.0),
-            (L['profil_y0'], L['portal_y']), (L['profil_z0'], L['profil_z1']))
-    fertig(bau_profil(c, 'Portalrohr_2020', 'x', rohr[0], rohr[1], rohr[2]),
-           'Portalrohr_2020', rohr, 'Aluminum 6061')
+    sicher('Portalrohr_2020', profil, 'Portalrohr_2020', 'x',
+           (-w('profil_laenge') / 2.0, w('profil_laenge') / 2.0),
+           (L['profil_y0'], L['portal_y']), (L['profil_z0'], L['profil_z1']))
     for s in (-1, 1):
         n = seite(s)
-        quer = xb(L, s, -w('rahmen_b') / 2.0, w('rahmen_b') / 2.0)
-        zr = (L['rahmen_z0'], L['rahmen_z1'])
-        fertig(bau_profil(c, 'Rahmen_2040_' + n, 'y', L['rahmen_y'], quer,
-                          zr),
-               'Rahmen_2040_' + n, (quer, L['rahmen_y'], zr), 'Aluminum 6061')
+        sicher('Rahmen_2040_' + n, profil, 'Rahmen_2040_' + n, 'y',
+               L['rahmen_y'],
+               xb(L, s, -w('rahmen_b') / 2.0, w('rahmen_b') / 2.0),
+               (L['rahmen_z0'], L['rahmen_z1']))
     for t in ('hinten', 'vorn'):
-        name = 'Quertraeger_2060_' + t
-        fertig(bau_profil(c, name, 'x', L['quer_x'], L['quer_y_' + t],
-                          L['quer_z']),
-               name, (L['quer_x'], L['quer_y_' + t], L['quer_z']),
-               'Aluminum 6061')
+        sicher('Quertraeger_2060_' + t, profil, 'Quertraeger_2060_' + t,
+               'x', L['quer_x'], L['quer_y_' + t], L['quer_z'])
 
     # ---- Linearfuehrungen: Schienen und Wagen (mit Kanal fuer die Schiene) --
     c = teile['Ref_Fuehrungen']
@@ -1362,62 +1457,30 @@ def bau_referenz(app, design, teile, L, fehler):
         n = seite(s)
         xsch = xb(L, s, -w('y_schiene_b') / 2.0, w('y_schiene_b') / 2.0)
         zsch = (L['y_schiene_z0'], L['y_schiene_z1'])
-        k = quader(c, 'Y-Schiene_' + n, xsch, L['y_schiene_y'], zsch,
-                   'neu').bodies.item(0)
-        fertig(k, 'Y-Schiene_' + n, (xsch, L['y_schiene_y'], zsch), 'Steel')
-        xwg = xb(L, s, -w('y_wagen_breite') / 2.0, w('y_wagen_breite') / 2.0)
-        ywg = (L['wagen_y0'], L['wagen_y1'])
-        zwg = (L['y_wagen_z0'], L['y_wagen_z1'])
-        k = quader(c, 'Y-Wagen_' + n, xwg, ywg, zwg, 'neu').bodies.item(0)
-        quader(c, 'Y-Wagen_Kanal_' + n, xsch, (ywg[0] - 1.0, ywg[1] + 1.0),
-               (zwg[0] - 1.0, zsch[1]), 'weg', k)
-        fertig(k, 'Y-Wagen_' + n, (xwg, ywg, zwg), 'Steel')
+        sicher('Y-Schiene_' + n, box, c, 'Y-Schiene_' + n, xsch,
+               L['y_schiene_y'], zsch, 'Steel')
+        ywg, zwg = (L['wagen_y0'], L['wagen_y1']), (L['y_wagen_z0'],
+                                                   L['y_wagen_z1'])
+        sicher('Y-Wagen_' + n, box, c, 'Y-Wagen_' + n,
+               xb(L, s, -w('y_wagen_breite') / 2.0,
+                  w('y_wagen_breite') / 2.0), ywg, zwg, 'Steel',
+               (xsch, (ywg[0] - 1.0, ywg[1] + 1.0), (zwg[0] - 1.0, zsch[1])))
     zsch = (-w('x_schiene_b') / 2.0, w('x_schiene_b') / 2.0)
     ysch = (L['portal_y'], L['x_schiene_y1'])
-    k = quader(c, 'X-Schiene', L['x_schiene_x'], ysch, zsch,
-               'neu').bodies.item(0)
-    fertig(k, 'X-Schiene', (L['x_schiene_x'], ysch, zsch), 'Steel')
+    sicher('X-Schiene', box, c, 'X-Schiene', L['x_schiene_x'], ysch, zsch,
+           'Steel')
     xwg = (L['xw_mitte'] - w('x_wagen_laenge') / 2.0,
            L['xw_mitte'] + w('x_wagen_laenge') / 2.0)
     ywg = (L['portal_y'] + w('x_wagen_boden'), 0.0)
-    zwg = (-w('x_wagen_breite') / 2.0, w('x_wagen_breite') / 2.0)
-    k = quader(c, 'X-Wagen', xwg, ywg, zwg, 'neu').bodies.item(0)
-    quader(c, 'X-Wagen_Kanal', (xwg[0] - 1.0, xwg[1] + 1.0),
-           (ywg[0] - 1.0, ysch[1]), zsch, 'weg', k)
-    fertig(k, 'X-Wagen', (xwg, ywg, zwg), 'Steel')
+    sicher('X-Wagen', box, c, 'X-Wagen', xwg, ywg,
+           (-w('x_wagen_breite') / 2.0, w('x_wagen_breite') / 2.0), 'Steel',
+           ((xwg[0] - 1.0, xwg[1] + 1.0), (ywg[0] - 1.0, ysch[1]), zsch))
 
     # ---- Riemen ----------------------------------------------------------------
-    c = teile['Ref_Riemen']
-    # X-Riemen: eine Schleife um Ritzel und Umlenkrolle, beide Enden im
-    # Riemenhalter. Zaehne innen, Wirklinie auf dem Teilkreis.
-    rw = w('ritzel_teilkreis') / 2.0
-    ra, ri = rw + L['riemen_aussen'], rw - L['riemen_innen']
-    x0, x1 = L['rh_x']
-    sk = skizze(c, _ebene(c, 'z', L['xr_zm'], 'E_Ref_X-Riemen'),
-                'Sk_X-Riemen')
-    zug = [((x0, yc + ra), (xp, yc + ra)),
-           ((xp, yc + ra), (xp - ra, yc), (xp, yc - ra)),
-           ((xp, yc - ra), (xu, yc - ra)),
-           ((xu, yc - ra), (xu + ra, yc), (xu, yc + ra)),
-           ((xu, yc + ra), (x1, yc + ra)),
-           ((x1, yc + ra), (x1, yc + ri)),
-           ((x1, yc + ri), (xu, yc + ri)),
-           ((xu, yc + ri), (xu + ri, yc), (xu, yc - ri)),
-           ((xu, yc - ri), (xp, yc - ri)),
-           ((xp, yc - ri), (xp - ri, yc), (xp, yc + ri)),
-           ((xp, yc + ri), (x0, yc + ri)),
-           ((x0, yc + ri), (x0, yc + ra))]
-    for pkt in zug:
-        pp = [punkt(sk, u, v) for u, v in pkt]
-        if len(pp) == 2:
-            sk.sketchCurves.sketchLines.addByTwoPoints(*pp)
-        else:
-            sk.sketchCurves.sketchArcs.addByThreePoints(*pp)
-    k = neu_mittig(c, groesstes_profil(sk), w('riemen_breite')).bodies.item(0)
-    fertig(k, 'X-Riemen', ((xp - ra, xu + ra), (yc - ra, yc + ra),
-                           (L['xr_z0'], L['xr_z1'])), 'Gummi', SCHWARZ)
+    sicher('X-Riemen', x_riemen)
     # Y-Riemen je Seite: zwei Enden in den Klemmtuermen, der Ruecklauf in
     # der oberen Nut des 2040
+    c = teile['Ref_Riemen']
     zy = (L['yr_z0'], L['yr_z1'])
     for s in (-1, 1):
         n = seite(s)
@@ -1427,57 +1490,29 @@ def bau_referenz(app, design, teile, L, fehler):
                           (L['kt_y_vorn'][0] + 1.0, L['rahmen_y'][1])),
                          ('Y-Riemen_hinten_' + n,
                           (L['rahmen_y'][0], L['kt_y_hinten'][1] - 1.0))):
-            k = quader(c, name, xr, yr, zy, 'neu').bodies.item(0)
-            fertig(k, name, (xr, yr, zy), 'Gummi', SCHWARZ)
+            sicher(name, box, c, name, xr, yr, zy, 'Gummi', None, SCHWARZ)
         xr = xb(L, s, L['yr_rueck_u'] - d / 2.0, L['yr_rueck_u'] + d / 2.0)
-        k = quader(c, 'Y-Ruecklauf_' + n, xr, L['rahmen_y'], L['yr_rueck_z'],
-                   'neu').bodies.item(0)
-        fertig(k, 'Y-Ruecklauf_' + n, (xr, L['rahmen_y'], L['yr_rueck_z']),
-               'Gummi', SCHWARZ)
+        sicher('Y-Ruecklauf_' + n, box, c, 'Y-Ruecklauf_' + n, xr,
+               L['rahmen_y'], L['yr_rueck_z'], 'Gummi', None, SCHWARZ)
 
     # ---- X-Antrieb: Motor, Ritzel, Umlenkrolle, Riemenhalter -----------------
     c = teile['Ref_Antrieb']
-    fl = w('motor_flansch') / 2.0
-    mx, my = (xp - fl, xp + fl), (yc - fl, yc + fl)
-    k = quader(c, 'NEMA17_X', mx, my, (L['mp_z1'], L['motor_z1']),
-               'neu').bodies.item(0)
-    zylinder(c, 'NEMA17_Bund', 'z', (xp, yc), w('motor_bund_d'),
-             L['bund_z0'], L['mp_z1'], 'dazu', k)
-    zylinder(c, 'NEMA17_Welle', 'z', (xp, yc), w('motor_welle_d'),
-             L['welle_z0'], L['bund_z0'], 'dazu', k)
-    fertig(k, 'NEMA17_X', (mx, my, (L['welle_z0'], L['motor_z1'])), 'Steel')
-    bo, sp, rf = w('ritzel_bord'), w('ritzel_spur'), w('ritzel_flansch_d')
+    sicher('NEMA17_X', motor)
     z0 = L['ritzel_z0']
-    k = zylinder(c, 'Ritzel_X', 'z', (xp, yc), rf, z0, z0 + bo,
-                 'neu').bodies.item(0)
-    zylinder(c, 'Ritzel_Spur', 'z', (xp, yc), L['ritzel_fuss_d'], z0 + bo,
-             z0 + bo + sp, 'dazu', k)
-    zylinder(c, 'Ritzel_Bord', 'z', (xp, yc), rf, z0 + bo + sp,
-             L['ritzel_nabe_z0'], 'dazu', k)
-    zylinder(c, 'Ritzel_Nabe', 'z', (xp, yc), w('ritzel_nabe_d'),
-             L['ritzel_nabe_z0'], L['ritzel_z1'], 'dazu', k)
-    bohrung(c, 'Ritzel_Bohrung', 'z', [(xp, yc)], w('motor_welle_d'),
-            z0 - 1.0, L['ritzel_z1'] + 1.0, k)
-    fertig(k, 'Ritzel_X', ((xp - rf / 2.0, xp + rf / 2.0),
-                           (yc - rf / 2.0, yc + rf / 2.0),
-                           (z0, L['ritzel_z1'])), 'Aluminum 6061')
+    sicher('Ritzel_X', rad, c, 'Ritzel_X', (xp, yc),
+           [(rf, z0, z0 + bo),
+            (L['ritzel_fuss_d'], z0 + bo, z0 + bo + sp),
+            (rf, z0 + bo + sp, L['ritzel_nabe_z0']),
+            (w('ritzel_nabe_d'), L['ritzel_nabe_z0'], L['ritzel_z1'])],
+           w('motor_welle_d'), 'Aluminum 6061')
     rz0, rz1, rd = L['rolle_z0'], L['rolle_z1'], w('rolle_d')
-    k = zylinder(c, 'Umlenkrolle_X', 'z', (xu, yc), rd, rz0, rz0 + bo,
-                 'neu').bodies.item(0)
-    zylinder(c, 'Rolle_Spur', 'z', (xu, yc), L['ritzel_fuss_d'], rz0 + bo,
-             rz1 - bo, 'dazu', k)
-    zylinder(c, 'Rolle_Bord', 'z', (xu, yc), rd, rz1 - bo, rz1, 'dazu', k)
-    bohrung(c, 'Rolle_Bohrung', 'z', [(xu, yc)], w('rolle_bohrung'),
-            rz0 - 1.0, rz1 + 1.0, k)
-    fertig(k, 'Umlenkrolle_X', ((xu - rd / 2.0, xu + rd / 2.0),
-                                (yc - rd / 2.0, yc + rd / 2.0), (rz0, rz1)),
-           'Aluminum 6061')
-    yrh = (-w('rh_tiefe'), 0.0)
-    zrh = (w('x_wagen_breite') / 2.0, w('x_wagen_breite') / 2.0
-           + w('rh_hoehe'))
-    k = quader(c, 'Riemenhalter_Toolhead', L['rh_x'], yrh, zrh,
-               'neu').bodies.item(0)
-    fertig(k, 'Riemenhalter_Toolhead', (L['rh_x'], yrh, zrh), 'PETG')
+    sicher('Umlenkrolle_X', rad, c, 'Umlenkrolle_X', (xu, yc),
+           [(rd, rz0, rz0 + bo), (L['ritzel_fuss_d'], rz0 + bo, rz1 - bo),
+            (rd, rz1 - bo, rz1)], w('rolle_bohrung'), 'Aluminum 6061')
+    sicher('Riemenhalter_Toolhead', box, c, 'Riemenhalter_Toolhead',
+           L['rh_x'], (-w('rh_tiefe'), 0.0),
+           (w('x_wagen_breite') / 2.0,
+            w('x_wagen_breite') / 2.0 + w('rh_hoehe')), 'PETG')
 
 
 def hinweise_bauen(L, fehler):
@@ -1666,6 +1701,7 @@ def run(context):
         ui = app.userInterface
         _EBENEN.clear()
         _AUSSEHEN.clear()
+        _BIBLIOTHEK.clear()
 
         doc = app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
         try:

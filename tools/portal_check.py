@@ -147,8 +147,9 @@ def main():
     p.ok('Riemen in der Spur des Ritzels (unten)', L['xr_z0'] - spur0, 0.5)
     p.ok('Riemen in der Spur des Ritzels (oben)',
          spur0 + w('ritzel_spur') - L['xr_z1'], 0.5)
-    # Welle 20 mm (Angabe am Aufbau): sie muss das ganze Ritzel tragen. Dafuer
-    # steht der Motor tief, und die Nabe taucht in die Bundbohrung.
+    # Ausgelegt auf 20 mm Welle: sie muss das ganze Ritzel tragen. Dafuer
+    # steht der Motor tief, und die Nabe taucht in die Bundbohrung. Die
+    # gemessene Welle (23 mm) steht weiter heraus und muss frei enden.
     p.ok('Welle ({:.0f} mm) reicht durch das ganze Ritzel'.format(
         w('motor_welle_l')), L['ritzel_z0'] - L['welle_z0'], 0.0)
     p.ok('Ritzel unter dem Zentrierbund (Luft)',
@@ -159,7 +160,8 @@ def main():
     p.info('Nabe taucht in die Bundbohrung', L['ritzel_z1'] - L['mp_z0'])
     p.ok('Madenschrauben unter der Motorplatte (Inbus von vorn)',
          L['mp_z0'] - L['madenschraube_z'], 2.0)
-    p.ok('Wellenende ueber dem Rohr', L['welle_z0'] - L['profil_z1'], 3.0)
+    p.ok('Wellenende ueber dem Rohr (gemessene Welle {:.0f} mm)'.format(
+        w('motor_welle_ist')), L['welle_ist_z0'] - L['profil_z1'], 3.0)
     p.info('laengste Welle, die noch 1 mm ueber dem Rohr endet',
            L['mp_z1'] - L['profil_z1'] - 1.0)
     p.ok('Umlenkrolle mittig auf dem Riemen',
@@ -561,8 +563,11 @@ def main():
             '4x M5x{:.0f} Zylinderkopf + 4x Hammermutter M5 Nut 6 '
             '(Y-Motorhalter -> obere Nut aussen am 2040)'.format(
                 L['ymh_schraube']),
-            'entfallen: Eckwellen, ihre Lager und die unteren Ritzel, der '
-            'Motorhalter in der Mitte des vorderen 2060',
+            '2x GT2-Riemen 6 mm, je ca. {:.0f} mm (Y, offen, von Klemme zu '
+            'Klemme; hinteres Ritzel {:.0f} mm hinter der Stirnseite '
+            'angenommen)'.format(L['yr_laenge'], w('yh_hinter')),
+            'entfallen: die vorderen Eckwellen, ihre Lager und die unteren '
+            'Ritzel, der Motorhalter in der Mitte des vorderen 2060',
             '1x GT2-Riemen 6 mm, ca. {:.0f} mm (X)'.format(
                 2.0 * (L['x_rolle'] - L['x_motor'])
                 + math.pi * w('ritzel_teilkreis')),
@@ -719,6 +724,10 @@ def main():
          3.0)
     p.ok('Motor vor dem vorderen 2060', (y_hinten - fl)
          - L['quer_y_vorn'][1], w('luft_bau'))
+    p.info('gemessene Welle ({:.0f} mm) steht ueber dem Ritzel'.format(
+        w('motor_welle_ist')), L['ym_welle_ist_z1'] - L['ym_ritzel_z1'])
+    p.ok('   und endet unter der Oberkante des 2040',
+         L['rahmen_z1'] - L['ym_welle_ist_z1'], 0.0)
     p.ok('Motor unten ueber der Unterkante der 2060 (Tisch)',
          L['ym_motor_z0'] - L['quer_z'][0], 10.0)
     p.ok('Motorplatte: Rand vor den vorderen Schrauben',
@@ -763,6 +772,20 @@ def main():
     p.ok('M5x{:.0f}: steht nicht auf dem Nutgrund auf'.format(
         L['ymh_schraube']), (w('nut_t') + w('nut_kammer_t'))
          - (L['ymh_schraube'] - w('ymh_wange')), 0.0)
+    # Riemen: offen, von Klemme zu Klemme um beide Ritzel. Hinteres Ritzel
+    # 11 mm hinter der Stirnseite angenommen (wie vorn die alte Eckwelle).
+    wagen_min = L['y_schiene_y'][0] + w('y_wagen_laenge') / 2
+    wagen_max = L['y_schiene_y'][1] - w('y_wagen_laenge') / 2
+    rr = w('ritzel_flansch_d') / 2
+    p.ok('vorderer Klemmturm am Schienenende hinter dem Ritzel des Motors',
+         (y_hinten - rr) - (wagen_max + w('turm_abstand')), 10.0)
+    p.ok('hinterer Klemmturm am Schienenende vor dem hinteren Ritzel',
+         (wagen_min - w('turm_abstand')) - (L['yh_y'] + rr), 10.0)
+    p.info('Y-Riemen je Seite, Klemme zu Klemme (Wirklinie)', L['yr_laenge'])
+    p.info('   ueber den Spannweg des Motors von',
+           L['yr_laenge'] - 2 * w('ym_spannweg'))
+    p.info('                                 bis',
+           L['yr_laenge'] + 2 * w('ym_spannweg'))
     # Motorschrauben von oben: senkrecht bis ins Freie
     # Rahmen und Riemen in ihrer wirklichen Laenge (die Quader des Portals
     # laufen endlos durch): das 2040 endet an der Stirnseite, beide Trume

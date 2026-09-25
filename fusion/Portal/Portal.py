@@ -51,7 +51,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 12
+REVISION = 13
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -139,12 +139,14 @@ MASSE = {
     'motor_bund_d':        (22.0, 'NEMA17: Zentrierbund'),
     'motor_bund_h':         (2.0, 'NEMA17: Zentrierbund, Hoehe'),
     'motor_welle_d':        (5.0, 'NEMA17: Wellendurchmesser'),
-    # 20 mm: Angabe am Aufbau [v]. Ab der Flanschflaeche gerechnet — ist
-    # sie ab dem Bund gemessen, steht die Welle 2 mm weiter vor.
-    'motor_welle_l':       (20.0, 'NEMA17: Wellenlaenge ab Flansch'),
-    # Nicht gemessen: welche Motoren an X und Y kommen. 48 ist der laengste
-    # gaengige, fuer die Pruefung die sichere Seite [?].
-    'motor_laenge':        (48.0, 'NEMA17: Koerperlaenge (nur Freigang)'),
+    # Die Halter sind auf 20 mm Welle ausgelegt (erste Angabe am Aufbau):
+    # so traegt die Welle das ganze Ritzel schon ab 20 mm. Gemessen sind
+    # 37 mm Motor und 60 mm mit Welle [v] — die Welle ragt also 23 mm heraus
+    # und steht 3 mm weiter ueber das Ritzel hinaus; portal_check.py prueft,
+    # dass sie dort frei endet.
+    'motor_welle_l':       (20.0, 'NEMA17: Wellenlaenge, auf die die Halter ausgelegt sind'),
+    'motor_welle_ist':     (23.0, 'NEMA17: Welle ragt so weit heraus (60 - 37, gemessen)'),
+    'motor_laenge':        (37.0, 'NEMA17: Koerperlaenge ohne Welle (gemessen)'),
     'motor_gewinde_tiefe':  (4.5, 'NEMA17: Gewindetiefe im Flansch'),
 
     # --- Normteile ---------------------------------------------------------
@@ -270,6 +272,11 @@ MASSE = {
     'quer_laenge':        (600.0, 'Referenz: 2060 quer: Laenge'),
     'quer_abstand':       (400.0, 'Referenz: 2060 quer: Abstand Mitte zu Mitte'),
     'quer_vorn_zurueck':   (35.0, 'Referenz: vorderes 2060 so weit hinter der Stirnseite der 2040'),
+    # Hinten: Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager [v].
+    # Wo die Achse steht, ist nicht gemessen — angenommen wie vorn die alte
+    # Eckwelle, 11 mm hinter der Stirnseite [?]. Davon haengt nur die
+    # Riemenlaenge ab.
+    'yh_hinter':           (11.0, 'Referenz: hinteres Ritzel so weit hinter der Stirnseite der 2040'),
     'quer_h':              (60.0, 'Referenz: 2060 quer, hochkant: Hoehe'),
     # Oeffnung aussen [v]: beginnt 6 mm unter der Profilkante, also 8 mm
     # breit um die Nutmitte; innen verengt sie sich auf 6,2 [w]
@@ -464,6 +471,7 @@ def lage():
     L['bund_z0'] = L['mp_z1'] - w('motor_bund_h')
     L['motor_z1'] = L['mp_z1'] + w('motor_laenge')
     L['welle_z0'] = L['mp_z1'] - w('motor_welle_l')
+    L['welle_ist_z0'] = L['mp_z1'] - w('motor_welle_ist')     # gemessen
     L['motor_schrauben'] = [(w('motor_u') + su * w('motor_loch') / 2.0,
                              L['xr_yc'] + sy * w('motor_loch') / 2.0)
                             for su in (-1, 1) for sy in (-1, 1)]     # (u, Y)
@@ -576,6 +584,7 @@ def lage():
     L['ymp_z1'] = L['ymp_z0'] + w('mp_dicke')
     L['ym_bund_z1'] = L['ymp_z0'] + w('motor_bund_h')
     L['ym_welle_z1'] = L['ymp_z0'] + w('motor_welle_l')
+    L['ym_welle_ist_z1'] = L['ymp_z0'] + w('motor_welle_ist')   # gemessen
     L['ym_motor_z0'] = L['ymp_z0'] - w('motor_laenge')
     # An der vorderen Stirnseite der 2040. Der Halter haengt nur an ihr —
     # wo das Gestell unter dem Portal steht, aendert an ihm nichts.
@@ -605,6 +614,20 @@ def lage():
     L['ymh_nut_y'] = [ye - w('ymh_nut_y1'), ye - w('ymh_nut_y2')]
     # Hammermutter-Schraube: Wange, Nutlippe 1,8, Mutter 4 — gerade Laenge
     L['ymh_schraube'] = 2.0 * int((w('ymh_wange') + 1.8 + 4.0) / 2.0 + 0.999)
+
+    # ---- Y-Riemen: hinteres Ritzel und Laenge ------------------------------
+    # Hinten ein Ritzel auf einer Welle [v], Lage angenommen [?]. Der Riemen
+    # ist offen: vordere Klemme -> Ritzel vorn -> Ruecklauf in der Nut ->
+    # Ritzel hinten -> hintere Klemme. Seine Enden stehen bis 1 mm vor das
+    # innere Ende der Klemmtuerme; Laenge auf der Wirklinie, Motor in der
+    # Mitte des Spannwegs.
+    L['yh_y'] = L['rahmen_y'][0] - w('yh_hinter')
+    L['yr_ende_vorn'] = L['kt_y_vorn'][0] + 1.0
+    L['yr_ende_hinten'] = L['kt_y_hinten'][1] - 1.0
+    L['yr_laenge'] = ((L['ym_y'] - L['yr_ende_vorn'])
+                      + (L['ym_y'] - L['yh_y'])
+                      + (L['yr_ende_hinten'] - L['yh_y'])
+                      + math.pi * w('ritzel_teilkreis'))
     return L
 
 
@@ -1518,8 +1541,9 @@ def bau_referenz(app, design, teile, L, fehler):
     Rahmen und Y-Schienen liegen mittig zum Y-Wagen, das vordere 2060
     35 mm hinter der Stirnseite, das hintere 400 mm dahinter. Der Toolhead
     (hier nur X-Wagen und Riemenhalter) steht in der Mitte des X-Wegs, die
-    Umlenkrolle und die Y-Motoren in der Mitte ihres Spannwegs. Nicht
-    gezeichnet: die Umlenkung der Y-Riemen hinten — sie ist nicht bekannt.
+    Umlenkrolle und die Y-Motoren in der Mitte ihres Spannwegs. Das hintere
+    Y-Ritzel steht, wo es angenommen ist (yh_hinter); seine Welle und Lager
+    sind nicht gezeichnet.
 
     Jedes Teil wird fuer sich gebaut: scheitert eines, steht das im Bericht
     und das Skript laeuft weiter. Die Druckteile sind dann schon fertig."""
@@ -1609,8 +1633,8 @@ def bau_referenz(app, design, teile, L, fehler):
         zylinder(c, 'NEMA17_Bund', 'z', (xp, yc), w('motor_bund_d'),
                  L['bund_z0'], L['mp_z1'], 'dazu', k)
         zylinder(c, 'NEMA17_Welle', 'z', (xp, yc), w('motor_welle_d'),
-                 L['welle_z0'], L['bund_z0'], 'dazu', k)
-        fertig(k, 'NEMA17_X', (mx, my, (L['welle_z0'], L['motor_z1'])),
+                 L['welle_ist_z0'], L['bund_z0'], 'dazu', k)
+        fertig(k, 'NEMA17_X', (mx, my, (L['welle_ist_z0'], L['motor_z1'])),
                'Steel')
 
     def y_motor(s):
@@ -1624,30 +1648,35 @@ def bau_referenz(app, design, teile, L, fehler):
         zylinder(c, 'NEMA17_Y_Bund_' + n, 'z', (mx, my), w('motor_bund_d'),
                  L['ymp_z0'], L['ym_bund_z1'], 'dazu', k)
         zylinder(c, 'NEMA17_Y_Welle_' + n, 'z', (mx, my), w('motor_welle_d'),
-                 L['ym_bund_z1'], L['ym_welle_z1'], 'dazu', k)
+                 L['ym_bund_z1'], L['ym_welle_ist_z1'], 'dazu', k)
         fertig(k, 'NEMA17_Y_' + n, (bx, by, (L['ym_motor_z0'],
-                                             L['ym_welle_z1'])), 'Steel')
+                                             L['ym_welle_ist_z1'])), 'Steel')
 
-    def y_riemen_vorn(s):
-        """Vorderes Stueck der Y-Schleife: gezogener Trum ab der vorderen
-        Klemme, um das Ritzel des Y-Motors, Ruecklauf in der Nut bis zum
-        hinteren Ende des 2040. Zaehne innen, Wirklinie auf dem Teilkreis."""
+    def y_riemen(s):
+        """Der offene Y-Riemen einer Seite: von der vorderen Klemme um das
+        Ritzel des Y-Motors, als Ruecklauf durch die Nut, um das hintere
+        Ritzel und zur hinteren Klemme. Zaehne innen, Wirklinie auf dem
+        Teilkreis."""
         c = teile['Ref_Riemen']
         n = seite(s)
         rw = w('ritzel_teilkreis') / 2.0
         ra, ri = rw + L['riemen_aussen'], rw - L['riemen_innen']
-        um, ym = L['ym_u'], L['ym_y']
-        y0, y1 = L['kt_y_vorn'][0] + 1.0, L['rahmen_y'][0]
+        um, ym, yh = L['ym_u'], L['ym_y'], L['yh_y']
+        yv, yhk = L['yr_ende_vorn'], L['yr_ende_hinten']
         sk = skizze(c, _ebene(c, 'z', L['yr_zm'], 'E_Ref_Y-Riemen'),
-                    'Sk_Y-Riemen_vorn_' + n)
-        zug = [((um + ra, y0), (um + ra, ym)),
+                    'Sk_Y-Riemen_' + n)
+        zug = [((um + ra, yv), (um + ra, ym)),
                ((um + ra, ym), (um, ym + ra), (um - ra, ym)),
-               ((um - ra, ym), (um - ra, y1)),
-               ((um - ra, y1), (um - ri, y1)),
-               ((um - ri, y1), (um - ri, ym)),
+               ((um - ra, ym), (um - ra, yh)),
+               ((um - ra, yh), (um, yh - ra), (um + ra, yh)),
+               ((um + ra, yh), (um + ra, yhk)),
+               ((um + ra, yhk), (um + ri, yhk)),
+               ((um + ri, yhk), (um + ri, yh)),
+               ((um + ri, yh), (um, yh - ri), (um - ri, yh)),
+               ((um - ri, yh), (um - ri, ym)),
                ((um - ri, ym), (um, ym + ri), (um + ri, ym)),
-               ((um + ri, ym), (um + ri, y0)),
-               ((um + ri, y0), (um + ra, y0))]
+               ((um + ri, ym), (um + ri, yv)),
+               ((um + ri, yv), (um + ra, yv))]
         for pkt in zug:
             pp = [punkt(sk, xs(L, s, u), y) for u, y in pkt]
             if len(pp) == 2:
@@ -1656,8 +1685,8 @@ def bau_referenz(app, design, teile, L, fehler):
                 sk.sketchCurves.sketchArcs.addByThreePoints(*pp)
         k = neu_mittig(c, groesstes_profil(sk),
                        w('riemen_breite')).bodies.item(0)
-        fertig(k, 'Y-Riemen_vorn_' + n,
-               (xb(L, s, um - ra, um + ra), (y1, ym + ra),
+        fertig(k, 'Y-Riemen_' + n,
+               (xb(L, s, um - ra, um + ra), (yh - ra, ym + ra),
                 (L['yr_z0'], L['yr_z1'])), 'Gummi', SCHWARZ)
 
     # ---- Aluprofile ----------------------------------------------------------
@@ -1701,20 +1730,10 @@ def bau_referenz(app, design, teile, L, fehler):
 
     # ---- Riemen ----------------------------------------------------------------
     sicher('X-Riemen', x_riemen)
-    # Y-Riemen je Seite: vorn die Schleife um das Ritzel des Y-Motors mit
-    # dem Ruecklauf in der oberen Nut des 2040, hinten der gezogene Trum bis
-    # zur hinteren Klemme. Die Umlenkung hinten fehlt.
-    c = teile['Ref_Riemen']
-    zy = (L['yr_z0'], L['yr_z1'])
+    # Y-Riemen je Seite: offen, von Klemme zu Klemme um beide Ritzel, der
+    # Ruecklauf in der oberen Nut des 2040
     for s in (-1, 1):
-        n = seite(s)
-        sicher('Y-Riemen_vorn_' + n, y_riemen_vorn, s)
-        xr = xb(L, s, w('y_riemen_linie') - d / 2.0,
-                w('y_riemen_linie') + d / 2.0)
-        name = 'Y-Riemen_hinten_' + n
-        sicher(name, box, c, name, xr,
-               (L['rahmen_y'][0], L['kt_y_hinten'][1] - 1.0), zy, 'Gummi',
-               None, SCHWARZ)
+        sicher('Y-Riemen_' + seite(s), y_riemen, s)
 
     # ---- X-Antrieb: Motor, Ritzel, Umlenkrolle, Riemenhalter -----------------
     c = teile['Ref_Antrieb']
@@ -1726,18 +1745,20 @@ def bau_referenz(app, design, teile, L, fehler):
             (rf, z0 + bo + sp, L['ritzel_nabe_z0']),
             (w('ritzel_nabe_d'), L['ritzel_nabe_z0'], L['ritzel_z1'])],
            w('motor_welle_d'), 'Aluminum 6061')
-    # Y-Antrieb: Motor haengend, Ritzel mit der Nabe nach unten
+    # Y-Antrieb: Motor haengend, Ritzel mit der Nabe nach unten; hinten das
+    # Ritzel auf der Welle (Lage angenommen), gleich hoch
+    z1 = L['ym_ritzel_z1']
+    y_stufen = [(w('ritzel_nabe_d'), L['ym_ritzel_z0'], L['ym_nabe_z1']),
+                (rf, L['ym_nabe_z1'], L['ym_nabe_z1'] + bo),
+                (L['ritzel_fuss_d'], L['ym_nabe_z1'] + bo, z1 - bo),
+                (rf, z1 - bo, z1)]
     for s in (-1, 1):
         n = seite(s)
         sicher('NEMA17_Y_' + n, y_motor, s)
-        z1 = L['ym_ritzel_z1']
-        sicher('Ritzel_Y_' + n, rad, c, 'Ritzel_Y_' + n,
-               (xs(L, s, L['ym_u']), L['ym_y']),
-               [(w('ritzel_nabe_d'), L['ym_ritzel_z0'], L['ym_nabe_z1']),
-                (rf, L['ym_nabe_z1'], L['ym_nabe_z1'] + bo),
-                (L['ritzel_fuss_d'], L['ym_nabe_z1'] + bo, z1 - bo),
-                (rf, z1 - bo, z1)],
-               w('motor_welle_d'), 'Aluminum 6061')
+        for t, y in (('vorn', L['ym_y']), ('hinten', L['yh_y'])):
+            name = 'Ritzel_Y_{}_{}'.format(t, n)
+            sicher(name, rad, c, name, (xs(L, s, L['ym_u']), y), y_stufen,
+                   w('motor_welle_d'), 'Aluminum 6061')
     rz0, rz1, rd = L['rolle_z0'], L['rolle_z1'], w('rolle_d')
     sicher('Umlenkrolle_X', rad, c, 'Umlenkrolle_X', (xu, yc),
            [(rd, rz0, rz0 + bo), (L['ritzel_fuss_d'], rz0 + bo, rz1 - bo),
@@ -1818,9 +1839,15 @@ def hinweise_bauen(L, fehler):
         .format(w('klemm_schlitz'), w('klemm_rippe')),
         '  nicht eindruecken, klemm_schlitz um 0,1 erhoehen; rutscht er,',
         '  verringern (gilt auch fuer den Riemenhalter in ToolheadZ.py).',
-        '  Rechtwinklig stellen: ein Riemenende in seiner Klemme um einen',
-        '  Zahn (2 mm) versetzen, bis das Portal an beiden Schienenenden',
-        '  gleich weit steht.',
+        '  Laenge je Seite ca. {:.0f} mm von Klemme zu Klemme (Wirklinie,'
+        .format(L['yr_laenge']),
+        '  Motor in der Mitte des Spannwegs, hinteres Ritzel {:.0f} mm hinter'
+        .format(w('yh_hinter')),
+        '  der Stirnseite angenommen): die Enden stehen bis kurz vor das',
+        '  innere Ende der Klemmtuerme.',
+        '  Beide Seiten abgleichen: an einer Ecke die Madenschrauben des',
+        '  Y-Ritzels loesen, Portal von Hand durchschieben, bis es frei',
+        '  laeuft, festziehen. Grob geht es in der Klemme um einen Zahn.',
         '',
         'Y-ANTRIEB (vorn je Ecke ein NEMA 17, das Ritzel direkt auf der Welle):',
         '  Achse {:.2f} mm innen neben der Schienenmitte, {:.1f} mm vor der'
@@ -1838,8 +1865,11 @@ def hinweise_bauen(L, fehler):
         '  nach UNTEN, Z {:+.1f} bis {:+.1f}: die Nabe taucht {:.1f} mm in die'
         .format(L['ym_ritzel_z0'], L['ym_ritzel_z1'],
                 L['ymp_z1'] - L['ym_ritzel_z0']),
-        '  Bundbohrung, die Welle steht {:.1f} mm ueber dem Ritzel.'.format(
-            w('welle_ueberstand')),
+        '  Bundbohrung. Ausgelegt auf {:.0f} mm Welle (steht dann {:.1f} mm'
+        .format(w('motor_welle_l'), w('welle_ueberstand')),
+        '  ueber dem Ritzel); die gemessenen {:.0f} mm stehen {:.1f} mm ueber.'
+        .format(w('motor_welle_ist'), L['ym_welle_ist_z1']
+                - L['ym_ritzel_z1']),
         '  Madenschrauben {:.1f} mm ueber der Platte, Inbus von vorn.'.format(
             L['ym_madenschraube_z'] - L['ymp_z1']),
         '  Halter: Hinterkante und Anlage liegen an der Stirnseite (sie nimmt',
@@ -1861,10 +1891,13 @@ def hinweise_bauen(L, fehler):
         .format(L['mp_z1'], w('mp_dicke'), L['motor_schraube']),
         '  von unten. Ritzel mit der Nabe nach OBEN, Z {:+.2f} bis {:+.2f}:'
         .format(L['ritzel_z0'], L['ritzel_z1']),
-        '  die Nabe taucht {:.1f} mm in die Bundbohrung, die {:.0f}-mm-Welle'
-        .format(L['ritzel_z1'] - L['mp_z0'], w('motor_welle_l')),
-        '  endet {:.1f} mm unter dem Ritzel. Madenschrauben {:.1f} mm unter der'
-        .format(L['ritzel_z0'] - L['welle_z0'],
+        '  die Nabe taucht {:.1f} mm in die Bundbohrung. Ausgelegt auf'
+        .format(L['ritzel_z1'] - L['mp_z0']),
+        '  {:.0f} mm Welle; die gemessenen {:.0f} mm enden {:.1f} mm unter dem'
+        .format(w('motor_welle_l'), w('motor_welle_ist'),
+                L['ritzel_z0'] - L['welle_ist_z0']),
+        '  Ritzel, {:.1f} mm ueber dem Rohr. Madenschrauben {:.1f} mm unter der'
+        .format(L['welle_ist_z0'] - L['profil_z1'],
                 L['mp_z0'] - L['madenschraube_z']),
         '  Platte, Inbus von vorn; eine davon auf die Abflachung der Welle.',
         '  Motorhalter: 2x M3x{:.0f} von oben in die Einsaetze des Stirnblocks.'
@@ -1915,11 +1948,12 @@ def hinweise_bauen(L, fehler):
         .format(L['ymh_schraube']),
         '     4x M3x{:.0f} lose. Ritzel von oben auf die Welle, Nabe voraus,'
         .format(L['motor_schraube']),
-        '     bis die Welle {:.1f} mm heraussteht; Madenschrauben von vorn.'
-        .format(w('welle_ueberstand')),
-        '  9. Y-Riemen: ein Ende in die vordere Klemme, um das Ritzel, durch',
-        '     die Nut nach hinten, um die hintere Umlenkung, in die hintere',
-        '     Klemme. Motor nach vorn ziehen, Schrauben fest.',
+        '     bis die Nabe in der Bundbohrung steht (Welle ragt darueber),',
+        '     Spur mittig auf Riemenhoehe; Madenschrauben von vorn.',
+        '  9. Y-Riemen (ca. {:.0f} mm): ein Ende in die vordere Klemme, um das'
+        .format(L['yr_laenge']),
+        '     Ritzel, durch die Nut nach hinten, um das hintere Ritzel, in die',
+        '     hintere Klemme. Motor nach vorn ziehen, Schrauben fest.',
         '',
         'DRUCK (PETG, Bambu Lab A1, 4 Wandlinien, >=40 % Infill):',
         '  Schlitten ....... Unterseite aufs Bett, Waende stehen darauf',
@@ -1937,9 +1971,12 @@ def hinweise_bauen(L, fehler):
         '  Umlenkrolle: Aussendurchmesser {:.0f} mm und Breite {:.1f} mm sind'
         .format(w('rolle_d'), w('rolle_breite')),
         '    angenommen (20-Z-Rolle mit Lager, Bohrung 5).',
-        '  Motoren: Laenge {:.0f} mm angenommen (nur Freigang; die Y-Motoren'
-        .format(w('motor_laenge')),
-        '    haengen darunter frei).',
+        '  Hinteres Y-Ritzel: {:.0f} mm hinter der Stirnseite angenommen; davon'
+        .format(w('yh_hinter')),
+        '    haengt nur die Riemenlaenge ab. Es muss wie vorn mit der Spur',
+        '    mittig auf dem Riemen stehen ({:.0f} bis {:.0f} mm unter der'.format(
+            L['rahmen_z1'] - L['yr_z1'], L['rahmen_z1'] - L['yr_z0']),
+        '    Oberkante des 2040).',
         '  Y-Schienen mittig auf den 2040 angenommen: davon haengt ab, wie weit',
         '    das Portal an die Y-Motorhalter heranfaehrt.',
         '  Ritzel 20 Z: Spur {:.0f} mm, Nabe {:.0f} mm mit den Madenschrauben in'
@@ -1963,7 +2000,7 @@ def hinweise_bauen(L, fehler):
         '    Toolhead nur X-Wagen und Riemenhalter, in der Mitte des X-Wegs.',
         '  X-Riemen: Schleife um Ritzel und Umlenkrolle, beide Enden im',
         '    Riemenhalter.',
-        '  Y-Riemen: je Seite vorn die Schleife um das Ritzel des Y-Motors,',
+        '  Y-Riemen: je Seite offen, vorn um das Ritzel des Y-Motors,',
         '    der Ruecklauf mittig in der oberen Nut des 2040 (Z {:+.1f} bis'
         .format(L['yr_rueck_z'][0]),
         ('    {:+.1f}), auf derselben Hoehe wie in der Klemme.'.format(
@@ -1971,7 +2008,8 @@ def hinweise_bauen(L, fehler):
          else '    {:+.1f}), die Klemme haelt ihn {:.1f} mm {}.'.format(
              L['yr_rueck_z'][1], abs(dz_nut),
              'hoeher' if dz_nut > 0 else 'tiefer')),
-        '    Die Umlenkung hinten fehlt, die Enden stehen an der Stirnseite.',
+        '    hinten um das Ritzel auf der Welle (Lage angenommen, Welle und',
+        '    Lager nicht gezeichnet), die Enden in den Klemmtuermen.',
         '  Y-Motoren mit Ritzel in der Mitte ihres Spannwegs.',
         '  Ritzel und Rolle sind am Fuss der Verzahnung gezeichnet, die',
         '    Massen der Referenzteile stimmen nur grob.',

@@ -44,8 +44,8 @@ sie mit „[Referenz, nicht drucken]“.
 |---|---|
 | `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 400 mm auseinander, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
-| `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite der Y-Riemen: vorn die Schleife um das Ritzel des Y-Motors mit dem Rücklauf in der oberen Nut des 2040, hinten der gezogene Trum zur hinteren Klemme |
-| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die X-Umlenkrolle; der Riemenhalter des Toolheads |
+| `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: um das Ritzel des Y-Motors, als Rücklauf durch die obere Nut des 2040, um das hintere Ritzel |
+| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, die X-Umlenkrolle; der Riemenhalter des Toolheads |
 
 Was dabei angenommen ist:
 
@@ -57,8 +57,11 @@ Was dabei angenommen ist:
   und Riemenhalter drin. Die Umlenkrolle steht in der Mitte ihres Spannwegs.
 * Der **Y-Rücklauf** liegt mittig in der oberen Nut (Z −42 bis −36), auf
   derselben Höhe wie in der Klemme. Die **Y-Motoren** stehen in der Mitte
-  ihres Spannwegs. Die Umlenkung hinten ist nicht gezeichnet, ihre Lage
-  kenne ich nicht; die Riemen enden dort an der Stirnseite.
+  ihres Spannwegs.
+* Hinten sitzt ein **Ritzel auf einer Edelstahlwelle** (Kugellager und
+  Gleitlager) `[v]`. Seine Achse ist 11 mm hinter der Stirnseite
+  angenommen, wie vorn die alte Eckwelle `[?]`; Welle und Lager sind nicht
+  gezeichnet. Von dieser Lage hängt nur die Riemenlänge ab.
 * Ritzel und Rolle sind am Fuß der Verzahnung gezeichnet, damit der Riemen
   sie nicht durchdringt. Die Massen der Referenzteile stimmen nur grob.
 
@@ -164,8 +167,11 @@ Rev. 9 endete er 3,4 mm tiefer, deshalb passte der Riemen nicht hinein. Ein
 Turm ist jetzt 32,6 mm lang.
 
 **Riemenführung:** Vorn läuft der Riemen um das Ritzel des Y-Motors (siehe
-[Y-Antrieb vorn](#y-antrieb-vorn)), hinten um eine Umlenkung, die noch
-offen ist. Der **Rücklauf läuft in der oberen Nut des 2040**, 9,5 mm neben
+[Y-Antrieb vorn](#y-antrieb-vorn)), hinten um das Ritzel auf der
+Edelstahlwelle. Der Riemen ist offen: **je Seite ≈ 1270 mm** von Klemme zu
+Klemme (Motor in der Mitte des Spannwegs, hinteres Ritzel 11 mm hinter der
+Stirnseite angenommen). Das hintere Ritzel muss wie vorn mit der Spur mittig
+auf dem Riemen stehen, 7 bis 13 mm unter der Oberkante des 2040. Der **Rücklauf läuft in der oberen Nut des 2040**, 9,5 mm neben
 der Schienenmitte. Auf dem Teilkreis (12,73 mm) liegen die Wirklinien, und
 die liegen 0,31 mm neben der Riemenmitte zum Rücken hin: Die Mitten der
 beiden Trume sind 12,1 mm auseinander. Bis Rev. 11 war hier der Teilkreis
@@ -211,16 +217,18 @@ es auch in der Klemme, um einen Zahn (2 mm).
 An jeder vorderen Ecke ein NEMA 17, das Ritzel des Y-Riemens **direkt auf der
 Motorwelle** — der X-Motor gespiegelt: Der Motor hängt unter einer
 4,5-mm-Motorplatte, Welle nach oben, und die Nabe des Ritzels taucht 1 mm in
-die Bundbohrung. So trägt die 20-mm-Welle das ganze Ritzel und steht 0,5 mm
-darüber heraus. **Eckwelle, Lager und unteres Ritzel entfallen**, das obere
+die Bundbohrung. So trägt schon eine 20-mm-Welle das ganze Ritzel; deine
+Motoren haben 23 mm (60 mm mit Welle, 37 mm ohne), die Welle steht also
+3,5 mm über das Ritzel hinaus und endet 2 mm unter der Oberkante des 2040. **Eckwelle, Lager und unteres Ritzel entfallen**, das obere
 Ritzel kommt auf die Motorwelle, der Motorhalter in der Mitte des vorderen
 2060 wird nicht mehr gebraucht. Warum zwei Motoren und wie sie angeschlossen
 werden: [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
 
 **Warum die Achse weiter vorn liegt:** Die alte Eckwelle stand 11 mm vor der
 Stirnseite. Dort passt der Motor nicht, denn er ist 42,3 mm breit und reichte
-10 mm unter das Ende des 2040. Darunter kommt er auch nicht: Mit 20 mm Welle
-liegt sein Flansch 25 mm unter der Oberkante, das 2040 ist 40 mm hoch. Die
+10 mm unter das Ende des 2040. Darunter kommt er auch nicht: Die Welle muss
+bis ins Ritzel reichen, der Flansch liegt deshalb höchstens 28 mm unter der
+Oberkante (bei 23 mm Welle), das 2040 ist 40 mm hoch. Die
 Achse steht deshalb **27,5 mm vor der Stirnseite** (±2 mm Langloch), der
 Motor ganz hinten noch 4,35 mm davor. Die 3 mm mehr als nötig kommen vom
 Toolhead: Am vorderen Schienenende ragt seine Trägerplatte (am linken
@@ -230,8 +238,8 @@ ausgespart.
 **Lage:** Die Achse liegt 15,55 mm innen neben der Schienenmitte, damit der
 gezogene Trum gerade von der Klemme zum Ritzel läuft. Das Ritzel steht mit
 der Spur mittig auf dem Riemen, 7 bis 13 mm unter der Oberkante des 2040. Der
-Motor endet unten 27 mm über der Unterkante der 2060, also über dem Tisch
-(Motorlänge 48 mm angenommen).
+Motor endet unten 38 mm über der Unterkante der 2060, also über dem Tisch
+(37 mm Motor, gemessen).
 
 **Halter:** Der Riemen zieht den Motor zum 2040 hin. Deshalb liegen die
 Hinterkante der Motorplatte und eine 3 mm dicke **Anlage** darüber an der
@@ -270,12 +278,13 @@ gelaufen.
 | +31,25 | Madenschrauben (Mitte der Nabe), 2,5 mm unter der Platte |
 | +26,25 … +20,25 | X-Riemen, mittig in der 7-mm-Spur |
 | +18,75 | Unterkante Ritzel |
-| +18,25 | Wellenende, 0,5 mm unter dem Ritzel |
+| +18,25 | Wellenende bei 20 mm Welle, 0,5 mm unter dem Ritzel (deine 23 mm: +15,25) |
 
 Das Ritzel (Bord Ø16) dreht mit 3,2 mm Luft in der Bundbohrung und passt
 auch mit dem Motor von oben hindurch. Die Madenschrauben erreicht der Inbus
 von vorn, eine davon gehört auf die Abflachung der Welle. Eine längere Welle
-stört nicht: bis 27 mm endet sie noch über dem Rohr. Vier M3×8 von unten
+stört nicht: bis 27 mm endet sie noch über dem Rohr — deine 23 mm enden
+5,2 mm darüber. Vier M3×8 von unten
 (3,5 mm im Flanschgewinde); alle vier sind erreichbar, der Inbus hat bis zum
 Rohr 20,75 mm. Der Motorhalter sitzt mit 2 × M3×35 von oben in den
 Gewindeeinsätzen des Stirnblocks. Der Motor steht 3 mm neben der
@@ -358,9 +367,11 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 9. Y-Motorhalter: je Seite 2 Hammermuttern in die obere Nut außen am
    2040, Halter an die Stirnseite schieben, 2 × M5×12. Motor von unten,
    4 × M3×8 von oben, noch lose. Ritzel von oben auf die Welle, Nabe
-   voraus, bis die Welle 0,5 mm heraussteht; Madenschrauben von vorn.
+   voraus, bis die Nabe in der Bundbohrung steht (die Welle ragt 3,5 mm
+   darüber); Madenschrauben von vorn.
 10. Y-Riemen: ein Ende in die vordere Klemme, um das Ritzel, durch die Nut
-   nach hinten, um die hintere Umlenkung, in die hintere Klemme. Motor nach
+   nach hinten, um das hintere Ritzel, in die hintere Klemme (≈ 1270 mm je
+   Seite). Motor nach
    vorn ziehen und festschrauben, dann beide Seiten abgleichen (oben).
 
 ## Druck (PETG, Bambu Lab A1)
@@ -420,6 +431,7 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
 | 2 | GT2-Ritzel 20 Z, Bohrung 5 | auf den Y-Motoren (die oberen Ritzel der alten Eckwellen) |
 | 8 | M3×8 Zylinderkopf | NEMA 17 → Y-Motorhalter, von oben |
 | 4 + 4 | M5×12 Zylinderkopf + Hammermutter M5 (Nut 6) | Y-Motorhalter → obere Nut außen am 2040 |
+| 2 | GT2-Riemen 6 mm, je ≈ 1270 mm | Y, offen, von Klemme zu Klemme (hinteres Ritzel angenommen) |
 | 2 + 2 + 2 | M3×10 + Messing-Einsatz M3 + Stift Ø3 | Riemenhalter am Toolhead |
 
 ## Nicht gemessen `[?]`
@@ -427,14 +439,11 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
 * **Umlenkrolle:** Außendurchmesser 18 mm (Bord) und Breite 8,5 mm sind
   angenommen. Maßgeblich für die Luft zu den Platten der Umlenkung (je 1 mm)
   und zum X-Wagen (3 mm).
-* **X-Motor:** Länge 48 mm angenommen — geht nur in den Freigang nach oben
-  ein. Die Welle (20 mm) ist deine Angabe; ist sie ab dem Bund gemessen,
-  steht sie 2 mm weiter unten heraus, das stört nicht.
 * **Ritzel 20 Z:** Spur 7 mm und Nabe 7 mm mit den Madenschrauben in der
   Mitte sind angenommen `[w]`. Sitzen sie höher, bleibt weniger als 2,5 mm
   Platz unter der Platte (am Y-Motor: über der Platte).
-* **Y-Motoren:** Länge 48 mm angenommen; sie hängen frei, unten bleiben
-  27 mm bis zum Tisch.
+* **Hinteres Y-Ritzel:** Achse 11 mm hinter der Stirnseite angenommen.
+  Davon hängt nur die Riemenlänge ab (≈ 1270 mm je Seite).
 * **Y-Schienen:** mittig auf den 2040 angenommen. Davon hängt ab, wie weit
   das Portal vorn an die Y-Motorhalter heranfährt (Abschnitt 14).
 
@@ -456,16 +465,18 @@ die Prüfung als Erstes.
 | `turm_abstand` / `kt_laenge` | 40,5 / 18 mm | Lage der Klemmtürme (Außenkante ab Wagenmitte) und ihre Länge, wie v8 |
 | `x_riemen_z0` / `x_riemen_y` | 20,25 / −10 mm | Lage des X-Riemens, auch in ToolheadZ.py |
 | `motor_u` | 7 mm | Motorachse innen neben der Schienenmitte |
-| `motor_welle_l` | 20 mm | Wellenlänge ab Flansch; legt die Höhe des Motors fest |
+| `motor_welle_l` | 20 mm | Wellenlänge, auf die die Halter ausgelegt sind; legt die Höhe der Motoren fest |
+| `motor_welle_ist` | 23 mm | gemessene Welle (60 − 37); steht 3,5 mm über das Ritzel hinaus |
 | `mp_dicke` / `welle_ueberstand` | 4,5 / 0,5 mm | Motorplatte und wie weit die Welle unter dem Ritzel heraussteht |
 | `rolle_u` / `rolle_weg` | 26,35 / 4 mm | Umlenkrolle in Mittelstellung und ihr Weg je Richtung |
 | `rolle_d` | 18 mm `[?]` | Außendurchmesser der Umlenkrolle |
-| `motor_laenge` | 48 mm `[?]` | Länge der Motoren (Freigang) |
+| `motor_laenge` | 37 mm | Länge der Motoren ohne Welle (gemessen) |
 | `ym_vor` / `ym_spannweg` | 27,5 / 2 mm | Y-Motorachse vor der Stirnseite des 2040 und das Langloch je Richtung |
 | `ymh_wange` / `ymh_hinten` | 5 / 30 mm | Wange des Y-Motorhalters: Dicke und wie weit sie hinter die Stirnseite reicht |
 | `ymh_nut_y1` / `ymh_nut_y2` | 8 / 22 mm | die beiden M5 in der oberen Nut, hinter der Stirnseite |
 | `ymh_wand` / `ymh_wand_luft` | 3 / 2 mm | Anlage an der Stirnseite: Dicke und Luft unter dem Riemen |
 | `ymh_innen` / `ymh_ausschnitt` | 28 / 4,5 mm | Aussparung innen hinten für den Toolhead am Schienenende |
 | `quer_vorn_zurueck` | 35 mm | vorderes 2060 hinter der Stirnseite der 2040 (Referenz, Y-Weg) |
+| `yh_hinter` | 11 mm `[?]` | hinteres Y-Ritzel hinter der Stirnseite (Referenz, Riemenlänge) |
 | `rahmen_laenge` / `y_schiene_laenge` | 600 / 500 mm | Länge der 2040 und der Y-Schienen (Referenz, Y-Weg) |
 | `quer_laenge` / `quer_abstand` / `quer_h` | 600 / 400 / 60 mm | 2060 quer: Länge, Abstand Mitte zu Mitte, Höhe (Referenz, Y-Weg) |

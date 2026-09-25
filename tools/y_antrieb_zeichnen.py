@@ -149,7 +149,7 @@ def schnitt(f, w, L):
     t.append(f.rect(ym - w('motor_bund_d') / 2, ym + w('motor_bund_d') / 2,
                     L['ymp_z0'], L['ym_bund_z1'], 'kauf'))
     t.append(f.rect(ym - w('motor_welle_d') / 2, ym + w('motor_welle_d') / 2,
-                    L['ym_bund_z1'], L['ym_welle_z1'], 'stahl'))
+                    L['ym_bund_z1'], L['ym_welle_ist_z1'], 'stahl'))
     # Ritzel: Nabe unten, Bord, Spur, Bord
     z1 = L['ym_ritzel_z1']
     for d, za, zb in ((w('ritzel_nabe_d'), L['ym_ritzel_z0'],
@@ -267,6 +267,12 @@ def main():
         ('Motor', 'Flansch {} mm unter der Oberkante des 2040, unten {} mm '
          'über dem Tisch'.format(de(L['rahmen_z1'] - L['ymp_z0'], 1),
                                  de(L['ym_motor_z0'] - L['quer_z'][0], 0))),
+        ('', 'Welle {} mm (gemessen), steht {} mm über dem Ritzel'.format(
+            de(w('motor_welle_ist'), 0),
+            de(L['ym_welle_ist_z1'] - L['ym_ritzel_z1'], 1))),
+        ('Y-Riemen', 'offen, je Seite ≈ {} mm von Klemme zu Klemme (hinteres '
+         'Ritzel {} mm hinter der Stirnseite angenommen)'.format(
+             de(L['yr_laenge'], 0), de(w('yh_hinter'), 0))),
         ('Schrauben', '4× M3×{} (Motor, von oben), 2× M5×{} + Hammermutter '
          '(Wange)'.format(de(L['motor_schraube'], 0),
                           de(L['ymh_schraube'], 0))),

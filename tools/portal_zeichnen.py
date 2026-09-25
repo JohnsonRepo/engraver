@@ -458,7 +458,8 @@ def schnitt_motor(f, w, L, tw, TL):
     t.append(f.rect(xm - fl, xm + fl, L['mp_z1'], L['motor_z1'], 'kauf'))
     t.append(f.rect(xm - w('motor_bund_d') / 2, xm + w('motor_bund_d') / 2,
                     L['bund_z0'], L['mp_z1'], 'kauf'))
-    t.append(f.rect(xm - 2.5, xm + 2.5, L['welle_z0'], L['bund_z0'], 'stahl'))
+    t.append(f.rect(xm - 2.5, xm + 2.5, L['welle_ist_z0'], L['bund_z0'],
+                    'stahl'))
     rf = w('ritzel_flansch_d') / 2
     bo, sp = w('ritzel_bord'), w('ritzel_spur')
     z0 = L['ritzel_z0']
@@ -470,7 +471,7 @@ def schnitt_motor(f, w, L, tw, TL):
     t.append(f.rect(xm - rn, xm + rn, L['ritzel_nabe_z0'], L['ritzel_z1'],
                     'stahl'))
     # Welle im Ritzel (verdeckt) und Madenschraube vorn in der Nabe
-    t.append(f.rect(xm - 2.5, xm + 2.5, L['welle_z0'], L['ritzel_z1'],
+    t.append(f.rect(xm - 2.5, xm + 2.5, L['welle_ist_z0'], L['ritzel_z1'],
                     'stahl', fill='none', stroke_dasharray='3 2'))
     t.append(f.kreis(xm, L['madenschraube_z'], 1.5, 'stahl',
                      fill='#555b66'))
@@ -648,9 +649,9 @@ def main():
     t += fe.rahmen('Schnitt C–C: Motorhalter')
     t.append(text(fe.ox, fe.oy + fe.hoehe + 14, 'durch die Motorachse, '
                   'Blick von vorn', 8.0, GRAU))
-    t += fe.mass(L['x_motor'] + 9.8, L['welle_z0'], L['mp_z1'],
-                 'Welle {} mm'.format(de(w('motor_welle_l'), 0)), 4,
-                 L['welle_z0'] + 3.0)
+    t += fe.mass(L['x_motor'] + 9.8, L['welle_ist_z0'], L['mp_z1'],
+                 'Welle {} mm'.format(de(w('motor_welle_ist'), 0)), 4,
+                 L['welle_ist_z0'] + 3.0)
     t += fe.spalte([
         (L['x_motor'] - 8, 72, 'NEMA 17'),
         (L['x_motor'] + 16, L['mp_z1'] - 2, 'Motorplatte {} mm'.format(
@@ -701,15 +702,15 @@ def main():
         ('', 'Rücklauf in der oberen Nut des 2040, Zähne zur Schiene'),
         ('Y-Klemmen', 'zwei Türme wie v8, je {} mm vor und hinter'.format(
             de(w('turm_abstand'), 1))),
-        ('', 'der Wagenmitte; gespannt an den Ritzeln'),
+        ('', 'der Wagenmitte; gespannt am Y-Motor'),
         ('X-Riemen', 'Unterkante {} mm, Schleife ≈ {} mm'.format(
             de(L['xr_z0'], 2), de(riemen_x, 0))),
         ('X-Spanner', 'Rolle ±{} mm, M3×{} von außen'.format(
             de(w('rolle_weg'), 0), de(L['zug_schraube'], 0))),
-        ('X-Motor', 'Welle {} mm trägt das ganze Ritzel: Platte {} mm,'
-         .format(de(w('motor_welle_l'), 0), de(w('mp_dicke'), 1))),
-        ('', 'Nabe {} mm in der Bundbohrung'.format(
-            de(L['ritzel_z1'] - L['mp_z0'], 0))),
+        ('X-Motor', 'Ritzel ganz auf der Welle schon ab {} mm (gemessen {}):'
+         .format(de(w('motor_welle_l'), 0), de(w('motor_welle_ist'), 0))),
+        ('', 'Platte {} mm, Nabe {} mm in der Bundbohrung'.format(
+            de(w('mp_dicke'), 1), de(L['ritzel_z1'] - L['mp_z0'], 0))),
         ('engste Luft', '{} mm: Motor ↔ Trägerplatte, Rolle ↔ X-Wagen,'
          .format(de(min(luft_motor, luft_rolle), 1))),
         ('', 'Platte ↔ X-Wagen am Ende des X-Wegs'),

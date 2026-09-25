@@ -68,7 +68,7 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Umlenkrolle 20 Z | Außendurchmesser (Bord) **18 mm**, Breite **8,5 mm** | `[?]` angenommen, nicht gemessen |
 | X-Motor | NEMA 17, Länge **48 mm** | `[?]` angenommen, geht nur in den Freigang ein |
 | NEMA 17, Welle | **20 mm** ab Flansch, Ø5 | `[v]` Angabe am Aufbau; legt beim X-Motor die Höhe fest (die Welle muss das ganze Ritzel tragen) |
-| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Mitte ≈ 26 mm unter der Wagenoberseite (liegt auf dem Ø3,2-Sicherungsstift), Zähne zur Schiene | `[v]` aus v8 |
+| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); Mitte ≈ **16 mm** unter der Wagenoberseite — 10 mm höher als in v8 auf dem Ø3,2-Stift | `[v]` Linie aus v8, Höhe Angabe am Aufbau |
 | Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (8,9 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
 | Abstand der Y-Schienen | **514 mm** Mitte zu Mitte = Rohr 500 + 2 × 7 mm; ergibt sich beim Aufbau aus dem verschraubten Portal | gesetzt (Portal.py), Rechnung siehe unten |
 | Kernbohrung 2020 V-Slot | Ø4,2 — für die Stirnschraube **M5 schneiden, ≥ 15 mm tief** | `[w]` |

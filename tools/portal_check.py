@@ -291,8 +291,8 @@ def main():
     p.ok('Ruecklauf steckt nicht tiefer als die Nutoeffnung',
          (L['yr_rueck_u'] - w('riemen_dicke') / 2)
          - (L['rahmen_flanke_u'] - w('nut_t')), 0.0)
-    p.info('Klemme haelt den Riemen tiefer als die Nutmitte',
-           L['nut_z'] - (L['yr_z0'] + L['yr_z1']) / 2)
+    p.info('Riemenmitte in der Klemme ueber der Nutmitte (+ = hoeher)',
+           (L['yr_z0'] + L['yr_z1']) / 2 - L['nut_z'])
 
     # ------------------------------------------------------------------
     p.titel('7) Schlitten: Waende, Schrauben, Wagen')

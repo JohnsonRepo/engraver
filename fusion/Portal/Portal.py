@@ -45,7 +45,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 9
+REVISION = 10
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -83,12 +83,14 @@ MASSE = {
     'rahmen_b':            (20.0, 'Rahmen 2040 hochkant: Breite'),
     'rahmen_h':            (40.0, 'Rahmen 2040 hochkant: Hoehe'),
 
-    # --- Y-Riemen: Lage wie in RiemenklemmeSchlitten v8 ---------------------
-    # Der Riemen laeuft weiter wie bisher: Mitte 21,6 mm innen neben der
-    # Schienenmitte, hochkant, Zaehne zur Schiene, Unterkante 28,9 mm unter
-    # der Wagenoberseite. Ritzel und Umlenkungen am Rahmen bleiben.
+    # --- Y-Riemen -----------------------------------------------------------
+    # Linie wie in RiemenklemmeSchlitten v8: Mitte 21,6 mm innen neben der
+    # Schienenmitte, hochkant, Zaehne zur Schiene. Hoehe: Angabe am Aufbau
+    # [v] — der Riemen sitzt 10 mm hoeher, als ihn die Tuerme bis Rev. 9
+    # hielten (Unterkante dort 28,9 mm unter der Wagenoberseite, auf dem
+    # Stift wie in v8). Ritzel und Umlenkungen am Rahmen bleiben.
     'y_riemen_linie':      (21.6, 'Y-Riemen: Mitte neben der Schienenmitte'),
-    'y_riemen_tiefe':      (28.9, 'Y-Riemen: Unterkante unter der Wagenoberseite'),
+    'y_riemen_tiefe':      (18.9, 'Y-Riemen: Unterkante unter der Wagenoberseite'),
 
     # --- GT2 (hardware.md) -------------------------------------------------
     'riemen_breite':        (6.0, 'GT2: Riemenbreite'),
@@ -119,6 +121,9 @@ MASSE = {
     'klemm_rippe':          (0.8, 'Riemenklemme: Rippenhoehe'),
     'klemm_rippe_b':        (1.0, 'Riemenklemme: Rippenbreite'),
     'klemm_stift_d':        (3.2, 'Riemenklemme: Bohrung fuer den Stift'),
+    # Nur die Y-Klemmtuerme: ueber dem Riemen bleibt Luft im Schlitz, er darf
+    # etwas hoeher sitzen als gezeichnet (v8 liess 3,9 mm)
+    'klemm_luft_oben':      (2.0, 'Y-Klemmturm: Luft ueber dem Riemen im Schlitz'),
 
     # --- NEMA 17 fuer X (hardware.md [w]) -----------------------------------
     'motor_flansch':       (42.3, 'NEMA17: Flanschmass'),
@@ -300,7 +305,7 @@ def lage():
     L['yr_rippe_u0'] = L['yr_wand_u'] - w('klemm_schlitz')      # Rippengrund
     L['yr_rippe_u1'] = L['yr_rippe_u0'] + w('klemm_rippe')      # Spitze
     L['yr_mitte_u'] = L['yr_wand_u'] - w('klemm_schlitz') / 2.0
-    L['yr_decke_z'] = L['yr_z1'] + 0.5          # Decke des Klemmschlitzes
+    L['yr_decke_z'] = L['yr_z1'] + w('klemm_luft_oben')   # Schlitzdecke
 
     # ---- Schlitten: Platte, Rueckwand, Stirnblock ---------------------------
     L['platte_u'] = (-w('platte_aussen'), w('platte_innen'))
@@ -374,8 +379,8 @@ def lage():
     L['yr_rueck_u'] = w('y_riemen_linie') - w('ritzel_teilkreis')
     L['rahmen_flanke_u'] = w('rahmen_b') / 2.0
     # Hoehe des Ruecklaufs: mittig in der oberen Seitennut des 2040. Die
-    # Klemme haelt den Riemen tiefer (wie v8); dazwischen gleicht er das
-    # zu den Ritzeln an den Y-Enden hin aus.
+    # Klemme haelt den Riemen auf der am Aufbau gemessenen Hoehe; den
+    # Unterschied gleicht er zu den Ritzeln an den Y-Enden hin aus.
     L['nut_z'] = L['rahmen_z1'] - w('rahmen_b') / 2.0
     L['yr_rueck_z'] = (L['nut_z'] - w('riemen_breite') / 2.0,
                        L['nut_z'] + w('riemen_breite') / 2.0)
@@ -1521,6 +1526,7 @@ def hinweise_bauen(L, fehler):
     R = L['R']
     riemen_x = (2.0 * (L['x_rolle'] - L['x_motor'])
                 + math.pi * w('ritzel_teilkreis'))
+    dz_nut = (L['yr_z0'] + L['yr_z1']) / 2.0 - L['nut_z']   # + = hoeher
     h = [
         'BEZUG: Maschinenkoordinaten wie ToolheadZ.py (Y nach vorn, Z',
         '  senkrecht, Y=0 an der Stirnflaeche des X-Wagens, Z=0 in der Mitte',
@@ -1557,10 +1563,13 @@ def hinweise_bauen(L, fehler):
         .format(L['kern_schraube'], L['kern_gewinde'] + 2.0),
         '  Die Vorderseite des Rohrs bleibt frei fuer die X-Schiene.',
         '',
-        'Y-RIEMEN (Lage wie RiemenklemmeSchlitten v8, laeuft weiter wie',
-        '  bisher): Mitte {:.1f} mm innen neben der Schienenmitte, hochkant,'
+        'Y-RIEMEN (Linie wie RiemenklemmeSchlitten v8, Hoehe am Aufbau',
+        '  gemessen): Mitte {:.1f} mm innen neben der Schienenmitte, hochkant,'
         .format(w('y_riemen_linie')),
-        '  Zaehne zur Schiene, Unterkante Z={:+.1f}.'.format(L['yr_z0']),
+        '  Zaehne zur Schiene, Unterkante Z={:+.1f} ({:.1f} mm unter der'
+        .format(L['yr_z0'], w('y_riemen_tiefe')),
+        '  Wagenoberseite). Ueber dem Riemen {:.1f} mm Luft im Schlitz.'
+        .format(w('klemm_luft_oben')),
         '  Der Ruecklauf laeuft in der oberen Nut des 2040 ({:.1f} mm neben'
         .format(L['yr_rueck_u']),
         '  der Schienenmitte). Die Zaehne zeigen zur Innenseite der Schleife,',
@@ -1678,9 +1687,9 @@ def hinweise_bauen(L, fehler):
         '  Y-Riemen: je Seite zwei Enden in den Klemmtuermen, der Ruecklauf',
         '    mittig in der oberen Nut des 2040 (Z {:+.1f} bis {:+.1f}). Die'
         .format(*L['yr_rueck_z']),
-        '    Klemme haelt den Riemen {:.1f} mm tiefer (wie v8), zu den Ritzeln'
-        .format(L['nut_z'] - (L['yr_z0'] + L['yr_z1']) / 2.0),
-        '    an den Y-Enden hin gleicht er das aus. Diese Ritzel fehlen.',
+        '    Klemme haelt den Riemen {:.1f} mm {} als die Nutmitte, zu den'
+        .format(abs(dz_nut), 'hoeher' if dz_nut > 0 else 'tiefer'),
+        '    Ritzeln an den Y-Enden hin gleicht er das aus. Diese Ritzel fehlen.',
         '  Ritzel und Rolle sind am Fuss der Verzahnung gezeichnet, die',
         '    Massen der Referenzteile stimmen nur grob.',
         '',

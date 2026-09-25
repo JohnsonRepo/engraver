@@ -138,11 +138,14 @@ zum Rahmen.
 
 ## Y-Riemen und Klemmtürme
 
-Die Riemenlage ist die von `RiemenklemmeSchlitten` v8, damit der Riemen am
-Rahmen weiterläuft wie bisher: **21,6 mm innen** neben der Schienenmitte,
-hochkant, **Zähne zur Schiene**, Unterkante Z = −44,9. Beide Klemmtürme hängen
-nach unten bis auf die Höhe der **oberen Nutreihe des 2040**: Der Riemen
-liegt 9,9 bis 15,9 mm unter der Oberkante des Profils, genau wie bei v8.
+Die Riemenlinie ist die von `RiemenklemmeSchlitten` v8: **21,6 mm innen**
+neben der Schienenmitte, hochkant, **Zähne zur Schiene**. Die **Höhe** kommt
+vom Aufbau: Der Riemen sitzt **10 mm höher**, als ihn die Türme bis Rev. 9
+hielten (dort lag er wie in v8 auf dem Stift). Seit Rev. 10 liegt die
+Unterkante bei Z = −34,9, also 18,9 mm unter der Wagenoberseite; die
+Oberkante liegt auf Höhe der Oberkante des 2040. Die Türme sind dafür 10 mm
+kürzer, 25,5 statt 35,5 mm, und über dem Riemen bleiben 2 mm Luft im
+Schlitz, falls er etwas höher läuft.
 
 **Riemenführung:** An beiden Y-Enden sitzen Ritzel mit senkrechter Achse.
 Der **Rücklauf läuft in der oberen Nut des 2040**, 8,9 mm neben der
@@ -159,7 +162,7 @@ der Wagenmitte. Schnitt A–A der Zeichnung zeigt sie von innen.
 Jeder Turm ist 18 mm lang, der Schlitz ist unten und an beiden Enden
 offen, 7 Rippen stehen an der Wand zur Schiene. Den Riemen von unten in
 den Schlitz drücken, dann einen **Stift Ø3 × 10 (oder eine M3×10) quer von
-innen** unter ihm durchschieben — er trägt den Riemen wie bei v8. Jeder
+innen** unter ihm durchschieben — er sichert den Riemen von unten. Jeder
 Turm hängt an zwei M3×8 von oben durch die Platte. Die des vorderen liegen
 unter dem Rohr: Er kommt **vor dem Rohr** an die Platte.
 
@@ -309,11 +312,11 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Teil | Volumen | Masse | Bauraum |
 |---|---|---|---|
 | Schlitten (je) | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
-| Klemmturm (je, 4×) | 5,0 cm³ | ≈ 6 g | 9 × 18 × 36 mm |
+| Klemmturm (je, 4×) | 3,4 cm³ | ≈ 4 g | 9 × 18 × 26 mm |
 | Motorhalter | 31,5 cm³ | ≈ 40 g | 50 × 51 × 28 mm |
 | Umlenkhalter | 35,1 cm³ | ≈ 45 g | 59 × 42 × 30 mm |
 | Spannklotz | 1,7 cm³ | ≈ 2,2 g | 25 × 12 × 7 mm |
-| **Portal zusammen** | 172 cm³ | **≈ 218 g** | |
+| **Portal zusammen** | 166 cm³ | **≈ 210 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft

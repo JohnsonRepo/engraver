@@ -3,7 +3,7 @@
 Wohin mit Steuerung, Netzteil, Endschaltern und Kabeln. Der Platz ist
 gerechnet: `python3 tools/portal_check.py`, Abschnitt 16. Die Zeichnung
 erzeugt `python3 tools/elektronik_zeichnen.py`; sie gibt auch die
-Kabellängen aus. **Stand: Konzept.** Die Halter kommen, sobald Netzteil,
+Kabellängen aus. **Stand: Konzept.** Die Halter kommen, sobald Laser,
 Ketten und Lüfter feststehen ([offen](#was-noch-fehlt)). Pinbelegung,
 Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
@@ -23,28 +23,58 @@ zwischen Tisch und 2040, fährt nichts hin:
 | höher geht es | in der Mitte (\|X\| ≤ 225 mm) ab 15 mm hinter dem 2060 bis 10 mm über die Oberkante der 2040 (108 mm über dem Fachboden) |
 
 Mit Z unten steht das hintere 2060 selbst im Weg: Der Toolhead stieße
-daran, lange bevor er das Fach erreicht. Die Prüfung fährt Portal und Toolhead über den ganzen Y-Weg bis an
-das Schienenende, dazu über X und Z, und lässt nur Stellungen gelten, in
-denen der Toolhead kein 2060 durchdringt.
+daran, lange bevor er das Fach erreicht. Die Prüfung fährt Portal und
+Toolhead über den ganzen Y-Weg bis an das Schienenende, dazu über X und Z,
+und lässt nur Stellungen gelten, in denen der Toolhead kein 2060
+durchdringt.
 
-**Die Tiefe hängt an der Lage des hinteren 2060** — angenommen sind 400 mm
+Die Tiefe hängt an der Lage des hinteren 2060 — angenommen sind 400 mm
 Mitte zu Mitte hinter dem vorderen `[?]`, also 145 mm Überstand der 2040.
-Bitte nachmessen: Rückseite hinteres 2060 bis hinteres Ende der 2040.
+Seit das Netzteil außerhalb steht, ist das unkritisch: Die Steuerung
+braucht rund 85 mm.
 
 ## Was hinein kommt
 
 | Teil | Platz | Stand |
 |---|---|---|
 | Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | links im Fach, in einem gedruckten Gehäuse mit 40-mm-Lüfter über den Treibern; USB nach hinten | Platzhalter 95 × 80 × 55 |
-| Netzteil 24 V | daneben, flach liegend (gelochtes Gehäuse, kühlt durch Konvektion) | Modell offen, Platzhalter 159 × 97 × 30 (Mean Well LRS-150-24 `[w]`) |
-| Netzanschluss | hinten rechts: Kaltgerätebuchse mit Schalter und Sicherung | — |
-| Not-Aus | vorn, gut erreichbar; schaltet mindestens den Laser stromlos | — |
+| Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Fach kommt nur seine 24-V-Leitung | vorhanden |
+| 24-V-Eingang | hinten im Fach: Einbaubuchse für den Hohlstecker, dahinter ein Schalter für ≥ 3 A Gleichstrom | Steckermaß offen |
+| Not-Aus | vorn, gut erreichbar, in der 24-V-Leitung (≥ 3 A Gleichstrom) — schaltet Laser und Motoren ab | — |
 
 Alles hängt an der **Rückseite des hinteren 2060** (drei Nuten) mit M5 in
 Hammermuttern, wie die übrigen Halter — der Tisch trägt nichts, die Maschine
 steht weiter nur auf den 2060. 55 mm Höhe reichen knapp für Uno, Shield,
 Treiber mit Kühlkörper und einen Lüfter darüber. Wird es mehr, rückt das
 Gehäuse 15 mm vom 2060 ab und darf dann höher werden.
+
+## Leistung: Reichen 72 W?
+
+Für die Motoren und den Lüfter ja, für den Laser bleiben dauernd **rund
+40 W**:
+
+| Verbraucher | Leistung |
+|---|---|
+| 4 × NEMA 17 an TMC2209, je ≈ 1 A eingestellt | ≈ 18 W — je Motor 2 Phasen × (1 A)² × 2 Ω plus 0,6 W im Treiber; Wicklungswiderstand angenommen `[?]` |
+| Lüfter 40 mm | ≈ 2 W |
+| Uno | über USB, nicht aus dem Netzteil |
+| Netzteil, dauernd (85 % von 72 W) | 61 W |
+| **bleibt für den Laser** | **≈ 41 W** dauernd, kurz bis ≈ 52 W |
+
+Ein Chopper-Treiber zieht aus dem Netzteil nicht die Spulenströme, sondern
+nur die Verluste in Wicklung und Treiber, dazu die mechanische Leistung —
+bei einem Laser-Portal wenige Watt. Deshalb reichen für vier Motoren knapp
+20 W.
+
+Ob es für den Laser reicht, steht auf **seinem Typenschild** (Spannung und
+Strom, oder die Leistungsaufnahme). Ein Modul mit rund 5 W Lichtleistung
+nimmt meist 20–40 W auf und passt. Eines mit 10 W oder mehr Lichtleistung
+nimmt meist 60 W und mehr auf `[w]` — dann braucht es ein größeres
+24-V-Netzteil (≥ 5 A; nicht über 28 V, das vertragen die TMC2209 nicht).
+Wird das Steckernetzteil überlastet, schaltet es ab: Die Motoren verlieren
+Schritte, GRBL merkt davon nichts, weil der Uno über USB weiterläuft.
+Braucht der Laser 12 V, kommt ein Abwärtswandler 24 → 12 V dazu, ausgelegt
+auf den Laserstrom plus 20 %.
 
 ## Endschalter
 
@@ -56,8 +86,22 @@ und Y auch, bräuchte aber 6–36 V und einen Optokoppler.
 | Achse | wo | Fahne | Referenz |
 |---|---|---|---|
 | X | links am Portal, beim X-Motor | am Toolhead | nach links |
-| Y | außen am linken 2040, hinten | am linken Y-Schlitten | nach hinten |
+| Y | außen am **rechten** 2040, hinten | am rechten Y-Schlitten | nach hinten |
 | Z | am Toolhead (vorhanden) | Schaltfahne (vorhanden) | nach oben |
+
+**Y rechts, weil links die Y-Kette läuft:** Die Fahne hinge außen neben dem
+Schlitten, genau dort, wo links die Kette neben dem 2040 liegt, und der
+obere Trum der Kette liegt über ihr. Rechts ist die Seite frei. Das Kabel
+läuft mit dem des rechten Y-Motors an der Rückseite des 2060 entlang.
+
+**X links ist eng:** Am linken Wegende steht der X-Motor 3 mm neben der
+Trägerplatte, und der X-Riemen läuft vom Ritzel zum Riemenhalter. Wo die
+Lichtschranke dort Platz findet, klärt die Prüfung, wenn die Halter
+gezeichnet werden. Sonst kommt sie rechts an die Umlenkung, und X
+referenziert nach rechts.
+
+Die Näherungssensoren (LJ12A3) brauchst du dafür nicht, sie sind die
+Reserve.
 
 **Warum Y hinten am 2060 referenziert:** Der Schalter sitzt da, wo der
 Toolhead mit Z unten 3 mm vor dem hinteren 2060 steht. Dann liegt der ganze
@@ -89,10 +133,11 @@ Pull-up „ausgelöst“ — die sichere Richtung.
 **Fest verlegt** in den Nuten, mit Nutabdeckungen oder Clips gehalten:
 
 * die Kabel aus dem Fach nach links unter dem 2040 durch, in die **untere
-  Nut außen am linken 2040** — dort entlang zum linken Y-Motor, zum
-  Y-Endschalter und zum Festpunkt der Y-Kette;
-* das Kabel des rechten Y-Motors an der **Rückseite des hinteren 2060**
-  nach rechts, dann in der unteren Nut außen am rechten 2040 nach vorn.
+  Nut außen am linken 2040** — dort entlang zum linken Y-Motor und zum
+  Festpunkt der Y-Kette;
+* die Kabel des rechten Y-Motors und des Y-Endschalters an der **Rückseite
+  des hinteren 2060** nach rechts, dann in der unteren Nut außen am rechten
+  2040 nach vorn bzw. nach hinten zum Endschalter.
 
 **Bewegt** in zwei Energieketten:
 
@@ -116,7 +161,7 @@ Längen bis zum Gerät, Weg wie gezeichnet, 15 % Reserve, aufgerundet:
 | Z-Motor | 1,35 m | **2 m** |
 | Laser (Versorgung + PWM) | 1,36 m | **2 m** |
 | X-Endschalter | 0,66 m | 1 m |
-| Y-Endschalter | 0,15 m | 0,5 m |
+| Y-Endschalter | 0,59 m | 1 m |
 | Z-Endschalter | 1,26 m | 1,5 m |
 
 In den Ketten nur **hochflexible Litzen** (Schleppkettenkabel), kein
@@ -126,15 +171,13 @@ Verlängerung.
 
 ## Elektrisch, kurz
 
-* **230 V:** Kaltgerätebuchse → Schalter und Sicherung → Netzteil. Den
-  Schutzleiter an das Netzteil **und an den Alurahmen** (Ringöse auf einer
-  Hammermutter im 2060) — die Halter sind aus Kunststoff, der Rahmen wäre
-  sonst nicht geerdet. Die Klemmen des Netzteils abdecken. Wenn du dir bei
-  Netzspannung nicht sicher bist, lass das von einer Elektrofachkraft
-  anschließen.
-* **24 V:** Netzteil → Schraubklemme des Shields (**Polung prüfen**, verpolt
-  sind die Treiber hin) und → Laser, wenn er 24 V braucht. Lüfter mit 24 V
-  direkt, sonst über einen Spannungsregler.
+* **Kein 230 V in der Maschine:** Das Steckernetzteil liefert 24 V, am
+  Rahmen muss nichts geerdet und keine Netzklemme abgedeckt werden.
+* **24 V:** Hohlstecker → Einbaubuchse → Schalter → Not-Aus → Schraubklemme
+  des Shields (**Polung prüfen**, verpolt sind die Treiber hin) und → Laser,
+  wenn er 24 V braucht. Lüfter mit 24 V direkt, sonst über einen
+  Spannungsregler. Eine Sicherung braucht es nicht, das Netzteil begrenzt den
+  Strom selbst; die Leitungen bis zum Abzweig für 3 A auslegen (0,5 mm²).
 * **Signale:** Laser-PWM an D11 (Aufdruck Z+/Z−) und GND,
   Lichtschranken an 5 V, GND und die Endschaltereingänge — Belegung in
   [hardware-notizen.md](hardware-notizen.md#pins-grbl-11-gegen-den-aufdruck).
@@ -144,12 +187,15 @@ Verlängerung.
 
 Bevor die Halter gezeichnet werden:
 
-1. **Netzteil:** Modell oder Maße (L × B × H), wo die Klemmen und die
-   Befestigungslöcher sitzen. Noch keins gekauft? Dann Spannung und Strom
-   vom **Typenschild des Lasers** — daraus folgt die Leistung.
-2. **Energieketten:** vorhanden? Innen- und Außenmaß, Biegeradius. Sonst
+1. **Laser:** Spannung und Strom (oder Leistungsaufnahme) vom Typenschild —
+   entscheidet, ob die 72 W reichen.
+2. **Hohlstecker des Netzteils:** 5,5 × 2,1 oder 5,5 × 2,5 mm (steht meist
+   auf dem Netzteil) — für die Einbaubuchse.
+3. **Energieketten:** vorhanden? Innen- und Außenmaß, Biegeradius. Sonst
    zwei Stück 10 × 15 mm (innen), R18, je 1 m.
-3. **Lüfter:** 40 mm vorhanden, mit welcher Spannung?
-4. **Überstand hinten:** Rückseite hinteres 2060 bis hinteres Ende der 2040
-   (angenommen 145 mm) — und ob die 2040 mit Winkeln am 2060 sitzen.
-5. **Gabellichtschranken:** Sind außer der an Z noch zwei übrig?
+4. **Lüfter:** 40 mm vorhanden, mit welcher Spannung? 24 V ginge direkt.
+5. Nicht mehr dringend: Überstand der 2040 hinter dem hinteren 2060
+   (angenommen 145 mm) und ob die 2040 mit Winkeln am 2060 sitzen.
+
+Geklärt (2026-09-25): Netzteil ist das Steckernetzteil 24 V / 3 A;
+Gabellichtschranken für X und Y sind da, Näherungssensoren als Reserve.

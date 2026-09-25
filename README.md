@@ -27,7 +27,7 @@ docs/portal-y-antrieb.svg      Y-Motorhalter vorn: Draufsicht auf die Ecke, Schn
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
-docs/elektronik.md             Platz für Steuerung und Netzteil, Endschalter, Kabel (Vorschlag)
+docs/elektronik.md             Platz für die Steuerung, Leistung, Endschalter, Kabel (Vorschlag)
 docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten

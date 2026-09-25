@@ -2,11 +2,12 @@
 """Zeichnung: Platz fuer die Elektronik — Vorschlag.
 
 Draufsicht auf die ganze Maschine und Seitenansicht von links: das
-Elektronikfach hinter dem hinteren 2060 mit Steuerung und Netzteil, die
-Endschalter, die festen Kabelwege und die beiden Energieketten. Rahmen,
-Portal und Toolhead kommen aus Portal.py und ToolheadZ.py, das Fach und der
-Y-Weg aus tools/portal_check.py (Abschnitte 14 und 16). Steuerung, Netzteil
-und Ketten sind Platzhalter — ihre Masse stehen noch aus.
+Elektronikfach hinter dem hinteren 2060 mit der Steuerung, die Endschalter,
+die festen Kabelwege und die beiden Energieketten. Rahmen, Portal und
+Toolhead kommen aus Portal.py und ToolheadZ.py, das Fach und der Y-Weg aus
+tools/portal_check.py (Abschnitte 14 und 16). Steuerung und Ketten sind
+Platzhalter — ihre Masse stehen noch aus. Das Netzteil ist ein
+Steckernetzteil und steht ausserhalb.
 
     python3 tools/elektronik_zeichnen.py   ->  docs/elektronik-platz.svg
 
@@ -32,12 +33,20 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
 
 # ---- Vorschlag: Platzhalter, die Kaufteile sind noch nicht festgelegt ----
 STEUERUNG = (95.0, 80.0, 55.0)   # Gehaeuse Uno + CNC Shield V3: X, Y, Z
-NETZTEIL = (159.0, 97.0, 30.0)   # Beispiel Mean Well LRS-150-24 [w]
-NETZBUCHSE = (50.0, 30.0)        # Kaltgeraetebuchse mit Schalter, Sicherung
+EINGANG = (40.0, 20.0, 25.0)     # 24-V-Buchse und Schalter, hinten im Fach
 KETTE_B, KETTE_H, KETTE_R = 18.0, 15.0, 18.0   # Kette aussen, Biegeradius
 KETTE_ENDEN = 40.0               # beide Anschlussglieder zusammen
 RESERVE = 0.15                   # Kabel: Boegen, Zugentlastung, Stecker
 KAUFLAENGEN = (0.5, 1.0, 1.5, 2.0, 2.5, 3.0)   # m
+
+# Leistung: Steckernetzteil GIDEALED 24 V / 3 A. Die Motoren sind
+# geschaetzt: je 2 Phasen x I^2 x R plus Treiber, mit dem Strom, der am
+# Vref-Poti eingestellt wird, und dem Wicklungswiderstand eines kurzen
+# NEMA 17 [?] (Typ der Motoren unbekannt).
+NETZTEIL_W = 72.0
+DAUERLAST = 0.85                 # dauernd nicht mehr als 85 % ziehen
+MOTOREN, MOTOR_I, MOTOR_R, TREIBER_W = 4, 1.0, 2.0, 0.6
+LUEFTER_W = 2.0
 
 KABEL = '#6d3fb5'
 FARBE.update({'kette': ('#a3abb8', '#3d4552')})
@@ -62,12 +71,10 @@ def konzept(w, L, tw, TL):
     x0 = fach.x[0] + 20.0
     K['steuerung'] = Quader('Steuerung', x0, x0 + sb, fach.y[1] - st,
                             fach.y[1], fach.z[0], fach.z[0] + sh)
-    nb, nt, nh = NETZTEIL
-    K['netzteil'] = Quader('Netzteil', -30.0, -30.0 + nb, fach.y[1] - nt,
-                           fach.y[1], fach.z[0] + 3.0, fach.z[0] + 3.0 + nh)
-    bb, bt = NETZBUCHSE
-    K['netzbuchse'] = Quader('Netzbuchse', 165.0, 165.0 + bb, fach.y[0],
-                             fach.y[0] + bt, fach.z[0], fach.z[0] + 30.0)
+    eb, et, eh = EINGANG
+    K['eingang'] = Quader('Eingang', x0, x0 + eb, fach.y[0] + 3.0,
+                          fach.y[0] + 3.0 + et, fach.z[0], fach.z[0] + eh)
+    K['leistung'] = leistung()
 
     # Aussenseiten der 2040 und ihre untere Nut
     K['x_aussen'] = R + w('rahmen_b') / 2.0 + 5.0
@@ -103,9 +110,10 @@ def konzept(w, L, tw, TL):
     K['kx_z_oben'] = K['kx_z_unten'] + 2.0 * KETTE_R
     K['kx_laenge'] = K['kx_hub'] / 2.0 + math.pi * KETTE_R + KETTE_ENDEN
 
-    # Endschalter (Gabellichtschranken LM393)
-    platte = portal['Platte links']
-    K['es_y'] = (-(R + w('rahmen_b') / 2.0 + 8.0), platte.y[0] - d_hinten)
+    # Endschalter (Gabellichtschranken LM393). Y rechts: links laeuft die
+    # Y-Kette neben dem Schlitten, die Fahne kaeme ihr zu nahe.
+    platte = portal['Platte rechts']
+    K['es_y'] = (R + w('rahmen_b') / 2.0 + 8.0, platte.y[0] - d_hinten)
     motor = portal['X-Motor']
     K['es_x'] = (motor.x[1] + 3.0, motor.y[1] + 6.0)
     xm = K['kx_fest']
@@ -113,6 +121,16 @@ def konzept(w, L, tw, TL):
     K['xm'] = xm
     K['kabel'] = kabelwege(w, L, TL, K)
     return K
+
+
+def leistung():
+    """Leistungsbilanz am 24-V-Netzteil in W: was die Motoren und der
+    Luefter brauchen und was dauernd fuer den Laser bleibt."""
+    motoren = MOTOREN * (2.0 * MOTOR_I ** 2 * MOTOR_R + TREIBER_W)
+    dauer = NETZTEIL_W * DAUERLAST
+    return {'motoren': motoren, 'luefter': LUEFTER_W, 'dauer': dauer,
+            'laser': dauer - motoren - LUEFTER_W,
+            'laser_max': NETZTEIL_W - motoren - LUEFTER_W}
 
 
 def laenge(punkte):
@@ -160,8 +178,8 @@ def kabelwege(w, L, TL, K):
     wege = {
         'Y-Motor links': (laenge(raus + y_motor(-1)), raus + y_motor(-1)),
         'Y-Motor rechts': (laenge(rechts + y_motor(1)), rechts + y_motor(1)),
-        'Y-Endschalter': (laenge(raus + [(-xa, K['es_y'][1], zn)]),
-                          raus + [(-xa, K['es_y'][1], zn)]),
+        'Y-Endschalter': (laenge(rechts + [(xa, K['es_y'][1], zn)]),
+                          rechts + [(xa, K['es_y'][1], zn)]),
         'X-Motor': (laenge(zur_kette) + ky + laenge(x_motor), zur_kette),
         'X-Endschalter': (laenge(zur_kette) + ky + laenge(x_es), None),
         'Z-Motor': (laenge(zur_kette) + ky + laenge(zur_x) + kx
@@ -266,9 +284,8 @@ def draufsicht(f, w, L, K):
     t.append(f.rect(min(K['kx_fest'], K['xm']),
                     x_schleife + KETTE_R + KETTE_H / 2.0, *K['kx_y'],
                     'kette'))
-    # Steuerung, Netzteil, Netzbuchse
-    for n, art in (('steuerung', 'neu'), ('netzteil', 'kauf'),
-                   ('netzbuchse', 'kauf')):
+    # Steuerung und 24-V-Eingang
+    for n, art in (('steuerung', 'neu'), ('eingang', 'kauf')):
         q = K[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art,
                         stroke_dasharray='5 3', stroke_width='1.2'))
@@ -304,7 +321,7 @@ def seitenansicht(f, w, L, TL, K):
     t.append(fach_rect(f, fach.y[0], fach.y[1], fach.z[0], fach.z[1]))
     t.append(f.rect(fach.y[0], K['y_tr'], fach.z[1], K['z_frei'] - 0.0,
                     'neu', fill='none', stroke_dasharray='3 3'))
-    for n, art in (('netzteil', 'kauf'), ('steuerung', 'neu')):
+    for n, art in (('eingang', 'kauf'), ('steuerung', 'neu')):
         q = K[n]
         t.append(f.rect(q.y[0], q.y[1], q.z[0], q.z[1], art,
                         stroke_dasharray='5 3', stroke_width='1.2'))
@@ -369,15 +386,16 @@ def main():
               '{}, ToolheadZ.py Rev. {})'.format(pm.REVISION, th.REVISION),
               14, TEXT, fett=True),
          text(24, 48, 'Maßstäblich. Rahmen, Portal und Toolhead aus den '
-              'Skripten; Steuerung, Netzteil und Ketten sind Platzhalter, '
-              'ihre Maße stehen noch aus.', 9, GRAU)]
+              'Skripten; Steuerung und Ketten sind Platzhalter. Das Netzteil '
+              '(24 V / 3 A) ist ein Steckernetzteil und steht außerhalb.', 9,
+              GRAU)]
 
     # ---- Draufsicht --------------------------------------------------------
     s1 = 0.86
     fa = Feld(262, 92, (-338.0, 338.0), (-392.0, 305.0), s1, b_runter=True)
     t += fa.ausschnitt('drauf', draufsicht(fa, w, L, K))
     t += fa.rahmen('Draufsicht (vorn unten)')
-    st, nt = K['steuerung'], K['netzteil']
+    st, eg = K['steuerung'], K['eingang']
     xm = K['xm']
     t += fa.spalte([
         (-R, L['rahmen_y'][0] + 20.0, 'linkes 2040 (600 mm)'),
@@ -392,7 +410,6 @@ def main():
          'Energiekette Y außen\nam linken 2040'),
         (sum(K['ky_x']) / 2, K['ky_wanne'][0] + 6.0,
          'Kettenwanne, hängt außen\nam 2040 (untere Nut)'),
-        (K['es_y'][0], K['es_y'][1], 'Y-Endschalter'),
         (K['es_x'][0], K['es_x'][1], 'X-Endschalter'),
         (-200.0, K['portal']['Portalrohr'].y[0] - K['d_hinten'] + 5.0,
          'Portal an der hinteren\nGrenze (Softlimit Y)')],
@@ -400,11 +417,10 @@ def main():
     t += fa.spalte([
         ((st.x[0] + st.x[1]) / 2, st.y[0] + 12.0,
          'Steuerung: Uno + CNC Shield\nV3 + 4 × TMC2209, Lüfter'),
-        ((nt.x[0] + nt.x[1]) / 2, nt.y[0] + 12.0,
-         'Netzteil 24 V (Platzhalter\n{} × {} × {})'.format(
-             *[de(v, 0) for v in NETZTEIL])),
-        (sum(K['netzbuchse'].x) / 2, sum(K['netzbuchse'].y) / 2,
-         'Netz: Kaltgerätebuchse mit\nSchalter und Sicherung'),
+        ((eg.x[0] + eg.x[1]) / 2, (eg.y[0] + eg.y[1]) / 2,
+         '24 V vom Steckernetzteil:\nBuchse und Schalter'),
+        (K['es_y'][0], K['es_y'][1], 'Y-Endschalter außen am\nrechten 2040 '
+         '(links die Kette)'),
         (fach.x[1] - 10.0, fach.y[1] - 10.0,
          'Elektronikfach unter den\n2040, {} × {} × {} mm'.format(
              de(fach.x[1] - fach.x[0], 0), de(fach.y[1] - fach.y[0], 0),
@@ -466,8 +482,14 @@ def main():
          'Z {} — {} mm über der Oberkante der 2040'.format(
              de(L['quer_y_hinten'][0] - K['y_tr'], 0), de(K['z_frei'], 0),
              de(K['z_frei'] - L['rahmen_z1'], 0))),
+        ('Netzteil', 'Steckernetzteil 24 V / 3 A ({} W), steht außerhalb; '
+         'Motoren ≈ {} W, Lüfter ≈ {} W — dauernd ({} %) bleiben für den '
+         'Laser ≈ {} W'.format(de(NETZTEIL_W, 0),
+                               de(K['leistung']['motoren'], 0),
+                               de(LUEFTER_W, 0), de(DAUERLAST * 100, 0),
+                               de(K['leistung']['laser'], 0))),
         ('Endschalter', 'LM393-Gabellichtschranken: X links am Portal, Y '
-         'außen am linken 2040 — schaltet, wenn der Toolhead mit Z unten '
+         'außen am rechten 2040 — schaltet, wenn der Toolhead mit Z unten '
          '3 mm vor dem hinteren 2060 steht; Z vorhanden'),
         ('Kette Y', '{} mm Hub, Festpunkt {} mm vom hinteren Ende des 2040, '
          'Schleife nach hinten, ≈ {} mm Kette (R{})'.format(

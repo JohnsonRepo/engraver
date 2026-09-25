@@ -458,8 +458,10 @@ gewandert:
   Spannung ab- oder anstecken — beides kostet den Treiber.
 * Netzteil 24 V für die Motoren (TMC2209 abs. max 29 V, siehe oben). Der Laser
   nach seinem Typenschild; ist er ein 12-V-Modul, bekommt er einen eigenen
-  12-V-Zweig. Leistung: Laser (elektrisch) plus etwa 50 W für die Motoren,
-  mit Reserve.
+  12-V-Zweig. **Vorhanden: Steckernetzteil GIDEALED 24 V / 3 A (72 W)**
+  `[v]` Angabe. Motoren und Lüfter brauchen davon rund 20 W, für den Laser
+  bleiben dauernd ≈ 41 W — Bilanz in
+  [elektronik.md](elektronik.md#leistung-reichen-72-w).
 
 ### Grenzen des Uno
 

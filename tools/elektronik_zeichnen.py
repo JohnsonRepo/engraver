@@ -34,6 +34,7 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
 # ---- Vorschlag: Platzhalter, die Kaufteile sind noch nicht festgelegt ----
 STEUERUNG = (95.0, 80.0, 55.0)   # Gehaeuse Uno + CNC Shield V3: X, Y, Z
 EINGANG = (40.0, 20.0, 25.0)     # 24-V-Buchse und Schalter, hinten im Fach
+VERTEILER = (70.0, 60.0, 30.0)   # Wago-Klemmen und Abwaertswandler 24 -> 12 V
 KETTE_B, KETTE_H, KETTE_R = 18.0, 15.0, 18.0   # Kette aussen, Biegeradius
 KETTE_ENDEN = 40.0               # beide Anschlussglieder zusammen
 RESERVE = 0.15                   # Kabel: Boegen, Zugentlastung, Stecker
@@ -42,11 +43,14 @@ KAUFLAENGEN = (0.5, 1.0, 1.5, 2.0, 2.5, 3.0)   # m
 # Leistung: Steckernetzteil GIDEALED 24 V / 3 A. Die Motoren sind
 # geschaetzt: je 2 Phasen x I^2 x R plus Treiber, mit dem Strom, der am
 # Vref-Poti eingestellt wird, und dem Wicklungswiderstand eines kurzen
-# NEMA 17 [?] (Typ der Motoren unbekannt).
+# NEMA 17 [?] (Typ der Motoren unbekannt). Laser: LASER TREE 4 W, 12 V
+# 1,6 A (1,4-1,8 A) [v] Angabe, ueber einen Abwaertswandler.
 NETZTEIL_W = 72.0
 DAUERLAST = 0.85                 # dauernd nicht mehr als 85 % ziehen
 MOTOREN, MOTOR_I, MOTOR_R, TREIBER_W = 4, 1.0, 2.0, 0.6
 LUEFTER_W = 2.0
+LASER_V, LASER_A = 12.0, 1.8     # obere Grenze der Angabe
+WANDLER_ETA = 0.9                # Abwaertswandler 24 -> 12 V [w]
 
 KABEL = '#6d3fb5'
 FARBE.update({'kette': ('#a3abb8', '#3d4552')})
@@ -74,6 +78,10 @@ def konzept(w, L, tw, TL):
     eb, et, eh = EINGANG
     K['eingang'] = Quader('Eingang', x0, x0 + eb, fach.y[0] + 3.0,
                           fach.y[0] + 3.0 + et, fach.z[0], fach.z[0] + eh)
+    vb, vt, vh = VERTEILER
+    xv = x0 + sb + 10.0
+    K['verteiler'] = Quader('Verteiler', xv, xv + vb, fach.y[1] - vt,
+                            fach.y[1], fach.z[0], fach.z[0] + vh)
     K['leistung'] = leistung()
 
     # Aussenseiten der 2040 und ihre untere Nut
@@ -124,13 +132,16 @@ def konzept(w, L, tw, TL):
 
 
 def leistung():
-    """Leistungsbilanz am 24-V-Netzteil in W: was die Motoren und der
-    Luefter brauchen und was dauernd fuer den Laser bleibt."""
+    """Leistungsbilanz am 24-V-Netzteil in W: Motoren, Luefter und der
+    Laser samt Wandlerverlust, gegen das, was das Netzteil dauernd
+    liefert."""
     motoren = MOTOREN * (2.0 * MOTOR_I ** 2 * MOTOR_R + TREIBER_W)
+    laser = LASER_V * LASER_A / WANDLER_ETA
     dauer = NETZTEIL_W * DAUERLAST
-    return {'motoren': motoren, 'luefter': LUEFTER_W, 'dauer': dauer,
-            'laser': dauer - motoren - LUEFTER_W,
-            'laser_max': NETZTEIL_W - motoren - LUEFTER_W}
+    summe = motoren + LUEFTER_W + laser
+    return {'motoren': motoren, 'luefter': LUEFTER_W, 'laser': laser,
+            'summe': summe, 'dauer': dauer, 'reserve': dauer - summe,
+            'strom': summe / 24.0}
 
 
 def laenge(punkte):
@@ -284,8 +295,9 @@ def draufsicht(f, w, L, K):
     t.append(f.rect(min(K['kx_fest'], K['xm']),
                     x_schleife + KETTE_R + KETTE_H / 2.0, *K['kx_y'],
                     'kette'))
-    # Steuerung und 24-V-Eingang
-    for n, art in (('steuerung', 'neu'), ('eingang', 'kauf')):
+    # Steuerung, 24-V-Eingang, Verteiler
+    for n, art in (('steuerung', 'neu'), ('eingang', 'kauf'),
+                   ('verteiler', 'kauf')):
         q = K[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art,
                         stroke_dasharray='5 3', stroke_width='1.2'))
@@ -321,7 +333,8 @@ def seitenansicht(f, w, L, TL, K):
     t.append(fach_rect(f, fach.y[0], fach.y[1], fach.z[0], fach.z[1]))
     t.append(f.rect(fach.y[0], K['y_tr'], fach.z[1], K['z_frei'] - 0.0,
                     'neu', fill='none', stroke_dasharray='3 3'))
-    for n, art in (('eingang', 'kauf'), ('steuerung', 'neu')):
+    for n, art in (('eingang', 'kauf'), ('verteiler', 'kauf'),
+                   ('steuerung', 'neu')):
         q = K[n]
         t.append(f.rect(q.y[0], q.y[1], q.z[0], q.z[1], art,
                         stroke_dasharray='5 3', stroke_width='1.2'))
@@ -419,6 +432,8 @@ def main():
          'Steuerung: Uno + CNC Shield\nV3 + 4 × TMC2209, Lüfter'),
         ((eg.x[0] + eg.x[1]) / 2, (eg.y[0] + eg.y[1]) / 2,
          '24 V vom Steckernetzteil:\nBuchse und Schalter'),
+        (sum(K['verteiler'].x) / 2, K['verteiler'].y[0] + 10.0,
+         'Wago-Klemmen und Wandler\n24 → 12 V für den Laser'),
         (K['es_y'][0], K['es_y'][1], 'Y-Endschalter außen am\nrechten 2040 '
          '(links die Kette)'),
         (fach.x[1] - 10.0, fach.y[1] - 10.0,
@@ -483,11 +498,11 @@ def main():
              de(L['quer_y_hinten'][0] - K['y_tr'], 0), de(K['z_frei'], 0),
              de(K['z_frei'] - L['rahmen_z1'], 0))),
         ('Netzteil', 'Steckernetzteil 24 V / 3 A ({} W), steht außerhalb; '
-         'Motoren ≈ {} W, Lüfter ≈ {} W — dauernd ({} %) bleiben für den '
-         'Laser ≈ {} W'.format(de(NETZTEIL_W, 0),
-                               de(K['leistung']['motoren'], 0),
-                               de(LUEFTER_W, 0), de(DAUERLAST * 100, 0),
-                               de(K['leistung']['laser'], 0))),
+         'Motoren ≈ {} W, Lüfter ≈ {} W, Laser über den Wandler ≈ {} W — '
+         'zusammen ≈ {} W, dauernd gehen {} W'.format(
+             de(NETZTEIL_W, 0), de(K['leistung']['motoren'], 0),
+             de(LUEFTER_W, 0), de(K['leistung']['laser'], 0),
+             de(K['leistung']['summe'], 0), de(K['leistung']['dauer'], 0))),
         ('Endschalter', 'LM393-Gabellichtschranken: X links am Portal, Y '
          'außen am rechten 2040 — schaltet, wenn der Toolhead mit Z unten '
          '3 mm vor dem hinteren 2060 steht; Z vorhanden'),

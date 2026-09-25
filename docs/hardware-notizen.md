@@ -102,8 +102,15 @@ Y-Riemen, über den ganzen Z-Weg. Details in
 
 | Wert | Maß | Status |
 |---|---|---|
+| Modul | **LASER TREE 4 W**, 450 nm, Fokus einstellbar | `[v]` Angabe (2026-09-25) |
+| Versorgung | **12 V, 1,6 A** (1,4–1,8 A) → höchstens 21,6 W | `[v]` Angabe |
+| Leistung steuern | PWM mit 5 V — direkt vom Uno (D11) | `[v]` Angabe |
+| Anschluss | Buchse **XH2.54, 3-polig** (12 V, GND, PWM — Reihenfolge am Aufdruck prüfen) | `[v]` Angabe |
 | Bohrbild | **40,5 hoch × 16,5 quer**, 4 × M3 | `[v]` am 2026-09-17 mit Bohrlehre am Modul bestätigt |
 | Gehäuse (angenommen) | 35 × 35 mm Querschnitt | `[w]` |
+
+Das Netzteil liefert 24 V, der Laser braucht 12 V: dazwischen sitzt ein
+Abwärtswandler — siehe [elektronik.md](elektronik.md#anschlussplan).
 
 Messhistorie an diesem Modul: **39 × 15** (erste Angabe) → **40 × 16**
 (`hardware.md`, eigene Messung) → **40,5 × 16,5** — mit `Bohrlehre_Laser`
@@ -141,13 +148,15 @@ Teil.
 
 | Wert | Maß | Status |
 |---|---|---|
-| Fokusabstand f (Gehäuseunterkante → Material) | **unbekannt** | steht nicht auf dem Modul, Modul nicht benannt |
+| Fokusabstand f (Gehäuseunterkante → Material) | **unbekannt** | Modul hat einen einstellbaren Fokus, kein festes f |
 
-`hardware.md` führt als Kandidaten das *Laser Tree LT-20W-A* mit „Fokus
-einstellbar 20–35 mm" `[w]` — ob es dasselbe Modul ist, ist offen. Deshalb
-steckt f **nicht** in der Geometrie: die Laserhöhe wird über senkrechte
-Langlöcher (±8 mm, nach oben nutzbar +7,8 mm) eingestellt. Der
-Validierungsbericht rechnet die Stellung je f aus.
+Das Modul ist ein **LASER TREE 4 W** mit einstellbarem Fokus (Angabe vom
+2026-09-25). `hardware.md` führte als Kandidaten das *Laser Tree LT-20W-A*
+mit „Fokus einstellbar 20–35 mm" `[w]` — das ist es also nicht, der
+Bereich gilt nicht. f steckt deshalb weiter **nicht** in der Geometrie: die
+Laserhöhe wird über senkrechte Langlöcher (±8 mm, nach oben nutzbar
++7,8 mm) eingestellt, der Fokus am Modul. Der Validierungsbericht rechnet
+die Stellung je f aus.
 
 Selbst messen: Papier aufs Bett, 1–2 % Leistung, Höhe variieren bis der Punkt
 am kleinsten ist, dann Gehäuseunterkante → Papier messen. Sobald der Wert
@@ -389,7 +398,8 @@ Chopper einstellbar.
 ## Elektronik
 
 **Stand 2026-09-25:** Arduino Uno R3 vorhanden, CNC Shield V3 noch nicht
-gekauft, Treiber: **4 × TMC2209** (plus Ersatz). Vier NEMA 17 — genau die
+gekauft, Treiber: **4 × TMC2209** (plus Ersatz), Steckernetzteil 24 V / 3 A,
+Laser 12 V / 1,6 A über einen Abwärtswandler. Vier NEMA 17 — genau die
 vier Treiberplätze des Shields. Pinbelegung
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
 Netzteil, Endschalter und Kabel hinkommen: [elektronik.md](elektronik.md).
@@ -459,8 +469,8 @@ gewandert:
 * Netzteil 24 V für die Motoren (TMC2209 abs. max 29 V, siehe oben). Der Laser
   nach seinem Typenschild; ist er ein 12-V-Modul, bekommt er einen eigenen
   12-V-Zweig. **Vorhanden: Steckernetzteil GIDEALED 24 V / 3 A (72 W)**
-  `[v]` Angabe. Motoren und Lüfter brauchen davon rund 20 W, für den Laser
-  bleiben dauernd ≈ 41 W — Bilanz in
+  `[v]` Angabe. Motoren ≈ 18 W, Lüfter ≈ 2 W, Laser mit Wandler ≈ 24 W —
+  zusammen ≈ 44 W, dauernd gehen 61 W. Bilanz in
   [elektronik.md](elektronik.md#leistung-reichen-72-w).
 
 ### Grenzen des Uno

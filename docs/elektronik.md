@@ -3,8 +3,9 @@
 Wohin mit Steuerung, Netzteil, Endschaltern und Kabeln. Der Platz ist
 gerechnet: `python3 tools/portal_check.py`, Abschnitt 16. Die Zeichnung
 erzeugt `python3 tools/elektronik_zeichnen.py`; sie gibt auch die
-Kabellängen aus. **Stand: Konzept.** Die Halter kommen, sobald Laser,
-Ketten und Lüfter feststehen ([offen](#was-noch-fehlt)). Pinbelegung,
+Kabellängen aus; den [Anschlussplan](#anschlussplan) erzeugt
+`python3 tools/anschluss_zeichnen.py`. **Stand: Konzept.** Die Halter kommen,
+sobald Ketten und Lüfter feststehen ([offen](#was-noch-fehlt)). Pinbelegung,
 Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
 
@@ -40,6 +41,7 @@ braucht rund 85 mm.
 | Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | links im Fach, in einem gedruckten Gehäuse mit 40-mm-Lüfter über den Treibern; USB nach hinten | Platzhalter 95 × 80 × 55 |
 | Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Fach kommt nur seine 24-V-Leitung | vorhanden |
 | 24-V-Eingang | hinten im Fach: Einbaubuchse für den Hohlstecker, dahinter ein Schalter für ≥ 3 A Gleichstrom | Steckermaß offen |
+| Verteiler | neben der Steuerung: Wago-Klemmen für +24 V, GND und die 5 V der Lichtschranken, dazu der Abwärtswandler 24 → 12 V für den Laser | Wago vorhanden, Platzhalter 70 × 60 × 30 |
 | Not-Aus | vorn, gut erreichbar, in der 24-V-Leitung (≥ 3 A Gleichstrom) — schaltet Laser und Motoren ab | — |
 
 Alles hängt an der **Rückseite des hinteren 2060** (drei Nuten) mit M5 in
@@ -50,31 +52,28 @@ Gehäuse 15 mm vom 2060 ab und darf dann höher werden.
 
 ## Leistung: Reichen 72 W?
 
-Für die Motoren und den Lüfter ja, für den Laser bleiben dauernd **rund
-40 W**:
+Ja, mit Reserve: Alles zusammen braucht **≈ 44 W**, das Netzteil gibt
+dauernd 61 W ab.
 
 | Verbraucher | Leistung |
 |---|---|
 | 4 × NEMA 17 an TMC2209, je ≈ 1 A eingestellt | ≈ 18 W — je Motor 2 Phasen × (1 A)² × 2 Ω plus 0,6 W im Treiber; Wicklungswiderstand angenommen `[?]` |
 | Lüfter 40 mm | ≈ 2 W |
+| Laser LASER TREE 4 W: 12 V × 1,8 A (obere Angabe) = 21,6 W, über den Wandler (90 %) | ≈ 24 W |
 | Uno | über USB, nicht aus dem Netzteil |
-| Netzteil, dauernd (85 % von 72 W) | 61 W |
-| **bleibt für den Laser** | **≈ 41 W** dauernd, kurz bis ≈ 52 W |
+| **zusammen** | **≈ 44 W**, also ≈ 1,8 A auf der 24-V-Leitung |
+| Netzteil, dauernd (85 % von 72 W) | 61 W — **≈ 17 W Reserve** |
 
 Ein Chopper-Treiber zieht aus dem Netzteil nicht die Spulenströme, sondern
 nur die Verluste in Wicklung und Treiber, dazu die mechanische Leistung —
 bei einem Laser-Portal wenige Watt. Deshalb reichen für vier Motoren knapp
 20 W.
 
-Ob es für den Laser reicht, steht auf **seinem Typenschild** (Spannung und
-Strom, oder die Leistungsaufnahme). Ein Modul mit rund 5 W Lichtleistung
-nimmt meist 20–40 W auf und passt. Eines mit 10 W oder mehr Lichtleistung
-nimmt meist 60 W und mehr auf `[w]` — dann braucht es ein größeres
-24-V-Netzteil (≥ 5 A; nicht über 28 V, das vertragen die TMC2209 nicht).
 Wird das Steckernetzteil überlastet, schaltet es ab: Die Motoren verlieren
-Schritte, GRBL merkt davon nichts, weil der Uno über USB weiterläuft.
-Braucht der Laser 12 V, kommt ein Abwärtswandler 24 → 12 V dazu, ausgelegt
-auf den Laserstrom plus 20 %.
+Schritte, GRBL merkt davon nichts, weil der Uno über USB weiterläuft. Die
+Reserve ist dafür da. Ein stärkerer Laser (10 W Lichtleistung und mehr, meist
+60 W Aufnahme `[w]`) bräuchte ein größeres 24-V-Netzteil — nicht über 28 V,
+das vertragen die TMC2209 nicht.
 
 ## Endschalter
 
@@ -166,36 +165,74 @@ Längen bis zum Gerät, Weg wie gezeichnet, 15 % Reserve, aufgerundet:
 
 In den Ketten nur **hochflexible Litzen** (Schleppkettenkabel), kein
 Massivdraht und keine starren Flachbandkabel. Die üblichen 1-m-Motorkabel
-reichen also nur links und für X; das Kabel am Laser braucht vermutlich eine
-Verlängerung.
+reichen also nur links und für X. Der Laser bekommt ein eigenes 3-adriges
+Kabel mit XH-Stecker ([Einkaufsliste](#einkaufsliste-vorschlag)).
 
-## Elektrisch, kurz
+## Anschlussplan
 
-* **Kein 230 V in der Maschine:** Das Steckernetzteil liefert 24 V, am
-  Rahmen muss nichts geerdet und keine Netzklemme abgedeckt werden.
-* **24 V:** Hohlstecker → Einbaubuchse → Schalter → Not-Aus → Schraubklemme
-  des Shields (**Polung prüfen**, verpolt sind die Treiber hin) und → Laser,
-  wenn er 24 V braucht. Lüfter mit 24 V direkt, sonst über einen
-  Spannungsregler. Eine Sicherung braucht es nicht, das Netzteil begrenzt den
-  Strom selbst; die Leitungen bis zum Abzweig für 3 A auslegen (0,5 mm²).
-* **Signale:** Laser-PWM an D11 (Aufdruck Z+/Z−) und GND,
-  Lichtschranken an 5 V, GND und die Endschaltereingänge — Belegung in
+![Anschlussplan](elektronik-anschluss.svg)
+
+Kein 230 V in der Maschine: Das Steckernetzteil liefert 24 V, am Rahmen muss
+nichts geerdet und keine Netzklemme abgedeckt werden.
+
+| von | an | Hinweis |
+|---|---|---|
+| Hohlstecker + | Einbaubuchse → Schalter → Not-Aus → Wago +24 V | 0,5 mm², für 3 A |
+| Hohlstecker − | Wago GND | |
+| Wago +24 V / GND | Schraubklemme des Shields + / − | **Polung prüfen** — verpolt sind die Treiber hin |
+| Wago +24 V / GND | Abwärtswandler IN+ / IN− | |
+| Wago +24 V / GND | Lüfter (24-V-Typ; ein 12-V-Lüfter kommt an den Wandler) | |
+| Wandler OUT+ / OUT− | Laser 12 V / GND | **Wandler erst ohne Laser auf 12,0 V stellen**, dann anschließen |
+| Shield Z+ (D11), Signalstift | Laser PWM | im selben 3-adrigen Kabel, 2 m, durch beide Ketten |
+| Shield X, Y, Z, A | X-Motor, Y-Motor links, Z-Motor, Y-Motor rechts | am Y-Motor rechts **eine Spule getauscht** ([Zwei Y-Motoren](hardware-notizen.md#zwei-y-motoren)) |
+| Shield X+ (D9), Y+ (D10), SpnEn (D12) | D0 der Lichtschranken X, Y, Z | GND der Lichtschranke an den GND-Stift daneben |
+| Shield 5 V | Wago +5 V → VCC der drei Lichtschranken | |
+| Uno USB | PC | versorgt auch den Uno |
+
+* **Abwärtswandler:** 24 → 12 V, mindestens 3 A dauernd — der Laser zieht
+  bis 1,8 A. Am sichersten ein fest eingestellter 12-V-Wandler. Ein
+  einstellbares Modul geht auch, aber die üblichen LM2596-Platinen sind bei
+  1,8 A ohne Kühlkörper am Limit `[w]`; ein XL4015-Modul (5 A) hat Luft.
+  Die gängigen Wandler haben ein gemeinsames Minus: Laser-GND und Uno-GND
+  sind damit verbunden, wie es die PWM braucht. Hat der Wandler getrennte
+  Massen, OUT− zusätzlich an den Wago GND.
+* **Laserstecker:** XH2.54, 3-polig. Die Reihenfolge steht auf der Platine
+  des Moduls neben der Buchse — vor dem ersten Einschalten ablesen.
+* **Wago:** drei 5er-Klemmen (z. B. 221-415): +24 V, GND, +5 V.
+* **Sicherung:** braucht es nicht, das Netzteil begrenzt den Strom selbst.
+* Pins und Jumper im Einzelnen:
   [hardware-notizen.md](hardware-notizen.md#pins-grbl-11-gegen-den-aufdruck).
-  Der Uno bekommt seine 5 V über USB.
+  Nichts unter Spannung an- oder abstecken, vor allem keine Motoren.
+
+## Einkaufsliste (Vorschlag)
+
+| Menge | Teil | wofür |
+|---|---|---|
+| 1 | CNC Shield V3 | Steuerung (Uno und 4 × TMC2209 vorhanden) |
+| 1 | Abwärtswandler 24 → 12 V, ≥ 3 A (fest 12 V oder XL4015) | Laser |
+| 1 | Einbaubuchse passend zum Hohlstecker | 24-V-Eingang |
+| 1 | Kippschalter, ≥ 3 A Gleichstrom | EIN/AUS |
+| 1 | Not-Aus-Pilzschalter mit Öffner, ≥ 3 A Gleichstrom | vorn |
+| 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
+| 2 | Energiekette 10 × 15 mm innen, R18, 1 m | Y und X |
+| 1 + 1 | Motorkabel 1,5 m und 2 m, Stecker passend zum Motor (meist JST-PH 6-polig) auf Dupont 4-polig | Y-Motor rechts, Z-Motor |
+| 2 m + 1 | 3-adrige Schleppkettenlitze + XH2.54-Stecker 3-polig mit Crimpkontakten | Laser |
+| 3 | Wago 221-415 | vorhanden |
+
+Die übrigen Motoren reichen mit 1 m ([Kabel](#kabel)).
 
 ## Was noch fehlt
 
 Bevor die Halter gezeichnet werden:
 
-1. **Laser:** Spannung und Strom (oder Leistungsaufnahme) vom Typenschild —
-   entscheidet, ob die 72 W reichen.
-2. **Hohlstecker des Netzteils:** 5,5 × 2,1 oder 5,5 × 2,5 mm (steht meist
+1. **Energieketten:** vorhanden? Innen- und Außenmaß, Biegeradius — sonst
+   wie in der Einkaufsliste.
+2. **Lüfter:** 40 mm vorhanden, mit welcher Spannung?
+3. **Hohlstecker des Netzteils:** 5,5 × 2,1 oder 5,5 × 2,5 mm (steht meist
    auf dem Netzteil) — für die Einbaubuchse.
-3. **Energieketten:** vorhanden? Innen- und Außenmaß, Biegeradius. Sonst
-   zwei Stück 10 × 15 mm (innen), R18, je 1 m.
-4. **Lüfter:** 40 mm vorhanden, mit welcher Spannung? 24 V ginge direkt.
-5. Nicht mehr dringend: Überstand der 2040 hinter dem hinteren 2060
+4. Nicht mehr dringend: Überstand der 2040 hinter dem hinteren 2060
    (angenommen 145 mm) und ob die 2040 mit Winkeln am 2060 sitzen.
 
-Geklärt (2026-09-25): Netzteil ist das Steckernetzteil 24 V / 3 A;
-Gabellichtschranken für X und Y sind da, Näherungssensoren als Reserve.
+Geklärt (2026-09-25): Netzteil ist das Steckernetzteil 24 V / 3 A; der
+Laser ein LASER TREE 4 W mit 12 V / 1,6 A; Gabellichtschranken für X und Y
+sind da, Näherungssensoren als Reserve; Wago-Klemmen sind da.

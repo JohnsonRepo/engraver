@@ -29,6 +29,7 @@ docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, 
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
 docs/elektronik.md             Platz für die Steuerung, Leistung, Endschalter, Kabel (Vorschlag)
 docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
+docs/elektronik-anschluss.svg  Anschlussplan: Netzteil, Wandler, Shield, Motoren, Laser, Endschalter
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
@@ -39,6 +40,7 @@ tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/portal_zeichnen.py       erzeugt die Portalzeichnung
 tools/y_antrieb_zeichnen.py    erzeugt die Zeichnung des Y-Antriebs
 tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
+tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
 tools/geometrie_check.py       Prüfung der Einzelplatte
 ```
 
@@ -114,6 +116,7 @@ python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
 python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
 python3 tools/y_antrieb_zeichnen.py # docs/portal-y-antrieb.svg neu erzeugen
 python3 tools/elektronik_zeichnen.py # docs/elektronik-platz.svg + Kabellängen
+python3 tools/anschluss_zeichnen.py  # docs/elektronik-anschluss.svg
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 ```
 

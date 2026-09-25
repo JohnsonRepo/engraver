@@ -274,9 +274,17 @@ def main():
          '   (Ruecklauf {:.2f} mm neben der Schienenmitte, Rippen {})'.format(
              L['yr_rueck_u'], 'zur Schiene' if rippen_seite < 0
              else 'nach innen'))
-    p.ok('Ruecklauf liegt in der Nut des 2040 (hinter der Flanke)',
-         L['rahmen_flanke_u'] - (L['yr_rueck_u'] + w('riemen_dicke') / 2),
-         0.0)
+    # Auf dem Teilkreis liegen die Wirklinien, nicht die Riemenmitten: die
+    # Mitten beider Trume liegen um 2x den Versatz naeher beieinander
+    p.ok('Trume: Riemenmitten = Teilkreis - 2x Wirklinienversatz',
+         -abs((w('y_riemen_linie') - L['yr_rueck_u'])
+              - (w('ritzel_teilkreis') - 2.0 * L['yr_wirk_versatz'])), -0.01)
+    p.ok('Ruecklauf: Ruecken liegt in der Nut (hinter der Flanke)',
+         L['rahmen_flanke_u'] - (L['yr_rueck_u'] - w('riemen_dicke') / 2),
+         0.5)
+    p.ok('Ruecklauf: Zahnspitzen hoechstens 0,5 mm vor der Flanke',
+         0.5 - ((L['yr_rueck_u'] + w('riemen_dicke') / 2)
+                - L['rahmen_flanke_u']), 0.0)
     p.ok('Klemmtuerme neben dem Ruecklauf',
          L['kt_u'][0] - (L['yr_rueck_u'] + w('riemen_dicke') / 2), 3.0)
     p.info('Riemen: Oberkante unter der Oberkante des 2040',
@@ -508,7 +516,10 @@ def main():
                              L['mp_z1'] - L['mh_z'][0])),
             ('Umlenkhalter', (L['uh_innen_u'] - L['uh_saeule_u'][0],
                               L['uh_y'][1] - L['uh_saeule_y'][0],
-                              L['klotz_z'][1] - L['wand_z1']))):
+                              L['klotz_z'][1] - L['wand_z1'])),
+            ('Y-Motorhalter', (L['ymh_u'][1] - L['ymh_u'][0],
+                               L['ymh_y'][1] - L['ymh_wange_y'][0],
+                               L['rahmen_z1'] - L['ymp_z0']))):
         p.ok('{}: groesste Kante'.format(name), max(masse), 250.0, '<=')
     p.ok('Bruecke Mutternschlitz Umlenkung (stehend)',
          (L['rolle_u'][1] - L['rolle_u'][0])
@@ -517,8 +528,8 @@ def main():
     # ------------------------------------------------------------------
     p.titel('11) Stueckliste Portal')
     for zeile in (
-            '2x Y-Schlitten, 4x Klemmturm (links/rechts gespiegelt), '
-            '1x Motorhalter, 1x Umlenkhalter, 1x Spannklotz',
+            '2x Y-Schlitten, 4x Klemmturm, 2x Y-Motorhalter (links/rechts '
+            'gespiegelt), 1x Motorhalter, 1x Umlenkhalter, 1x Spannklotz',
             '8x M3x{:.0f} Zylinderkopf (Schlitten -> Y-Wagen)'.format(
                 L['wagen_schraube']),
             '8x M3x{:.0f} Zylinderkopf + 8x Messing-Einsatz M3 Ø5 '
@@ -543,6 +554,15 @@ def main():
             '1x GT2-Umlenkrolle 20 Z mit Kugellager, Bohrung 5',
             '1x GT2-Ritzel 20 Z, Bohrung 5 (X-Motor)',
             '1x NEMA 17 (X)',
+            '2x NEMA 17 (Y), je ein GT2-Ritzel 20 Z Bohrung 5 direkt auf der '
+            'Welle (das obere Ritzel der alten Eckwelle)',
+            '8x M3x{:.0f} Zylinderkopf (NEMA 17 -> Y-Motorhalter, von oben)'
+            .format(L['motor_schraube']),
+            '4x M5x{:.0f} Zylinderkopf + 4x Hammermutter M5 Nut 6 '
+            '(Y-Motorhalter -> obere Nut aussen am 2040)'.format(
+                L['ymh_schraube']),
+            'entfallen: Eckwellen, ihre Lager und die unteren Ritzel, der '
+            'Motorhalter in der Mitte des vorderen 2060',
             '1x GT2-Riemen 6 mm, ca. {:.0f} mm (X)'.format(
                 2.0 * (L['x_rolle'] - L['x_motor'])
                 + math.pi * w('ritzel_teilkreis')),
@@ -581,9 +601,10 @@ def main():
     # ------------------------------------------------------------------
     # Referenz: die 2060 liegen quer unter den 2040. Laser und Schlittenplatte
     # haengen tiefer als ihre Oberkante — mit Z unten begrenzt das vordere
-    # 2060 den Y-Weg, nicht die Schiene. Lage wie im Modell: Schienen und
-    # 2060 mittig zum Y-Wagen, Abstand der 2060 Mitte zu Mitte (angenommen).
-    p.titel('14) Y-Weg gegen die 2060 (Referenz, alles mittig angenommen)')
+    # 2060 den Y-Weg, nicht die Schiene. Lage wie im Modell: 2040 und
+    # Schienen mittig zum Y-Wagen [?], das vordere 2060 35 mm hinter der
+    # Stirnseite [v], das hintere 400 mm Mitte zu Mitte dahinter [?].
+    p.titel('14) Y-Weg gegen die 2060 und die Y-Motorhalter (Referenz)')
     oben = L['quer_z'][1] + 3.0              # 3 mm Luft ueber dem 2060
 
     def tief(zc):
@@ -617,8 +638,202 @@ def main():
         p.info('Linse dann ueber dem Bett',
                zc_frei + TL['laser_unten_rel'] + tw('bett_abstand'))
 
+    # Vor dem vorderen 2060 stehen die Y-Motorhalter hoeher als das 2060.
+    # Am vorderen Schienenende faehrt das Portal ueber sie; der Toolhead an
+    # den X-Enden kommt ihnen nahe. Gerechnet in Rahmenkoordinaten, das
+    # Portal um den Schienenweg nach vorn verschoben.
+    halter = y_halter_quader(w, L)
+    lang_fest = ('Y-Schiene', 'Rahmen 2040', 'Y-Riemen', 'Y-Ruecklauf')
+    portal_bewegt = [q for q in portal
+                     if not any(q.name.startswith(t) for t in lang_fest)]
+
+    def vor(q, dy):
+        return bauraum.Quader(q.name, q.x[0], q.x[1], q.y[0] + dy,
+                              q.y[1] + dy, q.z[0], q.z[1], q.art)
+
+    d_p = min(vor(q, d_schiene).abstand(h) for q in portal_bewegt
+              for h in halter)
+    p.ok('Portal (Schlitten, Klemmtuerme, Halter) am vorderen Schienenende '
+         'frei ueber den Y-Motorhaltern', d_p, w('luft_bau'))
+
+    def luft_toolhead(zc, ritzel):
+        d = float('inf')
+        for xw in xs_:
+            for q in ([t.verschoben(0.0, xw) for t in feste_th]
+                      + [t.verschoben(zc, xw) for t in bewegte_th]):
+                qv = vor(q, d_schiene)
+                for h in halter:
+                    if ('Ritzel' in h.name) == ritzel:
+                        d = min(d, qv.abstand(h))
+        return d
+
+    p.ok('Toolhead mit Z oben (nach dem Referenzieren) am vorderen '
+         'Schienenende frei ueber Haltern und Motoren',
+         luft_toolhead(TL['zc_max'], False), w('luft_bau'))
+    zc_halter = next((zc / 2.0 for zc in range(int(zc0 * 2),
+                                               int(TL['zc_max'] * 2) + 1)
+                      if luft_toolhead(zc / 2.0, False) >= w('luft_bau')),
+                     None)
+    if zc_halter is not None:
+        p.info('am vorderen Schienenende ueber Halter und Motoren ab zc',
+               zc_halter)
+        p.info('Linse dann ueber dem Bett',
+               zc_halter + TL['laser_unten_rel'] + tw('bett_abstand'))
+        # Der Ritzelbord steht 1,26 mm weiter innen als der Ruecken des
+        # Riemens, an dem der Toolhead mit 3,4 mm vorbeifaehrt — seitlich
+        # bleibt am Bord weniger, aber nur am vorderen Schienenende.
+        d_r = min(luft_toolhead(zc / 2.0, True)
+                  for zc in range(int(zc_halter * 2),
+                                  int(TL['zc_max'] * 2) + 1))
+        p.ok('Toolhead neben dem Ritzelbord (vorderes Schienenende, '
+             'rechtes X-Ende)', d_r, 2.0)
+    p.info('tiefer nur mit Softlimit fuer Y (vorn endet die Arbeitsflaeche '
+           'ohnehin am 2060)')
+
+    # ------------------------------------------------------------------
+    p.titel('15) Y-Antrieb: Motor je Ecke vorn, Ritzel direkt auf der Welle')
+    fl = w('motor_flansch') / 2.0
+    ye = L['stirn_vorn_y']
+    y_hinten, y_vorn = L['ym_y_bereich']
+    bo = w('ritzel_bord')
+    p.info('Ritzelachse innen neben der Schienenmitte', L['ym_u'])
+    p.info('Ritzelachse vor der Stirnseite des 2040 (Mitte)', w('ym_vor'))
+    p.info('   Langloch von', y_hinten - ye)
+    p.info('             bis', y_vorn - ye)
+    p.ok('gezogener Trum laeuft gerade von der Klemme zum Ritzel',
+         -abs(L['ym_u'] + w('ritzel_teilkreis') / 2 - L['yr_wirk_u']), -0.01)
+    p.ok('Ritzelspur mittig auf dem Riemen',
+         -abs((L['ym_nabe_z1'] + bo + L['ym_ritzel_z1'] - bo) / 2
+              - L['yr_zm']), -0.01)
+    p.ok('Welle reicht durch das ganze Ritzel',
+         L['ym_welle_z1'] - L['ym_ritzel_z1'], 0.0)
+    p.ok('Ritzelnabe taucht in die Bundbohrung',
+         L['ymp_z1'] - L['ym_ritzel_z0'], 0.5)
+    p.ok('Ritzelnabe bleibt ueber dem Motorbund',
+         L['ym_ritzel_z0'] - L['ym_bund_z1'], 0.5)
+    p.ok('Madenschrauben ueber der Platte (Inbus von vorn)',
+         (L['ym_madenschraube_z'] - 1.5) - L['ymp_z1'], 0.5)
+    p.ok('Motor ganz hinten: vor der Stirnseite des 2040',
+         (y_hinten - fl) - ye, 1.0)
+    p.ok('Motor neben der Wange', (L['ym_u'] - fl) - L['ymh_wange_u'][1],
+         3.0)
+    p.ok('Motor vor dem vorderen 2060', (y_hinten - fl)
+         - L['quer_y_vorn'][1], w('luft_bau'))
+    p.ok('Motor unten ueber der Unterkante der 2060 (Tisch)',
+         L['ym_motor_z0'] - L['quer_z'][0], 10.0)
+    p.ok('Motorplatte: Rand vor den vorderen Schrauben',
+         L['ymh_y'][1] - (y_vorn + w('motor_loch') / 2
+                          + w('m3_durchgang') / 2), 2.0)
+    p.ok('Motorplatte: Rand hinter den hinteren Schrauben',
+         (y_hinten - w('motor_loch') / 2 - w('m3_durchgang') / 2) - ye, 2.0)
+    p.ok('Motorplatte: Rand innen neben den Schrauben',
+         L['ymh_u'][1] - (L['ym_u'] + w('motor_loch') / 2
+                          + w('m3_durchgang') / 2), 2.0)
+    p.ok('Motorplatte traegt den Flansch auch ganz vorn',
+         L['ymh_y'][1] - (y_vorn + fl), 0.0)
+    p.ok('hintere Motorschrauben: Kopf vor der Anlage (Motor ganz hinten)',
+         (y_hinten - w('motor_loch') / 2 - w('m3_senkung') / 2)
+         - L['ymh_wand_y'][1], 0.5)
+    p.ok('Ausschnitt: Rand hinter der inneren hinteren Schraube',
+         (y_hinten - w('motor_loch') / 2 - w('m3_durchgang') / 2)
+         - L['ymh_aus_y'][1], 2.0)
+    p.ok('Ausschnitt: Anlage reicht ueber die ganze Stirnseite',
+         L['ymh_wand_u'][1] - w('rahmen_b') / 2, 3.0)
+    p.ok('Ritzelbord vor der Anlage (Motor ganz hinten)',
+         (y_hinten - w('ritzel_flansch_d') / 2) - L['ymh_wand_y'][1], 3.0)
+    p.ok('Anlage endet unter dem Riemen', L['yr_z0'] - L['ymh_wand_z'][1],
+         1.5)
+    nut_unten = L['nut_z'] - (w('rahmen_b') - 2.0 * w('nut_oben')) / 2.0
+    p.ok('Anlage endet unter der Nutoeffnung (Ruecklauf tritt aus)',
+         nut_unten - L['ymh_wand_z'][1], 0.5)
+    p.ok('Motorschraube M3x{:.0f}: Gewinde im Flansch'.format(
+        L['motor_schraube']), L['motor_schraube'] - w('mp_dicke'), 3.5)
+    p.ok('Wange: 1. Hammermutter ganz in der Nut (~10,5 lang)',
+         w('ymh_nut_y1') - 10.5 / 2, 1.0)
+    p.ok('Wange: Hammermuttern nebeneinander',
+         (w('ymh_nut_y2') - w('ymh_nut_y1')) - 10.5, 1.0)
+    p.ok('Wange: Rand hinter der 2. M5',
+         w('ymh_hinten') - w('ymh_nut_y2') - w('m5_durchgang') / 2, 3.0)
+    p.ok('Wange: Rand ueber der M5', L['rahmen_z1']
+         - (L['nut_z'] + w('m5_durchgang') / 2), 3.0)
+    p.ok('Wange endet vor dem vorderen 2060',
+         L['ymh_wange_y'][0] - L['quer_y_vorn'][1], 3.0)
+    p.ok('M5x{:.0f}: Gewinde in der Hammermutter'.format(L['ymh_schraube']),
+         L['ymh_schraube'] - w('ymh_wange') - 1.8, 3.5)
+    p.ok('M5x{:.0f}: steht nicht auf dem Nutgrund auf'.format(
+        L['ymh_schraube']), (w('nut_t') + w('nut_kammer_t'))
+         - (L['ymh_schraube'] - w('ymh_wange')), 0.0)
+    # Motorschrauben von oben: senkrecht bis ins Freie
+    # Rahmen und Riemen in ihrer wirklichen Laenge (die Quader des Portals
+    # laufen endlos durch): das 2040 endet an der Stirnseite, beide Trume
+    # am Ritzel
+    boxen = [h for h in halter if 'Ritzel' in h.name]
+    d_r = w('riemen_dicke') / 2.0
+    for s_ in (-1, 1):
+        for name, u, y, z in (
+                ('Rahmen 2040', (-w('rahmen_b') / 2, w('rahmen_b') / 2),
+                 L['rahmen_y'], (L['rahmen_z0'], L['rahmen_z1'])),
+                ('Y-Riemen', (w('y_riemen_linie') - d_r,
+                              w('y_riemen_linie') + d_r),
+                 (L['rahmen_y'][0], y_vorn), (L['yr_z0'], L['yr_z1'])),
+                ('Y-Ruecklauf', (L['yr_rueck_u'] - d_r,
+                                 L['yr_rueck_u'] + d_r),
+                 (L['rahmen_y'][0], y_vorn), L['yr_rueck_z'])):
+            a, b = s_ * (R - u[0]), s_ * (R - u[1])
+            boxen.append(bauraum.Quader(name, min(a, b), max(a, b), y[0],
+                                        y[1], z[0], z[1]))
+    schlecht = (float('inf'), None)
+    for s_ in (-1, 1):
+        for u, dy in L['ym_schrauben']:
+            for y in (y_hinten + dy, y_vorn + dy):
+                pt = (s_ * (R - u), y, L['ymp_z1'] + w('m3_kopf_h'))
+                d, wer = bauraum.freier_korridor(pt, 'z', +1,
+                                                 INBUS_FREI_D / 2, boxen)
+                if d < schlecht[0]:
+                    schlecht = (d, wer)
+    p.ok('Motorschrauben von oben erreichbar'
+         + ('' if schlecht[1] is None else '  [' + schlecht[1] + ']'),
+         999.0 if schlecht[0] == float('inf') else schlecht[0],
+         WERKZEUG_LAENGE)
 
     return p.bericht()
+
+
+def y_halter_quader(w, L):
+    """Y-Motorhalter, Motor und Ritzel beider Seiten als Quader in
+    Rahmenkoordinaten (Portal in der Mitte). Motor und Ritzel als Huelle
+    ueber ihren ganzen Spannweg."""
+    R = L['R']
+    fl = w('motor_flansch') / 2.0
+    rr = w('ritzel_flansch_d') / 2.0
+    y0, y1 = L['ym_y_bereich']
+    q = []
+    for s in (-1, 1):
+        n = 'links' if s < 0 else 'rechts'
+
+        def xb(u0, u1):
+            a, b = s * (R - u0), s * (R - u1)
+            return min(a, b), max(a, b)
+
+        for name, u, y, z in (
+                ('Y-Motorplatte', (L['ymh_u'][0], L['ymh_aus_u'][0]),
+                 L['ymh_y'], (L['ymp_z0'], L['ymp_z1'])),
+                ('Y-Motorplatte innen', (L['ymh_aus_u'][0], L['ymh_u'][1]),
+                 (L['ymh_aus_y'][1], L['ymh_y'][1]),
+                 (L['ymp_z0'], L['ymp_z1'])),
+                ('Y-Anlage', L['ymh_wand_u'], L['ymh_wand_y'],
+                 L['ymh_wand_z']),
+                ('Y-Wange', L['ymh_wange_u'], L['ymh_wange_y'],
+                 L['ymh_wange_z']),
+                ('Y-Motor', (L['ym_u'] - fl, L['ym_u'] + fl),
+                 (y0 - fl, y1 + fl), (L['ym_motor_z0'], L['ymp_z0'])),
+                ('Y-Ritzel', (L['ym_u'] - rr, L['ym_u'] + rr),
+                 (y0 - rr, y1 + rr),
+                 (L['ym_ritzel_z0'], L['ym_welle_z1']))):
+            x = xb(*u)
+            q.append(bauraum.Quader('{} {}'.format(name, n), x[0], x[1],
+                                    y[0], y[1], z[0], z[1]))
+    return q
 
 
 if __name__ == '__main__':

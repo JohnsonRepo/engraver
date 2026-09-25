@@ -10,13 +10,13 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
-| Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern, GT2-Riemen über senkrechte Eckwellen vorn, **je Seite ein NEMA 17** |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
+| Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern, GT2-Riemen, vorn **je Seite ein NEMA 17** mit dem Ritzel direkt auf der Welle |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |
 | Werkzeug | Diodenlaser am Toolhead |
-| Steuerung | Arduino Uno R3 + CNC Shield V3, GRBL 1.1 (geplant) — siehe [Elektronik](#elektronik) |
+| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209, GRBL 1.1 (geplant) — siehe [Elektronik](#elektronik) |
 
 ## Z-Achse / Toolhead
 
@@ -71,8 +71,10 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | NEMA 17, Welle | **20 mm** ab Flansch, Ø5 | `[v]` Angabe am Aufbau; legt beim X-Motor die Höhe fest (die Welle muss das ganze Ritzel tragen) |
 | Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite | `[v]` Linie aus v8, Höhe Angabe am Aufbau |
 | Obere Nut des 2040 | Öffnung beginnt **6 mm unter der Oberkante** (oberer Rand), Mitte 10 mm darunter | `[v]` Angabe am Aufbau |
-| Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (8,9 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
-| Y-Antrieb | vorn an jeder Ecke eine senkrechte Welle Ø5 (Edelstahl, oben Kugellager, unten Gleitlager) mit zwei 20-Z-Ritzeln: oben der Y-Riemen, unten der Riemen vom Motor. Die Y-Riemen liegen spiegelbildlich, die Eckwellen müssen also **gegenläufig** drehen → **ein Motor je Ecke** statt eines Motors in der Mitte | `[v]` Aufbau; Lage der Motoren offen |
+| Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (9,5 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
+| Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Seit Portal Rev. 12 sitzt das Ritzel **direkt auf der Motorwelle**: Y-Motorhalter an der Stirnseite des 2040, Achse 27,5 mm davor (siehe portal-y-schlitten.md). Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
+| Alte Eckwelle vorn | Ø5 Edelstahl, oben Kugellager, unten Gleitlager, zwei 20-Z-Ritzel; Achse **11 mm vor der Stirnseite** des 2040. Dort passt kein Motor: er ragte 10 mm unter das Ende des 2040 | `[v]` Angabe am Aufbau |
+| Vorderes 2060 | **35 mm** hinter der Stirnseite der 2040 | `[v]` Angabe am Aufbau |
 | Abstand der Y-Schienen | **514 mm** Mitte zu Mitte = Rohr 500 + 2 × 7 mm; ergibt sich beim Aufbau aus dem verschraubten Portal | gesetzt (Portal.py), Rechnung siehe unten |
 | Kernbohrung 2020 V-Slot | Ø4,2 — für die Stirnschraube **M5 schneiden, ≥ 15 mm tief** | `[w]` |
 | Hammermuttern | M5, Nut 6, in der hinteren Nut des Portalrohrs | `[w]` |
@@ -359,7 +361,7 @@ Fallen beim Einbau:
   ≥ 1,9 µs.
 
 Fazit: taugt als billige Alternative zum A4988, die Empfehlung bleibt der
-TMC2209.
+TMC2209. **Entschieden (2026-09-25): TMC2209.**
 
 ### Fallstricke, falls es TMC wird
 
@@ -382,13 +384,14 @@ Chopper einstellbar.
 ## Elektronik
 
 **Stand 2026-09-25:** Arduino Uno R3 vorhanden, CNC Shield V3 noch nicht
-gekauft. Vier NEMA 17 — genau die vier Treiberplätze des Shields. Pinbelegung
+gekauft, Treiber: **4 × TMC2209** (plus Ersatz). Vier NEMA 17 — genau die
+vier Treiberplätze des Shields. Pinbelegung
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten).
 
 | Steckplatz | Motor | Schritte/mm bei 1/16 |
 |---|---|---|
 | X | X-Motor | `$100=80` (GT2, 20 Z: 40 mm je Umdrehung) |
-| Y | Y-Motor der einen Ecke | `$101=80` — gilt, wenn Motorritzel und unteres Eckritzel beide 20 Z haben |
+| Y | Y-Motor der einen Ecke | `$101=80` (GT2, 20 Z direkt auf der Welle) |
 | A | Y-Motor der anderen Ecke, **Klon von Y**: Jumper A.STEP↔Y.STEP und A.DIR↔Y.DIR | folgt Y |
 | Z | Z-Motor | `$102=1600` (Tr8×2) |
 
@@ -398,7 +401,7 @@ eigene Achse, sondern eine elektrische Kopie von Y.
 
 ### Zwei Y-Motoren
 
-* **Drehrichtung im Kabel umkehren.** Die Eckwellen drehen gegenläufig, Y und
+* **Drehrichtung im Kabel umkehren.** Die Ritzel vorn drehen gegenläufig, Y und
   A bekommen aber dasselbe DIR-Signal. `$3` hilft nicht, es dreht Y und A
   gemeinsam um. Also am zweiten Y-Motor die zwei Adern **einer** Spule
   tauschen (oder den Stecker um 180° drehen). Prüfen, bevor das Portal an
@@ -413,7 +416,7 @@ eigene Achse, sondern eine elektrische Kopie von Y.
   sitzen starr auf den Wagen, die Rechtwinkligkeit legen also die Teile fest
   (prüfen wie in [ausrichten.md](ausrichten.md)) — die Motoren dürfen nur nicht
   gegeneinander ziehen. Einmal einstellen: an einer Ecke die Madenschrauben
-  des oberen Ritzels lösen, Portal von Hand durchschieben, bis es frei läuft,
+  des Ritzels auf der Motorwelle lösen, Portal von Hand durchschieben, bis es frei läuft,
   festziehen. Nach einem Schrittverlust auf einer Seite dasselbe.
 
 ### Pins: GRBL 1.1 gegen den Aufdruck

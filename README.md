@@ -6,23 +6,24 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
-| Y-Achse | 2 Linearführungen MGN12H (Schienen 500 mm) oben auf den 2040ern, GT2-Riemen über senkrechte Eckwellen vorn, je Seite ein NEMA 17 |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
+| Y-Achse | 2 Linearführungen MGN12H (Schienen 500 mm) oben auf den 2040ern, GT2-Riemen, vorn je Seite ein NEMA 17 mit dem Ritzel direkt auf der Welle |
 | Portal | Y-Schlitten auf den MGN12H-Wagen, dazwischen ein 2020-V-Slot-Profil (500 mm); Y-Schienen 514 mm Mitte zu Mitte |
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
 | Z-Achse | Toolhead am MGN15H-Wagen: eigene MGN9-Führung, NEMA 17 über Tr8×2-Spindel |
 | Werkzeug | Diodenlaser am Z-Schlitten |
-| Steuerung | Arduino Uno R3 + CNC Shield V3, GRBL 1.1 (geplant), A-Achse klont Y |
+| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209, GRBL 1.1 (geplant), A-Achse klont Y |
 
 ## Inhalt
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb  ← neu
+fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
 docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
+docs/portal-y-antrieb.svg      Y-Motorhalter vorn: Draufsicht auf die Ecke, Schnitt durch die Motorachse
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
@@ -34,6 +35,7 @@ tools/portal_check.py          Prüfung des Portals mit dem Toolhead über X- un
 tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
 tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/portal_zeichnen.py       erzeugt die Portalzeichnung
+tools/y_antrieb_zeichnen.py    erzeugt die Zeichnung des Y-Antriebs
 tools/geometrie_check.py       Prüfung der Einzelplatte
 ```
 
@@ -58,19 +60,21 @@ Fokusabstand des Moduls nicht in der Geometrie steckt. Werkstückhöhe bis 59 mm
 mitfährt — die 200-mm-Spindel wird dafür auf 160 mm gekürzt. Details in
 [docs/toolhead-z.md](docs/toolhead-z.md).
 
-### Portal: Y-Schlitten und X-Antrieb (neu)
+### Portal: Y-Schlitten, X- und Y-Antrieb (neu)
 
 Riemenklemmenschlitten für die **MGN12H-Wagen (20 × 20)**, links und rechts
 gespiegelt. Sie tragen das Portalrohr von unten und verschrauben es hinten
 (Rückwand, 2 × M5 in Hammermuttern) und an der Stirn (M5 in die
 Kernbohrung) — die Vorderseite bleibt frei für die X-Schiene. Unter jeder
 Platte hängen **zwei gleiche Klemmtürme wie bei v8** mit Rippen und
-Querstift, einer je Riemenende; gespannt wird wie bisher an den Ritzeln.
+Querstift, einer je Riemenende.
 Links steht der **X-Motor** über dem Rohrende — so tief, dass seine
 20-mm-Welle das ganze Ritzel trägt —, rechts die **Umlenkung** mit
-einer 20-Z-Rolle, die ein Spannklotz nach außen zieht. Aluprofile,
-Linearführungen, Riemen und Motor stehen als Referenz mit im Modell (Komponente
-`Referenz_nicht_drucken`, nur zur Ansicht).
+einer 20-Z-Rolle, die ein Spannklotz nach außen zieht. Vorn an jedem 2040
+sitzt ein **Y-Motorhalter**: NEMA 17 hängend, das Ritzel des Y-Riemens direkt
+auf der Welle, gespannt über Langlöcher — Eckwelle und unteres Ritzel
+entfallen. Aluprofile, Linearführungen, Riemen und Motoren stehen als Referenz
+mit im Modell (Komponente `Referenz_nicht_drucken`, nur zur Ansicht).
 
 X-Weg **391,2 mm** — die ganze Schiene minus Wagen. Der Toolhead fährt an
 beiden Enden mit mindestens 3 mm an Motor, Umlenkung, Schlitten und Y-Riemen
@@ -105,6 +109,7 @@ python3 tools/portal_check.py       # Portal + Toolhead über den ganzen Weg
 python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
 python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
 python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
+python3 tools/y_antrieb_zeichnen.py # docs/portal-y-antrieb.svg neu erzeugen
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 ```
 
@@ -120,9 +125,10 @@ bestanden.
 `portal_check.py` importiert beide Skripte und fährt den Toolhead über
 81 X- × 11 Z-Stellungen gegen Schlitten, Motor, Umlenkung, beide Riemen und
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
-Werkzeugzugang und Druckbarkeit der Portalteile.
+Werkzeugzugang und Druckbarkeit der Portalteile, den Y-Weg gegen die 2060
+und die Y-Motorhalter und den Y-Antrieb selbst.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 11). Der
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 12). Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

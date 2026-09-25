@@ -188,9 +188,12 @@ Strahl reicht — siehe `toolhead-z.md`, Endschalter.
 
 Ebenfalls vorhanden: **induktiver Näherungsschalter LJ12A3-4-Z/BX** (M12,
 Sn 4 mm, NPN Schließer, 6–36 V). Für Z am Toolhead ungeeignet — 60 g,
-Pegelwandler nötig, ±0,1…0,2 mm Wiederholgenauigkeit. Vorgesehen für X und Y
-am Rahmen. Achtung: Schließer meldet bei Kabelbruch nicht; der Öffner
-(`/AX`) wäre für Endschalter die sichere Variante.
+Pegelwandler nötig, ±0,1…0,2 mm Wiederholgenauigkeit. Für X und Y am Rahmen
+war er zuerst vorgesehen; inzwischen sind auch dort Gabellichtschranken
+geplant, die ohne Optokoppler auskommen
+([elektronik.md](elektronik.md#endschalter)). Achtung: Schließer meldet bei
+Kabelbruch nicht; der Öffner (`/AX`) wäre für Endschalter die sichere
+Variante.
 
 ## Maschinenmaße für die Z-Achse
 
@@ -388,7 +391,8 @@ Chopper einstellbar.
 **Stand 2026-09-25:** Arduino Uno R3 vorhanden, CNC Shield V3 noch nicht
 gekauft, Treiber: **4 × TMC2209** (plus Ersatz). Vier NEMA 17 — genau die
 vier Treiberplätze des Shields. Pinbelegung
-und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten).
+und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
+Netzteil, Endschalter und Kabel hinkommen: [elektronik.md](elektronik.md).
 
 | Steckplatz | Motor | Schritte/mm bei 1/16 |
 |---|---|---|

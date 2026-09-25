@@ -27,6 +27,8 @@ docs/portal-y-antrieb.svg      Y-Motorhalter vorn: Draufsicht auf die Ecke, Schn
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
+docs/elektronik.md             Platz für Steuerung und Netzteil, Endschalter, Kabel (Vorschlag)
+docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
@@ -36,6 +38,7 @@ tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
 tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/portal_zeichnen.py       erzeugt die Portalzeichnung
 tools/y_antrieb_zeichnen.py    erzeugt die Zeichnung des Y-Antriebs
+tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
 tools/geometrie_check.py       Prüfung der Einzelplatte
 ```
 
@@ -110,6 +113,7 @@ python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
 python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
 python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
 python3 tools/y_antrieb_zeichnen.py # docs/portal-y-antrieb.svg neu erzeugen
+python3 tools/elektronik_zeichnen.py # docs/elektronik-platz.svg + Kabellängen
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 ```
 
@@ -126,9 +130,12 @@ bestanden.
 81 X- × 11 Z-Stellungen gegen Schlitten, Motor, Umlenkung, beide Riemen und
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile, den Y-Weg gegen die 2060
-und die Y-Motorhalter und den Y-Antrieb selbst.
+und die Y-Motorhalter, den Y-Antrieb selbst und das Elektronikfach hinter
+dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 13). Der
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 13).
+Für die Elektronik gibt es einen Platz und die Kabelwege als Vorschlag
+([elektronik.md](docs/elektronik.md)); die Halter folgen. Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

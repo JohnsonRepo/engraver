@@ -77,7 +77,7 @@ Abschnitt 14 nach, mit der Lage wie im Modell:
 |---|---|
 | Y-Wagen ab Schienenmitte bis Schienenende | ± 227,3 mm |
 | nach vorn (Laserseite), Z unten, bis 3 mm vor das 2060 | **106 mm** |
-| nach hinten bis zum 2060 | 215 mm, die Schiene endet vorher |
+| nach hinten (Portalseite), Z unten, bis 3 mm vor das 2060 | 215 mm — das 2060 begrenzt, die Schiene reichte bis 227,3 |
 | Strahl erreicht mit Z unten, ab Rahmenmitte | −96,5 bis +224,5 mm (321 mm) |
 | über die 2060 hinweg | ab Wagenmitte zc = +19,3, Linse dann 73,5 mm über dem Bett |
 
@@ -90,6 +90,9 @@ Riemens, an dem überall 3,4 mm Luft bleiben.
 
 Den Y-Weg in der Firmware also vorn auf die Grenze des 2060 setzen (die
 Arbeitsfläche endet ohnehin dort), dann erreicht der Toolhead die Halter nie.
+Hinter dem hinteren 2060 bleibt unter den 2040 ein Fach frei, in das nichts
+hineinfährt — dort ist Platz für die Elektronik
+([elektronik.md](elektronik.md)).
 Liegen Schienen oder das hintere 2060 anders als angenommen, ändern sich die
 Zahlen — `quer_abstand` und `y_schiene_laenge` anpassen und die Prüfung neu
 laufen lassen.

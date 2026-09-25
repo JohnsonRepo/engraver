@@ -322,15 +322,44 @@ Dagegen der A4988: **billiger** (~1,50 € gegen 4–6 €), robust, nichts zu
 konfigurieren, und er verträgt bis 35 V. Für 3 Achsen ist der Aufpreis rund
 15 € — gegenüber Spindel plus Garnitur belanglos.
 
-| | A4988 | TMC2209 |
-|---|---|---|
-| Versorgung | 8–35 V | ~5–28 V (abs. max 29) |
-| Strom | bis 2 A/Phase (IC), ohne Kühlung real ~1 A | bis 2 A RMS (IC), Modul je nach Kühlkörper ~1,2–1,4 A |
-| Microstepping | max. 1/16 | 8/16/32/64 extern, intern auf 1/256 interpoliert |
-| Konfiguration | Jumper + Vref-Poti | Jumper oder UART |
+| | A4988 | DRV8825 | TMC2209 |
+|---|---|---|---|
+| Preis | ~1,50 € | ~2 € | 4–6 € |
+| Versorgung | 8–35 V | 8,2–45 V | ~5–28 V (abs. max 29) |
+| Strom | bis 2 A/Phase (IC), ohne Kühlung real ~1 A | ohne Kühlkörper ~1,5 A, mit Kühlung bis 2,2 A | bis 2 A RMS (IC), Modul je nach Kühlkörper ~1,2–1,4 A |
+| Microstepping | max. 1/16 | max. 1/32 | 8/16/32/64 extern, intern auf 1/256 interpoliert |
+| Geräusch | laut | laut | leise (StealthChop) |
+| Konfiguration | Jumper + Vref-Poti | Jumper + Vref-Poti | Jumper oder UART |
 
-Bei 24 V passen beide. Über 29 V fällt der TMC2209 aus (dann TMC2130/5160
+Bei 24 V passen alle drei. Über 29 V fällt der TMC2209 aus (dann TMC2130/5160
 oder DRV8825). Nur wenn die Motoren 2-A-Typen sind, wird es am 2209-Modul eng.
+
+### Und der DRV8825?
+
+Steckt ohne Umbau im Sockel des A4988 und kann mehr: ~1,5 A ohne
+Kühlkörper, 1/32, bis 45 V. Bei 24 V und Motoren um 1 A bringt das an dieser
+Maschine nichts. Dafür hat er eine bekannte Schwäche: sehr kleine
+Spulenströme, wie sie nahe dem Nulldurchgang der Sinuskurve gebraucht werden,
+regelt er wegen seiner Mindest-Einschaltzeit nicht sauber — besonders bei
+24 V und Motoren mit kleiner Induktivität. Die Mikroschritte werden dann bei
+langsamer Fahrt ungleichmäßig. Am 3D-Drucker zeigt sich das als feine
+Streifen („Lachshaut“), Abhilfe dort sind Diodenmodule (TL-Smoother) zwischen
+Treiber und Motor. Beim Laser trifft es am ehesten Graustufen-Raster; die
+Fehler liegen im Bereich von Hundertsteln Millimetern, bei Linien und
+Füllungen fällt das kaum auf.
+
+Fallen beim Einbau:
+
+* **1/16 ist nur der MS3-Jumper** (M2), alle drei Jumper ergeben 1/32 —
+  anders als beim A4988.
+* Strom: **I = 2 × Vref** (Module mit 0,1-Ω-Messwiderständen, die üblichen).
+  Beispiel: 1,5-A-Motor, davon 70 % → 1,05 A → Vref ≈ 0,53 V.
+* Das Poti sitzt am anderen Ende als beim A4988 — nach dem EN-Pin ausrichten.
+* Der GRBL-Standard `$0=10` (µs Schrittpuls) passt, der DRV8825 braucht
+  ≥ 1,9 µs.
+
+Fazit: taugt als billige Alternative zum A4988, die Empfehlung bleibt der
+TMC2209.
 
 ### Fallstricke, falls es TMC wird
 
@@ -412,8 +441,10 @@ gewandert:
 
 * Das Shield führt keine UART-Leitung, TMC2209 laufen also standalone:
   **MS1 + MS2 stecken = 1/16** (intern auf 1/256 interpoliert), MS3 frei. Beim
-  A4988 alle drei Jumper = 1/16. Strom über das Vref-Poti nach der Formel des
-  Moduls (hängt vom Messwiderstand ab), etwa 70 % des Motornennstroms.
+  A4988 alle drei Jumper = 1/16, beim **DRV8825 nur MS3 = 1/16** (alle drei =
+  1/32, dann `$100=$101=160`, `$102=3200` und Z höchstens ~500 mm/min, weil
+  der Uno bei ~30 kHz Schluss macht). Strom über das Vref-Poti nach der Formel
+  des Moduls (hängt vom Messwiderstand ab), etwa 70 % des Motornennstroms.
 * Treiber richtig herum stecken (EN-Pin zum EN-Aufdruck) und Motoren nie unter
   Spannung ab- oder anstecken — beides kostet den Treiber.
 * Netzteil 24 V für die Motoren (TMC2209 abs. max 29 V, siehe oben). Der Laser

@@ -11,11 +11,12 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 | Ebene | Aufbau |
 |---|---|
 | Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
-| Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern, GT2-Riemen |
+| Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern, GT2-Riemen über senkrechte Eckwellen vorn, **je Seite ein NEMA 17** |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |
 | Werkzeug | Diodenlaser am Toolhead |
+| Steuerung | Arduino Uno R3 + CNC Shield V3, GRBL 1.1 (geplant) — siehe [Elektronik](#elektronik) |
 
 ## Z-Achse / Toolhead
 
@@ -71,6 +72,7 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite | `[v]` Linie aus v8, Höhe Angabe am Aufbau |
 | Obere Nut des 2040 | Öffnung beginnt **6 mm unter der Oberkante** (oberer Rand), Mitte 10 mm darunter | `[v]` Angabe am Aufbau |
 | Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (8,9 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
+| Y-Antrieb | vorn an jeder Ecke eine senkrechte Welle Ø5 (Edelstahl, oben Kugellager, unten Gleitlager) mit zwei 20-Z-Ritzeln: oben der Y-Riemen, unten der Riemen vom Motor. Die Y-Riemen liegen spiegelbildlich, die Eckwellen müssen also **gegenläufig** drehen → **ein Motor je Ecke** statt eines Motors in der Mitte | `[v]` Aufbau; Lage der Motoren offen |
 | Abstand der Y-Schienen | **514 mm** Mitte zu Mitte = Rohr 500 + 2 × 7 mm; ergibt sich beim Aufbau aus dem verschraubten Portal | gesetzt (Portal.py), Rechnung siehe unten |
 | Kernbohrung 2020 V-Slot | Ø4,2 — für die Stirnschraube **M5 schneiden, ≥ 15 mm tief** | `[w]` |
 | Hammermuttern | M5, Nut 6, in der hinteren Nut des Portalrohrs | `[w]` |
@@ -343,9 +345,89 @@ oder DRV8825). Nur wenn die Motoren 2-A-Typen sind, wird es am 2209-Modul eng.
 * Standalone-Betrieb kann StealthChop bei hoher Beschleunigung Schritte
   verlieren — mit UART ist das einstellbar, ohne nicht.
 
-Offen: **welches Board** die Maschine bekommt. Nur mit UART-Anbindung
-(SKR/Octopus, FluidNC am ESP32 o. ä.) sind Strom und Chopper einstellbar; auf
-einem klassischen Uno-CNC-Shield bleibt es beim Standalone-Modus mit Jumpern.
+Board: geplant ist ein **Arduino Uno R3 mit CNC Shield V3** (siehe
+[Elektronik](#elektronik)) — damit bleibt es beim Standalone-Modus mit Jumpern.
+Nur mit UART-Anbindung (SKR/Octopus, FluidNC am ESP32 o. ä.) wären Strom und
+Chopper einstellbar.
+
+## Elektronik
+
+**Stand 2026-09-25:** Arduino Uno R3 vorhanden, CNC Shield V3 noch nicht
+gekauft. Vier NEMA 17 — genau die vier Treiberplätze des Shields. Pinbelegung
+und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten).
+
+| Steckplatz | Motor | Schritte/mm bei 1/16 |
+|---|---|---|
+| X | X-Motor | `$100=80` (GT2, 20 Z: 40 mm je Umdrehung) |
+| Y | Y-Motor der einen Ecke | `$101=80` — gilt, wenn Motorritzel und unteres Eckritzel beide 20 Z haben |
+| A | Y-Motor der anderen Ecke, **Klon von Y**: Jumper A.STEP↔Y.STEP und A.DIR↔Y.DIR | folgt Y |
+| Z | Z-Motor | `$102=1600` (Tr8×2) |
+
+GRBL 1.1h mit der Arduino-IDE aufspielen (Bibliothek `grbl`, Beispiel
+`grblUpload`). GRBL auf dem Uno kennt nur X, Y und Z — A ist deshalb keine
+eigene Achse, sondern eine elektrische Kopie von Y.
+
+### Zwei Y-Motoren
+
+* **Drehrichtung im Kabel umkehren.** Die Eckwellen drehen gegenläufig, Y und
+  A bekommen aber dasselbe DIR-Signal. `$3` hilft nicht, es dreht Y und A
+  gemeinsam um. Also am zweiten Y-Motor die zwei Adern **einer** Spule
+  tauschen (oder den Stecker um 180° drehen). Prüfen, bevor das Portal an
+  beiden Riemen hängt: bei gleich eingebauten Motoren drehen die Motorwellen,
+  von oben gesehen, gegenläufig.
+* **Gleiche Treiber auf Y und A**, gleiche Mikroschritt-Jumper, gleicher
+  Strom. Mischbestückung ändert den Drehsinn einer Seite (ein TMC läuft
+  gegenüber einem A4988 spiegelbildlich, siehe oben) und womöglich ihre
+  Schrittweite.
+* **Kein Auto-Squaring.** Mit geklontem A kann GRBL die Seiten nicht getrennt
+  referenzieren; ein Y-Endschalter auf einer Seite genügt. Rohr und Schlitten
+  sitzen starr auf den Wagen, die Rechtwinkligkeit legen also die Teile fest
+  (prüfen wie in [ausrichten.md](ausrichten.md)) — die Motoren dürfen nur nicht
+  gegeneinander ziehen. Einmal einstellen: an einer Ecke die Madenschrauben
+  des oberen Ritzels lösen, Portal von Hand durchschieben, bis es frei läuft,
+  festziehen. Nach einem Schrittverlust auf einer Seite dasselbe.
+
+### Pins: GRBL 1.1 gegen den Aufdruck
+
+Der Aufdruck des Shields stammt aus GRBL 0.9. In GRBL 1.1 braucht die
+Laserleistung den Hardware-PWM an D11, dafür ist der Z-Endschalter auf D12
+gewandert:
+
+| Aufdruck | Uno-Pin | GRBL 1.1 |
+|---|---|---|
+| X+ / X− | D9 | Endschalter X |
+| Y+ / Y− | D10 | Endschalter Y (nur eine Seite) |
+| **Z+ / Z−** | D11 | **Laser-PWM** — kein Endschalter! |
+| **SpnEn** | D12 | **Endschalter Z** (Gabellichtschranke) |
+| SpnDir | D13 | Spindelrichtung, für den Laser frei |
+
+* Laser: PWM (5 V TTL) an den PWM-Eingang des Lasertreibers, Masse gemeinsam
+  mit dem Shield. `$32=1` (Lasermodus), `$30=1000` passend zum S-Maximum der
+  Gravursoftware.
+* Endschalter: die Gabellichtschranke (LM393, 5 V) geht direkt. Die
+  induktiven LJ12A3 (6–36 V) nicht direkt an die 5-V-Eingänge —
+  Optokoppler davor.
+
+### Treiber und Versorgung
+
+* Das Shield führt keine UART-Leitung, TMC2209 laufen also standalone:
+  **MS1 + MS2 stecken = 1/16** (intern auf 1/256 interpoliert), MS3 frei. Beim
+  A4988 alle drei Jumper = 1/16. Strom über das Vref-Poti nach der Formel des
+  Moduls (hängt vom Messwiderstand ab), etwa 70 % des Motornennstroms.
+* Treiber richtig herum stecken (EN-Pin zum EN-Aufdruck) und Motoren nie unter
+  Spannung ab- oder anstecken — beides kostet den Treiber.
+* Netzteil 24 V für die Motoren (TMC2209 abs. max 29 V, siehe oben). Der Laser
+  nach seinem Typenschild; ist er ein 12-V-Modul, bekommt er einen eigenen
+  12-V-Zweig. Leistung: Laser (elektrisch) plus etwa 50 W für die Motoren,
+  mit Reserve.
+
+### Grenzen des Uno
+
+8-Bit-GRBL schafft etwa 30 kHz Schrittrate — bei 80 Schritten/mm 375 mm/s,
+mehr als ein Diodenlaser braucht. Der Engpass ist die serielle Übertragung:
+Graustufenbilder schnell zu rastern kann stocken. Für Linien und Füllungen
+reicht es; wer später schneller rastern will, wechselt auf ein 32-Bit-Board
+(ESP32 mit FluidNC o. ä.) — die Mechanik bleibt gleich.
 
 ## Normteile (aus hardware.md, `[w]`)
 

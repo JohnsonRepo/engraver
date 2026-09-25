@@ -291,8 +291,14 @@ def main():
     p.ok('Ruecklauf steckt nicht tiefer als die Nutoeffnung',
          (L['yr_rueck_u'] - w('riemen_dicke') / 2)
          - (L['rahmen_flanke_u'] - w('nut_t')), 0.0)
-    p.info('Riemenmitte in der Klemme ueber der Nutmitte (+ = hoeher)',
-           (L['yr_z0'] + L['yr_z1']) / 2 - L['nut_z'])
+    # Der Riemen laeuft nur in der oberen Nut: die Klemme haelt ihn auf
+    # derselben Hoehe, und ihr Schlitz reicht bis ueber die Nut-Oberkante
+    p.ok('Riemen in der Klemme mittig auf Hoehe der Nut',
+         -abs((L['yr_z0'] + L['yr_z1']) / 2 - L['nut_z']), -0.05)
+    p.ok('Riemen unter der Oberkante der Nut', L['nut_oberkante_z']
+         - L['yr_z1'], 0.5)
+    p.ok('Schlitzdecke der Klemmtuerme ueber der Nut-Oberkante',
+         L['yr_decke_z'] - L['nut_oberkante_z'], 0.0)
 
     # ------------------------------------------------------------------
     p.titel('7) Schlitten: Waende, Schrauben, Wagen')

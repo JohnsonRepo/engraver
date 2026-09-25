@@ -139,13 +139,18 @@ zum Rahmen.
 ## Y-Riemen und Klemmtürme
 
 Die Riemenlinie ist die von `RiemenklemmeSchlitten` v8: **21,6 mm innen**
-neben der Schienenmitte, hochkant, **Zähne zur Schiene**. Die **Höhe** kommt
-vom Aufbau: Der Riemen sitzt **10 mm höher**, als ihn die Türme bis Rev. 9
-hielten (dort lag er wie in v8 auf dem Stift). Seit Rev. 10 liegt die
-Unterkante bei Z = −34,9, also 18,9 mm unter der Wagenoberseite; die
-Oberkante liegt auf Höhe der Oberkante des 2040. Die Türme sind dafür 10 mm
-kürzer, 25,5 statt 35,5 mm, und über dem Riemen bleiben 2 mm Luft im
-Schlitz, falls er etwas höher läuft.
+neben der Schienenmitte, hochkant, **Zähne zur Schiene**. Die **Höhe** gibt
+die obere Nut des 2040 vor, denn der Riemen läuft nur in ihr: Ihre Öffnung
+beginnt **6 mm unter der Oberkante** des Profils, ihre Mitte liegt 10 mm
+darunter. Der Riemen liegt mittig darin, 7 bis 13 mm unter der Profilkante,
+also 20 bis 26 mm unter der Wagenoberseite (Z −42 bis −36). Rücklauf und
+Riemenenden liegen damit auf derselben Höhe.
+
+Der Schlitz der Klemmtürme reicht bis 0,5 mm über die Oberkante der Nut —
+höher kann der Riemen nicht laufen. So war es auch bei v8: Dort endete der
+Schlitz 19,0 mm unter der Wagenoberseite, genau an der Oberkante der Nut. Bis
+Rev. 9 endete er 3,4 mm tiefer, deshalb passte der Riemen nicht hinein. Ein
+Turm ist jetzt 32,6 mm lang.
 
 **Riemenführung:** An beiden Y-Enden sitzen Ritzel mit senkrechter Achse.
 Der **Rücklauf läuft in der oberen Nut des 2040**, 8,9 mm neben der
@@ -312,11 +317,11 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Teil | Volumen | Masse | Bauraum |
 |---|---|---|---|
 | Schlitten (je) | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
-| Klemmturm (je, 4×) | 3,4 cm³ | ≈ 4 g | 9 × 18 × 26 mm |
+| Klemmturm (je, 4×) | 4,5 cm³ | ≈ 6 g | 9 × 18 × 33 mm |
 | Motorhalter | 31,5 cm³ | ≈ 40 g | 50 × 51 × 28 mm |
 | Umlenkhalter | 35,1 cm³ | ≈ 45 g | 59 × 42 × 30 mm |
 | Spannklotz | 1,7 cm³ | ≈ 2,2 g | 25 × 12 × 7 mm |
-| **Portal zusammen** | 166 cm³ | **≈ 210 g** | |
+| **Portal zusammen** | 170 cm³ | **≈ 216 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft

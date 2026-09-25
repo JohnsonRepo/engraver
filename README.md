@@ -121,7 +121,7 @@ bestanden.
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 10). Der
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 11). Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

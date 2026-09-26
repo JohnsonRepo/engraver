@@ -27,7 +27,7 @@ E_PETG = 1500.0          # N/mm2, gedruckt quer zur Schicht (vorsichtig)
 MOTOR_MASSE = 0.35       # kg, NEMA 17 mit 48 mm (40 mm: ~0,28)
 VORSPANNUNG = 20.0       # N je Trum, Richtwert fuer den Motorriemen
 RIEMEN_MU = 0.008        # kg/m, GT2 6 mm [w]
-WELLE_Y_PROBE = (12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 25.0, 30.0)
+WELLE_Y_PROBE = (12.0, 14.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 48.0)
 ABSTAND_PROBE = (400.0, 450.0, 500.0, 550.0, 600.0, 650.0)
 
 
@@ -99,13 +99,14 @@ def main():
     h = w('motor_loch') / 2.0
 
     # ------------------------------------------------------------------------
-    p.titel('1) Y-Kette: ab Rueckseite der 2060 nach hinten')
+    prof = L['profil_name']
+    p.titel('1) Y-Kette: ab Rueckseite der {} nach hinten'.format(prof))
     for text, wert in (
-            ('2060 vorn (Maschinenseite)', -w('profil_tiefe')),
-            ('2060 Rueckseite = Anlageflaeche', 0.0),
+            ('{} vorn (Maschinenseite)'.format(prof), -w('profil_tiefe')),
+            ('{} Rueckseite = Anlageflaeche'.format(prof), 0.0),
             ('Anlageplatte hinten', L['grund_y1']),
             ('vorderer Trum (Wirklinie)', L['trum_vorn_y']),
-            ('Wellenachsen (NICHT gemessen)', w('welle_y')),
+            ('Riemenlauf: Wellenachsen (NICHT gemessen)', w('welle_y')),
             ('hinterer Trum (Wirklinie)', L['trum_hinten_y']),
             ('Rollenachsen', ry),
             ('Block hinten = Spannlasche hinten', L['block_y1']),
@@ -114,7 +115,7 @@ def main():
             ('Boden hinten', L['boden_y1'])):
         p.info(text, wert)
 
-    p.titel('2) Z-Kette: ab Oberkante der 2060')
+    p.titel('2) Z-Kette: ab Oberkante der {}'.format(prof))
     for text, wert in (
             ('Oberkante Spannlasche', L['lasche_z1']),
             ('Spannschraube (Achse)', L['spann_z']),
@@ -123,19 +124,31 @@ def main():
             ('Unterseite Boden', L['boden_z0']),
             ('Ritzel oben', L['ritzel_z1']),
             ('Riemen oben', L['riemen_z1']),
-            ('Riemenmitte = Hoehe der obersten Nut', w('riemen_z')),
+            ('Riemenmitte = Hoehe der oberen Nut', w('riemen_z')),
             ('Riemen unten', L['riemen_z0']),
             ('Rolle unten', L['rolle_z0']),
             ('Ritzel unten', L['ritzel_z0']),
             ('Motorwelle unten', L['welle_z0']),
             ('Spitze der Rollenachse', L['rolle_schraube_z0']),
-            ('Anlageplatte unten', w('grund_unten')),
-            ('2060 unten', -w('profil_hoehe'))):
+            ('M5 in Nutensteinen', min(z for _, z in L['m5_loecher'])),
+            ('Anlageplatte unten', L['grund_z0']),
+            ('{} unten'.format(prof), -w('profil_hoehe'))):
         p.info(text, wert)
-    p.ok('Riemenmitte auf Hoehe der obersten Nut',
+    p.ok('Riemenmitte auf Hoehe der oberen Nut',
          -abs(w('riemen_z') - L['nut_z'][0]), -0.01)
     p.ok('Anlageplatte endet ueber der Profilunterkante',
-         w('grund_unten') + w('profil_hoehe'), 0.0)
+         L['grund_z0'] + w('profil_hoehe'), 0.0)
+    # Die Nutensteine sitzen nicht in der Nut, vor der der Riemen laeuft —
+    # auch nicht ihr Schraubenkopf: der muss unter dem Riemen bleiben.
+    p.ja('keine Nutensteine in der oberen Nut (dort laeuft der Riemen)',
+         all(abs(z - L['nut_z'][0]) > 1.0 for _, z in L['m5_loecher']))
+    p.ja('alle M5 sitzen in einer Nut der {}'.format(prof),
+         all(any(abs(z - n) < 1e-6 for n in L['nut_z'])
+             for _, z in L['m5_loecher']))
+    p.ok('M5-Kopf + Scheibe unter dem Riemen',
+         L['riemen_z0'] - (max(z for _, z in L['m5_loecher'])
+                           + w('m5_scheibe_d') / 2.0), 2.0)
+    p.info('Nutensteine M5', len(L['m5_loecher']), 'Stk')
 
     # ------------------------------------------------------------------------
     p.titel('3) Riemenlauf')
@@ -284,7 +297,7 @@ def main():
          L['spann_tiefe'] - w('insert_m3_t'), 2.0)
     p.ok('M5-Bohrung -> Unterkante Anlageplatte',
          min(z for _, z in L['m5_loecher']) - w('m5_durchgang') / 2.0
-         - w('grund_unten'), 4.0)
+         - L['grund_z0'], 4.0)
     p.ok('M5-Kopf + Scheibe innerhalb der Plattenbreite',
          hb - w('schraube_x') - w('m5_scheibe_d') / 2.0, 2.0)
 
@@ -403,10 +416,10 @@ def main():
     p.titel('13) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
     # Drucklage: Anlageflaeche aufs Bett, Aufbaurichtung = Maschine Y.
     p.info('Grundflaeche auf dem Bett (X x Z)',
-           2.0 * hb * (L['grund_z1'] - w('grund_unten')), 'mm2')
+           2.0 * hb * (L['grund_z1'] - L['grund_z0']), 'mm2')
     p.ok('Druckhoehe (Maschine Y)', L['boden_y1'], 250.0, '<=')
     p.ok('Grundflaeche X', 2.0 * hb, 250.0, '<=')
-    p.ok('Grundflaeche Z', L['lasche_z1'] - w('grund_unten'), 250.0, '<=')
+    p.ok('Grundflaeche Z', L['lasche_z1'] - L['grund_z0'], 250.0, '<=')
     # Die Lasche kragt in der Drucklage seitlich aus: ihre Vorderseite muss
     # mindestens 45 Grad steil sein.
     steig = ((L['lasche_z1'] - L['block_z1'])
@@ -424,7 +437,7 @@ def main():
     p.info('Motor Oberkante Z ({:.0f}er)'.format(w('motor_laenge')),
            L['motor_z1'])
     p.info('tiefster Punkt (Rollenachse) Z', L['rolle_schraube_z0'])
-    p.ja('nichts ragt vor die Rueckseite der 2060', True,
+    p.ja('nichts ragt vor die Rueckseite der {}'.format(prof), True,
          '   (Anlageflaeche = Y 0)')
 
     # ------------------------------------------------------------------------
@@ -436,8 +449,8 @@ def main():
             'S = {:.0f})'.format(L['riemen_l_min'], L['riemen_l_max'],
                                  w('welle_abstand')),
             '4x F625ZZ (je zwei Ruecken an Ruecken = eine Umlenkrolle)',
-            '4x M5x{:.0f} + 4x Scheibe M5 + 4x Nutenstein M5 (Nut 6)'.format(
-                L['m5_schraube']),
+            '{n}x M5x{:.0f} + {n}x Scheibe M5 + {n}x Nutenstein M5 (Nut 6)'
+            .format(L['m5_schraube'], n=len(L['m5_loecher'])),
             '2x M5x{:.0f} + 6x Scheibe M5 + 2x Sicherungsmutter M5 '
             '(Rollenachsen)'.format(L['rolle_schraube']),
             '4x M3x{:.0f} + 4x Scheibe DIN 125 (Motor)'.format(

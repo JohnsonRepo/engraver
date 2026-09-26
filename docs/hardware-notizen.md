@@ -12,7 +12,7 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 |---|---|
 | Gestell | 2 × 2060 Aluprofil, darauf 2 × 2040 Aluprofil |
 | Y-Achse | 2 Linearführungen oben auf den 2040ern |
-| Y-Antrieb | je Seite eine senkrechte Edelstahlwelle Ø5 hinter der hinteren 2060, NEMA 17 mittig an der 2060 |
+| Y-Antrieb | je Seite eine senkrechte Edelstahlwelle Ø5 hinter der hinteren Traverse (2040 hochkant), NEMA 17 mittig daran |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 Aluprofil |
 | X-Achse | Linearführung am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |
@@ -313,16 +313,16 @@ einem klassischen Uno-CNC-Shield bleibt es beim Standalone-Modus mit Jumpern.
 
 ## Y-Antrieb
 
-Nutzerangaben vom 2026-09-24, Halter in `fusion/YMotorhalter/`, Doku in
-`y-motorhalter.md`.
+Nutzerangaben vom 2026-09-24 und -26, Halter in `fusion/YMotorhalter/`,
+Doku in `y-motorhalter.md`.
 
 | Wert | Maß | Status |
 |---|---|---|
-| Hintere Traverse | **2060 hochkant**, Nuten auf der Rückseite 10 / 30 / 50 mm unter der Oberkante | Nutzerangabe, Nutlage `[w]` |
-| Y-Wellen | je Seite eine **senkrechte Edelstahlwelle Ø5** in 625ZZ, hinter der hinteren 2060 | Nutzerangabe |
-| Ritzel je Welle | zwei: **unten** Motorriemen (Höhe der obersten Nut, auf der Welle verschiebbar), **oben** Y-Riemen | Nutzerangabe |
+| Hintere Traverse | **2040 hochkant**, Nuten auf der Rückseite 10 / 30 mm unter der Oberkante; vor der oberen läuft der Motorriemen, Nutensteine nur in der unteren | Nutzerangabe 2026-09-26 (am 24. noch als 2060 angegeben), Nutlage `[w]` |
+| Y-Wellen | je Seite eine **senkrechte Edelstahlwelle Ø5** in 625ZZ, hinter der hinteren Traverse | Nutzerangabe |
+| Ritzel je Welle | zwei: **unten** Motorriemen (Höhe der oberen Nut, auf der Welle verschiebbar), **oben** Y-Riemen | Nutzerangabe |
 | Zähnezahl | 20 Z, Bohrung 5, an Motor und Wellen (1:1, 40 mm je Umdrehung) | angenommen |
-| Wellen hinter der 2060 (`welle_y`) | 20 mm; der Halter passt ohne neuen Lauf für 14 … 30 mm | `[?]` nicht gemessen |
+| Riemenlauf / Wellen hinter der Traverse (`welle_y`) | 35 mm (Rev. 2: Motor und Rollen 15 mm weiter außen als mit 20 mm in Rev. 1); der Halter passt ohne neuen Lauf für 14 … 45 mm | `[?]` Wellen nicht gemessen |
 | Wellenabstand S (`welle_abstand`) | 500 mm | `[?]` nicht gemessen |
 | Motorriemen | Endlosriemen GT2 6 mm, **L = 2·S + 56,8 + 2·Ω**, Ω = 30 … 50 mm | gerechnet |
 | Umlenkrollen | je 2× F625ZZ Rücken an Rücken, laufen auf dem Riemenrücken | `[w]` |

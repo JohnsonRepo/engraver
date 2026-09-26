@@ -1,14 +1,16 @@
-# YMotorhalter.py — Halter fuer den NEMA 17 der Y-Achse an der hinteren 2060
+# YMotorhalter.py — Halter fuer den NEMA 17 der Y-Achse an der hinteren 2040
 #
 # Bauteil (ein Druckteil, keine Baugruppe): der Halter bewegt sich nicht, und
 # Motor, Ritzel und Rollen sind Kaufteile.
 #
-# Antrieb der Y-Achse (Nutzerangabe 2026-09-24):
+# Antrieb der Y-Achse (Nutzerangaben 2026-09-24 und -26):
 #   * jede Seite hat eine eigene SENKRECHTE Edelstahlwelle Ø5 in 625ZZ-Lagern,
-#     hinter der hinteren 2060-Traverse (die steht hochkant, 60 mm hoch)
+#     hinter der hinteren Traverse; das ist eine 2040 hochkant (bis Rev. 1
+#     als 2060 angenommen)
 #   * auf jeder Welle zwei GT2-Ritzel: das OBERE treibt den Y-Riemen des
-#     Wagens, das UNTERE sitzt auf Hoehe der obersten Nut der 2060 und haengt
-#     am Motorriemen
+#     Wagens, das UNTERE sitzt auf Hoehe der oberen Nut der 2040 und haengt
+#     am Motorriemen — der laeuft also auf beiden Seiten des Halters vor der
+#     oberen Nut, die Nutensteine kommen in die untere
 #   * EIN geschlossener Motorriemen laeuft um beide unteren Ritzel; dieser
 #     Halter bringt den Motor in der Mitte dazu
 #
@@ -22,8 +24,8 @@
 #
 # Koordinatensystem (Maschinenkoordinaten, in mm):
 #   X = laengs der Traverse (Mitte des Halters = 0)
-#   Y = nach HINTEN, weg von der Maschine; Y = 0 ist die Rueckseite der 2060
-#   Z = senkrecht nach oben; Z = 0 ist die Oberkante der 2060
+#   Y = nach HINTEN, weg von der Maschine; Y = 0 ist die Rueckseite der 2040
+#   Z = senkrecht nach oben; Z = 0 ist die Oberkante der 2040
 # Im Fusion-Modell sind Y und Z getauscht (Modell-Z = Maschine Y) wie in
 # ToolheadZ — die Helfer unten sind von dort uebernommen und in Fusion
 # gelaufen.
@@ -38,19 +40,22 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'YMotorhalter'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
 MASSE = {
-    # --- Gestell: hintere Traverse 2060, hochkant (Nutzerangabe) -----------
-    # Nuten auf der 60-mm-Rueckseite bei 10 / 30 / 50 mm unter der Ober-
-    # kante [w] (20er Raster). Die unteren zwei tragen den Halter, auf Hoehe
-    # der obersten laeuft der Riemen.
-    'profil_hoehe':        (60.0,  '2060 hochkant: Hoehe'),
-    'profil_tiefe':        (20.0,  '2060: Tiefe (Maschine Y)'),
-    'nut_raster':          (20.0,  '2060: Nutabstand'),
-    'nut_oben':            (10.0,  '2060: oberste Nut unter der Oberkante'),
+    # --- Gestell: hintere Traverse 2040, hochkant (Nutzerangabe) -----------
+    # Zwei Nuten auf der 40-mm-Rueckseite, 10 und 30 mm unter der Oberkante
+    # [w] (20er Raster). In der OBEREN laeuft auf beiden Seiten des Halters
+    # der Riemen, die Nutensteine sitzen deshalb nur in der UNTEREN
+    # (Nutzerangabe 2026-09-26; Rev. 1 hatte eine 2060 mit drei Nuten).
+    # Mit profil_hoehe = 60 baut das Skript wieder fuer eine 2060: dann
+    # Nutensteine in allen Nuten ausser der obersten.
+    'profil_hoehe':        (40.0,  'Traverse hochkant: Hoehe (2040)'),
+    'profil_tiefe':        (20.0,  'Traverse: Tiefe (Maschine Y)'),
+    'nut_raster':          (20.0,  'Traverse: Nutabstand'),
+    'nut_oben':            (10.0,  'Traverse: obere Nut unter der Oberkante'),
     # Nutenstein M5 (Hammermutter, Nut 6) [w]: Lippe vor dem Stein, Gewinde-
     # laenge im Stein, Platz unter der Nutoeffnung. Die Schraube muss im
     # Stein greifen und darf hinten nicht aufsitzen.
@@ -59,17 +64,20 @@ MASSE = {
     'nut_tiefe':            (6.0,  'Nut: Platz ab Profilflaeche nach innen'),
 
     # --- Lage der Wellen und des Riemens (Nutzerangaben) -------------------
-    # NICHT gemessen [?]: wie weit die senkrechten Wellen hinter der 2060
-    # stehen. Der Halter vertraegt Abweichungen (der Riementrum laeuft dann
-    # leicht schraeg an die Rollen, siehe Pruefung) — nach dem Messen hier
-    # eintragen und neu laufen lassen.
-    'welle_y':             (20.0,  'Wellenachsen hinter der 2060-Rueckseite'),
+    # Riemenlauf, auf den Rollen und Motor ausgerichtet sind: Wellenachsen so
+    # weit hinter der Traverse. Rev. 2: 20 -> 35 mm, der Motor sitzt damit
+    # 15 mm weiter aussen (Nutzerangabe 2026-09-26) — und die beiden Rollen
+    # mit ihm, sonst liefe der vordere Trum bei Wellen ueber 30 mm in die
+    # Rollenflansche. Wo die Wellen wirklich stehen, ist NICHT gemessen [?]:
+    # der Halter passt fuer 14..45 mm, der hintere Trum laeuft dann leicht
+    # schraeg an die Rollen (Pruefung, Abschnitt 11).
+    'welle_y':             (35.0,  'Riemenlauf: Wellenachsen hinter der Traverse'),
     # NICHT gemessen [?]: Abstand der beiden Wellen. Erzeugt keine
     # Geometrie, nur die Riemenlaenge im Bericht.
     'welle_abstand':      (500.0,  'Abstand der beiden senkrechten Wellen'),
-    # Die unteren Ritzel sitzen auf Hoehe der obersten Nut (Nutzerangabe);
+    # Die unteren Ritzel sitzen auf Hoehe der oberen Nut (Nutzerangabe);
     # sie lassen sich auf der Welle etwas verschieben.
-    'riemen_z':           (-10.0,  'Riemenmitte unter der 2060-Oberkante'),
+    'riemen_z':           (-10.0,  'Riemenmitte unter der Traversen-Oberkante'),
 
     # --- Kaufteil: NEMA 17 (hardware.md [w], wie an der Z-Achse) -----------
     'motor_flansch':       (42.3,  'NEMA17: Flanschmass'),
@@ -120,10 +128,10 @@ MASSE = {
     'insert_m3_t':          (7.0,  'Gewindeeinsatz M3: Sacklochtiefe'),
 
     # --- Halter ------------------------------------------------------------
-    # Anlageplatte an der 2060: unten 2 mm ueber der Profilunterkante, oben
-    # buendig mit Block und Fuehrungsrippen.
+    # Anlageplatte an der Traverse: unten 2 mm ueber der Profilunterkante,
+    # oben buendig mit Block und Fuehrungsrippen.
     'grund_dicke':          (6.0,  'Anlageplatte: Dicke'),
-    'grund_unten':        (-58.0,  'Anlageplatte: Unterkante'),
+    'grund_rand_unten':     (2.0,  'Anlageplatte: endet so weit ueber der Profilunterkante'),
     'schraube_x':          (15.0,  'M5-Schrauben: Abstand von der Mitte'),
     # Boden: der Motor steht darauf, Ritzel und Rollen haengen darunter.
     # Hoechstens motor_welle_l - Ritzellaenge - Luft dick, sonst reicht die
@@ -203,7 +211,7 @@ def lage():
     L['riemen_konst'] = (2.0 * math.pi * L['rp_welle']
                          + (math.pi - 2.0) * (L['rp_motor'] + L['rp_rolle']))
 
-    # ---- Y-Kette: von der 2060-Rueckseite nach hinten ------------------------
+    # ---- Y-Kette: von der Traversen-Rueckseite nach hinten -------------------
     L['grund_y1'] = w('grund_dicke')
     L['trum_vorn_y'] = w('welle_y') - L['rp_welle']          # Wirklinie
     L['trum_hinten_y'] = w('welle_y') + L['rp_welle']
@@ -229,7 +237,12 @@ def lage():
                         - L['wirk_zahn'] + L['rp_welle'] - w('luft_min'))
 
     # ---- Z-Kette -------------------------------------------------------------
-    L['nut_z'] = [-w('nut_oben') - i * w('nut_raster') for i in range(3)]
+    # Nuten auf der Rueckseite der Traverse: 2040 -> zwei, 2060 -> drei. In
+    # der obersten laeuft der Riemen, alle anderen tragen Nutensteine.
+    n_nuten = int(round(w('profil_hoehe') / w('nut_raster')))
+    L['nut_z'] = [-w('nut_oben') - i * w('nut_raster') for i in range(n_nuten)]
+    L['profil_name'] = '20{:.0f}'.format(w('profil_hoehe'))
+    L['grund_z0'] = -w('profil_hoehe') + w('grund_rand_unten')
     L['riemen_z0'] = w('riemen_z') - w('riemen_breite') / 2.0
     L['riemen_z1'] = w('riemen_z') + w('riemen_breite') / 2.0
     # Unter dem Boden: M5-Scheibe, dann die Rolle, deren Mitte in der
@@ -261,7 +274,8 @@ def lage():
     L['halbe_breite'] = L['rippe_x0'] + w('rippe_breite')
 
     # ---- Lochbilder ------------------------------------------------------
-    # M5 in die mittlere und untere Nut, je zwei Nutensteine
+    # M5 in jede Nut ausser der obersten (bei der 2040: nur die untere), je
+    # zwei Nutensteine
     L['m5_loecher'] = [(sx * w('schraube_x'), z)
                        for z in L['nut_z'][1:] for sx in (-1, 1)]
     L['rolle_loecher'] = [(-L['rolle_x'], L['rolle_y']),
@@ -674,8 +688,9 @@ def fussfase(comp, koerper, achse, wert_mm, fase_mm, fehler, was):
 def bau_halter(app, design, comp, L, fehler):
     """Y-Motorhalter, ein Druckteil.
 
-    ANLAGEPLATTE an der Rueckseite der 2060, zwei M5 in die mittlere und zwei
-    in die untere Nut. Darauf oben der BODEN, der nach hinten auskragt: der
+    ANLAGEPLATTE an der Rueckseite der 2040, zwei M5 in die untere Nut — in
+    der oberen laeuft der Riemen. Darauf oben der BODEN, der nach hinten
+    auskragt: der
     Motor steht auf ihm (Welle nach unten), Ritzel und Umlenkrollen haengen
     darunter in der Riemenebene. Vorn auf dem Boden ein BLOCK, durch den die
     Achsen der beiden Rollen gehen, seitlich zwei FUEHRUNGSRIPPEN, zwischen
@@ -696,7 +711,7 @@ def bau_halter(app, design, comp, L, fehler):
 
     # Anlageplatte
     sk = skizze(comp, e_vorn, 'Sk_Anlageplatte')
-    rechteck(sk, -hb, w('grund_unten'), hb, L['grund_z1'])
+    rechteck(sk, -hb, L['grund_z0'], hb, L['grund_z1'])
     koerper = neu(comp, groesstes_profil(sk), w('grund_dicke')).bodies.item(0)
     koerper.name = 'YMotorhalter'
 
@@ -777,7 +792,7 @@ def bau_halter(app, design, comp, L, fehler):
     fussfase(comp, koerper, 'z', 0.0, w('fase_fuss'), fehler, 'Y-Motorhalter')
     bbox_pruefen(koerper, 'Y-Motorhalter',
                  ((-hb, hb), (0.0, L['boden_y1']),
-                  (w('grund_unten'), L['lasche_z1'])), fehler)
+                  (L['grund_z0'], L['lasche_z1'])), fehler)
     material_zuweisen(app, design, koerper, 'PETG', fehler)
     return koerper
 
@@ -787,7 +802,8 @@ def hinweise_bauen(L, fehler):
     ohne Fusion getestet werden kann (tools/y_motorhalter_check.py)."""
     S = w('welle_abstand')
     h = [
-        'BEZUG: Y = 0 ist die Rueckseite der hinteren 2060 (hochkant),',
+        'BEZUG: Y = 0 ist die Rueckseite der hinteren {} (hochkant),'.format(
+            L['profil_name']),
         '  Z = 0 ihre Oberkante, X = 0 die Mitte des Halters. Y zaehlt nach',
         '  HINTEN, weg von der Maschine. Im Modell ist Y und Z getauscht.',
         '',
@@ -796,15 +812,20 @@ def hinweise_bauen(L, fehler):
         '  den hinteren Trum als OMEGA um das Motorritzel: 180 Grad,',
         '  {:.0f} Zaehne im Eingriff. Gerade durchlaufend waere es ~1 Zahn.'
         .format(L['zaehne_im_eingriff']),
-        '  Riemenebene Z = {:+.1f} mm (Hoehe der obersten Nut).'.format(
+        '  Riemenebene Z = {:+.1f} mm (Hoehe der oberen Nut).'.format(
             w('riemen_z')),
-        '  Wellen {:.1f} mm hinter der 2060 (NICHT gemessen) -> vorderer'
-        .format(w('welle_y')),
+        '  Ausgerichtet auf Wellen {:.1f} mm hinter der {} -> vorderer'
+        .format(w('welle_y'), L['profil_name']),
         '  Trum bei Y = {:.1f}, hinterer bei Y = {:.1f} mm (Wirklinie).'.format(
             L['trum_vorn_y'], L['trum_hinten_y']),
-        '  Ohne neuen Lauf passt der Halter fuer Wellen {:.0f} bis {:.0f} mm'
+        '  Seit Rev. 2 sitzen Motor und Rollen 15 mm weiter aussen als in',
+        '  Rev. 1 (welle_y 20 -> 35). Wo die Wellen wirklich stehen, ist NICHT',
+        '  gemessen: der Halter passt fuer {:.0f} bis {:.0f} mm, der hintere Trum'
         .format(L['welle_y_von'], L['welle_y_bis']),
-        '  hinter der 2060; ausserhalb welle_y eintragen und neu laufen.',
+        '  laeuft dann leicht schraeg an die Rollen (bei 20 mm: {:.1f} Grad).'
+        .format(math.degrees(math.atan(
+            (w('welle_y') - 20.0) / (w('welle_abstand') / 2.0
+                                     - L['rolle_x'])))),
         '  Rollen bei X = +-{:.2f}, Y = {:.2f} mm.'.format(
             L['rolle_x'], L['rolle_y']),
         '  Motorachse Y = {:.1f} (ganz vorn) bis {:.1f} mm (ganz hinten).'.format(
@@ -853,10 +874,12 @@ def hinweise_bauen(L, fehler):
         '  auf die Abflachung.',
         '',
         'VERSCHRAUBUNG:',
-        '  Halter -> 2060 ...... 4x M5x{:.0f} + Scheibe + Nutenstein M5, mittlere'
-        .format(L['m5_schraube']),
-        '                        und untere Nut, {:.1f} mm Eingriff'.format(
+        '  Halter -> {} ...... {}x M5x{:.0f} + Scheibe + Nutenstein M5 in der'
+        .format(L['profil_name'], len(L['m5_loecher']), L['m5_schraube']),
+        '                        {}, {:.1f} mm Eingriff. Die obere Nut'.format(
+            'unteren Nut' if len(L['nut_z']) == 2 else 'mittleren + unteren Nut',
             L['m5_eingriff']),
+        '                        bleibt frei: vor ihr laeuft der Riemen.',
         '  Umlenkrollen ........ 2x M5x{:.0f} von oben + 3 Scheiben + Sicherungs-'
         .format(L['rolle_schraube']),
         '                        mutter, je 2x F625ZZ (Flansche aussen)',
@@ -872,10 +895,12 @@ def hinweise_bauen(L, fehler):
         '  Infill. PETG, weil der Motor warm wird.',
         '',
         'KEINE BOHRLEHRE: der Halter verbindet kein zweites Druckteil, die',
-        '  2060 wird nicht gebohrt (Nutensteine), und das NEMA-17-Lochbild',
+        '  {} wird nicht gebohrt (Nutensteine), und das NEMA-17-Lochbild'
+        .format(L['profil_name']),
         '  31 x 31 sitzt schon an der Z-Achse.',
         '',
-        'NOCH ZU MESSEN: Wellenabstand S, Lage der Wellen hinter der 2060',
+        'NOCH ZU MESSEN: Wellenabstand S, Lage der Wellen hinter der {}'
+        .format(L['profil_name']),
         '  (welle_y), Motorlaenge. Nach dem Eintragen neu laufen lassen und',
         '  python3 tools/y_motorhalter_check.py ausfuehren.',
     ]

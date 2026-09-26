@@ -22,11 +22,11 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
 
 S_LAUF = 1.6                # px/mm, Riemenlauf von oben
 S_HALTER = 3.0              # px/mm, Halter von oben und Schnitt
-LAUF_Y = (-78.0, 112.0)     # Maschinen-Y im Riemenlauf
+LAUF_Y = (-78.0, 130.0)     # Maschinen-Y im Riemenlauf
 DRAUF_X = (-44.0, 44.0)     # Halter von oben
-DRAUF_Y = (-24.0, 114.0)
-SCHNITT_Y = (-26.0, 114.0)  # Schnitt X = 0
-SCHNITT_Z = (-64.0, 56.0)
+DRAUF_Y = (-24.0, 128.0)
+SCHNITT_Y = (-26.0, 128.0)  # Schnitt X = 0
+SCHNITT_Z = (-46.0, 56.0)
 
 KOPF_M3, SCHEIBE_M3 = 5.5, 7.0
 WELLE_D = 5.0
@@ -242,10 +242,10 @@ def riemenlauf(w, L, ox, oy, breite):
                    LAUF_Y)
     t = [text(ox, oy - 22, 'Motorriemen von oben', 10, BLAU, fett=True),
          text(ox, oy - 9, 'maßstäblich für S = {} mm; hinten (weg von der '
-              'Maschine) = oben; die Y-Riemen laufen über der 2060 nach vorn'
-              .format(de(s_welle, 0)), 8, GRAU)]
+              'Maschine) = oben; die Y-Riemen laufen über der {} nach vorn'
+              .format(de(s_welle, 0), L['profil_name']), 8, GRAU)]
     inhalt = []
-    # 2060 und Halter
+    # Traverse und Halter
     inhalt.append(a.rect(xb[0], xb[1], -w('profil_tiefe'), 0.0, 'profil'))
     hb = L['halbe_breite']
     inhalt.append(a.rect(-hb, hb, 0.0, L['boden_y1'], 'druck',
@@ -303,14 +303,14 @@ def riemenlauf(w, L, ox, oy, breite):
     xl, _ = a.px(-s_welle / 2.0, 0)
     xr, _ = a.px(s_welle / 2.0, 0)
     _, y_w = a.px(0, w('welle_y'))
-    _, y_2060 = a.px(0, -w('profil_tiefe') / 2.0)
+    _, y_prof = a.px(0, -w('profil_tiefe') / 2.0)
     _, y_unten = a.px(0, LAUF_Y[0])
     t.append(text(xl + 20, y_w - 22, 'Welle links: unteres Ritzel (Motor'
                   'riemen) + oberes (Y-Riemen)', 8, TEXT, halo=True))
     t.append(text(xr - 20, y_w - 22, 'Welle rechts', 8, TEXT, 'end',
                   halo=True))
-    t.append(text((xl + xr) / 2.0 - 180, y_2060 + 3, '2060 hinten, hochkant',
-                  8, TEXT, 'middle', halo=True))
+    t.append(text((xl + xr) / 2.0 - 180, y_prof + 3, '{} hinten, hochkant'
+                  .format(L['profil_name']), 8, TEXT, 'middle', halo=True))
     cx, cy = a.px(0.0, L['motor_y_min'])
     t.append(text(cx + 36, cy - 30, 'Motor + zwei Umlenkrollen: Omega, '
                   '180° am Motorritzel', 8, TEXT, halo=True))
@@ -396,8 +396,9 @@ def halter_oben(w, L, ox, oy):
         (L['rolle_x'] + 4, L['rolle_y'], 'Umlenkrolle 2x F625ZZ, Achse M5'),
         (hb, L['trum_hinten_y'], 'hinterer Trum zur Welle'),
         (hb, L['trum_vorn_y'], 'vorderer Trum, läuft unter dem Boden durch'),
-        (hb, L['grund_y1'] / 2, 'Anlageplatte an der 2060'),
-        (DRAUF_X[1] - 2, -w('profil_tiefe') / 2, '2060')]
+        (hb, L['grund_y1'] / 2, 'Anlageplatte an der {}'.format(
+            L['profil_name'])),
+        (DRAUF_X[1] - 2, -w('profil_tiefe') / 2, L['profil_name'])]
     belegt = -1e9
     for x, y, s in sorted(eintraege, key=lambda e: -e[1]):
         px, py = a.px(x, y)
@@ -455,7 +456,7 @@ def schnitt(w, L, ox, oy):
     inhalt.append(a.rect(ry, ym, w('riemen_z') - 3, w('riemen_z') + 3,
                          'hinten', stroke='#8c96a3'))
 
-    # ---- 2060 im Schnitt, Nuten an der Rueckseite ------------------------
+    # ---- Traverse im Schnitt, Nuten an der Rueckseite --------------------
     inhalt.append(a.rect(-w('profil_tiefe'), 0.0, -w('profil_hoehe'), 0.0,
                          'profil'))
     for z in L['nut_z']:
@@ -465,7 +466,7 @@ def schnitt(w, L, ox, oy):
     b = w('wellen_schlitz') / 2.0
     r = L['bund_schlitz_b'] / 2.0
     ym0, ym1 = L['motor_y_min'], L['motor_y_max']
-    inhalt.append(a.rect(0.0, L['grund_y1'], w('grund_unten'),
+    inhalt.append(a.rect(0.0, L['grund_y1'], L['grund_z0'],
                          L['grund_z1'], 'druck'))
     inhalt.append(a.rect(0.0, L['block_y1'], z_b1, L['block_z1'], 'druck'))
     inhalt.append(a.poly([(L['lasche_y0_unten'], L['block_z1']),
@@ -526,7 +527,7 @@ def schnitt(w, L, ox, oy):
     t += a.ausschnitt('schnitt', inhalt)
 
     # Z-Skala links
-    for z in range(-60, 51, 10):
+    for z in range(-40, 51, 10):
         _, yy = a.px(SCHNITT_Y[0], z)
         t.append(linie(ox - 6, yy, ox, yy, GRAU, 0.6))
         t.append(text(ox - 9, yy + 3, de(z, 0, True), 7.5, GRAU, 'end'))
@@ -553,10 +554,13 @@ def schnitt(w, L, ox, oy):
         (L['trum_vorn_y'], w('riemen_z') - 3,
          'vorderer Trum, {} mm hinter der Anlageplatte'.format(
              de(L['trum_vorn_y'] - L['wirk_ruecken'] - L['grund_y1']))),
-        (L['grund_y1'], -30.0, '4x M5 in Nutensteine, mittlere + untere '
-         'Nut'),
-        (-w('profil_tiefe') / 2, -45.0, '2060 hochkant, Nuten bei −10, −30, '
-         '−50')]
+        (L['grund_y1'] + 3.0, min(z for _, z in L['m5_loecher']),
+         '{}x M5 in Nutensteine, nur untere Nut (oben läuft der Riemen)'
+         .format(len(L['m5_loecher']))),
+        (-w('profil_tiefe') / 2, -w('profil_hoehe') + 5.0,
+         '{} hochkant, Nuten bei {}'.format(
+             L['profil_name'], ', '.join(de(z, 0, True)
+                                         for z in L['nut_z'])))]
     belegt = -1e9
     for y, z, s in sorted(eintraege, key=lambda e: -e[1]):
         px, py = a.px(y, z)
@@ -572,10 +576,11 @@ def schnitt(w, L, ox, oy):
 def main():
     mod = pruef.modul_laden()
     w, L = mod.w, mod.lage()
-    breite = 1290.0
+    breite = 1380.0
     oben = 100.0
     t = [el('rect', {'width': '100%', 'height': '100%', 'fill': '#ffffff'}),
-         text(18, 22, 'Y-Antrieb — Motorhalter an der hinteren 2060', 13,
+         text(18, 22, 'Y-Antrieb — Motorhalter an der hinteren {}'.format(
+             L['profil_name']), 13,
               TEXT, fett=True),
          text(18, 37, 'Ein geschlossener GT2-Riemen um die unteren Ritzel '
               'der beiden senkrechten Wellen; zwei Umlenkrollen legen ihn als '
@@ -601,7 +606,7 @@ def main():
             ('kauf', 'Kaufteil'),
             ('stahl', 'Stahl, Riemen'),
             ('messing', 'Messing-Einsatz'),
-            ('profil', 'Aluprofil 2060'),
+            ('profil', 'Aluprofil ' + L['profil_name']),
             ('hinten', 'hinter der Schnittebene'))):
         x = 18 + i * 170
         t.append(rect_px(x, ly, x + 14, ly + 9, art))

@@ -8,7 +8,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 |---|---|
 | Gestell | 2 × 2060 Aluprofil, darauf 2 × 2040 Aluprofil |
 | Y-Achse | 2 Linearführungen oben auf den 2040ern |
-| Y-Antrieb | je Seite eine senkrechte Edelstahlwelle Ø5 hinter der hinteren 2060, ein Endlosriemen zum NEMA 17 in der Mitte |
+| Y-Antrieb | je Seite eine senkrechte Edelstahlwelle Ø5 hinter der hinteren Traverse (2040 hochkant), ein Endlosriemen zum NEMA 17 in der Mitte |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen ein 2020 Aluprofil |
 | X-Achse | Linearführung MGN15 am Portalprofil |
 | Z-Achse | Toolhead am MGN15H-Wagen: eigene MGN9-Führung, NEMA 17 über Tr8×2-Spindel |
@@ -18,7 +18,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/YMotorhalter/           Y-Motorhalter an der hinteren 2060  ← neu
+fusion/YMotorhalter/           Y-Motorhalter an der hinteren 2040  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
@@ -59,10 +59,10 @@ mitfährt — die 200-mm-Spindel wird dafür auf 160 mm gekürzt. Details in
 
 ### Y-Motorhalter (neu)
 
-Hält den NEMA 17 der Y-Achse an der Rückseite der hinteren 2060, mit vier
-M5-Nutensteinen in der mittleren und unteren Nut. Der Motor steht auf einem
-auskragenden Boden, Ritzel und zwei Umlenkrollen hängen darunter auf Höhe
-der obersten Nut. Die Rollen legen den Endlosriemen, der beide senkrechten
+Hält den NEMA 17 der Y-Achse an der Rückseite der hinteren 2040, mit zwei
+M5-Nutensteinen in der unteren Nut — vor der oberen läuft der Riemen. Der
+Motor steht auf einem auskragenden Boden, Ritzel und zwei Umlenkrollen hängen
+darunter auf Höhe der oberen Nut. Die Rollen legen den Endlosriemen, der beide senkrechten
 Wellen verbindet, als **Omega** um das Motorritzel: 180 Grad, 10 Zähne im
 Eingriff. Gerade durchlaufend wäre es weniger als ein Zahn. Gespannt wird
 über Langlöcher und eine Spannschraube.

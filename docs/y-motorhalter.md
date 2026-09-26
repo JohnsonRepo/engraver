@@ -1,400 +1,284 @@
 # Y-Motorhalter — Antrieb der Y-Achse
 
-Erzeugt von `fusion/YMotorhalter/YMotorhalter.py` (ein Druckteil, Rev. 2).
+Erzeugt von `fusion/YMotorhalter/YMotorhalter.py` (ein Druckteil, Rev. 3).
 Geprüft mit `python3 tools/y_motorhalter_check.py`, Skizze in
 [y-antrieb.svg](y-antrieb.svg) (neu erzeugen mit
 `python3 tools/y_antrieb_zeichnen.py`).
 
-![Y-Antrieb](y-antrieb.svg)
+![Y-Motorhalter](y-antrieb.svg)
 
 ## Was hier zusammenkommt
 
-Der Antrieb der Y-Achse, wie du ihn beschrieben hast (2026-09-24 und -26):
+So sieht der Y-Antrieb nach deinen Angaben und dem Foto aus (2026-09-26):
 
-* Die **hintere Traverse ist eine 2040, hochkant**: zwei Nuten auf der
-  Rückseite. Rev. 1 ging von einer 2060 mit drei Nuten aus.
-* Jede Seite hat eine eigene **senkrechte Edelstahlwelle Ø5** in 625ZZ-Lagern,
-  hinter der 2040 auf der Motorseite.
-* Auf jeder Welle sitzen **zwei GT2-Ritzel**: das **obere** treibt den
-  Y-Riemen des Wagens, das **untere** sitzt auf Höhe der **oberen Nut** der
-  2040 und hängt am Motorriemen. Es lässt sich auf der Welle etwas
-  verschieben.
-* **Ein** geschlossener Motorriemen läuft um beide unteren Ritzel, also auf
-  beiden Seiten des Halters vor der oberen Nut entlang.
-
-Der Halter bringt den NEMA 17 in die Mitte dieses Riemens. Er sitzt an der
-Rückseite der 2040, befestigt mit zwei M5-Nutensteinen in der **unteren**
-Nut. Die Lager der Wellen gehören nicht dazu.
+* **Zwei NEMA 17, je Seite einer**, jeweils am Ende ihrer 2040. Die 2040
+  steht hochkant, liegt auf der hinteren 2060 und steht über sie hinaus.
+  Oben auf ihr sitzt die Linearführung.
+* Der **Y-Riemen läuft in den oberen Nuten** beider Seitenflächen der 2040
+  und am Profilende um das Ritzel.
+* Das **Ritzel sitzt direkt auf der Motorwelle**, mittig zur 2040. Der Motor
+  hängt unter einer Platte etwa auf Höhe der unteren Nut, die Welle zeigt
+  nach oben.
+* Befestigt wird mit **Nutensteinen in den unteren Nuten**, weil in den
+  oberen der Riemen läuft. Die Schrauben sitzen an **beiden**
+  Seitenflächen, der Halter ist also ein U-Bügel.
+* Gespannt wird, indem der **Motor in Langlöchern** vom Profilende
+  wegrückt.
 
 | Teil | Material | Funktion |
 |---|---|---|
-| **Y-Motorhalter** | PETG, ~92 g (gerechnet) | Anlageplatte an der 2040, Boden für den Motor, Block mit den Rollenachsen, Führungsrippen, Spannlasche |
-| NEMA 17 + GT2-Ritzel 20 Z, Bohrung 5 | Kaufteil | steht auf dem Boden, Welle nach unten |
-| 2 Umlenkrollen, je 2× F625ZZ | Kaufteil | legen den Riemen als Omega um das Motorritzel |
-| Endlosriemen GT2, 6 mm | Kaufteil | Länge nach [Riemenlänge](#riemenlänge) |
+| **2× Y-Motorhalter** | PETG, 34 g je Stück (voll gerechnet) | Schenkel an beiden Seitenflächen, Joch vor der Stirnseite, Platte für den Motor, Führungswände |
+| 2× NEMA 17 + GT2-Ritzel 20 Z, Bohrung 5 | Kaufteil | Motor hängt unter der Platte, Ritzel auf Höhe der oberen Nut |
+| 8× M5×12 + Scheibe + Nutenstein M5 (Nut 6) | Kaufteil | je Halter 4, in den unteren Nuten |
+| 8× M3×10 + Scheibe DIN 125 | Kaufteil | je Motor 4, von oben |
 
-## Rev. 2: was sich geändert hat (2026-09-26)
+Das Teil ist symmetrisch zur Mitte der 2040. **Dasselbe Teil passt links
+und rechts**: zweimal drucken, nichts spiegeln.
 
-**Motor 15 mm weiter nach außen.** Die Motorachse steht jetzt 79,7 … 99,7 mm
-hinter der Traverse statt 64,7 … 84,7. Mit ihr sind auch die **beiden
-Umlenkrollen** 15 mm nach außen gerückt (Y = 34,7 → 49,7), der ganze
-Omega-Trieb also. Im Skript steht dafür `welle_y` = 35 statt 20: der
-Riemenlauf, auf den Rollen und Motor ausgerichtet sind.
+## Rev. 3: neues Konzept (2026-09-26)
 
-Warum die Rollen mitwandern: sie müssen zum Riemen passen, nicht zum Motor.
-Rückt nur der Motor aus, bleibt die Omega-Tiefe größer, und der Riemen wird
-30 mm länger. Das eigentliche Problem wäre der vordere Trum. Er läuft
-zwischen Anlageplatte und Rollenflanschen durch. Mit den Rollen an der alten
-Stelle passte das nur für Wellen bis 30 mm hinter der Traverse. Jetzt passen
-**14 bis 45 mm**, ohne neuen Lauf, siehe
-[Wellenlage](#die-wellenlage-ist-nicht-gemessen--was-der-halter-verträgt).
+Rev. 1 und 2 beruhten auf einem Missverständnis. Dort saß **ein** Motor
+mittig an der hinteren Traverse. Ein geschlossener Riemen trieb über ein
+Omega mit zwei Umlenkrollen zwei senkrechte Edelstahlwellen. Dein Foto
+zeigt etwas anderes: Der Y-Riemen läuft in den oberen Nuten der 2040 und
+kehrt am Profilende um. Genau dort sitzt der Motor, das Ritzel direkt auf
+seiner Welle. Rev. 3 ersetzt den alten Halter deshalb ganz. Umlenkrollen,
+Motorriemen und Edelstahlwellen braucht der Y-Antrieb nicht mehr.
 
-**Nutensteine nur in die untere Nut der 2040.** Vor der oberen Nut läuft auf
-beiden Seiten des Halters der Riemen. Der Halter hängt deshalb an **zwei M5
-in der unteren Nut** (Z = −30, X = ±15). Die Anlageplatte endet bei Z = −38,
-2 mm über der Unterkante der 2040. In Rev. 1 reichte sie bis −58, mit vier
-M5 in der mittleren und unteren Nut einer 2060. Die Köpfe der M5 bleiben
-12 mm unter dem Riemen.
+Deine beiden Korrekturen von vorher gelten weiter:
 
-Zwei Schrauben reichen: das Motorgewicht (0,32 Nm) kippt den Halter um die
-Unterkante der Anlageplatte und zieht dabei mit rund 40 N an den Schrauben.
-Sie klemmen mit einem Vielfachen davon. Weil beide in derselben Nut sitzen,
-steht der Halter von selbst waagerecht.
-
-Ist die Traverse doch eine 2060: `profil_hoehe` = 60 setzen. Dann baut das
-Skript wieder Nutensteine in alle Nuten außer der obersten.
-
-## Warum zwei Umlenkrollen
-
-Ein Motor mitten in einem gerade durchlaufenden Riemen treibt nichts an. Der
-Riemen berührt sein Ritzel nur so weit, wie er aus der Linie gedrückt wird.
-Bei 3 mm Versatz auf 250 mm Trumlänge sind das **1,4 Grad**, also weniger als
-ein Zahn. Das Ritzel rutscht durch.
-
-Deshalb lenken zwei glatte Rollen den hinteren Trum als **Omega** um das
-Motorritzel:
-
-* Die Rollen stehen genau so weit neben der Motorachse, dass die beiden
-  Omega-Trume **parallel** ans Ritzel laufen. Das Ritzel ist damit
-  **180 Grad** umschlungen, **10 Zähne** im Eingriff, und zwar in jeder
-  Spannstellung.
-* Gespannt wird, indem der Motor nach hinten rückt. Jeder Millimeter macht
-  den Riemenweg **2 mm** länger.
-* Die Rollen laufen auf dem glatten Riemenrücken: je zwei F625ZZ Rücken an
-  Rücken, Flansche außen, dazwischen 8 mm Lauffläche für den 6-mm-Riemen.
-
-Die Alternative wäre ein Motor an einem Ende, als dritte Ecke der
-Riemenschleife neben einer Welle. Dann teilen sich Motorritzel und
-Nachbarwelle eine halbe Umschlingung: je rund 90 Grad, 5 Zähne. Außerdem
-säße der Motor asymmetrisch. Mit dem Omega bleiben beide Wellenritzel bei
-180 Grad.
-
-Die Rollen tragen keine Welle, sie gehören zum Motorantrieb. Damit bleibt es
-bei deiner Vorgabe: **der Halter trägt nur den Motor**, die Wellen haben
-eigene Lager.
-
-## Drehrichtung — wichtig für die Y-Wagen
-
-Ein Riemen kann nur **gleichsinnig** antreiben. Alle Ritzel, die er mit der
-Zahnseite umschlingt, drehen in dieselbe Richtung: beide Wellen und der
-Motor. Nur die Rollen auf dem Rücken drehen andersherum.
-
-Für die Y-Riemen heißt das: dreht die linke Welle von oben gesehen gegen den
-Uhrzeigersinn, fährt an beiden Y-Riemen der **rechte Trum** (vom Bediener
-aus) nach hinten und der linke nach vorn. Damit die Wagen gemeinsam fahren,
-müssen **beide am selben Trum** hängen, also beide rechts oder beide links.
-Spiegelbildlich eingebaut (beide innen oder beide außen) fahren sie
-**gegeneinander**, und das Portal verklemmt sofort.
-
-> **Vor dem Festziehen prüfen:** Motorritzel von Hand drehen. Beide Wagen
-> müssen in dieselbe Richtung laufen. Wenn nicht, einen der beiden Wagen
-> an den anderen Trum seines Y-Riemens klemmen. Am Motor lässt sich das
-> nicht lösen.
+* **Nutensteine nur in der unteren Nut**, oben läuft der Riemen.
+* **Motor in die Profilmitte.** Beim jetzigen Winkel liegt die Motorachse
+  rund 15 mm neben der Mitte. Jetzt liegt sie genau auf X = 0, und beide
+  Trume laufen gerade in ihre Nut.
 
 ## Bezug und Koordinaten
 
-**Y = 0 ist die Rückseite der 2040, Z = 0 ihre Oberkante, X = 0 die Mitte
-des Halters.** Y zählt **nach hinten**, weg von der Maschine. Im Fusion-Modell
-sind Y und Z getauscht wie im Toolhead (Modell-Z = Maschine Y).
+**Y = 0 ist die Stirnseite der 2040, +Y zeigt vom Profil weg. Z = 0 ist
+ihre Unterkante, X = 0 ihre Mitte.** Im Fusion-Modell sind Y und Z
+getauscht wie im Toolhead (Modell-Z = Maschine Y).
 
-### Y-Kette (ab Rückseite der 2040)
+### Y-Kette (ab Stirnseite der 2040)
 
 | Y | Ebene |
 |---|---|
-| −20,0 | Vorderseite der 2040 (Maschinenseite) |
-| **0** | **Rückseite der 2040 = Anlagefläche** |
-| +6,0 | Anlageplatte hinten |
-| +28,6 | vorderer Trum (Wirklinie), 22,3 mm hinter der Anlageplatte |
-| +35,0 | Wellenachsen, auf die der Halter ausgerichtet ist — **nicht gemessen** |
-| +41,4 | hinterer Trum |
-| +49,7 | Achsen der Umlenkrollen (X = ±14,74) |
-| +55,2 | Block und Spannlasche hinten |
-| **+79,7 … +99,7** | **Motorachse**, ganz vorn … ganz hinten (Spannweg 20 mm) |
-| +123,4 | Boden hinten |
+| −40 | Schenkel hinten |
+| −30 / −10 | M5 in der unteren Nut, je Seite |
+| **0** | **Stirnseite der 2040 = Anlage des Jochs** |
+| +4 | Joch vorn |
+| +5,0 | Motor vorn, ganz innen |
+| **+26,15 … +34,15** | **Motorachse**, ganz innen … ganz außen (Spannweg 8 mm) |
+| +55,3 | Motor hinten, ganz außen |
+| +56,8 | Platte und Führungswände vorn |
 
-### Z-Kette (ab Oberkante der 2040)
+### Z-Kette (ab Unterkante der 2040)
 
 | Z | Ebene |
 |---|---|
-| +50 | Oberkante Motor (48er; ein 40er endet bei +42) |
-| +22 | Oberkante Spannlasche |
-| +17 | Spannschraube |
-| +12 | Oberkante Block, Führungsrippen und Anlageplatte |
-| **+2** | **Motorflansch = Oberseite Boden** |
-| −4 | Unterseite Boden |
-| −5,5 | Ritzel oben (1,5 mm unter dem Boden) |
-| **−10** | **Riemenmitte = Höhe der oberen Nut** |
-| −15 | Rollen unten |
-| −21,5 / −22 | Ritzel unten / Ende der Motorwelle |
-| −27 | Spitze der Rollenachsen |
-| **−30** | **M5-Schrauben in der unteren Nut** |
-| −38 | Anlageplatte unten (2040 endet bei −40) |
+| +40 | Oberkante der 2040, darauf die Linearführung |
+| +34,5 | Ritzel oben = Wellenende |
+| +33 / +27 | Riemen oben / unten |
+| **+30** | **Riemenmitte = Mitte der oberen Nut** |
+| +26,9 | untere Kante der oberen Nutöffnung |
+| +22 | Madenschraube in der Ritzelnabe |
+| +18,5 | Ritzel unten (Nabe) |
+| **+16,5** | **Platte oben = Oberkante des ganzen Halters** |
+| +12,5 | Zentrierbund oben (steckt in der Platte) |
+| +10,5 | Motorflansch = Platte unten |
+| **+10** | **M5 in der unteren Nut** |
+| +1 | Halter unten |
+| 0 | Unterkante der 2040 |
+| −37,5 | Motor unten (48er; ein 40er endet bei −29,5) |
+
+## Der Riemen in der Nut — warum 20 Zähne
+
+Liegt das Ritzel mittig, liegen die beiden Trume genau einen
+Teilkreisdurchmesser auseinander. Mit 20 Zähnen sind das 12,73 mm, und beide
+Trume laufen in der Mitte ihres Nutkanals:
+
+* Riemenrücken **3,26 mm** hinter der Seitenfläche: **1,46 mm** Luft zur
+  Lippe (1,8 mm)
+* Zahnspitzen **4,64 mm** hinter der Seitenfläche: **1,36 mm** Luft zum
+  Nutgrund (6,0 mm)
+
+| Ritzel | Luft zur Lippe | Luft zum Nutgrund | |
+|---|---|---|---|
+| 16 Z | 2,73 mm | **0,09 mm** | streift |
+| 18 Z | 2,09 mm | 0,73 mm | knapp |
+| **20 Z** | **1,46 mm** | **1,36 mm** | **mittig** |
+| 22 Z | 0,82 mm | 2,00 mm | knapp |
+| 24 Z | **0,18 mm** | 2,64 mm | streift |
+
+Die Nutmaße sind Richtwerte für Nut 6 `[w]`. Ist dein Nutgrund flacher,
+`nut_tiefe` eintragen und das Prüfwerkzeug laufen lassen. Umschlingung
+180 Grad, 10 Zähne im Eingriff, 40 mm je Umdrehung, also 80 Schritte/mm
+bei 1/16.
 
 ## Aufbau des Halters
 
-**Anlageplatte.** 6 mm dick, 48,7 mm breit, von Z = −38 bis +12. Zwei M5
-sitzen in der **unteren Nut** (X = ±15). Die obere Nut bleibt frei, vor ihr
-läuft der Riemen. Weil beide Steine in derselben Nut 30 mm auseinander
-sitzen, steht der Halter von selbst waagerecht.
+**Schenkel.** Zwei Schenkel, 6 mm dick und 40 mm lang, liegen an beiden
+Seitenflächen der 2040 an, von Z = 1 bis 16,5. Jeder hat zwei M5 in der
+unteren Nut, bei Y = −10 und −30. Oberhalb von Z = 16,5 bleibt die
+Seitenfläche frei, also auch die ganze obere Nut. Innen sind 0,2 mm Luft
+je Seite, die Schrauben ziehen die Schenkel an.
 
-**Boden.** Er kragt 123 mm nach hinten aus. Der Motor steht **oben** darauf,
-die Welle zeigt nach unten. Ritzel und Rollen hängen darunter in der
-Riemenebene. Hängend (Welle nach oben) reichte der Motor bis Z = −70, 30 mm
-unter die 2040. Was dort ist (Tisch, Rahmen, Füße), weiß ich nicht. Oben
-hinter der Traverse ist Platz, solange Portal und Toolhead nicht dorthin
-fahren.
+**Joch.** Eine 4 mm dicke Wand quer vor der Stirnseite verbindet die beiden
+Schenkel und liegt an der Stirnseite an. Damit sitzt der Halter längs des
+Profils immer an derselben Stelle, und der Riemenzug drückt ihn gegen die
+Stirnseite, statt an den Schrauben zu ziehen.
 
-Der Boden ist **6 mm** dick, mehr geht nicht: 24 mm Motorwelle = 6 mm Boden
-+ 1,5 mm Luft + 16 mm Ritzel + 0,5 mm Rest. Der Zentrierbund des Motors
-(Ø22 × 2) sitzt in einer 2,4 mm tiefen Tasche, die Welle geht durch ein
-8 mm breites Langloch. Beide sind so lang wie der Spannweg.
+**Platte.** Sie ist 6 mm dick und liegt vor der Stirnseite bei Z = 10,5 bis
+16,5. Der Motor hängt darunter, der Flansch liegt an ihrer Unterseite an,
+die Welle zeigt nach oben. Zentrierbund und Welle gehen durch ein 22,4 mm
+breites Langloch, die vier M3 durch Langlöcher. Alle fünf erlauben ±4 mm.
+Dicker geht die Platte nicht: 24 mm Motorwelle = 6 mm Platte + 2 mm Luft
++ 16 mm Ritzel.
 
-**Führungsrippen.** Zwei Rippen fassen den Motor links und rechts mit
-0,2 mm Luft und führen ihn beim Spannen gerade nach hinten. Zusammen mit dem
-Boden bilden sie ein U-Profil. Das hält Motor und Rollen parallel (siehe
-[Steifigkeit](#steifigkeit)).
+**Führungswände.** Unter der Platte stehen links und rechts neben dem Motor
+zwei 4 mm dicke Wände, je 1 mm vom Motor entfernt. Sie führen ihn beim
+Spannen gerade und steifen die Platte aus.
 
-**Block.** Er liegt vorn zwischen den Rippen, von der Anlageplatte bis
-5,5 mm hinter die Rollenachsen. Zusammen mit dem Boden ist er 16 mm dick und
-trägt die beiden Rollenachsen: M5×40 von oben mit Scheibe, unter dem Boden
-Scheibe, 2× F625ZZ, Scheibe und Sicherungsmutter. Die Scheibe zwischen Boden
-und Rolle liegt nur am Innenring an. Der Flansch der Rolle bleibt 1 mm unter
-dem Boden.
+Alles endet oben bündig bei Z = 16,5. Diese Fläche liegt beim Druck auf dem
+Bett.
 
-**Spannlasche.** Sie sitzt oben auf dem Block, 12 mm breit, und hat hinten
-einen **Messing-Einsatz M3** (Ø4,6 × 7, die vorhandenen). Die Spannschraube
-**M3×35** geht von vorn hindurch und drückt mit der Spitze auf die
-Vorderseite des Motors. Den Einsatz von der Motorseite einschmelzen: dann
-drückt die Riemenkraft ihn tiefer in die Bohrung und nicht heraus. Der Kopf
-liegt über dem Block und ist mit dem Inbus von oben erreichbar. Die
-Vorderseite der Lasche fällt unter 45 Grad ab, damit sie ohne Stützen
-druckt.
+## Ritzel und Motorwelle
 
-**Unter dem Boden ist alles offen.** Der vordere Trum läuft zwischen
-Anlageplatte und Rollen durch, 7,3 mm hinter der Platte und 3 mm unter dem
-Boden. Der Riemen lässt sich von unten einlegen.
+Ritzel **mit der Nabe nach unten** aufschieben, bis seine Oberkante bündig
+mit dem Wellenende ist (Z = 34,5). Dann steht die 7 mm breite Spur mittig
+auf Z = 30, und der 6 mm breite Riemen läuft gerade in die Nut. Die
+Madenschraube (Z = 22) trifft die Abflachung, die bei 15 mm Länge `[w]` auf
+Z = 19,5 beginnt. Zwischen Ritzel und Platte bleiben 2 mm.
 
-## Riemenlänge
-
-Der Motorriemen ist **endlos** (geschlossen, GT2, 6 mm breit). Ein offener
-Riemen mit Klemme ginge nicht: die Klemme müsste über den ganzen Y-Weg auf
-einem freien Trum bleiben, und in der Mitte liegt der Halter im Weg.
-
-**L = 2 · S + 56,8 + 2 · Ω**
-
-* **S** ist der Abstand der beiden Wellen. **Er ist noch nicht gemessen**, im
-  Skript stehen 500 mm.
-* **Ω** ist die Tiefe des Omegas, von den Rollenachsen zur Motorachse:
-  **30 mm** mit dem Motor ganz vorn, **50 mm** ganz hinten.
-* 56,8 = zwei halbe Umschlingungen an den Wellen (40,0) plus der Rest um
-  Rollen und Motorritzel. Das Prüfwerkzeug rechnet die Formel gegen die
-  Summe der Einzelstücke nach.
-
-| S | passender Riemen |
-|---|---|
-| 400 mm | 917 … 957 mm |
-| 450 mm | 1017 … 1057 mm |
-| **500 mm** | **1117 … 1157 mm** |
-| 550 mm | 1217 … 1257 mm |
-| 600 mm | 1317 … 1357 mm |
-| 650 mm | 1417 … 1457 mm |
-
-Das Fenster ist **40 mm** breit. Also: S von Wellenachse zu Wellenachse
-messen, dann einen Riemen suchen, der hineinpasst, am besten in die Mitte.
-Findest du keinen, gibt es zwei Stellschrauben im Skript:
-
-* `omega_min`: größer für einen **längeren** Riemen (die Langlöcher
-  wandern nach hinten), kleiner für einen kürzeren, aber nicht unter
-  29,0 mm, sonst laufen die vorderen Motorschrauben in die Rollenflansche.
-* `spann_weg` größer: ein breiteres Fenster, aber ein längerer Boden.
+Läuft der Riemen nicht gerade in die Nut, das Ritzel auf der Welle etwas
+verschieben. Bis zu 1 mm über das Wellenende hinaus ist in Ordnung.
 
 ## Spannen
 
-1. Motor ganz vorn, Riemen aufgelegt, die vier Motorschrauben lose.
-2. Spannschraube eindrehen, sie schiebt den Motor nach hinten.
-3. Richtwert **~20 N Vorspannung**. Nachprüfen am vorderen Trum, der frei
-   zwischen den Wellen läuft:
-   * **Frequenz:** anzupfen, mit einer Stimmgeräte-App messen. Bei 20 N und
-     S = 500 mm sind es **~50 Hz** (allgemein f = 1/(2·S) · √(T/μ), μ ≈ 8 g/m).
-   * **Durchhang:** 100 g (1 N) in der Mitte drücken ihn **~6 mm** durch
-     (allgemein S/80 bei 20 N).
-4. Die vier Motorschrauben festziehen. Die Spannschraube bleibt als Anschlag
-   stehen: sie hält den Motor, auch wenn das PETG unter den Schrauben mit der
-   Zeit nachgibt.
-5. Nach den ersten Betriebsstunden nachhören, ob die Frequenz gleich
-   geblieben ist.
-
-Die Vorspannung muss nicht hoch sein. Der Motorriemen überträgt nur, was die
-Y-Wagen brauchen (grob 10 N beim Beschleunigen des Portals). Zu stramm
-belastet er nur die Lager der Wellen und das Motorlager.
-
-## Die Wellenlage ist nicht gemessen — was der Halter verträgt
-
-Die Rollen sitzen so, dass der hintere Trum bei `welle_y` = 35 mm gerade
-anläuft. Stehen die Wellen woanders, läuft er leicht schräg an. Das ist
-harmlos, es ändert nur die Umschlingung an Rolle und Wellenritzel um ein paar
-Grad. Enger wird es am vorderen Trum, der zwischen Anlageplatte und
-Rollenflanschen durchmuss:
-
-| welle_y | vorderer Trum vor der Platte | vor den Rollen | hinterer Trum |
-|---|---|---|---|
-| 12 | **−0,7** ✗ | 34,1 | −5,6° |
-| 14 | 1,3 | 32,1 | −5,1° |
-| 20 (Annahme Rev. 1) | 7,3 | 26,1 | −3,6° |
-| 30 | 17,3 | 16,1 | −1,2° |
-| **35 (gebaut)** | 22,3 | 11,1 | 0° |
-| 40 | 27,3 | 6,1 | +1,2° |
-| 45 | 32,3 | 1,1 | +2,4° |
-| 48 | 35,3 | **−1,9** ✗ | +3,2° |
-
-**Ohne neuen Lauf passt der Halter für Wellen 14 bis 45 mm hinter der 2040.**
-Außerhalb davon `welle_y` eintragen, das Skript neu laufen lassen und
-`tools/y_motorhalter_check.py` ausführen.
+1. Halter montiert, Motor ganz innen, die vier M3 lose.
+2. Riemen um das Ritzel legen, beide Trume in ihre obere Nut.
+3. Motor vom Profil weg nach außen ziehen, zum Beispiel mit einem
+   Schraubendreher als Hebel zwischen Joch und Motor. Jeder Millimeter macht
+   den Riemenweg 2 mm länger, insgesamt sind es **16 mm**.
+4. Richtwert **~20 N je Trum**. Zum Prüfen den freien Trum anzupfen und mit
+   einer Stimmgeräte-App messen: f = 1/(2·l) · √(T/μ) mit μ ≈ 8 g/m. Bei
+   l = 300 mm freier Länge und 20 N sind das **~83 Hz**.
+5. Die vier M3 von oben festziehen. Über den Schraubenköpfen ist Platz für
+   den Inbus, Riemen und Ritzel bleiben weit weg.
 
 ## Freigänge und engste Stellen
 
 | Stelle | Luft | |
 |---|---|---|
-| vordere Motorschraube (Kopf + Scheibe unter dem Boden) → Rollenflansch, Motor ganz vorn | **2,0 mm** | bestimmt `omega_min` |
-| Motor → Führungsrippe, je Seite | 0,2 mm | gewollt: führt beim Spannen |
-| Motorritzel → Unterseite Boden | 1,5 mm | beim Aufschieben einstellen |
-| Riemen → Unterseite Boden | 3,0 mm | |
-| vorderer Trum → Anlageplatte | 22,3 mm | siehe Wellenlage |
-| M5-Kopf → Riemen (Unterkante) | 12 mm | die obere Nut bleibt frei |
-| Omega-Trum → vordere Motorschraube | 5,3 mm | seitlich, in jeder Stellung |
-| Motor ganz vorn → Spannlasche | 3,35 mm | |
-| Steg Motorlangloch → Bundtasche | 2,6 mm | engster Materialsteg |
-| Wand hinter der Rollenachse | 2,75 mm | |
+| Riemenrücken → Lippe der Nut | **1,46 mm** | siehe [20 Zähne](#der-riemen-in-der-nut--warum-20-zähne) |
+| Zahnspitzen → Nutgrund | **1,36 mm** | |
+| Motor → Joch, ganz innen | 1,0 mm | Anschlag des Spannwegs |
+| Motor → Führungswand, je Seite | 1,0 mm | |
+| Zentrierbund → Langloch, je Seite | 0,2 mm | führt quer |
+| Ritzel → Platte | 2,0 mm | |
+| M3-Kopf → Riemen | 7,0 mm | |
+| Halter oben → obere Nutöffnung | 10,4 mm | die obere Nut bleibt frei |
+| Ritzel oben → Oberkante der 2040 | 5,5 mm | nichts ragt nach oben heraus |
+| Steg Bundschlitz → Motorlangloch | 4,3 mm | engster Steg |
 
-## Steifigkeit
+## Kräfte und Steifigkeit
 
-Der Riemen zieht Rollen und Motor mit rund 2 × 20 N zueinander. Er greift
-in der Riemenebene an, 11 mm unter der Schwerachse von Boden und Rippen. Das
-biegt den Boden zwischen den Rollen und dem Motor. Mit dem U-Profil kippen
-Rollen- und Motorachse gegeneinander um höchstens **0,20 Grad** (Motor ganz
-hinten, PETG quer zur Schicht mit 1500 N/mm² gerechnet). Ohne die Rippen
-wären es 1,1 Grad. Genau deshalb laufen sie über die ganze Länge.
+Der Riemen zieht das Ritzel mit 2 × 20 N zum Profil hin. Das nimmt das Joch
+als Druck an der Stirnseite auf. Weil der Riemen 13,5 mm über der
+Oberkante des Jochs zieht, will er den Halter über diese Kante kippen. Die
+Schenkel halten unten an den M5 mit rund **83 N** Reibung dagegen. Die vier
+M5 klemmen etwa das Fünffache davon, vorsichtig gerechnet mit 500 N je
+Schraube auf PETG und μ = 0,2.
 
-Das Motorgewicht (0,35 kg auf 94 mm Hebel, 0,32 Nm) biegt den Boden am
-Motor um 0,02 mm durch. Die Anlageplatte klemmen zwei M5 in der unteren Nut,
-das trägt das leicht (siehe [Rev. 2](#rev-2-was-sich-geändert-hat-2026-09-26)).
+Unter dem Riemenzug kippt der Motor um **0,08 Grad**, das Ritzel weicht um
+0,02 mm aus (Platte mit Führungswänden, PETG quer zur Schicht mit
+1500 N/mm²). Das Motorgewicht biegt die Platte nicht messbar durch. Das
+Haltemoment des Motors (0,45 Nm) halten die vier M3 über Reibung mit
+zwölffacher Reserve.
 
 ## Verschraubung
 
 | Verbindung | Teile | Hinweis |
 |---|---|---|
-| Halter → 2040 | **2× M5×12 + Scheibe + Nutenstein M5 (Nut 6)** | nur untere Nut; 5 mm ragen in die Nut, 3,2 mm Eingriff im Stein |
-| Umlenkrollen | **2× M5×40**, 6× Scheibe M5, 2× Sicherungsmutter M5, **4× F625ZZ** | von oben durch Block und Boden; Innenringe klemmen, Rolle muss frei laufen |
-| NEMA 17 → Boden | **4× M3×10 + Scheibe DIN 125** | von unten durch die Langlöcher, 3,5 mm Eingriff (Gewindetiefe 4,5) |
-| Spannschraube | **1× M3×35 + 1× Messing-Einsatz M3** | Einsatz von der Motorseite einschmelzen |
-| Ritzel → Motorwelle | Madenschraube | Nabe nach unten, Madenschraube auf die Abflachung |
+| Halter → 2040 | **4× M5×12 + Scheibe + Nutenstein M5 (Nut 6)** | je Seite zwei in der unteren Nut; 4,8 mm ragen in die Nut, 3,0 mm Eingriff im Stein |
+| NEMA 17 → Platte | **4× M3×10 + Scheibe DIN 125** | von oben durch die Langlöcher, 3,5 mm Eingriff (Gewindetiefe 4,5) |
+| Ritzel → Motorwelle | Madenschrauben | Nabe unten, eine auf die Abflachung |
+
+Für beide Seiten zusammen: 8× M5×12, 8 Scheiben M5, 8 Nutensteine, 8× M3×10,
+8 Scheiben M3.
 
 ## Montage
 
-1. **Messing-Einsatz** in die Spannlasche einschmelzen, von der Motorseite.
-2. **Zwei Hammermuttern M5** in die **untere** Nut der hinteren 2040
-   (Rückseite). Halter mittig zwischen den Wellen ansetzen, 2× M5×12 mit
-   Scheibe, festziehen. Jetzt, solange die Rollen noch nicht dran sind:
-   später hängen ihre Achsen 3 mm über dem geraden Weg des Inbus.
-3. **Umlenkrollen:** M5×40 mit Scheibe von oben durch Block und Boden.
-   Unten Scheibe, zwei F625ZZ mit den Flanschen nach außen, Scheibe,
-   Sicherungsmutter. Nur so fest, dass die Innenringe klemmen und die Rolle
-   frei dreht.
-4. **Spannschraube** M3×35 von vorn in den Einsatz, ganz zurückgedreht.
-5. **Motor** zwischen die Rippen setzen, Welle nach unten, Bund in die
-   Tasche, ganz nach vorn schieben. 4× M3×10 mit Scheibe von unten, lose.
-6. **Ritzel** von unten auf die Motorwelle, Nabe nach unten, **1,5 mm Luft**
-   zum Boden. Ein 1,5er Inbus dazwischen dient als Fühlerlehre.
-   Madenschraube auf die Abflachung.
-7. **Riemen** um die unteren Ritzel beider Wellen legen. Den vorderen Trum
-   von unten hinter der Anlageplatte durchführen, den hinteren Trum zwischen
-   den Rollen nach hinten ums Motorritzel ziehen.
-8. **Höhe der Wellenritzel** so nachstellen, dass der Riemen mittig zwischen
-   den Rollenflanschen läuft (Riemenmitte = Mitte der oberen Nut).
-9. **Drehrichtung prüfen**, siehe [oben](#drehrichtung--wichtig-für-die-y-wagen).
-10. **Spannen** wie oben beschrieben, dann die Motorschrauben fest.
+1. Je Profilende **vier Hammermuttern M5** einsetzen, zwei in die **untere**
+   Nut jeder Seitenfläche.
+2. **Halter** von vorn über das Profilende schieben, bis das Joch an der
+   Stirnseite anliegt. 4× M5×12 mit Scheibe, festziehen.
+3. **Motor** von unten zwischen die Führungswände setzen, den Bund in das
+   Langloch, ganz nach innen. Den Stecker zur Seite oder nach außen drehen,
+   nicht zur 2060. 4× M3×10 mit Scheibe von oben, noch lose.
+4. **Ritzel** mit der Nabe nach unten aufschieben, Oberkante bündig mit dem
+   Wellenende, Madenschraube auf die Abflachung.
+5. **Riemen** um das Ritzel legen, beide Trume in die oberen Nuten.
+6. **Spannen** wie oben beschrieben, dann die M3 fest.
+7. **Prüfen**, dass der Riemen gerade und ohne die Lippen zu berühren in
+   beide Nuten läuft. Wenn nicht, die Ritzelhöhe nachstellen.
+8. Dasselbe auf der anderen Seite.
+9. **Drehrichtung:** Beide Motoren sind gleich eingebaut. Ob die Wagen
+   gemeinsam fahren, hängt davon ab, an welchem Trum jeder Wagen hängt. Vor
+   der ersten Fahrt einen Motor von Hand drehen und die Richtung in der
+   Firmware je Motor einstellen, oder eine Spule am Stecker tauschen.
 
 ## Druck (PETG, Bambu Lab A1)
 
-**Anlagefläche aufs Bett**, Aufbaurichtung = Maschine Y. Boden, Block und
-Rippen wachsen dann als Wand nach oben, **123 mm hoch** auf nur 48,7 × 50 mm
-Grundfläche. Deshalb einen **Brim** (5 mm) dazunehmen. Die Lasche hat eine
-45-Grad-Unterseite: **keine Stützen**. Die
-M5-Bohrungen und die Spannschraube stehen senkrecht und werden rund. Die
-Anlagefläche kommt vom Bett und ist damit plan, wichtig für die Nutensteine.
-Eine Fase von 0,4 mm hält den Elefantenfuß heraus.
-
-Die Rollenachsen und die Motorlanglöcher liegen in dieser Lage waagerecht.
-Das sind Durchgangsbohrungen, ein leichtes Durchhängen oben stört dort
-nicht. Genauso wurde die Motorkonsole an der Trägerplatte gedruckt.
+**Kopfüber drucken: die Oberseite (Z = 16,5) aufs Bett.** Platte, Joch,
+Schenkel und Führungswände wachsen dann senkrecht aus der Platte: 15,5 mm
+hoch auf 52,3 × 96,8 mm Grundfläche. Das braucht **keine Stützen**, nur die
+vier waagerechten M5-Bohrungen (Ø5,5) überbrücken. Die Motorauflage (die
+Plattenunterseite) liegt dann oben und wird plan. Anlage am Joch und
+Innenseiten der Schenkel sind senkrechte Wände und damit maßhaltig. Eine
+Fase von 0,4 mm an der Bettseite hält den Elefantenfuß heraus.
 
 4 Wandlinien, ≥ 40 % Infill. **PETG**, weil der Motor warm wird: PLA
 erweicht bei gut 55 °C, das erreicht ein NEMA 17 im Dauerbetrieb.
+**Zweimal drucken**, links und rechts ist es dasselbe Teil.
 
 ## Keine Bohrlehre
 
 Der Halter verbindet kein zweites Druckteil. Die 2040 wird nicht gebohrt,
 die Nutensteine sitzen in den Nuten. Das NEMA-17-Lochbild (31 × 31) passt an
-der Z-Achse schon in Konsole und Motoradapter. Die Langlöcher gleichen
-längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen, wie beim
-Mutternwinkel am Toolhead.
+der Z-Achse schon in Konsole und Motoradapter, und die Langlöcher gleichen
+längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
 
 ## Noch offen
 
-1. **Wellenabstand S** messen (Achse zu Achse): davon hängt die Riemenlänge
-   ab.
-2. **Wellen hinter der 2040** (`welle_y`) messen: der Halter ist auf 35 mm
-   ausgerichtet und passt ohne neuen Lauf für 14 bis 45 mm.
-3. **Welcher Trum trägt die Wagen?** Beide müssen am selben Trum hängen,
-   siehe [Drehrichtung](#drehrichtung--wichtig-für-die-y-wagen).
-4. **Freiraum hinter der Traverse:** Motor bis Z = +50, Halter und Motor
-   bis Y = 123. Portal und Toolhead dürfen in der hintersten Stellung nicht
-   hineinfahren.
-5. **Motorlänge:** 48 mm angenommen, nur für den Freiraum.
-6. **Nutensteine:** gerechnet mit 1,8 mm Lippe, 4 mm Gewinde und 6 mm Platz
-   in der Nut `[w]`. Setzt die M5×12 hinten auf, eine Scheibe mehr unter
-   den Kopf.
-7. **Profil:** die Traverse ist laut deiner Angabe vom 2026-09-26 eine 2040
-   (vorher 2060). Stimmt das nicht, `profil_hoehe` anpassen.
+1. **Motorlänge:** 48 mm angenommen, nur für den Freiraum nach unten. Ein
+   40er endet 8 mm höher.
+2. **Nutmaße** `[w]`: Lippe 1,8 und Nutgrund 6,0 mm bestimmen, wo der
+   Riemen in der Nut läuft. Bei anderem Profil `nut_lippe` und `nut_tiefe`
+   anpassen und prüfen.
+3. **Nutensteine** `[w]`: gerechnet mit 1,8 mm Lippe, 4 mm Gewinde und 6 mm
+   Platz. Setzt die M5×12 hinten auf, eine Scheibe mehr unter den Kopf.
+4. **Endschalter:** Sie gehören nicht zum Halter. Mit zwei Y-Motoren braucht
+   jede Seite einen, wenn die Firmware das Portal beim Referenzieren
+   ausrichten soll.
+5. **Alte Teile:** Die Umlenkrollen (F625ZZ), der Motorriemen und die
+   Edelstahlwellen aus Rev. 1/2 braucht der Y-Antrieb nicht mehr.
 
 ## Parametrik
 
 Alle Werte aus `MASSE` landen als User-Parameter im Dialog *Ändern →
-Parameter*. Die Zähnezahlen sind einheitenlos. Die Lagen rechnet `lage()`
-in Python: nach einer Änderung das Skript neu laufen lassen und
+Parameter*. Die Zähnezahl ist einheitenlos. Die Lagen rechnet `lage()` in
+Python: nach einer Änderung das Skript neu laufen lassen und
 `tools/y_motorhalter_check.py` ausführen.
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
-| `welle_y` | 35 mm `[?]` | Riemenlauf hinter der 2040, legt Rollen und Motor fest (Rev. 1: 20) |
-| `profil_hoehe` | 40 mm | Traverse 2040 hochkant: zwei Nuten, Nutensteine in allen außer der oberen |
-| `grund_rand_unten` | 2 mm | Anlageplatte endet so weit über der Profilunterkante |
-| `welle_abstand` | 500 mm `[?]` | Abstand der Wellen, nur für die Riemenlänge |
-| `riemen_z` | −10 mm | Riemenebene = obere Nut |
-| `omega_min` | 30 mm | Omega-Tiefe mit dem Motor ganz vorn (Minimum 29,0) |
-| `spann_weg` | 20 mm | Weg des Motors, Riemenfenster = 2 × spann_weg |
-| `boden_dicke` | 6 mm | höchstens 6,5, sonst reicht die Motorwelle nicht durchs Ritzel |
-| `block_hoehe` | 10 mm | Höhe von Block und Führungsrippen über dem Boden |
-| `schraube_x` | 15 mm | Abstand der M5 von der Mitte |
-| `ritzel_z_motor` / `ritzel_z_welle` | 20 / 20 | Zähnezahlen (1:1, 40 mm je Umdrehung) |
-| `motor_laenge` | 48 mm | nur Freiraum |
+| `nut_unten` / `nut_oben` | 10 / 10 mm | untere Nut über der Unterkante (Nutensteine), obere unter der Oberkante (Riemen) |
+| `nut_lippe` / `nut_tiefe` | 1,8 / 6,0 mm `[w]` | wo der Riemen im Nutkanal läuft, Länge der M5 |
+| `ritzel_z` | 20 | Zähnezahl: Abstand der Trume, 40 mm je Umdrehung |
+| `motor_welle_l` | 24 mm | legt mit dem Ritzel die Höhe von Motor und Platte fest |
+| `platte_dicke` | 6 mm | höchstens 7, sonst stößt das Ritzel an |
+| `wange_laenge` | 40 mm | so weit reichen die Schenkel am Profil entlang |
+| `schraube_y` / `schraube_abstand` | 10 / 20 mm | Lage der M5 hinter der Stirnseite |
+| `joch_dicke` | 4 mm | Anschlag an der Stirnseite, schiebt den Motor nach außen |
+| `spann_weg` | 8 mm | Weg des Motors; der Riemenweg ändert sich um das Doppelte |
+| `motor_laenge` | 48 mm | nur Freiraum nach unten |

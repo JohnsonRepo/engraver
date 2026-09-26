@@ -2,10 +2,10 @@
 """Rechnerische Pruefung des Y-Motorhalters — laeuft ohne Fusion.
 
 Importiert fusion/YMotorhalter/YMotorhalter.py mit gestubbtem adsk-Modul und
-prueft dieselbe Masskette, die das Skript zum Bauen benutzt: Riemenlauf und
-Umschlingung, Riemenlaenge, Freigaenge unter und auf dem Boden, Material-
-stege, Schraubenlaengen, Ritzel auf der Motorwelle, Toleranz gegen die noch
-nicht gemessene Wellenlage, Steifigkeit, Druckbarkeit.
+prueft dieselbe Masskette, die das Skript zum Bauen benutzt: Riemen in der
+oberen Nut, Ritzel auf der Motorwelle, Freigaenge um Motor und Ritzel,
+Materialstege, Schraubenlaengen, Kraefte, Druckbarkeit, Freiraum am
+Profilende.
 
     python3 tools/y_motorhalter_check.py
 
@@ -25,10 +25,13 @@ SKRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
 # Nur fuer die Rechnung, erzeugen keine Geometrie:
 E_PETG = 1500.0          # N/mm2, gedruckt quer zur Schicht (vorsichtig)
 MOTOR_MASSE = 0.35       # kg, NEMA 17 mit 48 mm (40 mm: ~0,28)
-VORSPANNUNG = 20.0       # N je Trum, Richtwert fuer den Motorriemen
-RIEMEN_MU = 0.008        # kg/m, GT2 6 mm [w]
-WELLE_Y_PROBE = (12.0, 14.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 48.0)
-ABSTAND_PROBE = (400.0, 450.0, 500.0, 550.0, 600.0, 650.0)
+MOTOR_MOMENT = 0.45      # Nm, Haltemoment eines 48er NEMA 17 [w]
+VORSPANNUNG = 20.0       # N je Trum, Richtwert fuer den Y-Riemen
+M5_KLEMMKRAFT = 500.0    # N je M5, vorsichtig: PETG unter dem Kopf
+M3_KLEMMKRAFT = 300.0    # N je M3, dito
+REIBWERT = 0.2           # PETG auf Alu bzw. auf dem Motorflansch
+MADENSCHRAUBE_R = 1.5    # mm, M3-Madenschraube in der Ritzelnabe
+ZAEHNE_PROBE = (16, 18, 20, 22, 24)
 
 
 def modul_laden():
@@ -82,8 +85,19 @@ class Pruefung:
         return 1 if self.fehler else 0
 
 
-def abstand(a, b):
-    return math.hypot(a[0] - b[0], a[1] - b[1])
+def strecken_abstand(a0, a1, b0, b1, n=400):
+    """Kleinster Abstand zweier Strecken in der Ebene (numerisch, genau
+    genug fuer Stege von ein paar Millimetern)."""
+    beste = float('inf')
+    for i in range(n + 1):
+        t = i / float(n)
+        px, py = a0[0] + t * (a1[0] - a0[0]), a0[1] + t * (a1[1] - a0[1])
+        dx, dy = b1[0] - b0[0], b1[1] - b0[1]
+        u = max(0.0, min(1.0, ((px - b0[0]) * dx + (py - b0[1]) * dy)
+                         / (dx * dx + dy * dy)))
+        beste = min(beste, math.hypot(px - b0[0] - u * dx,
+                                      py - b0[1] - u * dy))
+    return beste
 
 
 def main():
@@ -92,375 +106,271 @@ def main():
     p = Pruefung()
     luft = w('luft_min')
     hb = L['halbe_breite']
-    rx, ry = L['rolle_x'], L['rolle_y']
-    r_flansch_rolle = w('rolle_flansch_d') / 2.0
-    r_flansch_ritzel = w('ritzel_flansch_d') / 2.0
-    r_m3_scheibe = w('m3_scheibe_d') / 2.0
     h = w('motor_loch') / 2.0
-
-    # ------------------------------------------------------------------------
+    m = w('motor_flansch') / 2.0
+    hub = w('spann_weg') / 2.0
     prof = L['profil_name']
-    p.titel('1) Y-Kette: ab Rueckseite der {} nach hinten'.format(prof))
+
+    # ------------------------------------------------------------------------
+    p.titel('1) Y-Kette: ab Stirnseite der {} (+Y vom Profil weg)'.format(prof))
     for text, wert in (
-            ('{} vorn (Maschinenseite)'.format(prof), -w('profil_tiefe')),
-            ('{} Rueckseite = Anlageflaeche'.format(prof), 0.0),
-            ('Anlageplatte hinten', L['grund_y1']),
-            ('vorderer Trum (Wirklinie)', L['trum_vorn_y']),
-            ('Riemenlauf: Wellenachsen (NICHT gemessen)', w('welle_y')),
-            ('hinterer Trum (Wirklinie)', L['trum_hinten_y']),
-            ('Rollenachsen', ry),
-            ('Block hinten = Spannlasche hinten', L['block_y1']),
-            ('Motorachse ganz vorn', L['motor_y_min']),
-            ('Motorachse ganz hinten', L['motor_y_max']),
-            ('Boden hinten', L['boden_y1'])):
+            ('Schenkel hinten', L['wange_y0']),
+            ('hintere M5', L['m5_loecher'][1][0]),
+            ('vordere M5', L['m5_loecher'][0][0]),
+            ('Stirnseite der {} = Anlage des Jochs'.format(prof), 0.0),
+            ('Joch vorn', L['joch_y1']),
+            ('Motor vorn (ganz innen)', L['motor_y_min'] - m),
+            ('Motorachse ganz innen', L['motor_y_min']),
+            ('Motorachse Mitte', L['motor_y_mitte']),
+            ('Motorachse ganz aussen', L['motor_y_max']),
+            ('Motor hinten (ganz aussen)', L['motor_y_max'] + m),
+            ('Platte und Fuehrungswaende vorn', L['platte_y1'])):
         p.info(text, wert)
 
-    p.titel('2) Z-Kette: ab Oberkante der {}'.format(prof))
+    p.titel('2) Z-Kette: ab Unterkante der {}'.format(prof))
     for text, wert in (
-            ('Oberkante Spannlasche', L['lasche_z1']),
-            ('Spannschraube (Achse)', L['spann_z']),
-            ('Oberkante Block und Rippen', L['block_z1']),
-            ('Motorflansch = Oberseite Boden', L['boden_z1']),
-            ('Unterseite Boden', L['boden_z0']),
-            ('Ritzel oben', L['ritzel_z1']),
+            ('Oberkante {} (Schiene darauf)'.format(prof), w('profil_hoehe')),
+            ('Ritzel oben = Wellenende', L['ritzel_z1']),
             ('Riemen oben', L['riemen_z1']),
-            ('Riemenmitte = Hoehe der oberen Nut', w('riemen_z')),
+            ('Riemenmitte = Mitte der oberen Nut', L['riemen_z']),
             ('Riemen unten', L['riemen_z0']),
-            ('Rolle unten', L['rolle_z0']),
+            ('Oeffnung der oberen Nut unten', L['nut_oben_z0']),
+            ('Madenschraube der Ritzelnabe', L['madenschraube_z']),
+            ('Abflachung der Welle beginnt', L['flach_z0']),
             ('Ritzel unten', L['ritzel_z0']),
-            ('Motorwelle unten', L['welle_z0']),
-            ('Spitze der Rollenachse', L['rolle_schraube_z0']),
-            ('M5 in Nutensteinen', min(z for _, z in L['m5_loecher'])),
-            ('Anlageplatte unten', L['grund_z0']),
-            ('{} unten'.format(prof), -w('profil_hoehe'))):
+            ('Platte oben = Halter oben = Bettseite', L['platte_z1']),
+            ('Zentrierbund oben', L['bund_z1']),
+            ('Motorflansch = Platte unten', L['platte_z0']),
+            ('M5 in der unteren Nut', L['nut_unten_z']),
+            ('Halter unten', L['halter_z0']),
+            ('Unterkante {}'.format(prof), 0.0),
+            ('Motor unten ({:.0f}er)'.format(w('motor_laenge')),
+             L['motor_z0'])):
         p.info(text, wert)
-    p.ok('Riemenmitte auf Hoehe der oberen Nut',
-         -abs(w('riemen_z') - L['nut_z'][0]), -0.01)
-    p.ok('Anlageplatte endet ueber der Profilunterkante',
-         L['grund_z0'] + w('profil_hoehe'), 0.0)
-    # Die Nutensteine sitzen nicht in der Nut, vor der der Riemen laeuft —
-    # auch nicht ihr Schraubenkopf: der muss unter dem Riemen bleiben.
-    p.ja('keine Nutensteine in der oberen Nut (dort laeuft der Riemen)',
-         all(abs(z - L['nut_z'][0]) > 1.0 for _, z in L['m5_loecher']))
-    p.ja('alle M5 sitzen in einer Nut der {}'.format(prof),
-         all(any(abs(z - n) < 1e-6 for n in L['nut_z'])
-             for _, z in L['m5_loecher']))
-    p.ok('M5-Kopf + Scheibe unter dem Riemen',
-         L['riemen_z0'] - (max(z for _, z in L['m5_loecher'])
-                           + w('m5_scheibe_d') / 2.0), 2.0)
-    p.info('Nutensteine M5', len(L['m5_loecher']), 'Stk')
+    p.ok('Riemenmitte = Mitte der oberen Nut',
+         -abs(L['riemen_z'] - (w('profil_hoehe') - w('nut_oben'))), -0.01)
+    p.ja('alle M5 sitzen in der unteren Nut',
+         all(abs(z - L['nut_unten_z']) < 1e-6 for _, z in L['m5_loecher']))
+    p.ok('Halter bleibt unter der oberen Nut (Seitenflaeche frei)',
+         L['nut_oben_z0'] - L['halter_z1'], 2.0)
+    p.ok('Halter ragt nicht unter die {} (dort liegt die 2060)'.format(prof),
+         L['halter_z0'], 0.0)
+    p.ok('nichts ragt ueber die Oberkante (Schiene, Y-Wagen)',
+         w('profil_hoehe') - L['ritzel_z1'], 2.0)
 
     # ------------------------------------------------------------------------
-    p.titel('3) Riemenlauf')
-    p.info('Wirkradius Motorritzel ({:.0f} Z)'.format(w('ritzel_z_motor')),
-           L['rp_motor'])
-    p.info('Wirkradius Wellenritzel ({:.0f} Z)'.format(w('ritzel_z_welle')),
-           L['rp_welle'])
-    p.info('Wirkradius an der Rolle (Laufflaeche + Ruecken)', L['rp_rolle'])
-    # Die Omega-Trume laufen parallel ans Motorritzel, wenn die Rollen genau
-    # rp_motor + rp_rolle neben der Achse stehen: 180 Grad in jeder
-    # Spannstellung.
-    p.ok('Omega-Trume parallel: Rollenabstand - Soll',
-         -abs(rx - (L['rp_motor'] + L['rp_rolle'])), -1e-6)
-    p.ok('hinterer Trum laeuft gerade an die Rollen',
-         -abs(ry - L['rp_rolle'] - L['trum_hinten_y']), -1e-6)
-    p.ok('Zaehne im Eingriff am Motorritzel (180 Grad)',
-         L['zaehne_im_eingriff'], 6.0, '>=', 'Z')
-    # Zum Vergleich: gerade durchlaufender Riemen, Motor 3 mm aus der Linie
-    # gedrueckt — so viel Umschlingung haette ein Motor ohne Rollen.
-    ohne = 2.0 * math.degrees(math.atan(3.0 / (w('welle_abstand') / 2.0)))
-    p.info('ohne Rollen (3 mm aus der Linie): Umschlingung', ohne, 'Grad')
-    p.info('  = Zaehne im Eingriff', ohne / 360.0 * w('ritzel_z_motor'), 'Z')
-    p.info('Umschlingung an den Wellenritzeln', 180.0, 'Grad')
-    p.info('Weg je Motorumdrehung (1:1)', L['mm_pro_umdrehung'], 'mm')
+    p.titel('3) Riemen in der oberen Nut (Draufsicht)')
+    p.info('Wirkradius Ritzel ({:.0f} Z)'.format(w('ritzel_z')), L['rp'])
+    p.info('Trum: Ruecken bei X = +-', L['trum_ruecken_x'])
+    p.info('Trum: Zahnspitzen bei X = +-', L['trum_zahn_x'])
+    p.info('Ruecken hinter der Seitenflaeche', L['trum_tiefe_ruecken'])
+    p.info('Zahnspitzen hinter der Seitenflaeche', L['trum_tiefe_zahn'])
+    p.ok('Luft Riemenruecken -> Lippe', L['luft_lippe'], 1.0)
+    p.ok('Luft Zahnspitzen -> Nutgrund', L['luft_nutgrund'], 1.0)
+    p.ja('Ritzel mittig: beide Trume laufen parallel in ihre Nut', True,
+         '   (Motorachse X = 0, symmetrisches Teil)')
+    p.info('Riemen {:.0f} mm breit, Nutoeffnung {:.1f} mm: er laeuft hinter '
+           'den Lippen im Kanal'.format(w('riemen_breite'), w('nut_breite')))
+    p.info('Zum Vergleich, Luft zur Lippe / zum Nutgrund:')
+    halb = w('profil_breite') / 2.0
+    for z in ZAEHNE_PROBE:
+        rp = mod.teilkreis_r(z)
+        lippe = halb - (rp + L['wirk_ruecken']) - w('nut_lippe')
+        grund = w('nut_tiefe') - (halb - (rp - L['wirk_zahn']))
+        knapp = min(lippe, grund)
+        p.info('  {:2d} Z: {:5.2f} / {:5.2f} mm{}'.format(
+            z, lippe, grund, '   <- streift' if knapp < 0.3
+            else '   <- knapp' if knapp < 1.0 else ''))
+    p.info('Umschlingung', 180.0, 'Grad')
+    p.info('Zaehne im Eingriff', L['zaehne_im_eingriff'], 'Z')
+    p.info('Weg je Motorumdrehung', L['mm_pro_umdrehung'], 'mm')
     p.info('Schritte/mm bei 1/16', 200 * 16 / L['mm_pro_umdrehung'], '')
-
-    p.titel('4) Riemenlaenge (geschlossen, GT2 6 mm)')
-    p.info('L = 2*S + {:.2f} + 2*Omega'.format(L['riemen_konst']))
-    p.info('S = Wellenabstand (NICHT gemessen)', w('welle_abstand'))
-    p.info('Riemen fuer Motor ganz vorn', L['riemen_l_min'])
-    p.info('Riemen fuer Motor ganz hinten', L['riemen_l_max'])
-    p.info('Fenster fuer die Riemenlaenge', L['riemen_l_max']
-           - L['riemen_l_min'])
-    for s in ABSTAND_PROBE:
-        p.info('  S = {:.0f} mm -> Riemen {:.0f} .. {:.0f} mm'.format(
-            s, mod.riemenlaenge(L, s, w('omega_min')),
-            mod.riemenlaenge(L, s, w('omega_min') + w('spann_weg'))))
-    # Gegenprobe der Formel: Laenge aus den Einzelstuecken
-    s = w('welle_abstand')
-    stuecke = (s                                        # vorderer Trum
-               + 2.0 * math.pi * L['rp_welle']          # 2x halb um die Wellen
-               + 2.0 * (s / 2.0 - rx)                   # hinterer Trum
-               + 2.0 * math.pi / 2.0 * L['rp_rolle']    # 2x Viertel um Rollen
-               + 2.0 * w('omega_min')                   # Omega hin und zurueck
-               + math.pi * L['rp_motor'])               # halb um den Motor
-    p.ok('Formel = Summe der Einzelstuecke',
-         -abs(stuecke - L['riemen_l_min']), -1e-6)
+    p.info('freier Riemen Stirnseite -> Ritzel', L['motor_y_min'])
+    p.info('  .. (Motor ganz aussen)', L['motor_y_max'])
 
     # ------------------------------------------------------------------------
-    p.titel('5) Kuerzeste Omega-Tiefe aus den Freigaengen')
-    # (a) Motorritzel gegen Rollenflansch (beide in der Riemenebene)
-    a = math.sqrt(max((r_flansch_ritzel + r_flansch_rolle + luft) ** 2
-                      - rx ** 2, 0.0))
-    # (b) vordere Motorschraube (Kopf + Scheibe unter dem Boden) gegen den
-    #     oberen Rollenflansch — beide haengen direkt unter dem Boden
-    dx = h - rx
-    b = h + math.sqrt((r_flansch_rolle + r_m3_scheibe + luft) ** 2 - dx ** 2)
-    # (c) Steg zwischen Rollenachse und vorderem Motorlangloch im Boden
-    c = h + w('m3_durchgang') / 2.0 + w('m5_durchgang') / 2.0 + 2.0
-    # (d) Motorvorderseite gegen Block und Spannlasche
-    d = w('motor_flansch') / 2.0 + w('block_rand') + luft
-    noetig = max(a, b, c, d)
-    for text, wert in (('Ritzelflansch gegen Rollenflansch', a),
-                       ('Motorschraube (unten) gegen Rollenflansch', b),
-                       ('Steg Rollenachse / Motorlangloch >= 2 mm', c),
-                       ('Motor gegen Block', d)):
-        p.info('  ' + text, wert)
-    p.ok('omega_min deckt die kuerzeste Tiefe', w('omega_min'), noetig)
-
-    # ------------------------------------------------------------------------
-    p.titel('6) Freigaenge unter dem Boden (Riemenebene)')
-    p.ok('vorderer Trum (Ruecken) -> Anlageplatte',
-         L['trum_vorn_y'] - L['wirk_ruecken'] - L['grund_y1'], 2.0)
-    p.ok('Riemenoberkante -> Unterseite Boden',
-         L['boden_z0'] - L['riemen_z1'], 2.0)
-    p.ok('Ritzel oben -> Unterseite Boden', L['ritzel_luft'], luft)
+    p.titel('4) Ritzel auf der Motorwelle')
+    spur_mitte = (L['ritzel_z0'] + L['ritzel_nabe'] + w('ritzel_flansch_h')
+                  + w('ritzel_spur') / 2.0)
+    p.ok('Spurmitte = Riemenmitte', -abs(spur_mitte - L['riemen_z']), -0.01)
     p.ok('Riemen in der Ritzelspur (Rand je Seite)',
          (w('ritzel_spur') - w('riemen_breite')) / 2.0, 0.3)
-    lauf = w('rolle_h') - 2.0 * w('rolle_flansch_h')
-    p.ok('Riemen zwischen den Rollenflanschen (Rand je Seite)',
-         (lauf - w('riemen_breite')) / 2.0, 0.5)
-    mitte_rolle = (L['rolle_z0'] + L['rolle_z1']) / 2.0
-    ritzel_spur = L['ritzel_z1'] - w('ritzel_flansch_h') - w('ritzel_spur') / 2
-    p.ok('Rollenmitte in der Riemenebene',
-         -abs(mitte_rolle - w('riemen_z')), -0.01)
-    p.ok('Ritzelspur in der Riemenebene', -abs(ritzel_spur - w('riemen_z')),
-         -0.01)
-    for text, om in (('Motor ganz vorn', w('omega_min')),
-                     ('Motor ganz hinten', w('omega_min') + w('spann_weg'))):
-        ym = ry + om
-        p.ok('{}: Ritzel -> Rollenflansch'.format(text),
-             abstand((0.0, ym), (rx, ry)) - r_flansch_ritzel
-             - r_flansch_rolle, luft)
-        p.ok('{}: vordere Motorschraube -> Rollenflansch'.format(text),
-             abstand((h, ym - h), (rx, ry)) - r_flansch_rolle - r_m3_scheibe,
-             luft)
-    # Omega-Trum (Ruecken aussen) gegen die Motorschrauben: seitlicher
-    # Abstand, unabhaengig von der Spannstellung.
-    p.ok('Omega-Trum (Ruecken) -> vordere Motorschraube',
-         h - r_m3_scheibe - (L['rp_motor'] + L['wirk_ruecken']), 2.0)
-    p.ok('Riemen um das Ritzel -> hintere Motorschraube',
-         math.hypot(h, h) - r_m3_scheibe
-         - (L['rp_motor'] + L['wirk_ruecken']), 2.0)
-    # Die Rolle sitzt auf einer Scheibe unter dem Boden; ihr Flansch darf
-    # den Boden nicht beruehren (die Scheibe liegt nur am Innenring).
-    p.ok('Rollenflansch -> Unterseite Boden (Scheibe dazwischen)',
-         L['boden_z0'] - L['rolle_z1'], 0.5)
-    p.info('Rollenachse haengt bis', L['rolle_schraube_z0'])
-    p.info('Ritzelnabe haengt bis', L['ritzel_z0'])
-
-    p.titel('7) Freigaenge auf dem Boden')
-    p.ok('Motor zwischen den Rippen (Luft je Seite)',
-         L['rippe_x0'] - w('motor_flansch') / 2.0, 0.15)
-    p.ok('Motor ganz vorn -> Block/Lasche',
-         L['motor_y_min'] - w('motor_flansch') / 2.0 - L['block_y1'], luft)
-    p.ok('Motor ganz hinten steht ganz auf dem Boden',
-         L['boden_y1'] - L['motor_y_max'] - w('motor_flansch') / 2.0, 1.0)
-    kopf5 = w('m5_scheibe_d') / 2.0
-    p.ok('Rollenachse (Kopf + Scheibe) -> Spannlasche',
-         rx - kopf5 - w('lasche_breite') / 2.0, 2.0)
-    p.ok('Rollenachse (Kopf + Scheibe) -> Fuehrungsrippe',
-         L['rippe_x0'] - rx - kopf5, 0.5)
-    p.ok('Rollenachse (Kopf + Scheibe) liegt auf dem Block',
-         L['block_y1'] - ry - kopf5, 0.0)
+    p.ok('Motorwelle reicht durch das ganze Ritzel',
+         L['welle_z1'] - L['ritzel_z1'], 0.0)
+    p.ok('Madenschraube ganz auf der Abflachung',
+         L['madenschraube_z'] - MADENSCHRAUBE_R - L['flach_z0'], 0.5)
+    p.ok('Ritzel unten -> Platte oben', L['ritzel_luft'], luft)
+    p.ok('Platte duenn genug fuer Welle + Ritzel',
+         w('motor_welle_l') - w('ritzel_laenge') - luft, w('platte_dicke'))
+    p.ok('Zentrierbund steckt in der Platte', L['platte_z1'] - L['bund_z1'],
+         0.0)
 
     # ------------------------------------------------------------------------
-    p.titel('8) Materialstege')
-    p.ok('Steg Motorlangloch -> Bundtasche',
-         h - w('m3_durchgang') / 2.0 - L['bund_schlitz_b'] / 2.0, 2.0)
-    p.ok('Steg Motorlangloch -> Fuehrungsrippe (Bodenstreifen)',
-         L['rippe_x0'] - h - w('m3_durchgang') / 2.0, 3.0)
-    p.ok('Boden unter der Bundtasche',
-         w('boden_dicke') - L['bund_tasche_t'], 3.0)
-    p.ok('Wand hinter der Rollenachse (Block)',
-         L['block_y1'] - ry - w('m5_durchgang') / 2.0, 2.0)
-    p.ok('Steg Rollenachse -> vorderes Motorlangloch',
-         (L['motor_y_min'] - h - w('m3_durchgang') / 2.0)
-         - (ry + w('m5_durchgang') / 2.0), 2.0)
-    p.ok('Wand um den Einsatz der Spannschraube (seitlich)',
-         (w('lasche_breite') - w('insert_m3_d')) / 2.0, 2.0)
-    p.ok('Wand um den Einsatz (ueber dem Block)',
-         L['spann_z'] - w('insert_m3_d') / 2.0 - L['block_z1'], 2.0)
-    p.ok('Wand um den Einsatz (oben)',
-         L['lasche_z1'] - L['spann_z'] - w('insert_m3_d') / 2.0, 2.0)
-    p.ok('Lasche tiefer als der Einsatz (Anschlag vorn)',
-         L['spann_tiefe'] - w('insert_m3_t'), 2.0)
-    p.ok('M5-Bohrung -> Unterkante Anlageplatte',
-         min(z for _, z in L['m5_loecher']) - w('m5_durchgang') / 2.0
-         - L['grund_z0'], 4.0)
-    p.ok('M5-Kopf + Scheibe innerhalb der Plattenbreite',
-         hb - w('schraube_x') - w('m5_scheibe_d') / 2.0, 2.0)
+    p.titel('5) Motor unter der Platte')
+    p.ok('Motor ganz innen -> Joch', L['motor_y_min'] - m - L['joch_y1'], luft)
+    p.ok('Motor steht ganz vor der Stirnseite', L['motor_y_min'] - m,
+         L['joch_y1'])
+    p.ok('Motor -> Fuehrungswand (je Seite)', L['fuehrung_x0'] - m, luft)
+    p.ok('Zentrierbund im Langloch (Luft je Seite)',
+         (L['bund_schlitz_b'] - w('motor_bund_d')) / 2.0, 0.15)
+    p.ok('Platte deckt den Flansch auch ganz aussen',
+         L['platte_y1'] - L['motor_y_max'] - m, 0.0)
+    r_scheibe = w('m3_scheibe_d') / 2.0
+    p.ok('M3-Scheibe -> Ritzelflansch (radial)',
+         math.hypot(h, h) - r_scheibe - w('ritzel_flansch_d') / 2.0, 2.0)
+    p.ok('M3-Scheibe -> Riemenruecken (seitlich)',
+         h - r_scheibe - L['trum_ruecken_x'], 2.0)
+    p.ok('M3-Kopf oben -> Riemen unten',
+         L['riemen_z0'] - (L['platte_z1'] + w('m3_scheibe_h')
+                           + w('m3_kopf_h')), 2.0)
+    p.ok('Ritzelflansch -> Joch (Motor ganz innen)',
+         L['motor_y_min'] - w('ritzel_flansch_d') / 2.0 - L['joch_y1'], luft)
+    p.ok('Riemen unten -> Joch und Platte oben',
+         L['riemen_z0'] - L['halter_z1'], 2.0)
+    p.info('Motor haengt unter die {} bis'.format(prof), L['motor_z0'])
 
     # ------------------------------------------------------------------------
-    p.titel('9) Schrauben')
+    p.titel('6) Materialstege')
+    ym = L['motor_y_mitte']
+    rb, r3 = L['bund_schlitz_b'] / 2.0, w('m3_durchgang') / 2.0
+    steg = min(strecken_abstand((0.0, ym - hub), (0.0, ym + hub),
+                                (x, y - hub), (x, y + hub)) - rb - r3
+               for x, y in L['motor_langloecher'])
+    p.ok('Steg Bundschlitz -> Motorlangloch', steg, 2.0)
+    p.ok('Steg Motorlangloch -> Plattenrand', hb - h - r3, 3.0)
+    p.ok('Steg vorderes Motorlangloch -> Joch',
+         ym - h - hub - r3 - L['joch_y1'], 3.0)
+    p.ok('Steg hinteres Motorlangloch -> Plattenende',
+         L['platte_y1'] - (ym + h + hub + r3), 3.0)
+    p.ok('Steg Bundschlitz -> Joch', ym - hub - rb - L['joch_y1'], 3.0)
+    r5 = w('m5_durchgang') / 2.0
+    p.ok('Steg M5-Bohrung -> Schenkel oben',
+         L['halter_z1'] - L['nut_unten_z'] - r5, 2.0)
+    p.ok('Steg M5-Bohrung -> Schenkel unten',
+         L['nut_unten_z'] - r5 - L['halter_z0'], 2.0)
+    p.ok('Steg hintere M5 -> Schenkelende',
+         w('wange_laenge') + L['m5_loecher'][1][0] - r5, 3.0)
+    s5 = w('m5_scheibe_d') / 2.0
+    p.ok('M5-Scheibe liegt ganz auf dem Schenkel (oben)',
+         L['halter_z1'] - L['nut_unten_z'] - s5, 0.5)
+    p.ok('M5-Scheibe liegt ganz auf dem Schenkel (hinten)',
+         w('wange_laenge') + L['m5_loecher'][1][0] - s5, 0.5)
+    p.ok('vordere M5-Scheibe -> Joch (Platz fuer den Inbus)',
+         -L['m5_loecher'][0][0] - s5, 3.0)
+
+    # ------------------------------------------------------------------------
+    p.titel('7) Schrauben')
     p.info('M5 in den Nutenstein: Laenge', L['m5_schraube'])
+    p.info('  ragt in die Nut (ab Seitenflaeche)', L['m5_ueberstand'])
     p.ok('M5 greift im Nutenstein', L['m5_eingriff'], 3.0)
-    p.ok('M5 sitzt im Nutgrund nicht auf',
-         w('nut_tiefe') - L['m5_ueberstand'], 0.5)
-    p.info('Rollenachse M5: Laenge', L['rolle_schraube'])
-    p.ok('Rollenachse ragt durch die Sicherungsmutter',
-         L['rolle_schraube'] - L['rolle_klemm'], 1.6)
+    p.ok('M5 sitzt im Nutgrund nicht auf', w('nut_tiefe') - L['m5_ueberstand'],
+         0.5)
     p.info('Motorschraube M3: Laenge', L['motor_schraube'])
     p.ok('Motorschraube: Eingriff im Flansch', L['motor_eingriff'], 3.0)
     p.ok('Motorschraube setzt im Gewinde nicht auf',
          w('motor_gewinde_tiefe') - L['motor_eingriff'], 0.5)
-    p.info('Spannschraube M3: Laenge', L['spann_schraube'])
-    p.info('  ragt hinten heraus (Motor vorn .. hinten)',
-           L['spann_spitze_min'])
-    p.info('  ..', L['spann_spitze_max'])
-    p.ok('Spannschraube reicht ueber den ganzen Spannweg',
-         L['spann_schraube'] - L['spann_tiefe'] - L['spann_spitze_max'], 1.0)
-    p.ok('Spannschraube greift im Einsatz (Motor ganz vorn)',
-         min(L['spann_schraube'] - L['spann_spitze_min'],
-             w('insert_m3_t')), 4.0)
-    p.ok('Kopf der Spannschraube bleibt hinter der Anlageflaeche',
-         L['spann_kopf_y'] - w('m3_kopf_h'), 0.0)
-    p.ok('Spannschraube liegt ueber der Anlageplatte',
-         L['spann_z'] - w('m3_kopf_d') / 2.0 - L['grund_z1'], 1.0)
-
-    p.titel('10) Ritzel auf der Motorwelle')
-    p.ok('Motorwelle reicht durch das ganze Ritzel',
-         L['ritzel_z0'] - L['welle_z0'], 0.0)
-    p.info('Madenschraube ueber dem Wellenende',
-           L['madenschraube_z'] - L['welle_z0'])
-    p.ok('Madenschraube sitzt auf der Welle (>= 3 mm vom Ende)',
-         L['madenschraube_z'] - L['welle_z0'], 3.0)
-    p.ok('Boden duenn genug fuer Welle + Ritzel',
-         w('motor_welle_l') - w('ritzel_laenge') - L['ritzel_luft'],
-         w('boden_dicke'))
 
     # ------------------------------------------------------------------------
-    p.titel('11) Wellenlage NICHT gemessen — was der Halter vertraegt')
-    # Der vordere Trum laeuft zwischen Anlageplatte (Ruecken) und Rollen-
-    # flanschen (Zahnseite) durch; der hintere laeuft schraeg an die Rollen,
-    # wenn die Wellen woanders stehen als gebaut.
-    p.info('Halter gebaut fuer welle_y', w('welle_y'))
-    flansch_vorn = ry - r_flansch_rolle
-
-    def spalte(wy):
-        platte = wy - L['rp_welle'] - L['wirk_ruecken'] - L['grund_y1']
-        rolle = flansch_vorn - (wy - L['rp_welle'] + L['wirk_zahn'])
-        schraeg = math.degrees(math.atan(
-            (wy - w('welle_y')) / (w('welle_abstand') / 2.0 - rx)))
-        return platte, rolle, schraeg
-
-    for wy in WELLE_Y_PROBE:
-        platte, rolle, schraeg = spalte(wy)
-        p.info('  welle_y = {:4.0f}: vorderer Trum {:5.1f} vor der Platte, '
-               '{:5.1f} vor den Rollen, hinterer {:+.1f} Grad'.format(
-                   wy, platte, rolle, schraeg))
-    # Bereich, in dem der Halter ohne neuen Lauf passt (Luft >= luft_min):
-    # lage() rechnet ihn fuer den Bericht, hier die Gegenprobe ueber spalte()
-    von, bis = L['welle_y_von'], L['welle_y_bis']
-    p.info('Halter passt ohne Aenderung fuer welle_y von', von)
-    p.info('  bis', bis)
-    p.ok('Grenzen stimmen mit der Spaltrechnung ueberein',
-         -max(abs(spalte(von)[0] - luft), abs(spalte(bis)[1] - luft)), -1e-6)
-    p.ok('gebaute Lage: Toleranz nach vorn (Anlageplatte)',
-         w('welle_y') - von, 4.0)
-    p.ok('gebaute Lage: Toleranz nach hinten (Rollenflansche)',
-         bis - w('welle_y'), 4.0)
-
-    # ------------------------------------------------------------------------
-    p.titel('12) Kraefte und Steifigkeit')
-    # Zug im Boden zwischen Rollen und Motor: 2 Trume mit Vorspannung.
+    p.titel('8) Kraefte und Steifigkeit')
     zug = 2.0 * VORSPANNUNG
-    p.info('Zug zwischen Rollen und Motor (2 x {:.0f} N)'.format(VORSPANNUNG),
-           zug, 'N')
-    # Querschnitt im Motorbereich: Boden (ohne Langloecher und Wellen-
-    # schlitz) plus zwei Rippen — ein U-Profil.
-    b_boden = 2.0 * hb - 2.0 * w('m3_durchgang') - w('wellen_schlitz')
-    t = w('boden_dicke')
-    teile = [(b_boden * t, L['boden_z0'] + t / 2.0, b_boden * t ** 3 / 12.0)]
+    p.info('Riemenzug am Ritzel (2 x {:.0f} N), Richtung Profil'.format(
+        VORSPANNUNG), zug, 'N')
+    # Der Zug drueckt das Joch gegen die Stirnseite. Weil er ueber dem Joch
+    # angreift, kippt er den Halter um die Oberkante des Jochs; die Schenkel
+    # halten unten an den M5 dagegen (Reibung).
+    hebel_zug = L['riemen_z'] - L['halter_z1']
+    hebel_m5 = L['halter_z1'] - L['nut_unten_z']
+    kraft_m5 = zug * hebel_zug / hebel_m5
+    halten = L['n_m5'] * M5_KLEMMKRAFT * REIBWERT
+    p.info('Kippmoment um die Oberkante des Jochs', zug * hebel_zug / 1000.0,
+           'Nm')
+    p.info('  -> Reibkraft an den Schenkeln (M5-Hoehe)', kraft_m5, 'N')
+    p.ok('Sicherheit der Klemmung ({:.0f} x M5 mit {:.0f} N, mu {:.1f})'
+         .format(L['n_m5'], M5_KLEMMKRAFT, REIBWERT), halten / kraft_m5, 3.0,
+         '>=', 'x')
+    # Querschnitt Platte + Fuehrungswaende zwischen Joch und Motorschrauben
+    t = w('platte_dicke')
+    teile = [(2.0 * hb * t, (L['platte_z0'] + L['platte_z1']) / 2.0,
+              2.0 * hb * t ** 3 / 12.0)]
+    hw = L['platte_z0'] - L['halter_z0']
     for _ in range(2):
-        a_r = w('rippe_breite') * w('block_hoehe')
-        teile.append((a_r, L['boden_z1'] + w('block_hoehe') / 2.0,
-                      w('rippe_breite') * w('block_hoehe') ** 3 / 12.0))
+        teile.append((w('fuehrung_dicke') * hw, L['halter_z0'] + hw / 2.0,
+                      w('fuehrung_dicke') * hw ** 3 / 12.0))
     flaeche = sum(a for a, _, _ in teile)
     z_s = sum(a * z for a, z, _ in teile) / flaeche
     i_x = sum(i + a * (z - z_s) ** 2 for a, z, i in teile)
-    p.info('Schwerachse des Querschnitts (Z)', z_s)
-    p.info('Flaechenmoment (Boden + Rippen)', i_x, 'mm4')
-    # Der Zug greift in der Riemenebene an, die Schwerachse liegt hoeher:
-    # konstantes Moment zwischen Rollen und Motor -> Kippen gegeneinander.
-    moment = zug * (z_s - w('riemen_z'))
-    om = w('omega_min') + w('spann_weg')
-    kipp = math.degrees(moment * om / (E_PETG * i_x))
-    p.info('Moment aus dem Riemenzug', moment / 1000.0, 'Nm')
-    p.ok('Rollen und Motor kippen gegeneinander (Omega max)', kipp, 0.25,
-         '<=', 'Grad')
-    # Motorgewicht am auskragenden Boden
-    hebel = L['motor_y_max'] - L['grund_y1']
-    p.info('Motorgewicht x Hebel zur Anlage',
-           MOTOR_MASSE * 9.81 * hebel / 1000.0, 'Nm')
-    # Durchhang am Motor: Kragarm ab Blockende, U-Profil
-    a_k = L['motor_y_max'] - L['block_y1']
+    p.info('Schwerachse Platte + Fuehrungswaende (Z)', z_s)
+    p.info('Flaechenmoment', i_x, 'mm4')
+    moment = zug * (L['riemen_z'] - z_s)
+    laenge = L['motor_y_max'] - h - L['joch_y1']
+    kipp = math.degrees(moment * laenge / (E_PETG * i_x))
+    p.ok('Motor kippt unter dem Riemenzug (ganz aussen)', kipp, 0.25, '<=',
+         'Grad')
+    p.info('  -> Ritzel weicht aus um',
+           math.radians(kipp) * (L['riemen_z'] - z_s))
+    a_k = L['motor_y_max'] - L['joch_y1']
     f = MOTOR_MASSE * 9.81 * a_k ** 3 / (3.0 * E_PETG * i_x)
-    p.ok('Durchhang des Bodens am Motor (Eigengewicht)', f, 0.1, '<=')
-    # Vorspannung pruefen: Schwingung des vorderen Trums
-    s = w('welle_abstand') / 1000.0
-    p.info('vorderer Trum schwingt bei {:.0f} N mit'.format(VORSPANNUNG),
-           1.0 / (2.0 * s) * math.sqrt(VORSPANNUNG / RIEMEN_MU), 'Hz')
+    p.ok('Durchhang der Platte am Motor (Eigengewicht)', f, 0.1, '<=')
+    reib_motor = 4 * M3_KLEMMKRAFT * REIBWERT * math.hypot(h, h) / 1000.0
+    p.ok('Motor verdreht sich nicht (4 x M3 gegen Haltemoment)',
+         reib_motor / MOTOR_MOMENT, 3.0, '>=', 'x')
 
     # ------------------------------------------------------------------------
-    p.titel('13) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
-    # Drucklage: Anlageflaeche aufs Bett, Aufbaurichtung = Maschine Y.
-    p.info('Grundflaeche auf dem Bett (X x Z)',
-           2.0 * hb * (L['grund_z1'] - L['grund_z0']), 'mm2')
-    p.ok('Druckhoehe (Maschine Y)', L['boden_y1'], 250.0, '<=')
+    p.titel('9) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
+    # Drucklage: Oberseite aufs Bett. Alle Koerper sind Extrusionen laengs Z,
+    # stehen also senkrecht auf der Platte; die Langloecher gehen senkrecht
+    # durch, nur die M5-Bohrungen liegen waagerecht.
+    p.ok('Druckhoehe (Maschine Z)', L['halter_z1'] - L['halter_z0'], 250.0,
+         '<=')
     p.ok('Grundflaeche X', 2.0 * hb, 250.0, '<=')
-    p.ok('Grundflaeche Z', L['lasche_z1'] - L['grund_z0'], 250.0, '<=')
-    # Die Lasche kragt in der Drucklage seitlich aus: ihre Vorderseite muss
-    # mindestens 45 Grad steil sein.
-    steig = ((L['lasche_z1'] - L['block_z1'])
-             / (L['lasche_y0_oben'] - L['lasche_y0_unten']))
-    p.ok('Unterseite der Spannlasche (Steigung, 1 = 45 Grad)', steig, 1.0,
-         '<=', '')
-    p.ok('Bundtasche als Ueberhang in der Drucklage (Tiefe)',
-         L['bund_tasche_t'], 3.0, '<=')
+    p.ok('Grundflaeche Y', L['platte_y1'] - L['wange_y0'], 250.0, '<=')
+    p.ja('alle Waende senkrecht zum Bett, keine Ueberhaenge', True,
+         '   (Platte liegt auf, Rahmen waechst aus ihr)')
+    p.ok('waagerechte M5-Bohrung: Bruecke', w('m5_durchgang'), 8.0, '<=')
+    # Volumen aus denselben Rechtecken wie im Skript, ohne Fasen
+    hoehe = L['halter_z1'] - L['halter_z0']
+    unter = L['platte_z0'] - L['halter_z0']
+    v = (2.0 * hb * L['platte_y1'] * w('platte_dicke')
+         + 2.0 * hb * L['joch_y1'] * unter
+         + 2.0 * w('fuehrung_dicke') * (L['platte_y1'] - L['joch_y1']) * unter
+         + 2.0 * w('wange_dicke') * w('wange_laenge') * hoehe)
+    def langloch(b):
+        return b * w('spann_weg') + math.pi * b * b / 4.0
+
+    v -= w('platte_dicke') * (langloch(L['bund_schlitz_b'])
+                              + 4.0 * langloch(w('m3_durchgang')))
+    v -= L['n_m5'] * math.pi * r5 ** 2 * w('wange_dicke')
+    p.info('Volumen je Halter', v / 1000.0, 'cm3')
+    p.info('Masse je Halter, voll PETG (1,27 g/cm3)', v / 1000.0 * 1.27, 'g')
 
     # ------------------------------------------------------------------------
-    p.titel('14) Umhuellende hinter der Traverse (Freiraum fuers Portal)')
-    p.info('Halter X', 2.0 * hb)
-    p.info('Halter + Motor Y bis',
-           max(L['boden_y1'], L['motor_y_max'] + w('motor_flansch') / 2.0))
-    p.info('Motor Oberkante Z ({:.0f}er)'.format(w('motor_laenge')),
-           L['motor_z1'])
-    p.info('tiefster Punkt (Rollenachse) Z', L['rolle_schraube_z0'])
-    p.ja('nichts ragt vor die Rueckseite der {}'.format(prof), True,
-         '   (Anlageflaeche = Y 0)')
+    p.titel('10) Freiraum am Profilende')
+    p.info('Halter X (je Seite)', hb)
+    p.info('M5-Kopf aussen X', L['wange_x1'] + w('m5_scheibe_h')
+           + w('m5_kopf_h'))
+    p.info('Halter und Motor Y von', L['wange_y0'])
+    p.info('  bis', max(L['platte_y1'], L['motor_y_max'] + m))
+    p.info('Motor Z bis', L['motor_z0'])
+    p.info('hoechster Punkt (Ritzel) Z', L['ritzel_z1'])
+    p.ok('M5-Kopf innerhalb der Halterbreite',
+         hb - (L['wange_x1'] + w('m5_scheibe_h') + w('m5_kopf_h')), 0.0)
+    p.ja('unter der {} haengt nur der Motor, und der vor der Stirnseite'
+         .format(prof), L['motor_y_min'] - m > 0.0 and L['halter_z0'] >= 0.0)
 
     # ------------------------------------------------------------------------
-    p.titel('15) Stueckliste')
+    p.titel('11) Stueckliste (beide Seiten)')
     for zeile in (
-            '1x Y-Motorhalter (PETG)',
-            'NEMA 17 (Welle 5 mm) + GT2-Ritzel 20 Z, Bohrung 5',
-            '1x geschlossener GT2-Riemen 6 mm, {:.0f} .. {:.0f} mm (bei '
-            'S = {:.0f})'.format(L['riemen_l_min'], L['riemen_l_max'],
-                                 w('welle_abstand')),
-            '4x F625ZZ (je zwei Ruecken an Ruecken = eine Umlenkrolle)',
+            '2x Y-Motorhalter (PETG), links und rechts dasselbe Teil',
+            '2x NEMA 17 (Welle 5 mm) + 2x GT2-Ritzel {:.0f} Z, Bohrung 5, '
+            'fuer 6-mm-Riemen'.format(w('ritzel_z')),
             '{n}x M5x{:.0f} + {n}x Scheibe M5 + {n}x Nutenstein M5 (Nut 6)'
-            .format(L['m5_schraube'], n=len(L['m5_loecher'])),
-            '2x M5x{:.0f} + 6x Scheibe M5 + 2x Sicherungsmutter M5 '
-            '(Rollenachsen)'.format(L['rolle_schraube']),
-            '4x M3x{:.0f} + 4x Scheibe DIN 125 (Motor)'.format(
-                L['motor_schraube']),
-            '1x M3x{:.0f} + 1x Messing-Einsatz M3 Ø5 (Spannschraube)'.format(
-                L['spann_schraube'])):
+            .format(L['m5_schraube'], n=2 * L['n_m5']),
+            '8x M3x{:.0f} + 8x Scheibe DIN 125 (Motoren)'.format(
+                L['motor_schraube'])):
         p.info(zeile)
 
     # ------------------------------------------------------------------------
-    p.titel('16) Statische Pruefung der Schluessel im Skript')
+    p.titel('12) Statische Pruefung der Schluessel im Skript')
     quelle = open(SKRIPT, encoding='utf-8').read()
     masse_namen = set(mod.MASSE)
     fehlt_m = sorted(set(re.findall(r"\bw\('([^']+)'\)", quelle))
@@ -480,11 +390,14 @@ def main():
         p.info('nur dokumentierend (nicht in Geometrie): '
                + ', '.join(unbenutzt))
 
-    p.titel('17) Validierungsbericht des Fusion-Skripts')
+    p.titel('13) Validierungsbericht des Fusion-Skripts')
     try:
-        for zeile in mod.hinweise_bauen(L, []):
+        zeilen = mod.hinweise_bauen(L, [])
+        for zeile in zeilen:
             p.info(zeile if zeile else '.')
         p.ok('Bericht rendert ohne Fehler', 1.0, 1.0, '>=', '')
+        p.ok('laengste Berichtszeile', max(len(z) for z in zeilen), 74.0,
+             '<=', 'Zeichen')
     except Exception as exc:
         p.info('Bericht NICHT renderbar: {}'.format(exc))
         p.ok('Bericht rendert ohne Fehler', 0.0, 1.0, '>=', '')

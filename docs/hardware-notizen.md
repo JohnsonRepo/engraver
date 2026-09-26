@@ -12,7 +12,7 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 |---|---|
 | Gestell | 2 × 2060 Aluprofil, darauf 2 × 2040 Aluprofil |
 | Y-Achse | 2 Linearführungen oben auf den 2040ern |
-| Y-Antrieb | je Seite eine senkrechte Edelstahlwelle Ø5 hinter der hinteren Traverse (2040 hochkant), NEMA 17 mittig daran |
+| Y-Antrieb | je Seite ein NEMA 17 am Ende der 2040, Ritzel direkt auf der Motorwelle; der Y-Riemen läuft in den oberen Nuten der 2040 |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 Aluprofil |
 | X-Achse | Linearführung am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |
@@ -313,26 +313,30 @@ einem klassischen Uno-CNC-Shield bleibt es beim Standalone-Modus mit Jumpern.
 
 ## Y-Antrieb
 
-Nutzerangaben vom 2026-09-24 und -26, Halter in `fusion/YMotorhalter/`,
-Doku in `y-motorhalter.md`.
+Nutzerangaben vom 2026-09-26 mit Foto, Halter in `fusion/YMotorhalter/`
+(Rev. 3), Doku in `y-motorhalter.md`.
 
 | Wert | Maß | Status |
 |---|---|---|
-| Hintere Traverse | **2040 hochkant**, Nuten auf der Rückseite 10 / 30 mm unter der Oberkante; vor der oberen läuft der Motorriemen, Nutensteine nur in der unteren | Nutzerangabe 2026-09-26 (am 24. noch als 2060 angegeben), Nutlage `[w]` |
-| Y-Wellen | je Seite eine **senkrechte Edelstahlwelle Ø5** in 625ZZ, hinter der hinteren Traverse | Nutzerangabe |
-| Ritzel je Welle | zwei: **unten** Motorriemen (Höhe der oberen Nut, auf der Welle verschiebbar), **oben** Y-Riemen | Nutzerangabe |
-| Zähnezahl | 20 Z, Bohrung 5, an Motor und Wellen (1:1, 40 mm je Umdrehung) | angenommen |
-| Riemenlauf / Wellen hinter der Traverse (`welle_y`) | 35 mm (Rev. 2: Motor und Rollen 15 mm weiter außen als mit 20 mm in Rev. 1); der Halter passt ohne neuen Lauf für 14 … 45 mm | `[?]` Wellen nicht gemessen |
-| Wellenabstand S (`welle_abstand`) | 500 mm | `[?]` nicht gemessen |
-| Motorriemen | Endlosriemen GT2 6 mm, **L = 2·S + 56,8 + 2·Ω**, Ω = 30 … 50 mm | gerechnet |
-| Umlenkrollen | je 2× F625ZZ Rücken an Rücken, laufen auf dem Riemenrücken | `[w]` |
+| Y-Profil | **2040 hochkant**, liegt auf der hinteren 2060 und steht über sie hinaus; die letzten ~40 mm der Seitenflächen sind frei, vor und unter dem Profilende ist Platz | Nutzerangabe |
+| Nuten | je Seitenfläche zwei, 10 mm über der Unter- und unter der Oberkante; in den **oberen** läuft der Y-Riemen (beide Seiten), in die **unteren** kommen die Nutensteine | Nutzerangabe, Lage `[w]` |
+| Nut 6 | Öffnung 6,2, Lippe 1,8, Platz bis zum Nutgrund 6,0 | `[w]` |
+| Motoren | **2 × NEMA 17**, je Seite einer am Profilende, Welle nach oben, Achse mittig zur 2040 | Nutzerangabe |
+| Ritzel | **GT2 20 Z, Bohrung 5**, direkt auf der Motorwelle | Nutzerangabe |
+| Trume in der Nut | 12,73 mm auseinander (20 Z): Rücken 3,26, Zahnspitzen 4,64 mm hinter der Seitenfläche | gerechnet aus Nut 6 `[w]` |
+| Motorwelle | 24 mm ab Flansch, Abflachung 15 mm ab Wellenende | `[w]` |
+| Y-Motor | Körper 48 mm angenommen, nur für den Freiraum nach unten | `[?]` |
 | Nutensteine M5, Nut 6 | Lippe 1,8, Gewinde 4, Platz in der Nut 6 mm → M5×12 + Scheibe | `[w]` |
-| Y-Motor | NEMA 17, Körper 48 mm angenommen (nur Freiraum) | `[?]` |
+| jetziger Winkel | gedruckt, Motorachse ~15 mm neben der Profilmitte | Nutzerangabe, Foto |
 
-**Drehrichtung:** ein Riemen treibt beide Wellen **gleichsinnig**. Die
-Y-Wagen müssen deshalb am selben Trum ihres Y-Riemens hängen (vom Bediener
-aus beide rechts oder beide links), nicht spiegelbildlich. Das hängt an den
-Riemenklemmen der Wagen, nicht am Motorhalter — beim Einbau prüfen.
+**Rev. 1/2 beruhten auf einem Missverständnis:** ein Motor mittig an der
+hinteren Traverse, der über einen Omega-Riemen zwei senkrechte
+Edelstahlwellen treibt. Die Werte dazu (Wellen Ø5 in 625ZZ, Wellenabstand,
+Motorriemen, Umlenkrollen aus F625ZZ) gelten für den Y-Antrieb nicht mehr.
+
+**Drehrichtung:** Beide Motoren sind gleich eingebaut. Ob die Wagen gemeinsam
+fahren, hängt davon ab, an welchem Trum jeder Wagen hängt. Das wird in der
+Firmware je Motor eingestellt, nicht am Halter.
 
 ## Normteile (aus hardware.md, `[w]`)
 

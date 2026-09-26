@@ -834,40 +834,16 @@ def main():
     p.info('Fach Breite', fach.x[1] - fach.x[0])
     p.info('     Tiefe (haengt am hinteren 2060 [?])', fach.y[1] - fach.y[0])
     p.info('     Hoehe', fach.z[1] - fach.z[0])
-    quer = quer_quader(w, L)
-    # nur die hintere Haelfte des Wegs: von vorn kommt nichts bis ans Fach
-    dys = sorted(set([-d_schiene, -d_hinten, 0.0]
-                     + [-d_schiene + 2.5 * i
-                        for i in range(int(d_schiene / 2.5) + 1)]))
-    xs_f = [L['xw_min'] + (L['xw_max'] - L['xw_min']) * i / 20.0
-            for i in range(21)]
-    engste_f = (float('inf'), None)
     # Ueber dem Fach: in der Mitte (neben Schlitten und Klemmtuermen) reicht
     # nur die Traegerplatte tief herunter, und die hoechstens bis vor ihre
     # Lage am hinteren Schienenende. Dahinter bleibt viel mehr Hoehe.
-    y_tr = TL['traeger_y0'] - d_schiene - w('luft_bau')
-    hoch = {}          # tiefster bewegter Punkt ueber dem Fach, je Zone
-    zonen = {'mitte': (225.0, y_tr), 'mitte16': (225.0, fach.y[1])}
-    for dy in dys:
-        teile_p = [vor(q, dy) for q in portal_bewegt]
-        for xw in xs_f:
-            fx = [vor(q.verschoben(0.0, xw), dy) for q in feste_th]
-            for zc in zs_:
-                th_ = fx + [vor(q.verschoben(zc, xw), dy)
-                            for q in bewegte_th]
-                if any(t.abstand(k) < 0 for t in th_ for k in quer):
-                    continue
-                for q in th_ + teile_p:
-                    d = q.abstand(fach)
-                    if d < engste_f[0]:
-                        engste_f = (d, q.name, dy)
-                    for zn, (xb, yv) in zonen.items():
-                        if (q.x[0] < xb and -xb < q.x[1] and q.y[0] < yv
-                                and fach.y[0] < q.y[1]
-                                and q.z[0] < hoch.get(zn, (1e9,))[0]):
-                            hoch[zn] = (q.z[0], q.name)
+    y_tr = hohe_zone_y(w, TL, d_schiene)
+    zonen = {'mitte': (225.0, y_tr, fach.y[0]),
+             'mitte16': (225.0, fach.y[1], fach.y[0])}
+    engste_f, hoch = luft_hinten(w, L, TL, feste_th, bewegte_th, [fach],
+                                 zonen)
     p.ok('Fach frei von Portal und Toolhead, alle Stellungen [{}, Portal '
-         '{:+.1f}]'.format(engste_f[1], engste_f[2]), engste_f[0],
+         '{:+.1f}]'.format(engste_f[2], engste_f[3]), engste_f[0],
          w('luft_bau'))
     zm = hoch.get('mitte', (1e9, None))
     zd = hoch.get('mitte16', (1e9, None))
@@ -894,6 +870,64 @@ def y_weg(w, L, TL, feste_th, bewegte_th, luft=3.0):
     d_vorn = L['quer_y_vorn'][0] - luft - max(q.y[1] for q in teile)
     d_hinten = min(q.y[0] for q in teile) - luft - L['quer_y_hinten'][1]
     return d_schiene, d_vorn, d_hinten, teile
+
+
+def hohe_zone_y(w, TL, d_schiene):
+    """Ab hier (nach hinten) ist ueber dem Fach in der Mitte mehr Hoehe
+    frei: vor die Traegerplatte am hinteren Schienenende, mit Luft."""
+    return TL['traeger_y0'] - d_schiene - w('luft_bau')
+
+
+def luft_hinten(w, L, TL, feste_th, bewegte_th, ziele, zonen=None):
+    """Kleinste Luft zwischen festen Quadern `ziele` (Rahmenkoordinaten wie
+    Abschnitt 14) und allem, was sich bewegt: das Portal ueber die hintere
+    Haelfte des Y-Wegs bis ans Schienenende, der Toolhead dazu ueber X und
+    Z. Stellungen, in denen der Toolhead ein 2060 durchdringen muesste, gibt
+    es nicht — mit Z unten steht das 2060 davor — und werden uebersprungen.
+
+    Liefert ((luft, ziel, teil, dy), tief). tief: je Zone aus `zonen`
+    ({name: (xb, y_vorn, y_hinten)}) der tiefste bewegte Punkt (z, teil) in
+    |X| < xb, y_hinten < Y < y_vorn."""
+    d_schiene, _, d_hinten, _ = y_weg(w, L, TL, feste_th, bewegte_th)
+    lang_fest = ('Y-Schiene', 'Rahmen 2040', 'Y-Riemen', 'Y-Ruecklauf')
+    portal = [q for q in bauraum.portal_bauraeume(w, L)[0]
+              if not any(q.name.startswith(t) for t in lang_fest)]
+    quer = quer_quader(w, L)
+
+    def vor(q, dy):
+        return bauraum.Quader(q.name, q.x[0], q.x[1], q.y[0] + dy,
+                              q.y[1] + dy, q.z[0], q.z[1], q.art)
+
+    # nur die hintere Haelfte des Wegs: von vorn kommt nichts bis hierher
+    dys = sorted(set([-d_schiene, -d_hinten, 0.0]
+                     + [-d_schiene + 2.5 * i
+                        for i in range(int(d_schiene / 2.5) + 1)]))
+    xs = [L['xw_min'] + (L['xw_max'] - L['xw_min']) * i / 20.0
+          for i in range(21)]
+    zs = [TL['zc_min'] + (TL['zc_max'] - TL['zc_min']) * j
+          / (Z_SCHRITTE - 1.0) for j in range(Z_SCHRITTE)]
+    engste = (float('inf'), None, None, None)
+    tief = {}
+    for dy in dys:
+        teile_p = [vor(q, dy) for q in portal]
+        for xw in xs:
+            fx = [vor(q.verschoben(0.0, xw), dy) for q in feste_th]
+            for zc in zs:
+                th = fx + [vor(q.verschoben(zc, xw), dy)
+                           for q in bewegte_th]
+                if any(t.abstand(k) < 0 for t in th for k in quer):
+                    continue
+                for q in th + teile_p:
+                    for z in ziele:
+                        d = q.abstand(z)
+                        if d < engste[0]:
+                            engste = (d, z.name, q.name, dy)
+                    for zn, (xb, yv, yh) in (zonen or {}).items():
+                        if (q.x[0] < xb and -xb < q.x[1] and q.y[0] < yv
+                                and yh < q.y[1]
+                                and q.z[0] < tief.get(zn, (1e9,))[0]):
+                            tief[zn] = (q.z[0], q.name)
+    return engste, tief
 
 
 def quer_quader(w, L):

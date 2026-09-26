@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Elektronikgehaeuse fuer das Fach hinter dem hinteren 2060: Kasten fuer Arduino Uno R3 mit CNC Shield V3 (Stehbolzen, USB-Fenster hinten), daneben Platz fuer den Abwaertswandler 24 -> 12 V (Kabelbinder) und drei Wago-Klemmen, hinten Einbaubuchse 5,5 x 2,1 (M8) und Wippschalter KCD1, Kabelausschnitte links und vorn, Lueftung rechts. Montageplatte mit 4x M5 in Hammermuttern der Rueckseite des 2060, dazwischen ein Kabelkanal. Deckel mit 24-V-Luefter 40 mm ueber den Treibern, 4x M3 in Gewindeeinsaetze. Plus ausgeblendete Bohrlehre fuer das Lochbild des Uno und, nur zur Ansicht, hinteres 2060, Enden der 2040, Uno mit Shield und Luefter als Referenz (nicht drucken)."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

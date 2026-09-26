@@ -1,12 +1,14 @@
-# Elektronik — Platz, Endschalter, Kabel (Vorschlag)
+# Elektronik — Platz, Gehäuse, Endschalter, Kabel
 
 Wohin mit Steuerung, Netzteil, Endschaltern und Kabeln. Der Platz ist
-gerechnet: `python3 tools/portal_check.py`, Abschnitt 16. Die Zeichnung
-erzeugt `python3 tools/elektronik_zeichnen.py`; sie gibt auch die
-Kabellängen aus; den [Anschlussplan](#anschlussplan) erzeugt
-`python3 tools/anschluss_zeichnen.py`. **Stand: Konzept.** Die Halter kommen,
-sobald Ketten und Lüfter feststehen ([offen](#was-noch-fehlt)). Pinbelegung,
-Treiber und Jumper stehen in
+gerechnet: `python3 tools/portal_check.py`, Abschnitt 16. Das
+[Gehäuse](#gehäuse-elektronikpy) erzeugt `fusion/Elektronik/Elektronik.py`,
+geprüft mit `python3 tools/elektronik_check.py`. Die Zeichnung erzeugt
+`python3 tools/elektronik_zeichnen.py`; sie gibt auch die Kabellängen aus;
+den [Anschlussplan](#anschlussplan) erzeugt
+`python3 tools/anschluss_zeichnen.py`. **Stand:** Gehäuse gezeichnet
+(Elektronik.py Rev. 1); die Halter für Endschalter und Ketten folgen
+([offen](#was-noch-fehlt)). Pinbelegung, Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
 
 ![Platz für die Elektronik](elektronik-platz.svg)
@@ -38,17 +40,85 @@ braucht rund 85 mm.
 
 | Teil | Platz | Stand |
 |---|---|---|
-| Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | links im Fach, in einem gedruckten Gehäuse mit 40-mm-Lüfter über den Treibern; USB nach hinten | Platzhalter 95 × 80 × 55 |
-| Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Fach kommt nur seine 24-V-Leitung | vorhanden |
-| 24-V-Eingang | hinten im Fach: Einbaubuchse für den Hohlstecker, dahinter ein Schalter für ≥ 3 A Gleichstrom | Steckermaß offen |
-| Verteiler | neben der Steuerung: Wago-Klemmen für +24 V, GND und die 5 V der Lichtschranken, dazu der Abwärtswandler 24 → 12 V für den Laser | Wago vorhanden, Platzhalter 70 × 60 × 30 |
+| Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Gehäuse](#gehäuse-elektronikpy) links, 24-V-Lüfter im Deckel über den Treibern; USB nach hinten | gezeichnet |
+| Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Gehäuse kommt nur seine 24-V-Leitung | vorhanden |
+| 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und Wippschalter KCD1 | gezeichnet |
+| Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V für den Laser, davor drei Wago-Klemmen für +24 V, GND und die 5 V der Lichtschranken | gezeichnet, Wago vorhanden |
 | Not-Aus | vorn, gut erreichbar, in der 24-V-Leitung (≥ 3 A Gleichstrom) — schaltet Laser und Motoren ab | — |
 
-Alles hängt an der **Rückseite des hinteren 2060** (drei Nuten) mit M5 in
-Hammermuttern, wie die übrigen Halter — der Tisch trägt nichts, die Maschine
-steht weiter nur auf den 2060. 55 mm Höhe reichen knapp für Uno, Shield,
-Treiber mit Kühlkörper und einen Lüfter darüber. Wird es mehr, rückt das
-Gehäuse 15 mm vom 2060 ab und darf dann höher werden.
+Das Gehäuse hängt an der **Rückseite des hinteren 2060** (untere und obere
+Nut) mit 4 × M5 in Hammermuttern, wie die übrigen Halter — der Tisch trägt
+nichts, die Maschine steht weiter nur auf den 2060.
+
+## Gehäuse (Elektronik.py)
+
+| Teil | Druck (PETG) | Masse (voll) | Bauraum |
+|---|---|---|---|
+| Gehäuse mit Montageplatte | auf dem Boden stehend | 150 cm³ ≈ 191 g | 202 × 108 × 55 mm |
+| Deckel | Oberseite nach unten | 38 cm³ ≈ 48 g | 173 × 91 × 6 mm |
+| Bohrlehre_Uno (PLA, ausgeblendet) | flach | 8 cm³ ≈ 10 g | 53 × 69 × 2 mm |
+
+Die Massen stammen aus einer Nachbildung der Fusion-API; maßgeblich ist der
+erste Lauf in Fusion. Keine Stützen, 4 Wandlinien, ≥ 30 % Infill. Die
+Oberkante des USB-Fensters ist eine 48-mm-Brücke.
+
+**Aufbau:** Kasten 160 × 91 × 50 mm, 17 mm hinter dem 2060. Die
+Montageplatte liegt am 2060 an und trägt den Kasten über den Kanalboden und
+drei niedrige Rippen; der Spalt dazwischen (12 mm) ist der **Kabelkanal**
+nach rechts. Links im Kasten der Uno auf vier Stehbolzen, die Buchsenkante
+hinten am **USB-Fenster**. Rechts der Verteiler: hinten **Einbaubuchse** und
+**Schalter**, davor der **Wandler** quer mit zwei Kabelbindern (Schlitze im
+Boden, Platz bis 30 mm Tiefe), davor die drei **Wago-Klemmen** nebeneinander
+(Klebeband). Kabelausschnitte oben offen: links zur Y-Kette und zum linken
+Y-Motor, vorn in den Kanal. Lüftungsschlitze rechts oben. Der Deckel sitzt
+mit einer Lippe innen an den Wänden und 4 × M3 in Domen außen an den
+Seitenwänden; der **Lüfter** steht obenauf über der Mitte des Uno und bläst
+auf die Treiber.
+
+**Warum es passt:** Kasten und Deckel bleiben im Fach. Nur der Lüfter ragt
+7 mm darüber hinaus, 44 mm hinter dem 2060 und in der Mitte — dort ist bis
+unter den X-Wagen Platz. `tools/elektronik_check.py` fährt Portal und
+Toolhead über den ganzen Weg dagegen: engste Stelle 6 mm (Montageplatte ↔
+Trägerplatte am hinteren Schienenende, nur mit Z oben).
+
+**Montage:**
+
+1. **Bohrlehre_Uno** drucken und den Uno darauflegen: Alle vier Löcher
+   müssen fluchten. Erst dann das Gehäuse drucken.
+2. 4 Messing-Einsätze M3 von oben in die Dome.
+3. Uno mit 4 × M3×8 auf die Stehbolzen (Kernloch 2,8, die Schraube schneidet
+   ihr Gewinde) — **bevor das Shield aufgesteckt wird**, danach liegt es über
+   den Schrauben.
+4. Shield aufstecken, Treiber (EN-Pin zum EN-Aufdruck), Jumper.
+5. Einbaubuchse (Mutter innen) und Schalter (rastet ein) hinten einsetzen.
+6. Wandler mit 2 Kabelbindern, Wago-Klemmen mit Klebeband; verdrahten nach
+   dem [Anschlussplan](#anschlussplan). Den Wandler **ohne Laser** auf
+   12,0 V stellen.
+7. 4 Hammermuttern in die untere und obere Nut der Rückseite des hinteren
+   2060, Gehäuse ansetzen, 4 × M5×12. Der Inbus kommt von hinten neben dem
+   Kasten vorbei.
+8. Kabel links durch den Ausschnitt; die für rechts vorn in den Kanal und
+   darin nach rechts.
+9. Lüfter mit 4 × M3×16 und Muttern auf den Deckel, **blasend nach unten**
+   (Pfeil am Lüfterrahmen), Kabel durch die Öffnung. Deckel aufsetzen,
+   4 × M3×8.
+
+**Nicht gemessen `[w]`:** das Lochbild des Uno (Bohrlehre); die Höhe von
+Uno, Shield und Treibern mit Kühlkörper, angenommen **34 mm** ab Unterseite
+Uno — der Deckel liegt 8 mm darüber. Sobald das Shield da ist, nachmessen;
+ist es höher, `stapel_h` anpassen. Die Einbaubuchse (Loch 8,2 für M8), den
+Schalter KCD1 (Ausschnitt 19,2 × 12,9, Wand dort 1,6 mm für die
+Rastnasen) und die Wago 221-415 (30,2 × 18,6 × 8,1).
+
+| Parameter | Wert | Wirkung |
+|---|---|---|
+| `geh_x0` | −205 mm | linke Außenkante des Kastens |
+| `geh_abstand` | 12 mm | Kabelkanal zwischen Montageplatte und Kasten |
+| `stapel_h` / `luft_luefter` | 34 / 8 mm | Höhe Uno + Shield + Treiber, Luft bis zum Deckel — bestimmen die Kastenhöhe |
+| `vert_b` | 94 mm | Breite des Verteilers (3 Wago nebeneinander) |
+| `buchse_d` | 8,2 mm | Loch der Einbaubuchse |
+| `schalter_b` / `schalter_h` / `schalter_wand` | 19,2 / 12,9 / 1,6 mm | Ausschnitt und Wand am Schalter |
+| `uno_schraube_d` | 2,8 mm | Kernloch in den Stehbolzen |
 
 ## Leistung: Reichen 72 W?
 
@@ -131,12 +201,13 @@ Pull-up „ausgelöst“ — die sichere Richtung.
 
 **Fest verlegt** in den Nuten, mit Nutabdeckungen oder Clips gehalten:
 
-* die Kabel aus dem Fach nach links unter dem 2040 durch, in die **untere
-  Nut außen am linken 2040** — dort entlang zum linken Y-Motor und zum
-  Festpunkt der Y-Kette;
-* die Kabel des rechten Y-Motors und des Y-Endschalters an der **Rückseite
-  des hinteren 2060** nach rechts, dann in der unteren Nut außen am rechten
-  2040 nach vorn bzw. nach hinten zum Endschalter.
+* links aus dem Gehäuse, unter dem linken 2040 durch in die **untere Nut
+  außen am linken 2040** — dort entlang zum linken Y-Motor und zum Festpunkt
+  der Y-Kette;
+* vorn aus dem Gehäuse in den Kabelkanal, darin nach rechts, dann an der
+  **Rückseite des hinteren 2060** (mittlere Nut) zum rechten 2040 und in
+  dessen unterer Nut außen nach vorn zum rechten Y-Motor bzw. nach hinten
+  zum Y-Endschalter; das Kabel zum Not-Aus ebenso nach vorn.
 
 **Bewegt** in zwei Energieketten:
 
@@ -154,14 +225,14 @@ Längen bis zum Gerät, Weg wie gezeichnet, 15 % Reserve, aufgerundet:
 
 | Kabel | Weg | kaufen |
 |---|---|---|
-| Y-Motor links | 0,64 m | 1 m |
-| Y-Motor rechts | 0,99 m | **1,5 m** |
-| X-Motor | 0,65 m | 1 m |
-| Z-Motor | 1,35 m | **2 m** |
-| Laser (Versorgung + PWM) | 1,36 m | **2 m** |
-| X-Endschalter | 0,66 m | 1 m |
-| Y-Endschalter | 0,59 m | 1 m |
-| Z-Endschalter | 1,26 m | 1,5 m |
+| Y-Motor links | 0,66 m | 1 m |
+| Y-Motor rechts | 0,96 m | **1,5 m** |
+| X-Motor | 0,68 m | 1 m |
+| Z-Motor | 1,38 m | **2 m** |
+| Laser (Versorgung + PWM) | 1,38 m | **2 m** |
+| X-Endschalter | 0,68 m | 1 m |
+| Y-Endschalter | 0,56 m | 1 m |
+| Z-Endschalter | 1,29 m | 1,5 m |
 
 In den Ketten nur **hochflexible Litzen** (Schleppkettenkabel), kein
 Massivdraht und keine starren Flachbandkabel. Die üblichen 1-m-Motorkabel
@@ -210,29 +281,35 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
 |---|---|---|
 | 1 | CNC Shield V3 | Steuerung (Uno und 4 × TMC2209 vorhanden) |
 | 1 | Abwärtswandler 24 → 12 V, ≥ 3 A (fest 12 V oder XL4015) | Laser |
-| 1 | Einbaubuchse passend zum Hohlstecker | 24-V-Eingang |
-| 1 | Kippschalter, ≥ 3 A Gleichstrom | EIN/AUS |
+| 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Gehäuse: Loch 8,2) | 24-V-Eingang |
+| 1 | Wippschalter KCD1 (Ausschnitt 19,2 × 12,9 mm), ≥ 3 A | EIN/AUS |
 | 1 | Not-Aus-Pilzschalter mit Öffner, ≥ 3 A Gleichstrom | vorn |
 | 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
 | 2 | Energiekette 10 × 15 mm innen, R18, 1 m | Y und X |
 | 1 + 1 | Motorkabel 1,5 m und 2 m, Stecker passend zum Motor (meist JST-PH 6-polig) auf Dupont 4-polig | Y-Motor rechts, Z-Motor |
 | 2 m + 1 | 3-adrige Schleppkettenlitze + XH2.54-Stecker 3-polig mit Crimpkontakten | Laser |
 | 3 | Wago 221-415 | vorhanden |
+| 4 + 4 | M5×12 + Hammermutter M5 (Nut 6) | Gehäuse → Rückseite des 2060 |
+| 4 + 4 | M3×8 + Messing-Einsatz M3 Ø5 | Deckel |
+| 4 | M3×8 | Uno → Stehbolzen |
+| 4 + 4 | M3×16 + M3-Mutter | Lüfter → Deckel |
+| 2 | Kabelbinder, doppelseitiges Klebeband | Wandler, Wago |
 
 Die übrigen Motoren reichen mit 1 m ([Kabel](#kabel)).
 
 ## Was noch fehlt
 
-Bevor die Halter gezeichnet werden:
+1. **Halter der Endschalter** X und Y (mit Fahnen) — kommen als Nächstes,
+   alle Maße sind da.
+2. **Halter der Energieketten** (Wannen, Festpunkte, bewegte Enden): wenn
+   die Ketten da sind, die Anschlussglieder messen (Lochbild, Breite).
+3. **Stapelhöhe** Uno + Shield + Treiber, sobald das Shield da ist (siehe
+   [Gehäuse](#gehäuse-elektronikpy)).
+4. Nicht dringend: Überstand der 2040 hinter dem hinteren 2060 (angenommen
+   145 mm) und ob die 2040 mit Winkeln am 2060 sitzen.
 
-1. **Energieketten:** vorhanden? Innen- und Außenmaß, Biegeradius — sonst
-   wie in der Einkaufsliste.
-2. **Lüfter:** 40 mm vorhanden, mit welcher Spannung?
-3. **Hohlstecker des Netzteils:** 5,5 × 2,1 oder 5,5 × 2,5 mm (steht meist
-   auf dem Netzteil) — für die Einbaubuchse.
-4. Nicht mehr dringend: Überstand der 2040 hinter dem hinteren 2060
-   (angenommen 145 mm) und ob die 2040 mit Winkeln am 2060 sitzen.
-
-Geklärt (2026-09-25): Netzteil ist das Steckernetzteil 24 V / 3 A; der
-Laser ein LASER TREE 4 W mit 12 V / 1,6 A; Gabellichtschranken für X und Y
-sind da, Näherungssensoren als Reserve; Wago-Klemmen sind da.
+Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit
+Hohlstecker 5,5 × 2,1; der Laser ein LASER TREE 4 W mit 12 V / 1,6 A;
+Lüfter 24 V; Ketten werden wie in der Einkaufsliste gekauft;
+Gabellichtschranken für X und Y sind da, Näherungssensoren als Reserve;
+Wago-Klemmen sind da.

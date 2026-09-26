@@ -2,12 +2,12 @@
 """Zeichnung: Platz fuer die Elektronik — Vorschlag.
 
 Draufsicht auf die ganze Maschine und Seitenansicht von links: das
-Elektronikfach hinter dem hinteren 2060 mit der Steuerung, die Endschalter,
-die festen Kabelwege und die beiden Energieketten. Rahmen, Portal und
-Toolhead kommen aus Portal.py und ToolheadZ.py, das Fach und der Y-Weg aus
-tools/portal_check.py (Abschnitte 14 und 16). Steuerung und Ketten sind
-Platzhalter — ihre Masse stehen noch aus. Das Netzteil ist ein
-Steckernetzteil und steht ausserhalb.
+Elektronikfach hinter dem hinteren 2060 mit dem Gehaeuse der Steuerung, die
+Endschalter, die festen Kabelwege und die beiden Energieketten. Rahmen,
+Portal und Toolhead kommen aus Portal.py und ToolheadZ.py, das Gehaeuse aus
+Elektronik.py, das Fach und der Y-Weg aus tools/portal_check.py
+(Abschnitte 14 und 16). Die Ketten sind Platzhalter, bis die gekauften da
+sind. Das Netzteil ist ein Steckernetzteil und steht ausserhalb.
 
     python3 tools/elektronik_zeichnen.py   ->  docs/elektronik-platz.svg
 
@@ -30,11 +30,10 @@ from y_antrieb_zeichnen import quer_mass              # noqa: E402
 
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-platz.svg')
+ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                          'fusion', 'Elektronik', 'Elektronik.py')
 
-# ---- Vorschlag: Platzhalter, die Kaufteile sind noch nicht festgelegt ----
-STEUERUNG = (95.0, 80.0, 55.0)   # Gehaeuse Uno + CNC Shield V3: X, Y, Z
-EINGANG = (40.0, 20.0, 25.0)     # 24-V-Buchse und Schalter, hinten im Fach
-VERTEILER = (70.0, 60.0, 30.0)   # Wago-Klemmen und Abwaertswandler 24 -> 12 V
+# ---- Ketten: Platzhalter, bis die gekauften gemessen sind ------------------
 KETTE_B, KETTE_H, KETTE_R = 18.0, 15.0, 18.0   # Kette aussen, Biegeradius
 KETTE_ENDEN = 40.0               # beide Anschlussglieder zusammen
 RESERVE = 0.15                   # Kabel: Boegen, Zugentlastung, Stecker
@@ -56,9 +55,10 @@ KABEL = '#6d3fb5'
 FARBE.update({'kette': ('#a3abb8', '#3d4552')})
 
 
-def konzept(w, L, tw, TL):
-    """Lage aller Teile im Vorschlag, Rahmenkoordinaten wie
-    portal_check.py Abschnitt 14 (Portal in der Mitte seines Wegs)."""
+def konzept(w, L, tw, TL, ew, EL):
+    """Lage aller Teile, Rahmenkoordinaten wie portal_check.py Abschnitt 14
+    (Portal in der Mitte seines Wegs). ew, EL: Masse und Lagen aus
+    Elektronik.py."""
     feste, bewegte, _ = bauraum.bauraeume(tw, TL)
     feste = [q for q in feste if q.name not in portal_check.TOOLHEAD_OHNE]
     d_schiene, d_vorn, d_hinten, _ = portal_check.y_weg(w, L, TL, feste,
@@ -71,17 +71,26 @@ def konzept(w, L, tw, TL):
     K['fach'] = fach
     K['y_tr'] = TL['traeger_y0'] - d_schiene - w('luft_bau')
 
-    sb, st, sh = STEUERUNG
-    x0 = fach.x[0] + 20.0
-    K['steuerung'] = Quader('Steuerung', x0, x0 + sb, fach.y[1] - st,
-                            fach.y[1], fach.z[0], fach.z[0] + sh)
-    eb, et, eh = EINGANG
-    K['eingang'] = Quader('Eingang', x0, x0 + eb, fach.y[0] + 3.0,
-                          fach.y[0] + 3.0 + et, fach.z[0], fach.z[0] + eh)
-    vb, vt, vh = VERTEILER
-    xv = x0 + sb + 10.0
-    K['verteiler'] = Quader('Verteiler', xv, xv + vb, fach.y[1] - vt,
-                            fach.y[1], fach.z[0], fach.z[0] + vh)
+    # Gehaeuse aus Elektronik.py
+    K['EL'] = EL
+    K['steuerung'] = Quader('Gehaeuse', *EL['geh_x'], *EL['geh_y'],
+                            *EL['geh_z'])
+    K['platte'] = Quader('Montageplatte', *EL['platte_x'], *EL['platte_y'],
+                         *EL['platte_z'])
+    K['deckel'] = Quader('Deckel', *EL['deckel_x'], *EL['geh_y'],
+                         *EL['deckel_z'])
+    fm, h = EL['luefter_mitte'], ew('luefter') / 2.0
+    K['luefter'] = Quader('Luefter', fm[0] - h, fm[0] + h, fm[1] - h,
+                          fm[1] + h, *EL['luefter_z'])
+    K['uno'] = Quader('Uno', *EL['uno_x'], *EL['uno_y'], EL['uno_z0'],
+                      EL['stapel_z1'])
+    K['eingang'] = Quader('Eingang', EL['buchse_x'] - 6.0,
+                          EL['schalter_x'] + 11.0, EL['innen_y'][0],
+                          EL['innen_y'][0] + ew('eingang_tiefe'),
+                          EL['boden_z'], EL['boden_z'] + 25.0)
+    K['verteiler'] = Quader('Verteiler', *EL['wago_x'], EL['wandler_y'][0],
+                            EL['wago_y'][1], EL['boden_z'],
+                            EL['boden_z'] + 25.0)
     K['leistung'] = leistung()
 
     # Aussenseiten der 2040 und ihre untere Nut
@@ -152,11 +161,12 @@ def kabelwege(w, L, TL, K):
     """Kabelwege als 3D-Streckenzuege (Portal in der Mitte). Die Ketten
     zaehlen mit ihrer Laenge. Liefert {Name: (Laenge mm, Streckenzug
     in XY fuer die Draufsicht)}."""
-    R, st = L['R'], K['steuerung']
+    R, st, EL = L['R'], K['steuerung'], K['EL']
     xa, zn = K['x_aussen'], K['z_nut_u']
-    yc = (st.y[0] + st.y[1]) / 2.0
-    z_boden = K['fach'].z[0] + 25.0
-    raus = [(st.x[0], yc, z_boden), (-xa, yc, z_boden), (-xa, yc, zn)]
+    # links aus dem Kabelausschnitt, unter dem linken 2040 durch nach aussen
+    yc = EL['kabel_links_y']
+    z_k = EL['kabel_z0'] + 8.0
+    raus = [(st.x[0], yc, z_k), (-xa, yc, z_k), (-xa, yc, zn)]
     zm = (L['ym_motor_z0'] + L['ymp_z0']) / 2.0
     fl = w('motor_flansch') / 2.0
 
@@ -164,11 +174,16 @@ def kabelwege(w, L, TL, K):
         return [(s * xa, L['ym_y'] - fl, zn),
                 (s * (R - L['ym_u']), L['ym_y'], zm)]
 
-    xst = (st.x[0] + st.x[1]) / 2.0
+    # vorn aus dem Kabelausschnitt in den Kanal, darin nach rechts, dann an
+    # der Rueckseite des 2060 (mittlere Nut) zum rechten 2040
+    xv = EL['kabel_vorn_x']
+    y_kanal = (st.y[1] + EL['platte_y'][0]) / 2.0
     y_2060 = L['quer_y_hinten'][0] - 1.0
     z_2060 = L['quer_z'][0] + 30.0
-    rechts = [(xst, st.y[1], z_boden), (xst, y_2060, z_2060),
-              (xa, y_2060, z_2060), (xa, y_2060, zn)]
+    x_ende = EL['platte_x'][1] + 5.0
+    rechts = [(xv, st.y[1], z_k), (xv, y_kanal, z_k), (x_ende, y_kanal, z_k),
+              (x_ende, y_2060, z_2060), (xa, y_2060, z_2060),
+              (xa, y_2060, zn)]
     xk = sum(K['ky_x']) / 2.0
     zur_kette = raus + [(-xa, K['ky_fest'], zn),
                         (xk, K['ky_fest'], K['ky_z_unten'])]
@@ -295,12 +310,15 @@ def draufsicht(f, w, L, K):
     t.append(f.rect(min(K['kx_fest'], K['xm']),
                     x_schleife + KETTE_R + KETTE_H / 2.0, *K['kx_y'],
                     'kette'))
-    # Steuerung, 24-V-Eingang, Verteiler
-    for n, art in (('steuerung', 'neu'), ('eingang', 'kauf'),
-                   ('verteiler', 'kauf')):
+    # Gehaeuse (Elektronik.py) mit Platte; darin Uno, Eingang, Verteiler;
+    # obenauf der Luefter
+    for n, art, mehr in (('platte', 'neu', {}), ('steuerung', 'neu', {}),
+                         ('uno', 'druck', {'fill_opacity': '0.7'}),
+                         ('eingang', 'kauf', {'stroke_dasharray': '4 3'}),
+                         ('verteiler', 'kauf', {'stroke_dasharray': '4 3'}),
+                         ('luefter', 'kauf', {'fill_opacity': '0.85'})):
         q = K[n]
-        t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art,
-                        stroke_dasharray='5 3', stroke_width='1.2'))
+        t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
     # feste Kabelwege
     for n in ('Y-Motor links', 'Y-Motor rechts', 'Y-Endschalter', 'X-Motor'):
         weg = K['kabel'][n][1]
@@ -333,11 +351,12 @@ def seitenansicht(f, w, L, TL, K):
     t.append(fach_rect(f, fach.y[0], fach.y[1], fach.z[0], fach.z[1]))
     t.append(f.rect(fach.y[0], K['y_tr'], fach.z[1], K['z_frei'] - 0.0,
                     'neu', fill='none', stroke_dasharray='3 3'))
-    for n, art in (('eingang', 'kauf'), ('verteiler', 'kauf'),
-                   ('steuerung', 'neu')):
+    for n, art, mehr in (('platte', 'neu', {}), ('steuerung', 'neu', {}),
+                         ('deckel', 'neu', {}),
+                         ('uno', 'druck', {'fill_opacity': '0.7'}),
+                         ('luefter', 'kauf', {})):
         q = K[n]
-        t.append(f.rect(q.y[0], q.y[1], q.z[0], q.z[1], art,
-                        stroke_dasharray='5 3', stroke_width='1.2'))
+        t.append(f.rect(q.y[0], q.y[1], q.z[0], q.z[1], art, **mehr))
     # Portal an der hinteren Grenze, Z unten
     dh = -K['d_hinten']
     for n in ('Platte links', 'Portalrohr', 'Y-Wagen links',
@@ -385,7 +404,8 @@ def main():
     tw, TL = th.w, th.lage()
     pm = bauraum.modul_laden(bauraum.PORTAL, 'portal')
     w, L = pm.w, pm.lage()
-    K = konzept(w, L, tw, TL)
+    em = bauraum.modul_laden(ELEKTRONIK, 'elektronik')
+    K = konzept(w, L, tw, TL, em.w, em.lage())
     K['strahl_y'] = TL['strahl_y']
     K['z_frei'] = -16.0 - w('luft_bau')         # unter dem X-Wagen
     fach = K['fach']
@@ -395,20 +415,20 @@ def main():
             '<rect width="7" height="7" fill="#fbeee2"/>'
             '<line x1="0" y1="0" x2="0" y2="7" stroke="#e8a871" '
             'stroke-width="1.4"/></pattern>'),
-         text(24, 30, 'Platz für die Elektronik — Vorschlag (Portal.py Rev. '
-              '{}, ToolheadZ.py Rev. {})'.format(pm.REVISION, th.REVISION),
-              14, TEXT, fett=True),
-         text(24, 48, 'Maßstäblich. Rahmen, Portal und Toolhead aus den '
-              'Skripten; Steuerung und Ketten sind Platzhalter. Das Netzteil '
-              '(24 V / 3 A) ist ein Steckernetzteil und steht außerhalb.', 9,
-              GRAU)]
+         text(24, 30, 'Platz für die Elektronik (Elektronik.py Rev. {}, '
+              'Portal.py Rev. {}, ToolheadZ.py Rev. {})'.format(
+                  em.REVISION, pm.REVISION, th.REVISION), 14, TEXT,
+              fett=True),
+         text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Die Ketten '
+              'sind Platzhalter, bis die gekauften gemessen sind. Das '
+              'Netzteil (24 V / 3 A) steht außerhalb.', 9, GRAU)]
 
     # ---- Draufsicht --------------------------------------------------------
     s1 = 0.86
     fa = Feld(262, 92, (-338.0, 338.0), (-392.0, 305.0), s1, b_runter=True)
     t += fa.ausschnitt('drauf', draufsicht(fa, w, L, K))
     t += fa.rahmen('Draufsicht (vorn unten)')
-    st, eg = K['steuerung'], K['eingang']
+    eg = K['eingang']
     xm = K['xm']
     t += fa.spalte([
         (-R, L['rahmen_y'][0] + 20.0, 'linkes 2040 (600 mm)'),
@@ -428,12 +448,14 @@ def main():
          'Portal an der hinteren\nGrenze (Softlimit Y)')],
         fa.ox - 12, 'end', abstand=24.0)
     t += fa.spalte([
-        ((st.x[0] + st.x[1]) / 2, st.y[0] + 12.0,
-         'Steuerung: Uno + CNC Shield\nV3 + 4 × TMC2209, Lüfter'),
-        ((eg.x[0] + eg.x[1]) / 2, (eg.y[0] + eg.y[1]) / 2,
-         '24 V vom Steckernetzteil:\nBuchse und Schalter'),
+        (K['luefter'].x[1] - 6.0, K['luefter'].y[0] + 6.0,
+         'Gehäuse: Uno + CNC Shield\nV3, Lüfter 24 V im Deckel'),
+        ((eg.x[0] + eg.x[1]) / 2, eg.y[0] + 4.0,
+         '24 V vom Steckernetzteil:\nBuchse und Schalter hinten'),
         (sum(K['verteiler'].x) / 2, K['verteiler'].y[0] + 10.0,
-         'Wago-Klemmen und Wandler\n24 → 12 V für den Laser'),
+         'Wandler 24 → 12 V und\nWago-Klemmen'),
+        (K['platte'].x[1] - 8.0, K['platte'].y[0] + 2.0,
+         'Montageplatte: 4 × M5 in die\nRückseite des 2060, Kabelkanal'),
         (K['es_y'][0], K['es_y'][1], 'Y-Endschalter außen am\nrechten 2040 '
          '(links die Kette)'),
         (fach.x[1] - 10.0, fach.y[1] - 10.0,

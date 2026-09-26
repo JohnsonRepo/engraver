@@ -18,7 +18,8 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb  ← neu
+fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
+fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
@@ -27,7 +28,7 @@ docs/portal-y-antrieb.svg      Y-Motorhalter vorn: Draufsicht auf die Ecke, Schn
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
-docs/elektronik.md             Platz für die Steuerung, Leistung, Endschalter, Kabel (Vorschlag)
+docs/elektronik.md             Platz, Gehäuse, Leistung, Endschalter, Kabel, Anschlussplan
 docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
 docs/elektronik-anschluss.svg  Anschlussplan: Netzteil, Wandler, Shield, Motoren, Laser, Endschalter
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
@@ -39,6 +40,7 @@ tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
 tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/portal_zeichnen.py       erzeugt die Portalzeichnung
 tools/y_antrieb_zeichnen.py    erzeugt die Zeichnung des Y-Antriebs
+tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum, Montage, Druck)
 tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
 tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
 tools/geometrie_check.py       Prüfung der Einzelplatte
@@ -86,6 +88,18 @@ beiden Enden mit mindestens 3 mm an Motor, Umlenkung, Schlitten und Y-Riemen
 vorbei, geprüft über den ganzen X- und Z-Weg. Details in
 [docs/portal-y-schlitten.md](docs/portal-y-schlitten.md).
 
+### Elektronikgehäuse (neu)
+
+Gehäuse im Fach hinter dem hinteren 2060, unter den 2040 — dorthin fährt
+weder Portal noch Toolhead. Links der **Arduino Uno mit CNC Shield V3** auf
+Stehbolzen, USB nach hinten; rechts der **Abwärtswandler 24 → 12 V** für den
+Laser und drei **Wago-Klemmen**; hinten **Einbaubuchse** (Hohlstecker
+5,5 × 2,1) und **Schalter**. Der **Deckel** trägt den 24-V-Lüfter über den
+Treibern. Eine Montageplatte hängt es mit 4 × M5 an die Rückseite des 2060,
+dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
+Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
+[docs/elektronik.md](docs/elektronik.md).
+
 ### Toolhead-Grundplatte (überholt)
 
 Die erste Ausführung: nur die Platte, die den Laser am MGN9-Z-Wagen hält, ohne
@@ -111,6 +125,7 @@ Montagereihenfolge.
 ```sh
 python3 tools/toolhead_check.py     # Maßkette, Kollisionen, Schrauben, Druck
 python3 tools/portal_check.py       # Portal + Toolhead über den ganzen Weg
+python3 tools/elektronik_check.py   # Elektronikgehäuse gegen Portal, Toolhead, Rahmen
 python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
 python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
 python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
@@ -137,8 +152,9 @@ und die Y-Motorhalter, den Y-Antrieb selbst und das Elektronikfach hinter
 dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 
 **Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 13).
-Für die Elektronik gibt es einen Platz und die Kabelwege als Vorschlag
-([elektronik.md](docs/elektronik.md)); die Halter folgen. Der
+Elektronikgehäuse Rev. 1 gezeichnet und geprüft
+([elektronik.md](docs/elektronik.md)); die Halter für Endschalter und
+Energieketten folgen. Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

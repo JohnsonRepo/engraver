@@ -402,7 +402,9 @@ gekauft, Treiber: **4 × TMC2209** (plus Ersatz), Steckernetzteil 24 V / 3 A,
 Laser 12 V / 1,6 A über einen Abwärtswandler. Vier NEMA 17 — genau die
 vier Treiberplätze des Shields. Pinbelegung
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
-Netzteil, Endschalter und Kabel hinkommen: [elektronik.md](elektronik.md).
+Netzteil, Endschalter und Kabel hinkommen, und das Gehäuse
+(`fusion/Elektronik`): [elektronik.md](elektronik.md). Hohlstecker des
+Netzteils: **5,5 × 2,1 mm** `[v]` Angabe; Lüfter 24 V.
 
 | Steckplatz | Motor | Schritte/mm bei 1/16 |
 |---|---|---|

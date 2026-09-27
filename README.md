@@ -12,7 +12,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
 | Z-Achse | Toolhead am MGN15H-Wagen: eigene MGN9-Führung, NEMA 17 über Tr8×2-Spindel |
 | Werkzeug | Diodenlaser am Z-Schlitten |
-| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209, GRBL 1.1 (geplant), A-Achse klont Y |
+| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209 (vorhanden), GRBL 1.1, A-Achse klont Y |
 
 ## Inhalt
 
@@ -173,7 +173,7 @@ den Y-Antrieb selbst und das Elektronikfach hinter
 dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 
 **Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 13,
-YMotorhalter Rev. 4, `y_motorhalter_check.py`).
+YMotorhalter Rev. 5, `y_motorhalter_check.py`).
 Elektronikgehäuse Rev. 1 gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)); die Halter für Endschalter und
 Energieketten folgen. Der

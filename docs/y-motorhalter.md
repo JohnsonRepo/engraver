@@ -1,6 +1,6 @@
 # Y-Motorhalter — Antrieb der Y-Achse
 
-Erzeugt von `fusion/YMotorhalter/YMotorhalter.py` (ein Druckteil, Rev. 4).
+Erzeugt von `fusion/YMotorhalter/YMotorhalter.py` (ein Druckteil, Rev. 5).
 Geprüft mit `python3 tools/y_motorhalter_check.py`, Skizze in
 [y-motorhalter.svg](y-motorhalter.svg) (neu erzeugen mit
 `python3 tools/y_motorhalter_zeichnen.py`).
@@ -14,8 +14,9 @@ So sieht der Y-Antrieb nach deinen Angaben und dem Foto aus (2026-09-26):
 * **Zwei NEMA 17, je Seite einer**, jeweils vorn an ihrer 2040. Die 2040
   steht hochkant und liegt auf dem vorderen 2060, das 35 mm hinter ihrer
   Stirnseite sitzt. Oben auf ihr sitzt die Linearführung.
-* Der **Y-Riemen läuft in den oberen Nuten** beider Seitenflächen der 2040
-  und am Profilende um das Ritzel.
+* Der **Y-Riemen läuft in den oberen Nuten** beider Seitenflächen der 2040,
+  in der rechten hin und in der linken zurück, und am Profilende um das
+  Ritzel.
 * Das **Ritzel sitzt direkt auf der Motorwelle**, mittig zur 2040. Der Motor
   hängt unter einer Platte etwa auf Höhe der unteren Nut, die Welle zeigt
   nach oben.
@@ -32,7 +33,7 @@ die M5 saßen in der oberen Nut.
 
 | Teil | Material | Funktion |
 |---|---|---|
-| **2× Y-Motorhalter** | PETG, 35 g je Stück (voll gerechnet) | Schenkel an beiden Seitenflächen, Joch vor der Stirnseite, Platte für den Motor, Führungswände |
+| **2× Y-Motorhalter** | PETG, 32 g je Stück (voll gerechnet) | Schenkel an beiden Seitenflächen, Joch vor der Stirnseite, Platte für den Motor, Führungswände |
 | 2× NEMA 17 + GT2-Ritzel 20 Z, Bohrung 5 | Kaufteil | Motor hängt unter der Platte, Ritzel auf Höhe der oberen Nut |
 | 8× M5×12 + Scheibe + Nutenstein M5 (Nut 6) | Kaufteil | je Halter 4, in den unteren Nuten |
 | 8× M3×10 + Scheibe DIN 125 | Kaufteil | je Motor 4, von oben |
@@ -69,6 +70,14 @@ endet jetzt 25,5 mm unter der 2040.
 Ist ein Rev.-3-Halter schon gedruckt, geht er auch: dann das Ritzel 1 mm
 über das Wellenende hinaus schieben, bis der Riemen gerade in die Nut läuft.
 
+## Rev. 5: kürzere Schenkel (2026-09-27)
+
+Am vorderen 2060, 35 mm hinter der Stirnseite, halten **Winkel** die 2040
+an ihren Seitenflächen. Die Schenkel sind deshalb **30 statt 40 mm** lang
+und enden 5 mm vor dem 2060, die M5 sitzen bei 8 und 22 mm hinter der
+Stirnseite, wie am alten Halter aus `Portal.py`. Die Prüfung liest die Lage
+des 2060 aus `Portal.py`.
+
 ## Bezug und Koordinaten
 
 **Y = 0 ist die Stirnseite der 2040, +Y zeigt vom Profil weg. Z = 0 ist
@@ -79,9 +88,9 @@ getauscht wie im Toolhead (Modell-Z = Maschine Y).
 
 | Y | Ebene |
 |---|---|
-| −40 | Schenkel hinten |
-| −35 | Vorderseite des vorderen 2060 (unter der 2040) |
-| −30 / −10 | M5 in der unteren Nut, je Seite |
+| −35 | Vorderseite des vorderen 2060 (darunter, mit Winkeln an der 2040) |
+| −30 | Schenkel hinten, 5 mm vor dem 2060 |
+| −22 / −8 | M5 in der unteren Nut, je Seite |
 | **0** | **Stirnseite der 2040 = Anlage des Jochs** |
 | +4 | Joch vorn |
 | +5,0 | Motor vorn, ganz innen |
@@ -134,9 +143,9 @@ bei 1/16.
 
 ## Aufbau des Halters
 
-**Schenkel.** Zwei Schenkel, 6 mm dick und 40 mm lang, liegen an beiden
+**Schenkel.** Zwei Schenkel, 6 mm dick und 30 mm lang, liegen an beiden
 Seitenflächen der 2040 an, von Z = 1 bis 17,5. Jeder hat zwei M5 in der
-unteren Nut, bei Y = −10 und −30. Oberhalb von Z = 17,5 bleibt die
+unteren Nut, bei Y = −8 und −22; dahinter sitzen am 2060 die Winkel. Oberhalb von Z = 17,5 bleibt die
 Seitenfläche frei, also auch die ganze obere Nut. Innen sind 0,2 mm Luft
 je Seite, die Schrauben ziehen die Schenkel an.
 
@@ -251,7 +260,7 @@ Für beide Seiten zusammen: 8× M5×12, 8 Scheiben M5, 8 Nutensteine, 8× M3×10
 
 **Kopfüber drucken: die Oberseite (Z = 17,5) aufs Bett.** Platte, Joch,
 Schenkel und Führungswände wachsen dann senkrecht aus der Platte: 16,5 mm
-hoch auf 52,3 × 96,8 mm Grundfläche. Das braucht **keine Stützen**, nur die
+hoch auf 52,3 × 86,8 mm Grundfläche. Das braucht **keine Stützen**, nur die
 vier waagerechten M5-Bohrungen (Ø5,5) überbrücken. Die Motorauflage (die
 Plattenunterseite) liegt dann oben und wird plan. Anlage am Joch und
 Innenseiten der Schenkel sind senkrechte Wände und damit maßhaltig. Eine
@@ -270,20 +279,19 @@ längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
 
 ## Noch offen
 
-1. **Schenkel über dem vorderen 2060:** Die Schenkel reichen 40 mm hinter
-   die Stirnseite, das vordere 2060 beginnt bei 35 mm. Die letzten 5 mm
-   liegen 1 mm über ihm. Sitzen dort Winkel an der 2040, `wange_laenge` auf
-   30, `schraube_y` auf 8 und `schraube_abstand` auf 14 setzen: M5 dann bei
-   8 und 22 mm wie am alten Halter (die Prüfung besteht damit).
+1. **Winkel am vorderen 2060:** gerechnet mit 5 mm Luft zwischen
+   Schenkelende und 2060. Reicht ein Winkel weiter nach vorn, `wange_laenge`
+   kürzen und prüfen.
 2. **Nutmaße** `[w]`: Lippe 1,8 und Nutgrund 6,0 mm bestimmen, wo der
    Riemen in der Nut läuft. Bei anderem Profil `nut_lippe` und `nut_tiefe`
    anpassen und prüfen.
 3. **Nutensteine** `[w]`: gerechnet mit 1,8 mm Lippe, 4 mm Gewinde und 6 mm
    Platz. Setzt die M5×12 hinten auf, eine Scheibe mehr unter den Kopf.
-4. **Riemenlinie im Portal:** `Portal.py` legt den gezogenen Trum noch auf
-   die Linie aus v8, 21,6 mm innen neben der Schienenmitte. Mit dem mittigen
-   Ritzel laufen beide Trume in den oberen Nuten (±6,37 mm). Ob die
-   Klemmtürme der Y-Schlitten dazu passen, ist zu klären
+4. **Riemenlinie im Portal:** Der Riemen läuft in der rechten Nut hin und
+   in der linken zurück (Angabe vom 2026-09-27), mit dem mittigen Ritzel also
+   bei ±6,37 mm. `Portal.py` legt den gezogenen Trum noch auf die Linie aus
+   v8, 21,6 mm innen neben der Schienenmitte. Wo die Klemme am Y-Wagen den
+   Riemen greift, ist zu klären
    ([portal-y-schlitten.md](portal-y-schlitten.md#y-riemen-und-klemmtürme)).
 5. **Portal-Prüfung:** `portal_check.py` rechnet den Y-Weg vorn noch gegen
    den alten Halter. Dieser hier ist niedriger und reicht weniger weit nach
@@ -310,8 +318,8 @@ Python: nach einer Änderung das Skript neu laufen lassen und
 | `ritzel_z` | 20 | Zähnezahl: Abstand der Trume, 40 mm je Umdrehung |
 | `motor_welle_l` | 23 mm (gemessen) | legt mit dem Ritzel die Höhe von Motor und Platte fest |
 | `platte_dicke` | 6 mm | höchstens 7, sonst stößt das Ritzel an |
-| `wange_laenge` | 40 mm | so weit reichen die Schenkel am Profil entlang |
-| `schraube_y` / `schraube_abstand` | 10 / 20 mm | Lage der M5 hinter der Stirnseite |
+| `wange_laenge` | 30 mm | so weit reichen die Schenkel am Profil entlang; enden 5 mm vor dem vorderen 2060 (Winkel) |
+| `schraube_y` / `schraube_abstand` | 8 / 14 mm | Lage der M5 hinter der Stirnseite (8 und 22 mm) |
 | `joch_dicke` | 4 mm | Anschlag an der Stirnseite, schiebt den Motor nach außen |
 | `spann_weg` | 8 mm | Weg des Motors; der Riemenweg ändert sich um das Doppelte |
 | `motor_laenge` | 37 mm (gemessen) | nur Freiraum nach unten |

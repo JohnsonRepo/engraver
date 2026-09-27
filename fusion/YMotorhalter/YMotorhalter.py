@@ -9,7 +9,8 @@
 #     steht hochkant und liegt auf dem vorderen 2060, das 35 mm hinter ihrer
 #     Stirnseite sitzt (Portal.py)
 #   * der Y-Riemen laeuft INNERHALB der oberen Nuten beider Seitenflaechen
-#     der 2040 und am Profilende um das Ritzel
+#     der 2040 (in der rechten hin, in der linken zurueck) und am Profilende
+#     um das Ritzel
 #   * das Ritzel (GT2 20 Z, Bohrung 5) sitzt direkt auf der Motorwelle,
 #     mittig zur 2040; der Motor haengt unter einer Platte etwa auf Hoehe der
 #     unteren Nut, Welle nach oben
@@ -23,6 +24,8 @@
 # Profilmitte, M5 in der oberen Nut) ist damit ebenfalls ueberholt.
 # Rev. 4: gemessene Motoren (37 mm Koerper, Welle 23 mm, Portal.py) — die
 # Platte rueckt 1 mm hoeher, das Ritzel sitzt weiter ganz auf der Welle.
+# Rev. 5: am vorderen 2060 sitzen Winkel an der 2040 (Nutzerangabe
+# 2026-09-27) — die Schenkel enden 5 mm davor, 30 statt 40 mm lang.
 #
 # Koordinatensystem (Maschinenkoordinaten an EINEM Profilende, in mm):
 #   X = quer zur 2040, X = 0 ist ihre Mitte (das Teil ist symmetrisch)
@@ -42,7 +45,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'YMotorhalter'
-REVISION = 4
+REVISION = 5
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -104,12 +107,14 @@ MASSE = {
     # Platte: Unterseite = Motorflansch. Hoechstens motor_welle_l -
     # ritzel_laenge - luft_min dick, sonst stoesst das Ritzel an (Pruefung).
     'platte_dicke':         (6.0,  'Motorplatte: Dicke'),
-    # Schenkel an beiden Seitenflaechen, je zwei M5 in die untere Nut. Die
-    # letzten 40 mm der 2040 sind frei (Nutzerangabe).
+    # Schenkel an beiden Seitenflaechen, je zwei M5 in die untere Nut. Das
+    # vordere 2060 sitzt 35 mm hinter der Stirnseite, dort halten Winkel die
+    # 2040 (Nutzerangabe 2026-09-27): die Schenkel enden 5 mm davor, die M5
+    # sitzen wie am alten Halter aus Portal.py.
     'wange_dicke':          (6.0,  'Schenkel: Dicke'),
-    'wange_laenge':        (40.0,  'Schenkel: Laenge hinter der Stirnseite'),
-    'schraube_y':          (10.0,  'vordere M5: Abstand hinter der Stirnseite'),
-    'schraube_abstand':    (20.0,  'Abstand der beiden M5 je Schenkel'),
+    'wange_laenge':        (30.0,  'Schenkel: Laenge hinter der Stirnseite'),
+    'schraube_y':           (8.0,  'vordere M5: Abstand hinter der Stirnseite'),
+    'schraube_abstand':    (14.0,  'Abstand der beiden M5 je Schenkel'),
     'halter_rand_unten':    (1.0,  'Halter endet so weit ueber der Profilunterkante'),
     # Joch: verbindet die Schenkel vor der Stirnseite und liegt an ihr an.
     'joch_dicke':           (4.0,  'Joch vor der Stirnseite: Dicke'),

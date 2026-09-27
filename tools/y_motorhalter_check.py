@@ -358,17 +358,16 @@ def main():
          hb - (L['wange_x1'] + w('m5_scheibe_h') + w('m5_kopf_h')), 0.0)
     p.ja('unter der {} haengt nur der Motor, und der vor der Stirnseite'
          .format(prof), L['motor_y_min'] - m > 0.0 and L['halter_z0'] >= 0.0)
-    # Vorn liegt die 2040 auf dem vorderen 2060 (Lage aus Portal.py). Die
-    # Schenkel liegen an ihren Seitenflaechen, also ueber dem 2060; nur
-    # Winkel am 2060 koennten stoeren.
+    # Vorn liegt die 2040 auf dem vorderen 2060 (Lage aus Portal.py), und
+    # dort halten Winkel an ihren Seitenflaechen sie fest (Nutzerangabe
+    # 2026-09-27): die Schenkel muessen davor enden.
     try:
         vorn_2060 = modul_laden(PORTAL, 'portal').w('quer_vorn_zurueck')
         p.info('vorderes 2060 hinter der Stirnseite (Portal.py)', vorn_2060)
-        ueber = w('wange_laenge') - vorn_2060
-        p.info('Schenkel reichen ueber das 2060 (Luft darueber {:.1f} mm)'
-               .format(L['halter_z0']), max(ueber, 0.0))
+        p.ok('Schenkel enden vor dem 2060 (dort sitzen Winkel)',
+             vorn_2060 - w('wange_laenge'), 3.0)
         p.ok('hintere M5-Scheibe vor dem 2060',
-             vorn_2060 + L['m5_loecher'][1][0] - w('m5_scheibe_d') / 2.0, 0.0)
+             vorn_2060 + L['m5_loecher'][1][0] - w('m5_scheibe_d') / 2.0, 3.0)
     except Exception as exc:
         p.info('Portal.py nicht geladen ({}), 2060 nicht geprueft'.format(
             exc))

@@ -189,11 +189,12 @@ Rippen beider Klemmen auf der Schienenseite: Nur so greifen sie in die Zähne
 und nicht auf den glatten Rücken. `portal_check.py` prüft genau das. Der
 Rücklauf liegt im Profil und kommt dem Toolhead nie nahe.
 
-**Offen (2026-09-26):** Nach deiner Angabe mit Foto laufen beide Trume in
-den oberen Nuten, und das Ritzel sitzt mittig zur 2040 — so baut es der
-[YMotorhalter](y-motorhalter.md). Die Linie aus v8 (gezogener Trum 21,6 mm
-innen neben der Schienenmitte, Rücklauf 9,5 mm) passt dazu nicht. Ob die
-Klemmtürme so bleiben können, ist zu klären.
+**Offen (2026-09-26/27):** Der Riemen läuft in der rechten oberen Nut hin
+und in der linken zurück, und das Ritzel sitzt mittig zur 2040 — so baut es
+der [YMotorhalter](y-motorhalter.md). Die Linie aus v8 (gezogener Trum
+21,6 mm innen neben der Schienenmitte, Rücklauf 9,5 mm) passt dazu nicht.
+Wo die Klemme am Wagen den Riemen greift und ob die Klemmtürme so bleiben
+können, ist zu klären.
 
 **Zwei gleiche Klemmtürme je Schlitten wie bei v8**, einer je
 Riemenende, an derselben Stelle wie bei v8: 22,5 bis 40,5 mm vor und hinter

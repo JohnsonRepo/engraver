@@ -16,7 +16,7 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |
 | Werkzeug | Diodenlaser am Toolhead |
-| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209, GRBL 1.1 (geplant) — siehe [Elektronik](#elektronik) |
+| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209 (vorhanden), GRBL 1.1 — siehe [Elektronik](#elektronik) |
 
 ## Z-Achse / Toolhead
 
@@ -69,7 +69,7 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Umlenkrolle 20 Z | Außendurchmesser (Bord) **18 mm**, Breite **8,5 mm** | `[?]` angenommen, nicht gemessen |
 | Motoren | NEMA 17, **37 mm** ohne Welle, **60 mm** mit Welle | `[v]` Angabe am Aufbau |
 | NEMA 17, Welle | ragt **23 mm** heraus (60 − 37), Ø5. Die Halter sind auf **20 mm** ausgelegt (erste Angabe): so trägt die Welle das ganze Ritzel, die 3 mm mehr stehen frei über | `[v]` Angabe am Aufbau |
-| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. **Offen:** laut Angabe vom 2026-09-26 laufen beide Trume in den oberen Nuten, das Ritzel mittig ([Y-Antrieb](#y-antrieb)) — dazu passt die Linie aus v8 nicht | `[v]` Linie aus v8, Höhe Angabe am Aufbau; Lage quer offen |
+| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. **Offen:** der Riemen läuft in der rechten Nut hin und in der linken zurück (Angabe 2026-09-27), das Ritzel mittig ([Y-Antrieb](#y-antrieb)) — dazu passt die Linie aus v8 nicht; wo die Klemme am Wagen greift, ist zu klären | `[v]` Linie aus v8, Höhe Angabe am Aufbau; Lage quer offen |
 | Obere Nut des 2040 | Öffnung beginnt **6 mm unter der Oberkante** (oberer Rand), Mitte 10 mm darunter | `[v]` Angabe am Aufbau |
 | Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (9,5 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
 | Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Das Ritzel sitzt **direkt auf der Motorwelle**, **mittig zur 2040**, im eigenen `YMotorhalter` (Rev. 4, [Y-Antrieb](#y-antrieb)). Der Halter aus Portal Rev. 12/13 (Achse 27,5 mm vor der Stirnseite, 15,55 mm innen, M5 in der oberen Nut) ist gedruckt und am Aufbau verworfen. Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
@@ -397,8 +397,7 @@ Chopper einstellbar.
 
 ## Elektronik
 
-**Stand 2026-09-25:** Arduino Uno R3 vorhanden, CNC Shield V3 noch nicht
-gekauft, Treiber: **4 × TMC2209** (plus Ersatz), Steckernetzteil 24 V / 3 A,
+**Stand 2026-09-27:** Arduino Uno R3 und CNC Shield V3 vorhanden, Treiber: **4 × TMC2209** (plus Ersatz), Steckernetzteil 24 V / 3 A,
 Laser 12 V / 1,6 A über einen Abwärtswandler. Vier NEMA 17 — genau die
 vier Treiberplätze des Shields. Pinbelegung
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
@@ -486,13 +485,13 @@ reicht es; wer später schneller rastern will, wechselt auf ein 32-Bit-Board
 ## Y-Antrieb
 
 Nutzerangaben vom 2026-09-26 mit Foto, Halter in `fusion/YMotorhalter/`
-(Rev. 4), Doku in `y-motorhalter.md`. Portal und Rahmen siehe
+(Rev. 5), Doku in `y-motorhalter.md`. Portal und Rahmen siehe
 [Y-Achse und Portal](#y-achse-und-portal).
 
 | Wert | Maß | Status |
 |---|---|---|
-| Y-Profil | **2040 hochkant**, liegt vorn auf dem vorderen 2060, das **35 mm** hinter der Stirnseite sitzt; die letzten ~40 mm der Seitenflächen sind frei, vor und unter dem Profilende ist Platz | Nutzerangabe, 2060 `[v]` |
-| Nuten | je Seitenfläche zwei, 10 mm über der Unter- und unter der Oberkante; in den **oberen** läuft der Y-Riemen (beide Seiten), in die **unteren** kommen die Nutensteine | Nutzerangabe, Lage `[w]` |
+| Y-Profil | **2040 hochkant**, liegt vorn auf dem vorderen 2060, das **35 mm** hinter der Stirnseite sitzt; dort halten **Winkel** die 2040 an ihren Seitenflächen, davor sind die Seitenflächen frei; vor und unter dem Profilende ist Platz | Nutzerangabe (Winkel 2026-09-27), 2060 `[v]` |
+| Nuten | je Seitenfläche zwei, 10 mm über der Unter- und unter der Oberkante; in den **oberen** läuft der Y-Riemen, **in der rechten hin, in der linken zurück**; in die **unteren** kommen die Nutensteine | Nutzerangabe, Lage `[w]` |
 | Nut 6 | Öffnung 6,2, Lippe 1,8, Platz bis zum Nutgrund 6,0 | `[w]` |
 | Motoren | **2 × NEMA 17**, je Seite einer vorn am Profilende, Welle nach oben, Achse mittig zur 2040 | Nutzerangabe |
 | Ritzel | **GT2 20 Z, Bohrung 5**, direkt auf der Motorwelle | Nutzerangabe |

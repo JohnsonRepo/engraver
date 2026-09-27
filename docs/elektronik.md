@@ -208,9 +208,11 @@ Pull-up „ausgelöst“ — die sichere Richtung.
   **Rückseite des hinteren 2060** (mittlere Nut) zum rechten 2040 und in
   dessen unterer Nut außen nach vorn zum rechten Y-Motor bzw. nach hinten
   zum Y-Endschalter; das Kabel zum Not-Aus ebenso nach vorn.
-* Vorn belegt der [Y-Motorhalter](y-motorhalter.md) die letzten 40 mm der
-  unteren Nuten beider Seitenflächen (Nutensteine). Die Motorkabel verlassen
-  die Nut davor und laufen außen am Schenkel zum Motor.
+* Vorn belegt der [Y-Motorhalter](y-motorhalter.md) die letzten 30 mm der
+  unteren Nuten beider Seitenflächen (Nutensteine), dahinter sitzen am
+  vorderen 2060 die Winkel, die die 2040 halten. Das Motorkabel verlässt die
+  Nut vor dem Winkel und läuft außen an Winkel und Schenkel zum Motor. Wo
+  am hinteren 2060 ebenfalls Winkel sitzen, dort genauso.
 
 **Bewegt** in zwei Energieketten:
 
@@ -282,7 +284,6 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
 
 | Menge | Teil | wofür |
 |---|---|---|
-| 1 | CNC Shield V3 | Steuerung (Uno und 4 × TMC2209 vorhanden) |
 | 1 | Abwärtswandler 24 → 12 V, ≥ 3 A (fest 12 V oder XL4015) | Laser |
 | 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Gehäuse: Loch 8,2) | 24-V-Eingang |
 | 1 | Wippschalter KCD1 (Ausschnitt 19,2 × 12,9 mm), ≥ 3 A | EIN/AUS |
@@ -306,13 +307,14 @@ Die übrigen Motoren reichen mit 1 m ([Kabel](#kabel)).
    alle Maße sind da.
 2. **Halter der Energieketten** (Wannen, Festpunkte, bewegte Enden): wenn
    die Ketten da sind, die Anschlussglieder messen (Lochbild, Breite).
-3. **Stapelhöhe** Uno + Shield + Treiber, sobald das Shield da ist (siehe
-   [Gehäuse](#gehäuse-elektronikpy)).
+3. **Stapelhöhe** Uno + Shield + Treiber: das Shield ist da, jetzt messen
+   (siehe [Gehäuse](#gehäuse-elektronikpy)).
 4. Nicht dringend: Überstand der 2040 hinter dem hinteren 2060 (angenommen
-   145 mm) und ob die 2040 mit Winkeln am 2060 sitzen.
+   145 mm).
 
 Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit
 Hohlstecker 5,5 × 2,1; der Laser ein LASER TREE 4 W mit 12 V / 1,6 A;
 Lüfter 24 V; Ketten werden wie in der Einkaufsliste gekauft;
 Gabellichtschranken für X und Y sind da, Näherungssensoren als Reserve;
-Wago-Klemmen sind da.
+Wago-Klemmen sind da. 2026-09-27: das CNC Shield V3 ist da; die 2040 sitzen
+mit Winkeln an den 2060.

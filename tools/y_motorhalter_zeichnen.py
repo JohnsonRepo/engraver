@@ -27,7 +27,6 @@ X_BEREICH = (-32.0, 32.0)   # Draufsicht (hoch) und Schnitt (quer)
 Z_BEREICH = (-44.0, 42.0)   # Seitenansicht und Schnitt
 DETAIL_X = (2.5, 12.5)
 DETAIL_Z = (19.0, 37.0)
-SCHNITT_Y = -10.0           # Schnitt A-A: durch das vordere M5-Paar
 
 # Nur Zeichnung, vereinfacht [w]: Nut 6 hinter den Lippen (halbe Hoehe des
 # Kanals, Tiefe, ab der er sich verjuengt, halbe Hoehe am Nutgrund),
@@ -230,6 +229,11 @@ def ueberschrift(a, zeile1, zeile2):
 
 # ---- Geometrie fuer mehrere Ansichten -----------------------------------------
 
+def schnitt_y(L):
+    """Schnitt A-A liegt im vorderen M5-Paar."""
+    return L['m5_loecher'][0][0]
+
+
 def nut_seite(w, seite, zc, halb):
     """Nut in einer Seitenflaeche, (X, Z): Oeffnung durch die Lippe,
     dahinter der Kanal, zum Nutgrund verjuengt. Flaeche bei X = seite*halb."""
@@ -343,12 +347,12 @@ def draufsicht(w, L, ox, oy, x_r):
                                  'stahl'))
     inhalt.append(a.linie(Y_BEREICH[0], 0.0, Y_BEREICH[1], 0.0, ROT, 0.5,
                           '8 3 2 3'))
-    inhalt.append(a.linie(SCHNITT_Y, X_BEREICH[0] + 2, SCHNITT_Y,
+    inhalt.append(a.linie(schnitt_y(L), X_BEREICH[0] + 2, schnitt_y(L),
                           X_BEREICH[1] - 2, ROT, 0.8, '8 3 2 3'))
     t += a.ausschnitt('drauf', inhalt)
     t.append(a.rahmen())
     for v, dy in ((X_BEREICH[1] - 2, 9), (X_BEREICH[0] + 2, -3)):
-        px, py = a.px(SCHNITT_Y, v)
+        px, py = a.px(schnitt_y(L), v)
         t.append(text(px + 3, py + dy, 'A', 9, ROT, fett=True))
     # Spannweg des Motors
     xa, ya = a.px(L['motor_y_min'], -(m + 5.5))
@@ -474,7 +478,8 @@ def schnitt(w, L, ox, oy, x_r):
     m = w('motor_flansch') / 2.0
     fr = w('ritzel_flansch_d') / 2.0
     z = L['nut_unten_z']
-    t = ueberschrift(a, 'Schnitt A–A (Y = {})'.format(de(SCHNITT_Y, 0, True)),
+    t = ueberschrift(a, 'Schnitt A–A (Y = {})'.format(de(schnitt_y(L), 0,
+                                                           True)),
                      'Blick zum Motor; hell = dahinter')
     inhalt = [a.rect(-hb, hb, L['halter_z0'], L['halter_z1'], 'hinten'),
               a.rect(-m, m, L['motor_z0'], L['halter_z0'], 'hinten'),

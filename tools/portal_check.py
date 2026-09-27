@@ -608,7 +608,8 @@ def main():
     # haengen tiefer als ihre Oberkante — mit Z unten begrenzt das vordere
     # 2060 den Y-Weg, nicht die Schiene. Lage wie im Modell: 2040 und
     # Schienen mittig zum Y-Wagen [?], das vordere 2060 35 mm hinter der
-    # Stirnseite [v], das hintere 400 mm Mitte zu Mitte dahinter [?].
+    # Stirnseite [v], das hintere 435 mm Mitte zu Mitte dahinter (110 mm
+    # Ueberstand hinten gemessen [v]).
     p.titel('14) Y-Weg gegen die 2060 und die Y-Motorhalter (Referenz)')
     oben = L['quer_z'][1] + 3.0              # 3 mm Luft ueber dem 2060
 
@@ -628,6 +629,9 @@ def main():
     p.info('ab Mitte nach vorn (Laserseite) bis 3 mm vor das 2060, Z unten',
            d_vorn)
     p.info('ab Mitte nach hinten bis 3 mm vor das 2060, Z unten', d_hinten)
+    p.info('  nach hinten begrenzt {}'.format(
+        'die Schiene, das 2060 liegt dahinter' if d_schiene < d_hinten
+        else 'das 2060, nicht die Schiene'))
     strahl = TL['strahl_y'] - w('wagen_y')    # ab Rahmenmitte
     p.info('Strahl erreicht mit Z unten ab Rahmenmitte von',
            strahl - min(d_schiene, d_hinten))
@@ -832,7 +836,7 @@ def main():
     p.info('Fach Z von (ueber dem Tisch)', fach.z[0])
     p.info('       bis (unter den 2040)', fach.z[1])
     p.info('Fach Breite', fach.x[1] - fach.x[0])
-    p.info('     Tiefe (haengt am hinteren 2060 [?])', fach.y[1] - fach.y[0])
+    p.info('     Tiefe (hinteres 2060 gemessen [v])', fach.y[1] - fach.y[0])
     p.info('     Hoehe', fach.z[1] - fach.z[0])
     # Ueber dem Fach: in der Mitte (neben Schlitten und Klemmtuermen) reicht
     # nur die Traegerplatte tief herunter, und die hoechstens bis vor ihre
@@ -898,8 +902,10 @@ def luft_hinten(w, L, TL, feste_th, bewegte_th, ziele, zonen=None):
         return bauraum.Quader(q.name, q.x[0], q.x[1], q.y[0] + dy,
                               q.y[1] + dy, q.z[0], q.z[1], q.art)
 
-    # nur die hintere Haelfte des Wegs: von vorn kommt nichts bis hierher
-    dys = sorted(set([-d_schiene, -d_hinten, 0.0]
+    # nur die hintere Haelfte des Wegs: von vorn kommt nichts bis hierher.
+    # Hinter das Schienenende kommt der Wagen nicht, auch wenn das 2060
+    # weiter hinten liegt (seit Portal Rev. 14 so).
+    dys = sorted(set([-d_schiene, -min(d_hinten, d_schiene), 0.0]
                      + [-d_schiene + 2.5 * i
                         for i in range(int(d_schiene / 2.5) + 1)]))
     xs = [L['xw_min'] + (L['xw_max'] - L['xw_min']) * i / 20.0

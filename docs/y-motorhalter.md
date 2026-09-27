@@ -289,10 +289,15 @@ längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
    Platz. Setzt die M5×12 hinten auf, eine Scheibe mehr unter den Kopf.
 4. **Riemenlinie im Portal:** Der Riemen läuft in der rechten Nut hin und
    in der linken zurück (Angabe vom 2026-09-27), mit dem mittigen Ritzel also
-   bei ±6,37 mm. `Portal.py` legt den gezogenen Trum noch auf die Linie aus
-   v8, 21,6 mm innen neben der Schienenmitte. Wo die Klemme am Y-Wagen den
-   Riemen greift, ist zu klären
-   ([portal-y-schlitten.md](portal-y-schlitten.md#y-riemen-und-klemmtürme)).
+   bei ±6,37 mm. Die Klemmen bleiben, wo Y-Wagen und Klemmtürme in
+   `Portal.py` sie haben, 21,6 mm innen neben der Schienenmitte (Angabe vom
+   2026-09-27). Die Wagen-Trume laufen deshalb schräg von der Klemme in die
+   innere Nut (1,7° bis 19°, je nach Stellung), der Rücklauf gerade in der
+   äußeren; das hintere Ritzel muss dafür ebenfalls mittig zur 2040 stehen.
+   Wo ein Trum durch die Nutöffnung in den Kanal läuft, bleiben dem Riemen
+   0,1 mm je Seite — Zahlen in
+   [portal-y-schlitten.md](portal-y-schlitten.md#y-riemen-und-klemmtürme).
+   `Portal.py` rechnet den Riemen noch mit dem alten Ritzel.
 5. **Portal-Prüfung:** `portal_check.py` rechnet den Y-Weg vorn noch gegen
    den alten Halter. Dieser hier ist niedriger und reicht weniger weit nach
    innen. Mit dem Softlimit am vorderen 2060 erreicht der Toolhead ihn

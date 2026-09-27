@@ -105,14 +105,15 @@ def main():
     # ---- Verteilung: Wago-Klemmen, Wandler, Lüfter -------------------------
     t += block(290, 336, 120, 40, ['Wago +24 V', '221-415, 5 Plätze'],
                fett=1, fill='#fff4f4', stroke=P24)
-    t += block(290, 390, 120, 40, ['Wago GND', '221-415, 5 Plätze'], fett=1,
-               fill='#f1f3f5', stroke=MASSE)
-    t += block(290, 466, 120, 58, ['Abwärtswandler', '24 → 12 V, ≥ 3 A',
+    t += block(290, 390, 120, 40, ['Wago GND', '221-420, 10 Plätze'],
+               fett=1, fill='#f1f3f5', stroke=MASSE)
+    t += block(290, 466, 120, 58, ['Abwärtswandler', '24 → 12 V, ≥ 2 A dauernd',
                                    'Ausgang auf 12,0 V'], fett=1,
                fill='#fff7ec', stroke=P12)
     t += block(290, 556, 120, 58, ['Lüfter 40 mm', 'über den Treibern',
                                    '12-V-Typ: am Wandler'], fett=1)
-    t += block(290, 660, 120, 44, ['Wago +5 V', 'für die Lichtschranken'],
+    t += block(290, 660, 120, 58, ['Wago +5 V', '221-420, 10 Plätze',
+                                   'für die Lichtschranken'],
                fett=1, fill='#f8f0fc', stroke=P5)
     # +24 V und GND links hinunter zu Wandler und Lüfter
     t += [draht([(290, 350), (262, 350), (262, 480), (290, 480)], P24),
@@ -127,7 +128,9 @@ def main():
         '4 × TMC2209, Jumper MS1 + MS2 = 1/16, MS3 frei',
         'A klont Y: A.STEP ↔ Y.STEP, A.DIR ↔ Y.DIR',
         'Treiber: EN-Pin zum EN-Aufdruck',
-        'Strom am Vref-Poti, ≈ 70 % des Motornennstroms',
+        'Vref ≈ {} V → {} A eff. = {} % von {} A (R_sense 0,11 Ω)'.format(
+            ez.de(ez.MOTOR_I / ez.VREF_FAKTOR, 2), ez.de(ez.MOTOR_I, 2),
+            ez.de(ez.MOTOR_ANTEIL * 100, 0), ez.de(ez.MOTOR_NENN, 1)),
         'GRBL 1.1h: $32=1 (Laser), $30=1000'], fett=1, fill='#eef4fb',
         stroke=BLAU)
     # Schraubklemme links

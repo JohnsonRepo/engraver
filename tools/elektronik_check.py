@@ -197,7 +197,7 @@ def main():
            'danach liegt das Shield darueber')
 
     # ------------------------------------------------------------------
-    p.titel('6) Uno, Stapel, Luefter [w]')
+    p.titel('6) Uno, Stapel [v], Luefter [w]')
     ux, uy = EL['uno_x'], EL['uno_y']
     ix, iy = EL['innen_x'], EL['innen_y']
     p.ok('Uno links neben der Wand', ux[0] - ix[0], 3.0)
@@ -240,10 +240,26 @@ def main():
              - ew('m3_durchgang') / 2.0 for x, y in EL['dome']), 3.0)
 
     # ------------------------------------------------------------------
-    p.titel('7) Verteiler: Buchse, Schalter, Wandler, Wago [w]')
+    p.titel('7) Verteiler: Buchse, Schalter [w], Wandler [v], Wago [w]')
     vx = EL['vert_x']
     p.ok('Verteiler breit genug fuer 3 Wago nebeneinander',
          (vx[1] - vx[0]) - ew('wago_b'), 1.0)
+    breite = sum(x[1] - x[0] for _, _, x, _, _ in EL['wago'])
+    p.ok('Wago 221-420 + 221-420 + 221-415 nebeneinander ({:.1f} mm)'
+         .format(breite), ew('wago_b') - breite, 0.0)
+    unter_lippe = EL['deckel_z'][0] - ew('lippe_h')
+    for name, typ, _, y, z in EL['wago']:
+        p.ok('Wago {} ({}) im Platz laengs Y'.format(name, typ),
+             ew('wago_t') - (y[1] - y[0]), 1.0)
+        p.ok('   unter der Deckellippe', unter_lippe - z[1], 5.0)
+    wx, wz = EL['wandler_x'], EL['wandler_z']
+    p.ok('Wandler im Verteiler, Platz links und rechts fuer die Draehte',
+         min(wx[0] - vx[0], vx[1] - wx[1]), 15.0)
+    p.ok('Wandler: Platz laengs Y', ew('wandler_t') - ew('wandler_b'), 2.0)
+    p.ok('Kabelbinder auf dem Wandler (bis zu seinen Enden)',
+         ew('wandler_l') / 2.0 - ew('wandler_binder') - ew('binder_b') / 2.0,
+         3.0)
+    p.ok('Wandler unter der Deckellippe', unter_lippe - wz[1], 5.0)
     bx, ez = EL['buchse_x'], EL['eingang_z']
     sx = EL['schalter_x']
     sb, sh, sr = ew('schalter_b') / 2.0, ew('schalter_h') / 2.0, \
@@ -330,8 +346,11 @@ def main():
             .format(ew('buchse_d')),
             '1x Wippschalter KCD1, Ausschnitt {:.1f} x {:.1f}'.format(
                 ew('schalter_b'), ew('schalter_h')),
-            '1x Abwaertswandler 24 -> 12 V, >= 3 A; 2x Kabelbinder',
-            '3x Wago 221-415 (vorhanden), doppelseitiges Klebeband'):
+            '1x Abwaertswandler 24 -> 12 V, {:.0f} x {:.0f} x {:.0f} (vorhanden), '
+            'dauerhaft >= 2 A; 2x Kabelbinder'.format(
+                ew('wandler_l'), ew('wandler_b'), ew('wandler_h')),
+            'Wago (vorhanden): 1x 221-415 (+24 V), 2x 221-420 (GND, +5 V), '
+            '1x 221-413 Reserve; doppelseitiges Klebeband'):
         p.info(zeile)
 
     # ------------------------------------------------------------------

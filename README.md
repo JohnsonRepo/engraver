@@ -111,7 +111,8 @@ ohne Stützen. Er ersetzt den Y-Motorhalter aus `Portal.py`. Details in
 Gehäuse im Fach hinter dem hinteren 2060, unter den 2040 — dorthin fährt
 weder Portal noch Toolhead. Links der **Arduino Uno mit CNC Shield V3** auf
 Stehbolzen, USB nach hinten; rechts der **Abwärtswandler 24 → 12 V** für den
-Laser und drei **Wago-Klemmen**; hinten **Einbaubuchse** (Hohlstecker
+Laser (43 × 24 × 20 mm) und drei **Wago-Klemmen** (221-415 für +24 V,
+2 × 221-420 für GND und +5 V); hinten **Einbaubuchse** (Hohlstecker
 5,5 × 2,1) und **Schalter**. Der **Deckel** trägt den 24-V-Lüfter über den
 Treibern. Eine Montageplatte hängt es mit 4 × M5 an die Rückseite des 2060,
 dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
@@ -172,9 +173,12 @@ und die Y-Motorhalter (noch mit dem alten Halter aus `Portal.py` gerechnet),
 den Y-Antrieb selbst und das Elektronikfach hinter
 dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 13,
-YMotorhalter Rev. 5, `y_motorhalter_check.py`).
-Elektronikgehäuse Rev. 1 gezeichnet und geprüft
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 14,
+YMotorhalter Rev. 5, `y_motorhalter_check.py`). Portal Rev. 14 legt das
+hintere 2060 nach der Messung 435 mm hinter das vordere (die 2040 stehen
+hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
+Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
+Wandler, Wago) gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)); die Halter für Endschalter und
 Energieketten folgen. Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser

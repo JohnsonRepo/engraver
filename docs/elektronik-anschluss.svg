@@ -39,18 +39,19 @@
 <text x="297.0" y="364.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-415, 5 Plätze</text>
 <rect x="290.0" y="390.0" width="120.0" height="40.0" rx="3" fill="#f1f3f5" stroke="#1f2328" stroke-width="1"/>
 <text x="297.0" y="405.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Wago GND</text>
-<text x="297.0" y="418.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-415, 5 Plätze</text>
+<text x="297.0" y="418.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-420, 10 Plätze</text>
 <rect x="290.0" y="466.0" width="120.0" height="58.0" rx="3" fill="#fff7ec" stroke="#e67700" stroke-width="1"/>
 <text x="297.0" y="481.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Abwärtswandler</text>
-<text x="297.0" y="494.0" font-size="8.3" fill="#5b6472" text-anchor="start">24 → 12 V, ≥ 3 A</text>
+<text x="297.0" y="494.0" font-size="8.3" fill="#5b6472" text-anchor="start">24 → 12 V, ≥ 2 A dauernd</text>
 <text x="297.0" y="507.0" font-size="8.3" fill="#5b6472" text-anchor="start">Ausgang auf 12,0 V</text>
 <rect x="290.0" y="556.0" width="120.0" height="58.0" rx="3" fill="#f4f6f9" stroke="#8c939e" stroke-width="1"/>
 <text x="297.0" y="571.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Lüfter 40 mm</text>
 <text x="297.0" y="584.0" font-size="8.3" fill="#5b6472" text-anchor="start">über den Treibern</text>
 <text x="297.0" y="597.0" font-size="8.3" fill="#5b6472" text-anchor="start">12-V-Typ: am Wandler</text>
-<rect x="290.0" y="660.0" width="120.0" height="44.0" rx="3" fill="#f8f0fc" stroke="#8e44ad" stroke-width="1"/>
+<rect x="290.0" y="660.0" width="120.0" height="58.0" rx="3" fill="#f8f0fc" stroke="#8e44ad" stroke-width="1"/>
 <text x="297.0" y="675.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Wago +5 V</text>
-<text x="297.0" y="688.0" font-size="8.3" fill="#5b6472" text-anchor="start">für die Lichtschranken</text>
+<text x="297.0" y="688.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-420, 10 Plätze</text>
+<text x="297.0" y="701.0" font-size="8.3" fill="#5b6472" text-anchor="start">für die Lichtschranken</text>
 <polyline points="290.0,350.0 262.0,350.0 262.0,480.0 290.0,480.0" fill="none" stroke="#c62828" stroke-width="1.8" stroke-linejoin="round"/>
 <polyline points="262.0,480.0 262.0,568.0 290.0,568.0" fill="none" stroke="#c62828" stroke-width="1.8" stroke-linejoin="round"/>
 <polyline points="290.0,414.0 250.0,414.0 250.0,496.0 290.0,496.0" fill="none" stroke="#1f2328" stroke-width="1.8" stroke-linejoin="round"/>
@@ -60,7 +61,7 @@
 <text x="477.0" y="152.0" font-size="8.3" fill="#5b6472" text-anchor="start">4 × TMC2209, Jumper MS1 + MS2 = 1/16, MS3 frei</text>
 <text x="477.0" y="165.0" font-size="8.3" fill="#5b6472" text-anchor="start">A klont Y: A.STEP ↔ Y.STEP, A.DIR ↔ Y.DIR</text>
 <text x="477.0" y="178.0" font-size="8.3" fill="#5b6472" text-anchor="start">Treiber: EN-Pin zum EN-Aufdruck</text>
-<text x="477.0" y="191.0" font-size="8.3" fill="#5b6472" text-anchor="start">Strom am Vref-Poti, ≈ 70 % des Motornennstroms</text>
+<text x="477.0" y="191.0" font-size="8.3" fill="#5b6472" text-anchor="start">Vref ≈ 1,48 V → 1,05 A eff. = 70 % von 1,5 A (R_sense 0,11 Ω)</text>
 <text x="477.0" y="204.0" font-size="8.3" fill="#5b6472" text-anchor="start">GRBL 1.1h: $32=1 (Laser), $30=1000</text>
 <circle cx="470.0" cy="250.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
 <text x="475.0" y="253.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Klemme + (12–36 V)</text>
@@ -135,7 +136,7 @@
 <text x="31.0" y="498.0" font-size="8.3" fill="#5b6472" text-anchor="start">LightBurn o. ä., USB</text>
 <polyline points="470.0,470.0 456.0,470.0 456.0,454.0 204.0,454.0 204.0,470.0" fill="none" stroke="#1864ab" stroke-width="1.4" stroke-linejoin="round" stroke-dasharray="5 3"/>
 <text x="24.0" y="796.0" font-size="8.5" fill="#5b6472" text-anchor="start">Leistung</text>
-<text x="96.0" y="796.0" font-size="8.5" fill="#1c2733" text-anchor="start">Motoren ≈ 18 W, Lüfter ≈ 2 W, Laser über den Wandler ≈ 24 W — zusammen ≈ 44 W von 72 W (dauernd 61 W)</text>
+<text x="96.0" y="796.0" font-size="8.5" fill="#1c2733" text-anchor="start">Motoren ≈ 23 W, Lüfter ≈ 2 W, Laser über den Wandler ≈ 24 W — zusammen ≈ 49 W von 72 W (dauernd 61 W)</text>
 <text x="24.0" y="811.0" font-size="8.5" fill="#5b6472" text-anchor="start">Wandler</text>
 <text x="96.0" y="811.0" font-size="8.5" fill="#1c2733" text-anchor="start">Laser 12 V × 1,8 A = 21,6 W, bei 90 % Wirkungsgrad 24 W aus dem Netzteil; Ausgang vor dem Anschließen des Lasers auf 12,0 V</text>
 <text x="24.0" y="826.0" font-size="8.5" fill="#5b6472" text-anchor="start">Masse</text>

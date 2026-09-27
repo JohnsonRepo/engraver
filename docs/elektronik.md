@@ -7,7 +7,9 @@ geprüft mit `python3 tools/elektronik_check.py`. Die Zeichnung erzeugt
 `python3 tools/elektronik_zeichnen.py`; sie gibt auch die Kabellängen aus;
 den [Anschlussplan](#anschlussplan) erzeugt
 `python3 tools/anschluss_zeichnen.py`. **Stand:** Gehäuse gezeichnet
-(Elektronik.py Rev. 1); die Halter für Endschalter und Ketten folgen
+(Elektronik.py Rev. 2, mit den am Aufbau gemessenen Werten vom
+2026-09-27: Stapelhöhe, Wandler, Wago-Bestand, 110 mm Überstand der 2040
+hinten); die Halter für Endschalter und Ketten folgen
 ([offen](#was-noch-fehlt)). Pinbelegung, Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
 
@@ -20,21 +22,23 @@ zwischen Tisch und 2040, fährt nichts hin:
 
 | | |
 |---|---|
-| Fach | **488 × 139 × 55 mm** (Breite × Tiefe × Höhe) |
+| Fach | **488 × 104 × 55 mm** (Breite × Tiefe × Höhe) |
 | Lage | zwischen den Innenseiten der 2040, von 3 mm hinter dem 2060 bis 3 mm vor ihr hinteres Ende, von 2 mm über dem Tisch bis 3 mm unter die 2040 |
-| engste Stelle | **6 mm**: die Trägerplatte, wenn das Portal am hinteren Schienenende steht — das geht nur mit Z oben |
-| höher geht es | in der Mitte (\|X\| ≤ 225 mm) ab 15 mm hinter dem 2060 bis 10 mm über die Oberkante der 2040 (108 mm über dem Fachboden) |
+| engste Stelle | **23 mm**: der hintere linke Klemmturm des Y-Schlittens über dem Fach, wenn das Portal am hinteren Schienenende steht |
+| höher geht es | in der Mitte (\|X\| ≤ 225 mm) gleich hinter dem 2060 bis 10 mm über die Oberkante der 2040 (108 mm über dem Fachboden) |
 
-Mit Z unten steht das hintere 2060 selbst im Weg: Der Toolhead stieße
-daran, lange bevor er das Fach erreicht. Die Prüfung fährt Portal und
+Nach hinten begrenzt das **Schienenende** den Y-Weg, nicht das 2060: Dort
+steht der Toolhead mit Z unten noch 26 mm vor dem hinteren 2060, die
+Trägerplatte 23 mm vor der Montageplatte. Die Prüfung fährt Portal und
 Toolhead über den ganzen Y-Weg bis an das Schienenende, dazu über X und Z,
 und lässt nur Stellungen gelten, in denen der Toolhead kein 2060
 durchdringt.
 
-Die Tiefe hängt an der Lage des hinteren 2060 — angenommen sind 400 mm
-Mitte zu Mitte hinter dem vorderen `[?]`, also 145 mm Überstand der 2040.
-Seit das Netzteil außerhalb steht, ist das unkritisch: Die Steuerung
-braucht rund 85 mm.
+Die Tiefe folgt aus dem Überstand der 2040 hinter dem hinteren 2060:
+**110 mm** `[v]` (bis Rev. 1 waren 145 mm angenommen), die 2060 liegen damit
+**435 mm** Mitte zu Mitte auseinander. Kasten, Kabelkanal und Montageplatte
+brauchen 107 mm ab der Rückseite des 2060 und enden 3,4 mm vor dem Ende der
+2040 — dafür ist der Kanal 11 statt 12 mm breit.
 
 ## Was hinein kommt
 
@@ -43,7 +47,7 @@ braucht rund 85 mm.
 | Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Gehäuse](#gehäuse-elektronikpy) links, 24-V-Lüfter im Deckel über den Treibern; USB nach hinten | gezeichnet |
 | Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Gehäuse kommt nur seine 24-V-Leitung | vorhanden |
 | 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und Wippschalter KCD1 | gezeichnet |
-| Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V für den Laser, davor drei Wago-Klemmen für +24 V, GND und die 5 V der Lichtschranken | gezeichnet, Wago vorhanden |
+| Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
 | Not-Aus | vorn, gut erreichbar, in der 24-V-Leitung (≥ 3 A Gleichstrom) — schaltet Laser und Motoren ab | — |
 
 Das Gehäuse hängt an der **Rückseite des hinteren 2060** (untere und obere
@@ -54,32 +58,38 @@ nichts, die Maschine steht weiter nur auf den 2060.
 
 | Teil | Druck (PETG) | Masse (voll) | Bauraum |
 |---|---|---|---|
-| Gehäuse mit Montageplatte | auf dem Boden stehend | 150 cm³ ≈ 191 g | 202 × 108 × 55 mm |
-| Deckel | Oberseite nach unten | 38 cm³ ≈ 48 g | 173 × 91 × 6 mm |
-| Bohrlehre_Uno (PLA, ausgeblendet) | flach | 8 cm³ ≈ 10 g | 53 × 69 × 2 mm |
+| Gehäuse mit Montageplatte | auf dem Boden stehend | 148 cm³ ≈ 188 g | 202 × 107 × 55 mm |
+| Deckel | Oberseite nach unten | 37 cm³ ≈ 47 g | 173 × 91 × 5,5 mm |
+| Bohrlehre_Uno (PLA, ausgeblendet) | flach | 7 cm³ ≈ 9 g | 53 × 69 × 2 mm |
 
-Die Massen stammen aus einer Nachbildung der Fusion-API; maßgeblich ist der
-erste Lauf in Fusion. Keine Stützen, 4 Wandlinien, ≥ 30 % Infill. Die
-Oberkante des USB-Fensters ist eine 48-mm-Brücke.
+Die Massen sind aus den Schritten des Skripts nachgerechnet (Voxel,
+0,2 mm); maßgeblich ist der erste Lauf in Fusion. Keine Stützen,
+4 Wandlinien, ≥ 30 % Infill. Die Oberkante des USB-Fensters ist eine
+48-mm-Brücke.
 
-**Aufbau:** Kasten 160 × 91 × 50 mm, 17 mm hinter dem 2060. Die
+**Aufbau:** Kasten 160 × 91 × 44 mm, 16 mm hinter dem 2060. Die
 Montageplatte liegt am 2060 an und trägt den Kasten über den Kanalboden und
-drei niedrige Rippen; der Spalt dazwischen (12 mm) ist der **Kabelkanal**
+drei niedrige Rippen; der Spalt dazwischen (11 mm) ist der **Kabelkanal**
 nach rechts. Links im Kasten der Uno auf vier Stehbolzen, die Buchsenkante
 hinten am **USB-Fenster**. Rechts der Verteiler: hinten **Einbaubuchse** und
-**Schalter**, davor der **Wandler** quer mit zwei Kabelbindern (Schlitze im
-Boden, Platz bis 30 mm Tiefe), davor die drei **Wago-Klemmen** nebeneinander
-(Klebeband). Kabelausschnitte oben offen: links zur Y-Kette und zum linken
-Y-Motor, vorn in den Kanal. Lüftungsschlitze rechts oben. Der Deckel sitzt
-mit einer Lippe innen an den Wänden und 4 × M3 in Domen außen an den
-Seitenwänden; der **Lüfter** steht obenauf über der Mitte des Uno und bläst
-auf die Treiber.
+**Schalter**, davor der **Wandler** (43 × 24 × 20 mm) quer, mittig vor dem
+Schalter, mit zwei Kabelbindern 15 mm neben seiner Mitte — sie laufen
+durch Schlitze im Boden, zwischen Buchse und Schalter bzw. rechts am
+Schalter vorbei, und liegen 4 mm innerhalb seiner Enden. Links und rechts
+vom Wandler bleiben 22,5 bzw. 28,5 mm für die Drähte. Davor die drei
+**Wago-Klemmen** nebeneinander (Klebeband), von links: **+5 V** (221-420,
+neben dem Uno), **GND** (221-420), **+24 V** (221-415, beim Schalter);
+zusammen 89,8 mm auf 92 mm Platz. Kabelausschnitte oben offen: links zur
+Y-Kette und zum linken Y-Motor, vorn in den Kanal. Lüftungsschlitze rechts
+oben. Der Deckel sitzt mit einer Lippe innen an den Wänden und 4 × M3 in
+Domen außen an den Seitenwänden; der **Lüfter** steht obenauf über der
+Mitte des Uno und bläst auf die Treiber.
 
 **Warum es passt:** Kasten und Deckel bleiben im Fach. Nur der Lüfter ragt
-7 mm darüber hinaus, 44 mm hinter dem 2060 und in der Mitte — dort ist bis
+1 mm darüber hinaus, 43 mm hinter dem 2060 und in der Mitte — dort ist bis
 unter den X-Wagen Platz. `tools/elektronik_check.py` fährt Portal und
-Toolhead über den ganzen Weg dagegen: engste Stelle 6 mm (Montageplatte ↔
-Trägerplatte am hinteren Schienenende, nur mit Z oben).
+Toolhead über den ganzen Weg dagegen: engste Stelle 22,7 mm (Montageplatte
+↔ Trägerplatte, Portal am hinteren Schienenende).
 
 **Montage:**
 
@@ -103,41 +113,46 @@ Trägerplatte am hinteren Schienenende, nur mit Z oben).
    (Pfeil am Lüfterrahmen), Kabel durch die Öffnung. Deckel aufsetzen,
    4 × M3×8.
 
-**Nicht gemessen `[w]`:** das Lochbild des Uno (Bohrlehre); die Höhe von
-Uno, Shield und Treibern mit Kühlkörper, angenommen **34 mm** ab Unterseite
-Uno — der Deckel liegt 8 mm darüber. Sobald das Shield da ist, nachmessen;
-ist es höher, `stapel_h` anpassen. Die Einbaubuchse (Loch 8,2 für M8), den
-Schalter KCD1 (Ausschnitt 19,2 × 12,9, Wand dort 1,6 mm für die
-Rastnasen) und die Wago 221-415 (30,2 × 18,6 × 8,1).
+**Gemessen `[v]` (2026-09-27):** die Höhe von Uno, Shield und Treibern mit
+Kühlkörper, **28 mm** ab Unterseite Uno (bis Rev. 1 mit 34 mm angenommen) —
+der Deckel liegt 8 mm darüber, der Kasten ist dadurch 6 mm niedriger; das
+Lochbild des Uno stimmt mit der Bohrlehre; der Wandler, 43 × 24 × 20 mm.
+
+**Nicht gemessen `[w]`:** die Einbaubuchse (Loch 8,2 für M8), der Schalter
+KCD1 (Ausschnitt 19,2 × 12,9, Wand dort 1,6 mm für die Rastnasen) und die
+Wago-Klemmen nach Datenblatt: 221-415 30,2 × 18,8 × 8,6 mm, 221-420
+(10 Leiter, zwei Reihen) 29,8 × 18,3 × 15,8 mm (Breite × Tiefe × Höhe, je
+die größere Händlerangabe).
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
 | `geh_x0` | −205 mm | linke Außenkante des Kastens |
-| `geh_abstand` | 12 mm | Kabelkanal zwischen Montageplatte und Kasten |
-| `stapel_h` / `luft_luefter` | 34 / 8 mm | Höhe Uno + Shield + Treiber, Luft bis zum Deckel — bestimmen die Kastenhöhe |
+| `geh_abstand` | 11 mm | Kabelkanal zwischen Montageplatte und Kasten |
+| `stapel_h` / `luft_luefter` | 28 `[v]` / 8 mm | Höhe Uno + Shield + Treiber, Luft bis zum Deckel — bestimmen die Kastenhöhe |
 | `vert_b` | 94 mm | Breite des Verteilers (3 Wago nebeneinander) |
+| `wandler_l` / `_b` / `_h` | 43 / 24 / 20 mm `[v]` | Wandler; `wandler_binder` 15 mm: Kabelbinder neben seiner Mitte |
 | `buchse_d` | 8,2 mm | Loch der Einbaubuchse |
 | `schalter_b` / `schalter_h` / `schalter_wand` | 19,2 / 12,9 / 1,6 mm | Ausschnitt und Wand am Schalter |
 | `uno_schraube_d` | 2,8 mm | Kernloch in den Stehbolzen |
 
 ## Leistung: Reichen 72 W?
 
-Ja, mit Reserve: Alles zusammen braucht **≈ 44 W**, das Netzteil gibt
+Ja, mit Reserve: Alles zusammen braucht **≈ 49 W**, das Netzteil gibt
 dauernd 61 W ab.
 
 | Verbraucher | Leistung |
 |---|---|
-| 4 × NEMA 17 an TMC2209, je ≈ 1 A eingestellt | ≈ 18 W — je Motor 2 Phasen × (1 A)² × 2 Ω plus 0,6 W im Treiber; Wicklungswiderstand angenommen `[?]` |
+| 4 × NEMA 17 (Stepperonline, 1,5 A) an TMC2209, je 1,05 A eingestellt | ≈ 23 W — je Motor 2 Phasen × (1,05 A)² × 2,3 Ω plus 0,6 W im Treiber; 2,3 Ω laut Datenblatt des 17HE15-1504S `[w]` |
 | Lüfter 40 mm | ≈ 2 W |
 | Laser LASER TREE 4 W: 12 V × 1,8 A (obere Angabe) = 21,6 W, über den Wandler (90 %) | ≈ 24 W |
 | Uno | über USB, nicht aus dem Netzteil |
-| **zusammen** | **≈ 44 W**, also ≈ 1,8 A auf der 24-V-Leitung |
-| Netzteil, dauernd (85 % von 72 W) | 61 W — **≈ 17 W Reserve** |
+| **zusammen** | **≈ 49 W**, also ≈ 2,0 A auf der 24-V-Leitung |
+| Netzteil, dauernd (85 % von 72 W) | 61 W — **≈ 12,5 W Reserve** |
 
 Ein Chopper-Treiber zieht aus dem Netzteil nicht die Spulenströme, sondern
 nur die Verluste in Wicklung und Treiber, dazu die mechanische Leistung —
-bei einem Laser-Portal wenige Watt. Deshalb reichen für vier Motoren knapp
-20 W.
+bei einem Laser-Portal wenige Watt. Deshalb reichen für vier Motoren rund
+23 W.
 
 Wird das Steckernetzteil überlastet, schaltet es ab: Die Motoren verlieren
 Schritte, GRBL merkt davon nichts, weil der Uno über USB weiterläuft. Die
@@ -172,11 +187,15 @@ referenziert nach rechts.
 Die Näherungssensoren (LJ12A3) brauchst du dafür nicht, sie sind die
 Reserve.
 
-**Warum Y hinten am 2060 referenziert:** Der Schalter sitzt da, wo der
-Toolhead mit Z unten 3 mm vor dem hinteren 2060 steht. Dann liegt der ganze
-Weg der Softlimits zwischen den beiden 2060: 321 mm (215 hinter und 106 vor
-der Mitte). Weiter hinten, bis zum Schienenende, kommt das Portal nur beim
-Verfahren von Hand.
+**Warum Y hinten am Schienenende referenziert:** Seit die 2060 435 mm
+auseinander liegen (gemessen), kommt der Toolhead mit Z unten nicht mehr an
+das hintere 2060 — am hinteren Schienenende steht er noch 26 mm davor. Nach
+hinten begrenzen also die Y-Wagen, die dort bündig mit dem Schienenende
+stehen. Der Schalter soll 3 mm davor schalten: Die Wagen dürfen nicht über
+das Ende hinaus, sonst fallen Kugeln heraus. Der Weg der Softlimits reicht
+dann vom Schaltpunkt bis 3 mm vor das vordere 2060 (Z unten): 333 mm
+zwischen Schienenende und vorderem 2060 (227 hinter und 106 vor der Mitte),
+davon gehen Schaltabstand und Rückzug ab.
 
 GRBL, vorläufig — die Werte folgen aus den Schaltpunkten, wenn die Halter
 feststehen:
@@ -188,7 +207,7 @@ feststehen:
 | `$27=1` | 1 mm vom Schalter zurück |
 | `$20=1` | Softlimits an |
 | `$130≈387` | X: 391 mm Weg, minus Schaltweg und Rückzug |
-| `$131≈318` | Y: 321 mm zwischen den 2060, minus Rückzug und Reserve |
+| `$131≈327` | Y: 333 mm zwischen Schienenende und vorderem 2060, minus 3 mm Schaltabstand, 1 mm Rückzug und 2 mm Reserve |
 | `$132≈84` | Z: vom Schaltpunkt (8 mm unter der oberen Grenze) bis ganz unten, 85,6 mm |
 
 Welche Richtung ausgelöst heißt, zeigt GRBL selbst: Mit `?` steht im Status
@@ -211,33 +230,39 @@ Pull-up „ausgelöst“ — die sichere Richtung.
 * Vorn belegt der [Y-Motorhalter](y-motorhalter.md) die letzten 30 mm der
   unteren Nuten beider Seitenflächen (Nutensteine), dahinter sitzen am
   vorderen 2060 die Winkel, die die 2040 halten. Das Motorkabel verlässt die
-  Nut vor dem Winkel und läuft außen an Winkel und Schenkel zum Motor. Wo
-  am hinteren 2060 ebenfalls Winkel sitzen, dort genauso.
+  Nut vor dem Winkel und läuft außen an Winkel und Schenkel zum Motor. Am
+  hinteren 2060 sitzen ebenfalls Winkel (8 je Kreuzung), dort genauso.
 
 **Bewegt** in zwei Energieketten:
 
 | | Y-Kette | X-Kette |
 |---|---|---|
 | wo | außen am linken 2040, neben dem Schlitten (der steht bis 12 mm über das 2040 hinaus) | über dem Portalrohr, hinter dem X-Riemen |
-| Hub | 321 mm | 391 mm |
-| Festpunkt | 273 mm vom hinteren Ende des 2040 (halber Hub) | Mitte des X-Wegs |
+| Hub | 333 mm | 391 mm |
+| Festpunkt | 267 mm vom hinteren Ende des 2040 (halber Hub) | Mitte des X-Wegs |
 | Schleife | nach hinten; die Wanne hängt in der unteren Nut außen am 2040 | nach rechts — links stünde am Wegende der X-Motor darin |
 | bewegtes Ende | linker Y-Schlitten, am Stirnblock | hinten an der Trägerplatte, über dem Riemenhalter |
-| Länge (R18, mit Anschlussgliedern) | ≈ 257 mm | ≈ 292 mm |
+| Länge (R18, mit Anschlussgliedern) | ≈ 263 mm | ≈ 292 mm |
 | darin | X- und Z-Motor, Laser, X- und Z-Endschalter | Z-Motor, Laser, Z-Endschalter |
+
+Gekauft sind Ketten mit **10 × 20 mm innen** (Angabe 2026-09-27). Gerechnet
+und gezeichnet ist noch mit dem Platzhalter 18 × 15 mm außen und R18. Eine
+10 × 20 ist schon innen breiter als der Platzhalter außen — die Y-Kette
+steht also weiter nach außen als gezeichnet. Längen und Halter folgen,
+sobald Außenmaße, Biegeradius und die Anschlussglieder gemessen sind.
 
 Längen bis zum Gerät, Weg wie gezeichnet, 15 % Reserve, aufgerundet:
 
 | Kabel | Weg | kaufen |
 |---|---|---|
-| Y-Motor links | 0,66 m | 1 m |
-| Y-Motor rechts | 0,96 m | **1,5 m** |
-| X-Motor | 0,68 m | 1 m |
-| Z-Motor | 1,38 m | **2 m** |
-| Laser (Versorgung + PWM) | 1,38 m | **2 m** |
-| X-Endschalter | 0,68 m | 1 m |
-| Y-Endschalter | 0,56 m | 1 m |
-| Z-Endschalter | 1,29 m | 1,5 m |
+| Y-Motor links | 0,70 m | 1 m |
+| Y-Motor rechts | 0,99 m | **1,5 m** |
+| X-Motor | 0,72 m | 1 m |
+| Z-Motor | 1,42 m | **2 m** |
+| Laser (12 V + PWM) | 1,42 m | **2 m** |
+| X-Endschalter | 0,72 m | 1 m |
+| Y-Endschalter | 0,53 m | 1 m |
+| Z-Endschalter | 1,33 m | **2 m** (bis Rev. 1: 1,5 m) |
 
 In den Ketten nur **hochflexible Litzen** (Schleppkettenkabel), kein
 Massivdraht und keine starren Flachbandkabel. Die üblichen 1-m-Motorkabel
@@ -265,16 +290,25 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
 | Shield 5 V | Wago +5 V → VCC der drei Lichtschranken | |
 | Uno USB | PC | versorgt auch den Uno |
 
-* **Abwärtswandler:** 24 → 12 V, mindestens 3 A dauernd — der Laser zieht
-  bis 1,8 A. Am sichersten ein fest eingestellter 12-V-Wandler. Ein
-  einstellbares Modul geht auch, aber die üblichen LM2596-Platinen sind bei
-  1,8 A ohne Kühlkörper am Limit `[w]`; ein XL4015-Modul (5 A) hat Luft.
-  Die gängigen Wandler haben ein gemeinsames Minus: Laser-GND und Uno-GND
-  sind damit verbunden, wie es die PWM braucht. Hat der Wandler getrennte
-  Massen, OUT− zusätzlich an den Wago GND.
+* **Abwärtswandler:** vorhanden, 43 × 24 × 20 mm `[v]`. Er muss dauerhaft
+  1,8 A bei 12 V liefern (der Laser zieht 1,4–1,8 A). Die üblichen
+  LM2596-Platinen (Aufdruck „3 A“) sind damit ohne Kühlkörper am Limit
+  `[w]` — dann im ersten Lauf nach ein paar Minuten Laser fühlen, ob der
+  Wandler heiß wird; ein XL4015-Modul (5 A) oder ein fester 12-V-Wandler
+  hat Luft. Die gängigen Wandler haben ein gemeinsames Minus: Laser-GND und
+  Uno-GND sind damit verbunden, wie es die PWM braucht. Hat der Wandler
+  getrennte Massen, OUT− zusätzlich an den Wago GND.
 * **Laserstecker:** XH2.54, 3-polig. Die Reihenfolge steht auf der Platine
   des Moduls neben der Buchse — vor dem ersten Einschalten ablesen.
-* **Wago:** drei 5er-Klemmen (z. B. 221-415): +24 V, GND, +5 V.
+* **Wago** (vorhanden): **+24 V an der 221-415** (5 Plätze: vom Not-Aus,
+  Shield, Wandler, Lüfter, einer frei), **GND an einer 221-420** (10 Plätze:
+  Buchse −, Shield, Wandler, Lüfter, frei für OUT− eines Wandlers mit
+  getrennten Massen), **+5 V an der zweiten 221-420** (5-V-Pin des Shields,
+  drei Lichtschranken). Die **221-413** bleibt Reserve.
+* **Treiber:** GERUI TMC2209 V2.0 mit Kühlkörper, standalone, 1/16 über
+  MS1 + MS2. Strom am Vref-Poti: **Vref ≈ 1,48 V → 1,05 A eff.** = 70 % des
+  Nennstroms 1,5 A — Rechnung und Vorgehen in
+  [hardware-notizen.md](hardware-notizen.md#treiber-und-versorgung).
 * **Sicherung:** braucht es nicht, das Netzteil begrenzt den Strom selbst.
 * Pins und Jumper im Einzelnen:
   [hardware-notizen.md](hardware-notizen.md#pins-grbl-11-gegen-den-aufdruck).
@@ -284,15 +318,15 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
 
 | Menge | Teil | wofür |
 |---|---|---|
-| 1 | Abwärtswandler 24 → 12 V, ≥ 3 A (fest 12 V oder XL4015) | Laser |
+| 1 | Abwärtswandler 24 → 12 V, 43 × 24 × 20 mm | vorhanden — dauerhaft ≥ 1,8 A? |
 | 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Gehäuse: Loch 8,2) | 24-V-Eingang |
 | 1 | Wippschalter KCD1 (Ausschnitt 19,2 × 12,9 mm), ≥ 3 A | EIN/AUS |
 | 1 | Not-Aus-Pilzschalter mit Öffner, ≥ 3 A Gleichstrom | vorn |
 | 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
-| 2 | Energiekette 10 × 15 mm innen, R18, 1 m | Y und X |
+| 2 | Energiekette 10 × 20 mm innen, 1 m | Y und X — gekauft |
 | 1 + 1 | Motorkabel 1,5 m und 2 m, Stecker passend zum Motor (meist JST-PH 6-polig) auf Dupont 4-polig | Y-Motor rechts, Z-Motor |
 | 2 m + 1 | 3-adrige Schleppkettenlitze + XH2.54-Stecker 3-polig mit Crimpkontakten | Laser |
-| 3 | Wago 221-415 | vorhanden |
+| 1 + 2 | Wago 221-415 (+24 V), 221-420 (GND, +5 V); 221-413 Reserve | vorhanden |
 | 4 + 4 | M5×12 + Hammermutter M5 (Nut 6) | Gehäuse → Rückseite des 2060 |
 | 4 + 4 | M3×8 + Messing-Einsatz M3 Ø5 | Deckel |
 | 4 | M3×8 | Uno → Stehbolzen |
@@ -304,17 +338,22 @@ Die übrigen Motoren reichen mit 1 m ([Kabel](#kabel)).
 ## Was noch fehlt
 
 1. **Halter der Endschalter** X und Y (mit Fahnen) — kommen als Nächstes,
-   alle Maße sind da.
-2. **Halter der Energieketten** (Wannen, Festpunkte, bewegte Enden): wenn
-   die Ketten da sind, die Anschlussglieder messen (Lochbild, Breite).
-3. **Stapelhöhe** Uno + Shield + Treiber: das Shield ist da, jetzt messen
-   (siehe [Gehäuse](#gehäuse-elektronikpy)).
-4. Nicht dringend: Überstand der 2040 hinter dem hinteren 2060 (angenommen
-   145 mm).
+   alle Maße sind da. Y schaltet jetzt am hinteren Schienenende
+   ([Endschalter](#endschalter)).
+2. **Energieketten** (10 × 20 innen, gekauft): Außenbreite und -höhe,
+   Biegeradius und die Anschlussglieder (Lochbild, Breite) messen — dann
+   Längen, Wannen, Festpunkte und bewegte Enden.
+3. **Wandler:** Typ bzw. Aufdruck — kann er dauerhaft 1,8 A?
+4. **Treiber:** den Messwiderstand auf den GERUI-Modulen ablesen (R110 =
+   0,11 Ω), bevor Vref eingestellt wird.
+5. **Motoren:** Typ auf dem Etikett ablesen (vermutlich 17HE15-1504S).
 
 Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit
 Hohlstecker 5,5 × 2,1; der Laser ein LASER TREE 4 W mit 12 V / 1,6 A;
-Lüfter 24 V; Ketten werden wie in der Einkaufsliste gekauft;
-Gabellichtschranken für X und Y sind da, Näherungssensoren als Reserve;
-Wago-Klemmen sind da. 2026-09-27: das CNC Shield V3 ist da; die 2040 sitzen
-mit Winkeln an den 2060.
+Lüfter 24 V; Gabellichtschranken für X und Y sind da, Näherungssensoren
+als Reserve; Wago-Klemmen sind da. 2026-09-27: das CNC Shield V3 ist da;
+die 2040 sitzen mit Winkeln an den 2060 (8 je Kreuzung, zwei davon in der
+oberen Nut); Stapelhöhe 28 mm, Lochbild des Uno stimmt; Motoren
+Stepperonline NEMA 17 (1,5 A); Treiber GERUI TMC2209 V2.0; die 2040 stehen
+hinten 110 mm über; Wandler 43 × 24 × 20 mm; Wago: 1 × 221-413,
+1 × 221-415, 2 × 221-420; Ketten 10 × 20 mm innen.

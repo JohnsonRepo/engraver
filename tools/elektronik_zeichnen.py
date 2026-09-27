@@ -34,19 +34,25 @@ ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                           'fusion', 'Elektronik', 'Elektronik.py')
 
 # ---- Ketten: Platzhalter, bis die gekauften gemessen sind ------------------
+# Gekauft: 10 x 20 mm innen (Angabe 2026-09-27). Aussenmasse und Biegeradius
+# fehlen noch — bis dahin die alten Platzhalter.
 KETTE_B, KETTE_H, KETTE_R = 18.0, 15.0, 18.0   # Kette aussen, Biegeradius
 KETTE_ENDEN = 40.0               # beide Anschlussglieder zusammen
 RESERVE = 0.15                   # Kabel: Boegen, Zugentlastung, Stecker
 KAUFLAENGEN = (0.5, 1.0, 1.5, 2.0, 2.5, 3.0)   # m
 
-# Leistung: Steckernetzteil GIDEALED 24 V / 3 A. Die Motoren sind
-# geschaetzt: je 2 Phasen x I^2 x R plus Treiber, mit dem Strom, der am
-# Vref-Poti eingestellt wird, und dem Wicklungswiderstand eines kurzen
-# NEMA 17 [?] (Typ der Motoren unbekannt). Laser: LASER TREE 4 W, 12 V
-# 1,6 A (1,4-1,8 A) [v] Angabe, ueber einen Abwaertswandler.
+# Leistung: Steckernetzteil GIDEALED 24 V / 3 A. Die Motoren: je 2 Phasen
+# x I^2 x R plus Treiber, mit dem Strom, der am Vref-Poti eingestellt wird
+# (70 % des Nennstroms), und dem Wicklungswiderstand des Stepperonline
+# NEMA 17, vermutlich 17HE15-1504S: 1,5 A, 2,3 Ohm [w]. Laser: LASER TREE
+# 4 W, 12 V 1,6 A (1,4-1,8 A) [v] Angabe, ueber einen Abwaertswandler.
 NETZTEIL_W = 72.0
 DAUERLAST = 0.85                 # dauernd nicht mehr als 85 % ziehen
-MOTOREN, MOTOR_I, MOTOR_R, TREIBER_W = 4, 1.0, 2.0, 0.6
+MOTOR_NENN, MOTOR_ANTEIL = 1.5, 0.7    # A je Phase [w]; davon eingestellt
+MOTOREN, MOTOR_R, TREIBER_W = 4, 2.3, 0.6
+MOTOR_I = MOTOR_NENN * MOTOR_ANTEIL    # Effektivstrom je Phase
+# TMC2209 V2.0 (GERUI), R_sense 0,11 Ohm [w]: I_eff = 0,71 x Vref
+VREF_FAKTOR = 0.71
 LUEFTER_W = 2.0
 LASER_V, LASER_A = 12.0, 1.8     # obere Grenze der Angabe
 WANDLER_ETA = 0.9                # Abwaertswandler 24 -> 12 V [w]
@@ -61,15 +67,29 @@ def konzept(w, L, tw, TL, ew, EL):
     Elektronik.py."""
     feste, bewegte, _ = bauraum.bauraeume(tw, TL)
     feste = [q for q in feste if q.name not in portal_check.TOOLHEAD_OHNE]
-    d_schiene, d_vorn, d_hinten, _ = portal_check.y_weg(w, L, TL, feste,
-                                                        bewegte)
+    d_schiene, d_vorn, d_2060, _ = portal_check.y_weg(w, L, TL, feste,
+                                                      bewegte)
+    # Hinten begrenzt seit Portal Rev. 14 die Schiene: das hintere 2060
+    # liegt weiter hinten, als der Wagen kommt.
+    d_hinten = min(d_2060, d_schiene)
     portal = {q.name: q for q in bauraum.portal_bauraeume(w, L)[0]}
     R = L['R']
     K = {'feste': feste, 'bewegte': bewegte, 'portal': portal,
-         'd_schiene': d_schiene, 'd_vorn': d_vorn, 'd_hinten': d_hinten}
+         'd_schiene': d_schiene, 'd_vorn': d_vorn, 'd_hinten': d_hinten,
+         # Toolhead mit Z unten an der hinteren Grenze: Luft zum 2060
+         'luft_2060': d_2060 - d_hinten + 3.0}
+    K['grenze_hinten'] = ('am hinteren Schienenende' if d_schiene < d_2060
+                          else '3 mm vor dem hinteren 2060')
     fach = portal_check.elektronikfach(w, L)
     K['fach'] = fach
-    K['y_tr'] = TL['traeger_y0'] - d_schiene - w('luft_bau')
+    # engste Stelle zwischen Fach und allem, was faehrt (wie portal_check
+    # Abschnitt 16): (Luft, Fach, Teil, Portalstellung)
+    K['fach_engste'] = portal_check.luft_hinten(w, L, TL, feste, bewegte,
+                                                [fach])[0]
+    # hoehere Zone in der Mitte: ab vor der Traegerplatte am hinteren
+    # Schienenende — seit Portal Rev. 14 liegt die vor dem 2060, die Zone
+    # beginnt dann am Fach
+    K['y_tr'] = min(TL['traeger_y0'] - d_schiene - w('luft_bau'), fach.y[1])
 
     # Gehaeuse aus Elektronik.py
     K['EL'] = EL
@@ -210,7 +230,7 @@ def kabelwege(w, L, TL, K):
         'X-Endschalter': (laenge(zur_kette) + ky + laenge(x_es), None),
         'Z-Motor': (laenge(zur_kette) + ky + laenge(zur_x) + kx
                     + laenge(z_motor), None),
-        'Laser (24 V + PWM)': (laenge(zur_kette) + ky + laenge(zur_x) + kx
+        'Laser (12 V + PWM)': (laenge(zur_kette) + ky + laenge(zur_x) + kx
                                + laenge(laser), None),
         'Z-Endschalter': (laenge(zur_kette) + ky + laenge(zur_x) + kx
                           + laenge(z_es), None),
@@ -492,7 +512,8 @@ def main():
         (tr.y[1] - K['d_schiene'], tr.z[0] + 30.0,
          'Trägerplatte am Schienenende\n(nur mit Z oben, gestrichelt)'),
         (K['strahl_y'] - K['d_hinten'], -110.0,
-         'Toolhead mit Z unten: 3 mm\nvor dem hinteren 2060'),
+         'Toolhead mit Z unten: {} mm\nvor dem hinteren 2060'.format(
+             de(K['luft_2060'], 0))),
         (-60.0, L['rahmen_z1'] - 8.0, '2040 (davor die Kette)'),
         (-211.0, 66.0, 'Toolhead oben abgeschnitten')],
         fb.ox + fb.breite + 12, 'start', abstand=26.0)
@@ -500,9 +521,13 @@ def main():
         de(fach.z[1] - fach.z[0], 0)), 4)
     t += quer_mass(fb, fach.y[0], fach.y[1], fach.z[0] + 6.0, '{} mm'.format(
         de(fach.y[1] - fach.y[0], 0)), -4)
-    t += fb.luft(tr.y[0] - K['d_schiene'] + 4.0, fach.z[1],
-                 tr.y[0] - K['d_schiene'] + 4.0, tr.z[0],
-                 '{} mm'.format(de(tr.z[0] - fach.z[1], 0)), dx=5, dy=-2)
+    # engste Stelle ueber dem Fach: das Teil in seiner Stellung
+    luft, _, teil, dy = K['fach_engste']
+    q = K['portal'].get(teil)
+    if q is not None and abs(q.z[0] - fach.z[1] - luft) < 0.05:
+        ym = (q.y[0] + q.y[1]) / 2.0 + dy
+        t += fb.luft(ym, fach.z[1], ym, q.z[0], '{} mm'.format(de(luft, 0)),
+                     dx=5, dy=-2)
 
     # ---- Zahlen ------------------------------------------------------------
     ty = fb.oy + fb.hoehe + 50
@@ -510,11 +535,14 @@ def main():
     zeilen = [
         ('Fach', '{} × {} × {} mm (B × T × H) hinter dem hinteren 2060, '
          'unter den 2040 — dort fährt nichts hin, engste Stelle {} mm '
-         '(Trägerplatte'.format(
+         '({}'.format(
              de(fach.x[1] - fach.x[0], 0), de(fach.y[1] - fach.y[0], 0),
-             de(fach.z[1] - fach.z[0], 0), de(tr.z[0] - fach.z[1], 0))),
-        ('', 'am hinteren Schienenende, nur mit Z oben). Die Tiefe hängt an '
-         'der Lage des hinteren 2060 (400 mm Mitte zu Mitte angenommen).'),
+             de(fach.z[1] - fach.z[0], 0), de(K['fach_engste'][0], 0),
+             K['fach_engste'][2].replace('ue', 'ü'))),
+        ('', 'darüber, Portal am hinteren Schienenende). Die Tiefe hängt an '
+         'der Lage des hinteren 2060 (die 2040 stehen hinten {} mm über, '
+         'gemessen).'.format(de(L['quer_y_hinten'][0] - L['rahmen_y'][0],
+                                0))),
         ('höher', 'in der Mitte (|X| ≤ 225) ab {} mm hinter dem 2060 frei bis '
          'Z {} — {} mm über der Oberkante der 2040'.format(
              de(L['quer_y_hinten'][0] - K['y_tr'], 0), de(K['z_frei'], 0),
@@ -526,8 +554,9 @@ def main():
              de(LUEFTER_W, 0), de(K['leistung']['laser'], 0),
              de(K['leistung']['summe'], 0), de(K['leistung']['dauer'], 0))),
         ('Endschalter', 'LM393-Gabellichtschranken: X links am Portal, Y '
-         'außen am rechten 2040 — schaltet, wenn der Toolhead mit Z unten '
-         '3 mm vor dem hinteren 2060 steht; Z vorhanden'),
+         'außen am rechten 2040 — schaltet {} (Toolhead mit Z unten {} mm '
+         'vor dem 2060); Z vorhanden'.format(K['grenze_hinten'],
+                                             de(K['luft_2060'], 0))),
         ('Kette Y', '{} mm Hub, Festpunkt {} mm vom hinteren Ende des 2040, '
          'Schleife nach hinten, ≈ {} mm Kette (R{})'.format(
              de(K['ky_hub'], 0), de(K['ky_fest'] - L['rahmen_y'][0], 0),
@@ -537,7 +566,7 @@ def main():
              de(K['kx_hub'], 0), de(K['kx_laenge'], 0), de(KETTE_R, 0))),
     ]
     for n in ('Y-Motor links', 'Y-Motor rechts', 'X-Motor', 'Z-Motor',
-              'Laser (24 V + PWM)', 'X-Endschalter', 'Y-Endschalter',
+              'Laser (12 V + PWM)', 'X-Endschalter', 'Y-Endschalter',
               'Z-Endschalter'):
         mm = kab[n][0]
         zeilen.append(('Kabel' if n == 'Y-Motor links' else '',

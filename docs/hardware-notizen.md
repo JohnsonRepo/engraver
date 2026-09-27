@@ -10,7 +10,7 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem vorderen Ende der 2040, hinten stehen die 2040 110 mm über), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; an jeder Kreuzung 8 Winkel |
 | Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn **je Seite ein NEMA 17** mit dem Ritzel direkt auf der Welle, mittig zur 2040 (`YMotorhalter`) |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
@@ -67,9 +67,10 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Umlenkrollen | **glatt, Bohrung 5 mm**; 20-Z-Ritzel mit Kugellager vorhanden | `[v]` |
 | X-Umlenkung | **20-Z-Rolle mit Kugellager**, Bohrung 5 — in der Schleife läuft die Zahnseite auf der Rolle, eine glatte gehört auf den Riemenrücken | gewählt (Portal.py) |
 | Umlenkrolle 20 Z | Außendurchmesser (Bord) **18 mm**, Breite **8,5 mm** | `[?]` angenommen, nicht gemessen |
-| Motoren | NEMA 17, **37 mm** ohne Welle, **60 mm** mit Welle | `[v]` Angabe am Aufbau |
+| Motoren | **Stepperonline** NEMA 17, **37 mm** ohne Welle, **60 mm** mit Welle | `[v]` Angabe am Aufbau |
+| Motordaten | vermutlich **17HE15-1504S**: **1,5 A** je Phase, 2,3 Ω, 4,0 mH, 42 Ncm, Körper 38 mm, Welle Ø5 × 23,5 mm, D-Fläche 20 mm lang, 280 g. Alle Stepperonline-NEMA-17 mit 38–40 mm Körper haben 1,5 A (Ausnahme 17HS16-2004S1 mit 2 A) — Typ am Etikett prüfen | `[w]` Datenblatt Stepperonline |
 | NEMA 17, Welle | ragt **23 mm** heraus (60 − 37), Ø5. Die Halter sind auf **20 mm** ausgelegt (erste Angabe): so trägt die Welle das ganze Ritzel, die 3 mm mehr stehen frei über | `[v]` Angabe am Aufbau |
-| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. **Offen:** der Riemen läuft in der rechten Nut hin und in der linken zurück (Angabe 2026-09-27), das Ritzel mittig ([Y-Antrieb](#y-antrieb)) — dazu passt die Linie aus v8 nicht; wo die Klemme am Wagen greift, ist zu klären | `[v]` Linie aus v8, Höhe Angabe am Aufbau; Lage quer offen |
+| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. Der Riemen läuft in der rechten Nut hin und in der linken zurück (Angabe 2026-09-27), das Ritzel mittig ([Y-Antrieb](#y-antrieb)); die Klemmen bleiben, wo Y-Wagen und Klemmtürme in `Portal.py` sie haben: **21,6 mm innen**. Der Wagen-Trum läuft damit schräg von der Klemme in die innere Nut zum Ritzel, der Rücklauf gerade in der äußeren Nut | `[v]` Linie aus v8 = Klemmtürme in Portal.py, Höhe Angabe am Aufbau |
 | Obere Nut des 2040 | Öffnung beginnt **6 mm unter der Oberkante** (oberer Rand), Mitte 10 mm darunter | `[v]` Angabe am Aufbau |
 | Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (9,5 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
 | Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Das Ritzel sitzt **direkt auf der Motorwelle**, **mittig zur 2040**, im eigenen `YMotorhalter` (Rev. 4, [Y-Antrieb](#y-antrieb)). Der Halter aus Portal Rev. 12/13 (Achse 27,5 mm vor der Stirnseite, 15,55 mm innen, M5 in der oberen Nut) ist gedruckt und am Aufbau verworfen. Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
@@ -77,6 +78,8 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Y-Umlenkung hinten | Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager | `[v]` Angabe am Aufbau; Lage 11 mm hinter der Stirnseite angenommen `[?]` (nur Riemenlänge) |
 | Y-Riemen, Länge | offen, je Seite **≈ 1270 mm** von Klemme zu Klemme | gerechnet (Portal.py), hängt an der Lage des hinteren Ritzels |
 | Vorderes 2060 | **35 mm** hinter der Stirnseite der 2040 | `[v]` Angabe am Aufbau |
+| Hinteres 2060 | die 2040 stehen hinten **110 mm** darüber hinaus (beide Seiten) → **435 mm** Mitte zu Mitte hinter dem vorderen (bis Portal Rev. 13: 400 `[?]`) | `[v]` Angabe am Aufbau 2026-09-27 |
+| Winkel 2040 ↔ 2060 | **8 je Kreuzung**, zwei davon in der oberen Nut | `[v]` Angabe am Aufbau 2026-09-27 |
 | Abstand der Y-Schienen | **514 mm** Mitte zu Mitte = Rohr 500 + 2 × 7 mm; ergibt sich beim Aufbau aus dem verschraubten Portal | gesetzt (Portal.py), Rechnung siehe unten |
 | Kernbohrung 2020 V-Slot | Ø4,2 — für die Stirnschraube **M5 schneiden, ≥ 15 mm tief** | `[w]` |
 | Hammermuttern | M5, Nut 6, in der hinteren Nut des Portalrohrs | `[w]` |
@@ -397,8 +400,10 @@ Chopper einstellbar.
 
 ## Elektronik
 
-**Stand 2026-09-27:** Arduino Uno R3 und CNC Shield V3 vorhanden, Treiber: **4 × TMC2209** (plus Ersatz), Steckernetzteil 24 V / 3 A,
-Laser 12 V / 1,6 A über einen Abwärtswandler. Vier NEMA 17 — genau die
+**Stand 2026-09-27:** Arduino Uno R3 und CNC Shield V3 vorhanden, Treiber:
+**4 × TMC2209** (GERUI TMC2209 V2.0 mit Kühlkörper, plus Ersatz),
+Steckernetzteil 24 V / 3 A, Laser 12 V / 1,6 A über einen Abwärtswandler
+(43 × 24 × 20 mm). Vier NEMA 17 von Stepperonline (1,5 A) — genau die
 vier Treiberplätze des Shields. Pinbelegung
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
 Netzteil, Endschalter und Kabel hinkommen, und das Gehäuse
@@ -465,13 +470,23 @@ gewandert:
   1/32, dann `$100=$101=160`, `$102=3200` und Z höchstens ~500 mm/min, weil
   der Uno bei ~30 kHz Schluss macht). Strom über das Vref-Poti nach der Formel
   des Moduls (hängt vom Messwiderstand ab), etwa 70 % des Motornennstroms.
+* **Vref der GERUI TMC2209 V2.0:** Die üblichen V2.0-Module haben
+  R_sense = 0,11 Ω (Aufdruck **R110** neben dem Chip) `[w]` — vor dem
+  Einstellen ablesen. Dann gilt I_eff = 0,71 × Vref, also
+  **Vref = 1,41 × I_eff**. Motor 1,5 A, davon 70 % = **1,05 A eff. →
+  Vref ≈ 1,48 V**. Messen zwischen GND und dem Schleifer des Potis (Shield
+  an 24 V, Uno an USB, Motoren dürfen ab sein), mit einem isolierten
+  Schraubendreher drehen. Werden die Motoren über 70 °C heiß, zurück; laufen
+  sie kalt und verlieren Schritte, höchstens bis 1,2 A (Vref ≈ 1,7 V, 80 %
+  des Nennstroms) — das Netzteil trägt das noch (≈ 55 W statt 49 W). Alle
+  vier gleich einstellen, Y und A auf jeden Fall.
 * Treiber richtig herum stecken (EN-Pin zum EN-Aufdruck) und Motoren nie unter
   Spannung ab- oder anstecken — beides kostet den Treiber.
 * Netzteil 24 V für die Motoren (TMC2209 abs. max 29 V, siehe oben). Der Laser
   nach seinem Typenschild; ist er ein 12-V-Modul, bekommt er einen eigenen
   12-V-Zweig. **Vorhanden: Steckernetzteil GIDEALED 24 V / 3 A (72 W)**
-  `[v]` Angabe. Motoren ≈ 18 W, Lüfter ≈ 2 W, Laser mit Wandler ≈ 24 W —
-  zusammen ≈ 44 W, dauernd gehen 61 W. Bilanz in
+  `[v]` Angabe. Motoren ≈ 23 W, Lüfter ≈ 2 W, Laser mit Wandler ≈ 24 W —
+  zusammen ≈ 49 W, dauernd gehen 61 W. Bilanz in
   [elektronik.md](elektronik.md#leistung-reichen-72-w).
 
 ### Grenzen des Uno
@@ -496,7 +511,7 @@ Nutzerangaben vom 2026-09-26 mit Foto, Halter in `fusion/YMotorhalter/`
 | Motoren | **2 × NEMA 17**, je Seite einer vorn am Profilende, Welle nach oben, Achse mittig zur 2040 | Nutzerangabe |
 | Ritzel | **GT2 20 Z, Bohrung 5**, direkt auf der Motorwelle | Nutzerangabe |
 | Trume in der Nut | 12,73 mm auseinander (20 Z): Rücken 3,26, Zahnspitzen 4,64 mm hinter der Seitenfläche | gerechnet aus Nut 6 `[w]` |
-| Motorwelle | **23 mm** ab Flansch (60 mm mit, 37 mm ohne Welle), Abflachung 15 mm ab Wellenende | `[v]` Länge, Abflachung `[w]` |
+| Motorwelle | **23 mm** ab Flansch (60 mm mit, 37 mm ohne Welle), Abflachung 15 mm ab Wellenende angenommen — der 17HE15-1504S hat 20 mm, die Madenschraube trifft also sicher | `[v]` Länge, Abflachung `[w]` |
 | Y-Motor | Körper **37 mm**, hängt bis 25,5 mm unter die 2040 | `[v]` |
 | Nutensteine M5, Nut 6 | Lippe 1,8, Gewinde 4, Platz in der Nut 6 mm → M5×12 + Scheibe | `[w]` |
 | gedruckter Halter (Portal.py) | Motorachse 15,55 mm neben der Profilmitte, M5 in der oberen Nut — daher Rev. 3 | Nutzerangabe, Foto |

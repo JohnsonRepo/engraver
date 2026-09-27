@@ -2,19 +2,21 @@
 #
 # Baugruppe aus zwei Druckteilen und einer Bohrlehre:
 #   Gehaeuse     Kasten fuer Arduino Uno R3 mit CNC Shield V3 und 4 x TMC2209,
-#                daneben Platz fuer drei Wago-Klemmen und den Abwaerts-
-#                wandler 24 -> 12 V (Kabelbinder). Hinten Fenster fuer USB,
-#                Einbaubuchse fuer den Hohlstecker 5,5 x 2,1 und Wipp-
-#                schalter; Kabelausschnitte links und vorn, Lueftungs-
-#                schlitze rechts. Vorn eine Montageplatte mit 4 x M5 in
-#                Hammermuttern der Rueckseite des hinteren 2060; zwischen
-#                Platte und Kasten laeuft ein Kabelkanal.
+#                daneben Platz fuer drei Wago-Klemmen (221-415, 2 x 221-420)
+#                und den Abwaertswandler 24 -> 12 V, 43 x 24 x 20 (Kabel-
+#                binder). Hinten Fenster fuer USB, Einbaubuchse fuer den
+#                Hohlstecker 5,5 x 2,1 und Wippschalter; Kabelausschnitte
+#                links und vorn, Lueftungsschlitze rechts. Vorn eine
+#                Montageplatte mit 4 x M5 in Hammermuttern der Rueckseite
+#                des hinteren 2060; zwischen Platte und Kasten laeuft ein
+#                Kabelkanal.
 #   Deckel       mit dem 24-V-Luefter (40 x 40 x 10) ueber den Treibern,
 #                4 x M3 in Gewindeeinsaetze der Eckdome.
 #   Bohrlehren   ausgeblendet: Lochbild des Uno zum Anhalten, bevor das
 #                Gehaeuse gedruckt wird.
 #   Referenz_nicht_drucken  nur zur Ansicht: hinteres 2060, Enden der 2040,
-#                Uno mit Shield und Treibern (Huelle), Luefter.
+#                Uno mit Shield und Treibern (Huelle), Luefter, Wandler,
+#                Wago-Klemmen.
 #
 # Das Gehaeuse steht im Fach hinter dem hinteren 2060, unter den 2040
 # (docs/elektronik.md). Dorthin faehrt nichts; nur der Luefter ragt ueber
@@ -33,7 +35,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Elektronik'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -44,7 +46,9 @@ MASSE = {
     'rahmen_h':            (40.0, 'Rahmen 2040 hochkant: Hoehe'),
     'rahmen_y0':         (-360.0, 'Rahmen: hintere Stirnseite der 2040'),
     'rahmen_z0':          (-69.0, 'Rahmen: Unterkante der 2040 = Oberkante 2060'),
-    'quer_y1':           (-215.0, 'Rahmen: Rueckseite des hinteren 2060'),
+    # Rev. 2: die 2040 stehen hinten 110 mm ueber das 2060 [v] (bis Rev. 1
+    # 145 mm angenommen) — das Fach ist 35 mm kuerzer.
+    'quer_y1':           (-250.0, 'Rahmen: Rueckseite des hinteren 2060'),
     'quer_h':              (60.0, '2060 quer, hochkant: Hoehe'),
     'quer_laenge':        (600.0, '2060 quer: Laenge'),
     'quer_nut_1':          (10.0, '2060: 1. Nut ueber der Unterkante'),
@@ -68,13 +72,15 @@ MASSE = {
     'uno_buchse_vor':       (6.3, 'Uno: USB-Buchse steht so weit ueber die Kante'),
     'uno_buchse_h':        (11.0, 'Uno: USB- und Hohlbuchse, Hoehe ueber der Platine'),
     'uno_buchse_b':        (46.0, 'Uno: Bereich der Buchsen an der Kante'),
-    # Stapel: Unterseite Uno bis Oberkante Kuehlkoerper der Treiber [w]
-    'stapel_h':            (34.0, 'Uno + Shield + Treiber: Hoehe ab Unterseite Uno'),
+    # Stapel: Unterseite Uno bis Oberkante Kuehlkoerper der Treiber, am
+    # Aufbau gemessen [v] (Rev. 2; bis Rev. 1 mit 34 mm angenommen)
+    'stapel_h':            (28.0, 'Uno + Shield + Treiber: Hoehe ab Unterseite Uno'),
     'luft_luefter':         (8.0, 'Luft zwischen Kuehlkoerpern und Deckel'),
 
     # Gehaeuse
     'geh_x0':            (-205.0, 'Gehaeuse: linke Aussenkante'),
-    'geh_abstand':         (12.0, 'Gehaeuse: Kabelkanal zwischen Platte und Kasten'),
+    # Rev. 2: 11 statt 12 mm, damit der Kasten in das kuerzere Fach passt
+    'geh_abstand':         (11.0, 'Gehaeuse: Kabelkanal zwischen Platte und Kasten'),
     'geh_wand':             (2.5, 'Gehaeuse: Wand'),
     'geh_boden':            (2.5, 'Gehaeuse: Boden'),
     'uno_rand':             (4.0, 'Uno: Luft zur Wand links und rechts'),
@@ -97,12 +103,18 @@ MASSE = {
     'lueftung_h':          (22.0, 'Lueftungsschlitz: Hoehe'),
     'binder_b':             (5.0, 'Kabelbinder-Schlitz: Laenge'),
     'binder_t':             (2.2, 'Kabelbinder-Schlitz: Breite'),
-    # Platz im Verteiler (Masse der Teile [w]): hinten Buchse und Schalter,
-    # davor der Wandler quer, davor die drei Wago-Klemmen nebeneinander
-    # (221-415: 30,2 breit, 18,6 tief, Draehte von vorn oder hinten)
+    # Platz im Verteiler: hinten Buchse und Schalter, davor der Wandler quer,
+    # davor die drei Wago-Klemmen nebeneinander (Draehte von vorn oder
+    # hinten). Wandler gemessen [v] (Rev. 2), Wago nach Datenblatt [w] —
+    # siehe WAGO unten.
     'eingang_tiefe':       (22.0, 'Verteiler: Buchse und Schalter reichen so weit hinein'),
+    'wandler_l':           (43.0, 'Abwaertswandler: Laenge (liegt quer, laengs X)'),
+    'wandler_b':           (24.0, 'Abwaertswandler: Breite (laengs Y)'),
+    'wandler_h':           (20.0, 'Abwaertswandler: Hoehe'),
     'wandler_t':           (30.0, 'Verteiler: Platz fuer den Wandler (Tiefe)'),
-    'wandler_binder':      (20.0, 'Verteiler: Kabelbinder so weit neben der Mitte'),
+    # Rev. 2: 15 statt 20 mm neben der Wandlermitte — bei 43 mm Laenge
+    # lagen die Binder sonst fast an seinen Enden
+    'wandler_binder':      (15.0, 'Verteiler: Kabelbinder so weit neben der Wandlermitte'),
     'wago_t':              (20.0, 'Verteiler: Platz fuer die Wago-Klemmen (Tiefe)'),
     'wago_b':              (92.0, 'Verteiler: Platz fuer 3 Wago-Klemmen (Breite)'),
     'dom_d':                (9.0, 'Deckelschrauben: Dom aussen an der Wand'),
@@ -141,6 +153,15 @@ MASSE = {
 # USB- und Hohlbuchse, y quer ab der Kante unter der Hohlbuchse [w]
 # (Arduino-Massblatt, in mil: 550/100, 600/2000, 2600/300, 2600/1400).
 UNO_LOECHER = ((13.97, 2.54), (15.24, 50.80), (66.04, 7.62), (66.04, 35.56))
+
+# Wago-Klemmen im Verteiler von links nach rechts (Rev. 2, Bestand [v]):
+# +5 V neben dem Uno (kommt von dessen 5-V-Pin), GND in der Mitte, +24 V
+# rechts beim Schalter. Die 221-413 (3 Leiter) bleibt Reserve. Masse nach
+# Datenblatt [w], je die groessere Angabe der Haendler:
+# (Name, Typ, breit laengs X, tief laengs Y, hoch)
+WAGO = (('+5 V', '221-420', 29.8, 18.3, 15.8),
+        ('GND', '221-420', 29.8, 18.3, 15.8),
+        ('+24 V', '221-415', 30.2, 18.8, 8.6))
 LUEFTUNG_N = 6                   # Lueftungsschlitze rechts
 
 
@@ -205,17 +226,31 @@ def lage():
     # Wandler quer vor Buchse und Schalter, mit zwei Kabelbindern laengs Y:
     # je ein Schlitzpaar vor und hinter ihm, der Binder laeuft unter dem
     # Boden durch. Die Binder laufen zwischen Buchse und Schalter bzw.
-    # rechts am Schalter vorbei. Davor die Wago-Klemmen (Klebeband).
+    # rechts am Schalter vorbei — der Wandler steht deshalb mittig vor dem
+    # Schalter. Davor die Wago-Klemmen (Klebeband).
     vx, vy = L['vert_x'], L['innen_y']
     xm = (vx[0] + vx[1]) / 2.0
     y_w0 = vy[0] + w('eingang_tiefe')
     L['wandler_y'] = (y_w0, y_w0 + w('wandler_t'))
+    xw, yw = L['schalter_x'], y_w0 + w('wandler_t') / 2.0
+    L['wandler_x'] = (xw - w('wandler_l') / 2.0, xw + w('wandler_l') / 2.0)
+    L['wandler_koerper_y'] = (yw - w('wandler_b') / 2.0,
+                              yw + w('wandler_b') / 2.0)
+    L['wandler_z'] = (L['boden_z'], L['boden_z'] + w('wandler_h'))
     vor = w('binder_t') + 2.5                  # vor den Binderschlitzen
     L['wago_y'] = (L['wandler_y'][1] + vor,
                    L['wandler_y'][1] + vor + w('wago_t'))
     L['wago_x'] = (xm - w('wago_b') / 2.0, xm + w('wago_b') / 2.0)
+    # die einzelnen Klemmen: an die Hinterkante des Platzes, Luecken gleich
+    luecke = (w('wago_b') - sum(k[2] for k in WAGO)) / (len(WAGO) - 1.0)
+    L['wago'], x = [], L['wago_x'][0]
+    for name, typ, b, t, h in WAGO:
+        L['wago'].append((name, typ, (x, x + b),
+                          (L['wago_y'][0], L['wago_y'][0] + t),
+                          (L['boden_z'], L['boden_z'] + h)))
+        x += b + luecke
     rand = w('binder_t') / 2.0 + 1.0
-    L['binder_x_lage'] = (xm - w('wandler_binder'), xm + w('wandler_binder'))
+    L['binder_x_lage'] = (xw - w('wandler_binder'), xw + w('wandler_binder'))
     L['binder'] = [(x, y) for x in L['binder_x_lage']
                    for y in (L['wandler_y'][0] - rand,
                              L['wandler_y'][1] + rand)]
@@ -891,8 +926,9 @@ def bau_bohrlehren(app, design, comp, L, fehler):
 # --- Referenz (nicht drucken) --------------------------------------------------
 def bau_referenz(app, design, teile, L, fehler):
     """Hinteres 2060, die hinteren Enden der 2040, Uno mit der Huelle von
-    Shield und Treibern, Luefter — nur zur Ansicht, NICHT drucken. Jedes Teil
-    wird fuer sich gebaut: scheitert eines, steht das im Bericht."""
+    Shield und Treibern, Luefter, Wandler und Wago-Klemmen — nur zur
+    Ansicht, NICHT drucken. Jedes Teil wird fuer sich gebaut: scheitert
+    eines, steht das im Bericht."""
     R = L['R']
 
     def sicher(name, bauen, *args):
@@ -922,13 +958,17 @@ def bau_referenz(app, design, teile, L, fehler):
 
     el = teile['Ref_Elektronik']
     fm, h = L['luefter_mitte'], w('luefter') / 2.0
-    for name, x, y, z, mat in (
+    wago = [('Wago_' + n.replace('+', '').replace(' ', ''), x, y, z,
+             'Kunststoff') for n, _, x, y, z in L['wago']]
+    for name, x, y, z, mat in [
             ('Uno', L['uno_x'], L['uno_y'], (L['uno_z0'], L['uno_z1']),
              'Leiterplatte'),
             ('Shield_und_Treiber', L['uno_x'], L['uno_y'],
              (L['uno_z1'], L['stapel_z1']), 'Kunststoff'),
             ('Luefter', (fm[0] - h, fm[0] + h), (fm[1] - h, fm[1] + h),
-             L['luefter_z'], 'Kunststoff')):
+             L['luefter_z'], 'Kunststoff'),
+            ('Wandler', L['wandler_x'], L['wandler_koerper_y'],
+             L['wandler_z'], 'Leiterplatte')] + wago:
         def quader_ref(name=name, x=x, y=y, z=z):
             kk = quader(el, name, x, y, z, 'neu').bodies.item(0)
             kk.name = name
@@ -977,9 +1017,13 @@ def hinweise_bauen(L, fehler):
         '  Wand dort {:.1f} mm, damit die Rastnasen greifen).'.format(
             w('schalter_wand')),
         'VERTEILER: hinten Buchse und Schalter, davor der Wandler 24 -> 12 V',
-        '  quer (2 Kabelbinder, Schlitze im Boden, bis {:.0f} mm tief), davor'
-        .format(w('wandler_t')),
-        '  3 x Wago 221-415 nebeneinander (doppelseitiges Klebeband).',
+        '  ({:.0f} x {:.0f} x {:.0f}) quer, mittig vor dem Schalter; 2 Kabelbinder'
+        .format(w('wandler_l'), w('wandler_b'), w('wandler_h')),
+        '  durch Schlitze im Boden, {:.0f} mm neben seiner Mitte. Davor die'
+        .format(w('wandler_binder')),
+        '  Wago-Klemmen nebeneinander (doppelseitiges Klebeband), von links:',
+        '  ' + ', '.join('{} {}'.format(n, t) for n, t, _, _, _ in L['wago'])
+        + '; 221-413 Reserve.',
         'KABEL: links zur Y-Kette und zum linken Y-Motor; vorn in den Kanal',
         '  zwischen Platte und Kasten ({:.0f} mm), dort nach rechts: rechter'
         .format(w('geh_abstand')),
@@ -990,11 +1034,13 @@ def hinweise_bauen(L, fehler):
         '  eine {:.0f}-mm-Bruecke.'.format(
             L['fenster_x'][1] - L['fenster_x'][0]),
         '',
-        'NICHT GEMESSEN [w]: Lochbild des Uno (vor dem Druck mit der',
-        '  ausgeblendeten Bohrlehre_Uno pruefen); Hoehe von Uno + Shield +',
-        '  Treibern mit Kuehlkoerper {:.0f} mm (Deckel {:.0f} mm darueber);'
+        'GEMESSEN [v] (Rev. 2): Hoehe von Uno + Shield + Treibern mit',
+        '  Kuehlkoerper {:.0f} mm (Deckel {:.0f} mm darueber), Lochbild des Uno'
         .format(w('stapel_h'), w('luft_luefter')),
-        '  Buchse (M8), Schalter (KCD1), Wago 221-415.',
+        '  (stimmt mit der Bohrlehre_Uno), Wandler {:.0f} x {:.0f} x {:.0f}.'
+        .format(w('wandler_l'), w('wandler_b'), w('wandler_h')),
+        'NICHT GEMESSEN [w]: Buchse (M8), Schalter (KCD1), Wago-Klemmen',
+        '  (Datenblatt), Luefter.',
     ]
     if fehler:
         h += ['', 'FEHLER / WARNUNGEN:'] + ['  ' + f for f in fehler]

@@ -51,7 +51,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 13
+REVISION = 14
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -261,16 +261,17 @@ MASSE = {
 
     # --- Referenz (nicht drucken, nur zur Ansicht) --------------------------
     # Angaben am Aufbau [v]: 2040 600 mm, Y-Schienen 500 mm, darunter quer
-    # zwei 2060 hochkant, 600 mm lang, 400 mm auseinander; das vordere sitzt
-    # 35 mm hinter der Stirnseite der 2040. Gezeichnet sind 2040 und
-    # Schienen mittig zum Y-Wagen [?], das hintere 2060 400 mm Mitte zu
-    # Mitte hinter dem vorderen [?].
+    # zwei 2060 hochkant, 600 mm lang; das vordere sitzt 35 mm hinter der
+    # Stirnseite der 2040, hinten stehen die 2040 110 mm ueber das hintere
+    # 2060 (gemessen 2026-09-27, Rev. 14) — die 2060 liegen damit 435 mm
+    # Mitte zu Mitte auseinander (bis Rev. 13: 400 [?]). Gezeichnet sind
+    # 2040 und Schienen mittig zum Y-Wagen [?].
     # V-Slot vereinfacht: Nutoeffnung 6,2 und Kernbohrung 4,2 [w], dahinter
     # eine 8 mm breite Kammer.
     'rahmen_laenge':      (600.0, 'Referenz: Laenge der 2040'),
     'y_schiene_laenge':   (500.0, 'Referenz: Laenge der Y-Schienen'),
     'quer_laenge':        (600.0, 'Referenz: 2060 quer: Laenge'),
-    'quer_abstand':       (400.0, 'Referenz: 2060 quer: Abstand Mitte zu Mitte'),
+    'quer_abstand':       (435.0, 'Referenz: 2060 quer: Abstand Mitte zu Mitte'),
     'quer_vorn_zurueck':   (35.0, 'Referenz: vorderes 2060 so weit hinter der Stirnseite der 2040'),
     # Hinten: Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager [v].
     # Wo die Achse steht, ist nicht gemessen — angenommen wie vorn die alte
@@ -555,7 +556,8 @@ def lage():
     L['y_schiene_y'] = (w('wagen_y') - w('y_schiene_laenge') / 2.0,
                         w('wagen_y') + w('y_schiene_laenge') / 2.0)
     # 2060 quer unter den 2040: das vordere quer_vorn_zurueck hinter der
-    # Stirnseite [v], das hintere quer_abstand (Mitte zu Mitte) dahinter [?]
+    # Stirnseite [v], das hintere quer_abstand (Mitte zu Mitte) dahinter [v]
+    # (aus 110 mm Ueberstand der 2040 hinten, Rev. 14)
     L['quer_x'] = (-w('quer_laenge') / 2.0, w('quer_laenge') / 2.0)
     L['quer_z'] = (L['rahmen_z0'] - w('quer_h'), L['rahmen_z0'])
     v1 = L['rahmen_y'][1] - w('quer_vorn_zurueck')
@@ -1539,7 +1541,8 @@ def bau_referenz(app, design, teile, L, fehler):
     Komponenten Ref_Profile, Ref_Fuehrungen, Ref_Riemen, Ref_Antrieb.
 
     Rahmen und Y-Schienen liegen mittig zum Y-Wagen, das vordere 2060
-    35 mm hinter der Stirnseite, das hintere 400 mm dahinter. Der Toolhead
+    35 mm hinter der Stirnseite, das hintere 435 mm (Mitte zu Mitte)
+    dahinter — die 2040 stehen hinten 110 mm ueber. Der Toolhead
     (hier nur X-Wagen und Riemenhalter) steht in der Mitte des X-Wegs, die
     Umlenkrolle und die Y-Motoren in der Mitte ihres Spannwegs. Das hintere
     Y-Ritzel steht, wo es angenommen ist (yh_hinter); seine Welle und Lager
@@ -1993,8 +1996,10 @@ def hinweise_bauen(L, fehler):
         '    quer darunter ({:.0f} mm, {:.0f} mm Mitte zu Mitte), V-Slot'.format(
             w('quer_laenge'), w('quer_abstand')),
         '    vereinfacht. 2040 und Schienen mittig zum Y-Wagen [?], das',
-        '    vordere 2060 {:.0f} mm hinter der Stirnseite [v].'.format(
-            w('quer_vorn_zurueck')),
+        '    vordere 2060 {:.0f} mm hinter der Stirnseite [v], hinten stehen'
+        .format(w('quer_vorn_zurueck')),
+        '    die 2040 {:.0f} mm ueber das hintere 2060 [v].'.format(
+            L['quer_y_hinten'][0] - L['rahmen_y'][0]),
         '  Fuehrungen: MGN12 ({:.0f} mm) mit MGN12H, MGN15 mit MGN15H. Vom'
         .format(w('y_schiene_laenge')),
         '    Toolhead nur X-Wagen und Riemenhalter, in der Mitte des X-Wegs.',

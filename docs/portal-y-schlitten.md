@@ -42,7 +42,7 @@ sie mit „[Referenz, nicht drucken]“.
 
 | Gruppe | Inhalt |
 |---|---|
-| `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 400 mm auseinander, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
+| `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
 | `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: um das Ritzel des Y-Motors, als Rücklauf durch die obere Nut des 2040, um das hintere Ritzel |
 | `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, die X-Umlenkrolle; der Riemenhalter des Toolheads |
@@ -52,7 +52,9 @@ Was dabei angenommen ist:
 * **2040** (600 mm) und **Y-Schienen** (500 mm) liegen mittig zum Y-Wagen,
   das Portal steht also in der Mitte seines Wegs. Mittig ist angenommen
   `[?]`. Das vordere **2060** sitzt 35 mm hinter der Stirnseite der 2040
-  `[v]`, das hintere 400 mm Mitte zu Mitte dahinter `[?]`.
+  `[v]`, das hintere 435 mm Mitte zu Mitte dahinter `[v]`: Die 2040 stehen
+  hinten 110 mm über (gemessen 2026-09-27, Rev. 14; bis Rev. 13 400 mm
+  `[?]`).
 * Der **Toolhead** steht in der Mitte des X-Wegs; von ihm sind nur X-Wagen
   und Riemenhalter drin. Die Umlenkrolle steht in der Mitte ihres Spannwegs.
 * Der **Y-Rücklauf** liegt mittig in der oberen Nut (Z −42 bis −36), auf
@@ -70,22 +72,24 @@ Was dabei angenommen ist:
 Mit Z unten hängt die Schlittenplatte bis Z −125,3 und die Laserlinse bis
 Z −115,8; die 2060 beginnen oben bei Z −69. Über ein 2060 kommt der Toolhead
 deshalb nur hochgefahren, und das vordere 2060 (auf der Seite des Lasers)
-begrenzt den Y-Weg, nicht die Schiene. `portal_check.py` rechnet das in
-Abschnitt 14 nach, mit der Lage wie im Modell:
+begrenzt den Y-Weg, nicht die Schiene. Hinten ist es seit Rev. 14 umgekehrt:
+Das hintere 2060 liegt weiter hinten, als der Wagen kommt, dort begrenzt das
+Schienenende. `portal_check.py` rechnet das in Abschnitt 14 nach, mit der
+Lage wie im Modell:
 
 | | |
 |---|---|
 | Y-Wagen ab Schienenmitte bis Schienenende | ± 227,3 mm |
 | nach vorn (Laserseite), Z unten, bis 3 mm vor das 2060 | **106 mm** |
-| nach hinten (Portalseite), Z unten, bis 3 mm vor das 2060 | 215 mm — das 2060 begrenzt, die Schiene reichte bis 227,3 |
-| Strahl erreicht mit Z unten, ab Rahmenmitte | −96,5 bis +224,5 mm (321 mm) |
+| nach hinten (Portalseite), Z unten | **227,3 mm** — die Schiene begrenzt; bis 3 mm vor das 2060 wären es 250 mm, der Toolhead bleibt 26 mm davor (bis Rev. 13: 215 mm, das 2060 begrenzte) |
+| Strahl erreicht mit Z unten, ab Rahmenmitte | −108,8 bis +224,5 mm (333 mm) |
 | über die 2060 hinweg | ab Wagenmitte zc = +19,3, Linse dann 73,5 mm über dem Bett |
 
 Vor dem vorderen 2060 stehen die Y-Motorhalter, und sie sind höher als das
 2060. Am vorderen Schienenende fährt der Toolhead erst ab zc = +39 über sie
 hinweg (Linse 93 mm über dem Bett); mit Z ganz oben, also nach dem
 Referenzieren, bleiben 3,05 mm. Gerechnet ist das mit dem alten Halter aus
-`Portal.py`. Der [YMotorhalter](y-motorhalter.md) (Rev. 4), der ihn ersetzt,
+`Portal.py`. Der [YMotorhalter](y-motorhalter.md) (Rev. 5), der ihn ersetzt,
 ist niedriger (Oberkante 22,5 mm, Ritzel 5,5 mm unter der Oberkante der 2040;
 der alte reichte bis an sie heran) und reicht weniger weit nach innen (26,2
 statt 37,2 mm neben der Schienenmitte). Am rechten X-Ende läuft er dort 2,1 mm neben
@@ -93,13 +97,15 @@ dem Ritzelbord vorbei: Der Bord steht 1,3 mm weiter innen als der Rücken des
 Riemens, an dem überall 3,4 mm Luft bleiben.
 
 Den Y-Weg in der Firmware also vorn auf die Grenze des 2060 setzen (die
-Arbeitsfläche endet ohnehin dort), dann erreicht der Toolhead die Halter nie.
-Hinter dem hinteren 2060 bleibt unter den 2040 ein Fach frei, in das nichts
-hineinfährt — dort ist Platz für die Elektronik
-([elektronik.md](elektronik.md)).
-Liegen Schienen oder das hintere 2060 anders als angenommen, ändern sich die
-Zahlen — `quer_abstand` und `y_schiene_laenge` anpassen und die Prüfung neu
-laufen lassen.
+Arbeitsfläche endet ohnehin dort), dann erreicht der Toolhead die Halter nie;
+hinten auf das Schienenende, mit dem Y-Endschalter 3 mm davor — die Wagen
+dürfen nicht über das Ende hinaus
+([elektronik.md](elektronik.md#endschalter)). Hinter dem hinteren 2060
+bleibt unter den 2040 ein Fach frei, in das nichts hineinfährt — dort ist
+Platz für die Elektronik ([elektronik.md](elektronik.md)).
+Liegen die Schienen anders als angenommen (mittig zu den 2040 `[?]`), ändern
+sich die Zahlen — `y_schiene_laenge` und `quer_abstand` anpassen und die
+Prüfung neu laufen lassen.
 
 ## Koordinaten
 
@@ -189,12 +195,32 @@ Rippen beider Klemmen auf der Schienenseite: Nur so greifen sie in die Zähne
 und nicht auf den glatten Rücken. `portal_check.py` prüft genau das. Der
 Rücklauf liegt im Profil und kommt dem Toolhead nie nahe.
 
-**Offen (2026-09-26/27):** Der Riemen läuft in der rechten oberen Nut hin
-und in der linken zurück, und das Ritzel sitzt mittig zur 2040 — so baut es
-der [YMotorhalter](y-motorhalter.md). Die Linie aus v8 (gezogener Trum
-21,6 mm innen neben der Schienenmitte, Rücklauf 9,5 mm) passt dazu nicht.
-Wo die Klemme am Wagen den Riemen greift und ob die Klemmtürme so bleiben
-können, ist zu klären.
+**Mit dem mittigen Ritzel (2026-09-27):** Der Riemen läuft in der rechten
+oberen Nut hin und in der linken zurück, das Ritzel sitzt mittig zur 2040 —
+so baut es der [YMotorhalter](y-motorhalter.md). Die Klemmen bleiben, wo
+Y-Wagen und Klemmtürme dieses Skripts sie haben (Angabe: so ist es gebaut):
+Wirklinie 21,9 mm innen neben der Schienenmitte, 11,9 mm vor der inneren
+Seitenfläche. Dazwischen laufen die **Wagen-Trume schräg** von der Klemme
+zum Ritzel, dessen Wirklinie 6,4 mm neben der Profilmitte in der inneren Nut
+liegt; der **Rücklauf läuft gerade** in der äußeren Nut. Nachgerechnet
+(Ritzel vorn in der Mitte des Spannwegs, hinten 11 mm hinter der Stirnseite
+und ebenfalls mittig zur 2040):
+
+| Portal ab Mitte | vorderer Trum | hinterer Trum |
+|---|---|---|
+| +227,3 (vorderes Schienenende) | 64 mm lang, 13,8°, läuft vor dem Profil auf die Nutlinie und am offenen Ende hinein | 498 mm, 1,8°, in der Nutöffnung 105 bis 48 mm vom hinteren Ende |
+| +106 (vordere Grenze, Z unten) | 184 mm, 4,8°, in der Nutöffnung auf den letzten 13 mm vor dem vorderen Ende | 377 mm, 2,4°, 77 bis 33 mm vom hinteren Ende |
+| 0 | 290 mm, 3,1°, 37 bis 4 mm vom vorderen Ende | 271 mm, 3,3°, 52 bis 21 mm vom hinteren Ende |
+| −227,3 (hinteres Schienenende) | 517 mm, 1,7°, 91 bis 31 mm vom vorderen Ende | 45 mm, 19,4°, läuft hinter dem Profil auf die Nutlinie und am offenen Ende hinein |
+
+Wo der Trum durch die Nutöffnung in den Kanal läuft, bleiben dem 6 mm
+breiten Riemen in der 6,2 mm weiten Engstelle **0,1 mm je Seite** — Ritzel
+und Klemmen stehen beide auf Nutmitte, er läuft also frei, solange die
+Höhen stimmen. Schleift er an den Nutkanten (Geräusch, Abrieb an den
+Riemenkanten), müssen die Klemmen näher an die Nut. `Ref_Riemen` und die
+Prüfung rechnen noch mit dem alten Ritzel 15,55 mm innen: Der Wagen-Trum
+liegt dort überall bei 21,9 mm, der echte weiter außen — für den Toolhead
+die sichere Seite.
 
 **Zwei gleiche Klemmtürme je Schlitten wie bei v8**, einer je
 Riemenende, an derselben Stelle wie bei v8: 22,5 bis 40,5 mm vor und hinter

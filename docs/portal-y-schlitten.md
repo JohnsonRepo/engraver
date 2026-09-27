@@ -203,8 +203,8 @@ Wirklinie 21,9 mm innen neben der Schienenmitte, 11,9 mm vor der inneren
 Seitenfläche. Dazwischen laufen die **Wagen-Trume schräg** von der Klemme
 zum Ritzel, dessen Wirklinie 6,4 mm neben der Profilmitte in der inneren Nut
 liegt; der **Rücklauf läuft gerade** in der äußeren Nut. Nachgerechnet
-(Ritzel vorn in der Mitte des Spannwegs, hinten 11 mm hinter der Stirnseite
-und ebenfalls mittig zur 2040):
+(Ritzel vorn in der Mitte des Spannwegs; hinten ebenfalls mittig zur 2040
+`[v]`, 11 mm hinter der Stirnseite angenommen):
 
 | Portal ab Mitte | vorderer Trum | hinterer Trum |
 |---|---|---|

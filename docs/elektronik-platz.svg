@@ -58,10 +58,10 @@
 <rect x="747.9" y="146.8" width="44.7" height="70.5" fill="none" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="4 3"/>
 <rect x="326.8" y="641.0" width="36.4" height="36.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
 <rect x="742.1" y="641.0" width="36.4" height="36.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
-<rect x="293.0" y="183.8" width="18.9" height="165.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.6"/>
-<rect x="294.7" y="281.5" width="15.5" height="119.7" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
-<rect x="545.6" y="386.1" width="190.1" height="18.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.6"/>
-<rect x="545.6" y="387.8" width="106.0" height="15.5" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
+<rect x="285.2" y="183.8" width="26.7" height="165.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.6"/>
+<rect x="286.9" y="281.5" width="23.2" height="119.7" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
+<rect x="545.6" y="378.4" width="190.1" height="26.7" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.6"/>
+<rect x="545.6" y="380.1" width="106.0" height="23.2" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
 <rect x="358.3" y="209.8" width="174.0" height="4.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="376.4" y="122.5" width="137.9" height="77.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="382.0" y="130.6" width="45.9" height="59.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.7"/>
@@ -71,7 +71,7 @@
 <polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,641.0 345.0,659.2" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,641.0 760.3,659.2" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,146.8" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
-<polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,349.0 302.4,349.0" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+<polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,349.0 298.6,349.0" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <circle cx="358.4" cy="438.4" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="789.2" cy="146.8" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="522.4" cy="456.6" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
@@ -81,8 +81,8 @@
 <line x1="331.7" y1="136.7" x2="253.0" y2="136.7" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="331.7" cy="136.7" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="139.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">linkes 2040 (600 mm)</text>
-<line x1="302.4" y1="188.9" x2="253.0" y2="188.9" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="302.4" cy="188.9" r="1.5" fill="#5b6472"/>
+<line x1="298.6" y1="188.9" x2="253.0" y2="188.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="298.6" cy="188.9" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="191.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenwanne, hängt außen</text>
 <text x="250.0" y="201.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am 2040 (untere Nut)</text>
 <line x1="380.7" y1="207.0" x2="253.0" y2="222.9" stroke="#5b6472" stroke-width="0.6"/>
@@ -92,8 +92,8 @@
 <line x1="423.7" y1="221.0" x2="253.0" y2="256.9" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="423.7" cy="221.0" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="259.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
-<line x1="302.4" y1="323.2" x2="253.0" y2="323.2" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="302.4" cy="323.2" r="1.5" fill="#5b6472"/>
+<line x1="298.6" y1="323.2" x2="253.0" y2="323.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="298.6" cy="323.2" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="326.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette Y außen</text>
 <text x="250.0" y="336.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am linken 2040</text>
 <line x1="358.4" y1="438.4" x2="253.0" y2="438.4" stroke="#5b6472" stroke-width="0.6"/>
@@ -133,10 +133,10 @@
 <circle cx="525.5" cy="211.5" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="301.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Montageplatte: 4 × M5 in die</text>
 <text x="855.4" y="311.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rückseite des 2060, Kabelkanal</text>
-<line x1="718.5" y1="387.8" x2="852.4" y2="387.8" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="718.5" cy="387.8" r="1.5" fill="#5b6472"/>
-<text x="855.4" y="390.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette X über dem</text>
-<text x="855.4" y="400.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rohr, hinter dem Riemen</text>
+<line x1="718.5" y1="380.1" x2="852.4" y2="380.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="718.5" cy="380.1" r="1.5" fill="#5b6472"/>
+<text x="855.4" y="383.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette X über dem</text>
+<text x="855.4" y="393.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rohr, hinter dem Riemen</text>
 <line x1="522.4" y1="456.6" x2="852.4" y2="456.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="522.4" cy="456.6" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="459.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Z-Endschalter (vorhanden)</text>
@@ -277,17 +277,17 @@
 <text x="24.0" y="1257.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1257.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motor rechts: Weg ≈ 0,99 m → 1,5 m kaufen</text>
 <text x="24.0" y="1272.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1272.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Motor: Weg ≈ 0,72 m → 1 m kaufen</text>
+<text x="110.0" y="1272.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Motor: Weg ≈ 0,73 m → 1 m kaufen</text>
 <text x="24.0" y="1287.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1287.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Motor: Weg ≈ 1,42 m → 2 m kaufen</text>
+<text x="110.0" y="1287.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Motor: Weg ≈ 1,43 m → 2 m kaufen</text>
 <text x="24.0" y="1302.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (12 V + PWM): Weg ≈ 1,42 m → 2 m kaufen</text>
+<text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (12 V + PWM): Weg ≈ 1,43 m → 2 m kaufen</text>
 <text x="24.0" y="1317.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,72 m → 1 m kaufen</text>
+<text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,73 m → 1 m kaufen</text>
 <text x="24.0" y="1332.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1332.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Endschalter: Weg ≈ 0,53 m → 1 m kaufen</text>
 <text x="24.0" y="1347.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1347.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Endschalter: Weg ≈ 1,33 m → 2 m kaufen</text>
+<text x="110.0" y="1347.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Endschalter: Weg ≈ 1,34 m → 2 m kaufen</text>
 <rect x="24.0" y="1382.5" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <text x="43.0" y="1390.5" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
 <rect x="194.0" y="1382.5" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>

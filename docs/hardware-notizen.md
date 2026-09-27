@@ -68,18 +68,18 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | X-Umlenkung | **20-Z-Rolle mit Kugellager**, Bohrung 5 — in der Schleife läuft die Zahnseite auf der Rolle, eine glatte gehört auf den Riemenrücken | gewählt (Portal.py) |
 | Umlenkrolle 20 Z | Außendurchmesser (Bord) **18 mm**, Breite **8,5 mm** | `[?]` angenommen, nicht gemessen |
 | Motoren | **Stepperonline** NEMA 17, **37 mm** ohne Welle, **60 mm** mit Welle | `[v]` Angabe am Aufbau |
-| Motordaten | vermutlich **17HE15-1504S**: **1,5 A** je Phase, 2,3 Ω, 4,0 mH, 42 Ncm, Körper 38 mm, Welle Ø5 × 23,5 mm, D-Fläche 20 mm lang, 280 g. Alle Stepperonline-NEMA-17 mit 38–40 mm Körper haben 1,5 A (Ausnahme 17HS16-2004S1 mit 2 A) — Typ am Etikett prüfen | `[w]` Datenblatt Stepperonline |
+| Motordaten | **17HE15-1504S**: **1,5 A** je Phase, 2,3 Ω, 4,0 mH, 42 Ncm, Körper 38 mm, Welle Ø5 × 23,5 mm, D-Fläche 20 mm lang, 280 g (gemessen 37 / 23 mm, siehe oben) | `[v]` Typ laut Etikett (2026-09-27), Daten `[w]` Datenblatt Stepperonline |
 | NEMA 17, Welle | ragt **23 mm** heraus (60 − 37), Ø5. Die Halter sind auf **20 mm** ausgelegt (erste Angabe): so trägt die Welle das ganze Ritzel, die 3 mm mehr stehen frei über | `[v]` Angabe am Aufbau |
 | Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. Der Riemen läuft in der rechten Nut hin und in der linken zurück (Angabe 2026-09-27), das Ritzel mittig ([Y-Antrieb](#y-antrieb)); die Klemmen bleiben, wo Y-Wagen und Klemmtürme in `Portal.py` sie haben: **21,6 mm innen**. Der Wagen-Trum läuft damit schräg von der Klemme in die innere Nut zum Ritzel, der Rücklauf gerade in der äußeren Nut | `[v]` Linie aus v8 = Klemmtürme in Portal.py, Höhe Angabe am Aufbau |
 | Obere Nut des 2040 | Öffnung beginnt **6 mm unter der Oberkante** (oberer Rand), Mitte 10 mm darunter | `[v]` Angabe am Aufbau |
 | Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (9,5 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
 | Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Das Ritzel sitzt **direkt auf der Motorwelle**, **mittig zur 2040**, im eigenen `YMotorhalter` (Rev. 4, [Y-Antrieb](#y-antrieb)). Der Halter aus Portal Rev. 12/13 (Achse 27,5 mm vor der Stirnseite, 15,55 mm innen, M5 in der oberen Nut) ist gedruckt und am Aufbau verworfen. Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
 | Alte Eckwelle vorn | Ø5 Edelstahl, oben Kugellager, unten Gleitlager, zwei 20-Z-Ritzel; Achse **11 mm vor der Stirnseite** des 2040. Dort passt kein Motor: er ragte 10 mm unter das Ende des 2040 | `[v]` Angabe am Aufbau |
-| Y-Umlenkung hinten | Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager | `[v]` Angabe am Aufbau; Lage 11 mm hinter der Stirnseite angenommen `[?]` (nur Riemenlänge) |
+| Y-Umlenkung hinten | Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager; quer **mittig zur 2040**, der Rücklauf läuft also gerade in der äußeren Nut | `[v]` Angabe am Aufbau (mittig: 2026-09-27); Lage 11 mm hinter der Stirnseite angenommen `[?]` (nur Riemenlänge) |
 | Y-Riemen, Länge | offen, je Seite **≈ 1270 mm** von Klemme zu Klemme | gerechnet (Portal.py), hängt an der Lage des hinteren Ritzels |
 | Vorderes 2060 | **35 mm** hinter der Stirnseite der 2040 | `[v]` Angabe am Aufbau |
 | Hinteres 2060 | die 2040 stehen hinten **110 mm** darüber hinaus (beide Seiten) → **435 mm** Mitte zu Mitte hinter dem vorderen (bis Portal Rev. 13: 400 `[?]`) | `[v]` Angabe am Aufbau 2026-09-27 |
-| Winkel 2040 ↔ 2060 | **8 je Kreuzung**, zwei davon in der oberen Nut | `[v]` Angabe am Aufbau 2026-09-27 |
+| Winkel 2040 ↔ 2060 | **8 je Kreuzung**; zwei davon greifen in die **obere Nut des 2060** und die **untere Nut der 2040** — die oberen Nuten der 2040 bleiben frei für den Riemen. Ob einer davon vor dem vorderen 2060 an der Seitenfläche sitzt (dort liegt der Y-Motorhalter), ist offen | `[v]` Angabe am Aufbau 2026-09-27 |
 | Abstand der Y-Schienen | **514 mm** Mitte zu Mitte = Rohr 500 + 2 × 7 mm; ergibt sich beim Aufbau aus dem verschraubten Portal | gesetzt (Portal.py), Rechnung siehe unten |
 | Kernbohrung 2020 V-Slot | Ø4,2 — für die Stirnschraube **M5 schneiden, ≥ 15 mm tief** | `[w]` |
 | Hammermuttern | M5, Nut 6, in der hinteren Nut des Portalrohrs | `[w]` |
@@ -108,7 +108,7 @@ Y-Riemen, über den ganzen Z-Weg. Details in
 | Modul | **LASER TREE 4 W**, 450 nm, Fokus einstellbar | `[v]` Angabe (2026-09-25) |
 | Versorgung | **12 V, 1,6 A** (1,4–1,8 A) → höchstens 21,6 W | `[v]` Angabe |
 | Leistung steuern | PWM mit 5 V — direkt vom Uno (D11) | `[v]` Angabe |
-| Anschluss | Buchse **XH2.54, 3-polig** (12 V, GND, PWM — Reihenfolge am Aufdruck prüfen) | `[v]` Angabe |
+| Anschluss | Buchse **XH2.54, 3-polig**, von links **PWM · GND · +12 V** — vor dem ersten Einschalten mit dem Aufdruck vergleichen | `[v]` Angabe (Reihenfolge 2026-09-27) |
 | Bohrbild | **40,5 hoch × 16,5 quer**, 4 × M3 | `[v]` am 2026-09-17 mit Bohrlehre am Modul bestätigt |
 | Gehäuse (angenommen) | 35 × 35 mm Querschnitt | `[w]` |
 
@@ -401,10 +401,10 @@ Chopper einstellbar.
 ## Elektronik
 
 **Stand 2026-09-27:** Arduino Uno R3 und CNC Shield V3 vorhanden, Treiber:
-**4 × TMC2209** (GERUI TMC2209 V2.0 mit Kühlkörper, plus Ersatz),
+**5 × TMC2209** (GERUI TMC2209 V2.0 mit Kühlkörper; 4 + 1 Ersatz),
 Steckernetzteil 24 V / 3 A, Laser 12 V / 1,6 A über einen Abwärtswandler
-(43 × 24 × 20 mm). Vier NEMA 17 von Stepperonline (1,5 A) — genau die
-vier Treiberplätze des Shields. Pinbelegung
+12 V / 5 A (43 × 24 × 20 mm). Vier NEMA 17 **Stepperonline 17HE15-1504S**
+(1,5 A) — genau die vier Treiberplätze des Shields. Pinbelegung
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
 Netzteil, Endschalter und Kabel hinkommen, und das Gehäuse
 (`fusion/Elektronik`): [elektronik.md](elektronik.md). Hohlstecker des
@@ -470,16 +470,28 @@ gewandert:
   1/32, dann `$100=$101=160`, `$102=3200` und Z höchstens ~500 mm/min, weil
   der Uno bei ~30 kHz Schluss macht). Strom über das Vref-Poti nach der Formel
   des Moduls (hängt vom Messwiderstand ab), etwa 70 % des Motornennstroms.
-* **Vref der GERUI TMC2209 V2.0:** Die üblichen V2.0-Module haben
-  R_sense = 0,11 Ω (Aufdruck **R110** neben dem Chip) `[w]` — vor dem
-  Einstellen ablesen. Dann gilt I_eff = 0,71 × Vref, also
-  **Vref = 1,41 × I_eff**. Motor 1,5 A, davon 70 % = **1,05 A eff. →
-  Vref ≈ 1,48 V**. Messen zwischen GND und dem Schleifer des Potis (Shield
-  an 24 V, Uno an USB, Motoren dürfen ab sein), mit einem isolierten
+* **Vref der GERUI TMC2209 V2.0:** Ohne UART stellt das Poti den
+  Effektivstrom ein: I_eff = 0,325 V / (R_sense + 0,02 Ω) / √2 × Vref / 2,5 V
+  (TMC2209-Datenblatt) `[w]`. R_sense hängt vom Modul ab — üblich sind
+  0,11 Ω (Aufdruck **R110**), bei manchen 0,10 oder 0,15 Ω. Auf den GERUI
+  ist kein R110 zu finden (Angabe 2026-09-27). Ziel: 70 % von 1,5 A =
+  **1,05 A eff.**:
+
+  | Messwiderstand | Vref für 1,05 A | mit 1,37 V fließen |
+  |---|---|---|
+  | R100 (0,10 Ω) | **1,37 V** | 1,05 A |
+  | R110 (0,11 Ω) | 1,48 V | 0,97 A |
+  | R150 (0,15 Ω) | 1,94 V | 0,74 A |
+
+  Solange der Wert unbekannt ist, **mit 1,37 V anfangen** — das sind bei
+  jedem der drei höchstens 1,05 A. Die Aufschrift sitzt auf den zwei
+  kleinen Widerständen neben dem Chip — je nach Modul oben oder auf der
+  Unterseite. Messen zwischen GND und dem Schleifer des Potis (Shield an
+  24 V, Uno an USB, Motoren dürfen ab sein), mit einem isolierten
   Schraubendreher drehen. Werden die Motoren über 70 °C heiß, zurück; laufen
-  sie kalt und verlieren Schritte, höchstens bis 1,2 A (Vref ≈ 1,7 V, 80 %
-  des Nennstroms) — das Netzteil trägt das noch (≈ 55 W statt 49 W). Alle
-  vier gleich einstellen, Y und A auf jeden Fall.
+  sie kalt und verlieren Schritte, höchstens bis 1,2 A (R100: 1,57 V,
+  R110: 1,70 V, R150: 2,22 V) — das Netzteil trägt das noch (≈ 55 W statt
+  49 W). Alle vier gleich einstellen, Y und A auf jeden Fall.
 * Treiber richtig herum stecken (EN-Pin zum EN-Aufdruck) und Motoren nie unter
   Spannung ab- oder anstecken — beides kostet den Treiber.
 * Netzteil 24 V für die Motoren (TMC2209 abs. max 29 V, siehe oben). Der Laser

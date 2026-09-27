@@ -107,9 +107,9 @@ def main():
                fett=1, fill='#fff4f4', stroke=P24)
     t += block(290, 390, 120, 40, ['Wago GND', '221-420, 10 Plätze'],
                fett=1, fill='#f1f3f5', stroke=MASSE)
-    t += block(290, 466, 120, 58, ['Abwärtswandler', '24 → 12 V, ≥ 2 A dauernd',
-                                   'Ausgang auf 12,0 V'], fett=1,
-               fill='#fff7ec', stroke=P12)
+    t += block(290, 466, 120, 58, [
+        'Abwärtswandler', '24 → 12 V, {} A'.format(ez.de(ez.WANDLER_A, 0)),
+        'Ausgang 12,0 V messen'], fett=1, fill='#fff7ec', stroke=P12)
     t += block(290, 556, 120, 58, ['Lüfter 40 mm', 'über den Treibern',
                                    '12-V-Typ: am Wandler'], fett=1)
     t += block(290, 660, 120, 58, ['Wago +5 V', '221-420, 10 Plätze',
@@ -128,9 +128,12 @@ def main():
         '4 × TMC2209, Jumper MS1 + MS2 = 1/16, MS3 frei',
         'A klont Y: A.STEP ↔ Y.STEP, A.DIR ↔ Y.DIR',
         'Treiber: EN-Pin zum EN-Aufdruck',
-        'Vref ≈ {} V → {} A eff. = {} % von {} A (R_sense 0,11 Ω)'.format(
-            ez.de(ez.MOTOR_I / ez.VREF_FAKTOR, 2), ez.de(ez.MOTOR_I, 2),
-            ez.de(ez.MOTOR_ANTEIL * 100, 0), ez.de(ez.MOTOR_NENN, 1)),
+        'Strom {} A eff. = {} % von {} A, Vref je nach R_sense:'.format(
+            ez.de(ez.MOTOR_I, 2), ez.de(ez.MOTOR_ANTEIL * 100, 0),
+            ez.de(ez.MOTOR_NENN, 1)),
+        ' · '.join('{} V (R{:03.0f})'.format(ez.de(ez.vref(ez.MOTOR_I, r), 2),
+                                            r * 1000)
+                   for r in ez.R_SENSE),
         'GRBL 1.1h: $32=1 (Laser), $30=1000'], fett=1, fill='#eef4fb',
         stroke=BLAU)
     # Schraubklemme links
@@ -168,8 +171,8 @@ def main():
                   7.8, GRAU))
     t += block(gx, 396, gb, 72, ['Laser LASER TREE 4 W (450 nm)',
                                  '12 V, 1,6 A (1,4–1,8 A)',
-                                 'Buchse XH2.54, 3-polig:',
-                                 '12 V · GND · PWM (5 V) — Aufdruck prüfen'],
+                                 'Buchse XH2.54, 3-polig, von links:',
+                                 'PWM (5 V) · GND · +12 V'],
                fett=1, fill='#eef6ff', stroke=SIGNAL)
     t += [draht([(sx + sb, 380), (812, 380), (812, 440), (gx, 440)], SIGNAL),
           draht([(410, 480), (430, 480), (430, 548), (800, 548), (800, 412),
@@ -210,11 +213,12 @@ def main():
              ez.de(lb['laser'], 0), ez.de(lb['summe'], 0),
              ez.de(ez.NETZTEIL_W, 0), ez.de(lb['dauer'], 0))),
         ('Wandler', 'Laser 12 V × {} A = {} W, bei {} % Wirkungsgrad {} W '
-         'aus dem Netzteil; Ausgang vor dem Anschließen des Lasers auf '
-         '12,0 V'.format(ez.de(ez.LASER_A, 1),
-                         ez.de(ez.LASER_V * ez.LASER_A, 1),
-                         ez.de(ez.WANDLER_ETA * 100, 0),
-                         ez.de(lb['laser'], 0))),
+         'aus dem Netzteil; der Wandler ({} A) ist damit zu {} % belastet. '
+         'Ausgang vor dem Anschließen des Lasers messen: 12,0 V'.format(
+             ez.de(ez.LASER_A, 1), ez.de(ez.LASER_V * ez.LASER_A, 1),
+             ez.de(ez.WANDLER_ETA * 100, 0), ez.de(lb['laser'], 0),
+             ez.de(ez.WANDLER_A, 0),
+             ez.de(100.0 * ez.LASER_A / ez.WANDLER_A, 0))),
         ('Masse', 'Netzteil, Shield, Wandler und Laser haben ein gemeinsames '
          'GND; ein isolierter Wandler braucht dafür eine Brücke OUT− → GND'),
     ]

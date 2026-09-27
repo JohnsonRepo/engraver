@@ -3,8 +3,8 @@
 # Baugruppe aus zwei Druckteilen und einer Bohrlehre:
 #   Gehaeuse     Kasten fuer Arduino Uno R3 mit CNC Shield V3 und 4 x TMC2209,
 #                daneben Platz fuer drei Wago-Klemmen (221-415, 2 x 221-420)
-#                und den Abwaertswandler 24 -> 12 V, 43 x 24 x 20 (Kabel-
-#                binder). Hinten Fenster fuer USB, Einbaubuchse fuer den
+#                und den Abwaertswandler 24 -> 12 V / 5 A, 43 x 24 x 20
+#                (Kabelbinder). Hinten Fenster fuer USB, Einbaubuchse fuer den
 #                Hohlstecker 5,5 x 2,1 und Wippschalter; Kabelausschnitte
 #                links und vorn, Lueftungsschlitze rechts. Vorn eine
 #                Montageplatte mit 4 x M5 in Hammermuttern der Rueckseite
@@ -1016,12 +1016,12 @@ def hinweise_bauen(L, fehler):
         .format(w('buchse_d'), w('schalter_b'), w('schalter_h')),
         '  Wand dort {:.1f} mm, damit die Rastnasen greifen).'.format(
             w('schalter_wand')),
-        'VERTEILER: hinten Buchse und Schalter, davor der Wandler 24 -> 12 V',
-        '  ({:.0f} x {:.0f} x {:.0f}) quer, mittig vor dem Schalter; 2 Kabelbinder'
+        'VERTEILER: hinten Buchse und Schalter, davor der Wandler 24 -> 12 V /',
+        '  5 A ({:.0f} x {:.0f} x {:.0f}) quer, mittig vor dem Schalter; 2 Kabel-'
         .format(w('wandler_l'), w('wandler_b'), w('wandler_h')),
-        '  durch Schlitze im Boden, {:.0f} mm neben seiner Mitte. Davor die'
+        '  binder durch Schlitze im Boden, {:.0f} mm neben seiner Mitte. Davor'
         .format(w('wandler_binder')),
-        '  Wago-Klemmen nebeneinander (doppelseitiges Klebeband), von links:',
+        '  die Wago-Klemmen nebeneinander (doppelseitiges Klebeband), von links:',
         '  ' + ', '.join('{} {}'.format(n, t) for n, t, _, _, _ in L['wago'])
         + '; 221-413 Reserve.',
         'KABEL: links zur Y-Kette und zum linken Y-Motor; vorn in den Kanal',

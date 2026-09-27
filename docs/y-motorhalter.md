@@ -280,8 +280,11 @@ längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
 ## Noch offen
 
 1. **Winkel am vorderen 2060:** gerechnet mit 5 mm Luft zwischen
-   Schenkelende und 2060. Reicht ein Winkel weiter nach vorn, `wange_laenge`
-   kürzen und prüfen.
+   Schenkelende und 2060. Die Winkel greifen in die obere Nut des 2060 und
+   die untere Nut der 2040 (Angabe vom 2026-09-27) — dieselbe Nut, in der
+   die Nutensteine des Halters sitzen. Sitzt einer davon **vor** dem 2060
+   an der Seitenfläche, stößt er an den Schenkel: dann `wange_laenge`
+   kürzen bzw. die Schrauben verlegen und prüfen.
 2. **Nutmaße** `[w]`: Lippe 1,8 und Nutgrund 6,0 mm bestimmen, wo der
    Riemen in der Nut läuft. Bei anderem Profil `nut_lippe` und `nut_tiefe`
    anpassen und prüfen.
@@ -293,7 +296,7 @@ längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
    `Portal.py` sie haben, 21,6 mm innen neben der Schienenmitte (Angabe vom
    2026-09-27). Die Wagen-Trume laufen deshalb schräg von der Klemme in die
    innere Nut (1,7° bis 19°, je nach Stellung), der Rücklauf gerade in der
-   äußeren; das hintere Ritzel muss dafür ebenfalls mittig zur 2040 stehen.
+   äußeren; das hintere Ritzel sitzt ebenfalls mittig zur 2040 (Angabe).
    Wo ein Trum durch die Nutöffnung in den Kanal läuft, bleiben dem Riemen
    0,1 mm je Seite — Zahlen in
    [portal-y-schlitten.md](portal-y-schlitten.md#y-riemen-und-klemmtürme).

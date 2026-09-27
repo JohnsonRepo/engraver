@@ -6,8 +6,9 @@ Importiert Elektronik.py, Portal.py und ToolheadZ.py mit gestubbtem
 adsk-Modul und prueft: Abgleich der Rahmenmasse mit Portal.py, Lage im Fach
 hinter dem hinteren 2060, Freiraum gegen Portal und Toolhead ueber den ganzen
 Weg, Montage mit M5 in Hammermuttern, Werkzeugzugang, Uno und Stapelhoehe,
-Verteiler (Buchse, Schalter, Wandler, Wago), Waende, Druckbarkeit und den
-Kabelkanal. Gibt am Ende die Stueckliste aus.
+Verteiler (Buchse, Schalter, Wandler, Wago), Waende, Druckbarkeit, den
+Kabelkanal und die Leistungsbilanz (aus tools/elektronik_zeichnen.py). Gibt
+die Stueckliste aus.
 
     python3 tools/elektronik_check.py
 
@@ -20,6 +21,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bauraum                                        # noqa: E402
+import elektronik_zeichnen as leistung              # noqa: E402
 import portal_check                                   # noqa: E402
 from toolhead_check import Pruefung                   # noqa: E402
 
@@ -346,9 +348,10 @@ def main():
             .format(ew('buchse_d')),
             '1x Wippschalter KCD1, Ausschnitt {:.1f} x {:.1f}'.format(
                 ew('schalter_b'), ew('schalter_h')),
-            '1x Abwaertswandler 24 -> 12 V, {:.0f} x {:.0f} x {:.0f} (vorhanden), '
-            'dauerhaft >= 2 A; 2x Kabelbinder'.format(
-                ew('wandler_l'), ew('wandler_b'), ew('wandler_h')),
+            '1x Abwaertswandler 24 -> 12 V / {:.0f} A, '
+            '{:.0f} x {:.0f} x {:.0f} (vorhanden); 2x Kabelbinder'.format(
+                leistung.WANDLER_A, ew('wandler_l'), ew('wandler_b'),
+                ew('wandler_h')),
             'Wago (vorhanden): 1x 221-415 (+24 V), 2x 221-420 (GND, +5 V), '
             '1x 221-413 Reserve; doppelseitiges Klebeband'):
         p.info(zeile)
@@ -379,6 +382,20 @@ def main():
     except Exception as exc:
         p.info('Bericht NICHT renderbar: {}'.format(exc))
         p.ok('Bericht rendert ohne Fehler', 0.0, 1.0, '>=', '')
+
+    # ------------------------------------------------------------------
+    p.titel('13) Leistung: Netzteil, Wandler, Treiber')
+    lb = leistung.leistung()
+    p.info('Motoren + Luefter + Laser (mit Wandler)', lb['summe'], 'W')
+    p.ok('Netzteil 24 V / 3 A: Reserve bei 85 % Dauerlast', lb['reserve'],
+         5.0, '>=', 'W')
+    p.ok('Wandler {:.0f} A: Laser zieht davon hoechstens'.format(
+        leistung.WANDLER_A), 100.0 * leistung.LASER_A / leistung.WANDLER_A,
+         80.0, '<=', '%')
+    p.info('Motorstrom eingestellt (eff.)', leistung.MOTOR_I, 'A')
+    for r in leistung.R_SENSE:
+        p.ok('   Vref bei R_sense {:.2f} Ohm (Poti bis 2,5 V)'.format(r),
+             leistung.vref(leistung.MOTOR_I, r), 2.5, '<=', 'V')
     return p.bericht()
 
 

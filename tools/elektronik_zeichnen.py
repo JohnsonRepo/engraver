@@ -33,29 +33,36 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
 ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                           'fusion', 'Elektronik', 'Elektronik.py')
 
-# ---- Ketten: Platzhalter, bis die gekauften gemessen sind ------------------
-# Gekauft: 10 x 20 mm innen (Angabe 2026-09-27). Aussenmasse und Biegeradius
-# fehlen noch — bis dahin die alten Platzhalter.
-KETTE_B, KETTE_H, KETTE_R = 18.0, 15.0, 18.0   # Kette aussen, Biegeradius
-KETTE_ENDEN = 40.0               # beide Anschlussglieder zusammen
+# ---- Ketten ----------------------------------------------------------------
+# Gekauft: 10 x 20 mm innen, 15 x 27 mm aussen, je 1 m [v] (Angabe
+# 2026-09-27). Biegeradius und Anschlussglieder fehlen noch — dafuer die
+# alten Platzhalter.
+KETTE_B, KETTE_H = 27.0, 15.0    # Kette aussen: Breite, Hoehe [v]
+KETTE_R = 18.0                   # Biegeradius [?]
+KETTE_ENDEN = 40.0               # beide Anschlussglieder zusammen [?]
 RESERVE = 0.15                   # Kabel: Boegen, Zugentlastung, Stecker
 KAUFLAENGEN = (0.5, 1.0, 1.5, 2.0, 2.5, 3.0)   # m
 
 # Leistung: Steckernetzteil GIDEALED 24 V / 3 A. Die Motoren: je 2 Phasen
 # x I^2 x R plus Treiber, mit dem Strom, der am Vref-Poti eingestellt wird
 # (70 % des Nennstroms), und dem Wicklungswiderstand des Stepperonline
-# NEMA 17, vermutlich 17HE15-1504S: 1,5 A, 2,3 Ohm [w]. Laser: LASER TREE
-# 4 W, 12 V 1,6 A (1,4-1,8 A) [v] Angabe, ueber einen Abwaertswandler.
+# 17HE15-1504S [v] Etikett: 1,5 A, 2,3 Ohm [w]. Laser: LASER TREE 4 W,
+# 12 V 1,6 A (1,4-1,8 A) [v] Angabe, ueber den Abwaertswandler 12 V / 5 A
+# [v] Angabe.
 NETZTEIL_W = 72.0
 DAUERLAST = 0.85                 # dauernd nicht mehr als 85 % ziehen
 MOTOR_NENN, MOTOR_ANTEIL = 1.5, 0.7    # A je Phase [w]; davon eingestellt
 MOTOREN, MOTOR_R, TREIBER_W = 4, 2.3, 0.6
 MOTOR_I = MOTOR_NENN * MOTOR_ANTEIL    # Effektivstrom je Phase
-# TMC2209 V2.0 (GERUI), R_sense 0,11 Ohm [w]: I_eff = 0,71 x Vref
-VREF_FAKTOR = 0.71
+# TMC2209 standalone, Strom ueber das Vref-Poti [w]:
+#   I_eff = 0,325 V / (R_sense + 0,02 Ohm) / Wurzel 2 x Vref / 2,5 V
+# R_sense haengt vom Modul ab. Auf den GERUI V2.0 steht kein R110 (Angabe
+# 2026-09-27), deshalb die ueblichen Werte; der kleinste ist der sichere.
+R_SENSE = (0.10, 0.11, 0.15)     # Ohm
 LUEFTER_W = 2.0
 LASER_V, LASER_A = 12.0, 1.8     # obere Grenze der Angabe
-WANDLER_ETA = 0.9                # Abwaertswandler 24 -> 12 V [w]
+WANDLER_A = 5.0                  # Abwaertswandler 24 -> 12 V, 5 A [v]
+WANDLER_ETA = 0.9                # sein Wirkungsgrad [w]
 
 KABEL = '#6d3fb5'
 FARBE.update({'kette': ('#a3abb8', '#3d4552')})
@@ -138,7 +145,7 @@ def konzept(w, L, tw, TL, ew, EL):
     # X-Kette: ueber dem Portalrohr hinter dem X-Riemen, Festpunkt in der
     # Mitte des X-Wegs, Schleife nach rechts (links stuende der X-Motor im
     # Weg). Bewegtes Ende hinten an der Traegerplatte.
-    K['kx_y'] = (L['portal_y'] - 20.0 - 12.0, L['portal_y'] - 20.0 + 6.0)
+    K['kx_y'] = (L['portal_y'] - 14.0 - KETTE_B, L['portal_y'] - 14.0)
     K['kx_hub'] = L['xw_max'] - L['xw_min']
     K['kx_fest'] = (L['xw_min'] + L['xw_max']) / 2.0
     K['kx_wanne'] = (K['kx_fest'], L['xw_max'] + KETTE_R + KETTE_H / 2.0)
@@ -171,6 +178,12 @@ def leistung():
     return {'motoren': motoren, 'luefter': LUEFTER_W, 'laser': laser,
             'summe': summe, 'dauer': dauer, 'reserve': dauer - summe,
             'strom': summe / 24.0}
+
+
+def vref(i_eff, r_sense):
+    """Vref am Poti eines TMC2209 (standalone) fuer den Effektivstrom
+    i_eff in A bei Messwiderstaenden r_sense in Ohm."""
+    return i_eff * (r_sense + 0.02) * math.sqrt(2.0) * 2.5 / 0.325
 
 
 def laenge(punkte):

@@ -69,10 +69,10 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Umlenkrolle 20 Z | Außendurchmesser (Bord) **18 mm**, Breite **8,5 mm** | `[?]` angenommen, nicht gemessen |
 | Motoren | NEMA 17, **37 mm** ohne Welle, **60 mm** mit Welle | `[v]` Angabe am Aufbau |
 | NEMA 17, Welle | ragt **23 mm** heraus (60 − 37), Ø5. Die Halter sind auf **20 mm** ausgelegt (erste Angabe): so trägt die Welle das ganze Ritzel, die 3 mm mehr stehen frei über | `[v]` Angabe am Aufbau |
-| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite | `[v]` Linie aus v8, Höhe Angabe am Aufbau |
+| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. **Offen:** laut Angabe vom 2026-09-26 laufen beide Trume in den oberen Nuten, das Ritzel mittig ([Y-Antrieb](#y-antrieb)) — dazu passt die Linie aus v8 nicht | `[v]` Linie aus v8, Höhe Angabe am Aufbau; Lage quer offen |
 | Obere Nut des 2040 | Öffnung beginnt **6 mm unter der Oberkante** (oberer Rand), Mitte 10 mm darunter | `[v]` Angabe am Aufbau |
 | Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (9,5 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
-| Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Seit Portal Rev. 12 sitzt das Ritzel **direkt auf der Motorwelle**: Y-Motorhalter an der Stirnseite des 2040, Achse 27,5 mm davor (siehe portal-y-schlitten.md). Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
+| Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Das Ritzel sitzt **direkt auf der Motorwelle**, **mittig zur 2040**, im eigenen `YMotorhalter` (Rev. 4, [Y-Antrieb](#y-antrieb)). Der Halter aus Portal Rev. 12/13 (Achse 27,5 mm vor der Stirnseite, 15,55 mm innen, M5 in der oberen Nut) ist gedruckt und am Aufbau verworfen. Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
 | Alte Eckwelle vorn | Ø5 Edelstahl, oben Kugellager, unten Gleitlager, zwei 20-Z-Ritzel; Achse **11 mm vor der Stirnseite** des 2040. Dort passt kein Motor: er ragte 10 mm unter das Ende des 2040 | `[v]` Angabe am Aufbau |
 | Y-Umlenkung hinten | Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager | `[v]` Angabe am Aufbau; Lage 11 mm hinter der Stirnseite angenommen `[?]` (nur Riemenlänge) |
 | Y-Riemen, Länge | offen, je Seite **≈ 1270 mm** von Klemme zu Klemme | gerechnet (Portal.py), hängt an der Lage des hinteren Ritzels |
@@ -486,29 +486,31 @@ reicht es; wer später schneller rastern will, wechselt auf ein 32-Bit-Board
 ## Y-Antrieb
 
 Nutzerangaben vom 2026-09-26 mit Foto, Halter in `fusion/YMotorhalter/`
-(Rev. 3), Doku in `y-motorhalter.md`.
+(Rev. 4), Doku in `y-motorhalter.md`. Portal und Rahmen siehe
+[Y-Achse und Portal](#y-achse-und-portal).
 
 | Wert | Maß | Status |
 |---|---|---|
-| Y-Profil | **2040 hochkant**, liegt auf der hinteren 2060 und steht über sie hinaus; die letzten ~40 mm der Seitenflächen sind frei, vor und unter dem Profilende ist Platz | Nutzerangabe |
+| Y-Profil | **2040 hochkant**, liegt vorn auf dem vorderen 2060, das **35 mm** hinter der Stirnseite sitzt; die letzten ~40 mm der Seitenflächen sind frei, vor und unter dem Profilende ist Platz | Nutzerangabe, 2060 `[v]` |
 | Nuten | je Seitenfläche zwei, 10 mm über der Unter- und unter der Oberkante; in den **oberen** läuft der Y-Riemen (beide Seiten), in die **unteren** kommen die Nutensteine | Nutzerangabe, Lage `[w]` |
 | Nut 6 | Öffnung 6,2, Lippe 1,8, Platz bis zum Nutgrund 6,0 | `[w]` |
-| Motoren | **2 × NEMA 17**, je Seite einer am Profilende, Welle nach oben, Achse mittig zur 2040 | Nutzerangabe |
+| Motoren | **2 × NEMA 17**, je Seite einer vorn am Profilende, Welle nach oben, Achse mittig zur 2040 | Nutzerangabe |
 | Ritzel | **GT2 20 Z, Bohrung 5**, direkt auf der Motorwelle | Nutzerangabe |
 | Trume in der Nut | 12,73 mm auseinander (20 Z): Rücken 3,26, Zahnspitzen 4,64 mm hinter der Seitenfläche | gerechnet aus Nut 6 `[w]` |
-| Motorwelle | 24 mm ab Flansch, Abflachung 15 mm ab Wellenende | `[w]` |
-| Y-Motor | Körper 48 mm angenommen, nur für den Freiraum nach unten | `[?]` |
+| Motorwelle | **23 mm** ab Flansch (60 mm mit, 37 mm ohne Welle), Abflachung 15 mm ab Wellenende | `[v]` Länge, Abflachung `[w]` |
+| Y-Motor | Körper **37 mm**, hängt bis 25,5 mm unter die 2040 | `[v]` |
 | Nutensteine M5, Nut 6 | Lippe 1,8, Gewinde 4, Platz in der Nut 6 mm → M5×12 + Scheibe | `[w]` |
-| jetziger Winkel | gedruckt, Motorachse ~15 mm neben der Profilmitte | Nutzerangabe, Foto |
+| gedruckter Halter (Portal.py) | Motorachse 15,55 mm neben der Profilmitte, M5 in der oberen Nut — daher Rev. 3 | Nutzerangabe, Foto |
 
 **Rev. 1/2 beruhten auf einem Missverständnis:** ein Motor mittig an der
 hinteren Traverse, der über einen Omega-Riemen zwei senkrechte
 Edelstahlwellen treibt. Die Werte dazu (Wellen Ø5 in 625ZZ, Wellenabstand,
 Motorriemen, Umlenkrollen aus F625ZZ) gelten für den Y-Antrieb nicht mehr.
 
-**Drehrichtung:** Beide Motoren sind gleich eingebaut. Ob die Wagen gemeinsam
-fahren, hängt davon ab, an welchem Trum jeder Wagen hängt. Das wird in der
-Firmware je Motor eingestellt, nicht am Halter.
+**Drehrichtung:** Beide Motoren sind gleich eingebaut, die Y-Riemen liegen
+aber spiegelbildlich: Die Motoren müssen gegenläufig drehen. Am CNC Shield
+bekommt der zweite Y-Motor (A, Klon von Y) dasselbe DIR-Signal, deshalb an
+ihm eine Spule tauschen — siehe [Zwei Y-Motoren](#zwei-y-motoren).
 
 ## Normteile (aus hardware.md, `[w]`)
 

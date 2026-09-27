@@ -173,7 +173,7 @@ den Y-Antrieb selbst und das Elektronikfach hinter
 dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 
 **Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 13,
-YMotorhalter Rev. 3, `y_motorhalter_check.py`).
+YMotorhalter Rev. 4, `y_motorhalter_check.py`).
 Elektronikgehäuse Rev. 1 gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)); die Halter für Endschalter und
 Energieketten folgen. Der

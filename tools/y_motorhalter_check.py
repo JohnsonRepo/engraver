@@ -21,11 +21,13 @@ import types
 
 SKRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                       'fusion', 'YMotorhalter', 'YMotorhalter.py')
+PORTAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                      'fusion', 'Portal', 'Portal.py')
 
 # Nur fuer die Rechnung, erzeugen keine Geometrie:
 E_PETG = 1500.0          # N/mm2, gedruckt quer zur Schicht (vorsichtig)
-MOTOR_MASSE = 0.35       # kg, NEMA 17 mit 48 mm (40 mm: ~0,28)
-MOTOR_MOMENT = 0.45      # Nm, Haltemoment eines 48er NEMA 17 [w]
+MOTOR_MASSE = 0.35       # kg, vorsichtig wie ein 48er (die 37er: ~0,25)
+MOTOR_MOMENT = 0.45      # Nm, vorsichtig: Haltemoment eines 48er [w]
 VORSPANNUNG = 20.0       # N je Trum, Richtwert fuer den Y-Riemen
 M5_KLEMMKRAFT = 500.0    # N je M5, vorsichtig: PETG unter dem Kopf
 M3_KLEMMKRAFT = 300.0    # N je M3, dito
@@ -34,14 +36,14 @@ MADENSCHRAUBE_R = 1.5    # mm, M3-Madenschraube in der Ritzelnabe
 ZAEHNE_PROBE = (16, 18, 20, 22, 24)
 
 
-def modul_laden():
+def modul_laden(pfad=SKRIPT, name='y_motorhalter'):
     """Importiert das Fusion-Skript ohne Fusion: adsk wird nur innerhalb der
     Funktionen benutzt, der Modulimport laeuft also mit einem Stub durch."""
-    for name in ('adsk', 'adsk.core', 'adsk.fusion'):
-        sys.modules.setdefault(name, types.ModuleType(name))
+    for paket in ('adsk', 'adsk.core', 'adsk.fusion'):
+        sys.modules.setdefault(paket, types.ModuleType(paket))
     sys.modules['adsk'].core = sys.modules['adsk.core']
     sys.modules['adsk'].fusion = sys.modules['adsk.fusion']
-    spec = importlib.util.spec_from_file_location('y_motorhalter', SKRIPT)
+    spec = importlib.util.spec_from_file_location(name, pfad)
     modul = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(modul)
     return modul
@@ -356,6 +358,20 @@ def main():
          hb - (L['wange_x1'] + w('m5_scheibe_h') + w('m5_kopf_h')), 0.0)
     p.ja('unter der {} haengt nur der Motor, und der vor der Stirnseite'
          .format(prof), L['motor_y_min'] - m > 0.0 and L['halter_z0'] >= 0.0)
+    # Vorn liegt die 2040 auf dem vorderen 2060 (Lage aus Portal.py). Die
+    # Schenkel liegen an ihren Seitenflaechen, also ueber dem 2060; nur
+    # Winkel am 2060 koennten stoeren.
+    try:
+        vorn_2060 = modul_laden(PORTAL, 'portal').w('quer_vorn_zurueck')
+        p.info('vorderes 2060 hinter der Stirnseite (Portal.py)', vorn_2060)
+        ueber = w('wange_laenge') - vorn_2060
+        p.info('Schenkel reichen ueber das 2060 (Luft darueber {:.1f} mm)'
+               .format(L['halter_z0']), max(ueber, 0.0))
+        p.ok('hintere M5-Scheibe vor dem 2060',
+             vorn_2060 + L['m5_loecher'][1][0] - w('m5_scheibe_d') / 2.0, 0.0)
+    except Exception as exc:
+        p.info('Portal.py nicht geladen ({}), 2060 nicht geprueft'.format(
+            exc))
 
     # ------------------------------------------------------------------------
     p.titel('11) Stueckliste (beide Seiten)')

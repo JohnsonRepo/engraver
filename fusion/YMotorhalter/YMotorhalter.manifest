@@ -3,7 +3,7 @@
     "type": "script",
     "author": "Johnson",
     "description": {
-        "": "Motorhalter fuer die Y-Achse: je Seite ein NEMA 17 am Ende der 2040 (hochkant), dasselbe Teil links und rechts. U-Buegel mit vier M5-Nutensteinen in den unteren Nuten beider Seitenflaechen und einem Joch an der Stirnseite. Der Motor haengt mittig unter einer Platte, das GT2-Ritzel 20 Z sitzt direkt auf der Motorwelle in Hoehe der oberen Nuten, in denen der Y-Riemen laeuft. Gespannt wird ueber Langloecher, gedruckt kopfueber ohne Stuetzen."
+        "": "Motorhalter fuer die Y-Achse: je Seite ein NEMA 17 vorn an der 2040 (hochkant), dasselbe Teil links und rechts. U-Buegel mit vier M5-Nutensteinen in den unteren Nuten beider Seitenflaechen und einem Joch an der Stirnseite. Der Motor haengt mittig unter einer Platte, das GT2-Ritzel 20 Z sitzt direkt auf der Motorwelle in Hoehe der oberen Nuten, in denen der Y-Riemen laeuft. Gespannt wird ueber Langloecher, gedruckt kopfueber ohne Stuetzen."
     },
     "supportedOS": "windows|mac",
     "editEnabled": true

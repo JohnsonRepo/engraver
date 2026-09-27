@@ -1,12 +1,13 @@
-# YMotorhalter.py — Halter fuer die NEMA 17 der Y-Achse am Ende jeder 2040
+# YMotorhalter.py — Halter fuer die NEMA 17 der Y-Achse, vorn an jeder 2040
 #
 # Bauteil (ein Druckteil, keine Baugruppe): der Halter bewegt sich nicht,
 # Motor und Ritzel sind Kaufteile. Das Teil ist symmetrisch zur Mitte der
 # 2040 und passt deshalb links wie rechts — zweimal drucken, nichts spiegeln.
 #
 # Antrieb der Y-Achse (Nutzerangaben 2026-09-26, mit Foto):
-#   * jede Seite hat ihren eigenen NEMA 17 am Ende ihrer 2040; die 2040
-#     steht hochkant, liegt auf der hinteren 2060 und steht ueber sie hinaus
+#   * jede Seite hat ihren eigenen NEMA 17 vorn an ihrer 2040; die 2040
+#     steht hochkant und liegt auf dem vorderen 2060, das 35 mm hinter ihrer
+#     Stirnseite sitzt (Portal.py)
 #   * der Y-Riemen laeuft INNERHALB der oberen Nuten beider Seitenflaechen
 #     der 2040 und am Profilende um das Ritzel
 #   * das Ritzel (GT2 20 Z, Bohrung 5) sitzt direkt auf der Motorwelle,
@@ -18,7 +19,10 @@
 #     Profilende weg rueckt
 # Rev. 1 und 2 (ein Motor mittig an der hinteren Traverse, Omega-Trieb zu
 # zwei senkrechten Wellen) beruhten auf einem Missverstaendnis; Rev. 3
-# ersetzt sie ganz.
+# ersetzt sie ganz. Der Y-Motorhalter aus Portal.py (Achse 15,55 mm neben der
+# Profilmitte, M5 in der oberen Nut) ist damit ebenfalls ueberholt.
+# Rev. 4: gemessene Motoren (37 mm Koerper, Welle 23 mm, Portal.py) — die
+# Platte rueckt 1 mm hoeher, das Ritzel sitzt weiter ganz auf der Welle.
 #
 # Koordinatensystem (Maschinenkoordinaten an EINEM Profilende, in mm):
 #   X = quer zur 2040, X = 0 ist ihre Mitte (das Teil ist symmetrisch)
@@ -38,7 +42,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'YMotorhalter'
-REVISION = 3
+REVISION = 4
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -63,11 +67,12 @@ MASSE = {
     'motor_loch':          (31.0,  'NEMA17: Lochbild 31 x 31'),
     'motor_bund_d':        (22.0,  'NEMA17: Zentrierbund Durchmesser'),
     'motor_bund_h':         (2.0,  'NEMA17: Zentrierbund Hoehe'),
-    'motor_welle_l':       (24.0,  'NEMA17: Wellenlaenge ab Flansch'),
+    # Gemessen [v]: 60 mm mit Welle, 37 mm ohne (Hardware-Notizen).
+    'motor_welle_l':       (23.0,  'NEMA17: Wellenlaenge ab Flansch'),
     'motor_flach_l':       (15.0,  'NEMA17: Abflachung ab Wellenende'),
     'motor_gewinde_tiefe':  (4.5,  'NEMA17: Gewindetiefe im Flansch'),
-    # Nur Freiraum nach unten: mit 48 mm gerechnet, ein 40er endet 8 mm hoeher.
-    'motor_laenge':        (48.0,  'NEMA17: Koerperlaenge (nur Freiraum)'),
+    # Nur Freiraum nach unten; gemessen [v].
+    'motor_laenge':        (37.0,  'NEMA17: Koerperlaenge (nur Freiraum)'),
 
     # --- Kaufteil: GT2-Riemen und Ritzel (hardware.md [w]) -----------------
     'gt2_teilung':          (2.0,  'GT2: Teilung'),

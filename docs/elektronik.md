@@ -208,6 +208,9 @@ Pull-up „ausgelöst“ — die sichere Richtung.
   **Rückseite des hinteren 2060** (mittlere Nut) zum rechten 2040 und in
   dessen unterer Nut außen nach vorn zum rechten Y-Motor bzw. nach hinten
   zum Y-Endschalter; das Kabel zum Not-Aus ebenso nach vorn.
+* Vorn belegt der [Y-Motorhalter](y-motorhalter.md) die letzten 40 mm der
+  unteren Nuten beider Seitenflächen (Nutensteine). Die Motorkabel verlassen
+  die Nut davor und laufen außen am Schenkel zum Motor.
 
 **Bewegt** in zwei Energieketten:
 

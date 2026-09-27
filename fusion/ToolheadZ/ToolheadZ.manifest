@@ -3,7 +3,7 @@
     "type": "script",
     "author": "Johnson",
     "description": {
-        "": "Kompletter Laser-Toolhead mit Z-Achse als Baugruppe: Traegerplatte mit angeformter Motorkonsole auf dem MGN15H-Wagen des Portals, MGN9-Z-Fuehrung auf einem Schienensockel, NEMA 17 zwischen zwei Fuehrungsrippen mit flexibler Kupplung auf eine M6-Gewindestange, Schlittenplatte mit Diodenlaser und schwimmender Mutternblock mit zwei federverspannten M6-Muttern. Plus ausgeblendete Bohrlehren fuer alle kritischen Lochbilder."
+        "": "Kompletter Laser-Toolhead mit Z-Achse als Baugruppe: Traegerplatte mit angeformter Motorkonsole auf dem MGN15H-Wagen des Portals, MGN9-Z-Fuehrung auf einem Schienensockel, NEMA 17 zwischen zwei Fuehrungsrippen mit starrer Kupplung auf eine Tr8x2-Spindel, Schlittenplatte mit Diodenlaser, Mutternwinkel als Flanschsitz fuer die Tr8x2-Anti-Backlash-Garnitur, Motoradapter, Schaltfahne und Endschalterhalter, dazu der Riemenhalter, der hinten beide Enden des X-Riemens klemmt. Plus ausgeblendete Bohrlehren fuer die Lochbilder der Kaufteile und fuer die Bohrungen des Riemenhalters in der schon gedruckten Traegerplatte."
     },
     "supportedOS": "windows|mac",
     "editEnabled": true

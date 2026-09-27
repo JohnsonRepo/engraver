@@ -6,48 +6,63 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil, darauf 2 × 2040 Aluprofil |
-| Y-Achse | 2 Linearführungen oben auf den 2040ern |
-| Y-Antrieb | je Seite ein NEMA 17 am Ende der 2040, Ritzel direkt auf der Motorwelle; der Y-Riemen läuft in den oberen Nuten der 2040 |
-| Portal | Halterungen auf den Y-Schlitten, dazwischen ein 2020 Aluprofil |
-| X-Achse | Linearführung MGN15 am Portalprofil |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
+| Y-Achse | 2 Linearführungen MGN12H (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn je Seite ein NEMA 17 mit dem Ritzel direkt auf der Welle, mittig zur 2040 |
+| Portal | Y-Schlitten auf den MGN12H-Wagen, dazwischen ein 2020-V-Slot-Profil (500 mm); Y-Schienen 514 mm Mitte zu Mitte |
+| X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
 | Z-Achse | Toolhead am MGN15H-Wagen: eigene MGN9-Führung, NEMA 17 über Tr8×2-Spindel |
 | Werkzeug | Diodenlaser am Z-Schlitten |
+| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209, GRBL 1.1 (geplant), A-Achse klont Y |
 
 ## Inhalt
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/YMotorhalter/           Y-Motorhalter am Ende jeder 2040  ← neu
+fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
+fusion/YMotorhalter/           Y-Motorhalter vorn an jeder 2040 (ersetzt den aus Portal)  ← neu
+fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
+docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
+docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
+docs/portal-y-antrieb.svg      alter Y-Motorhalter aus Portal.py (überholt): Ecke und Schnitt
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
+docs/elektronik.md             Platz, Gehäuse, Leistung, Endschalter, Kabel, Anschlussplan
+docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
+docs/elektronik-anschluss.svg  Anschlussplan: Netzteil, Wandler, Shield, Motoren, Laser, Endschalter
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
-docs/y-antrieb.svg             Skizze: Draufsicht, Seitenansicht, Schnitt, Riemen in der Nut
+docs/y-motorhalter.svg         Y-Motorhalter: Draufsicht, Seitenansicht, Schnitt, Riemen in der Nut
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
 tools/toolhead_check.py        rechnerische Prüfung der Baugruppe (ohne Fusion)
+tools/portal_check.py          Prüfung des Portals mit dem Toolhead über X- und Z-Weg
 tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
 tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
+tools/portal_zeichnen.py       erzeugt die Portalzeichnung
+tools/y_antrieb_zeichnen.py    erzeugt die Zeichnung des alten Y-Motorhalters aus Portal.py
+tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum, Montage, Druck)
+tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
+tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
-tools/y_antrieb_zeichnen.py    erzeugt die Y-Antriebsskizze
+tools/y_motorhalter_zeichnen.py erzeugt die Zeichnung des Y-Motorhalters
 ```
 
 ## Teile
 
 ### Toolhead Z-Achse (aktuell)
 
-Kompletter Toolhead als Baugruppe aus sechs gedruckten Teilen: **Trägerplatte**
+Kompletter Toolhead als Baugruppe aus sieben gedruckten Teilen: **Trägerplatte**
 am MGN15H-Wagen des Portals — mit angeformter Motorkonsole für den NEMA 17 —,
 ein **Motoradapter**, der den Motor 10 mm über die Konsole hebt,
 **Schlittenplatte** auf dem MGN9H-Z-Wagen mit dem Laser, ein **Mutternwinkel**
 als Flanschsitz für die Tr8×2-Anti-Backlash-Garnitur, schwimmend verschraubt,
 eine schwarze **Schaltfahne** und ein **Endschalterhalter** für die
-Gabellichtschranke.
+Gabellichtschranke, dazu der **Riemenhalter** hinten an der Trägerplatte, der
+beide Enden des X-Riemens klemmt (Rev. 33).
 
 Nutzbarer Z-Verfahrweg **93,6 mm** (MGN9-Schiene 200 mm), Strahlachse 58,5 mm
 vor der X-Wagen-Stirnfläche, NEMA 17 mit allen vier Schrauben zugänglich. Die
@@ -57,17 +72,51 @@ Fokusabstand des Moduls nicht in der Geometrie steckt. Werkstückhöhe bis 59 mm
 mitfährt — die 200-mm-Spindel wird dafür auf 160 mm gekürzt. Details in
 [docs/toolhead-z.md](docs/toolhead-z.md).
 
+### Portal: Y-Schlitten, X- und Y-Antrieb (neu)
+
+Riemenklemmenschlitten für die **MGN12H-Wagen (20 × 20)**, links und rechts
+gespiegelt. Sie tragen das Portalrohr von unten und verschrauben es hinten
+(Rückwand, 2 × M5 in Hammermuttern) und an der Stirn (M5 in die
+Kernbohrung) — die Vorderseite bleibt frei für die X-Schiene. Unter jeder
+Platte hängen **zwei gleiche Klemmtürme wie bei v8** mit Rippen und
+Querstift, einer je Riemenende.
+Links steht der **X-Motor** über dem Rohrende — so tief, dass seine
+20-mm-Welle das ganze Ritzel trägt —, rechts die **Umlenkung** mit
+einer 20-Z-Rolle, die ein Spannklotz nach außen zieht. Den Y-Antrieb vorn an
+jedem 2040 übernimmt der eigene [Y-Motorhalter](#y-motorhalter-neu); der
+Y-Motorhalter, den `Portal.py` noch mitbaut, ist **überholt** (Achse 15,55 mm
+neben der Profilmitte, M5 in der oberen Nut). Aluprofile, Linearführungen,
+Riemen und Motoren stehen als Referenz mit im Modell (Komponente
+`Referenz_nicht_drucken`, nur zur Ansicht).
+
+X-Weg **391,2 mm** — die ganze Schiene minus Wagen. Der Toolhead fährt an
+beiden Enden mit mindestens 3 mm an Motor, Umlenkung, Schlitten und Y-Riemen
+vorbei, geprüft über den ganzen X- und Z-Weg. Details in
+[docs/portal-y-schlitten.md](docs/portal-y-schlitten.md).
+
 ### Y-Motorhalter (neu)
 
-Hält je Seite einen NEMA 17 am Ende der 2040, dasselbe Teil links und
-rechts. Der Y-Riemen läuft in den oberen Nuten beider Seitenflächen und am
-Profilende um das Ritzel, das direkt auf der Motorwelle sitzt. Der Motor
-hängt mittig zur 2040 unter einer Platte, Welle nach oben. Mit 20 Zähnen
-laufen beide Trume mittig im Nutkanal. Der Halter ist ein U-Bügel: zwei
-Schenkel mit 4 × M5 in den unteren Nuten, ein Joch liegt an der Stirnseite
-an. Gespannt wird über Langlöcher, der Motor rückt ±4 mm vom Profil weg.
-Gedruckt wird kopfüber ohne Stützen. Details in
+Hält vorn an jeder 2040 einen NEMA 17, dasselbe Teil links und rechts. Der
+Y-Riemen läuft in den oberen Nuten beider Seitenflächen und am Profilende um
+das Ritzel, das direkt auf der Motorwelle sitzt. Der Motor hängt mittig zur
+2040 unter einer Platte, Welle nach oben. Mit 20 Zähnen laufen beide Trume
+mittig im Nutkanal. Der Halter ist ein U-Bügel: zwei Schenkel mit 4 × M5 in
+den unteren Nuten, ein Joch liegt an der Stirnseite an. Gespannt wird über
+Langlöcher, der Motor rückt ±4 mm vom Profil weg. Gedruckt wird kopfüber
+ohne Stützen. Er ersetzt den Y-Motorhalter aus `Portal.py`. Details in
 [docs/y-motorhalter.md](docs/y-motorhalter.md).
+
+### Elektronikgehäuse (neu)
+
+Gehäuse im Fach hinter dem hinteren 2060, unter den 2040 — dorthin fährt
+weder Portal noch Toolhead. Links der **Arduino Uno mit CNC Shield V3** auf
+Stehbolzen, USB nach hinten; rechts der **Abwärtswandler 24 → 12 V** für den
+Laser und drei **Wago-Klemmen**; hinten **Einbaubuchse** (Hohlstecker
+5,5 × 2,1) und **Schalter**. Der **Deckel** trägt den 24-V-Lüfter über den
+Treibern. Eine Montageplatte hängt es mit 4 × M5 an die Rückseite des 2060,
+dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
+Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
+[docs/elektronik.md](docs/elektronik.md).
 
 ### Toolhead-Grundplatte (überholt)
 
@@ -83,9 +132,9 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * macOS: `~/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Scripts/`
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
-Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ (bzw. YMotorhalter)
-→ Run*. Jeder Lauf
-legt ein **neues Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
+Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
+*Portal*, *YMotorhalter* oder *Elektronik*). Jeder Lauf legt ein **neues
+Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
 
@@ -93,11 +142,17 @@ Montagereihenfolge.
 
 ```sh
 python3 tools/toolhead_check.py     # Maßkette, Kollisionen, Schrauben, Druck
+python3 tools/portal_check.py       # Portal + Toolhead über den ganzen Weg
+python3 tools/elektronik_check.py   # Elektronikgehäuse gegen Portal, Toolhead, Rahmen
 python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
 python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
+python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
+python3 tools/y_antrieb_zeichnen.py # docs/portal-y-antrieb.svg (alter Y-Motorhalter)
+python3 tools/elektronik_zeichnen.py # docs/elektronik-platz.svg + Kabellängen
+python3 tools/anschluss_zeichnen.py  # docs/elektronik-anschluss.svg
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 python3 tools/y_motorhalter_check.py  # Y-Motorhalter: Riemen in der Nut, Freigänge, Schrauben
-python3 tools/y_antrieb_zeichnen.py   # docs/y-antrieb.svg neu erzeugen
+python3 tools/y_motorhalter_zeichnen.py  # docs/y-motorhalter.svg neu erzeugen
 ```
 
 `toolhead_check.py` importiert das Fusion-Skript mit gestubbtem `adsk`-Modul und
@@ -109,7 +164,19 @@ verschraubt wird), Lochbildtoleranzen, Druckbarkeit — und statisch, dass jeder
 im Skript benutzte Maß- und Lageschlüssel existiert. Exit-Code 0 = alles
 bestanden.
 
-**Stand:** alle Prüfungen bestanden (Rev. 14). Der Zugangskonflikt zwischen
-Laser und Z-Wagen ist gelöst, indem der Laser 30,75 mm tiefer hängt und über
-senkrechte Langlöcher eingestellt wird —
+`portal_check.py` importiert beide Skripte und fährt den Toolhead über
+81 X- × 11 Z-Stellungen gegen Schlitten, Motor, Umlenkung, beide Riemen und
+den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
+Werkzeugzugang und Druckbarkeit der Portalteile, den Y-Weg gegen die 2060
+und die Y-Motorhalter (noch mit dem alten Halter aus `Portal.py` gerechnet),
+den Y-Antrieb selbst und das Elektronikfach hinter
+dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
+
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 13,
+YMotorhalter Rev. 3, `y_motorhalter_check.py`).
+Elektronikgehäuse Rev. 1 gezeichnet und geprüft
+([elektronik.md](docs/elektronik.md)); die Halter für Endschalter und
+Energieketten folgen. Der
+Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
+30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

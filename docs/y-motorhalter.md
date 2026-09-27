@@ -2,10 +2,10 @@
 
 Erzeugt von `fusion/YMotorhalter/YMotorhalter.py` (ein Druckteil, Rev. 3).
 Geprüft mit `python3 tools/y_motorhalter_check.py`, Skizze in
-[y-antrieb.svg](y-antrieb.svg) (neu erzeugen mit
-`python3 tools/y_antrieb_zeichnen.py`).
+[y-motorhalter.svg](y-motorhalter.svg) (neu erzeugen mit
+`python3 tools/y_motorhalter_zeichnen.py`).
 
-![Y-Motorhalter](y-antrieb.svg)
+![Y-Motorhalter](y-motorhalter.svg)
 
 ## Was hier zusammenkommt
 

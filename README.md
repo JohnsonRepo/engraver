@@ -32,6 +32,7 @@ docs/toolhead-grundplatte.md   Doku der Einzelplatte
 docs/elektronik.md             Platz, Gehäuse, Leistung, Endschalter, Kabel, Anschlussplan
 docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
 docs/elektronik-anschluss.svg  Anschlussplan: Netzteil, Wandler, Shield, Motoren, Laser, Endschalter
+docs/elektronik-box.svg        Elektronik-Gehäuse von oben: Uno, Lüfter, Verteiler, Kabelwege
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
@@ -46,6 +47,7 @@ tools/y_antrieb_zeichnen.py    erzeugt die Zeichnung des alten Y-Motorhalters au
 tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum, Montage, Druck)
 tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
 tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
+tools/elektronik_box_zeichnen.py erzeugt die Draufsicht auf das Elektronik-Gehäuse
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
 tools/y_motorhalter_zeichnen.py erzeugt die Zeichnung des Y-Motorhalters
@@ -151,6 +153,7 @@ python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
 python3 tools/y_antrieb_zeichnen.py # docs/portal-y-antrieb.svg (alter Y-Motorhalter)
 python3 tools/elektronik_zeichnen.py # docs/elektronik-platz.svg + Kabellängen
 python3 tools/anschluss_zeichnen.py  # docs/elektronik-anschluss.svg
+python3 tools/elektronik_box_zeichnen.py  # docs/elektronik-box.svg
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 python3 tools/y_motorhalter_check.py  # Y-Motorhalter: Riemen in der Nut, Freigänge, Schrauben
 python3 tools/y_motorhalter_zeichnen.py  # docs/y-motorhalter.svg neu erzeugen

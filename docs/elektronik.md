@@ -5,7 +5,9 @@ gerechnet: `python3 tools/portal_check.py`, Abschnitt 16. Das
 [Gehäuse](#gehäuse-elektronikpy) erzeugt `fusion/Elektronik/Elektronik.py`,
 geprüft mit `python3 tools/elektronik_check.py`. Die Zeichnung erzeugt
 `python3 tools/elektronik_zeichnen.py`; sie gibt auch die Kabellängen aus;
-den [Anschlussplan](#anschlussplan) erzeugt
+die [Draufsicht auf das Gehäuse](#gehäuse-elektronikpy)
+`python3 tools/elektronik_box_zeichnen.py`, den
+[Anschlussplan](#anschlussplan)
 `python3 tools/anschluss_zeichnen.py`. **Stand:** Gehäuse gezeichnet
 (Elektronik.py Rev. 2, mit den Angaben vom Aufbau vom 2026-09-27:
 Stapelhöhe, Wandler 12 V / 5 A, Wago-Bestand, 110 mm Überstand der 2040
@@ -56,6 +58,8 @@ Nut) mit 4 × M5 in Hammermuttern, wie die übrigen Halter — der Tisch trägt
 nichts, die Maschine steht weiter nur auf den 2060.
 
 ## Gehäuse (Elektronik.py)
+
+![Elektronik-Gehäuse von oben](elektronik-box.svg)
 
 | Teil | Druck (PETG) | Masse (voll) | Bauraum |
 |---|---|---|---|

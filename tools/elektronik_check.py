@@ -7,8 +7,8 @@ adsk-Modul und prueft: Abgleich der Rahmenmasse mit Portal.py, Lage im Fach
 hinter dem hinteren 2060, Freiraum gegen Portal und Toolhead ueber den ganzen
 Weg, Montage mit M5 in Hammermuttern, Werkzeugzugang, Uno und Stapelhoehe,
 Verteiler (Buchse, Schalter, Wandler, Wago), Waende, Druckbarkeit, den
-Kabelkanal und die Leistungsbilanz (aus tools/elektronik_zeichnen.py). Gibt
-die Stueckliste aus.
+Kabelkanal, die Leistungsbilanz und die Litzen (aus
+tools/elektronik_zeichnen.py). Gibt die Stueckliste aus.
 
     python3 tools/elektronik_check.py
 
@@ -31,6 +31,7 @@ WERKZEUG_LAENGE = 20.0        # kuerzester nutzbarer Inbus-Schenkel
 BETT = 250.0                  # Bambu Lab A1: 256, mit Rand
 # Einbaumasse der Kaufteile hinter der Rueckwand [w]
 BUCHSE_KOERPER_D = 11.0       # Einbaubuchse M8: Mutter und Loetfahnen
+BUCHSE_KOERPER_T = 15.0       # ... so tief hinter der Wand
 SCHALTER_KOERPER = (21.0, 15.0, 20.0)   # KCD1: breit, hoch, tief
 
 
@@ -281,7 +282,7 @@ def main():
          ix[1] - (sx + sb + sr), 2.0)
     p.ok('Wand am Schalter (KCD1: 0,8 bis 2 mm) [w]',
          ew('schalter_wand'), 2.0, '<=')
-    tiefe = max(SCHALTER_KOERPER[2], 15.0)
+    tiefe = max(SCHALTER_KOERPER[2], BUCHSE_KOERPER_T)
     p.ok('Buchse und Schalter reichen nicht bis zum Wandler',
          ew('eingang_tiefe') - tiefe + (ew('geh_wand')
                                         - ew('schalter_wand')), 0.5)
@@ -396,6 +397,28 @@ def main():
     for r in leistung.R_SENSE:
         p.ok('   Vref bei R_sense {:.2f} Ohm (Poti bis 2,5 V)'.format(r),
              leistung.vref(leistung.MOTOR_I, r), 2.5, '<=', 'V')
+
+    # ------------------------------------------------------------------
+    p.titel('14) Litzen: Querschnitt, Spannungsfall, Kontakte')
+    li = leistung.litzen(leistung.konzept(w, L, tw, TL, ew, EL))
+    p.ok('24 V {} mm2: belastbar (VDE 0298-4) gegen den Netzteilstrom'.format(
+        leistung.LITZE_24V), leistung.BELASTBAR[leistung.LITZE_24V],
+         li['netz_a'], '>=', 'A')
+    p.info('   Not-Aus {:.1f} m hin und zurueck: Spannungsfall bei {:.0f} A'
+           .format(li['not_m'], li['netz_a']), li['not_u'], 'V')
+    p.ok('Laser {} mm2, {:.0f} m: Spannungsfall an {:.0f} V'.format(
+        leistung.LITZE_LASER, li['laser_m'], leistung.LASER_V),
+         100.0 * li['laser_u'] / leistung.LASER_V, 5.0, '<=', '%')
+    p.ok('   Laserlitze passt in den XH-Crimpkontakt', leistung.LITZE_LASER,
+         leistung.XH_MAX, '<=', 'mm2')
+    p.ok('Motor {} mm2, {:.0f} m: Kabel gegen die Wicklung'.format(
+        leistung.LITZE_MOTOR, li['motor_m']),
+         100.0 * li['motor_r'] / leistung.MOTOR_R, 25.0, '<=', '%')
+    p.ok('   Motorlitze passt in den PH-Crimpkontakt', leistung.LITZE_MOTOR,
+         leistung.PH_MAX, '<=', 'mm2')
+    p.ok('Endschalter {} mm2: haelt in der Wago (feindraehtig)'.format(
+        leistung.LITZE_SIGNAL), leistung.LITZE_SIGNAL, leistung.WAGO_MIN,
+         '>=', 'mm2')
     return p.bericht()
 
 

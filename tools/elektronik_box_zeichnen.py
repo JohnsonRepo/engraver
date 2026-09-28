@@ -25,6 +25,8 @@ from antrieb_zeichnen import (text, linie, pfeil, rect_px, de,  # noqa
 from portal_zeichnen import Feld, ORANGE              # noqa: E402
 from y_antrieb_zeichnen import quer_mass              # noqa: E402
 from elektronik_zeichnen import ELEKTRONIK, KABEL, linienzug  # noqa: E402
+from elektronik_check import (BUCHSE_KOERPER_D, BUCHSE_KOERPER_T,  # noqa
+                              SCHALTER_KOERPER)
 
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-box.svg')
@@ -33,13 +35,11 @@ S = 3.0                          # px/mm
 X_BEREICH = (-272.0, -4.0)       # Maschinen-X
 Y_BEREICH = (-382.0, -216.0)     # Maschinen-Y, vorn (zur Maschine) unten
 
-# Skizzenmasse der Kaufteile, die Elektronik.py nicht fuehrt [?] — nur fuer
-# das Bild, nicht gemessen:
-BUCHSE_TIEF = 16.0               # Einbaubuchse: Koerper hinter der Wand
-BUCHSE_MUTTER = (12.0, 2.0)      # ihre M8-Mutter innen: breit, dick
-BUCHSE_BUND = (10.0, 2.0)        # Bund aussen
-SCHALTER_TIEF = 20.0             # KCD1: Koerper mit Kontakten hinter der Wand
-SCHALTER_RAHMEN = (21.0, 3.0)    # Rahmen aussen: breit, tief
+# Buchse und Schalter hinter der Rueckwand mit der Huelle aus
+# tools/elektronik_check.py (nicht gemessen); dazu nur fuers Bild [?]:
+BUCHSE_MUTTER = 2.0              # Einbaubuchse: Mutter innen, dick
+BUCHSE_BUND = (10.0, 2.0)        # ... Bund aussen: breit, dick
+SCHALTER_RAHMEN = 3.0            # KCD1: Rahmen aussen, tief
 BINDER_B = 3.6                   # Kabelbinder: Breite
 
 BODEN = '#fdf1e6'                # Boden und Kanal, tiefer als die Waende
@@ -163,20 +163,20 @@ def draufsicht(f, ew, EL):
     # Verteiler: hinten Buchse und Schalter (mit ihren Teilen vor der
     # Rueckwand), davor der Wandler mit zwei Kabelbindern, davor die Wago
     x, y0 = EL['buchse_x'], iy[0]
-    mb, md = BUCHSE_MUTTER
-    t.append(f.rect(x - mb / 2.0, x + mb / 2.0, y0, y0 + md, 'stahl'))
+    h = BUCHSE_KOERPER_D / 2.0
+    t.append(f.rect(x - h, x + h, y0, y0 + BUCHSE_MUTTER, 'stahl'))
     h = ew('buchse_d') / 2.0
-    t.append(f.rect(x - h, x + h, y0 + md, y0 + BUCHSE_TIEF, 'kauf'))
+    t.append(f.rect(x - h, x + h, y0 + BUCHSE_MUTTER, y0 + BUCHSE_KOERPER_T,
+                    'kauf'))
     bb, bd = BUCHSE_BUND
     t.append(f.rect(x - bb / 2.0, x + bb / 2.0, gy[0] - bd, gy[0], 'stahl'))
-    x, h = EL['schalter_x'], ew('schalter_b') / 2.0
-    t.append(f.rect(x - h, x + h, y0, y0 + SCHALTER_TIEF, 'kauf'))
-    cx, cy = mitte_px(f, x, x, y0, y0 + SCHALTER_TIEF)
+    x, h = EL['schalter_x'], SCHALTER_KOERPER[0] / 2.0
+    t.append(f.rect(x - h, x + h, y0, y0 + SCHALTER_KOERPER[2], 'kauf'))
+    cx, cy = mitte_px(f, x, x, y0, y0 + SCHALTER_KOERPER[2])
     schrift.append(text(cx, cy - 1, 'Schalter', 8.0, TEXT, 'middle',
                         fett=True))
     schrift.append(text(cx, cy + 9, 'KCD1', 7.5, GRAU, 'middle'))
-    rb_, rd = SCHALTER_RAHMEN
-    t.append(f.rect(x - rb_ / 2.0, x + rb_ / 2.0, gy[0] - rd, gy[0], 'kauf'))
+    t.append(f.rect(x - h, x + h, gy[0] - SCHALTER_RAHMEN, gy[0], 'kauf'))
     wx, wy = EL['wandler_x'], EL['wandler_koerper_y']
     t.append(f.rect(*wx, *wy, 'wandler'))
     ya, yb = EL['binder'][0][1], EL['binder'][1][1]

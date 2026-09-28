@@ -4,7 +4,8 @@ Wohin mit Steuerung, Netzteil, Endschaltern und Kabeln. Der Platz ist
 gerechnet: `python3 tools/portal_check.py`, Abschnitt 16. Das
 [Gehäuse](#gehäuse-elektronikpy) erzeugt `fusion/Elektronik/Elektronik.py`,
 geprüft mit `python3 tools/elektronik_check.py`. Die Zeichnung erzeugt
-`python3 tools/elektronik_zeichnen.py`; sie gibt auch die Kabellängen aus;
+`python3 tools/elektronik_zeichnen.py`; sie gibt auch die Kabellängen und
+die Spannungsfälle der [Litzen](#litzen) aus;
 die [Draufsicht auf das Gehäuse](#gehäuse-elektronikpy)
 `python3 tools/elektronik_box_zeichnen.py`, den
 [Anschlussplan](#anschlussplan)
@@ -275,6 +276,33 @@ Massivdraht und keine starren Flachbandkabel. Die üblichen 1-m-Motorkabel
 reichen also nur links und für X. Der Laser bekommt ein eigenes 3-adriges
 Kabel mit XH-Stecker ([Einkaufsliste](#einkaufsliste-vorschlag)).
 
+### Litzen
+
+Kupfer, feindrähtig. Der Querschnitt folgt aus Strom und Länge und aus dem,
+was Stecker und Klemmen nehmen `[w]`: XH-Crimpkontakt 0,08–0,34 mm²
+(AWG 28–22), PH 0,05–0,22 mm² (AWG 30–24), Dupont AWG 28–22, Wago 221
+feindrähtig 0,14–4 mm². Gerechnet in `tools/elektronik_zeichnen.py`, geprüft
+in `tools/elektronik_check.py` (Abschnitt 14), jeweils am längsten Weg:
+
+| Leitung | Strom | Litze | warum |
+|---|---|---|---|
+| 24 V: Buchse → Schalter → Not-Aus → Wago +24 V, Buchse − → Wago GND, Wago → Shield und Wandler | bis 3 A (Netzteil) | **0,75 mm² (AWG 18)**, rot und schwarz | belastbar 6 A (VDE 0298-4, flexible Leitung); 0,5 mm² hätte genau die 3 A. Not-Aus 1,5 m hin und zurück: 0,21 V bei 3 A |
+| Laser: +12 V, GND, PWM | 1,8 A | **3 × 0,34 mm² (AWG 22)** | dicker passt nicht in den XH-Kontakt am Laser; 2 m: 0,37 V = 3 % von 12 V |
+| Motoren | 1,05 A je Spule | **4 × AWG 24 (0,2 mm²)** | dicker passt nicht in den PH-Kontakt am Motor; Z-Motor, 2 m: 0,35 Ω = 15 % der Wicklung. Fertige Motorkabel mit AWG 26 gehen auch (24 %) |
+| Endschalter: 5 V, GND, Signal | ≈ 20 mA | **3 × 0,14 mm² (AWG 26)** oder dicker | dünner hält die Wago nicht |
+| Lüfter | < 0,1 A | seine eigene Anschlusslitze | |
+
+* In Schraubklemmen (Shield, Wandler, Not-Aus) mit **Aderendhülse**, in die
+  Wago ohne.
+* In den Ketten Silikonlitze oder Schleppkettenleitung. Je kleiner der
+  Biegeradius der Kette, desto eher dünne Einzeladern statt dicker
+  Mantelleitungen — der Radius der gekauften Ketten fehlt noch
+  ([Was noch fehlt](#was-noch-fehlt)).
+* Die Y-Kette trägt fünf Leitungen (X- und Z-Motor, Laser, X- und
+  Z-Endschalter), die X-Kette drei. In 10 × 20 mm innen passen fünf
+  Mantelleitungen bis etwa 4,5 mm Außendurchmesser in zwei Lagen — beim
+  Kauf darauf achten.
+
 ## Anschlussplan
 
 ![Anschlussplan](elektronik-anschluss.svg)
@@ -284,7 +312,7 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
 
 | von | an | Hinweis |
 |---|---|---|
-| Hohlstecker + | Einbaubuchse → Schalter → Not-Aus → Wago +24 V | 0,5 mm², für 3 A |
+| Hohlstecker + | Einbaubuchse → Schalter → Not-Aus → Wago +24 V | 0,75 mm², das Netzteil liefert bis 3 A ([Litzen](#litzen)) |
 | Hohlstecker − | Wago GND | |
 | Wago +24 V / GND | Schraubklemme des Shields + / − | **Polung prüfen** — verpolt sind die Treiber hin |
 | Wago +24 V / GND | Abwärtswandler IN+ / IN− | |
@@ -333,8 +361,12 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
 | 1 | Not-Aus-Pilzschalter mit Öffner, ≥ 3 A Gleichstrom | vorn |
 | 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
 | 2 | Energiekette 10 × 20 mm innen, 15 × 27 mm außen, 1 m | Y und X — gekauft |
-| 1 + 1 | Motorkabel 1,5 m und 2 m, Stecker passend zum Motor (meist JST-PH 6-polig) auf Dupont 4-polig | Y-Motor rechts, Z-Motor |
-| 2 m + 1 | 3-adrige Schleppkettenlitze + XH2.54-Stecker 3-polig mit Crimpkontakten | Laser |
+| 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, Stecker passend zum Motor (meist JST-PH 6-polig) auf Dupont 4-polig | Y-Motor rechts, Z-Motor |
+| 2 m + 1 | 3-adrige Schleppkettenlitze 3 × 0,34 mm² (AWG 22) + XH2.54-Stecker 3-polig mit Crimpkontakten | Laser |
+| 1,5 m | 2-adrige Leitung 2 × 0,75 mm² | Not-Aus |
+| je 1 m | Litze 0,75 mm², rot und schwarz | 24 V im Kasten |
+| 4 m | 3-adrige Leitung 3 × 0,14 mm² (AWG 26), hochflexibel | Endschalter X 1 m, Y 1 m, Z 2 m |
+| 1 | Aderendhülsen 0,75 und 0,34 mm² | Schraubklemmen |
 | 1 + 2 | Wago 221-415 (+24 V), 221-420 (GND, +5 V); 221-413 Reserve | vorhanden |
 | 4 + 4 | M5×12 + Hammermutter M5 (Nut 6) | Gehäuse → Rückseite des 2060 |
 | 4 + 4 | M3×8 + Messing-Einsatz M3 Ø5 | Deckel |

@@ -11,7 +11,7 @@ sind. Das Netzteil ist ein Steckernetzteil und steht ausserhalb.
 
     python3 tools/elektronik_zeichnen.py   ->  docs/elektronik-platz.svg
 
-Gibt ausserdem die Kabellaengen aus.
+Gibt ausserdem die Kabellaengen und die Spannungsfaelle der Litzen aus.
 """
 
 import math
@@ -63,6 +63,19 @@ LUEFTER_W = 2.0
 LASER_V, LASER_A = 12.0, 1.8     # obere Grenze der Angabe
 WANDLER_A = 5.0                  # Abwaertswandler 24 -> 12 V, 5 A [v]
 WANDLER_ETA = 0.9                # sein Wirkungsgrad [w]
+
+# Litzen: Kupfer, feindraehtig, in den Ketten hochflexibel. Der Querschnitt
+# folgt aus Strom und Laenge und aus dem, was die Kontakte nehmen [w]:
+# XH-Crimpkontakt 0,08-0,34 mm2 (AWG 28-22), PH 0,05-0,22 mm2 (AWG 30-24),
+# Dupont AWG 28-22, Wago 221 feindraehtig 0,14-4 mm2. Belastbarkeit
+# flexibler Leitungen nach VDE 0298-4, Tabelle 11 (2 Adern belastet, 30 C).
+RHO_CU = 0.0175                  # Ohm mm2/m
+BELASTBAR = {0.5: 3.0, 0.75: 6.0, 1.0: 10.0}    # mm2: A
+LITZE_24V = 0.75     # mm2 (AWG 18): Eingang, Schalter, Not-Aus, Wago, Shield
+LITZE_LASER = 0.34   # mm2 (AWG 22): mehr nimmt der XH-Kontakt am Laser nicht
+LITZE_MOTOR = 0.2    # mm2 (AWG 24): mehr nimmt der PH-Kontakt am Motor nicht
+LITZE_SIGNAL = 0.14  # mm2 (AWG 26): Endschalter; weniger haelt die Wago nicht
+XH_MAX, PH_MAX, WAGO_MIN = 0.34, 0.22, 0.14     # mm2
 
 KABEL = '#6d3fb5'
 FARBE.update({'kette': ('#a3abb8', '#3d4552')})
@@ -184,6 +197,31 @@ def vref(i_eff, r_sense):
     """Vref am Poti eines TMC2209 (standalone) fuer den Effektivstrom
     i_eff in A bei Messwiderstaenden r_sense in Ohm."""
     return i_eff * (r_sense + 0.02) * math.sqrt(2.0) * 2.5 / 0.325
+
+
+def spannungsfall(mm2, laenge_m, strom):
+    """Spannungsfall in V an einer Leitung aus Hin- und Rueckleiter, je
+    laenge_m lang, Kupfer mit mm2 Querschnitt (strom = 1: Widerstand)."""
+    return RHO_CU * 2.0 * laenge_m / mm2 * strom
+
+
+def litzen(K):
+    """Folgen der Querschnitte an den laengsten Wegen (Kauflaengen):
+    Spannungsfall am Laser, Widerstand im Z-Motorkabel, Not-Aus bei vollem
+    Netzteilstrom — dessen Kabel laeuft wie das zum rechten Y-Motor nach
+    vorn und zurueck."""
+    kab = K['kabel']
+    netz_a = NETZTEIL_W / 24.0
+    m_laser = kauflaenge(kab['Laser (12 V + PWM)'][0])
+    m_motor = kauflaenge(kab['Z-Motor'][0])
+    m_not = kauflaenge(kab['Y-Motor rechts'][0])
+    return {'netz_a': netz_a,
+            'laser_m': m_laser,
+            'laser_u': spannungsfall(LITZE_LASER, m_laser, LASER_A),
+            'motor_m': m_motor,
+            'motor_r': spannungsfall(LITZE_MOTOR, m_motor, 1.0),
+            'not_m': m_not,
+            'not_u': spannungsfall(LITZE_24V, m_not, netz_a)}
 
 
 def laenge(punkte):
@@ -629,6 +667,16 @@ def main():
                                                         kauflaenge(mm)))
     print('  Kette Y {:.0f} mm, Kette X {:.0f} mm'.format(K['ky_laenge'],
                                                          K['kx_laenge']))
+    li = litzen(K)
+    print('  Litze 24 V {} mm2: Not-Aus {} m hin und zurueck, {:.2f} V bei '
+          '{:.0f} A'.format(LITZE_24V, li['not_m'], li['not_u'],
+                            li['netz_a']))
+    print('  Litze Laser {} mm2, {} m: {:.2f} V = {:.1f} % von {:.0f} V'
+          .format(LITZE_LASER, li['laser_m'], li['laser_u'],
+                  100.0 * li['laser_u'] / LASER_V, LASER_V))
+    print('  Litze Motor {} mm2, {} m: {:.2f} Ohm = {:.0f} % der Wicklung'
+          .format(LITZE_MOTOR, li['motor_m'], li['motor_r'],
+                  100.0 * li['motor_r'] / MOTOR_R))
 
 
 if __name__ == '__main__':

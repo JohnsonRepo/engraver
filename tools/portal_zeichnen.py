@@ -710,7 +710,7 @@ def main():
         ('Rohr', 'liegt auf der 6-mm-Platte, Höhe wie bisher'),
         ('Y-Riemen', 'Linie wie v8: {} mm innen, Unterkante {} mm'.format(
             de(w('y_riemen_linie'), 1), de(L['yr_z0'], 1))),
-        ('', 'Rücklauf in der oberen Nut des 2040, Zähne zur Schiene'),
+        ('', 'Rücklauf in der äußeren oberen Nut, Zähne zur Schiene'),
         ('Y-Klemmen', 'zwei Türme wie v8, je {} mm vor und hinter'.format(
             de(w('turm_abstand'), 1))),
         ('', 'der Wagenmitte; gespannt am Y-Motor'),

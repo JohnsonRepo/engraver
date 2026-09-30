@@ -12,7 +12,7 @@
 #               oben der Kabeldurchlass, davor und dahinter je ein Schlitz
 #               fuer einen Kabelbinder (Zugentlastung).
 #   Referenz_nicht_drucken  vorderes 2060, rechtes 2040 vorn, Y-Motorhalter
-#               und Motor rechts (als Huelle, wie YMotorhalter.py) und der
+#               und Motor rechts (als Huelle, wie in Portal.py) und der
 #               Taster.
 #
 # Der Taster [v] (Bild und Angaben vom 2026-09-30): Pilzkopf, rastet beim
@@ -26,15 +26,14 @@
 # Koordinaten = Maschinenkoordinaten wie Portal.py: X nach rechts, Y nach
 # vorn, Z senkrecht, Z = 0 in der Mitte des Portalrohrs. Im Fusion-Modell
 # sind Y und Z getauscht (Modell-Z = Maschine Y). tools/notaus_check.py
-# vergleicht die Rahmenmasse mit Portal.py und den Motorhalter mit
-# YMotorhalter.py.
+# vergleicht die Rahmenmasse und den Y-Motorhalter mit Portal.py.
 #
 # Konventionen: siehe fusion-python/SKILL.md und references/baugruppen.md.
 
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'NotAus'
-REVISION = 4
+REVISION = 5
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -57,7 +56,7 @@ MASSE = {
     'nut_kammer_t':         (5.5, 'V-Slot vereinfacht: Tiefe bis Kammergrund'),
     'kern_d':               (4.2, 'V-Slot: Kernbohrung'),
 
-    # --- Y-Motorhalter rechts, Huelle (wie YMotorhalter.py) [v] -------------
+    # --- Y-Motorhalter rechts, Huelle (wie in Portal.py) [v] ----------------
     # Y ab der Stirnseite der 2040, Z ab ihrer Unterkante, X ab ihrer Mitte
     'ymh_halbe_b':        (26.15, 'Y-Motorhalter: halbe Breite'),
     'ymh_y0':             (-30.0, 'Y-Motorhalter: Schenkel hinten'),
@@ -74,6 +73,8 @@ MASSE = {
     # Rev. 2: Gewinde 16 mm [v] Angabe 2026-09-30 (Rev. 1: 19 mm angenommen).
     # Rev. 3: nur der Bericht; das Gewinde ist rund [v], das Loch bleibt.
     # Rev. 4: nur ein Kommentar (die Endschalter stehen jetzt in Portal.py).
+    # Rev. 5: der Y-Motorhalter steht jetzt in Portal.py (Kommentare, und
+    #        der Referenzkoerper heisst wie dort Y-Motorhalter_rechts).
     # Kopf, Tiefe, Mutter und Klemmbereich sind nicht gemessen [?].
     'schalter_d':          (16.0, 'Not-Aus: Gewindedurchmesser [v] Angabe'),
     'schalter_spiel':       (0.3, 'Loch so viel groesser als das Gewinde'),
@@ -183,7 +184,7 @@ def lage():
     L['kopf_y'] = (L['geh_y'][1], L['geh_y'][1] + w('schalter_kopf_h'))
     L['koerper_y'] = (L['front_y'][0] - w('schalter_tiefe'), L['front_y'][0])
 
-    # ---- Y-Motorhalter und Motor rechts (Huelle, YMotorhalter.py) ----------
+    # ---- Y-Motorhalter und Motor rechts (Huelle, wie in Portal.py) --------
     ys, zs = w('rahmen_y1'), w('rahmen_z0')
     hb = w('ymh_halbe_b')
     L['ymh_x'] = (R - hb, R + hb)
@@ -782,7 +783,7 @@ def bau_referenz(app, design, teile, L, fehler):
             material_zuweisen(app, design, k, 'Aluminum 6061', fehler)
 
     ym = teile['Ref_YMotor']
-    box(ym, 'YMotorhalter_rechts', L['ymh_x'], L['ymh_y'], L['ymh_z'],
+    box(ym, 'Y-Motorhalter_rechts', L['ymh_x'], L['ymh_y'], L['ymh_z'],
         'PETG')
     box(ym, 'Motor_rechts', L['motor_x'], L['motor_y'], L['motor_z'],
         'Steel')

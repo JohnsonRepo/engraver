@@ -43,6 +43,17 @@ def _schneiden(p1, p2, p3, p4):
             and kreuz(p1, p2, p3) * kreuz(p1, p2, p4) < 0)
 
 
+def quer_mass(f, a0, a1, b, s, dy=-5):
+    """Waagerechtes Mass von a0 bis a1 auf Hoehe b, Text darueber (bis
+    Portal Rev. 15 in y_antrieb_zeichnen.py)."""
+    (x0, y), (x1, _) = f.px(a0, b), f.px(a1, b)
+    return [linie(x0, y, x1, y, BLAU, 0.8),
+            linie(x0, y - 3, x0, y + 3, BLAU, 0.8),
+            linie(x1, y - 3, x1, y + 3, BLAU, 0.8),
+            text((x0 + x1) / 2, y + dy, s, 8.0, BLAU, 'middle', True,
+                 halo=True)]
+
+
 class Feld:
     """Ansicht: waagerecht a, senkrecht b (beides mm), Massstab s px/mm.
     a_rueck: a waechst nach links. b_runter: b waechst nach unten
@@ -191,7 +202,7 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
         t.append(f.rect(xu(L['kt_u'][0]), xu(L['kt_u'][1]), *ty, 'neu',
                         stroke_dasharray='4 3', fill_opacity='0.3'))
     # Y-Riemen (unter der Platte): zwei Enden, je eines in einem Klemmturm.
-    # Der Ruecklauf laeuft in der oberen Nut des 2040.
+    # Der Ruecklauf laeuft in der aeusseren oberen Nut des 2040.
     enden = ((f.b[0] - 5, L['kt_y_hinten'][1] - 1.0),
              (L['kt_y_vorn'][0] + 1.0, f.b[1] + 5))
     for y0, y1 in enden:
@@ -532,8 +543,8 @@ def main():
         (xu(19, -1), -21.5, 'Klemmturm vorn\n(unter dem Motorhalter)'),
         (xu(w('y_riemen_linie'), -1), L['platte_y0'] - 5,
          'Y-Riemen (zwei Enden)'),
-        (xu(L['yr_rueck_u'], -1), -80, 'Y-Rücklauf in der oberen\n'
-         'Nut des 2040'),
+        (xu(L['yr_rueck_u'], -1), -80, 'Y-Rücklauf in der äußeren\n'
+         'oberen Nut des 2040'),
         (xu(u_rw, -1), L['rueck_y0'] + 1.0,
          'Rückwand: 2× M5 in\nHammermuttern'),
         (-215, -26, 'Portalrohr 2020'),

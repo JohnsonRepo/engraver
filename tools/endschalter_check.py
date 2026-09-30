@@ -27,9 +27,9 @@ from toolhead_check import Pruefung                   # noqa: E402
 
 WINKEL = 20.0          # Winkel an den Kreuzungen 2040/2060 [v] Angabe
 BETT = 250.0           # Bambu Lab A1: 256, mit Rand
-NUT_PLATZ = 6.0        # so weit darf eine Schraube in die Nut (YMotorhalter)
+NUT_PLATZ = 6.0        # so weit darf eine Schraube in die Nut (Y-Motorhalter)
 NUT_LIPPE, NUTSTEIN = 1.8, 4.0     # Hammermutter Nut 6 [w]
-SCHEIBE_M5, SCHEIBE_M5_D = 1.0, 10.0   # DIN 125 unter dem Kopf (YMotorhalter)
+SCHEIBE_M5, SCHEIBE_M5_D = 1.0, 10.0   # DIN 125 unter dem Kopf (Y-Motorhalter)
 RITZEL_R = 8.0         # Flansch des hinteren Y-Ritzels, Radius [w]
 M3_KOPF_D, M3_KOPF_H = 5.5, 3.0
 EINSATZ_M3 = (5.0, 5.7)            # Aussendurchmesser, Laenge [w]
@@ -267,7 +267,7 @@ def main():
         best[2], best[3]), best[0], ew('luft_bau') - 0.01)
     # Rahmen: 2040, Schienen, Riemen, beide 2060, Winkel an den Kreuzungen,
     # Y-Motorhalter vorn; der Ruecklauf laeuft in der AEUSSEREN oberen Nut
-    # (hardware-notizen.md) — Portal.py rechnet ihn noch innen.
+    # (Portal.py seit Rev. 16).
     quer = portal_check.quer_quader(w, L)
     winkel = []
     for q in quer:
@@ -282,7 +282,7 @@ def main():
                     L['rahmen_z0'] + WINKEL))
     ruecklauf = []
     for s_ in (-1, 1):
-        xr = s_ * (R + 10.0 - 3.6)
+        xr = s_ * (R - L['yr_rueck_u'])
         ruecklauf.append(Quader('Y-Ruecklauf aussen {}'.format(
             'rechts' if s_ > 0 else 'links'), xr - 0.7, xr + 0.7,
             L['yh_y'], 400.0, EL['nut_o_z'] - 3.0,
@@ -312,7 +312,7 @@ def main():
          0.01, '<=')
     p.ok('obere Nut frei: Fuss endet ueber keiner Schraube dort',
          EL['nut_o_z'] - EL['hy_m5'][0][1], 15.0)
-    # mit Scheibe wie am YMotorhalter; ohne stuende die Spitze genau am
+    # mit Scheibe wie am Y-Motorhalter; ohne stuende die Spitze genau am
     # Nutgrund
     in_nut = EL['hy_m5_schraube'] - SCHEIBE_M5 - ew('hy_fuss_dicke')
     p.ok('M5x{:.0f} + Scheibe: Spitze vor dem Nutgrund'.format(

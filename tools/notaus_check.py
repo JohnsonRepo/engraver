@@ -2,7 +2,7 @@
 """Rechnerische Pruefung des Not-Aus-Gehaeuses (fusion/NotAus) — laeuft ohne
 Fusion.
 
-Importiert NotAus.py, Portal.py, ToolheadZ.py und YMotorhalter.py mit
+Importiert NotAus.py, Portal.py (mit dem Y-Motorhalter) und ToolheadZ.py mit
 gestubbtem adsk-Modul und prueft: Abgleich der Bezugsmasse, Lage vor dem
 vorderen 2060, Freiraum zum rechten Y-Motorhalter samt Motor, zu den
 Winkeln und zum Tisch, dass nichts, was faehrt, vor das 2060 kommt, die
@@ -26,10 +26,9 @@ from toolhead_check import Pruefung                   # noqa: E402
 
 HIER = os.path.dirname(os.path.abspath(__file__))
 NOTAUS = os.path.join(HIER, '..', 'fusion', 'NotAus', 'NotAus.py')
-YMOTOR = os.path.join(HIER, '..', 'fusion', 'YMotorhalter', 'YMotorhalter.py')
 WINKEL = 20.0          # Winkel an den Kreuzungen 2040/2060 [v] Angabe
 BETT = 250.0           # Bambu Lab A1: 256, mit Rand
-NUT_PLATZ = 6.0        # so weit darf eine Schraube in die Nut (YMotorhalter)
+NUT_PLATZ = 6.0        # so weit darf eine Schraube in die Nut (Y-Motorhalter)
 NUT_LIPPE, NUTSTEIN = 1.8, 4.0     # Hammermutter Nut 6 [w]
 INBUS = 4.0            # M5-Zylinderkopf: Inbus SW 4
 X_SCHRITTE, Z_SCHRITTE = 41, 9
@@ -70,8 +69,7 @@ def main():
     w, L = pm.w, pm.lage()
     nm = bauraum.modul_laden(NOTAUS, 'notaus')
     nw, NL = nm.w, nm.lage()
-    ym = bauraum.modul_laden(YMOTOR, 'ymotorhalter')
-    yw, YL = ym.w, ym.lage()
+    yw, YL = w, L['ymh']          # Y-Motorhalter, seit Rev. 16 in Portal.py
     p = Pruefung()
     feste, bewegte, _ = bauraum.bauraeume(tw, TL)
     feste = [q for q in feste if q.name not in portal_check.TOOLHEAD_OHNE]
@@ -80,7 +78,7 @@ def main():
     T = teile(nw, NL)
 
     # ------------------------------------------------------------------
-    p.titel('1) Abgleich NotAus.py <-> Portal.py / YMotorhalter.py')
+    p.titel('1) Abgleich NotAus.py <-> Portal.py (Rahmen, Y-Motorhalter)')
     fl = yw('motor_flansch')
     for text, ist, soll in (
             ('Y-Schienen Mitte (R)', R, L['R']),

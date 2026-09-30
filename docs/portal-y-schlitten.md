@@ -1,11 +1,11 @@
-# Portal — Y-Schlitten, Y-Klemmtürme und X-Antrieb
+# Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 15, sechzehn gedruckte
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 16, sechzehn gedruckte
 Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
 [portal-y-schlitten.svg](portal-y-schlitten.svg) (Portal) und
-[portal-y-antrieb.svg](portal-y-antrieb.svg) (Y-Antrieb vorn).
+[y-motorhalter.svg](y-motorhalter.svg) (Y-Motorhalter vorn).
 
 ![Portal](portal-y-schlitten.svg)
 
@@ -28,7 +28,7 @@ kommen seit Rev. 15 die Halter und Fahnen der Endschalter X und Y
 | 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten; dünne Motorplatte, damit die 20-mm-Welle das ganze Ritzel trägt |
 | 4 | **Umlenkhalter** | 1 | rechts: 20-Z-Rolle mit Lager auf einer M5 im Langloch |
 | 5 | **Spannklotz** | 1 | eine M3 von außen zieht ihn und damit die Rolle nach außen |
-| 6 | **Y-Motorhalter** — **überholt** | 2 (gespiegelt) | nicht mehr drucken: es gilt der eigene [YMotorhalter](y-motorhalter.md) (Rev. 4), Ritzel mittig zur 2040, 4 × M5 in den unteren Nuten. War: vorn an der Stirnseite jedes 2040, NEMA 17 hängend, Achse 15,55 mm innen neben der Schienenmitte, Wange mit 2 × M5 in der oberen Nut außen |
+| 6 | **Y-Motorhalter** | 2 (dasselbe Teil) | vorn an jeder 2040: U-Bügel mit Schenkeln an beiden Seitenflächen (4 × M5 in den unteren Nuten), NEMA 17 hängend, Ritzel mittig zur 2040 direkt auf der Welle. Seit Rev. 16 in diesem Skript (vorher `YMotorhalter.py`), Einzelheiten in [y-motorhalter.md](y-motorhalter.md) |
 | 7 | **Endschalter** | 5 | Halter_Y und Fahne_Y, Halter_X, Klammer_X und Fahne_X für die Gabellichtschranken; Fahnen und Klammer **schwarz**. Lage, Montage und Einstellen: [endschalter.md](endschalter.md) (bis Rev. 14 im eigenen Skript `Endschalter.py`) |
 | — | **Riemenhalter** | 1 | am Toolhead (ToolheadZ.py Rev. 33), klemmt beide Enden des X-Riemens |
 
@@ -48,7 +48,7 @@ sie mit „[Referenz, nicht drucken]“.
 |---|---|
 | `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
-| `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: um das Ritzel des Y-Motors, als Rücklauf durch die obere Nut des 2040, um das hintere Ritzel |
+| `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: schräg um das mittige Ritzel des Y-Motors, als Rücklauf gerade durch die äußere obere Nut des 2040, um das hintere Ritzel und schräg zurück |
 | `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, die X-Umlenkrolle; vom Toolhead der Riemenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
 | `Ref_Endschalter` | die beiden Lichtschranken LM393 (Platine und Gabel): Y fest am rechten 2040 hinter dem hinteren 2060, X vor dem linken Ende der 2020 |
 
@@ -94,15 +94,21 @@ Lage wie im Modell:
 | über die 2060 hinweg | ab Wagenmitte zc = +19,3, Linse dann 73,5 mm über dem Bett |
 
 Vor dem vorderen 2060 stehen die Y-Motorhalter, und sie sind höher als das
-2060. Am vorderen Schienenende fährt der Toolhead erst ab zc = +39 über sie
-hinweg (Linse 93 mm über dem Bett); mit Z ganz oben, also nach dem
-Referenzieren, bleiben 3,05 mm. Gerechnet ist das mit dem alten Halter aus
-`Portal.py`. Der [YMotorhalter](y-motorhalter.md) (Rev. 5), der ihn ersetzt,
-ist niedriger (Oberkante 22,5 mm, Ritzel 5,5 mm unter der Oberkante der 2040;
-der alte reichte bis an sie heran) und reicht weniger weit nach innen (26,2
-statt 37,2 mm neben der Schienenmitte). Am rechten X-Ende läuft er dort 2,1 mm neben
-dem Ritzelbord vorbei: Der Bord steht 1,3 mm weiter innen als der Rücken des
-Riemens, an dem überall 3,4 mm Luft bleiben.
+2060. Am vorderen Schienenende fährt der Toolhead erst ab zc = +37 über sie
+hinweg (Linse 91 mm über dem Bett); mit Z ganz oben, also nach dem
+Referenzieren, bleiben 5,0 mm. Am rechten X-Ende läuft er dort 17,7 mm
+neben dem Ritzelbord vorbei. Seit Rev. 16 rechnet `portal_check.py` mit dem
+Y-Motorhalter, den das Skript selbst baut; bis Rev. 15 stand hier noch der
+alte, höhere Halter.
+
+Am **vorderen Schienenende**, wo die Y-Wagen bündig mit der Schiene stehen,
+endet der vordere Klemmturm 2,2 mm hinter dem inneren Schenkel des
+Y-Motorhalters, 2,9 mm über ihm und 1 mm weiter innen. Höhe und Seite
+ändern sich über den Y-Weg nicht — berühren kann er ihn nie, die Kanten
+bleiben 3,8 mm auseinander. `portal_check.py` misst aber achsweise und sieht
+nur den größten Einzelabstand, 2,9 mm; dort verlangt es deshalb 2 statt
+3 mm. So weit kommt das Portal ohnehin nur von Hand: Im Betrieb endet der
+Y-Weg vorn bei +106 mm (siehe unten), und dort bleiben 99 mm.
 
 Den Y-Weg in der Firmware also vorn auf die Grenze des 2060 setzen (die
 Arbeitsfläche endet ohnehin dort), dann erreicht der Toolhead die Halter nie;
@@ -189,46 +195,57 @@ Turm ist jetzt 32,6 mm lang.
 
 **Riemenführung:** Vorn läuft der Riemen um das Ritzel des Y-Motors (siehe
 [Y-Antrieb vorn](#y-antrieb-vorn)), hinten um das Ritzel auf der
-Edelstahlwelle. Der Riemen ist offen: **je Seite ≈ 1270 mm** von Klemme zu
-Klemme (Motor in der Mitte des Spannwegs, hinteres Ritzel 11 mm hinter der
-Stirnseite angenommen). Das hintere Ritzel muss wie vorn mit der Spur mittig
-auf dem Riemen stehen, 7 bis 13 mm unter der Oberkante des 2040. Der **Rücklauf läuft in der oberen Nut des 2040**, 9,5 mm neben
-der Schienenmitte. Auf dem Teilkreis (12,73 mm) liegen die Wirklinien, und
-die liegen 0,31 mm neben der Riemenmitte zum Rücken hin: Die Mitten der
-beiden Trume sind 12,1 mm auseinander. Bis Rev. 11 war hier der Teilkreis
-als Abstand der Mitten gerechnet, der Rücklauf lag im Modell 0,6 mm zu tief.
-Sein Rücken steckt 1,2 mm in der Nut, die Zahnspitzen stehen 0,2 mm vor der
-Flanke. Die Zähne zeigen zur Innenseite der Schleife, also zur Schiene. Deshalb stehen die
+Edelstahlwelle. Der Riemen ist offen: **je Seite ≈ 1276 mm** von Klemme zu
+Klemme (Portal in der Mitte, Motor in der Mitte des Spannwegs, hinteres
+Ritzel 11 mm hinter der Stirnseite angenommen). Das hintere Ritzel muss wie
+vorn mit der Spur mittig auf dem Riemen stehen, 7 bis 13 mm unter der
+Oberkante des 2040. Der **Rücklauf läuft gerade in der äußeren oberen Nut
+des 2040**, die Riemenmitte 6,05 mm neben der Schienenmitte. Auf dem
+Teilkreis (12,73 mm) liegen die Wirklinien, und die liegen 0,31 mm neben der
+Riemenmitte zum Rücken hin. Sein Rücken steckt 3,3 mm in der Nut, 1,5 mm
+hinter der Lippe, die Zahnspitzen bleiben 1,4 mm vor dem Nutgrund. Die Zähne
+zeigen zur Innenseite der Schleife, also zur Schiene. Deshalb stehen die
 Rippen beider Klemmen auf der Schienenseite: Nur so greifen sie in die Zähne
 und nicht auf den glatten Rücken. `portal_check.py` prüft genau das. Der
 Rücklauf liegt im Profil und kommt dem Toolhead nie nahe.
 
 **Mit dem mittigen Ritzel (2026-09-27):** Der Riemen läuft in der rechten
 oberen Nut hin und in der linken zurück, das Ritzel sitzt mittig zur 2040 —
-so baut es der [YMotorhalter](y-motorhalter.md). Die Klemmen bleiben, wo
+so baut es der [Y-Motorhalter](y-motorhalter.md). Die Klemmen bleiben, wo
 Y-Wagen und Klemmtürme dieses Skripts sie haben (Angabe: so ist es gebaut):
 Wirklinie 21,9 mm innen neben der Schienenmitte, 11,9 mm vor der inneren
 Seitenfläche. Dazwischen laufen die **Wagen-Trume schräg** von der Klemme
 zum Ritzel, dessen Wirklinie 6,4 mm neben der Profilmitte in der inneren Nut
 liegt; der **Rücklauf läuft gerade** in der äußeren Nut. Nachgerechnet
 (Ritzel vorn in der Mitte des Spannwegs; hinten ebenfalls mittig zur 2040
-`[v]`, 11 mm hinter der Stirnseite angenommen):
+`[v]`, 11 mm hinter der Stirnseite angenommen). „In der Nutöffnung“ heißt:
+Dort liegt ein Teil des Riemens zwischen Lippe und Seitenfläche. Bis
+Rev. 15 stand hier, wo die Wirklinie allein durch die Lippe läuft; die
+Bereiche waren kürzer.
 
 | Portal ab Mitte | vorderer Trum | hinterer Trum |
 |---|---|---|
-| +227,3 (vorderes Schienenende) | 64 mm lang, 13,8°, läuft vor dem Profil auf die Nutlinie und am offenen Ende hinein | 498 mm, 1,8°, in der Nutöffnung 105 bis 48 mm vom hinteren Ende |
-| +106 (vordere Grenze, Z unten) | 184 mm, 4,8°, in der Nutöffnung auf den letzten 13 mm vor dem vorderen Ende | 377 mm, 2,4°, 77 bis 33 mm vom hinteren Ende |
-| 0 | 290 mm, 3,1°, 37 bis 4 mm vom vorderen Ende | 271 mm, 3,3°, 52 bis 21 mm vom hinteren Ende |
-| −227,3 (hinteres Schienenende) | 517 mm, 1,7°, 91 bis 31 mm vom vorderen Ende | 45 mm, 19,4°, läuft hinter dem Profil auf die Nutlinie und am offenen Ende hinein |
+| +227,3 (vorderes Schienenende) | 66 mm lang, 13,8°, läuft außen an der Nut vorbei direkt ans Ritzel (am Profilende 2,9 mm neben der Seitenfläche) | 498 mm, 1,8°, in der Nutöffnung 138 bis 36 mm vom hinteren Ende |
+| +106 (vordere Grenze, Z unten) | 185 mm, 4,8°, in der Nutöffnung auf den letzten 25 mm vor dem vorderen Ende | 377 mm, 2,4°, 101 bis 24 mm vom hinteren Ende |
+| 0 | 290 mm, 3,1°, auf den letzten 56 mm vor dem vorderen Ende | 271 mm, 3,3°, 70 bis 14 mm vom hinteren Ende |
+| −227,3 (hinteres Schienenende) | 517 mm, 1,7°, 124 bis 18 mm vom vorderen Ende | 48 mm, 19,3°, nur auf den letzten 1,3 mm vor dem hinteren Ende |
 
 Wo der Trum durch die Nutöffnung in den Kanal läuft, bleiben dem 6 mm
 breiten Riemen in der 6,2 mm weiten Engstelle **0,1 mm je Seite** — Ritzel
 und Klemmen stehen beide auf Nutmitte, er läuft also frei, solange die
 Höhen stimmen. Schleift er an den Nutkanten (Geräusch, Abrieb an den
-Riemenkanten), müssen die Klemmen näher an die Nut. `Ref_Riemen` und die
-Prüfung rechnen noch mit dem alten Ritzel 15,55 mm innen: Der Wagen-Trum
-liegt dort überall bei 21,9 mm, der echte weiter außen — für den Toolhead
+Riemenkanten), müssen die Klemmen näher an die Nut. Seit Rev. 16 rechnen
+`Ref_Riemen` und `portal_check.py` (Abschnitt 15, `y_riemen_weg()`) mit den
+mittigen Ritzeln; die Tabelle kommt von dort. Für den Toolhead nimmt die
+Prüfung den Wagen-Trum weiter bei 21,9 mm an, der echte liegt weiter außen:
 die sichere Seite.
+
+**Die Riemenlänge wandert mit.** Weil die Wagen-Trume schräg laufen, ist
+der Riemenweg in der Mitte des Y-Wegs am kürzesten (1276,2 mm) und wird zu
+den Enden hin länger: am vorderen Schienenende um 1,3 mm, am hinteren um
+2,0 mm. Ein in der Mitte gespannter Riemen wird dort also etwas gedehnt,
+die Spannung steigt zu den Enden hin. Liefen die Klemmen auf der Nutlinie
+(6,4 statt 21,9 mm neben der Schienenmitte), bliebe der Weg gleich lang.
 
 **Zwei gleiche Klemmtürme je Schlitten wie bei v8**, einer je
 Riemenende, an derselben Stelle wie bei v8: 22,5 bis 40,5 mm vor und hinter
@@ -242,7 +259,7 @@ Turm hängt an zwei M3×8 von oben durch die Platte. Die des vorderen liegen
 unter dem Rohr: Er kommt **vor dem Rohr** an die Platte.
 
 **Spannen** am Y-Motor: Schrauben lösen, Motor nach vorn ziehen, festziehen
-(Langlöcher ±4 mm im [YMotorhalter](y-motorhalter.md#spannen)) — die Türme sind
+(Langlöcher ±4 mm im [Y-Motorhalter](y-motorhalter.md#spannen)) — die Türme sind
 starr.
 
 **Klemmschlitz:** 1,6 mm vom Rippengrund bis zur glatten Wand, der Riemen ist
@@ -260,53 +277,23 @@ es auch in der Klemme, um einen Zahn (2 mm).
 
 ## Y-Antrieb vorn
 
-> **Überholt (2026-09-26).** Am gedruckten Halter hat sich gezeigt: Das
-> Ritzel muss mittig zur 2040 sitzen (hier 15,55 mm daneben), und die
-> Nutensteine gehören in die untere Nut, weil oben auf beiden Seiten der
-> Riemen läuft. Das setzt der eigene Y-Motorhalter um:
-> [y-motorhalter.md](y-motorhalter.md). Der Halter unten und seine Zeichnung
-> bleiben nur zum Nachvollziehen im Modell — nicht drucken.
+An jeder vorderen Ecke ein NEMA 17 am **Y-Motorhalter**, das Ritzel des
+Y-Riemens **direkt auf der Motorwelle**, mittig zur 2040. Der Halter ist ein
+U-Bügel: Schenkel an beiden Seitenflächen der 2040 mit je 2 × M5 in
+Nutensteinen der **unteren** Nut (in der oberen läuft der Riemen), ein Joch
+an der Stirnseite, die Platte davor. Der Motor hängt unter der Platte,
+Welle nach oben; gespannt wird, indem er in Langlöchern vom Profilende weg
+rückt. Links und rechts ist es dasselbe Teil. Aufbau, Riemen in der Nut,
+Montage und Druck: [y-motorhalter.md](y-motorhalter.md).
 
-![Y-Antrieb](portal-y-antrieb.svg)
-
-An jeder vorderen Ecke ein NEMA 17, das Ritzel des Y-Riemens **direkt auf der
-Motorwelle** — der X-Motor gespiegelt: Der Motor hängt unter einer
-4,5-mm-Motorplatte, Welle nach oben, und die Nabe des Ritzels taucht 1 mm in
-die Bundbohrung. So trägt schon eine 20-mm-Welle das ganze Ritzel; deine
-Motoren haben 23 mm (60 mm mit Welle, 37 mm ohne), die Welle steht also
-3,5 mm über das Ritzel hinaus und endet 2 mm unter der Oberkante des 2040. **Eckwelle, Lager und unteres Ritzel entfallen**, das obere
-Ritzel kommt auf die Motorwelle, der Motorhalter in der Mitte des vorderen
-2060 wird nicht mehr gebraucht. Warum zwei Motoren und wie sie angeschlossen
-werden: [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
-
-**Warum die Achse weiter vorn liegt:** Die alte Eckwelle stand 11 mm vor der
-Stirnseite. Dort passt der Motor nicht, denn er ist 42,3 mm breit und reichte
-10 mm unter das Ende des 2040. Darunter kommt er auch nicht: Die Welle muss
-bis ins Ritzel reichen, der Flansch liegt deshalb höchstens 28 mm unter der
-Oberkante (bei 23 mm Welle), das 2040 ist 40 mm hoch. Die
-Achse steht deshalb **27,5 mm vor der Stirnseite** (±2 mm Langloch), der
-Motor ganz hinten noch 4,35 mm davor. Die 3 mm mehr als nötig kommen vom
-Toolhead: Am vorderen Schienenende ragt seine Trägerplatte (am linken
-X-Ende) 1,3 mm über die Stirnseite. Innen hinten ist der Halter dafür
-ausgespart.
-
-**Lage:** Die Achse liegt 15,55 mm innen neben der Schienenmitte, damit der
-gezogene Trum gerade von der Klemme zum Ritzel läuft. Das Ritzel steht mit
-der Spur mittig auf dem Riemen, 7 bis 13 mm unter der Oberkante des 2040. Der
-Motor endet unten 38 mm über der Unterkante der 2060, also über dem Tisch
-(37 mm Motor, gemessen).
-
-**Halter:** Der Riemen zieht den Motor zum 2040 hin. Deshalb liegen die
-Hinterkante der Motorplatte und eine 3 mm dicke **Anlage** darüber an der
-Stirnseite an und nehmen den Zug. Die Anlage endet 2 mm unter dem Riemen,
-darüber kommt der Rücklauf aus der Nut. Eine 5 mm dicke **Wange** außen am
-2040 reicht 30 mm hinter die Stirnseite und hält den Halter mit 2 × M5×12 in
-Hammermuttern der oberen Nut, 8 und 22 mm hinter der Stirnseite. Sie endet
-5 mm vor dem vorderen 2060.
-
-**Spannen:** Motorschrauben und Bundbohrung sind Langlöcher, ±2 mm längs Y.
-Schrauben lösen, Motor nach vorn ziehen, festziehen. ±2 mm am Ritzel sind
-±4 mm Riemen, zusammen mit der Klemme (ein Zahn = 2 mm) reicht das.
+Seit Rev. 16 baut `Portal.py` diesen Halter selbst (Komponenten
+`Y-Motorhalter_links` und `_rechts`), bis dahin stand er im eigenen Skript
+`YMotorhalter.py` (Rev. 5). Maße und Lage sind dieselben; seine Werte heißen
+jetzt `ymh_…` (Tabelle in [y-motorhalter.md](y-motorhalter.md#parametrik)).
+Den alten Halter dieses Skripts (Achse 15,55 mm neben der Profilmitte,
+Wange mit M5 in der oberen Nut, 2026-09-26 für überholt erklärt) gibt es
+nicht mehr, ebenso seine Zeichnung. Warum zwei Motoren und wie sie
+angeschlossen werden: [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
 
 ## X-Antrieb
 
@@ -419,13 +406,13 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 8. X-Riemen: ein Ende in den Riemenhalter, um Motor und Rolle, zweites Ende
    einlegen, spannen. Läuft er nicht mittig in der Spur, das Ritzel
    nachstellen.
-9. Y-Motorhalter: der eigene [YMotorhalter](y-motorhalter.md#montage)
-   (Rev. 4) — je Seite 4 Hammermuttern in die unteren Nuten beider
+9. Y-Motorhalter ([Montage](y-motorhalter.md#montage)) — je Seite
+   4 Hammermuttern in die unteren Nuten beider
    Seitenflächen, Halter an die Stirnseite schieben, 4 × M5×12. Motor von
    unten, 4 × M3×10 von oben, noch lose. Ritzel mit der Nabe nach unten,
    Oberkante bündig mit dem Wellenende.
 10. Y-Riemen: ein Ende in die vordere Klemme, um das Ritzel, durch die Nut
-   nach hinten, um das hintere Ritzel, in die hintere Klemme (≈ 1270 mm je
+   nach hinten, um das hintere Ritzel, in die hintere Klemme (≈ 1276 mm je
    Seite). Motor nach
    vorn ziehen und festschrauben, dann beide Seiten abgleichen (oben).
 11. Endschalter: Halter, Lichtschranken und Fahnen nach
@@ -441,13 +428,14 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 | Motorhalter | Motorplatte (Oberseite) unten |
 | Umlenkhalter | auf der Rückseite (Säule) stehend |
 | Spannklotz | Unterseite |
-| Y-Motorhalter (2×) — überholt | nicht drucken; der YMotorhalter liegt kopfüber auf dem Bett ([y-motorhalter.md](y-motorhalter.md#druck-petg-bambu-lab-a1)) |
+| Y-Motorhalter (2×, dasselbe Teil) | kopfüber, die Oberseite der Platte aufs Bett ([y-motorhalter.md](y-motorhalter.md#druck-petg-bambu-lab-a1)) |
 | Riemenhalter (Toolhead) | Unterseite (Wagenflanke), Schlitz und Rippen stehen senkrecht |
 | Endschalter (5 Teile) | wie in [endschalter.md](endschalter.md#druck-petg-bambu-lab-a1); Fahne_Y, Klammer_X und Fahne_X **schwarz** |
 
 Keine Stützen. 4 Wandlinien, ≥ 40 % Infill. Rechter Schlitten, die rechten
-Klemmtürme und der rechte Y-Motorhalter sind gespiegelt modelliert — **im
-Slicer nicht spiegeln**, die Körper so exportieren, wie sie im Modell liegen.
+Klemmtürme sind gespiegelt modelliert — **im Slicer nicht spiegeln**, die
+Körper so exportieren, wie sie im Modell liegen. Die Y-Motorhalter sind
+symmetrisch, zweimal dasselbe Teil.
 
 Massen (Vollmaterial, PETG 1,27 g/cm³, aus einer Nachbildung der Fusion-API
 gerechnet — maßgeblich ist der erste Fusion-Lauf):
@@ -459,8 +447,8 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Motorhalter | 31,5 cm³ | ≈ 40 g | 50 × 51 × 28 mm |
 | Umlenkhalter | 35,1 cm³ | ≈ 45 g | 59 × 42 × 30 mm |
 | Spannklotz | 1,7 cm³ | ≈ 2,2 g | 25 × 12 × 7 mm |
-| Y-Motorhalter (je, überholt) | 18,7 cm³ | ≈ 24 g | 52 × 81 × 25 mm |
-| **Portal zusammen** | 207 cm³ | **≈ 263 g** | |
+| Y-Motorhalter (je) | 25,5 cm³ | ≈ 32 g | 52 × 87 × 17 mm |
+| **Portal zusammen** (ohne Endschalter) | 221 cm³ | **≈ 281 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
@@ -489,9 +477,9 @@ den Bohrer an der Trägerplatte.
 | 1 | GT2-Riemen 6 mm, ≈ 1001 mm | X-Achse |
 | 2 | NEMA 17 | Y-Motoren, je Ecke vorn |
 | 2 | GT2-Ritzel 20 Z, Bohrung 5 | auf den Y-Motoren (die oberen Ritzel der alten Eckwellen) |
-| 8 + 8 | M3×10 Zylinderkopf + Scheibe DIN 125 | NEMA 17 → YMotorhalter (Rev. 4), von oben |
-| 8 + 8 + 8 | M5×12 Zylinderkopf + Scheibe + Hammermutter M5 (Nut 6) | YMotorhalter → untere Nuten beider Seitenflächen, je Seite 4 |
-| 2 | GT2-Riemen 6 mm, je ≈ 1270 mm | Y, offen, von Klemme zu Klemme (hinteres Ritzel angenommen) |
+| 8 + 8 | M3×10 Zylinderkopf + Scheibe DIN 125 | NEMA 17 → Y-Motorhalter, von oben |
+| 8 + 8 + 8 | M5×12 Zylinderkopf + Scheibe + Hammermutter M5 (Nut 6) | Y-Motorhalter → untere Nuten beider Seitenflächen, je Seite 4 |
+| 2 | GT2-Riemen 6 mm, je ≈ 1276 mm | Y, offen, von Klemme zu Klemme (hinteres Ritzel angenommen) |
 | 2 + 2 + 2 | M3×10 + Messing-Einsatz M3 + Stift Ø3 | Riemenhalter am Toolhead |
 | — | Schrauben, Einsätze und Hammermuttern der Endschalter | [endschalter.md](endschalter.md#stückliste) |
 
@@ -501,10 +489,11 @@ den Bohrer an der Trägerplatte.
   angenommen. Maßgeblich für die Luft zu den Platten der Umlenkung (je 1 mm)
   und zum X-Wagen (3 mm).
 * **Ritzel 20 Z:** Spur 7 mm und Nabe 7 mm mit den Madenschrauben in der
-  Mitte sind angenommen `[w]`. Sitzen sie höher, bleibt weniger als 2,5 mm
-  Platz unter der Platte (am Y-Motor: über der Platte).
+  Mitte sind angenommen `[w]`. Sitzen sie höher, bleibt am X-Motor weniger
+  als 2,5 mm Platz unter der Platte. Am Y-Motor steckt die Nabe unten, 1 mm
+  über der Platte ([y-motorhalter.md](y-motorhalter.md#ritzel-und-motorwelle)).
 * **Hinteres Y-Ritzel:** Achse 11 mm hinter der Stirnseite angenommen.
-  Davon hängt nur die Riemenlänge ab (≈ 1270 mm je Seite).
+  Davon hängt nur die Riemenlänge ab (≈ 1276 mm je Seite).
 * **Y-Schienen:** mittig auf den 2040 angenommen. Davon hängt ab, wie weit
   das Portal vorn an die Y-Motorhalter heranfährt (Abschnitt 14).
 * **Endschalter:** Boden des Gabelschlitzes, Lötstifte unter der Platine,
@@ -534,11 +523,7 @@ die Prüfung als Erstes.
 | `rolle_u` / `rolle_weg` | 26,35 / 4 mm | Umlenkrolle in Mittelstellung und ihr Weg je Richtung |
 | `rolle_d` | 18 mm `[?]` | Außendurchmesser der Umlenkrolle |
 | `motor_laenge` | 37 mm | Länge der Motoren ohne Welle (gemessen) |
-| `ym_vor` / `ym_spannweg` | 27,5 / 2 mm | alter Y-Motorhalter (überholt): Achse vor der Stirnseite des 2040 und das Langloch je Richtung |
-| `ymh_wange` / `ymh_hinten` | 5 / 30 mm | alter Y-Motorhalter (überholt): Wange, Dicke und wie weit sie hinter die Stirnseite reicht |
-| `ymh_nut_y1` / `ymh_nut_y2` | 8 / 22 mm | die beiden M5 in der oberen Nut, hinter der Stirnseite |
-| `ymh_wand` / `ymh_wand_luft` | 3 / 2 mm | Anlage an der Stirnseite: Dicke und Luft unter dem Riemen |
-| `ymh_innen` / `ymh_ausschnitt` | 28 / 4,5 mm | Aussparung innen hinten für den Toolhead am Schienenende |
+| `ymh_…` | | Y-Motorhalter, Tabelle in [y-motorhalter.md](y-motorhalter.md#parametrik) |
 | `quer_vorn_zurueck` | 35 mm | vorderes 2060 hinter der Stirnseite der 2040 (Referenz, Y-Weg) |
 | `yh_hinter` | 11 mm `[?]` | hinteres Y-Ritzel hinter der Stirnseite (Referenz, Riemenlänge) |
 | `rahmen_laenge` / `y_schiene_laenge` | 600 / 500 mm | Länge der 2040 und der Y-Schienen (Referenz, Y-Weg) |

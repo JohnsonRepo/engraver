@@ -3,7 +3,7 @@
 
 Draufsicht und Seitenansicht mit gemeinsamer Y-Achse, daneben der Schnitt
 A-A durch die Schenkel (Nutensteine unten, Riemen oben) und ein Detail des
-Riemens in der oberen Nut. Alle Masse kommen aus YMotorhalter.py; die Skizze
+Riemens in der oberen Nut. Alle Masse kommen aus Portal.py (Y-Motorhalter); die Skizze
 wandert also mit den Parametern.
 
     python3 tools/y_motorhalter_zeichnen.py   ->  docs/y-motorhalter.svg
@@ -237,7 +237,7 @@ def schnitt_y(L):
 def nut_seite(w, seite, zc, halb):
     """Nut in einer Seitenflaeche, (X, Z): Oeffnung durch die Lippe,
     dahinter der Kanal, zum Nutgrund verjuengt. Flaeche bei X = seite*halb."""
-    o, lip, tief = w('nut_breite') / 2.0, w('nut_lippe'), w('nut_tiefe')
+    o, lip, tief = w('nut_b') / 2.0, w('nut_lippe'), w('nut_tiefe')
     lokal = [(0.0, -o), (lip, -o), (lip, -NUT_KANAL),
              (NUT_SCHRAEG_AB, -NUT_KANAL), (tief, -NUT_GRUND),
              (tief, NUT_GRUND), (NUT_SCHRAEG_AB, NUT_KANAL),
@@ -249,7 +249,7 @@ def nut_quer(w, flaeche_z, richtung):
     """Nut in der oberen oder unteren 20-mm-Flaeche, Mitte X = 0; richtung
     = -1 fuer die Oberseite (die Nut geht nach unten), +1 fuer die
     Unterseite."""
-    o, lip, tief = w('nut_breite') / 2.0, w('nut_lippe'), w('nut_tiefe')
+    o, lip, tief = w('nut_b') / 2.0, w('nut_lippe'), w('nut_tiefe')
     lokal = [(-o, 0.0), (-o, lip), (-NUT_KANAL, lip),
              (-NUT_KANAL, NUT_SCHRAEG_AB), (-NUT_GRUND, tief),
              (NUT_GRUND, tief), (NUT_KANAL, NUT_SCHRAEG_AB),
@@ -275,7 +275,7 @@ def ritzel_umriss(w, L, y):
     sr = L['rp']
     z0 = L['ritzel_z0']
     z_n = z0 + L['ritzel_nabe']
-    z_f = z_n + w('ritzel_flansch_h')
+    z_f = z_n + w('ritzel_bord')
     z_s = z_f + w('ritzel_spur')
     z1 = L['ritzel_z1']
     rechts = [(y + nr, z0), (y + nr, z_n), (y + fr, z_n), (y + fr, z_f),
@@ -292,10 +292,10 @@ def draufsicht(w, L, ox, oy, x_r):
     a = Ansicht(ox, oy, S, Y_BEREICH, X_BEREICH)
     ym = L['motor_y_mitte']
     hb = L['halbe_breite']
-    halb = w('profil_breite') / 2.0
+    halb = w('rahmen_b') / 2.0
     h = w('motor_loch') / 2.0
     m = w('motor_flansch') / 2.0
-    hub = w('spann_weg') / 2.0
+    hub = w('ymh_spann_weg') / 2.0
     r_mitte = (L['trum_ruecken_x'] + L['trum_zahn_x']) / 2.0
     t = ueberschrift(a, 'Draufsicht', 'Motor in der Mitte des Spannwegs; '
                      'verdeckt gestrichelt')
@@ -365,10 +365,10 @@ def draufsicht(w, L, ox, oy, x_r):
         (L['joch_y1'] / 2, hb - 1.5, 'Joch, liegt an der Stirnseite an'),
         (L['platte_y1'] - 3, hb - 1.5,
          'Platte {} mm, Führungswände darunter'.format(
-             de(w('platte_dicke')))),
+             de(w('ymh_platte_dicke')))),
         (ym + h, h + 1.2, 'M3 im Langloch'),
         (ym + 5.0, w('ritzel_flansch_d') / 2 - 2.0,
-         'Ritzel {} Z, mittig zur {}'.format(de(w('ritzel_z'), 0),
+         'Ritzel {} Z, mittig zur {}'.format(de(L['zaehne'], 0),
                                               L['profil_name'])),
         (ym - w('motor_bund_d') / 2 + 1.0, -5.0, 'Zentrierbund im Langloch'),
         (L['motor_y_max'] + m - 1.5, -m + 1.5,
@@ -391,8 +391,8 @@ def seitenansicht(w, L, ox, oy, x_r):
     rr = L['trum_ruecken_x']
     t = ueberschrift(a, 'Seitenansicht von außen', 'die Nuten sind offen: '
                      'oben läuft der Riemen, unten sitzen die Nutensteine')
-    o = w('nut_breite') / 2.0
-    inhalt = [a.rect(Y_BEREICH[0], 0.0, 0.0, w('profil_hoehe'), 'profil')]
+    o = w('nut_b') / 2.0
+    inhalt = [a.rect(Y_BEREICH[0], 0.0, 0.0, w('rahmen_h'), 'profil')]
     for zc in (L['nut_unten_z'], L['nut_oben_z']):
         inhalt.append(a.rect(Y_BEREICH[0], 0.0, zc - o, zc + o, 'nut'))
     inhalt.append(a.rect(Y_BEREICH[0], ym + rr, L['riemen_z0'],
@@ -462,7 +462,7 @@ def seitenansicht(w, L, ox, oy, x_r):
          'NEMA 17, hängt bis Z = {} ({}er)'.format(
              de(L['motor_z0'], 1, True), de(w('motor_laenge'), 0))),
         ((L['motor_y_min'] + L['motor_y_max']) / 2, L['motor_z0'] - 3.0,
-         'Spannweg ±{} mm'.format(de(w('spann_weg') / 2.0, 0))),
+         'Spannweg ±{} mm'.format(de(w('ymh_spann_weg') / 2.0, 0))),
         (-45.0, 1.5, '{} hochkant, Unterkante Z = 0'.format(
             L['profil_name']))]
     t += beschriften(a, eintraege, x_r)
@@ -473,7 +473,7 @@ def schnitt(w, L, ox, oy, x_r):
     """Schnitt A-A quer durch Profil und Schenkel, Blick zum Motor (+Y):
     X nach rechts, Z nach oben."""
     a = Ansicht(ox, oy, S, X_BEREICH, Z_BEREICH)
-    halb = w('profil_breite') / 2.0
+    halb = w('rahmen_b') / 2.0
     hb = L['halbe_breite']
     m = w('motor_flansch') / 2.0
     fr = w('ritzel_flansch_d') / 2.0
@@ -483,12 +483,12 @@ def schnitt(w, L, ox, oy, x_r):
                      'Blick zum Motor; hell = dahinter')
     inhalt = [a.rect(-hb, hb, L['halter_z0'], L['halter_z1'], 'hinten'),
               a.rect(-m, m, L['motor_z0'], L['halter_z0'], 'hinten'),
-              a.rect(-halb, halb, 0.0, w('profil_hoehe'), 'profil')]
+              a.rect(-halb, halb, 0.0, w('rahmen_h'), 'profil')]
     for zc in (L['nut_unten_z'], L['nut_oben_z']):
         for sx in (-1, 1):
             inhalt.append(a.poly(nut_seite(w, sx, zc, halb), 'frei'))
         inhalt.append(a.kreis(0.0, zc, KERNBOHRUNG, 'frei'))
-    inhalt.append(a.poly(nut_quer(w, w('profil_hoehe'), -1), 'frei'))
+    inhalt.append(a.poly(nut_quer(w, w('rahmen_h'), -1), 'frei'))
     inhalt.append(a.poly(nut_quer(w, 0.0, 1), 'frei'))
     inhalt.append(a.rect(-fr, fr, L['ritzel_z0'], L['ritzel_z1'], 'hinten',
                          fill='none', stroke_dasharray='3 2'))
@@ -530,13 +530,13 @@ def schnitt(w, L, ox, oy, x_r):
 def detail(w, L, ox, oy, x_r):
     """Rechte obere Nut im Schnitt A-A, vergroessert."""
     a = Ansicht(ox, oy, S_DETAIL, DETAIL_X, DETAIL_Z)
-    halb = w('profil_breite') / 2.0
+    halb = w('rahmen_b') / 2.0
     t = ueberschrift(a, 'Detail: Riemen in der Nut', 'rechte obere Nut aus '
                      'A–A; Nutform vereinfacht')
-    zg = L['trum_zahn_x'] + w('riemen_zahn')
+    zg = L['trum_zahn_x'] + w('riemen_zahn_h')
     inhalt = [a.rect(DETAIL_X[0], halb, DETAIL_Z[0], DETAIL_Z[1], 'profil'),
               a.poly(nut_seite(w, 1, L['nut_oben_z'], halb), 'frei'),
-              a.poly(nut_quer(w, w('profil_hoehe'), -1), 'frei'),
+              a.poly(nut_quer(w, w('rahmen_h'), -1), 'frei'),
               a.rect(L['trum_zahn_x'], L['trum_ruecken_x'], L['riemen_z0'],
                      L['riemen_z1'], 'riemen'),
               a.linie(zg, L['riemen_z0'], zg, L['riemen_z1'], '#8e959e', 0.8,
@@ -559,7 +559,7 @@ def detail(w, L, ox, oy, x_r):
               pfeil(xb, yb, xb - xa, 0.0, BLAU, 4.0, 1.6),
               text(xb - 3, yb + 3, s, 7.5, BLAU, 'end', halo=True)]
     eintraege = [
-        (halb - w('nut_lippe') / 2, L['nut_oben_z'] + w('nut_breite') / 2
+        (halb - w('nut_lippe') / 2, L['nut_oben_z'] + w('nut_b') / 2
          + 0.6, 'Lippe {} mm; {} mm Luft zum Riemenrücken'.format(
              de(w('nut_lippe')), de(L['luft_lippe'], 2))),
         (L['trum_ruecken_x'] - 0.3, L['riemen_z'] + 1.5,
@@ -578,7 +578,7 @@ def detail(w, L, ox, oy, x_r):
 
 def main():
     mod = pruef.modul_laden()
-    w, L = mod.w, mod.lage()
+    w, L = mod.w, mod.lage()['ymh']    # seit Rev. 16 in Portal.py
     breite = 1380.0
     t = [el('rect', {'width': '100%', 'height': '100%', 'fill': '#ffffff'}),
          text(18, 24, 'Y-Motorhalter am Ende der {} — je Seite einer, '
@@ -588,7 +588,7 @@ def main():
               'Seitenflächen und um das Ritzel direkt auf der Motorwelle. '
               'Der Halter sitzt mit {} × M5 in den unteren Nuten.'.format(
                   L['n_m5']), 8.5, GRAU),
-         text(18, 53, 'Aus YMotorhalter.py Rev. {} · Y = 0 Stirnseite, '
+         text(18, 53, 'Aus Portal.py Rev. {} · Y = 0 Stirnseite, '
               'Z = 0 Unterkante, X = 0 Mitte der {} · Maße in mm'.format(
                   mod.REVISION, L['profil_name']), 8.5, GRAU)]
 

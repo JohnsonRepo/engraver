@@ -11,7 +11,7 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 | Ebene | Aufbau |
 |---|---|
 | Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem vorderen Ende der 2040, hinten stehen die 2040 110 mm über), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; an jeder Kreuzung 8 Winkel (20 mm) |
-| Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn **je Seite ein NEMA 17** mit dem Ritzel direkt auf der Welle, mittig zur 2040 (`YMotorhalter`) |
+| Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn **je Seite ein NEMA 17** mit dem Ritzel direkt auf der Welle, mittig zur 2040 (Y-Motorhalter in `Portal.py`) |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
 | Z-Achse | Grundplatte am X-Wagen, darauf Linearführung; Toolhead auf dem Z-Wagen |
@@ -73,10 +73,10 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. Der Riemen läuft in der rechten Nut hin und in der linken zurück (Angabe 2026-09-27), das Ritzel mittig ([Y-Antrieb](#y-antrieb)); die Klemmen bleiben, wo Y-Wagen und Klemmtürme in `Portal.py` sie haben: **21,6 mm innen**. Der Wagen-Trum läuft damit schräg von der Klemme in die innere Nut zum Ritzel, der Rücklauf gerade in der äußeren Nut | `[v]` Linie aus v8 = Klemmtürme in Portal.py, Höhe Angabe am Aufbau |
 | Obere Nut des 2040 | Öffnung beginnt **6 mm unter der Oberkante** (oberer Rand), Mitte 10 mm darunter | `[v]` Angabe am Aufbau |
 | Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (9,5 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
-| Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Das Ritzel sitzt **direkt auf der Motorwelle**, **mittig zur 2040**, im eigenen `YMotorhalter` (Rev. 4, [Y-Antrieb](#y-antrieb)). Der Halter aus Portal Rev. 12/13 (Achse 27,5 mm vor der Stirnseite, 15,55 mm innen, M5 in der oberen Nut) ist gedruckt und am Aufbau verworfen. Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
+| Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Das Ritzel sitzt **direkt auf der Motorwelle**, **mittig zur 2040**, im Y-Motorhalter (seit Portal Rev. 16 in `Portal.py`, vorher eigenes Skript `YMotorhalter.py`; [Y-Antrieb](#y-antrieb)). Der Halter aus Portal Rev. 12/13 (Achse 27,5 mm vor der Stirnseite, 15,55 mm innen, M5 in der oberen Nut) ist gedruckt und am Aufbau verworfen. Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
 | Alte Eckwelle vorn | Ø5 Edelstahl, oben Kugellager, unten Gleitlager, zwei 20-Z-Ritzel; Achse **11 mm vor der Stirnseite** des 2040. Dort passt kein Motor: er ragte 10 mm unter das Ende des 2040 | `[v]` Angabe am Aufbau |
 | Y-Umlenkung hinten | Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager; quer **mittig zur 2040**, der Rücklauf läuft also gerade in der äußeren Nut | `[v]` Angabe am Aufbau (mittig: 2026-09-27); Lage 11 mm hinter der Stirnseite angenommen `[?]` (nur Riemenlänge) |
-| Y-Riemen, Länge | offen, je Seite **≈ 1270 mm** von Klemme zu Klemme | gerechnet (Portal.py), hängt an der Lage des hinteren Ritzels |
+| Y-Riemen, Länge | offen, je Seite **≈ 1276 mm** von Klemme zu Klemme (Portal in der Mitte; an den Schienenenden bis 2 mm mehr, weil die Wagen-Trume schräg laufen) | gerechnet (Portal.py Rev. 16, mittige Ritzel), hängt an der Lage des hinteren Ritzels |
 | Vorderes 2060 | **35 mm** hinter der Stirnseite der 2040 | `[v]` Angabe am Aufbau |
 | Hinteres 2060 | die 2040 stehen hinten **110 mm** darüber hinaus (beide Seiten) → **435 mm** Mitte zu Mitte hinter dem vorderen (bis Portal Rev. 13: 400 `[?]`) | `[v]` Angabe am Aufbau 2026-09-27 |
 | Winkel 2040 ↔ 2060 | **8 je Kreuzung**, **20 mm** groß; zwei davon greifen in die **obere Nut des 2060** und die **untere Nut der 2040** — die oberen Nuten der 2040 bleiben frei für den Riemen. Ob einer davon vor dem vorderen 2060 an der Seitenfläche sitzt (dort liegt der Y-Motorhalter), ist offen | `[v]` Angabe am Aufbau 2026-09-27, Größe 2026-09-29 |
@@ -519,8 +519,9 @@ reicht es; wer später schneller rastern will, wechselt auf ein 32-Bit-Board
 
 ## Y-Antrieb
 
-Nutzerangaben vom 2026-09-26 mit Foto, Halter in `fusion/YMotorhalter/`
-(Rev. 5), Doku in `y-motorhalter.md`. Portal und Rahmen siehe
+Nutzerangaben vom 2026-09-26 mit Foto, Halter seit Portal Rev. 16 in
+`fusion/Portal/Portal.py` (bis Rev. 15 `fusion/YMotorhalter/`, Rev. 5), Doku
+in `y-motorhalter.md`. Portal und Rahmen siehe
 [Y-Achse und Portal](#y-achse-und-portal).
 
 | Wert | Maß | Status |
@@ -534,7 +535,7 @@ Nutzerangaben vom 2026-09-26 mit Foto, Halter in `fusion/YMotorhalter/`
 | Motorwelle | **23 mm** ab Flansch (60 mm mit, 37 mm ohne Welle), Abflachung 15 mm ab Wellenende angenommen — der 17HE15-1504S hat 20 mm, die Madenschraube trifft also sicher | `[v]` Länge, Abflachung `[w]` |
 | Y-Motor | Körper **37 mm**, hängt bis 25,5 mm unter die 2040 | `[v]` |
 | Nutensteine M5, Nut 6 | Lippe 1,8, Gewinde 4, Platz in der Nut 6 mm → M5×12 + Scheibe | `[w]` |
-| gedruckter Halter (Portal.py) | Motorachse 15,55 mm neben der Profilmitte, M5 in der oberen Nut — daher Rev. 3 | Nutzerangabe, Foto |
+| gedruckter Halter (Portal.py bis Rev. 15) | Motorachse 15,55 mm neben der Profilmitte, M5 in der oberen Nut — daher Rev. 3 | Nutzerangabe, Foto |
 
 **Rev. 1/2 beruhten auf einem Missverständnis:** ein Motor mittig an der
 hinteren Traverse, der über einen Omega-Riemen zwei senkrechte

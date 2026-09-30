@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Rechnerische Pruefung des Y-Motorhalters — laeuft ohne Fusion.
 
-Importiert fusion/YMotorhalter/YMotorhalter.py mit gestubbtem adsk-Modul und
-prueft dieselbe Masskette, die das Skript zum Bauen benutzt: Riemen in der
-oberen Nut, Ritzel auf der Motorwelle, Freigaenge um Motor und Ritzel,
+Importiert fusion/Portal/Portal.py (dort steht der Halter seit Rev. 16, bis
+dahin fusion/YMotorhalter/YMotorhalter.py) mit gestubbtem adsk-Modul und
+prueft dieselbe Masskette, die das Skript zum Bauen benutzt, in den
+Koordinaten des Halters (lage_y_motorhalter): Riemen in der oberen Nut, Ritzel auf der Motorwelle, Freigaenge um Motor und Ritzel,
 Materialstege, Schraubenlaengen, Kraefte, Druckbarkeit, Freiraum am
 Profilende.
 
@@ -19,8 +20,6 @@ import re
 import sys
 import types
 
-SKRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                      'fusion', 'YMotorhalter', 'YMotorhalter.py')
 PORTAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                       'fusion', 'Portal', 'Portal.py')
 
@@ -36,7 +35,7 @@ MADENSCHRAUBE_R = 1.5    # mm, M3-Madenschraube in der Ritzelnabe
 ZAEHNE_PROBE = (16, 18, 20, 22, 24)
 
 
-def modul_laden(pfad=SKRIPT, name='y_motorhalter'):
+def modul_laden(pfad=PORTAL, name='portal'):
     """Importiert das Fusion-Skript ohne Fusion: adsk wird nur innerhalb der
     Funktionen benutzt, der Modulimport laeuft also mit einem Stub durch."""
     for paket in ('adsk', 'adsk.core', 'adsk.fusion'):
@@ -104,13 +103,14 @@ def strecken_abstand(a0, a1, b0, b1, n=400):
 
 def main():
     mod = modul_laden()
-    w, L = mod.w, mod.lage()
+    w, PL = mod.w, mod.lage()
+    L = PL['ymh']                  # der Halter in seinen Koordinaten
     p = Pruefung()
-    luft = w('luft_min')
+    luft = w('ymh_luft_min')
     hb = L['halbe_breite']
     h = w('motor_loch') / 2.0
     m = w('motor_flansch') / 2.0
-    hub = w('spann_weg') / 2.0
+    hub = w('ymh_spann_weg') / 2.0
     prof = L['profil_name']
 
     # ------------------------------------------------------------------------
@@ -131,7 +131,7 @@ def main():
 
     p.titel('2) Z-Kette: ab Unterkante der {}'.format(prof))
     for text, wert in (
-            ('Oberkante {} (Schiene darauf)'.format(prof), w('profil_hoehe')),
+            ('Oberkante {} (Schiene darauf)'.format(prof), w('rahmen_h')),
             ('Ritzel oben = Wellenende', L['ritzel_z1']),
             ('Riemen oben', L['riemen_z1']),
             ('Riemenmitte = Mitte der oberen Nut', L['riemen_z']),
@@ -150,7 +150,8 @@ def main():
              L['motor_z0'])):
         p.info(text, wert)
     p.ok('Riemenmitte = Mitte der oberen Nut',
-         -abs(L['riemen_z'] - (w('profil_hoehe') - w('nut_oben'))), -0.01)
+         -abs(L['riemen_z'] - (w('rahmen_h') - w('rahmen_b') / 2.0)),
+         -0.01)
     p.ja('alle M5 sitzen in der unteren Nut',
          all(abs(z - L['nut_unten_z']) < 1e-6 for _, z in L['m5_loecher']))
     p.ok('Halter bleibt unter der oberen Nut (Seitenflaeche frei)',
@@ -158,11 +159,11 @@ def main():
     p.ok('Halter ragt nicht unter die {} (dort liegt die 2060)'.format(prof),
          L['halter_z0'], 0.0)
     p.ok('nichts ragt ueber die Oberkante (Schiene, Y-Wagen)',
-         w('profil_hoehe') - L['ritzel_z1'], 2.0)
+         w('rahmen_h') - L['ritzel_z1'], 2.0)
 
     # ------------------------------------------------------------------------
     p.titel('3) Riemen in der oberen Nut (Draufsicht)')
-    p.info('Wirkradius Ritzel ({:.0f} Z)'.format(w('ritzel_z')), L['rp'])
+    p.info('Wirkradius Ritzel ({:.0f} Z)'.format(L['zaehne']), L['rp'])
     p.info('Trum: Ruecken bei X = +-', L['trum_ruecken_x'])
     p.info('Trum: Zahnspitzen bei X = +-', L['trum_zahn_x'])
     p.info('Ruecken hinter der Seitenflaeche', L['trum_tiefe_ruecken'])
@@ -172,11 +173,11 @@ def main():
     p.ja('Ritzel mittig: beide Trume laufen parallel in ihre Nut', True,
          '   (Motorachse X = 0, symmetrisches Teil)')
     p.info('Riemen {:.0f} mm breit, Nutoeffnung {:.1f} mm: er laeuft hinter '
-           'den Lippen im Kanal'.format(w('riemen_breite'), w('nut_breite')))
+           'den Lippen im Kanal'.format(w('riemen_breite'), w('nut_b')))
     p.info('Zum Vergleich, Luft zur Lippe / zum Nutgrund:')
-    halb = w('profil_breite') / 2.0
+    halb = w('rahmen_b') / 2.0
     for z in ZAEHNE_PROBE:
-        rp = mod.teilkreis_r(z)
+        rp = z * w('riemen_teilung') / (2.0 * math.pi)
         lippe = halb - (rp + L['wirk_ruecken']) - w('nut_lippe')
         grund = w('nut_tiefe') - (halb - (rp - L['wirk_zahn']))
         knapp = min(lippe, grund)
@@ -192,7 +193,7 @@ def main():
 
     # ------------------------------------------------------------------------
     p.titel('4) Ritzel auf der Motorwelle')
-    spur_mitte = (L['ritzel_z0'] + L['ritzel_nabe'] + w('ritzel_flansch_h')
+    spur_mitte = (L['ritzel_z0'] + L['ritzel_nabe'] + w('ritzel_bord')
                   + w('ritzel_spur') / 2.0)
     p.ok('Spurmitte = Riemenmitte', -abs(spur_mitte - L['riemen_z']), -0.01)
     p.ok('Riemen in der Ritzelspur (Rand je Seite)',
@@ -203,7 +204,7 @@ def main():
          L['madenschraube_z'] - MADENSCHRAUBE_R - L['flach_z0'], 0.5)
     p.ok('Ritzel unten -> Platte oben', L['ritzel_luft'], luft)
     p.ok('Platte duenn genug fuer Welle + Ritzel',
-         w('motor_welle_l') - w('ritzel_laenge') - luft, w('platte_dicke'))
+         w('motor_welle_ist') - w('ritzel_laenge') - luft, w('ymh_platte_dicke'))
     p.ok('Zentrierbund steckt in der Platte', L['platte_z1'] - L['bund_z1'],
          0.0)
 
@@ -251,12 +252,12 @@ def main():
     p.ok('Steg M5-Bohrung -> Schenkel unten',
          L['nut_unten_z'] - r5 - L['halter_z0'], 2.0)
     p.ok('Steg hintere M5 -> Schenkelende',
-         w('wange_laenge') + L['m5_loecher'][1][0] - r5, 3.0)
+         w('ymh_wange_laenge') + L['m5_loecher'][1][0] - r5, 3.0)
     s5 = w('m5_scheibe_d') / 2.0
     p.ok('M5-Scheibe liegt ganz auf dem Schenkel (oben)',
          L['halter_z1'] - L['nut_unten_z'] - s5, 0.5)
     p.ok('M5-Scheibe liegt ganz auf dem Schenkel (hinten)',
-         w('wange_laenge') + L['m5_loecher'][1][0] - s5, 0.5)
+         w('ymh_wange_laenge') + L['m5_loecher'][1][0] - s5, 0.5)
     p.ok('vordere M5-Scheibe -> Joch (Platz fuer den Inbus)',
          -L['m5_loecher'][0][0] - s5, 3.0)
 
@@ -291,13 +292,13 @@ def main():
          .format(L['n_m5'], M5_KLEMMKRAFT, REIBWERT), halten / kraft_m5, 3.0,
          '>=', 'x')
     # Querschnitt Platte + Fuehrungswaende zwischen Joch und Motorschrauben
-    t = w('platte_dicke')
+    t = w('ymh_platte_dicke')
     teile = [(2.0 * hb * t, (L['platte_z0'] + L['platte_z1']) / 2.0,
               2.0 * hb * t ** 3 / 12.0)]
     hw = L['platte_z0'] - L['halter_z0']
     for _ in range(2):
-        teile.append((w('fuehrung_dicke') * hw, L['halter_z0'] + hw / 2.0,
-                      w('fuehrung_dicke') * hw ** 3 / 12.0))
+        teile.append((w('ymh_fuehrung_dicke') * hw, L['halter_z0'] + hw / 2.0,
+                      w('ymh_fuehrung_dicke') * hw ** 3 / 12.0))
     flaeche = sum(a for a, _, _ in teile)
     z_s = sum(a * z for a, z, _ in teile) / flaeche
     i_x = sum(i + a * (z - z_s) ** 2 for a, z, i in teile)
@@ -332,16 +333,16 @@ def main():
     # Volumen aus denselben Rechtecken wie im Skript, ohne Fasen
     hoehe = L['halter_z1'] - L['halter_z0']
     unter = L['platte_z0'] - L['halter_z0']
-    v = (2.0 * hb * L['platte_y1'] * w('platte_dicke')
+    v = (2.0 * hb * L['platte_y1'] * w('ymh_platte_dicke')
          + 2.0 * hb * L['joch_y1'] * unter
-         + 2.0 * w('fuehrung_dicke') * (L['platte_y1'] - L['joch_y1']) * unter
-         + 2.0 * w('wange_dicke') * w('wange_laenge') * hoehe)
+         + 2.0 * w('ymh_fuehrung_dicke') * (L['platte_y1'] - L['joch_y1']) * unter
+         + 2.0 * w('ymh_wange_dicke') * w('ymh_wange_laenge') * hoehe)
     def langloch(b):
-        return b * w('spann_weg') + math.pi * b * b / 4.0
+        return b * w('ymh_spann_weg') + math.pi * b * b / 4.0
 
-    v -= w('platte_dicke') * (langloch(L['bund_schlitz_b'])
+    v -= w('ymh_platte_dicke') * (langloch(L['bund_schlitz_b'])
                               + 4.0 * langloch(w('m3_durchgang')))
-    v -= L['n_m5'] * math.pi * r5 ** 2 * w('wange_dicke')
+    v -= L['n_m5'] * math.pi * r5 ** 2 * w('ymh_wange_dicke')
     p.info('Volumen je Halter', v / 1000.0, 'cm3')
     p.info('Masse je Halter, voll PETG (1,27 g/cm3)', v / 1000.0 * 1.27, 'g')
 
@@ -361,23 +362,19 @@ def main():
     # Vorn liegt die 2040 auf dem vorderen 2060 (Lage aus Portal.py), und
     # dort halten Winkel an ihren Seitenflaechen sie fest (Nutzerangabe
     # 2026-09-27): die Schenkel muessen davor enden.
-    try:
-        vorn_2060 = modul_laden(PORTAL, 'portal').w('quer_vorn_zurueck')
-        p.info('vorderes 2060 hinter der Stirnseite (Portal.py)', vorn_2060)
-        p.ok('Schenkel enden vor dem 2060 (dort sitzen Winkel)',
-             vorn_2060 - w('wange_laenge'), 3.0)
-        p.ok('hintere M5-Scheibe vor dem 2060',
-             vorn_2060 + L['m5_loecher'][1][0] - w('m5_scheibe_d') / 2.0, 3.0)
-    except Exception as exc:
-        p.info('Portal.py nicht geladen ({}), 2060 nicht geprueft'.format(
-            exc))
+    vorn_2060 = w('quer_vorn_zurueck')
+    p.info('vorderes 2060 hinter der Stirnseite', vorn_2060)
+    p.ok('Schenkel enden vor dem 2060 (dort sitzen Winkel)',
+         vorn_2060 - w('ymh_wange_laenge'), 3.0)
+    p.ok('hintere M5-Scheibe vor dem 2060',
+         vorn_2060 + L['m5_loecher'][1][0] - w('m5_scheibe_d') / 2.0, 3.0)
 
     # ------------------------------------------------------------------------
     p.titel('11) Stueckliste (beide Seiten)')
     for zeile in (
             '2x Y-Motorhalter (PETG), links und rechts dasselbe Teil',
             '2x NEMA 17 (Welle 5 mm) + 2x GT2-Ritzel {:.0f} Z, Bohrung 5, '
-            'fuer 6-mm-Riemen'.format(w('ritzel_z')),
+            'fuer 6-mm-Riemen'.format(L['zaehne']),
             '{n}x M5x{:.0f} + {n}x Scheibe M5 + {n}x Nutenstein M5 (Nut 6)'
             .format(L['m5_schraube'], n=2 * L['n_m5']),
             '8x M3x{:.0f} + 8x Scheibe DIN 125 (Motoren)'.format(
@@ -385,29 +382,29 @@ def main():
         p.info(zeile)
 
     # ------------------------------------------------------------------------
-    p.titel('12) Statische Pruefung der Schluessel im Skript')
-    quelle = open(SKRIPT, encoding='utf-8').read()
+    p.titel('12) Statische Pruefung der Schluessel in Portal.py')
+    quelle = open(PORTAL, encoding='utf-8').read()
     masse_namen = set(mod.MASSE)
     fehlt_m = sorted(set(re.findall(r"\bw\('([^']+)'\)", quelle))
                      - masse_namen)
-    fehlt_l = sorted(set(re.findall(r"L\['([^']+)'\]", quelle)) - set(L))
+    fehlt_h = sorted(set(re.findall(r"\bH\['([^']+)'\]", quelle)) - set(L))
     p.ok('alle w()-Schluessel in MASSE vorhanden', len(fehlt_m), 0, '<=', '')
     if fehlt_m:
         p.info('FEHLT in MASSE: ' + ', '.join(fehlt_m))
-    p.ok('alle L[]-Schluessel von lage() geliefert', len(fehlt_l), 0, '<=', '')
-    if fehlt_l:
-        p.info('FEHLT in lage(): ' + ', '.join(fehlt_l))
-    p.ja('einheitenlose Parameter stehen in MASSE',
-         mod.EINHEITENLOS <= masse_namen)
-    unbenutzt = sorted(masse_namen
-                       - set(re.findall(r"\bw\('([^']+)'\)", quelle)))
+    p.ok('alle H[]-Schluessel von lage_y_motorhalter() geliefert',
+         len(fehlt_h), 0, '<=', '')
+    if fehlt_h:
+        p.info('FEHLT in lage_y_motorhalter(): ' + ', '.join(fehlt_h))
+    benutzt = set(re.findall(r"\bw\('([^']+)'\)", quelle))
+    unbenutzt = sorted(n for n in masse_namen
+                       if n.startswith('ymh_') and n not in benutzt)
     if unbenutzt:
         p.info('nur dokumentierend (nicht in Geometrie): '
                + ', '.join(unbenutzt))
 
     p.titel('13) Validierungsbericht des Fusion-Skripts')
     try:
-        zeilen = mod.hinweise_bauen(L, [])
+        zeilen = mod.hinweise_bauen(PL, [])
         for zeile in zeilen:
             p.info(zeile if zeile else '.')
         p.ok('Bericht rendert ohne Fehler', 1.0, 1.0, '>=', '')

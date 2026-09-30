@@ -18,15 +18,13 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb, Endschalter X und Y
-fusion/YMotorhalter/           Y-Motorhalter vorn an jeder 2040 (ersetzt den aus Portal)  ← neu
+fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
 docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
-docs/portal-y-antrieb.svg      alter Y-Motorhalter aus Portal.py (überholt): Ecke und Schnitt
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
@@ -49,7 +47,6 @@ tools/portal_check.py          Prüfung des Portals mit dem Toolhead über X- un
 tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
 tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/portal_zeichnen.py       erzeugt die Portalzeichnung
-tools/y_antrieb_zeichnen.py    erzeugt die Zeichnung des alten Y-Motorhalters aus Portal.py
 tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum, Montage, Druck, Leistung, Litzen) und der Verkabelung
 tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
 tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
@@ -95,10 +92,9 @@ Platte hängen **zwei gleiche Klemmtürme wie bei v8** mit Rippen und
 Querstift, einer je Riemenende.
 Links steht der **X-Motor** über dem Rohrende — so tief, dass seine
 20-mm-Welle das ganze Ritzel trägt —, rechts die **Umlenkung** mit
-einer 20-Z-Rolle, die ein Spannklotz nach außen zieht. Den Y-Antrieb vorn an
-jedem 2040 übernimmt der eigene [Y-Motorhalter](#y-motorhalter-neu); der
-Y-Motorhalter, den `Portal.py` noch mitbaut, ist **überholt** (Achse 15,55 mm
-neben der Profilmitte, M5 in der oberen Nut). Aluprofile, Linearführungen,
+einer 20-Z-Rolle, die ein Spannklotz nach außen zieht. Vorn an jedem 2040
+sitzt der [Y-Motorhalter](#y-motorhalter-neu) mit dem Y-Motor, seit Rev. 16
+ebenfalls aus `Portal.py`. Aluprofile, Linearführungen,
 Riemen und Motoren stehen als Referenz mit im Modell (Komponente
 `Referenz_nicht_drucken`, nur zur Ansicht).
 
@@ -116,7 +112,9 @@ das Ritzel, das direkt auf der Motorwelle sitzt. Der Motor hängt mittig zur
 mittig im Nutkanal. Der Halter ist ein U-Bügel: zwei Schenkel mit 4 × M5 in
 den unteren Nuten, ein Joch liegt an der Stirnseite an. Gespannt wird über
 Langlöcher, der Motor rückt ±4 mm vom Profil weg. Gedruckt wird kopfüber
-ohne Stützen. Er ersetzt den Y-Motorhalter aus `Portal.py`. Details in
+ohne Stützen. Seit Portal Rev. 16 baut ihn `Portal.py` mit (vorher das
+eigene Skript `YMotorhalter.py`); den alten Halter des Portals, Achse
+15,55 mm neben der Profilmitte, gibt es nicht mehr. Details in
 [docs/y-motorhalter.md](docs/y-motorhalter.md).
 
 ### Elektronikgehäuse (neu)
@@ -180,7 +178,7 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
 Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
-*Portal*, *YMotorhalter*, *Elektronik*, *Endschalter* oder *NotAus*). Jeder Lauf legt ein **neues
+*Portal*, *Elektronik* oder *NotAus*). Jeder Lauf legt ein **neues
 Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
@@ -194,7 +192,6 @@ python3 tools/elektronik_check.py   # Elektronikgehäuse gegen Portal, Toolhead,
 python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
 python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
 python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
-python3 tools/y_antrieb_zeichnen.py # docs/portal-y-antrieb.svg (alter Y-Motorhalter)
 python3 tools/elektronik_zeichnen.py # docs/elektronik-platz.svg + Kabellängen
 python3 tools/anschluss_zeichnen.py  # docs/elektronik-anschluss.svg
 python3 tools/verkabelung.py         # Tabellen in docs/verkabelung.md
@@ -221,12 +218,12 @@ bestanden.
 81 X- × 11 Z-Stellungen gegen Schlitten, Motor, Umlenkung, beide Riemen und
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile, den Y-Weg gegen die 2060
-und die Y-Motorhalter (noch mit dem alten Halter aus `Portal.py` gerechnet),
-den Y-Antrieb selbst und das Elektronikfach hinter
+und die Y-Motorhalter, den Y-Antrieb selbst mit dem Riemenweg über den
+ganzen Y-Weg und das Elektronikfach hinter
 dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 15,
-YMotorhalter Rev. 5, `y_motorhalter_check.py`). Portal Rev. 14 legt das
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 16 mit
+dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 14 legt das
 hintere 2060 nach der Messung 435 mm hinter das vordere (die 2040 stehen
 hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
 Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
@@ -234,7 +231,7 @@ Wandler, Wago) gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)). Die Endschalter X und Y baut seit
 Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),
-Not-Aus-Gehäuse Rev. 4 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
+Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)); die Halter der

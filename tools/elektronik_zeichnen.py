@@ -26,14 +26,12 @@ from bauraum import Quader                            # noqa: E402
 from antrieb_zeichnen import (el, f1, text, linie, rect_px,  # noqa: E402
                               de, TEXT, GRAU, BLAU, ROT, FARBE)
 from portal_zeichnen import Feld, ORANGE              # noqa: E402
-from y_antrieb_zeichnen import quer_mass              # noqa: E402
+from portal_zeichnen import quer_mass                 # noqa: E402
 
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-platz.svg')
 ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                           'fusion', 'Elektronik', 'Elektronik.py')
-YMOTORHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                            'fusion', 'YMotorhalter', 'YMotorhalter.py')
 NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                       'fusion', 'NotAus', 'NotAus.py')
 
@@ -181,10 +179,9 @@ def konzept(w, L, tw, TL, ew, EL):
     xm = K['kx_fest']
     K['es_z'] = (xm - 27.0, 32.0)
     K['xm'] = xm
-    # Y-Motoren am eigenen Halter (YMotorhalter.py): mittig zur 2040, die
-    # Achse in der Mitte des Spannwegs. Der Halter aus Portal.py (15,5 mm
-    # innen) ist ueberholt.
-    YL = bauraum.modul_laden(YMOTORHALTER, 'ymotorhalter').lage()
+    # Y-Motoren am Y-Motorhalter (seit Rev. 16 in Portal.py): mittig zur
+    # 2040, die Achse in der Mitte des Spannwegs
+    YL = L['ymh']
     ys, zs = L['rahmen_y'][1], L['rahmen_z0']
     K['ym_y'] = ys + YL['motor_y_mitte']
     K['ym_z'] = (zs + YL['motor_z0'], zs + YL['platte_z0'])
@@ -385,7 +382,7 @@ def draufsicht(f, w, L, K):
         q = P[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0] - dh, q.y[1] - dh, 'druck',
                         fill='none', stroke_dasharray='4 3'))
-    # Y-Motoren vorn (YMotorhalter.py), Not-Aus-Gehaeuse (NotAus.py)
+    # Y-Motoren vorn (Portal.py), Not-Aus-Gehaeuse (NotAus.py)
     fl = w('motor_flansch') / 2.0
     for s in (-1, 1):
         x = s * R

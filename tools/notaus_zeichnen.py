@@ -4,7 +4,7 @@
 Von vorn, im Schnitt durch die Mitte von rechts und von oben: das Gehaeuse
 an der Vorderseite des vorderen 2060 mit Laschen, Rippen, Taster und
 Kabelweg, daneben das rechte 2040 mit Y-Motorhalter und Motor. Alle Masse
-aus NotAus.py, Portal.py und YMotorhalter.py; die Zeichnung ist
+aus NotAus.py und Portal.py (mit dem Y-Motorhalter); die Zeichnung ist
 massstaeblich und wandert mit den Parametern.
 
     python3 tools/notaus_zeichnen.py   ->  docs/notaus.svg
@@ -20,7 +20,7 @@ from bauraum import Quader                            # noqa: E402
 from antrieb_zeichnen import (text, linie, rect_px, de,  # noqa: E402
                               TEXT, GRAU, BLAU, FARBE)
 from portal_zeichnen import Feld                      # noqa: E402
-from y_antrieb_zeichnen import quer_mass              # noqa: E402
+from portal_zeichnen import quer_mass                 # noqa: E402
 from endschalter_zeichnen import profil_schnitt, ansicht  # noqa: E402
 from notaus_check import NOTAUS                       # noqa: E402
 

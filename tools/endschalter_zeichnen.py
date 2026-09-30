@@ -23,7 +23,7 @@ from bauraum import Quader                            # noqa: E402
 from antrieb_zeichnen import (text, linie, rect_px, de,  # noqa: E402
                               TEXT, GRAU, BLAU, FARBE)
 from portal_zeichnen import Feld                      # noqa: E402
-from y_antrieb_zeichnen import quer_mass              # noqa: E402
+from portal_zeichnen import quer_mass                 # noqa: E402
 
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'endschalter.svg')

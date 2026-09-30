@@ -1,7 +1,12 @@
 # Y-Motorhalter — Antrieb der Y-Achse
 
-Erzeugt von `fusion/YMotorhalter/YMotorhalter.py` (ein Druckteil, Rev. 5).
-Geprüft mit `python3 tools/y_motorhalter_check.py`, Skizze in
+Erzeugt von `fusion/Portal/Portal.py` (Rev. 16, Komponenten
+`Y-Motorhalter_links` und `Y-Motorhalter_rechts`, zweimal dasselbe
+Druckteil). Bis Portal Rev. 15 stand er im eigenen Skript
+`fusion/YMotorhalter/YMotorhalter.py` (Rev. 5), siehe
+[Portal Rev. 16](#portal-rev-16-im-portal-skript-2026-09-30).
+Geprüft mit `python3 tools/y_motorhalter_check.py`, zusammen mit dem Portal
+in `python3 tools/portal_check.py`. Skizze in
 [y-motorhalter.svg](y-motorhalter.svg) (neu erzeugen mit
 `python3 tools/y_motorhalter_zeichnen.py`).
 
@@ -26,10 +31,10 @@ So sieht der Y-Antrieb nach deinen Angaben und dem Foto aus (2026-09-26):
 * Gespannt wird, indem der **Motor in Langlöchern** vom Profilende
   wegrückt.
 
-Er ersetzt den Y-Motorhalter aus `Portal.py`
-([portal-y-schlitten.md](portal-y-schlitten.md#y-antrieb-vorn)), den du
+Er ersetzt den alten Y-Motorhalter von `Portal.py` (bis Rev. 15), den du
 gedruckt hast: Dort lag die Motorachse 15,55 mm neben der Profilmitte, und
-die M5 saßen in der oberen Nut.
+die M5 saßen in der oberen Nut. Heute baut `Portal.py` diesen hier
+([portal-y-schlitten.md](portal-y-schlitten.md#y-antrieb-vorn)).
 
 | Teil | Material | Funktion |
 |---|---|---|
@@ -77,6 +82,20 @@ an ihren Seitenflächen. Die Schenkel sind deshalb **30 statt 40 mm** lang
 und enden 5 mm vor dem 2060, die M5 sitzen bei 8 und 22 mm hinter der
 Stirnseite, wie am alten Halter aus `Portal.py`. Die Prüfung liest die Lage
 des 2060 aus `Portal.py`.
+
+## Portal Rev. 16: im Portal-Skript (2026-09-30)
+
+Der Halter ist ins Portal-Skript umgezogen. `Portal.py` baut ihn an beiden
+vorderen Ecken, das eigene Skript `YMotorhalter.py` gibt es nicht mehr.
+Form, Maße und Lage sind dieselben wie in Rev. 5. Seine eigenen Parameter
+heißen jetzt `ymh_…`, Profil, Nut, Riemen, Ritzel und Motor nimmt er aus
+den gemeinsamen Werten des Portals ([Parametrik](#parametrik)).
+
+Damit rechnen `Ref_Riemen` und `portal_check.py` mit den mittigen Ritzeln
+und mit diesem Halter statt mit dem alten. Zwei Dinge zeigen sich dabei,
+siehe [Noch offen](#noch-offen), Punkte 4 und 5: Die Riemenlänge ändert sich
+über den Y-Weg um bis zu 2 mm, und am vorderen Schienenende kommt der
+vordere Klemmturm dem inneren Schenkel nahe.
 
 ## Bezug und Koordinaten
 
@@ -137,9 +156,10 @@ Trume laufen in der Mitte ihres Nutkanals:
 | 24 Z | **0,18 mm** | 2,64 mm | streift |
 
 Die Nutmaße sind Richtwerte für Nut 6 `[w]`. Ist dein Nutgrund flacher,
-`nut_tiefe` eintragen und das Prüfwerkzeug laufen lassen. Umschlingung
-180 Grad, 10 Zähne im Eingriff, 40 mm je Umdrehung, also 80 Schritte/mm
-bei 1/16.
+`nut_tiefe` eintragen und das Prüfwerkzeug laufen lassen. 40 mm je
+Umdrehung, also 80 Schritte/mm bei 1/16. Umschlingung 166 bis 178 Grad, je
+nach Stellung des Portals (der Wagen-Trum läuft schräg an), also 9 bis 10
+Zähne im Eingriff; am hinteren Ritzel sind es 161 bis 178 Grad.
 
 ## Aufbau des Halters
 
@@ -295,38 +315,45 @@ längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
    bei ±6,37 mm. Die Klemmen bleiben, wo Y-Wagen und Klemmtürme in
    `Portal.py` sie haben, 21,6 mm innen neben der Schienenmitte (Angabe vom
    2026-09-27). Die Wagen-Trume laufen deshalb schräg von der Klemme in die
-   innere Nut (1,7° bis 19°, je nach Stellung), der Rücklauf gerade in der
+   innere Nut (1,7° bis 19,3°, je nach Stellung), der Rücklauf gerade in der
    äußeren; das hintere Ritzel sitzt ebenfalls mittig zur 2040 (Angabe).
    Wo ein Trum durch die Nutöffnung in den Kanal läuft, bleiben dem Riemen
-   0,1 mm je Seite — Zahlen in
+   0,1 mm je Seite. Weil die Trume schräg laufen, ist der Riemenweg in der
+   Mitte am kürzesten und an den Schienenenden 1,3 bzw. 2,0 mm länger: Ein
+   in der Mitte gespannter Riemen wird dort etwas gedehnt. Seit Portal
+   Rev. 16 rechnet `Portal.py` das so; Zahlen in
    [portal-y-schlitten.md](portal-y-schlitten.md#y-riemen-und-klemmtürme).
-   `Portal.py` rechnet den Riemen noch mit dem alten Ritzel.
-5. **Portal-Prüfung:** `portal_check.py` rechnet den Y-Weg vorn noch gegen
-   den alten Halter. Dieser hier ist niedriger und reicht weniger weit nach
-   innen. Mit dem Softlimit am vorderen 2060 erreicht der Toolhead ihn
-   ohnehin nicht.
+5. **Portal-Prüfung:** Seit Portal Rev. 16 rechnet `portal_check.py` den
+   Y-Weg vorn gegen diesen Halter. Der Toolhead fährt am vorderen
+   Schienenende ab zc = +37 über ihn hinweg, mit dem Softlimit am vorderen
+   2060 erreicht er ihn ohnehin nicht. Am Schienenende selbst (nur von Hand)
+   endet der vordere Klemmturm 2,2 mm hinter dem inneren Schenkel, 2,9 mm
+   über ihm und 1 mm weiter innen — berühren kann er ihn nicht
+   ([portal-y-schlitten.md](portal-y-schlitten.md#y-weg-die-2060-und-die-y-motorhalter)).
 6. **Endschalter** gehören nicht zum Halter: Der Y-Endschalter sitzt hinten
    rechts, ohne Auto-Squaring ([endschalter.md](endschalter.md)).
 7. **Alte Teile:** Die Umlenkrollen (F625ZZ), der Motorriemen und die
    Edelstahlwellen aus Rev. 1/2 braucht der Y-Antrieb nicht mehr, ebenso
-   den Y-Motorhalter aus `Portal.py`.
+   den alten Y-Motorhalter von `Portal.py` (bis Rev. 15).
 
 ## Parametrik
 
-Alle Werte aus `MASSE` landen als User-Parameter im Dialog *Ändern →
-Parameter*. Die Zähnezahl ist einheitenlos. Die Lagen rechnet `lage()` in
-Python: nach einer Änderung das Skript neu laufen lassen und
-`tools/y_motorhalter_check.py` ausführen.
+Die Werte stehen in `MASSE` von `Portal.py` und landen als User-Parameter
+im Dialog *Ändern → Parameter*; die des Halters beginnen mit `ymh_`. Die
+Lagen rechnet `lage_y_motorhalter()` in Python: nach einer Änderung das
+Portal-Skript neu laufen lassen und `tools/y_motorhalter_check.py` und
+`tools/portal_check.py` ausführen. Bis Portal Rev. 15 hießen sie ohne
+`ymh_`, Nutlage und Zähnezahl waren eigene Werte.
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
-| `nut_unten` / `nut_oben` | 10 / 10 mm | untere Nut über der Unterkante (Nutensteine), obere unter der Oberkante (Riemen) |
+| `rahmen_b` / `rahmen_h` | 20 / 40 mm | Profil; die Nuten liegen eine halbe Breite über der Unterkante (Nutensteine) und unter der Oberkante (Riemen) |
 | `nut_lippe` / `nut_tiefe` | 1,8 / 6,0 mm `[w]` | wo der Riemen im Nutkanal läuft, Länge der M5 |
-| `ritzel_z` | 20 | Zähnezahl: Abstand der Trume, 40 mm je Umdrehung |
-| `motor_welle_l` | 23 mm (gemessen) | legt mit dem Ritzel die Höhe von Motor und Platte fest |
-| `platte_dicke` | 6 mm | höchstens 7, sonst stößt das Ritzel an |
-| `wange_laenge` | 30 mm | so weit reichen die Schenkel am Profil entlang; enden 5 mm vor dem vorderen 2060 (Winkel) |
-| `schraube_y` / `schraube_abstand` | 8 / 14 mm | Lage der M5 hinter der Stirnseite (8 und 22 mm) |
-| `joch_dicke` | 4 mm | Anschlag an der Stirnseite, schiebt den Motor nach außen |
-| `spann_weg` | 8 mm | Weg des Motors; der Riemenweg ändert sich um das Doppelte |
+| `ritzel_teilkreis` | 12,73 mm | GT2 20 Z (Zähne = π · Teilkreis / `riemen_teilung`): Abstand der Trume, 40 mm je Umdrehung |
+| `motor_welle_ist` | 23 mm (gemessen) | legt mit dem Ritzel die Höhe von Motor und Platte fest |
+| `ymh_platte_dicke` | 6 mm | höchstens 7, sonst stößt das Ritzel an |
+| `ymh_wange_laenge` | 30 mm | so weit reichen die Schenkel am Profil entlang; enden 5 mm vor dem vorderen 2060 (Winkel) |
+| `ymh_schraube_y` / `ymh_schraube_abstand` | 8 / 14 mm | Lage der M5 hinter der Stirnseite (8 und 22 mm) |
+| `ymh_joch_dicke` | 4 mm | Anschlag an der Stirnseite, schiebt den Motor nach außen |
+| `ymh_spann_weg` | 8 mm | Weg des Motors; der Riemenweg ändert sich um das Doppelte |
 | `motor_laenge` | 37 mm (gemessen) | nur Freiraum nach unten |

@@ -23,7 +23,7 @@ import bauraum                                        # noqa: E402
 from antrieb_zeichnen import (text, linie, pfeil, rect_px, de,  # noqa
                               TEXT, GRAU, BLAU, FARBE)
 from portal_zeichnen import Feld, ORANGE              # noqa: E402
-from y_antrieb_zeichnen import quer_mass              # noqa: E402
+from portal_zeichnen import quer_mass                 # noqa: E402
 from elektronik_zeichnen import ELEKTRONIK, KABEL, linienzug  # noqa: E402
 from elektronik_check import (BUCHSE_KOERPER_D, BUCHSE_KOERPER_T,  # noqa
                               SCHALTER_KOERPER)

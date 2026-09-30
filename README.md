@@ -32,7 +32,8 @@ docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, 
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
 docs/elektronik.md             Platz, Gehäuse, Leistung, Endschalter, Kabel, Anschlussplan
 docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
-docs/elektronik-anschluss.svg  Anschlussplan: Netzteil, Wandler, Shield, Motoren, Laser, Endschalter
+docs/elektronik-anschluss.svg  Anschlussplan mit Kabelnummern W1–W17 und Kabelliste
+docs/verkabelung.md            Verkabelung: Kabelliste, Anschlussliste, Klemmen, Schritt für Schritt, Inbetriebnahme, GRBL
 docs/elektronik-box.svg        Elektronik-Gehäuse von oben: Uno, Lüfter, Verteiler, Kabelwege
 docs/endschalter.md            Endschalter X und Y: Halter, Fahnen, Montage, Einstellen, GRBL
 docs/endschalter.svg           Endschalter: Y von hinten und von außen, X von vorn und von oben, Klammer X
@@ -47,9 +48,10 @@ tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
 tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/portal_zeichnen.py       erzeugt die Portalzeichnung
 tools/y_antrieb_zeichnen.py    erzeugt die Zeichnung des alten Y-Motorhalters aus Portal.py
-tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum, Montage, Druck, Leistung, Litzen)
+tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum, Montage, Druck, Leistung, Litzen) und der Verkabelung
 tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
 tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
+tools/verkabelung.py           Kabelliste — Quelle für Anleitung, Anschlussplan und Prüfung; schreibt die Tabellen in docs/verkabelung.md
 tools/elektronik_box_zeichnen.py erzeugt die Draufsicht auf das Elektronik-Gehäuse
 tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im Spalt, Freiraum über den ganzen Weg
 tools/endschalter_zeichnen.py  erzeugt die Zeichnung der Endschalter
@@ -126,6 +128,17 @@ dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
 Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
 [docs/elektronik.md](docs/elektronik.md).
 
+### Verkabelung (neu)
+
+Alle 17 Leitungen vom Steckernetzteil bis zum Laser mit Nummer, Adern,
+Farben, Querschnitt, Weg und Kauflänge; Belegung der Wago-Klemmen und des
+Shields; Material, Reihenfolge beim Anschließen und eine Inbetriebnahme in
+Stufen (24 V, Wandler, GRBL und Lichtschranken, Vref, Motoren,
+Referenzfahrt, Laser, Not-Aus) mit den GRBL-Einstellungen. Neu gegenüber
+dem alten Plan: Pull-down 10 kΩ auf der Laser-PWM, Schließer des Not-Aus an
+Abort, Masse der Lichtschranken über die Wago. Details in
+[docs/verkabelung.md](docs/verkabelung.md).
+
 ### Endschalter X und Y (neu)
 
 Zwei LM393-Gabellichtschranken wie an Z, beide schalten 3 mm vor dem
@@ -163,13 +176,14 @@ Montagereihenfolge.
 ```sh
 python3 tools/toolhead_check.py     # Maßkette, Kollisionen, Schrauben, Druck
 python3 tools/portal_check.py       # Portal + Toolhead über den ganzen Weg
-python3 tools/elektronik_check.py   # Elektronikgehäuse gegen Portal, Toolhead, Rahmen
+python3 tools/elektronik_check.py   # Elektronikgehäuse gegen Portal, Toolhead, Rahmen; Verkabelung
 python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
 python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
 python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
 python3 tools/y_antrieb_zeichnen.py # docs/portal-y-antrieb.svg (alter Y-Motorhalter)
 python3 tools/elektronik_zeichnen.py # docs/elektronik-platz.svg + Kabellängen
 python3 tools/anschluss_zeichnen.py  # docs/elektronik-anschluss.svg
+python3 tools/verkabelung.py         # Tabellen in docs/verkabelung.md
 python3 tools/elektronik_box_zeichnen.py  # docs/elektronik-box.svg
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 python3 tools/y_motorhalter_check.py  # Y-Motorhalter: Riemen in der Nut, Freigänge, Schrauben
@@ -202,8 +216,11 @@ hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
 Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
 Wandler, Wago) gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)). Endschalter Rev. 1 für X und Y mit
-`endschalter_check.py` geprüft ([endschalter.md](docs/endschalter.md)); die
-Halter der Energieketten folgen. Der
+`endschalter_check.py` geprüft ([endschalter.md](docs/endschalter.md)). Die
+Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
+`elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
+Tabellen in [verkabelung.md](docs/verkabelung.md)); die Halter der
+Energieketten folgen. Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

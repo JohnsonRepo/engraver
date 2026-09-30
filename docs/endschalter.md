@@ -234,9 +234,10 @@ Aus den Schaltpunkten, gerechnet in `tools/endschalter_check.py`; die
 
 Weg wie in [elektronik-platz.svg](elektronik-platz.svg) gezeichnet: Y
 **0,49 m**, X **0,72 m**. Mit 15 % Reserve reicht für beide **1 m**
-3 × 0,14 mm² (AWG 26). Y läuft mit dem Kabel des rechten Y-Motors an der Rückseite des
-hinteren 2060 und dann in der unteren Außennut zum Halter. X läuft in der
-Y-Kette zum linken Schlitten und von dort vorn am Rohrende zum Halter.
+3 × 0,25 mm² (AWG 24). Y läuft mit dem Kabel des rechten Y-Motors an der
+Rückseite des hinteren 2060 und dann in der unteren Außennut zum Halter. X
+läuft in der Y-Kette zum linken Schlitten und von dort vorn am Rohrende zum
+Halter. Adern und Anschlüsse (W9, W10): [verkabelung.md](verkabelung.md).
 
 ## Stückliste
 

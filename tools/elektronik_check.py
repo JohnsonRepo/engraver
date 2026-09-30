@@ -8,13 +8,17 @@ hinter dem hinteren 2060, Freiraum gegen Portal und Toolhead ueber den ganzen
 Weg, Montage mit M5 in Hammermuttern, Werkzeugzugang, Uno und Stapelhoehe,
 Verteiler (Buchse, Schalter, Wandler, Wago), Waende, Druckbarkeit, den
 Kabelkanal, die Leistungsbilanz und die Litzen (aus
-tools/elektronik_zeichnen.py). Gibt die Stueckliste aus.
+tools/elektronik_zeichnen.py) und die Verkabelung (Kabelliste aus
+tools/verkabelung.py: Netze, Not-Aus, Signale, Kontakte, Klemmen, Laengen,
+Ketten und ob die Tabellen in docs/verkabelung.md aktuell sind). Gibt die
+Stueckliste aus.
 
     python3 tools/elektronik_check.py
 
 Exit-Code 0 = alle Pruefungen bestanden.
 """
 
+import itertools
 import os
 import re
 import sys
@@ -23,6 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bauraum                                        # noqa: E402
 import elektronik_zeichnen as leistung              # noqa: E402
 import portal_check                                   # noqa: E402
+import verkabelung as vk                              # noqa: E402
 from toolhead_check import Pruefung                   # noqa: E402
 
 ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
@@ -400,7 +405,8 @@ def main():
 
     # ------------------------------------------------------------------
     p.titel('14) Litzen: Querschnitt, Spannungsfall, Kontakte')
-    li = leistung.litzen(leistung.konzept(w, L, tw, TL, ew, EL))
+    K = leistung.konzept(w, L, tw, TL, ew, EL)
+    li = leistung.litzen(K)
     p.ok('24 V {} mm2: belastbar (VDE 0298-4) gegen den Netzteilstrom'.format(
         leistung.LITZE_24V), leistung.BELASTBAR[leistung.LITZE_24V],
          li['netz_a'], '>=', 'A')
@@ -416,10 +422,113 @@ def main():
          100.0 * li['motor_r'] / leistung.MOTOR_R, 25.0, '<=', '%')
     p.ok('   Motorlitze passt in den PH-Crimpkontakt', leistung.LITZE_MOTOR,
          leistung.PH_MAX, '<=', 'mm2')
-    p.ok('Endschalter {} mm2: haelt in der Wago (feindraehtig)'.format(
+    p.ok('Signale {} mm2: halten in der Wago (feindraehtig)'.format(
         leistung.LITZE_SIGNAL), leistung.LITZE_SIGNAL, leistung.WAGO_MIN,
          '>=', 'mm2')
+
+    # ------------------------------------------------------------------
+    es = bauraum.modul_laden(leistung.ENDSCHALTER, 'endschalter')
+    verkabelung_pruefen(p, {'L': L, 'TL': TL, 'K': K, 'es_w': es.w})
     return p.bericht()
+
+
+def verkabelung_pruefen(p, Q):
+    """Abschnitt 15: die Kabelliste aus tools/verkabelung.py."""
+    p.titel('15) Verkabelung: Netze, Not-Aus, Signale, Kontakte, Klemmen')
+    lts = vk.leitungen()
+    A = vk.ANSCHLUSS
+    unbekannt = sorted({a for _, _, a in vk.enden(lts) if a not in A})
+    p.ja('alle Anschluesse der Kabelliste sind beschrieben', not unbekannt,
+         (' — ' + ', '.join(unbekannt)) if unbekannt else '')
+    N = vk.netze(lts=lts)
+    plus24, masse = N['Buchse +'], N['Buchse −']
+    for a in ('Shield +', 'Wandler IN+', 'Lüfter +'):
+        p.ja('+24 V ueber Schalter und Not-Aus an {}'.format(A[a][0]),
+             a in plus24)
+    for a in ('Shield −', 'Wandler IN−', 'Lüfter −', 'Laser GND',
+              'LS X GND', 'LS Y GND', 'LS Z GND', 'Shield Z− GND'):
+        p.ja('GND an {}'.format(A[a][0]), a in masse)
+    p.ja('+12 V vom Wandler nur an den Laser',
+         N['Wandler OUT+'] == {'Wandler OUT+', 'Laser +12 V'})
+    p.ja('+5 V vom Stift 5V an VCC aller drei Lichtschranken',
+         {'LS X VCC', 'LS Y VCC', 'LS Z VCC'} <= N['Shield 5V'])
+    netze = {'+24 V': plus24, '+12 V': N['Wandler OUT+'],
+             '+5 V': N['Shield 5V'], 'GND': masse}
+    for (n1, s1), (n2, s2) in itertools.combinations(netze.items(), 2):
+        p.ja('kein Kurzschluss {} <-> {}'.format(n1, n2), not s1 & s2)
+    for pin, achse in vk.EINGAENGE.items():
+        ls = {a for a in N.get(pin, {pin}) if a.startswith('LS ')}
+        p.ja('{}: nur D0 der Lichtschranke {}'.format(A[pin][0], achse),
+             ls == {'LS {} D0'.format(achse)})
+    d11 = N['Shield Z+']
+    p.ja('D11 (Z+/Z−) nur Laser-PWM, keine Lichtschranke',
+         'Laser PWM' in d11 and not any(a.startswith('LS ') for a in d11))
+    pd = next((lt['adern'][0] for lt in lts if lt['art'] == 'Widerstand'),
+              None)
+    p.ja('Pull-down 10 kOhm zwischen D11 und GND',
+         pd is not None and pd[2] in d11 and pd[3] in masse)
+    gedrueckt = vk.netze(zustand=('ein', 'gedrueckt'), lts=lts)
+    p.ja('Not-Aus gedrueckt: Shield, Wandler (Laser) und Luefter ohne 24 V',
+         not {'Shield +', 'Wandler IN+', 'Lüfter +'} & gedrueckt['Buchse +'])
+    p.ja('Not-Aus gedrueckt: Abort auf GND, GRBL bricht ab',
+         'Shield Abort' in gedrueckt['Buchse −'])
+    p.ja('Not-Aus nicht gedrueckt: Abort frei', 'Shield Abort' not in masse)
+    aus = vk.netze(zustand=('nicht gedrueckt',), lts=lts)
+    p.ja('Schalter aus: hinter dem Schalter keine 24 V',
+         not {'Shield +', 'Wandler IN+', 'Lüfter +'} & aus['Buchse +'])
+
+    falsch = []
+    for lt, ader, a in vk.enden(lts):
+        art = A[a][1]
+        if lt['mm2'] is None or art is None:
+            continue
+        lo, hi = vk.KONTAKT[art]
+        if not lo - 1e-9 <= lt['mm2'] <= hi + 1e-9:
+            falsch.append('{} {} ({} mm2) in {}'.format(
+                lt['nr'], ader[0], lt['mm2'], art))
+    p.ja('jede Litze passt in ihre Kontakte (Dupont, XH, PH, Wago, '
+         'Schraubklemme)', not falsch,
+         (' — ' + '; '.join(falsch)) if falsch else '')
+    bel = vk.wago_belegung(lts)
+    for name, typ, plaetze in vk.WAGO:
+        p.ok('{} ({}): belegt + Reserve'.format(name, typ),
+             len(bel[name]) + vk.WAGO_RESERVE.get(name, 0), plaetze, '<=',
+             'Pl.')
+    K = Q['K']
+    for lt in lts:
+        weg, kauf = vk.laenge_m(lt, K)
+        if weg is None:
+            continue
+        if lt.get('mitgeliefert') and kauf <= lt['mitgeliefert']:
+            p.ok('{} {}: mitgeliefertes Kabel reicht (+15 %)'.format(
+                lt['nr'], lt['name']), lt['mitgeliefert'],
+                 weg * (1.0 + leistung.RESERVE), '>=', 'm')
+        else:
+            p.ok('{} {}: Kauflaenge >= Weg + 15 %'.format(
+                lt['nr'], lt['name']), kauf,
+                 weg * (1.0 + leistung.RESERVE), '>=', 'm')
+    for kette in ('Y', 'X'):
+        n = sum(1 for lt in lts if kette in lt.get('kette', '').split())
+        p.ok('{}-Kette: Leitungen darin'.format(kette), n, vk.KETTE_PLAETZE,
+             '<=', 'St.')
+    ma = vk.UNO_MA + 4 * vk.TREIBER_LOGIK_MA + 3 * vk.LS_MA
+    p.ok('5 V aus USB: Uno, Treiberlogik, drei Lichtschranken', ma,
+         vk.USB_MA, '<=', 'mA')
+
+    with open(vk.ANLEITUNG, encoding='utf-8') as f:
+        anleitung = f.read()
+    for name, inhalt in vk.tabellen(Q).items():
+        p.ja('verkabelung.md: Tabelle "{}" aktuell'.format(name),
+             vk.auslesen(anleitung, name) == inhalt,
+             '' if vk.auslesen(anleitung, name) == inhalt
+             else ' — python3 tools/verkabelung.py')
+    g = {k: v for k, v, _ in vk.grbl(Q)}
+    pfad = os.path.join(vk.DOCS, 'endschalter.md')
+    with open(pfad, encoding='utf-8') as f:
+        es_text = f.read()
+    for k in ('$130', '$131'):
+        p.ja('endschalter.md nennt `{}={}`'.format(k, g[k]),
+             '`{}={}`'.format(k, g[k]) in es_text)
 
 
 if __name__ == '__main__':

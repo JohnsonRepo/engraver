@@ -478,9 +478,10 @@ dem Z-Wagen.
 Elektrisch: **VCC vom selben Pegel wie das Board** (3,3-V-Board → 3,3 V), D0
 direkt an den Endschaltereingang. Der ebenfalls vorhandene induktive
 LJ12A3-4-Z/BX wäre hier die schlechtere Wahl — 60 g statt 5, 12–36 V mit
-Pegelwandler, ±0,1…0,2 mm statt ±0,03 mm. An X und Y ginge er, dort sind
-inzwischen aber auch Gabellichtschranken vorgesehen — ohne Optokoppler
-([elektronik.md](elektronik.md#endschalter)).
+Pegelwandler, ±0,1…0,2 mm statt ±0,03 mm. An X und Y ginge er, dort sitzen
+inzwischen aber auch Gabellichtschranken — ohne Optokoppler
+([endschalter.md](endschalter.md)). Angeschlossen wird die Z-Lichtschranke
+an SpnEn (D12), wie in [verkabelung.md](verkabelung.md) (W11).
 
 ## Versteifungsrippen an der Säule
 

@@ -12,9 +12,11 @@ die [Draufsicht auf das Gehäuse](#gehäuse-elektronikpy)
 `python3 tools/anschluss_zeichnen.py`. **Stand:** Gehäuse gezeichnet
 (Elektronik.py Rev. 2, mit den Angaben vom Aufbau vom 2026-09-27:
 Stapelhöhe, Wandler 12 V / 5 A, Wago-Bestand, 110 mm Überstand der 2040
-hinten, Ketten 15 × 27 mm außen, Laseranschluss); die Halter für
-Endschalter und Ketten folgen
-([offen](#was-noch-fehlt)). Pinbelegung, Treiber und Jumper stehen in
+hinten, Ketten 15 × 27 mm außen, Laseranschluss); die Endschalter sind
+gebaut ([endschalter.md](endschalter.md)), die Halter der Ketten folgen
+([offen](#was-noch-fehlt)). **Die ganze Verdrahtung** — Kabelliste,
+Anschlussliste, Klemmen, Schritt für Schritt und Inbetriebnahme — steht in
+[verkabelung.md](verkabelung.md). Pinbelegung, Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
 
 ![Platz für die Elektronik](elektronik-platz.svg)
@@ -108,8 +110,8 @@ Toolhead über den ganzen Weg dagegen: engste Stelle 22,7 mm (Montageplatte
 4. Shield aufstecken, Treiber (EN-Pin zum EN-Aufdruck), Jumper.
 5. Einbaubuchse (Mutter innen) und Schalter (rastet ein) hinten einsetzen.
 6. Wandler mit 2 Kabelbindern, Wago-Klemmen mit Klebeband; verdrahten nach
-   dem [Anschlussplan](#anschlussplan). Den Wandler **ohne Laser** auf
-   12,0 V stellen.
+   [verkabelung.md](verkabelung.md#schritt-für-schritt). Den Wandler
+   **ohne Laser** auf 12,0 V stellen.
 7. 4 Hammermuttern in die untere und obere Nut der Rückseite des hinteren
    2060, Gehäuse ansetzen, 4 × M5×12. Der Inbus kommt von hinten neben dem
    Kasten vorbei.
@@ -204,24 +206,10 @@ dann vom Schaltpunkt bis 3 mm vor das vordere 2060 (Z unten): 333 mm
 zwischen Schienenende und vorderem 2060 (227 hinter und 106 vor der Mitte),
 davon gehen Schaltabstand und Rückzug ab.
 
-GRBL — die Wege folgen aus den Schaltpunkten der Halter, gerechnet in
-`tools/endschalter_check.py` ([endschalter.md](endschalter.md#grbl)):
-
-| | |
-|---|---|
-| `$22=1` | Referenzfahrt an: erst Z nach oben, dann X und Y |
-| `$23=1` | X referenziert nach links (minus). Y nach hinten und Z nach oben sind die Plus-Richtungen, wenn `$3` so gesetzt ist, dass Y+ das Portal nach hinten fährt |
-| `$27=1` | 1 mm vom Schalter zurück |
-| `$20=1` | Softlimits an |
-| `$130=385` | X: 391 mm Weg, minus 3 mm Schaltabstand, 1 mm Rückzug und 2 mm Reserve |
-| `$131=327` | Y: 333 mm zwischen Schienenende und vorderem 2060, minus 3 mm Schaltabstand, 1 mm Rückzug und 2 mm Reserve |
-| `$132≈84` | Z: vom Schaltpunkt (8 mm unter der oberen Grenze) bis ganz unten, 85,6 mm |
-
-Welche Richtung ausgelöst heißt, zeigt GRBL selbst: Mit `?` steht im Status
-`Pn:X` (bzw. Y, Z), solange ein Schalter als ausgelöst gilt. `$5` so setzen,
-dass `Pn` nur beim Unterbrechen erscheint. Wird D0 beim Unterbrechen HIGH
-(bei diesen Modulen üblich `[w]`), meldet ein Kabelbruch über den internen
-Pull-up „ausgelöst“ — die sichere Richtung.
+Die GRBL-Einstellungen mit diesen Wegen (`$130`–`$132`, gerechnet aus den
+Schaltpunkten) und den Test der Lichtschranken mit `?` und `$5` beschreibt
+[verkabelung.md](verkabelung.md#grbl-einstellungen); angeschlossen werden
+sie nach [verkabelung.md](verkabelung.md#4-5-v-und-lichtschranken-w6-w9w11).
 
 ## Kabel
 
@@ -259,18 +247,10 @@ angenommen sind der Biegeradius (R18 `[?]`) und die Anschlussglieder
 (zusammen 40 mm `[?]`); davon hängen die Längen ab — 1 m reicht für beide
 reichlich.
 
-Längen bis zum Gerät, Weg wie gezeichnet, 15 % Reserve, aufgerundet:
-
-| Kabel | Weg | kaufen |
-|---|---|---|
-| Y-Motor links | 0,70 m | 1 m |
-| Y-Motor rechts | 0,99 m | **1,5 m** |
-| X-Motor | 0,73 m | 1 m |
-| Z-Motor | 1,43 m | **2 m** |
-| Laser (12 V + PWM) | 1,43 m | **2 m** |
-| X-Endschalter | 0,72 m | 1 m |
-| Y-Endschalter | 0,49 m | 1 m |
-| Z-Endschalter | 1,34 m | **2 m** (bis Rev. 1: 1,5 m) |
+Die Längen bis zum Gerät (Weg wie gezeichnet, 15 % Reserve, aufgerundet)
+stehen mit Litze, Weg und Kette jeder Leitung in der Kabelliste von
+[verkabelung.md](verkabelung.md#leitungen); `tools/elektronik_zeichnen.py`
+gibt sie auch beim Zeichnen aus.
 
 In den Ketten nur **hochflexible Litzen** (Schleppkettenkabel), kein
 Massivdraht und keine starren Flachbandkabel. Die üblichen 1-m-Motorkabel
@@ -290,7 +270,7 @@ in `tools/elektronik_check.py` (Abschnitt 14), jeweils am längsten Weg:
 | 24 V: Buchse → Schalter → Not-Aus → Wago +24 V, Buchse − → Wago GND, Wago → Shield und Wandler | bis 3 A (Netzteil) | **0,75 mm² (AWG 18)**, rot und schwarz | belastbar 6 A (VDE 0298-4, flexible Leitung); 0,5 mm² hätte genau die 3 A. Not-Aus 1,5 m hin und zurück: 0,21 V bei 3 A |
 | Laser: +12 V, GND, PWM | 1,8 A | **3 × 0,34 mm² (AWG 22)** | dicker passt nicht in den XH-Kontakt am Laser; 2 m: 0,37 V = 3 % von 12 V |
 | Motoren | 1,05 A je Spule | **4 × AWG 24 (0,2 mm²)** | dicker passt nicht in den PH-Kontakt am Motor; Z-Motor, 2 m: 0,35 Ω = 15 % der Wicklung. Fertige Motorkabel mit AWG 26 gehen auch (24 %) |
-| Endschalter: 5 V, GND, Signal | ≈ 20 mA | **3 × 0,14 mm² (AWG 26)** oder dicker | dünner hält die Wago nicht |
+| Endschalter: 5 V, GND, Signal; Not-Aus-Meldung | ≈ 20 mA | **3 × 0,25 mm² (AWG 24)** | 0,14 mm² ist das Minimum der Wago (AWG 26 hat nur 0,13), die Schraubklemme des Not-Aus braucht eine Aderendhülse ab 0,25; in den Dupont-Kontakt passen bis 0,34 |
 | Lüfter | < 0,1 A | seine eigene Anschlusslitze | |
 
 * In Schraubklemmen (Shield, Wandler, Not-Aus) mit **Aderendhülse**, in die
@@ -311,35 +291,14 @@ in `tools/elektronik_check.py` (Abschnitt 14), jeweils am längsten Weg:
 Kein 230 V in der Maschine: Das Steckernetzteil liefert 24 V, am Rahmen muss
 nichts geerdet und keine Netzklemme abgedeckt werden.
 
-| von | an | Hinweis |
-|---|---|---|
-| Hohlstecker + | Einbaubuchse → Schalter → Not-Aus → Wago +24 V | 0,75 mm², das Netzteil liefert bis 3 A ([Litzen](#litzen)) |
-| Hohlstecker − | Wago GND | |
-| Wago +24 V / GND | Schraubklemme des Shields + / − | **Polung prüfen** — verpolt sind die Treiber hin |
-| Wago +24 V / GND | Abwärtswandler IN+ / IN− | |
-| Wago +24 V / GND | Lüfter (24-V-Typ; ein 12-V-Lüfter kommt an den Wandler) | |
-| Wandler OUT+ / OUT− | Laser 12 V / GND | **Wandler erst ohne Laser auf 12,0 V stellen**, dann anschließen |
-| Shield Z+ (D11), Signalstift | Laser PWM | im selben 3-adrigen Kabel, 2 m, durch beide Ketten |
-| Shield X, Y, Z, A | X-Motor, Y-Motor links, Z-Motor, Y-Motor rechts | am Y-Motor rechts **eine Spule getauscht** ([Zwei Y-Motoren](hardware-notizen.md#zwei-y-motoren)) |
-| Shield X+ (D9), Y+ (D10), SpnEn (D12) | D0 der Lichtschranken X, Y, Z | GND der Lichtschranke an den GND-Stift daneben |
-| Shield 5 V | Wago +5 V → VCC der drei Lichtschranken | |
-| Uno USB | PC | versorgt auch den Uno |
+Die Verdrahtung Leitung für Leitung (W1–W17), die Belegung von Wago-Klemmen
+und Shield, die Reihenfolge beim Anschließen und die Inbetriebnahme mit
+Tests stehen in [verkabelung.md](verkabelung.md). Plan und Tabellen
+entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
 
 * **Abwärtswandler:** vorhanden, **12 V / 5 A**, 43 × 24 × 20 mm `[v]`.
   Der Laser zieht höchstens 1,8 A, der Wandler ist damit zu 36 % belastet —
-  reichlich Luft. Den Ausgang vor dem Anschließen des Lasers messen
-  (12,0 V). Die gängigen Wandler haben ein gemeinsames Minus: Laser-GND und
-  Uno-GND sind damit verbunden, wie es die PWM braucht. Hat der Wandler
-  getrennte Massen (IN− und OUT− ohne Durchgang), OUT− zusätzlich an den
-  Wago GND.
-* **Laserstecker:** XH2.54, 3-polig, **von links PWM · GND · +12 V**
-  `[v]` Angabe. Vor dem ersten Einschalten mit dem Aufdruck neben der
-  Buchse vergleichen — vertauscht bekäme der PWM-Eingang 12 V.
-* **Wago** (vorhanden): **+24 V an der 221-415** (5 Plätze: vom Not-Aus,
-  Shield, Wandler, Lüfter, einer frei), **GND an einer 221-420** (10 Plätze:
-  Buchse −, Shield, Wandler, Lüfter, frei für OUT− eines Wandlers mit
-  getrennten Massen), **+5 V an der zweiten 221-420** (5-V-Pin des Shields,
-  drei Lichtschranken). Die **221-413** bleibt Reserve.
+  reichlich Luft.
 * **Treiber:** GERUI TMC2209 V2.0 mit Kühlkörper (5 Stück: 4 + Ersatz),
   standalone, 1/16 über MS1 + MS2. Strom am Vref-Poti, Ziel **1,05 A eff.**
   = 70 % des Nennstroms 1,5 A. Vref hängt vom Messwiderstand ab: **1,37 V**
@@ -348,9 +307,6 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
   gibt bei jedem der drei höchstens 1,05 A. Rechnung und Vorgehen in
   [hardware-notizen.md](hardware-notizen.md#treiber-und-versorgung).
 * **Sicherung:** braucht es nicht, das Netzteil begrenzt den Strom selbst.
-* Pins und Jumper im Einzelnen:
-  [hardware-notizen.md](hardware-notizen.md#pins-grbl-11-gegen-den-aufdruck).
-  Nichts unter Spannung an- oder abstecken, vor allem keine Motoren.
 
 ## Einkaufsliste (Vorschlag)
 
@@ -359,23 +315,15 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
 | 1 | Abwärtswandler 24 → 12 V / 5 A, 43 × 24 × 20 mm | vorhanden |
 | 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Gehäuse: Loch 8,2) | 24-V-Eingang |
 | 1 | Wippschalter KCD1 (Ausschnitt 19,2 × 12,9 mm), ≥ 3 A | EIN/AUS |
-| 1 | Not-Aus-Pilzschalter mit Öffner, ≥ 3 A Gleichstrom | vorn |
 | 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
 | 2 | Energiekette 10 × 20 mm innen, 15 × 27 mm außen, 1 m | Y und X — gekauft |
-| 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, Stecker passend zum Motor (meist JST-PH 6-polig) auf Dupont 4-polig | Y-Motor rechts, Z-Motor |
-| 2 m + 1 | 3-adrige Schleppkettenlitze 3 × 0,34 mm² (AWG 22) + XH2.54-Stecker 3-polig mit Crimpkontakten | Laser |
-| 1,5 m | 2-adrige Leitung 2 × 0,75 mm² | Not-Aus |
-| je 1 m | Litze 0,75 mm², rot und schwarz | 24 V im Kasten |
-| 4 m | 3-adrige Leitung 3 × 0,14 mm² (AWG 26), hochflexibel | Endschalter X 1 m, Y 1 m, Z 2 m |
-| 1 | Aderendhülsen 0,75 und 0,34 mm² | Schraubklemmen |
 | 1 + 2 | Wago 221-415 (+24 V), 221-420 (GND, +5 V); 221-413 Reserve | vorhanden |
+| — | Not-Aus, Kabel, Litzen, Stecker, Aderendhülsen, Pull-down | [verkabelung.md](verkabelung.md#material-und-werkzeug) |
 | 4 + 4 | M5×12 + Hammermutter M5 (Nut 6) | Gehäuse → Rückseite des 2060 |
 | 4 + 4 | M3×8 + Messing-Einsatz M3 Ø5 | Deckel |
 | 4 | M3×8 | Uno → Stehbolzen |
 | 4 + 4 | M3×16 + M3-Mutter | Lüfter → Deckel |
 | 2 | Kabelbinder, doppelseitiges Klebeband | Wandler, Wago |
-
-Die übrigen Motoren reichen mit 1 m ([Kabel](#kabel)).
 
 ## Was noch fehlt
 
@@ -396,6 +344,9 @@ Die übrigen Motoren reichen mit 1 m ([Kabel](#kabel)).
    der Seitenfläche der 2040 **vor** dem 2060, also in den 35 mm bis zur
    Stirnseite? Dort belegt der [Y-Motorhalter](y-motorhalter.md) die untere
    Nut.
+5. **Verkabelung:** Not-Aus mit Schließer und sein Platz vorn, dazu drei
+   Dinge, die sich beim Anschließen zeigen
+   ([verkabelung.md](verkabelung.md#noch-offen)).
 
 Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit
 Hohlstecker 5,5 × 2,1; der Laser ein LASER TREE 4 W mit 12 V / 1,6 A;

@@ -76,7 +76,10 @@ BELASTBAR = {0.5: 3.0, 0.75: 6.0, 1.0: 10.0}    # mm2: A
 LITZE_24V = 0.75     # mm2 (AWG 18): Eingang, Schalter, Not-Aus, Wago, Shield
 LITZE_LASER = 0.34   # mm2 (AWG 22): mehr nimmt der XH-Kontakt am Laser nicht
 LITZE_MOTOR = 0.2    # mm2 (AWG 24): mehr nimmt der PH-Kontakt am Motor nicht
-LITZE_SIGNAL = 0.14  # mm2 (AWG 26): Endschalter; weniger haelt die Wago nicht
+# Signale (Lichtschranken, Not-Aus-Meldung) 0,25: 0,14 ist das Minimum der
+# Wago (AWG 26 hat nur 0,13), und am Not-Aus braucht die Schraubklemme eine
+# Aderendhuelse ab 0,25; in den Dupont-Kontakt passen bis 0,34
+LITZE_SIGNAL = 0.25  # mm2 (AWG 24)
 XH_MAX, PH_MAX, WAGO_MIN = 0.34, 0.22, 0.14     # mm2
 
 KABEL = '#6d3fb5'

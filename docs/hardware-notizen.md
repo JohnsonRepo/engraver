@@ -113,7 +113,8 @@ Y-Riemen, über den ganzen Z-Weg. Details in
 | Gehäuse (angenommen) | 35 × 35 mm Querschnitt | `[w]` |
 
 Das Netzteil liefert 24 V, der Laser braucht 12 V: dazwischen sitzt ein
-Abwärtswandler — siehe [elektronik.md](elektronik.md#anschlussplan).
+Abwärtswandler — siehe [elektronik.md](elektronik.md#anschlussplan), die
+Verdrahtung in [verkabelung.md](verkabelung.md).
 
 Messhistorie an diesem Modul: **39 × 15** (erste Angabe) → **40 × 16**
 (`hardware.md`, eigene Messung) → **40,5 × 16,5** — mit `Bohrlehre_Laser`
@@ -454,6 +455,7 @@ gewandert:
 | **Z+ / Z−** | D11 | **Laser-PWM** — kein Endschalter! |
 | **SpnEn** | D12 | **Endschalter Z** (Gabellichtschranke) |
 | SpnDir | D13 | Spindelrichtung, für den Laser frei |
+| Abort | A0 | Schließer des Not-Aus: GRBL bricht ab ([verkabelung.md](verkabelung.md#7-not-aus-meldung-w16-empfohlen)) |
 
 * Laser: PWM (5 V TTL) an den PWM-Eingang des Lasertreibers, Masse gemeinsam
   mit dem Shield. `$32=1` (Lasermodus), `$30=1000` passend zum S-Maximum der
@@ -461,6 +463,9 @@ gewandert:
 * Endschalter: die Gabellichtschranke (LM393, 5 V) geht direkt. Die
   induktiven LJ12A3 (6–36 V) nicht direkt an die 5-V-Eingänge —
   Optokoppler davor.
+* Belegung im Einzelnen (X an X−, Y an Y+, Z an SpnEn, 5 V und GND der
+  Lichtschranken über die Wagos, Pull-down 10 kΩ auf Z−):
+  [verkabelung.md](verkabelung.md#klemmen-wago-und-shield).
 
 ### Treiber und Versorgung
 

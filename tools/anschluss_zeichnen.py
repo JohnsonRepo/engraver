@@ -4,9 +4,10 @@
 Steckernetzteil 24 V, Schalter und Not-Aus, Verteilung ueber Wago-Klemmen,
 Abwaertswandler 24 -> 12 V fuer den Laser, CNC Shield V3 auf dem Uno mit
 Pins nach GRBL 1.1 (docs/hardware-notizen.md), Motoren, Laser und die drei
-Gabellichtschranken. Die Leistungsbilanz kommt aus
-tools/elektronik_zeichnen.py, damit beide Zeichnungen dieselben Zahlen
-zeigen.
+Gabellichtschranken. Jede Leitung traegt ihre Nummer aus der Kabelliste
+(tools/verkabelung.py); die Liste steht unten in der Zeichnung. Die
+Leistungsbilanz kommt aus tools/elektronik_zeichnen.py, damit alle
+Zeichnungen dieselben Zahlen zeigen.
 
     python3 tools/anschluss_zeichnen.py   ->  docs/elektronik-anschluss.svg
 """
@@ -18,6 +19,7 @@ import xml.dom.minidom
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from antrieb_zeichnen import el, f1, text, TEXT, GRAU, BLAU   # noqa: E402
 import elektronik_zeichnen as ez                              # noqa: E402
+import verkabelung as vk                                      # noqa: E402
 
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-anschluss.svg')
@@ -25,13 +27,14 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
 P24 = '#c62828'        # +24 V
 P12 = '#e67700'        # +12 V
 MASSE = '#1f2328'      # GND
-SIGNAL = '#1864ab'     # PWM, Endschalter
+SIGNAL = '#1864ab'     # PWM, Endschalter, Abort
 P5 = '#8e44ad'         # 5 V
 MOTOR = '#2b8a3e'      # Motorspulen
+USB = '#868e96'
 
 
 def block(x, y, b, h, zeilen, fill='#f4f6f9', stroke='#8c939e', fett=0,
-          strich=None):
+          strich=None, tx=7):
     """Kasten mit Textzeilen; die ersten `fett` Zeilen fett."""
     t = [el('rect', {'x': f1(x), 'y': f1(y), 'width': f1(b),
                      'height': f1(h), 'rx': '3', 'fill': fill,
@@ -39,7 +42,7 @@ def block(x, y, b, h, zeilen, fill='#f4f6f9', stroke='#8c939e', fett=0,
                      'stroke-dasharray': strich})]
     y0 = y + 15
     for i, z in enumerate(zeilen):
-        t.append(text(x + 7, y0 + 13 * i, z, 9.0 if i < fett else 8.3,
+        t.append(text(x + tx, y0 + 13 * i, z, 9.0 if i < fett else 8.3,
                       TEXT if i < fett else GRAU, fett=i < fett))
     return t
 
@@ -51,21 +54,50 @@ def draht(punkte, farbe, breite=1.8, strich=None):
         'stroke-linejoin': 'round', 'stroke-dasharray': strich})
 
 
-def pin(x, y, s, anker='start', farbe=TEXT):
-    return [el('circle', {'cx': f1(x), 'cy': f1(y), 'r': '2.4',
-                          'fill': '#ffffff', 'stroke': TEXT,
-                          'stroke-width': '1'}),
-            text(x + (5 if anker == 'start' else -5), y + 3, s, 8.0, farbe,
-                 anker, halo=True)]
+def pin(x, y, s='', anker='start', farbe=TEXT, gr=8.0):
+    t = [el('circle', {'cx': f1(x), 'cy': f1(y), 'r': '2.4',
+                       'fill': '#ffffff', 'stroke': TEXT,
+                       'stroke-width': '1'})]
+    if s:
+        t.append(text(x + (5 if anker == 'start' else -5), y + 3, s, gr,
+                      farbe, anker, halo=True))
+    return t
+
+
+def punkt(x, y, farbe):
+    """Verbindungspunkt: hier sind Leitungen verbunden (ohne Punkt kreuzen
+    sie nur)."""
+    return el('circle', {'cx': f1(x), 'cy': f1(y), 'r': '2.6',
+                         'fill': farbe})
+
+
+def marke(x, y, s):
+    """Nummer der Leitung aus der Kabelliste, auf die Linie gesetzt."""
+    b = 6.0 + 5.2 * len(s)
+    return [el('rect', {'x': f1(x - b / 2), 'y': f1(y - 6), 'width': f1(b),
+                        'height': '12', 'rx': '6', 'fill': '#ffffff',
+                        'stroke': '#495057', 'stroke-width': '0.9'}),
+            text(x, y + 3, s, 7.6, TEXT, 'middle', fett=True)]
+
+
+def masse_zeichen(x, y):
+    """Massezeichen, Spitze bei (x, y)."""
+    return [draht([(x, y - 6), (x, y)], MASSE, 1.4),
+            draht([(x - 6, y), (x + 6, y)], MASSE, 1.6),
+            draht([(x - 3.5, y + 3), (x + 3.5, y + 3)], MASSE, 1.4),
+            draht([(x - 1.5, y + 6), (x + 1.5, y + 6)], MASSE, 1.2)]
 
 
 def main():
     lb = ez.leistung()
-    t = [text(24, 30, 'Anschlussplan Elektronik — Steckernetzteil 24 V, '
-              'CNC Shield V3, Laser 12 V', 14, TEXT, fett=True),
+    Q = vk.laden()
+    t = [text(24, 30, 'Anschlussplan — Stromversorgung, Motoren, '
+              'Lichtschranken, Laser (Leitungen W1–W17)', 14, TEXT,
+              fett=True),
          text(24, 48, 'Blockschaltbild, nicht maßstäblich. Pins nach GRBL 1.1 '
-              '(hardware-notizen.md, Elektronik). Nichts unter Spannung '
-              'an- oder abstecken.', 9, GRAU)]
+              '(hardware-notizen.md). Nummern und Adern wie in '
+              'verkabelung.md. Nichts unter Spannung an- oder abstecken.',
+              9, GRAU)]
     # Legende der Farben
     for i, (farbe, s) in enumerate(((P24, '+24 V'), (P12, '+12 V'),
                                     (MASSE, 'Masse (GND)'), (P5, '+5 V'),
@@ -74,59 +106,79 @@ def main():
         x = 24 + i * 118
         t += [draht([(x, 66), (x + 22, 66)], farbe, 2.4),
               text(x + 28, 69, s, 8.5)]
+    t += marke(24 + 6 * 118 + 11, 66, 'W7')
+    t.append(text(24 + 6 * 118 + 28, 69, 'Leitung (Liste unten)', 8.5))
+    t += [punkt(24 + 7 * 118 + 60, 66, TEXT),
+          text(24 + 7 * 118 + 68, 69, 'verbunden', 8.5)]
 
     # Elektronikfach
-    t.append(el('rect', {'x': '226', 'y': '92', 'width': '560',
-                         'height': '668', 'rx': '6', 'fill': '#fdf6ee',
+    t.append(el('rect', {'x': '226', 'y': '92', 'width': '580',
+                         'height': '724', 'rx': '6', 'fill': '#fdf6ee',
                          'stroke': '#c2621b', 'stroke-width': '1.2',
                          'stroke-dasharray': '6 4'}))
-    t.append(text(236, 108, 'im Elektronikfach (hinter dem hinteren 2060)',
+    t.append(text(236, 86, 'im Elektronikfach (hinter dem hinteren 2060)',
                   9, '#c2621b', fett=True))
+    t.append(text(846, 86, 'an der Maschine', 9, BLAU, fett=True))
 
     # ---- Einspeisung: Netzteil, Buchse, Schalter, Not-Aus ------------------
-    t += block(24, 120, 180, 58, ['Steckernetzteil 24 V / 3 A',
+    t += block(24, 118, 180, 58, ['Steckernetzteil 24 V / 3 A',
                                   '72 W, 230 V bleibt außerhalb',
-                                  'Hohlstecker'], fett=1)
-    t += block(290, 124, 120, 44, ['Einbaubuchse', 'für den Hohlstecker'],
+                                  'Hohlstecker 5,5 × 2,1'], fett=1)
+    t += block(290, 118, 120, 42, ['Einbaubuchse', 'Mitte +, Hülse −'],
                fett=1)
-    t += block(290, 196, 120, 44, ['Schalter EIN/AUS', '≥ 3 A Gleichstrom'],
+    t += block(290, 186, 120, 40, ['Schalter EIN/AUS', 'KCD1, ≥ 3 A'],
                fett=1)
-    t += block(24, 258, 180, 58, ['Not-Aus, vorn', 'Pilzschalter, Öffner',
-                                  '≥ 3 A Gleichstrom'], fett=1,
+    t += block(24, 232, 180, 104, ['Not-Aus, vorn rechts',
+                                   'Pilzschalter, ≥ 3 A Gleichstrom',
+                                   'Öffner 11–12: trennt die 24 V',
+                                   'Schließer 13–14: meldet an',
+                                   'Abort (W16, empfohlen)'], fett=1,
                fill='#fff4f4', stroke=P24)
-    t += [draht([(204, 140), (290, 140)], P24),            # Netzteil +
-          draht([(204, 156), (290, 156)], MASSE)]          # Netzteil −
-    t += [draht([(350, 168), (350, 196)], P24),        # Buchse + -> Schalter
-          draht([(290, 218), (232, 218), (232, 272), (204, 272)], P24),
-          draht([(204, 300), (350, 300), (350, 336)], P24)]  # -> Wago +24
-    # Buchse − -> Wago GND, rechts an Schalter und Wago +24 vorbei
-    t.append(draht([(410, 156), (424, 156), (424, 400), (410, 400)], MASSE))
+    for y, s in ((250, '11'), (268, '12'), (300, '14'), (318, '13')):
+        t += pin(204, y)
+        t.append(text(198, y + 3, s, 7.5, GRAU, 'end'))
+    t += [draht([(204, 132), (290, 132)], P24),              # Netzteil +
+          draht([(204, 150), (290, 150)], MASSE),            # Netzteil −
+          text(258, 145, 'Hohlstecker', 7.2, GRAU, 'middle')]
+    # W1: Buchse + -> Schalter, Buchse − -> Wago GND (rechts herum)
+    t += [draht([(350, 160), (350, 186)], P24),
+          draht([(410, 150), (424, 150), (424, 410), (410, 410)], MASSE)]
+    t += marke(366, 173, 'W1') + marke(424, 300, 'W1')
+    # W2: Schalter -> Öffner 11, Öffner 12 -> Wago +24 V
+    t += [draht([(290, 206), (238, 206), (238, 250), (204, 250)], P24),
+          draht([(204, 268), (230, 268), (230, 358), (290, 358)], P24)]
+    t += marke(262, 206, 'W2') + marke(262, 358, 'W2')
 
     # ---- Verteilung: Wago-Klemmen, Wandler, Lüfter -------------------------
-    t += block(290, 336, 120, 40, ['Wago +24 V', '221-415, 5 Plätze'],
+    t += block(290, 350, 120, 36, ['Wago +24 V', '221-415, 5 Plätze'],
                fett=1, fill='#fff4f4', stroke=P24)
-    t += block(290, 390, 120, 40, ['Wago GND', '221-420, 10 Plätze'],
+    t += block(290, 404, 120, 36, ['Wago GND', '221-420, 10 Plätze'],
                fett=1, fill='#f1f3f5', stroke=MASSE)
-    t += block(290, 466, 120, 58, [
+    t += block(290, 470, 120, 58, [
         'Abwärtswandler', '24 → 12 V, {} A'.format(ez.de(ez.WANDLER_A, 0)),
-        'Ausgang 12,0 V messen'], fett=1, fill='#fff7ec', stroke=P12)
-    t += block(290, 556, 120, 58, ['Lüfter 40 mm', 'über den Treibern',
-                                   '12-V-Typ: am Wandler'], fett=1)
-    t += block(290, 660, 120, 58, ['Wago +5 V', '221-420, 10 Plätze',
-                                   'für die Lichtschranken'],
+        'ohne Laser auf 12,0 V'], fett=1, fill='#fff7ec', stroke=P12)
+    t += block(290, 552, 120, 40, ['Lüfter 40 mm, 24 V',
+                                   'bläst auf die Treiber'], fett=1)
+    t += block(290, 690, 120, 36, ['Wago +5 V', '221-420, 10 Plätze'],
                fett=1, fill='#f8f0fc', stroke=P5)
-    # +24 V und GND links hinunter zu Wandler und Lüfter
-    t += [draht([(290, 350), (262, 350), (262, 480), (290, 480)], P24),
-          draht([(262, 480), (262, 568), (290, 568)], P24),
-          draht([(290, 414), (250, 414), (250, 496), (290, 496)], MASSE),
-          draht([(250, 496), (250, 586), (290, 586)], MASSE)]
+    # W4 (Wandler) innen, W5 (Lüfter) außen; die Masse der Lichtschranken
+    # und des Not-Aus-Schließers ganz außen
+    t += [draht([(290, 374), (276, 374), (276, 486), (290, 486)], P24),
+          draht([(290, 426), (266, 426), (266, 500), (290, 500)], MASSE),
+          draht([(290, 366), (256, 366), (256, 566), (290, 566)], P24),
+          draht([(290, 418), (246, 418), (246, 580), (290, 580)], MASSE)]
+    t += marke(271, 456, 'W4') + marke(251, 540, 'W5')
 
     # ---- CNC Shield V3 auf dem Uno -----------------------------------------
-    sx, sy, sb, sh = 470, 124, 300, 400
-    t += block(sx, sy, sb, sh, [
+    sx, sy, sb, sh = 470, 118, 316, 482
+    t.append(el('rect', {'x': f1(sx), 'y': f1(sy), 'width': f1(sb),
+                         'height': f1(sh), 'rx': '3', 'fill': '#eef4fb',
+                         'stroke': BLAU, 'stroke-width': '1'}))
+    zeilen = [
         'CNC Shield V3 auf Arduino Uno R3',
         '4 × TMC2209, Jumper MS1 + MS2 = 1/16, MS3 frei',
         'A klont Y: A.STEP ↔ Y.STEP, A.DIR ↔ Y.DIR',
+        'Jumper D12/D13 für A nicht stecken (D12 = Z-Endschalter)',
         'Treiber: EN-Pin zum EN-Aufdruck',
         'Strom {} A eff. = {} % von {} A, Vref je nach R_sense:'.format(
             ez.de(ez.MOTOR_I, 2), ez.de(ez.MOTOR_ANTEIL * 100, 0),
@@ -134,78 +186,134 @@ def main():
         ' · '.join('{} V (R{:03.0f})'.format(ez.de(ez.vref(ez.MOTOR_I, r), 2),
                                             r * 1000)
                    for r in ez.R_SENSE),
-        'GRBL 1.1h: $32=1 (Laser), $30=1000'], fett=1, fill='#eef4fb',
-        stroke=BLAU)
-    # Schraubklemme links
-    t += pin(sx, 250, 'Klemme + (12–36 V)')
-    t += pin(sx, 272, 'Klemme −')
-    t += [draht([(410, 350), (438, 350), (438, 250), (sx, 250)], P24),
-          draht([(410, 404), (448, 404), (448, 272), (sx, 272)], MASSE)]
-    # Wandler: Eingang von den Wagos, Ausgang zum Laser (unter dem Shield)
-    # USB
-    t += pin(sx, 470, 'USB (Uno)')
-    # Motorausgänge rechts
-    motoren = (('X', 'X-Motor'), ('Y', 'Y-Motor links'), ('Z', 'Z-Motor'),
-               ('A', 'Y-Motor rechts'))
-    for i, (n, _) in enumerate(motoren):
-        t += pin(sx + sb, 250 + 30 * i, 'Motor ' + n, 'end')
-    t += pin(sx + sb, 380, 'Z+ (D11): Laser-PWM', 'end')
-    unten = ((520, 'X+ (D9)'), (590, 'Y+ (D10)'), (660, 'SpnEn (D12)'),
-             (730, '5V'))
+        'GRBL 1.1h: $32=1 (Laser), $30=1000, $5 nach dem Test']
+    for i, z in enumerate(zeilen):
+        t.append(text(sx + 12, 392 + 13 * i, z, 9.0 if i == 0 else 8.3,
+                      TEXT if i == 0 else GRAU, fett=i == 0))
+    # Schraubklemme links, W3 von den Wagos
+    t += pin(sx, 250, 'Klemme + (12–36 V)') + pin(sx, 272, 'Klemme −')
+    t += [draht([(410, 362), (438, 362), (438, 250), (sx, 250)], P24),
+          draht([(410, 420), (450, 420), (450, 272), (sx, 272)], MASSE)]
+    t += marke(444, 318, 'W3')
+    # USB links unten
+    t += pin(sx, 578, 'USB (Uno)')
+    # Laser-PWM und Pull-down rechts oben, Motoren rechts
+    t += pin(sx + sb, 170, 'Z+ (D11): Laser-PWM', 'end')
+    t += pin(sx + sb, 196, 'Z− (D11): Pull-down', 'end')
+    motoren = (('X', 'X-Motor', 'W12'), ('Y', 'Y-Motor links', 'W13'),
+               ('Z', 'Z-Motor', 'W15'),
+               ('A', 'Y-Motor rechts — eine Spule getauscht', 'W14'))
+    for i, (n, _, _) in enumerate(motoren):
+        t += pin(sx + sb, 250 + 30 * i, 'Motor ' + n + ' (2B 2A 1A 1B)',
+                 'end')
+    unten = ((520, 'X− (D9)'), (580, 'Y+ (D10)'), (640, 'SpnEn (D12)'),
+             (700, 'Abort (A0)'), (760, '5V'))
     for x, s in unten:
-        t.append(el('circle', {'cx': f1(x), 'cy': f1(sy + sh), 'r': '2.4',
-                               'fill': '#ffffff', 'stroke': TEXT,
-                               'stroke-width': '1'}))
-        t.append(text(x, sy + sh - 7, s, 8.0, TEXT, 'middle', halo=True))
+        t += pin(x, sy + sh)
+        t.append(text(x, sy + sh - 8, s, 8.0, TEXT, 'middle', halo=True))
 
     # ---- Geräte an der Maschine --------------------------------------------
-    gx, gb = 846, 250
-    t.append(text(gx, 108, 'an der Maschine', 9, BLAU, fett=True))
-    for i, (n, s) in enumerate(motoren):
+    gx, gb = 846, 284
+    # Laser oben rechts: W7 von Wandler (über den Kasten) und Shield
+    t += block(gx, 118, gb, 64, ['Laser LASER TREE 4 W', '450 nm, 12 V, '
+                                 '1,6 A (1,4–1,8 A)', 'XH2.54, von links:',
+                                 'PWM · GND · +12 V'], fett=1,
+               fill='#eef6ff', stroke=SIGNAL, tx=66)
+    for y, s in ((134, '+12 V'), (152, 'GND'), (170, 'PWM')):
+        t += pin(gx, y, s)
+    t += [draht([(410, 486), (456, 486), (456, 98), (822, 98), (822, 134),
+                 (gx, 134)], P12),
+          draht([(410, 500), (464, 500), (464, 104), (812, 104), (812, 152),
+                 (gx, 152)], MASSE),
+          draht([(sx + sb, 170), (gx, 170)], SIGNAL)]
+    t += marke(640, 101, 'W7') + marke(826, 170, 'W7')
+    # W8: Pull-down 10 kΩ auf Z− (Signal- und GND-Stift)
+    t += [draht([(sx + sb, 196), (796, 196), (796, 200)], SIGNAL, 1.4),
+          el('rect', {'x': '792', 'y': '200', 'width': '8', 'height': '20',
+                      'fill': '#ffffff', 'stroke': TEXT,
+                      'stroke-width': '1.1'}),
+          draht([(796, 220), (796, 226)], MASSE, 1.4)]
+    t += masse_zeichen(796, 232)
+    t.append(text(781, 216, '10 kΩ', 7.5, GRAU, 'end'))
+    t += marke(796, 184, 'W8')
+    # Motoren
+    for i, (n, s, nr) in enumerate(motoren):
         y = 236 + 30 * i
-        zusatz = ' — eine Spule getauscht' if n == 'A' else ''
-        t += block(gx, y, gb, 26, [s + zusatz], fett=1)
+        t += block(gx, y, gb, 26, [s], fett=1)
         t.append(draht([(sx + sb, 250 + 30 * i), (gx, 250 + 30 * i)], MOTOR,
                        2.2))
-    t.append(text(gx, 364, '4 Adern je Motor, durch die Ketten: X, Z',
+        t += marke(818, 250 + 30 * i, nr)
+    t.append(text(gx, 372, 'je Spule ein Adernpaar: 2B·2A und 1A·1B',
                   7.8, GRAU))
-    t += block(gx, 396, gb, 72, ['Laser LASER TREE 4 W (450 nm)',
-                                 '12 V, 1,6 A (1,4–1,8 A)',
-                                 'Buchse XH2.54, 3-polig, von links:',
-                                 'PWM (5 V) · GND · +12 V'],
-               fett=1, fill='#eef6ff', stroke=SIGNAL)
-    t += [draht([(sx + sb, 380), (812, 380), (812, 440), (gx, 440)], SIGNAL),
-          draht([(410, 480), (430, 480), (430, 548), (800, 548), (800, 412),
-                 (gx, 412)], P12),
-          draht([(410, 510), (440, 510), (440, 560), (824, 560), (824, 426),
-                 (gx, 426)], MASSE)]
-    t.append(text(gx, 484, '12 V und GND vom Wandler, PWM vom Shield:',
-                  7.8, GRAU))
-    t.append(text(gx, 495, 'ein 3-adriges Kabel, 2 m, durch beide Ketten',
-                  7.8, GRAU))
-    # Endschalter
-    es = (('X-Endschalter', 520), ('Y-Endschalter', 590),
-          ('Z-Endschalter', 660))
-    for i, (s, x) in enumerate(es):
-        y = 600 + 44 * i
-        t += block(gx, y, gb, 34, [s + ' (LM393)',
-                                   'VCC 5 V · GND · D0'], fett=1)
-        t.append(draht([(x, sy + sh), (x, y + 17), (gx, y + 17)], SIGNAL))
-    t.append(draht([(730, sy + sh), (730, 682), (410, 682)], P5))
-    t.append(draht([(410, 690), (836, 690), (836, 612), (gx, 612)], P5,
-                   1.4, '4 3'))
-    t += [draht([(836, 656), (gx, 656)], P5, 1.4, '4 3'),
-          draht([(836, 690), (836, 700), (gx, 700)], P5, 1.4, '4 3')]
-    t.append(text(gx, 752, 'GND der Lichtschranken an den GND-Stift',
-                  7.8, GRAU))
-    t.append(text(gx, 763, 'neben dem jeweiligen Eingang', 7.8, GRAU))
-    # PC
-    t += block(24, 470, 180, 40, ['PC', 'LightBurn o. ä., USB'], fett=1)
-    t.append(draht([(sx, 470), (456, 470), (456, 454), (204, 454),
-                    (204, 470)], SIGNAL, 1.4, '5 3'))
+    t.append(text(gx, 384, 'Y-Kette: W7, W9, W11, W12, W15 · X-Kette: '
+                  'W7, W11, W15', 7.8, GRAU))
+
+    # Lichtschranken: +5 V und GND als Sammelschiene, D0 einzeln vom Shield
+    ls = (('X', 624, 520, 'W9', 'vor dem linken Rohrende'),
+          ('Y', 676, 580, 'W10', 'außen am rechten 2040, hinten'),
+          ('Z', 728, 640, 'W11', 'am Toolhead'))
+    for a, y0, xs, nr, wo in ls:
+        t += block(gx, y0, gb, 44, ['Lichtschranke {} (LM393)'.format(a), wo],
+                   fett=1, tx=50)
+        for dy, s in ((10, 'VCC'), (22, 'GND'), (34, 'D0')):
+            t += pin(gx, y0 + dy, s, gr=7.4)
+        t += [draht([(xs, sy + sh), (xs, y0 + 34), (gx, y0 + 34)], SIGNAL),
+              draht([(822, y0 + 10), (gx, y0 + 10)], P5, 1.4),
+              draht([(834, y0 + 22), (gx, y0 + 22)], MASSE, 1.4),
+              punkt(822, y0 + 10, P5), punkt(834, y0 + 22, MASSE)]
+        t += marke(796, y0 + 34, nr)
+    # W6: 5V-Stift -> Wago +5 V; Sammelschiene +5 V -> VCC
+    t += [draht([(760, sy + sh), (760, 698), (410, 698)], P5),
+          draht([(410, 718), (822, 718)], P5, 1.6),
+          draht([(822, 634), (822, 738)], P5, 1.6), punkt(822, 718, P5)]
+    t += marke(700 - 40, 698, 'W6')
+    # Masse: Wago GND -> Sammelschiene -> GND der Lichtschranken und
+    # Schließer 14 des Not-Aus
+    t += [draht([(290, 410), (240, 410)], MASSE, 1.6),
+          draht([(204, 300), (240, 300), (240, 792), (834, 792), (834, 646)],
+                MASSE, 1.6),
+          punkt(240, 410, MASSE), punkt(834, 750, MASSE),
+          punkt(834, 698, MASSE)]
+    t += marke(222, 300, 'W16') + marke(540, 792, 'W9–11')
+    # W16: Schließer 13 -> Abort (gestrichelt: empfohlen)
+    t.append(draht([(204, 318), (216, 318), (216, 806), (700, 806),
+                    (700, sy + sh)], SIGNAL, 1.6, '5 3'))
+    t += marke(216, 560, 'W16')
+    # PC über USB
+    t += block(24, 600, 180, 40, ['PC', 'LightBurn o. ä., USB'], fett=1)
+    t.append(draht([(204, 620), (460, 620), (460, 578), (sx, 578)], USB,
+                   1.6, '5 3'))
+    t += marke(330, 620, 'W17')
+
+    # ---- Kabelliste -------------------------------------------------------
+    ty = 846
+    t.append(text(24, ty, 'Kabelliste', 10.5, BLAU, fett=True))
+    lts = vk.leitungen()
+    halb = (len(lts) + 1) // 2
+    spalten = (0, 36, 176, 360, 452)
+    for i, lt in enumerate(lts):
+        x0 = 24 + (i // halb) * 580
+        y = ty + 18 + 14 * (i % halb)
+        weg, kauf = vk.laenge_m(lt, Q['K'])
+        if weg is not None:
+            laenge = '{} → {} m'.format(ez.de(weg, 2), ez.de(kauf, 1))
+            if lt.get('mitgeliefert') and kauf <= lt['mitgeliefert']:
+                laenge = '{} m, mitgeliefert'.format(ez.de(weg, 2))
+        elif lt.get('laenge'):
+            laenge = '≈ {} m'.format(ez.de(lt['laenge'], 2))
+        else:
+            laenge = '—'
+        kette = 'Kette ' + lt['kette'] if lt.get('kette') else ''
+        for x, s, fett in ((spalten[0], lt['nr'], True),
+                           (spalten[1], lt['name'], False),
+                           (spalten[2], vk._litze(lt), False),
+                           (spalten[3], laenge, False),
+                           (spalten[4], kette, False)):
+            t.append(text(x0 + x, y, s, 8.2, TEXT if fett else GRAU,
+                          fett=fett))
 
     # ---- Zahlen ------------------------------------------------------------
-    ty = 796
+    ty = ty + 18 + 14 * halb + 12
     zeilen = [
         ('Leistung', 'Motoren ≈ {} W, Lüfter ≈ {} W, Laser über den Wandler '
          '≈ {} W — zusammen ≈ {} W von {} W (dauernd {} W)'.format(
@@ -219,13 +327,16 @@ def main():
              ez.de(ez.WANDLER_ETA * 100, 0), ez.de(lb['laser'], 0),
              ez.de(ez.WANDLER_A, 0),
              ez.de(100.0 * ez.LASER_A / ez.WANDLER_A, 0))),
-        ('Masse', 'Netzteil, Shield, Wandler und Laser haben ein gemeinsames '
-         'GND; ein isolierter Wandler braucht dafür eine Brücke OUT− → GND'),
+        ('Masse', 'Netzteil, Shield, Wandler, Laser und Lichtschranken haben '
+         'ein gemeinsames GND, Stern an der Wago GND; ein isolierter Wandler '
+         'braucht dafür eine Brücke OUT− → GND'),
+        ('Einschalten', 'erst USB (GRBL läuft, der Pull-down W8 hält den '
+         'Laser aus), dann 24 V; ausschalten umgekehrt'),
     ]
     for i, (k, v) in enumerate(zeilen):
         t.append(text(24, ty + 15 * i, k, 8.5, GRAU))
-        t.append(text(96, ty + 15 * i, v, 8.5, TEXT))
-    W, H = 1120, ty + 15 * len(zeilen) + 14
+        t.append(text(100, ty + 15 * i, v, 8.5, TEXT))
+    W, H = 1180, ty + 15 * len(zeilen) + 14
     svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="{0}" height="{1}" '
            'viewBox="0 0 {0} {1}" font-family="Inter, Helvetica, Arial, '
            'sans-serif"><rect width="{0}" height="{1}" fill="#ffffff"/>'

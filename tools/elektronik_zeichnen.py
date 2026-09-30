@@ -34,6 +34,10 @@ ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                           'fusion', 'Elektronik', 'Elektronik.py')
 ENDSCHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                            'fusion', 'Endschalter', 'Endschalter.py')
+YMOTORHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                            'fusion', 'YMotorhalter', 'YMotorhalter.py')
+NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                      'fusion', 'NotAus', 'NotAus.py')
 
 # ---- Ketten ----------------------------------------------------------------
 # Gekauft: 10 x 20 mm innen, 15 x 27 mm aussen, je 1 m [v] (Angabe
@@ -76,9 +80,8 @@ BELASTBAR = {0.5: 3.0, 0.75: 6.0, 1.0: 10.0}    # mm2: A
 LITZE_24V = 0.75     # mm2 (AWG 18): Eingang, Schalter, Not-Aus, Wago, Shield
 LITZE_LASER = 0.34   # mm2 (AWG 22): mehr nimmt der XH-Kontakt am Laser nicht
 LITZE_MOTOR = 0.2    # mm2 (AWG 24): mehr nimmt der PH-Kontakt am Motor nicht
-# Signale (Lichtschranken, Not-Aus-Meldung) 0,25: 0,14 ist das Minimum der
-# Wago (AWG 26 hat nur 0,13), und am Not-Aus braucht die Schraubklemme eine
-# Aderendhuelse ab 0,25; in den Dupont-Kontakt passen bis 0,34
+# Signale (Lichtschranken, 24-V-Waechter) 0,25: 0,14 ist das Minimum der
+# Wago (AWG 26 hat nur 0,13); in den Dupont-Kontakt passen bis 0,34
 LITZE_SIGNAL = 0.25  # mm2 (AWG 24)
 XH_MAX, PH_MAX, WAGO_MIN = 0.34, 0.22, 0.14     # mm2
 
@@ -181,6 +184,20 @@ def konzept(w, L, tw, TL, ew, EL):
     xm = K['kx_fest']
     K['es_z'] = (xm - 27.0, 32.0)
     K['xm'] = xm
+    # Y-Motoren am eigenen Halter (YMotorhalter.py): mittig zur 2040, die
+    # Achse in der Mitte des Spannwegs. Der Halter aus Portal.py (15,5 mm
+    # innen) ist ueberholt.
+    YL = bauraum.modul_laden(YMOTORHALTER, 'ymotorhalter').lage()
+    ys, zs = L['rahmen_y'][1], L['rahmen_z0']
+    K['ym_y'] = ys + YL['motor_y_mitte']
+    K['ym_z'] = (zs + YL['motor_z0'], zs + YL['platte_z0'])
+    # Not-Aus-Gehaeuse vorn am vorderen 2060 (NotAus.py); das Kabel kommt
+    # von rechts in der oberen Nut vorn am 2060
+    NA = bauraum.modul_laden(NOTAUS, 'notaus').lage()
+    K['notaus'] = Quader('Not-Aus', NA['lasche_x'][0][0],
+                         NA['lasche_x'][1][1], *NA['geh_y'], *NA['geh_z'])
+    K['notaus_kabel'] = (NA['geh_x'][1], NA['kabel'][0], NA['kabel'][1])
+    K['notaus_nut_z'] = NA['nuten_z'][0]
     K['kabel'] = kabelwege(w, L, TL, K)
     return K
 
@@ -213,13 +230,13 @@ def spannungsfall(mm2, laenge_m, strom):
 def litzen(K):
     """Folgen der Querschnitte an den laengsten Wegen (Kauflaengen):
     Spannungsfall am Laser, Widerstand im Z-Motorkabel, Not-Aus bei vollem
-    Netzteilstrom — dessen Kabel laeuft wie das zum rechten Y-Motor nach
-    vorn und zurueck."""
+    Netzteilstrom — dessen Kabel laeuft zum Gehaeuse vorn am vorderen 2060
+    und zurueck."""
     kab = K['kabel']
     netz_a = NETZTEIL_W / 24.0
     m_laser = kauflaenge(kab['Laser (12 V + PWM)'][0])
     m_motor = kauflaenge(kab['Z-Motor'][0])
-    m_not = kauflaenge(kab['Y-Motor rechts'][0])
+    m_not = kauflaenge(kab['Not-Aus'][0])
     return {'netz_a': netz_a,
             'laser_m': m_laser,
             'laser_u': spannungsfall(LITZE_LASER, m_laser, LASER_A),
@@ -243,12 +260,14 @@ def kabelwege(w, L, TL, K):
     yc = EL['kabel_links_y']
     z_k = EL['kabel_z0'] + 8.0
     raus = [(st.x[0], yc, z_k), (-xa, yc, z_k), (-xa, yc, zn)]
-    zm = (L['ym_motor_z0'] + L['ymp_z0']) / 2.0
+    zm = sum(K['ym_z']) / 2.0
     fl = w('motor_flansch') / 2.0
+    # vorn verlaesst das Kabel die untere Nut zwischen dem 2060 und den
+    # Schenkeln des Y-Motorhalters
+    y_vor = L['quer_y_vorn'][1] + 2.0
 
     def y_motor(s):
-        return [(s * xa, L['ym_y'] - fl, zn),
-                (s * (R - L['ym_u']), L['ym_y'], zm)]
+        return [(s * xa, y_vor, zn), (s * (R + fl + 3.0), K['ym_y'], zm)]
 
     # vorn aus dem Kabelausschnitt in den Kanal, darin nach rechts, dann an
     # der Rueckseite des 2060 (mittlere Nut) zum rechten 2040
@@ -277,7 +296,13 @@ def kabelwege(w, L, TL, K):
     laser = am_th + [(xm, 0.0, laser_oben), (xm, 41.0, laser_oben)]
     z_es = am_th + [(xm - 20.0, 16.0, 112.0)]
     ky, kx = K['ky_laenge'], K['kx_laenge']
+    na_x, na_y, na_z = K['notaus_kabel']
+    z_nut = K['notaus_nut_z']
+    notaus = rechts + [(xa, y_vor, zn), (xa, y_vor, z_nut),
+                       (na_x + 3.0, y_vor, z_nut), (na_x + 3.0, na_y, na_z),
+                       (na_x, na_y, na_z)]
     wege = {
+        'Not-Aus': (laenge(notaus), notaus),
         'Y-Motor links': (laenge(raus + y_motor(-1)), raus + y_motor(-1)),
         'Y-Motor rechts': (laenge(rechts + y_motor(1)), rechts + y_motor(1)),
         'Y-Endschalter': (laenge(rechts + [(xa, K['es_y'][1], zn)]),
@@ -363,12 +388,14 @@ def draufsicht(f, w, L, K):
         q = P[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0] - dh, q.y[1] - dh, 'druck',
                         fill='none', stroke_dasharray='4 3'))
-    # Y-Motoren vorn
+    # Y-Motoren vorn (YMotorhalter.py), Not-Aus-Gehaeuse (NotAus.py)
     fl = w('motor_flansch') / 2.0
     for s in (-1, 1):
-        x = s * (R - L['ym_u'])
-        t.append(f.rect(x - fl, x + fl, L['ym_y'] - fl, L['ym_y'] + fl,
+        x = s * R
+        t.append(f.rect(x - fl, x + fl, K['ym_y'] - fl, K['ym_y'] + fl,
                         'kauf'))
+    q = K['notaus']
+    t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], 'neu'))
     # Energieketten: Wanne und die Huelle der Kette in der Mitte
     t.append(f.rect(K['ky_x'][0] - 2, K['ky_x'][1] + 2, *K['ky_wanne'], 'neu',
                     stroke_dasharray='4 3', fill_opacity='0.6'))
@@ -396,7 +423,8 @@ def draufsicht(f, w, L, K):
         q = K[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
     # feste Kabelwege
-    for n in ('Y-Motor links', 'Y-Motor rechts', 'Y-Endschalter', 'X-Motor'):
+    for n in ('Y-Motor links', 'Y-Motor rechts', 'Y-Endschalter', 'X-Motor',
+              'Not-Aus'):
         weg = K['kabel'][n][1]
         t.append(linienzug(f, [(p[0], p[1]) for p in weg]))
     # Endschalter
@@ -421,8 +449,7 @@ def seitenansicht(f, w, L, TL, K):
     for y in (L['quer_y_vorn'], L['quer_y_hinten']):
         t.append(f.rect(y[0], y[1], *L['quer_z'], 'profil'))
     fl = w('motor_flansch') / 2.0
-    t.append(f.rect(L['ym_y'] - fl, L['ym_y'] + fl, L['ym_motor_z0'],
-                    L['ymp_z0'], 'kauf'))
+    t.append(f.rect(K['ym_y'] - fl, K['ym_y'] + fl, *K['ym_z'], 'kauf'))
     # Fach und die hoehere Zone in der Mitte
     t.append(fach_rect(f, fach.y[0], fach.y[1], fach.z[0], fach.z[1]))
     t.append(f.rect(fach.y[0], K['y_tr'], fach.z[1], K['z_frei'] - 0.0,
@@ -514,7 +541,7 @@ def main():
          'Arbeitsfläche: Strahl mit\nZ unten ({} × {} mm)'.format(
              de(L['xw_max'] - L['xw_min'], 0),
              de(K['d_vorn'] + K['d_hinten'], 0))),
-        (-R + L['ym_u'], L['ym_y'], 'Y-Motor links'),
+        (-R, K['ym_y'], 'Y-Motor links'),
         (sum(K['ky_x']) / 2, K['ky_fest'] - 30.0,
          'Energiekette Y außen\nam linken 2040'),
         (sum(K['ky_x']) / 2, K['ky_wanne'][0] + 6.0,
@@ -542,7 +569,9 @@ def main():
          'Energiekette X über dem\nRohr, hinter dem Riemen'),
         (xm + 20.0, 40.0, 'Toolhead (Mitte)'),
         (K['es_z'][0], K['es_z'][1], 'Z-Endschalter (vorhanden)'),
-        (R - L['ym_u'], L['ym_y'], 'Y-Motor rechts'),
+        (R, K['ym_y'], 'Y-Motor rechts'),
+        (sum(K['notaus'].x) / 2.0, K['notaus'].y[1],
+         'Not-Aus vorn am 2060'),
         (R + 10.0, 60.0, 'Kabel Y-Motor rechts\nin der unteren Nut außen')],
         fa.ox + fa.breite + 12, 'start', abstand=24.0)
 
@@ -623,7 +652,7 @@ def main():
     ]
     for n in ('Y-Motor links', 'Y-Motor rechts', 'X-Motor', 'Z-Motor',
               'Laser (12 V + PWM)', 'X-Endschalter', 'Y-Endschalter',
-              'Z-Endschalter'):
+              'Z-Endschalter', 'Not-Aus'):
         mm = kab[n][0]
         zeilen.append(('Kabel' if n == 'Y-Motor links' else '',
                        '{}: Weg ≈ {} m → {} m kaufen'.format(

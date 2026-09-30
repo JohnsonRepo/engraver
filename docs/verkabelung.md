@@ -42,8 +42,8 @@ Drei Spannungen, eine gemeinsame Masse:
 | **GND** | alles verbunden, Stern an der Wago GND | | |
 
 Signale: Die Lichtschranken X, Y und Z melden an D9, D10 und D12. Der Laser
-bekommt seine Leistung als PWM von D11. Der zweite Kontakt des Not-Aus
-meldet an A0 (Abort).
+bekommt seine Leistung als PWM von D11. Ein Spannungsteiler an den 24 V
+meldet an A0 (Abort), wenn sie fehlen.
 
 Kein 230 V in der Maschine: Das Steckernetzteil liefert 24 V, am Rahmen
 muss nichts geerdet werden. Eine Sicherung braucht es nicht, das Netzteil
@@ -55,7 +55,7 @@ begrenzt den Strom selbst.
 | Nr | Leitung | Litze | Weg | Länge | kaufen | Kette |
 |---|---|---|---|---|---|---|
 | W1 | **Eingang** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
-| W2 | **Not-Aus-Kreis** — beide Adern führen +24 V: an beiden Enden rot markieren | 2 × 0,75 mm² (AWG 18) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,99 m | **1,5 m** | — |
+| W2 | **Not-Aus-Kreis** — beide Adern führen +24 V: an beiden Enden rot markieren; NO bleibt frei | 2 × 0,75 mm² (AWG 18) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn, obere Nut vorn am 2060 zum Gehäuse | 1,01 m | **1,5 m** | — |
 | W3 | **Shield** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
 | W4 | **Wandler-Eingang** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
 | W5 | **Lüfter 24 V** — Litze dünner als 0,14 mm²: abisoliert doppelt legen | Litze des Lüfters | im Kasten, durch die Öffnung im Deckel | — | — | — |
@@ -66,10 +66,10 @@ begrenzt den Strom selbst.
 | W10 | **Lichtschranke Y** | 3 × 0,25 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach hinten | 0,49 m | **1 m** | — |
 | W11 | **Lichtschranke Z** | 3 × 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,34 m | **2 m** | Y + X |
 | W12 | **X-Motor** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, zum Motor über dem Rohrende | 0,73 m | mitgeliefert (1 m) | Y |
-| W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn | 0,7 m | mitgeliefert (1 m) | — |
-| W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,99 m | **1,5 m**, fertig | — |
+| W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn | 0,69 m | mitgeliefert (1 m) | — |
+| W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,98 m | **1,5 m**, fertig | — |
 | W15 | **Z-Motor** | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,43 m | **2 m**, fertig | Y + X |
-| W16 | **Not-Aus-Meldung** — empfohlen; braucht einen Not-Aus mit Schließer | 3 × 0,25 mm² (AWG 24) | wie W2 | 0,99 m | **1,5 m** | — |
+| W16 | **24-V-Wächter an Abort** — fehlen die 24 V (Not-Aus, Schalter, Netzteil), bricht GRBL ab | Widerstand | im Kasten | — | — | — |
 | W17 | **USB** | USB-Kabel A–B | hinten raus zum PC | — | vorhanden | — |
 <!-- /tabelle:leitungen -->
 
@@ -87,8 +87,8 @@ Anschließen mit dem Ohmmeter prüfen
 |---|---|---|---|---|
 | W1 | +24 V | rot | Einbaubuchse, Mittelstift (+) | Schalter, Kontakt 1 |
 |  | GND | schwarz | Einbaubuchse, Hülse (−) | Wago GND |
-| W2 | +24 V hin | Ader 1 | Schalter, Kontakt 2 | Not-Aus, Öffner 11 |
-|  | +24 V zurück | Ader 2 | Not-Aus, Öffner 12 | Wago +24 V |
+| W2 | +24 V hin | Ader 1 | Schalter, Kontakt 2 | Not-Aus, C |
+|  | +24 V zurück | Ader 2 | Not-Aus, NC | Wago +24 V |
 | W3 | +24 V | rot | Wago +24 V | Shield, Schraubklemme + |
 |  | GND | schwarz | Wago GND | Shield, Schraubklemme − |
 | W4 | +24 V | rot | Wago +24 V | Wandler IN+ |
@@ -117,8 +117,8 @@ Anschließen mit dem Ohmmeter prüfen
 |  | Spule B | rot · blau | Shield Motor A, 1A · 1B | Y-Motor rechts, Spule B: B+ · B− |
 | W15 | Spule A | schwarz · grün | Shield Motor Z, 2B · 2A | Z-Motor, Spule A: A+ · A− |
 |  | Spule B | rot · blau | Shield Motor Z, 1A · 1B | Z-Motor, Spule B: B+ · B− |
-| W16 | Abort | gelb | Shield Abort (A0) | Not-Aus, Schließer 13 |
-|  | GND | schwarz | Wago GND | Not-Aus, Schließer 14 |
+| W16 | R1 22 kΩ | — | Wago +24 V | Shield Abort (A0) |
+|  | R2 4,7 kΩ ∥ 100 nF | — | Shield Abort (A0) | Wago GND |
 | W17 | USB | — | Uno, USB-B | PC |
 <!-- /tabelle:anschluesse -->
 
@@ -127,8 +127,8 @@ Anschließen mit dem Ohmmeter prüfen
 <!-- tabelle:wago -->
 | Klemme | Typ | belegt | frei | angeschlossen |
 |---|---|---|---|---|
-| **Wago +24 V** | 221-415 | 4 von 5 | 1 | W2 Not-Aus, Öffner 12 · W3 Shield, Schraubklemme + · W4 Wandler IN+ · W5 Lüfter, rote Litze |
-| **Wago GND** | 221-420 | 8 von 10 | 2 (einer davon für OUT− eines isolierten Wandlers) | W1 Einbaubuchse, Hülse (−) · W3 Shield, Schraubklemme − · W4 Wandler IN− · W5 Lüfter, schwarze Litze · W9 Lichtschranke X, GND · W10 Lichtschranke Y, GND · W11 Lichtschranke Z, GND · W16 Not-Aus, Schließer 14 |
+| **Wago +24 V** | 221-415 | 5 von 5 | 0 | W2 Not-Aus, NC · W3 Shield, Schraubklemme + · W4 Wandler IN+ · W5 Lüfter, rote Litze · W16 Shield Abort (A0) |
+| **Wago GND** | 221-420 | 8 von 10 | 2 (einer davon für OUT− eines isolierten Wandlers) | W1 Einbaubuchse, Hülse (−) · W3 Shield, Schraubklemme − · W4 Wandler IN− · W5 Lüfter, schwarze Litze · W9 Lichtschranke X, GND · W10 Lichtschranke Y, GND · W11 Lichtschranke Z, GND · W16 Shield Abort (A0) |
 | **Wago +5 V** | 221-420 | 4 von 10 | 6 | W6 Shield, Stift 5V · W9 Lichtschranke X, VCC · W10 Lichtschranke Y, VCC · W11 Lichtschranke Z, VCC |
 <!-- /tabelle:wago -->
 
@@ -143,7 +143,7 @@ Anschließen mit dem Ohmmeter prüfen
 | SpnEn (D12) | D12 | Endschalter Z — GRBL 1.1 legt ihn auf D12 | W11 → Lichtschranke Z, D0 |
 | Z+ (D11), Signalstift | D11 | Laser-PWM — kein Endschalter | W7 → Laser, XH links: PWM |
 | Z− (D11), Signalstift | D11 | Pull-down 10 kΩ zum GND-Stift daneben | W8 → Shield Z−, GND-Stift |
-| Abort (A0) | A0 | Not-Aus-Schließer: GRBL bricht ab | W16 → Not-Aus, Schließer 13 |
+| Abort (A0) | A0 | 24-V-Wächter: ohne 24 V bricht GRBL ab | W16 → Wago +24 V · W16 → Wago GND |
 | Motor X, Y, Z, A | — | 2B · 2A · 1A · 1B je Treiber; A klont Y (Jumper) | W12 · W13 · W15 · W14 |
 <!-- /tabelle:shield -->
 
@@ -167,32 +167,31 @@ Anschließen mit dem Ohmmeter prüfen
 | 0,5 m | Einzelader 0,75 mm² (AWG 18), rot | W1 0,15 m · W3 0,15 m · W4 0,15 m |
 | 0,5 m | Einzelader 0,75 mm² (AWG 18), schwarz | W1 0,15 m · W3 0,15 m · W4 0,15 m |
 | 1,5 m | 2 × 0,75 mm² (AWG 18) | W2 1,5 m |
-| 6 m | 3 × 0,25 mm² (AWG 24) | W6 0,15 m · W9 1 m · W10 1 m · W11 2 m · W16 1,5 m |
+| 4,5 m | 3 × 0,25 mm² (AWG 24) | W6 0,15 m · W9 1 m · W10 1 m · W11 2 m |
 | 2 m | 3 × 0,34 mm² (AWG 22), Schleppkette | W7 2 m |
 | 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker zum Motor, Dupont 4-polig zum Shield | W14, W15 (W12, W13: die mitgelieferten 1-m-Kabel) |
-| 17 + Reserve | Dupont-Crimpkontakte (Buchse) | Shield und Lichtschranken |
+| 17 + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, Lichtschranken, W8, W16 |
 | 6 · 1 · 3 | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, Pull-down, Lichtschranken |
 | 1 + 3 | XH2.54-Gehäuse 3-polig + Crimpkontakte | Laser |
-| 2 | Aderendhülse 0,25 mm² | Schraubklemmen |
 | 2 | Aderendhülse 0,34 mm² | Schraubklemmen |
-| 6 | Aderendhülse 0,75 mm² | Schraubklemmen |
+| 4 | Aderendhülse 0,75 mm² | Schraubklemmen |
 | 1 | Widerstand 10 kΩ, ¼ W | W8 |
-| 1 | Not-Aus-Pilzschalter mit **Öffner und Schließer** (1 NC + 1 NO), im Gehäuse, ≥ 3 A Gleichstrom | W2, W16 |
+| 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator 100 nF | W16 |
+| — | Not-Aus-Pilztaster mit Wechsler C/NO/NC (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |
 | — | Schrumpfschlauch 2–6 mm, Kabelbinder, Beschriftung (W-Nummer an beiden Enden) | alle |
 <!-- /tabelle:material -->
 
 * **Litze:** in den Ketten hochflexibel (LiYY, LiFY, Silikon oder
   Schleppkettenleitung). Für die Signale 0,25 mm²: Das hält sicher in der
-  Wago (ab 0,14 mm²) und mit Aderendhülse in der Schraubklemme des
-  Not-Aus. In den Dupont-Kontakt passen bis 0,34 mm². Ist schon Litze mit
-  0,14 mm² oder AWG 26 (0,13 mm²) da, geht sie auch: in der Wago das
-  abisolierte Ende doppelt legen.
+  Wago (ab 0,14 mm²), und in den Dupont-Kontakt passen bis 0,34 mm². Ist
+  schon Litze mit 0,14 mm² oder AWG 26 (0,13 mm²) da, geht sie auch: in
+  der Wago das abisolierte Ende doppelt legen.
 * **Werkzeug:** Crimpzange für Dupont und XH (2,54 mm, z. B. SN-28B),
   Zange für Aderendhülsen, Abisolierzange, Lötkolben, Multimeter mit
   Durchgangsprüfer, Schrumpfschlauch.
 * **Wago 221:** 11 mm abisolieren, Hebel auf, Litze bis zum Anschlag, Hebel
   zu. Ohne Aderendhülse.
-* **Schraubklemmen** (Shield, Wandler, Not-Aus): immer mit Aderendhülse.
+* **Schraubklemmen** (Shield, Wandler): immer mit Aderendhülse.
   Verzinnte Litze gibt in der Klemme mit der Zeit nach.
 * **Dupont und XH:** 2 mm abisolieren, crimpen, an jedem Kontakt ziehen.
   Die Kontakte rasten im Gehäuse hörbar ein.
@@ -219,11 +218,14 @@ Zuerst alles im Gehäuse, dann nach außen zur Maschine. Die Prüfungen der
    (Schaltkontakt), bleibt sie frei.
 2. **W1:** rot von der Mittelfahne an Kontakt 1 des Schalters, schwarz von
    der Hülse an die **Wago GND**. Anlöten, Schrumpfschlauch darüber.
-3. **W2** zum Not-Aus nach vorn: Ader 1 von Kontakt 2 des Schalters an den
-   **Öffner** (11), Ader 2 vom Öffner (12) zurück an die **Wago +24 V**.
-   Beide Adern führen +24 V, deshalb an beiden Enden rot markieren. Welche
-   Klemmen der Öffner hat, steht am Kontaktblock (Öffner meist 11–12 oder
-   21–22, Schließer 13–14 oder 23–24 `[w]`).
+3. **W2** zum Not-Aus nach vorn. Er hat einen **Wechsler** mit drei
+   Lötfahnen, C, NO und NC `[v]` (Bild). Ader 1 kommt von Kontakt 2 des
+   Schalters an **C**, Ader 2 geht von **NC** zurück an die **Wago
+   +24 V**. Beide Adern führen +24 V, deshalb an beiden Enden rot
+   markieren. **NO bleibt frei:** Beim Drücken liegt dort C, also +24 V.
+   Anlöten, Schrumpfschlauch über jede Fahne. Der Not-Aus sitzt in seinem
+   Gehäuse vorn am vorderen 2060 ([notaus.md](notaus.md)); W2 kommt von
+   rechts in der oberen Nut des 2060.
 
 Dann [Prüfung A und B](#a-ohne-strom).
 
@@ -292,23 +294,33 @@ Dann [Prüfung D](#d-uno-grbl-und-lichtschranken).
    ([Zwei Y-Motoren](hardware-notizen.md#zwei-y-motoren)).
 5. Alles nur bei ausgeschaltetem Strom.
 
-### 7. Not-Aus-Meldung (W16, empfohlen)
+### 7. 24-V-Wächter (W16)
 
 Der Not-Aus trennt die 24 V. Motoren und Laser sind dann stromlos, der Uno
 läuft aber über USB weiter, und GRBL arbeitet den Auftrag weiter ab. Wird
 der Not-Aus wieder entriegelt, bekommen Motoren und Laser mitten im Auftrag
 wieder Strom, und der Laser brennt mit der Leistung, die gerade gilt.
 
-**Mit W16** meldet ein zweiter Kontakt des Not-Aus, ein **Schließer**, das
-Drücken an **Abort** (A0). GRBL bricht sofort ab, schaltet den Laser aus
-und geht in ALARM. Danach muss neu referenziert werden. Schließer 13 →
-Abort, 14 → Wago GND.
+Dagegen hilft der **24-V-Wächter**, ein Spannungsteiler an **Abort** (A0):
 
-**Ohne W16:** Nach jedem Not-Aus zuerst in LightBurn Stopp bzw. Reset
-drücken, dann entriegeln.
+* **R1 22 kΩ** von der **Wago +24 V** an Abort,
+* **R2 4,7 kΩ** und parallel dazu **100 nF** von Abort an die **Wago GND**.
 
-Löst Abort von selbst aus, einen Kondensator 100 nF zwischen Abort und GND
-direkt am Shield setzen.
+Mit 24 V liegen an A0 4,1 bis 4,5 V, also HIGH. Fehlen die 24 V, zieht R2
+den Eingang auf unter 1 V. GRBL bricht dann sofort ab, schaltet den Laser
+aus und meldet ALARM; im Status steht `Pn:R`, solange die 24 V fehlen. Das
+gilt für den Not-Aus, für den Schalter und für ein abgezogenes Netzteil.
+Der Kondensator filtert Störungen aus der 24-V-Leitung.
+
+Bauen: An jedes Ende eine kurze Litze 0,25 mm² anlöten, die Verbindung
+beider Widerstände mit dem Kondensator in Schrumpfschlauch, von dort ein
+1-poliger Dupont-Stecker auf **Abort**. Die Litzen enden in den Wagos. Auch
+wenn der Stecker verrutscht, fließt über 22 kΩ höchstens 1 mA; das hält
+jeder Pin aus.
+
+Warum nicht der zweite Kontakt des Not-Aus: Er ist ein Wechsler, an NO läge
+beim Drücken C, also +24 V. Das zerstört den Uno. Der Wächter braucht keinen
+Kontakt und meldet mehr als nur den Not-Aus.
 
 ### 8. USB (W17)
 
@@ -325,7 +337,9 @@ sind sie in [elektronik.md](elektronik.md#kabel).
   Festpunkt der Y-Kette.
 * **Vorn aus dem Gehäuse** in den Kanal, darin nach rechts, an der
   Rückseite des hinteren 2060 (mittlere Nut) zum rechten 2040 und in dessen
-  untere Außennut: W14, W2 und W16 nach vorn, W10 nach hinten zum Halter Y.
+  untere Außennut: W14 und W2 nach vorn, W10 nach hinten zum Halter Y. W2
+  verlässt die Nut vor dem 2060, läuft in dessen oberer Nut vorn nach
+  links und rechts oben ins Gehäuse des Not-Aus.
 * **Y-Kette:** W7, W9, W11, W12, W15. Am linken Schlitten verlassen W9 und
   W12 die Kette, W7, W11 und W15 laufen über dem Rohr zum Festpunkt der
   X-Kette.
@@ -427,10 +441,11 @@ In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
 
 ### I. Not-Aus
 
-* Bei einer langsamen Fahrt drücken: Motoren und Laser stehen sofort. Mit
-  W16 meldet GRBL ALARM.
-* Entriegeln und mit `$H` neu referenzieren. Ohne W16 vorher in LightBurn
-  stoppen.
+* Bei einer langsamen Fahrt drücken: Motoren und Laser stehen sofort, GRBL
+  meldet ALARM, und `?` zeigt `Pn:R`.
+* Den Pilz drehen, bis er herausspringt. `Pn:R` verschwindet. Dann mit `$H`
+  neu referenzieren.
+* Schalter aus: auch dann steht `Pn:R` im Status, das ist richtig.
 
 ## GRBL-Einstellungen
 
@@ -473,7 +488,9 @@ Standardwert von GRBL.
 | Laser brennt nicht | Lasermodus aus, PWM falsch gesteckt, keine 12 V | `$32=1`, `$30=1000`; PWM auf Z+; 12 V am Stecker messen |
 | Laser blitzt beim Einschalten kurz auf | Pull-down fehlt, 24 V vor USB | W8 stecken; erst USB, dann 24 V |
 | Netzteil schaltet ab | Kurzschluss oder Überlast | 24-V-Leitungen prüfen; Vref nicht über 1,05 A |
-| Uno startet neu oder verliert die Verbindung | Störungen auf Abort (W16) oder USB | 100 nF an Abort; kürzeres oder besseres USB-Kabel |
+| `Pn:R` im Status, GRBL bricht ab | keine 24 V: Not-Aus gedrückt, Schalter aus, Netzteil ab; oder R1 von W16 lose | Not-Aus entriegeln, 24 V einschalten; an Abort gegen GND messen: mit 24 V 4–4,5 V |
+| GRBL bricht mitten im Auftrag ab, `Pn:R` blitzt kurz | die 24 V brechen ein (Stecker, Netzteil überlastet) | Hohlstecker und Netzteil prüfen; Vref nicht über 1,05 A |
+| Uno verliert die Verbindung | USB | kürzeres oder besseres USB-Kabel |
 
 ## Geändert gegen den alten Anschlussplan
 
@@ -483,10 +500,11 @@ Standardwert von GRBL.
 * **X-Lichtschranke an X−** statt X+. Beides ist D9, minus passt zur
   Referenz links.
 * **Signalleitungen 0,25 statt 0,14 mm².** 0,14 mm² ist das Minimum der
-  Wago, und die Schraubklemme des Not-Aus braucht eine Aderendhülse ab
-  0,25 mm².
-* **Neu:** der Pull-down 10 kΩ an Z− (W8), der Schließer des Not-Aus an
-  Abort (W16) und die Einschaltreihenfolge.
+  Wago, AWG 26 hat nur 0,13 mm².
+* **Neu:** der Pull-down 10 kΩ an Z− (W8), der 24-V-Wächter an Abort (W16)
+  und die Einschaltreihenfolge.
+* **Not-Aus** (2026-09-30): Wechsler C/NO/NC, C und NC in der 24-V-Leitung,
+  NO frei; im eigenen Gehäuse vorn am vorderen 2060.
 * **Lüfter:** 24 V an den Wagos. Der Hinweis auf einen 12-V-Lüfter ist
   gestrichen.
 * **GRBL:** `$130=385` und `$132=82`, beide mit 1 mm Rückzug und 2 mm
@@ -494,8 +512,9 @@ Standardwert von GRBL.
 
 ## Noch offen
 
-1. **Not-Aus:** Hat er einen Schließer für W16? Und wo vorn soll er
-   sitzen? Einen Halter gibt es noch nicht.
+1. **Not-Aus** `[?]`: der Gewindedurchmesser des Tasters (16, 19 oder
+   22 mm) fürs Gehäuse, und ob die Kontakte mindestens 3 A tragen. Das
+   steht auf dem Taster oder im Angebot ([notaus.md](notaus.md)).
 2. **Motorfarben** `[w]`: die übliche Belegung von Stepperonline. Beim
    Anschließen mit dem Ohmmeter prüfen.
 3. **Lichtschranken** `[w]`: Reihenfolge der Stifte am Modul und ob D0 beim

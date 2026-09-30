@@ -128,13 +128,13 @@ def main():
                fett=1)
     t += block(290, 186, 120, 40, ['Schalter EIN/AUS', 'KCD1, ≥ 3 A'],
                fett=1)
-    t += block(24, 232, 180, 104, ['Not-Aus, vorn rechts',
-                                   'Pilzschalter, ≥ 3 A Gleichstrom',
-                                   'Öffner 11–12: trennt die 24 V',
-                                   'Schließer 13–14: meldet an',
-                                   'Abort (W16, empfohlen)'], fett=1,
+    t += block(24, 232, 180, 104, ['Not-Aus, vorn am 2060',
+                                   'Pilztaster, Drehen löst',
+                                   'Wechsler: C–NC trennt 24 V',
+                                   'NO bleibt frei',
+                                   'Gehäuse: NotAus.py'], fett=1,
                fill='#fff4f4', stroke=P24)
-    for y, s in ((250, '11'), (268, '12'), (300, '14'), (318, '13')):
+    for y, s in ((250, 'C'), (268, 'NC'), (300, 'NO')):
         t += pin(204, y)
         t.append(text(198, y + 3, s, 7.5, GRAU, 'end'))
     t += [draht([(204, 132), (290, 132)], P24),              # Netzteil +
@@ -207,7 +207,7 @@ def main():
         t += pin(sx + sb, 250 + 30 * i, 'Motor ' + n + ' (2B 2A 1A 1B)',
                  'end')
     unten = ((520, 'X− (D9)'), (580, 'Y+ (D10)'), (640, 'SpnEn (D12)'),
-             (700, 'Abort (A0)'), (760, '5V'))
+             (760, '5V'))
     for x, s in unten:
         t += pin(x, sy + sh)
         t.append(text(x, sy + sh - 8, s, 8.0, TEXT, 'middle', halo=True))
@@ -267,18 +267,37 @@ def main():
           draht([(410, 718), (822, 718)], P5, 1.6),
           draht([(822, 634), (822, 738)], P5, 1.6), punkt(822, 718, P5)]
     t += marke(700 - 40, 698, 'W6')
-    # Masse: Wago GND -> Sammelschiene -> GND der Lichtschranken und
-    # Schließer 14 des Not-Aus
-    t += [draht([(290, 410), (240, 410)], MASSE, 1.6),
-          draht([(204, 300), (240, 300), (240, 792), (834, 792), (834, 646)],
+    # Masse: Wago GND -> Sammelschiene -> GND der Lichtschranken
+    t += [draht([(290, 410), (240, 410), (240, 792), (834, 792), (834, 646)],
                 MASSE, 1.6),
-          punkt(240, 410, MASSE), punkt(834, 750, MASSE),
-          punkt(834, 698, MASSE)]
-    t += marke(222, 300, 'W16') + marke(540, 792, 'W9–11')
-    # W16: Schließer 13 -> Abort (gestrichelt: empfohlen)
-    t.append(draht([(204, 318), (216, 318), (216, 806), (700, 806),
-                    (700, sy + sh)], SIGNAL, 1.6, '5 3'))
-    t += marke(216, 560, 'W16')
+          punkt(834, 750, MASSE), punkt(834, 698, MASSE)]
+    t += marke(540, 792, 'W9–11')
+    # W16: 24-V-Waechter an Abort — R1 vom +24 V hinter dem Not-Aus,
+    # R2 und 100 nF nach GND
+    ya, xk = 470, 822
+    t += pin(sx + sb, ya, 'Abort (A0)', 'end')
+    t += [draht([(sx + sb, ya), (xk, ya)], SIGNAL, 1.6),
+          punkt(xk, ya, SIGNAL),
+          draht([(xk, ya), (xk, 452)], SIGNAL, 1.4),
+          el('rect', {'x': f1(xk - 4), 'y': '432', 'width': '8',
+                      'height': '20', 'fill': '#ffffff', 'stroke': TEXT,
+                      'stroke-width': '1.1'}),
+          draht([(xk, 432), (xk, 420)], P24, 1.4),
+          draht([(xk - 6, 420), (xk + 6, 420)], P24, 2.0),
+          text(xk + 10, 423, '+24 V hinter dem Not-Aus (Wago)', 8.0, P24),
+          text(xk + 8, 446, '22 kΩ', 7.5, GRAU),
+          draht([(xk, ya), (xk, 488)], SIGNAL, 1.4),
+          el('rect', {'x': f1(xk - 4), 'y': '488', 'width': '8',
+                      'height': '20', 'fill': '#ffffff', 'stroke': TEXT,
+                      'stroke-width': '1.1'}),
+          draht([(xk, 508), (xk, 516)], MASSE, 1.4),
+          draht([(xk, 478), (xk + 18, 478), (xk + 18, 494)], SIGNAL, 1.2),
+          draht([(xk + 12, 494), (xk + 24, 494)], TEXT, 2.0),
+          draht([(xk + 12, 499), (xk + 24, 499)], TEXT, 2.0),
+          draht([(xk + 18, 499), (xk + 18, 516), (xk, 516)], MASSE, 1.2),
+          text(xk + 28, 500, '4,7 kΩ ∥ 100 nF', 7.5, GRAU)]
+    t += masse_zeichen(xk, 522)
+    t += marke(803, ya, 'W16')
     # PC über USB
     t += block(24, 600, 180, 40, ['PC', 'LightBurn o. ä., USB'], fett=1)
     t.append(draht([(204, 620), (460, 620), (460, 578), (sx, 578)], USB,
@@ -330,6 +349,9 @@ def main():
         ('Masse', 'Netzteil, Shield, Wandler, Laser und Lichtschranken haben '
          'ein gemeinsames GND, Stern an der Wago GND; ein isolierter Wandler '
          'braucht dafür eine Brücke OUT− → GND'),
+        ('Not-Aus', 'Wechsler C/NO/NC: C und NC trennen die 24 V, NO '
+         'bleibt frei. Fehlen die 24 V (Not-Aus, Schalter, Netzteil), zieht '
+         'der Wächter W16 Abort auf LOW, und GRBL bricht ab'),
         ('Einschalten', 'erst USB (GRBL läuft, der Pull-down W8 hält den '
          'Laser aus), dann 24 V; ausschalten umgekehrt'),
     ]

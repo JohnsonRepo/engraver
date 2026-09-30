@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Gehaeuse fuer den Not-Aus-Pilztaster vorn am vorderen 2060: Kasten mit offener Rueckseite, Frontwand mit Loch fuer den Taster (Gewinde [?], Mutter innen), zwei Laschen mit M5 in der mittleren Nut des 2060 (laengs verschiebbar), 45-Grad-Rippen fuer den Druck ohne Stuetzen, Kabeldurchlass mit Schlitzen fuer einen Kabelbinder. Dazu nur zur Ansicht: vorderes 2060, rechtes 2040, Y-Motorhalter mit Motor und der Taster (nicht drucken)."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

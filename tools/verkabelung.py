@@ -50,10 +50,10 @@ ANSCHLUSS = {
     'Buchse −': ('Einbaubuchse, Hülse (−)', 'Loeten'),
     'Schalter 1': ('Schalter, Kontakt 1', 'Loeten'),
     'Schalter 2': ('Schalter, Kontakt 2', 'Loeten'),
-    'Not-Aus 11': ('Not-Aus, Öffner 11', 'Schraubklemme'),
-    'Not-Aus 12': ('Not-Aus, Öffner 12', 'Schraubklemme'),
-    'Not-Aus 13': ('Not-Aus, Schließer 13', 'Schraubklemme'),
-    'Not-Aus 14': ('Not-Aus, Schließer 14', 'Schraubklemme'),
+    # Wechsler mit Loetfahnen [v] Bild 2026-09-30: C, NO, NC
+    'Not-Aus C': ('Not-Aus, C', 'Loeten'),
+    'Not-Aus NC': ('Not-Aus, NC', 'Loeten'),
+    'Not-Aus NO': ('Not-Aus, NO (frei)', 'Loeten'),
     'Wago +24 V': ('Wago +24 V', 'Wago'),
     'Wago GND': ('Wago GND', 'Wago'),
     'Wago +5 V': ('Wago +5 V', 'Wago'),
@@ -116,7 +116,7 @@ SHIELD = (
     ('Shield SpnEn', 'D12', 'Endschalter Z — GRBL 1.1 legt ihn auf D12'),
     ('Shield Z+', 'D11', 'Laser-PWM — kein Endschalter'),
     ('Shield Z− S', 'D11', 'Pull-down 10 kΩ zum GND-Stift daneben'),
-    ('Shield Abort', 'A0', 'Not-Aus-Schließer: GRBL bricht ab'),
+    ('Shield Abort', 'A0', '24-V-Wächter: ohne 24 V bricht GRBL ab'),
 )
 EINGAENGE = {'Shield X−': 'X', 'Shield Y+': 'Y', 'Shield SpnEn': 'Z'}
 
@@ -140,13 +140,14 @@ def leitungen():
              adern=[('+24 V', 'rot', 'Buchse +', 'Schalter 1'),
                     ('GND', 'schwarz', 'Buchse −', 'Wago GND')]),
         dict(nr='W2', name='Not-Aus-Kreis', art='Leitung 2-adrig',
-             mm2=ez.LITZE_24V, kabel='Y-Motor rechts', strom=3.0,
+             mm2=ez.LITZE_24V, kabel='Not-Aus', strom=3.0,
              weg='vorn raus, Kanal, Rückseite hinteres 2060, untere Nut '
-                 'außen am rechten 2040 nach vorn',
+                 'außen am rechten 2040 nach vorn, obere Nut vorn am 2060 '
+                 'zum Gehäuse',
              hinweis='beide Adern führen +24 V: an beiden Enden rot '
-                     'markieren',
-             adern=[('+24 V hin', 'Ader 1', 'Schalter 2', 'Not-Aus 11'),
-                    ('+24 V zurück', 'Ader 2', 'Not-Aus 12',
+                     'markieren; NO bleibt frei',
+             adern=[('+24 V hin', 'Ader 1', 'Schalter 2', 'Not-Aus C'),
+                    ('+24 V zurück', 'Ader 2', 'Not-Aus NC',
                      'Wago +24 V')]),
         dict(nr='W3', name='Shield', art='Einzeladern', mm2=ez.LITZE_24V,
              laenge=kasten, strom=3.0, weg='im Kasten',
@@ -232,12 +233,13 @@ def leitungen():
                      'Z-Motor A'),
                     ('Spule B', 'rot · blau', 'Shield Z 1A·1B',
                      'Z-Motor B')]),
-        dict(nr='W16', name='Not-Aus-Meldung', art='Leitung 3-adrig',
-             mm2=SIG, kabel='Y-Motor rechts', strom=0.001,
-             weg='wie W2',
-             hinweis='empfohlen; braucht einen Not-Aus mit Schließer',
-             adern=[('Abort', 'gelb', 'Shield Abort', 'Not-Aus 13'),
-                    ('GND', 'schwarz', 'Wago GND', 'Not-Aus 14')]),
+        dict(nr='W16', name='24-V-Wächter an Abort', art='Widerstand',
+             mm2=None, weg='im Kasten',
+             hinweis='fehlen die 24 V (Not-Aus, Schalter, Netzteil), '
+                     'bricht GRBL ab',
+             adern=[('R1 22 kΩ', '—', 'Wago +24 V', 'Shield Abort'),
+                    ('R2 4,7 kΩ ∥ 100 nF', '—', 'Shield Abort',
+                     'Wago GND')]),
         dict(nr='W17', name='USB', art='USB-Kabel A–B', mm2=None,
              fertig=True, weg='hinten raus zum PC',
              adern=[('USB', '—', 'Uno USB', 'PC')]),
@@ -248,13 +250,30 @@ def leitungen():
 # Zustand, in dem sie besteht. Widerstaende verbinden nicht.
 INNEN = (
     ('Schalter 1', 'Schalter 2', 'ein'),
-    ('Not-Aus 11', 'Not-Aus 12', 'nicht gedrueckt'),
-    ('Not-Aus 13', 'Not-Aus 14', 'gedrueckt'),
+    ('Not-Aus C', 'Not-Aus NC', 'nicht gedrueckt'),
+    ('Not-Aus C', 'Not-Aus NO', 'gedrueckt'),
     ('Wandler IN−', 'Wandler OUT−', None),        # gemeinsame Masse [w]
     ('Shield −', 'Shield Z− GND', None),          # GND des Shields
     ('Shield Z+', 'Shield Z− S', None),           # beide D11
 )
 BETRIEB = ('ein', 'nicht gedrueckt')
+
+# 24-V-Waechter an Abort (A0): Spannungsteiler vom +24 V hinter dem Not-Aus.
+# Fehlen die 24 V, zieht R2 den Eingang auf LOW, und GRBL bricht ab —
+# gleich, ob der Not-Aus gedrueckt, der Schalter aus oder das Netzteil ab
+# ist. ATmega328P [w] (Datenblatt): Pull-up 20-50 kOhm, LOW bis 0,3 x VCC,
+# HIGH ab 0,6 x VCC.
+WAECHTER_R1, WAECHTER_R2 = 22e3, 4.7e3
+PULLUP = (20e3, 50e3)
+VCC, V_IL, V_IH = 5.0, 1.5, 3.0
+NETZ_TOLERANZ = 0.05        # 24 V +- 5 %
+
+
+def waechter_spannung(u24, r_pullup):
+    """Spannung an A0 (V): Knoten aus R1 zu u24, R2 zu GND und dem
+    Pull-up zu VCC."""
+    g = 1.0 / WAECHTER_R1 + 1.0 / WAECHTER_R2 + 1.0 / r_pullup
+    return (u24 / WAECHTER_R1 + VCC / r_pullup) / g
 # In eine Kette 10 x 20 mm innen passen fuenf Mantelleitungen bis etwa
 # 4,5 mm aussen, in zwei Lagen (elektronik.md, Litzen)
 KETTE_PLAETZE = 5
@@ -480,7 +499,8 @@ def material(K):
         weg, kauf = laenge_m(lt, K)
         if lt['mm2'] is not None and not lt.get('fertig'):
             if lt['art'].startswith('Leitung'):
-                meter.setdefault(_litze(lt), []).append((lt['nr'], kauf))
+                meter.setdefault(_litze(lt), []).append(
+                    (lt['nr'], kauf or lt.get('laenge') or 0.0))
             elif lt['mm2'] == SIG:
                 # eine Ader aus der Signalleitung
                 meter.setdefault('3 × {}{}'.format(
@@ -492,7 +512,11 @@ def material(K):
                         _litze(lt), farbe), []).append(
                             (lt['nr'], lt['laenge']))
         if lt['art'] == 'Widerstand':
-            kontakte['Dupont'] = kontakte.get('Dupont', 0) + 2
+            # je Anschluss am Shield ein Kontakt; an der Wago eine kurze
+            # Litze, an die der Widerstand geloetet wird
+            kontakte['Dupont'] = kontakte.get('Dupont', 0) + len(
+                {x for _, _, a, b in lt['adern'] for x in (a, b)
+                 if ANSCHLUSS[x][1] == 'Dupont'})
         if lt.get('fertig') or lt['mm2'] is None:
             continue
         for _, _, a, b in lt['adern']:
@@ -504,11 +528,11 @@ def material(K):
                     huelsen[lt['mm2']] = huelsen.get(lt['mm2'], 0) + 1
     # Dupont-Gehaeuse: am Shield je Signal ein 1-poliges, an jeder
     # Lichtschranke ein 3-poliges, der Pull-down im 2-poligen
-    gehaeuse['Dupont 1-polig'] = sum(
-        1 for lt in leitungen() if not lt.get('fertig')
-        for _, _, a, b in lt['adern'] for x in (a, b)
-        if x.startswith('Shield') and ANSCHLUSS[x][1] == 'Dupont'
-        and lt['art'] != 'Widerstand')
+    am_shield = {x for lt in leitungen() if not lt.get('fertig')
+                 for _, _, a, b in lt['adern'] for x in (a, b)
+                 if x.startswith('Shield') and ANSCHLUSS[x][1] == 'Dupont'}
+    gehaeuse['Dupont 1-polig'] = len(am_shield - {'Shield Z− S',
+                                                  'Shield Z− GND'})
     gehaeuse['Dupont 3-polig'] = 3
     gehaeuse['Dupont 2-polig'] = 1
     return meter, kontakte, huelsen, gehaeuse
@@ -525,8 +549,8 @@ def tab_material(K):
     z.append('| 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker '
              'zum Motor, Dupont 4-polig zum Shield | W14, W15 (W12, W13: die '
              'mitgelieferten 1-m-Kabel) |')
-    z.append('| {} + Reserve | Dupont-Crimpkontakte (Buchse) | Shield und '
-             'Lichtschranken |'.format(kontakte.get('Dupont', 0)))
+    z.append('| {} + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, '
+             'Lichtschranken, W8, W16 |'.format(kontakte.get('Dupont', 0)))
     z.append('| {} · {} · {} | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, '
              'Pull-down, Lichtschranken |'.format(
                  gehaeuse['Dupont 1-polig'], gehaeuse['Dupont 2-polig'],
@@ -537,8 +561,10 @@ def tab_material(K):
         z.append('| {} | Aderendhülse {} | Schraubklemmen |'.format(
             huelsen[mm2], _mm2(mm2)))
     z.append('| 1 | Widerstand 10 kΩ, ¼ W | W8 |')
-    z.append('| 1 | Not-Aus-Pilzschalter mit **Öffner und Schließer** '
-             '(1 NC + 1 NO), im Gehäuse, ≥ 3 A Gleichstrom | W2, W16 |')
+    z.append('| 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator '
+             '100 nF | W16 |')
+    z.append('| — | Not-Aus-Pilztaster mit Wechsler C/NO/NC (vorhanden), '
+             'Gehäuse aus [NotAus.py](notaus.md) | W2 |')
     z.append('| — | Schrumpfschlauch 2–6 mm, Kabelbinder, Beschriftung '
              '(W-Nummer an beiden Enden) | alle |')
     return '\n'.join(z)

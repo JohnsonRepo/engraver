@@ -54,7 +54,7 @@ brauchen 107 mm ab der Rückseite des 2060 und enden 3,4 mm vor dem Ende der
 | Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Gehäuse kommt nur seine 24-V-Leitung | vorhanden |
 | 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und Wippschalter KCD1 | gezeichnet |
 | Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
-| Not-Aus | vorn, gut erreichbar, in der 24-V-Leitung (≥ 3 A Gleichstrom) — schaltet Laser und Motoren ab | — |
+| Not-Aus | vorn am vorderen 2060 im eigenen Gehäuse ([notaus.md](notaus.md)); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, Gehäuse gezeichnet |
 
 Das Gehäuse hängt an der **Rückseite des hinteren 2060** (untere und obere
 Nut) mit 4 × M5 in Hammermuttern, wie die übrigen Halter — der Tisch trägt
@@ -270,7 +270,7 @@ in `tools/elektronik_check.py` (Abschnitt 14), jeweils am längsten Weg:
 | 24 V: Buchse → Schalter → Not-Aus → Wago +24 V, Buchse − → Wago GND, Wago → Shield und Wandler | bis 3 A (Netzteil) | **0,75 mm² (AWG 18)**, rot und schwarz | belastbar 6 A (VDE 0298-4, flexible Leitung); 0,5 mm² hätte genau die 3 A. Not-Aus 1,5 m hin und zurück: 0,21 V bei 3 A |
 | Laser: +12 V, GND, PWM | 1,8 A | **3 × 0,34 mm² (AWG 22)** | dicker passt nicht in den XH-Kontakt am Laser; 2 m: 0,37 V = 3 % von 12 V |
 | Motoren | 1,05 A je Spule | **4 × AWG 24 (0,2 mm²)** | dicker passt nicht in den PH-Kontakt am Motor; Z-Motor, 2 m: 0,35 Ω = 15 % der Wicklung. Fertige Motorkabel mit AWG 26 gehen auch (24 %) |
-| Endschalter: 5 V, GND, Signal; Not-Aus-Meldung | ≈ 20 mA | **3 × 0,25 mm² (AWG 24)** | 0,14 mm² ist das Minimum der Wago (AWG 26 hat nur 0,13), die Schraubklemme des Not-Aus braucht eine Aderendhülse ab 0,25; in den Dupont-Kontakt passen bis 0,34 |
+| Endschalter: 5 V, GND, Signal | ≈ 20 mA | **3 × 0,25 mm² (AWG 24)** | 0,14 mm² ist das Minimum der Wago (AWG 26 hat nur 0,13); in den Dupont-Kontakt passen bis 0,34 |
 | Lüfter | < 0,1 A | seine eigene Anschlusslitze | |
 
 * In Schraubklemmen (Shield, Wandler, Not-Aus) mit **Aderendhülse**, in die
@@ -344,8 +344,8 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
    der Seitenfläche der 2040 **vor** dem 2060, also in den 35 mm bis zur
    Stirnseite? Dort belegt der [Y-Motorhalter](y-motorhalter.md) die untere
    Nut.
-5. **Verkabelung:** Not-Aus mit Schließer und sein Platz vorn, dazu drei
-   Dinge, die sich beim Anschließen zeigen
+5. **Verkabelung:** der Gewindedurchmesser des Not-Aus-Tasters für sein
+   Gehäuse, dazu drei Dinge, die sich beim Anschließen zeigen
    ([verkabelung.md](verkabelung.md#noch-offen)).
 
 Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit
@@ -362,4 +362,5 @@ Aufdruck R110; Motoren 17HE15-1504S (Etikett); hinteres Y-Ritzel mittig
 zur 2040; die Winkel greifen in die obere Nut des 2060 und die untere der
 2040; Laserstecker von links PWM · GND · +12 V. 2026-09-29: Winkel an den
 Kreuzungen 20 mm; die Nuten für die Endschalterhalter sind frei; eine
-Klammer an der Trägerplatte ist in Ordnung.
+Klammer an der Trägerplatte ist in Ordnung. 2026-09-30: der Not-Aus ist da,
+ein Pilztaster mit Wechsler C/NO/NC und Lötfahnen; er sitzt vorn.

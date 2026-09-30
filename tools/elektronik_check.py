@@ -470,12 +470,34 @@ def verkabelung_pruefen(p, Q):
     gedrueckt = vk.netze(zustand=('ein', 'gedrueckt'), lts=lts)
     p.ja('Not-Aus gedrueckt: Shield, Wandler (Laser) und Luefter ohne 24 V',
          not {'Shield +', 'Wandler IN+', 'Lüfter +'} & gedrueckt['Buchse +'])
-    p.ja('Not-Aus gedrueckt: Abort auf GND, GRBL bricht ab',
-         'Shield Abort' in gedrueckt['Buchse −'])
-    p.ja('Not-Aus nicht gedrueckt: Abort frei', 'Shield Abort' not in masse)
+    p.ja('Not-Aus: NO bleibt frei (am Wechsler laege dort C)',
+         N.get('Not-Aus NO', {'Not-Aus NO'}) <= {'Not-Aus NO', 'Not-Aus C',
+                                                 'Not-Aus NC'})
     aus = vk.netze(zustand=('nicht gedrueckt',), lts=lts)
     p.ja('Schalter aus: hinter dem Schalter keine 24 V',
          not {'Shield +', 'Wandler IN+', 'Lüfter +'} & aus['Buchse +'])
+    # 24-V-Waechter: R1 vom +24 V hinter dem Not-Aus an Abort, R2 an GND
+    wa = next((lt['adern'] for lt in lts if lt['nr'] == 'W16'), None)
+    p.ja('Waechter: R1 am +24 V hinter Schalter und Not-Aus',
+         wa is not None and wa[0][2] in plus24
+         and wa[0][2] not in gedrueckt['Buchse +']
+         and wa[0][2] not in aus['Buchse +'] and wa[0][3] == 'Shield Abort')
+    p.ja('Waechter: R2 von Abort an GND', wa is not None
+         and wa[1][2] == 'Shield Abort' and wa[1][3] in masse)
+    u_min = 24.0 * (1.0 - vk.NETZ_TOLERANZ)
+    u_max = 24.0 * (1.0 + vk.NETZ_TOLERANZ)
+    hoch = min(vk.waechter_spannung(u_min, r) for r in vk.PULLUP)
+    p.ok('Waechter: 24 V an -> Abort HIGH (Pull-up 20-50 kOhm)', hoch,
+         vk.V_IH + 0.5, '>=', 'V')
+    p.ok('   ... und nicht ueber 5 V', max(vk.waechter_spannung(u_max, r)
+                                         for r in vk.PULLUP), vk.VCC, '<=',
+         'V')
+    tief = max(vk.waechter_spannung(0.0, r) for r in vk.PULLUP)
+    p.ok('Waechter: 24 V weg -> Abort LOW, GRBL bricht ab', tief,
+         vk.V_IL - 0.3, '<=', 'V')
+    p.ok('   Strom in A0, falls R2 bricht (24 V ueber R1 an der '
+         'Schutzdiode)', (u_max - vk.VCC - 0.5) / vk.WAECHTER_R1 * 1000.0,
+         1.0, '<=', 'mA')
 
     falsch = []
     for lt, ader, a in vk.enden(lts):

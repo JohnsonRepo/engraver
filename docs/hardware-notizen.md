@@ -409,7 +409,10 @@ Steckernetzteil 24 V / 3 A, Laser 12 V / 1,6 A über einen Abwärtswandler
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
 Netzteil, Endschalter und Kabel hinkommen, und das Gehäuse
 (`fusion/Elektronik`): [elektronik.md](elektronik.md). Hohlstecker des
-Netzteils: **5,5 × 2,1 mm** `[v]` Angabe; Lüfter 24 V.
+Netzteils: **5,5 × 2,1 mm** `[v]` Angabe; Lüfter 24 V. Not-Aus: Pilztaster
+„STOP“, rastet, Drehen löst, **ein Wechsler C/NO/NC** mit Lötfahnen `[v]`
+(Bild 2026-09-30); Gewinde und Belastbarkeit `[?]` — Gehäuse und
+Verdrahtung in [notaus.md](notaus.md).
 
 | Steckplatz | Motor | Schritte/mm bei 1/16 |
 |---|---|---|
@@ -455,7 +458,7 @@ gewandert:
 | **Z+ / Z−** | D11 | **Laser-PWM** — kein Endschalter! |
 | **SpnEn** | D12 | **Endschalter Z** (Gabellichtschranke) |
 | SpnDir | D13 | Spindelrichtung, für den Laser frei |
-| Abort | A0 | Schließer des Not-Aus: GRBL bricht ab ([verkabelung.md](verkabelung.md#7-not-aus-meldung-w16-empfohlen)) |
+| Abort | A0 | 24-V-Wächter: fehlen die 24 V, bricht GRBL ab ([verkabelung.md](verkabelung.md#7-24-v-wächter-w16)) |
 
 * Laser: PWM (5 V TTL) an den PWM-Eingang des Lasertreibers, Masse gemeinsam
   mit dem Shield. `$32=1` (Lasermodus), `$30=1000` passend zum S-Maximum der

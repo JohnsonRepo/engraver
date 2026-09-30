@@ -22,6 +22,7 @@ fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-A
 fusion/YMotorhalter/           Y-Motorhalter vorn an jeder 2040 (ersetzt den aus Portal)  ← neu
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
 fusion/Endschalter/            Halter und Fahnen der Lichtschranken X und Y  ← neu
+fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
@@ -37,6 +38,8 @@ docs/verkabelung.md            Verkabelung: Kabelliste, Anschlussliste, Klemmen,
 docs/elektronik-box.svg        Elektronik-Gehäuse von oben: Uno, Lüfter, Verteiler, Kabelwege
 docs/endschalter.md            Endschalter X und Y: Halter, Fahnen, Montage, Einstellen, GRBL
 docs/endschalter.svg           Endschalter: Y von hinten und von außen, X von vorn und von oben, Klammer X
+docs/notaus.md                 Not-Aus: Taster, Lage, Gehäuse, Montage, Druck
+docs/notaus.svg                Not-Aus-Gehäuse von vorn, im Schnitt und von oben
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
@@ -55,6 +58,8 @@ tools/verkabelung.py           Kabelliste — Quelle für Anleitung, Anschlusspl
 tools/elektronik_box_zeichnen.py erzeugt die Draufsicht auf das Elektronik-Gehäuse
 tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im Spalt, Freiraum über den ganzen Weg
 tools/endschalter_zeichnen.py  erzeugt die Zeichnung der Endschalter
+tools/notaus_check.py          Prüfung des Not-Aus-Gehäuses: Lage, Freiraum, Schrauben, Taster, Druck
+tools/notaus_zeichnen.py       erzeugt die Zeichnung des Not-Aus-Gehäuses
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
 tools/y_motorhalter_zeichnen.py erzeugt die Zeichnung des Y-Motorhalters
@@ -135,9 +140,19 @@ Farben, Querschnitt, Weg und Kauflänge; Belegung der Wago-Klemmen und des
 Shields; Material, Reihenfolge beim Anschließen und eine Inbetriebnahme in
 Stufen (24 V, Wandler, GRBL und Lichtschranken, Vref, Motoren,
 Referenzfahrt, Laser, Not-Aus) mit den GRBL-Einstellungen. Neu gegenüber
-dem alten Plan: Pull-down 10 kΩ auf der Laser-PWM, Schließer des Not-Aus an
+dem alten Plan: Pull-down 10 kΩ auf der Laser-PWM, 24-V-Wächter an
 Abort, Masse der Lichtschranken über die Wago. Details in
 [docs/verkabelung.md](docs/verkabelung.md).
+
+### Not-Aus (neu)
+
+Pilztaster mit einem Wechsler (C, NO, NC): C und NC liegen in der
+24-V-Leitung, NO bleibt frei. Er sitzt in einem gedruckten Gehäuse vorn am
+vorderen 2060, rechts innen neben dem rechten 2040, mit 2 × M5 in der
+mittleren Nut und längs verschiebbar. Das Gehäuse ist hinten offen,
+45°-Rippen tragen die Laschen, und es druckt ohne Stützen. Dass die 24 V
+fehlen, meldet ein Spannungsteiler an Abort, und GRBL bricht ab. Details
+in [docs/notaus.md](docs/notaus.md).
 
 ### Endschalter X und Y (neu)
 
@@ -166,7 +181,7 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
 Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
-*Portal*, *YMotorhalter*, *Elektronik* oder *Endschalter*). Jeder Lauf legt ein **neues
+*Portal*, *YMotorhalter*, *Elektronik*, *Endschalter* oder *NotAus*). Jeder Lauf legt ein **neues
 Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
@@ -190,6 +205,8 @@ python3 tools/y_motorhalter_check.py  # Y-Motorhalter: Riemen in der Nut, Freig�
 python3 tools/y_motorhalter_zeichnen.py  # docs/y-motorhalter.svg neu erzeugen
 python3 tools/endschalter_check.py  # Endschalter: Schaltpunkte, Freigänge, Schrauben, Druck
 python3 tools/endschalter_zeichnen.py  # docs/endschalter.svg neu erzeugen
+python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schrauben, Druck
+python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
 ```
 
 `toolhead_check.py` importiert das Fusion-Skript mit gestubbtem `adsk`-Modul und
@@ -216,7 +233,8 @@ hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
 Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
 Wandler, Wago) gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)). Endschalter Rev. 1 für X und Y mit
-`endschalter_check.py` geprüft ([endschalter.md](docs/endschalter.md)). Die
+`endschalter_check.py` geprüft ([endschalter.md](docs/endschalter.md)),
+Not-Aus-Gehäuse Rev. 1 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)); die Halter der

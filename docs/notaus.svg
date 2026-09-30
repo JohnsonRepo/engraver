@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1472" height="867" viewBox="0 0 1472 867" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1472" height="867" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Not-Aus vorn am vorderen 2060: Gehäuse (NotAus.py Rev. 1)</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Orange: neu (PETG, gelb wenn vorhanden). Der Taster ist nicht gemessen [?]: Gewinde Ø19 mm eingetragen.</text>
+<clipPath id="vorn"><rect x="250.0" y="100.0" width="494.0" height="296.4"/></clipPath>
+<g clip-path="url(#vorn)">
+<rect x="250.0" y="222.2" width="494.0" height="156.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="554.2" y="170.2" width="52.0" height="52.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8" fill-opacity="0.8"/>
+<rect x="658.2" y="170.2" width="52.0" height="52.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8" fill-opacity="0.8"/>
+<line x1="250.0" y1="256.3" x2="744.0" y2="256.3" stroke="#8c939e" stroke-width="0.6"/>
+<line x1="250.0" y1="240.1" x2="744.0" y2="240.1" stroke="#8c939e" stroke-width="0.6"/>
+<line x1="250.0" y1="308.3" x2="744.0" y2="308.3" stroke="#8c939e" stroke-width="0.6"/>
+<line x1="250.0" y1="292.1" x2="744.0" y2="292.1" stroke="#8c939e" stroke-width="0.6"/>
+<line x1="250.0" y1="360.3" x2="744.0" y2="360.3" stroke="#8c939e" stroke-width="0.6"/>
+<line x1="250.0" y1="344.1" x2="744.0" y2="344.1" stroke="#8c939e" stroke-width="0.6"/>
+<rect x="330.6" y="274.2" width="36.4" height="52.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="497.0" y="274.2" width="36.4" height="52.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="330.6" y="318.4" width="36.4" height="7.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="330.6" y="274.2" width="36.4" height="7.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="497.0" y="318.4" width="36.4" height="7.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="497.0" y="274.2" width="36.4" height="7.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="606.2" y="118.2" width="52.0" height="104.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="367.0" y="235.2" width="130.0" height="130.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="577.2" y="192.3" width="110.0" height="96.2" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="564.2" y="176.7" width="136.0" height="42.9" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<circle cx="348.8" cy="300.2" r="13.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="515.2" cy="300.2" r="13.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="348.8" cy="300.2" r="11.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="515.2" cy="300.2" r="11.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="432.0" cy="300.2" r="41.6" fill="#e03131" stroke="#a51111" stroke-width="0.8"/>
+<circle cx="432.0" cy="300.2" r="25.1" fill="none" stroke="#a51111" stroke-width="0.8" stroke-dasharray="3 2"/>
+<line x1="250.0" y1="378.2" x2="744.0" y2="378.2" stroke="#5b6472" stroke-width="1.2"/>
+<line x1="671.2" y1="196.2" x2="671.2" y2="248.2" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="671.2" y1="248.2" x2="504.8" y2="248.2" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="504.8" y1="248.2" x2="497.0" y2="256.0" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+</g>
+<rect x="250.0" y="100.0" width="494.0" height="296.4" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="250.0" y="92.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Von vorn</text>
+<line x1="302.0" y1="248.2" x2="241.0" y2="248.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="302.0" cy="248.2" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="251.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060,</text>
+<text x="238.0" y="261.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">mittlere Nut: Z −99</text>
+<line x1="402.9" y1="271.1" x2="241.0" y2="286.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="402.9" cy="271.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="289.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pilzkopf Ø32 [?],</text>
+<text x="238.0" y="299.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Loch Ø19,3 dahinter</text>
+<line x1="348.8" y1="300.2" x2="241.0" y2="324.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="348.8" cy="300.2" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="327.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5×12 mit Scheibe</text>
+<text x="238.0" y="337.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">in der mittleren Nut</text>
+<line x1="354.0" y1="378.2" x2="241.0" y2="378.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="354.0" cy="378.2" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="381.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Tisch</text>
+<line x1="632.2" y1="144.2" x2="753.0" y2="144.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="632.2" cy="144.2" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="147.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechtes 2040, Ende</text>
+<line x1="653.0" y1="187.1" x2="753.0" y2="187.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="653.0" cy="187.1" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="190.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Motorhalter</text>
+<line x1="580.2" y1="196.2" x2="753.0" y2="217.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="580.2" cy="196.2" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="220.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Winkel an der</text>
+<text x="756.0" y="230.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kreuzung (20 mm)</text>
+<line x1="671.2" y1="237.8" x2="753.0" y2="257.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="671.2" cy="237.8" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="260.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">W2 aus der unteren Nut</text>
+<text x="756.0" y="270.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">des 2040, in der oberen</text>
+<text x="756.0" y="280.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Nut des 2060 nach links</text>
+<line x1="658.2" y1="262.5" x2="753.0" y2="307.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="658.2" cy="262.5" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="310.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Motor rechts</text>
+<line x1="367.0" y1="214.4" x2="497.0" y2="214.4" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="367.0" y1="211.4" x2="367.0" y2="217.4" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="497.0" y1="211.4" x2="497.0" y2="217.4" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="432.0" y="209.4" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">50 mm</text>
+<line x1="533.4" y1="278.1" x2="577.2" y2="278.1" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="533.4" y1="275.1" x2="533.4" y2="281.1" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="577.2" y1="275.1" x2="577.2" y2="281.1" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="555.3" y="273.1" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">17 mm</text>
+<line x1="489.2" y1="378.2" x2="489.2" y2="341.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="486.2" y1="378.2" x2="492.2" y2="378.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="486.2" y1="341.8" x2="492.2" y2="341.8" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="495.2" y="363.0" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">14 mm</text>
+<clipPath id="schnitt"><rect x="974.0" y="100.0" width="278.2" height="296.4"/></clipPath>
+<g clip-path="url(#schnitt)">
+<polygon points="1234.0,378.2 1216.1,378.2 1216.1,362.6 1199.9,362.6 1199.9,378.2 1182.0,378.2 1182.0,360.3 1197.6,360.3 1197.6,344.1 1182.0,344.1 1182.0,308.3 1197.6,308.3 1197.6,292.1 1182.0,292.1 1182.0,256.3 1197.6,256.3 1197.6,240.1 1182.0,240.1 1182.0,222.2 1199.9,222.2 1199.9,237.8 1216.1,237.8 1216.1,222.2 1234.0,222.2 1234.0,240.1 1218.4,240.1 1218.4,256.3 1234.0,256.3 1234.0,292.1 1218.4,292.1 1218.4,308.3 1234.0,308.3 1234.0,344.1 1218.4,344.1 1218.4,360.3 1234.0,360.3" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.9"/>
+<rect x="1070.2" y="243.0" width="111.8" height="114.4" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8"/>
+<rect x="1166.4" y="274.2" width="15.6" height="52.0" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8" stroke-dasharray="3 2"/>
+<rect x="1062.4" y="235.2" width="119.6" height="7.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1062.4" y="357.4" width="119.6" height="7.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1062.4" y="235.2" width="7.8" height="39.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1062.4" y="325.3" width="7.8" height="39.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1070.2" y="275.5" width="78.0" height="49.4" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="1070.2" y="263.8" width="10.4" height="72.8" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8" fill-opacity="0.8"/>
+<rect x="1005.2" y="258.6" width="57.2" height="83.2" fill="#e03131" stroke="#a51111" stroke-width="0.8"/>
+<rect x="1148.2" y="284.6" width="13.0" height="31.2" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<line x1="1252.2" y1="378.2" x2="974.0" y2="378.2" stroke="#5b6472" stroke-width="1.2"/>
+<rect x="943.3" y="176.7" width="225.7" height="42.9" fill="none" stroke="#2f5d92" stroke-width="1.0" stroke-dasharray="4 3"/>
+<rect x="947.2" y="192.3" width="130.8" height="96.2" fill="none" stroke="#8a6d3b" stroke-width="1.0" stroke-dasharray="4 3"/>
+</g>
+<rect x="974.0" y="100.0" width="278.2" height="296.4" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="974.0" y="92.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt durch die Mitte, von rechts (vorn links)</text>
+<line x1="1015.6" y1="269.0" x2="965.0" y2="269.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1015.6" cy="269.0" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="272.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pilzkopf, rastet ein;</text>
+<text x="962.0" y="282.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Drehen löst</text>
+<line x1="1062.4" y1="272.9" x2="965.0" y2="309.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1062.4" cy="272.9" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="312.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Motor und Halter</text>
+<text x="962.0" y="322.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(vor der Schnittebene)</text>
+<line x1="1127.4" y1="300.2" x2="965.0" y2="349.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1127.4" cy="300.2" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="352.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Taster: Gewinde</text>
+<text x="962.0" y="362.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">durch, Mutter innen</text>
+<line x1="1153.4" y1="313.2" x2="965.0" y2="389.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1153.4" cy="313.2" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="392.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lötfahnen C, NO, NC</text>
+<text x="962.0" y="402.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(NO bleibt frei)</text>
+<line x1="1088.4" y1="361.3" x2="965.0" y2="429.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1088.4" cy="361.3" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="432.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Front aufs Bett</text>
+<line x1="1143.0" y1="239.1" x2="1261.2" y2="239.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1143.0" cy="239.1" r="1.5" fill="#5b6472"/>
+<text x="1264.2" y="242.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rückseite offen,</text>
+<text x="1264.2" y="252.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">liegt am 2060 an</text>
+<line x1="1174.2" y1="282.0" x2="1261.2" y2="282.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1174.2" cy="282.0" r="1.5" fill="#5b6472"/>
+<text x="1264.2" y="285.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lasche links (dahinter)</text>
+<line x1="1226.2" y1="326.2" x2="1261.2" y2="326.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1226.2" cy="326.2" r="1.5" fill="#5b6472"/>
+<text x="1264.2" y="329.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
+<line x1="1182.0" y1="214.4" x2="1062.4" y2="214.4" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1182.0" y1="211.4" x2="1182.0" y2="217.4" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1062.4" y1="211.4" x2="1062.4" y2="217.4" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="1122.2" y="209.4" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">46 mm</text>
+<line x1="1062.4" y1="243.0" x2="1005.2" y2="243.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1062.4" y1="240.0" x2="1062.4" y2="246.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1005.2" y1="240.0" x2="1005.2" y2="246.0" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="1033.8" y="238.0" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">22 mm [?]</text>
+<line x1="994.8" y1="365.2" x2="994.8" y2="235.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="991.8" y1="365.2" x2="997.8" y2="365.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="991.8" y1="235.2" x2="997.8" y2="235.2" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="988.8" y="303.2" font-size="8.0" fill="#2f5d92" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">50 mm</text>
+<clipPath id="oben"><rect x="250.0" y="486.4" width="494.0" height="351.0"/></clipPath>
+<g clip-path="url(#oben)">
+<rect x="330.6" y="593.0" width="36.4" height="36.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="497.0" y="593.0" width="36.4" height="36.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="337.8" y="593.0" width="22.1" height="15.6" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="504.1" y="593.0" width="22.1" height="15.6" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="330.6" y="577.4" width="36.4" height="15.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="330.6" y="593.0" width="36.4" height="36.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="497.0" y="577.4" width="36.4" height="15.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="497.0" y="593.0" width="36.4" height="36.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="390.4" y="697.0" width="83.2" height="57.2" fill="#e03131" stroke="#a51111" stroke-width="0.8"/>
+<rect x="367.0" y="577.4" width="130.0" height="119.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="367.0,593.0 330.6,593.0 367.0,629.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="497.0,593.0 533.4,593.0 497.0,629.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="250.0" y="525.4" width="494.0" height="52.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="577.2" y="681.4" width="110.0" height="130.8" fill="none" stroke="#8a6d3b" stroke-width="1.0" stroke-dasharray="4 3"/>
+<rect x="564.2" y="590.4" width="136.0" height="225.7" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="554.2" y="525.4" width="52.0" height="52.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8" fill-opacity="0.8"/>
+<rect x="658.2" y="525.4" width="52.0" height="52.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8" fill-opacity="0.8"/>
+<rect x="606.2" y="434.4" width="52.0" height="234.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<line x1="671.2" y1="499.4" x2="671.2" y2="582.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="671.2" y1="582.6" x2="504.8" y2="582.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="504.8" y1="582.6" x2="504.8" y2="613.8" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="504.8" y1="613.8" x2="497.0" y2="613.8" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+</g>
+<rect x="250.0" y="486.4" width="494.0" height="351.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="250.0" y="478.4" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Von oben (vorn unten)</text>
+<line x1="302.0" y1="551.4" x2="241.0" y2="551.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="302.0" cy="551.4" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="554.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
+<line x1="341.0" y1="585.2" x2="241.0" y2="585.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="341.0" cy="585.2" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="588.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lasche mit M5</text>
+<line x1="356.6" y1="603.4" x2="241.0" y2="613.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="356.6" cy="603.4" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="616.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rippe, 45°: druckt</text>
+<text x="238.0" y="626.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">ohne Stützen</text>
+<line x1="398.2" y1="746.4" x2="241.0" y2="746.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="398.2" cy="746.4" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="749.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pilzkopf</text>
+<line x1="632.2" y1="512.4" x2="753.0" y2="512.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="632.2" cy="512.4" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="515.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechtes 2040</text>
+<line x1="671.2" y1="538.4" x2="753.0" y2="542.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="671.2" cy="538.4" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="545.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">W2 in der unteren</text>
+<text x="756.0" y="555.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Nut außen am 2040</text>
+<line x1="504.8" y1="613.8" x2="753.0" y2="613.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="504.8" cy="613.8" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="616.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabeldurchlass Ø7 und</text>
+<text x="756.0" y="626.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">zwei Schlitze für den</text>
+<text x="756.0" y="636.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelbinder</text>
+<line x1="663.4" y1="784.9" x2="753.0" y2="784.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="663.4" cy="784.9" r="1.5" fill="#5b6472"/>
+<text x="756.0" y="787.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Motorhalter,</text>
+<text x="756.0" y="797.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">darunter der Motor</text>
+<line x1="348.8" y1="561.8" x2="515.2" y2="561.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="348.8" y1="558.8" x2="348.8" y2="564.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="515.2" y1="558.8" x2="515.2" y2="564.8" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="432.0" y="556.8" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">64 mm</text>
+<line x1="533.4" y1="509.8" x2="606.2" y2="509.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="533.4" y1="506.8" x2="533.4" y2="512.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="606.2" y1="506.8" x2="606.2" y2="512.8" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="569.8" y="504.8" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">28 mm</text>
+<text x="974.0" y="488.4" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
+<text x="974.0" y="506.4" font-size="8.5" fill="#5b6472" text-anchor="start">Gehäuse</text>
+<text x="1052.0" y="506.4" font-size="8.5" fill="#1c2733" text-anchor="start">50 × 50 × 46 mm, Wände 3 mm, Front 3 mm</text>
+<text x="974.0" y="521.4" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="1052.0" y="521.4" font-size="8.5" fill="#1c2733" text-anchor="start">Mitte X +180, auf der mittleren Nut; längs verschiebbar</text>
+<text x="974.0" y="536.4" font-size="8.5" fill="#5b6472" text-anchor="start">Befestigung</text>
+<text x="1052.0" y="536.4" font-size="8.5" fill="#1c2733" text-anchor="start">2 × M5×12 mit Scheibe, Hammermuttern M5</text>
+<text x="974.0" y="551.4" font-size="8.5" fill="#5b6472" text-anchor="start">Taster</text>
+<text x="1052.0" y="551.4" font-size="8.5" fill="#1c2733" text-anchor="start">Gewinde Ø19 [?] → Loch Ø19,3; Mutter innen</text>
+<text x="974.0" y="566.4" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="1052.0" y="566.4" font-size="8.5" fill="#1c2733" text-anchor="start">passt für 16, 19 und 22 mm: nur das Loch ändert sich</text>
+<text x="974.0" y="581.4" font-size="8.5" fill="#5b6472" text-anchor="start">Kabel</text>
+<text x="1052.0" y="581.4" font-size="8.5" fill="#1c2733" text-anchor="start">W2, 2 × 0,75 mm²: C und NC, NO bleibt frei</text>
+<text x="974.0" y="596.4" font-size="8.5" fill="#5b6472" text-anchor="start">Druck</text>
+<text x="1052.0" y="596.4" font-size="8.5" fill="#1c2733" text-anchor="start">PETG, Front aufs Bett, keine Stützen</text>
+<text x="974.0" y="611.4" font-size="8.5" fill="#5b6472" text-anchor="start">Luft</text>
+<text x="1052.0" y="611.4" font-size="8.5" fill="#1c2733" text-anchor="start">17 mm zum Y-Motor, 5 mm zum Tisch</text>
+<rect x="974.0" y="646.4" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="993.0" y="654.4" font-size="8.5" fill="#1c2733" text-anchor="start">neu (PETG)</text>
+<rect x="1124.0" y="646.4" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="1143.0" y="654.4" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motorhalter</text>
+<rect x="1274.0" y="646.4" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<text x="1293.0" y="654.4" font-size="8.5" fill="#1c2733" text-anchor="start">Motor, Kaufteil</text>
+<rect x="974.0" y="664.4" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="993.0" y="672.4" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<rect x="1124.0" y="664.4" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<text x="1143.0" y="672.4" font-size="8.5" fill="#1c2733" text-anchor="start">Schrauben, Winkel, Taster</text>
+<rect x="1274.0" y="664.4" width="14.0" height="9.0" fill="#e03131" stroke="#a51111" stroke-width="0.8"/>
+<text x="1293.0" y="672.4" font-size="8.5" fill="#1c2733" text-anchor="start">Pilzkopf</text>
+<line x1="974.0" y1="686.9" x2="990.0" y2="686.9" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<text x="995.0" y="690.4" font-size="8.5" fill="#1c2733" text-anchor="start">Kabel W2 zum Not-Aus</text></svg>

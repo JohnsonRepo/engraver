@@ -193,8 +193,9 @@ def main():
                                    2)), dx=4, dy=-4)
 
     # ---- Feld 2: Y von rechts aussen (Y nach rechts = vorn) ----------------
+    # von rechts gesehen liegt vorn links: Y laeuft nach links
     f2 = Feld(f1.ox + f1.breite + 230, 100, (-372.0, -196.0), (-134.0, 14.0),
-              2.05)
+              2.05, a_rueck=True)
     quer_schnitt = ('svg', profil_schnitt(
         f2, L['quer_y_hinten'][0], L['quer_y_hinten'][1], L['quer_z'][0],
         L['quer_z'][1], 'lruo'), 300.0)
@@ -214,20 +215,20 @@ def main():
     kreise = [('svg', f2.kreis(yy, zz, k, 'stahl'), 400.0)
               for yy, zz in EL['hy_m5']]
     t += f2.ausschnitt('y2', ansicht(f2, teile2 + kreise, 'y', 'z', 'x', 1))
-    t += f2.rahmen('Y: von rechts außen (hinten links, vorn rechts)')
-    t += f2.spalte([
-        (-356.0, -45.0, 'rechtes 2040, Ende'),
-        (-340.0, EL['nut_o_z'], 'Rücklauf in der oberen Nut'),
-        (EL['ly_strahl_y'], EL['ly_gabel_z'][1],
-         'Fahne am Strahl'),
-        (hy_y[0] + 4.0, EL['nut_u_z'], 'Halter Y, M5 in der unteren Nut')],
-        f2.ox - 12, 'end', abstand=26.0)
+    t += f2.rahmen('Y: von rechts außen (vorn links, hinten rechts)')
     t += f2.spalte([
         (-240.0, -100.0, 'hinteres 2060'),
         (-240.0, ew('rahmen_z0') + 10.0, 'Winkel an der\nKreuzung (20 mm)'),
         (-275.0, -20.0, 'Y-Wagen: {} mm vor dem\nSchienenende'.format(
             de(ew('schaltabstand'), 0))),
         (-250.0, -12.0, 'Schlittenplatte')],
+        f2.ox - 12, 'end', abstand=26.0)
+    t += f2.spalte([
+        (-356.0, -45.0, 'rechtes 2040, Ende'),
+        (-340.0, EL['nut_o_z'], 'Rücklauf in der oberen Nut'),
+        (EL['ly_strahl_y'], EL['ly_gabel_z'][1],
+         'Fahne am Strahl'),
+        (hy_y[0] + 4.0, EL['nut_u_z'], 'Halter Y, M5 in der unteren Nut')],
         f2.ox + f2.breite + 12, 'start', abstand=26.0)
     t += quer_mass(f2, hy_y[1], L['quer_y_hinten'][0], -122.0,
                    '{} mm'.format(de(L['quer_y_hinten'][0] - hy_y[1], 0)))

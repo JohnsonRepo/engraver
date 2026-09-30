@@ -32,6 +32,8 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-platz.svg')
 ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                           'fusion', 'Elektronik', 'Elektronik.py')
+ENDSCHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                           'fusion', 'Endschalter', 'Endschalter.py')
 
 # ---- Ketten ----------------------------------------------------------------
 # Gekauft: 10 x 20 mm innen, 15 x 27 mm aussen, je 1 m [v] (Angabe
@@ -167,12 +169,12 @@ def konzept(w, L, tw, TL, ew, EL):
     K['kx_z_oben'] = K['kx_z_unten'] + 2.0 * KETTE_R
     K['kx_laenge'] = K['kx_hub'] / 2.0 + math.pi * KETTE_R + KETTE_ENDEN
 
-    # Endschalter (Gabellichtschranken LM393). Y rechts: links laeuft die
-    # Y-Kette neben dem Schlitten, die Fahne kaeme ihr zu nahe.
-    platte = portal['Platte rechts']
-    K['es_y'] = (R + w('rahmen_b') / 2.0 + 8.0, platte.y[0] - d_hinten)
-    motor = portal['X-Motor']
-    K['es_x'] = (motor.x[1] + 3.0, motor.y[1] + 6.0)
+    # Endschalter (Gabellichtschranken LM393) wie Endschalter.py: Y aussen
+    # am rechten 2040 hinter dem hinteren 2060 (links laeuft die Y-Kette),
+    # X vor dem linken Rohrende; jeweils der Strahl.
+    SL = bauraum.modul_laden(ENDSCHALTER, 'endschalter').lage()
+    K['es_y'] = (SL['gy_x'], SL['ly_strahl_y'])
+    K['es_x'] = (SL['lx_strahl_x'], SL['lx_strahl_y_rel'])
     xm = K['kx_fest']
     K['es_z'] = (xm - 27.0, 32.0)
     K['xm'] = xm

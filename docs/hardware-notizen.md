@@ -10,7 +10,7 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem vorderen Ende der 2040, hinten stehen die 2040 110 mm über), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; an jeder Kreuzung 8 Winkel |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem vorderen Ende der 2040, hinten stehen die 2040 110 mm über), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; an jeder Kreuzung 8 Winkel (20 mm) |
 | Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn **je Seite ein NEMA 17** mit dem Ritzel direkt auf der Welle, mittig zur 2040 (`YMotorhalter`) |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
@@ -79,7 +79,7 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Y-Riemen, Länge | offen, je Seite **≈ 1270 mm** von Klemme zu Klemme | gerechnet (Portal.py), hängt an der Lage des hinteren Ritzels |
 | Vorderes 2060 | **35 mm** hinter der Stirnseite der 2040 | `[v]` Angabe am Aufbau |
 | Hinteres 2060 | die 2040 stehen hinten **110 mm** darüber hinaus (beide Seiten) → **435 mm** Mitte zu Mitte hinter dem vorderen (bis Portal Rev. 13: 400 `[?]`) | `[v]` Angabe am Aufbau 2026-09-27 |
-| Winkel 2040 ↔ 2060 | **8 je Kreuzung**; zwei davon greifen in die **obere Nut des 2060** und die **untere Nut der 2040** — die oberen Nuten der 2040 bleiben frei für den Riemen. Ob einer davon vor dem vorderen 2060 an der Seitenfläche sitzt (dort liegt der Y-Motorhalter), ist offen | `[v]` Angabe am Aufbau 2026-09-27 |
+| Winkel 2040 ↔ 2060 | **8 je Kreuzung**, **20 mm** groß; zwei davon greifen in die **obere Nut des 2060** und die **untere Nut der 2040** — die oberen Nuten der 2040 bleiben frei für den Riemen. Ob einer davon vor dem vorderen 2060 an der Seitenfläche sitzt (dort liegt der Y-Motorhalter), ist offen | `[v]` Angabe am Aufbau 2026-09-27, Größe 2026-09-29 |
 | Abstand der Y-Schienen | **514 mm** Mitte zu Mitte = Rohr 500 + 2 × 7 mm; ergibt sich beim Aufbau aus dem verschraubten Portal | gesetzt (Portal.py), Rechnung siehe unten |
 | Kernbohrung 2020 V-Slot | Ø4,2 — für die Stirnschraube **M5 schneiden, ≥ 15 mm tief** | `[w]` |
 | Hammermuttern | M5, Nut 6, in der hinteren Nut des Portalrohrs | `[w]` |
@@ -201,9 +201,9 @@ Strahl reicht — siehe `toolhead-z.md`, Endschalter.
 Ebenfalls vorhanden: **induktiver Näherungsschalter LJ12A3-4-Z/BX** (M12,
 Sn 4 mm, NPN Schließer, 6–36 V). Für Z am Toolhead ungeeignet — 60 g,
 Pegelwandler nötig, ±0,1…0,2 mm Wiederholgenauigkeit. Für X und Y am Rahmen
-war er zuerst vorgesehen; inzwischen sind auch dort Gabellichtschranken
-geplant, die ohne Optokoppler auskommen
-([elektronik.md](elektronik.md#endschalter)). Achtung: Schließer meldet bei
+war er zuerst vorgesehen; inzwischen sitzen auch dort Gabellichtschranken,
+die ohne Optokoppler auskommen — Halter und Fahnen in
+[endschalter.md](endschalter.md). Achtung: Schließer meldet bei
 Kabelbruch nicht; der Öffner (`/AX`) wäre für Endschalter die sichere
 Variante.
 

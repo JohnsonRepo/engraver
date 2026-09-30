@@ -70,10 +70,10 @@
 <rect x="387.7" y="142.9" width="34.4" height="34.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.85"/>
 <polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,641.0 345.0,659.2" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,641.0 760.3,659.2" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
-<polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,146.8" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+<polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,179.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,349.0 298.6,349.0" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
-<circle cx="358.4" cy="438.4" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
-<circle cx="789.2" cy="146.8" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
+<circle cx="346.1" cy="434.1" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
+<circle cx="796.1" cy="179.5" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="522.4" cy="456.6" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 </g>
 <rect x="262.0" y="92.0" width="581.4" height="599.4" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
@@ -96,9 +96,9 @@
 <circle cx="298.6" cy="323.2" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="326.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette Y außen</text>
 <text x="250.0" y="336.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am linken 2040</text>
-<line x1="358.4" y1="438.4" x2="253.0" y2="438.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="358.4" cy="438.4" r="1.5" fill="#5b6472"/>
-<text x="250.0" y="441.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Endschalter</text>
+<line x1="346.1" y1="434.1" x2="253.0" y2="434.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="346.1" cy="434.1" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="437.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Endschalter</text>
 <line x1="390.3" y1="560.3" x2="253.0" y2="560.3" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="390.3" cy="560.3" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="563.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arbeitsfläche: Strahl mit</text>
@@ -113,22 +113,22 @@
 <circle cx="458.4" cy="128.1" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="131.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">24 V vom Steckernetzteil:</text>
 <text x="855.4" y="141.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Buchse und Schalter hinten</text>
-<line x1="789.2" y1="146.8" x2="852.4" y2="162.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="789.2" cy="146.8" r="1.5" fill="#5b6472"/>
-<text x="855.4" y="165.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Endschalter außen am</text>
-<text x="855.4" y="175.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechten 2040 (links die Kette)</text>
+<line x1="416.9" y1="148.1" x2="852.4" y2="162.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="416.9" cy="148.1" r="1.5" fill="#5b6472"/>
+<text x="855.4" y="165.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Gehäuse: Uno + CNC Shield</text>
+<text x="855.4" y="175.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">V3, Lüfter 24 V im Deckel</text>
 <line x1="471.7" y1="152.1" x2="852.4" y2="196.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="471.7" cy="152.1" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="199.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wandler 24 → 12 V und</text>
 <text x="855.4" y="209.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wago-Klemmen</text>
-<line x1="753.9" y1="202.9" x2="852.4" y2="230.1" stroke="#5b6472" stroke-width="0.6"/>
+<line x1="796.1" y1="179.5" x2="852.4" y2="230.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="796.1" cy="179.5" r="1.5" fill="#5b6472"/>
+<text x="855.4" y="233.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Endschalter außen am</text>
+<text x="855.4" y="243.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechten 2040 (links die Kette)</text>
+<line x1="753.9" y1="202.9" x2="852.4" y2="264.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="753.9" cy="202.9" r="1.5" fill="#5b6472"/>
-<text x="855.4" y="233.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Elektronikfach unter den</text>
-<text x="855.4" y="243.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040, 488 × 104 × 55 mm</text>
-<line x1="416.9" y1="148.1" x2="852.4" y2="264.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="416.9" cy="148.1" r="1.5" fill="#5b6472"/>
-<text x="855.4" y="267.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Gehäuse: Uno + CNC Shield</text>
-<text x="855.4" y="277.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">V3, Lüfter 24 V im Deckel</text>
+<text x="855.4" y="267.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Elektronikfach unter den</text>
+<text x="855.4" y="277.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040, 488 × 104 × 55 mm</text>
 <line x1="525.5" y1="211.5" x2="852.4" y2="298.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="525.5" cy="211.5" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="301.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Montageplatte: 4 × M5 in die</text>
@@ -283,9 +283,9 @@
 <text x="24.0" y="1302.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (12 V + PWM): Weg ≈ 1,43 m → 2 m kaufen</text>
 <text x="24.0" y="1317.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,73 m → 1 m kaufen</text>
+<text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,72 m → 1 m kaufen</text>
 <text x="24.0" y="1332.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1332.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Endschalter: Weg ≈ 0,53 m → 1 m kaufen</text>
+<text x="110.0" y="1332.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Endschalter: Weg ≈ 0,49 m → 1 m kaufen</text>
 <text x="24.0" y="1347.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1347.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Endschalter: Weg ≈ 1,34 m → 2 m kaufen</text>
 <rect x="24.0" y="1382.5" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>

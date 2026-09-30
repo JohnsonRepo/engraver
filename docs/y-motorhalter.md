@@ -305,9 +305,8 @@ längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
    den alten Halter. Dieser hier ist niedriger und reicht weniger weit nach
    innen. Mit dem Softlimit am vorderen 2060 erreicht der Toolhead ihn
    ohnehin nicht.
-6. **Endschalter** gehören nicht zum Halter: Der Elektronik-Plan sieht einen
-   Y-Endschalter hinten rechts vor, ohne Auto-Squaring
-   ([elektronik.md](elektronik.md#endschalter)).
+6. **Endschalter** gehören nicht zum Halter: Der Y-Endschalter sitzt hinten
+   rechts, ohne Auto-Squaring ([endschalter.md](endschalter.md)).
 7. **Alte Teile:** Die Umlenkrollen (F625ZZ), der Motorriemen und die
    Edelstahlwellen aus Rev. 1/2 braucht der Y-Antrieb nicht mehr, ebenso
    den Y-Motorhalter aus `Portal.py`.

@@ -175,8 +175,8 @@ und Y auch, bräuchte aber 6–36 V und einen Optokoppler.
 
 | Achse | wo | Fahne | Referenz |
 |---|---|---|---|
-| X | links am Portal, beim X-Motor | am Toolhead | nach links |
-| Y | außen am **rechten** 2040, hinten | am rechten Y-Schlitten | nach hinten |
+| X | vor dem linken Ende des Portalrohrs, Block an der X-Schiene | Klammer unten an der Trägerplatte | nach links |
+| Y | außen am **rechten** 2040, 35 mm hinter dem hinteren 2060, untere Nut | Klammer an der rechten Schlittenplatte | nach hinten |
 | Z | am Toolhead (vorhanden) | Schaltfahne (vorhanden) | nach oben |
 
 **Y rechts, weil links die Y-Kette läuft:** Die Fahne hinge außen neben dem
@@ -184,11 +184,12 @@ Schlitten, genau dort, wo links die Kette neben dem 2040 liegt, und der
 obere Trum der Kette liegt über ihr. Rechts ist die Seite frei. Das Kabel
 läuft mit dem des rechten Y-Motors an der Rückseite des 2060 entlang.
 
-**X links ist eng:** Am linken Wegende steht der X-Motor 3 mm neben der
-Trägerplatte, und der X-Riemen läuft vom Ritzel zum Riemenhalter. Wo die
-Lichtschranke dort Platz findet, klärt die Prüfung, wenn die Halter
-gezeichnet werden. Sonst kommt sie rechts an die Umlenkung, und X
-referenziert nach rechts.
+**X links, vor dem Rohr:** Am linken Wegende steht der X-Motor 3 mm neben
+der Trägerplatte, und der X-Riemen läuft vom Ritzel zum Riemenhalter. Die
+Lichtschranke sitzt deshalb nicht am Motor, sondern auf einem Block vor
+dem linken Rohrende, der an das Ende der X-Schiene stößt. Die Fahne hängt
+an einer Klammer unten an der Trägerplatte. Halter, Fahnen, Montage und
+Einstellen: [endschalter.md](endschalter.md).
 
 Die Näherungssensoren (LJ12A3) brauchst du dafür nicht, sie sind die
 Reserve.
@@ -203,8 +204,8 @@ dann vom Schaltpunkt bis 3 mm vor das vordere 2060 (Z unten): 333 mm
 zwischen Schienenende und vorderem 2060 (227 hinter und 106 vor der Mitte),
 davon gehen Schaltabstand und Rückzug ab.
 
-GRBL, vorläufig — die Werte folgen aus den Schaltpunkten, wenn die Halter
-feststehen:
+GRBL — die Wege folgen aus den Schaltpunkten der Halter, gerechnet in
+`tools/endschalter_check.py` ([endschalter.md](endschalter.md#grbl)):
 
 | | |
 |---|---|
@@ -212,8 +213,8 @@ feststehen:
 | `$23=1` | X referenziert nach links (minus). Y nach hinten und Z nach oben sind die Plus-Richtungen, wenn `$3` so gesetzt ist, dass Y+ das Portal nach hinten fährt |
 | `$27=1` | 1 mm vom Schalter zurück |
 | `$20=1` | Softlimits an |
-| `$130≈387` | X: 391 mm Weg, minus Schaltweg und Rückzug |
-| `$131≈327` | Y: 333 mm zwischen Schienenende und vorderem 2060, minus 3 mm Schaltabstand, 1 mm Rückzug und 2 mm Reserve |
+| `$130=385` | X: 391 mm Weg, minus 3 mm Schaltabstand, 1 mm Rückzug und 2 mm Reserve |
+| `$131=327` | Y: 333 mm zwischen Schienenende und vorderem 2060, minus 3 mm Schaltabstand, 1 mm Rückzug und 2 mm Reserve |
 | `$132≈84` | Z: vom Schaltpunkt (8 mm unter der oberen Grenze) bis ganz unten, 85,6 mm |
 
 Welche Richtung ausgelöst heißt, zeigt GRBL selbst: Mit `?` steht im Status
@@ -267,8 +268,8 @@ Längen bis zum Gerät, Weg wie gezeichnet, 15 % Reserve, aufgerundet:
 | X-Motor | 0,73 m | 1 m |
 | Z-Motor | 1,43 m | **2 m** |
 | Laser (12 V + PWM) | 1,43 m | **2 m** |
-| X-Endschalter | 0,73 m | 1 m |
-| Y-Endschalter | 0,53 m | 1 m |
+| X-Endschalter | 0,72 m | 1 m |
+| Y-Endschalter | 0,49 m | 1 m |
 | Z-Endschalter | 1,34 m | **2 m** (bis Rev. 1: 1,5 m) |
 
 In den Ketten nur **hochflexible Litzen** (Schleppkettenkabel), kein
@@ -378,9 +379,11 @@ Die übrigen Motoren reichen mit 1 m ([Kabel](#kabel)).
 
 ## Was noch fehlt
 
-1. **Halter der Endschalter** X und Y (mit Fahnen) — kommen als Nächstes,
-   alle Maße sind da. Y schaltet jetzt am hinteren Schienenende
-   ([Endschalter](#endschalter)).
+1. **Endschalter:** Halter und Fahnen für X und Y sind gezeichnet und
+   geprüft ([endschalter.md](endschalter.md)). Offen sind dort vier
+   Kleinigkeiten am Aufbau: Boden des Gabelschlitzes, Lötstifte, ein
+   Schmiernippel am X-Wagen und der Lagerbock der hinteren Umlenkung
+   ([Noch offen](endschalter.md#noch-offen)).
 2. **Energieketten** (15 × 27 außen): Biegeradius und die Anschlussglieder
    (Lochbild, Breite) messen — dann Längen, Wannen, Festpunkte und bewegte
    Enden. Den Radius zeigt eine um 180° gebogene Kette: Außenhöhe der
@@ -406,4 +409,6 @@ hinten 110 mm über; Wandler 43 × 24 × 20 mm; Wago: 1 × 221-413,
 Ketten 15 × 27 mm außen, je 1 m; Wandler 12 V / 5 A; 5 Treiber, ohne
 Aufdruck R110; Motoren 17HE15-1504S (Etikett); hinteres Y-Ritzel mittig
 zur 2040; die Winkel greifen in die obere Nut des 2060 und die untere der
-2040; Laserstecker von links PWM · GND · +12 V.
+2040; Laserstecker von links PWM · GND · +12 V. 2026-09-29: Winkel an den
+Kreuzungen 20 mm; die Nuten für die Endschalterhalter sind frei; eine
+Klammer an der Trägerplatte ist in Ordnung.

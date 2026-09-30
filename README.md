@@ -21,6 +21,7 @@ fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← a
 fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 fusion/YMotorhalter/           Y-Motorhalter vorn an jeder 2040 (ersetzt den aus Portal)  ← neu
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
+fusion/Endschalter/            Halter und Fahnen der Lichtschranken X und Y  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
@@ -33,6 +34,8 @@ docs/elektronik.md             Platz, Gehäuse, Leistung, Endschalter, Kabel, An
 docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
 docs/elektronik-anschluss.svg  Anschlussplan: Netzteil, Wandler, Shield, Motoren, Laser, Endschalter
 docs/elektronik-box.svg        Elektronik-Gehäuse von oben: Uno, Lüfter, Verteiler, Kabelwege
+docs/endschalter.md            Endschalter X und Y: Halter, Fahnen, Montage, Einstellen, GRBL
+docs/endschalter.svg           Endschalter: Y von hinten und von außen, X von vorn und von oben, Klammer X
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
@@ -48,6 +51,8 @@ tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum,
 tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
 tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
 tools/elektronik_box_zeichnen.py erzeugt die Draufsicht auf das Elektronik-Gehäuse
+tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im Spalt, Freiraum über den ganzen Weg
+tools/endschalter_zeichnen.py  erzeugt die Zeichnung der Endschalter
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
 tools/y_motorhalter_zeichnen.py erzeugt die Zeichnung des Y-Motorhalters
@@ -121,6 +126,18 @@ dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
 Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
 [docs/elektronik.md](docs/elektronik.md).
 
+### Endschalter X und Y (neu)
+
+Zwei LM393-Gabellichtschranken wie an Z, beide schalten 3 mm vor dem
+Schienenende. **Y** sitzt außen am rechten 2040, 35 mm hinter dem hinteren
+2060, mit 2 × M5 in der unteren Nut; die obere trägt den Rücklauf des
+Y-Riemens. Die Fahne ist eine Klammer an der rechten Schlittenplatte.
+**X** sitzt auf einem Block vor dem linken Rohrende, der an das Ende der
+X-Schiene stößt und zugleich Anschlag ist. Die Fahne sitzt auf einer
+Klammer unten an der Trägerplatte und ist im Langloch ±2 mm verstellbar.
+Fahnen und Klammern werden schwarz gedruckt. Details in
+[docs/endschalter.md](docs/endschalter.md).
+
 ### Toolhead-Grundplatte (überholt)
 
 Die erste Ausführung: nur die Platte, die den Laser am MGN9-Z-Wagen hält, ohne
@@ -136,7 +153,7 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
 Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
-*Portal*, *YMotorhalter* oder *Elektronik*). Jeder Lauf legt ein **neues
+*Portal*, *YMotorhalter*, *Elektronik* oder *Endschalter*). Jeder Lauf legt ein **neues
 Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
@@ -157,6 +174,8 @@ python3 tools/elektronik_box_zeichnen.py  # docs/elektronik-box.svg
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 python3 tools/y_motorhalter_check.py  # Y-Motorhalter: Riemen in der Nut, Freigänge, Schrauben
 python3 tools/y_motorhalter_zeichnen.py  # docs/y-motorhalter.svg neu erzeugen
+python3 tools/endschalter_check.py  # Endschalter: Schaltpunkte, Freigänge, Schrauben, Druck
+python3 tools/endschalter_zeichnen.py  # docs/endschalter.svg neu erzeugen
 ```
 
 `toolhead_check.py` importiert das Fusion-Skript mit gestubbtem `adsk`-Modul und
@@ -182,8 +201,9 @@ hintere 2060 nach der Messung 435 mm hinter das vordere (die 2040 stehen
 hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
 Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
 Wandler, Wago) gezeichnet und geprüft
-([elektronik.md](docs/elektronik.md)); die Halter für Endschalter und
-Energieketten folgen. Der
+([elektronik.md](docs/elektronik.md)). Endschalter Rev. 1 für X und Y mit
+`endschalter_check.py` geprüft ([endschalter.md](docs/endschalter.md)); die
+Halter der Energieketten folgen. Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

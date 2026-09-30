@@ -1,7 +1,7 @@
 # Endschalter X und Y — Halter und Schaltfahnen
 
 Die fünf Druckteile und die ausgeblendete Bohrlehre der Lichtschranke
-erzeugt `fusion/Portal/Portal.py` (seit Rev. 15, jetzt Rev. 16) als eigene Komponenten der
+erzeugt `fusion/Portal/Portal.py` (seit Rev. 15, jetzt Rev. 17) als eigene Komponenten der
 Portal-Baugruppe, neben Schlitten, Klemmtürmen und Antrieben. Bis Portal
 Rev. 14 standen sie im eigenen Skript `Endschalter.py`; Maße und Lagen sind
 dieselben. Geprüft mit `python3 tools/endschalter_check.py`, Skizze in

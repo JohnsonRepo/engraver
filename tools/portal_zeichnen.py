@@ -250,7 +250,7 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
     t.append(f.rect(umriss_x[0], umriss_x[1], TL['traeger_y1'],
                     TL['laser_vorn_y'], 'toolhead', fill='#f3f6fa',
                     stroke_dasharray='3 2', fill_opacity='0.6'))
-    # X-Riemen: Ruecklauf und gezogener Trum, um Ritzel/Rolle
+    # X-Riemen: Ruecklauf und gezogener Trum, um Ritzel und Umlenkritzel
     ya, yr = L['xr_y'], L['xr_y_rueck']
     rp = w('ritzel_teilkreis') / 2
     if s < 0:
@@ -362,8 +362,9 @@ def schnitt_tuerme(f, w, L):
 
 # ---- Schnitt durch die Umlenkung ------------------------------------------
 def schnitt_umlenkung(f, w, L, tw, TL):
-    """XZ-Schnitt durch die Achse der Rolle (Y = Ritzelachsen), Blick von
-    vorn. Der X-Wagen steht vor der Schnittebene: nur als Umriss."""
+    """XZ-Schnitt durch die Achse des Umlenkritzels (Y = Ritzelachsen),
+    Blick von vorn. Der X-Wagen steht vor der Schnittebene: nur als
+    Umriss."""
     R = L['R']
     xu = lambda u: R - u
     t = []
@@ -409,11 +410,19 @@ def schnitt_umlenkung(f, w, L, tw, TL):
                     'stahl'))
     t.append(f.rect(xu(L['zug_spitze_ist']), xa, L['uh_zug_z'] - 1.5,
                     L['uh_zug_z'] + 1.5, 'stahl'))
-    # Rolle, Scheiben, M5 mit Kopf und Mutter
-    rr = w('rolle_d') / 2
-    t.append(f.rect(xr - rr, xr + rr, L['rolle_z0'], L['rolle_z1'], 'kauf'))
-    t.append(f.rect(xr - 6.4, xr + 6.4, L['xr_z0'], L['xr_z1'], 'kauf',
+    # Umlenkritzel mit der Nabe oben, Scheiben, M5 mit Kopf und Mutter
+    rr, rf = w('rolle_d') / 2, L['ritzel_fuss_d'] / 2
+    z0, zn, bo = L['rolle_z0'], L['rolle_nabe_z0'], w('ritzel_bord')
+    for a, b, r in ((z0, z0 + bo, rr), (zn - bo, zn, rr),
+                    (zn, L['rolle_z1'], w('rolle_nabe_d') / 2)):
+        t.append(f.rect(xr - r, xr + r, a, b, 'kauf'))
+    t.append(f.rect(xr - rf, xr + rf, z0 + bo, zn - bo, 'kauf',
                     fill='#d9ccb8'))
+    # ganz innen (entspannt) als Umriss: dort steht es dem X-Wagen am
+    # rechten Ende am naechsten
+    xi_r = xu(L['rolle_u'][1])
+    t.append(f.rect(xi_r - rr, xi_r + rr, z0, zn, 'kauf', fill='none',
+                    stroke_dasharray='2 2'))
     for zz in (uz1, L['rolle_z1'], L['klotz_z'][1]):
         t.append(f.rect(xr - 5.0, xr + 5.0, zz, zz + w('m5_scheibe_h'),
                         'stahl'))
@@ -425,8 +434,8 @@ def schnitt_umlenkung(f, w, L, tw, TL):
     t.append(f.rect(xr - w('m5_mutter_sw') / 2, xr + w('m5_mutter_sw') / 2,
                     L['uh_mutter_z'][1] - w('m5_mutter_h'),
                     L['uh_mutter_z'][1], 'stahl'))
-    # Riemen um die Rolle: die Achsebene schneidet ihn nur aussen, wo er
-    # vom gezogenen Trum auf den Ruecklauf umlenkt (Zaehne zur Rolle)
+    # Riemen um das Umlenkritzel: die Achsebene schneidet ihn nur aussen,
+    # wo er vom gezogenen Trum auf den Ruecklauf umlenkt (Zaehne innen)
     t.append(f.rect(xr + w('ritzel_teilkreis') / 2 - L['riemen_innen'],
                     xr + w('ritzel_teilkreis') / 2 + L['riemen_aussen'],
                     L['xr_z0'], L['xr_z1'], 'riemen'))
@@ -568,8 +577,8 @@ def main():
         (xu(L['uh_lasche_u'][0], 1) + 1.5, L['xr_yc'] - 1.5,
          'Zugschraube M3×{} (von außen)'.format(de(L['zug_schraube'], 0))),
         (L['x_rolle'] + 9, L['xr_yc'] + 3.5, 'Spannklotz'),
-        (L['x_rolle'], L['xr_yc'], 'M5-Achse, darunter die\n'
-         'Umlenkrolle 20 Z'),
+        (L['x_rolle'], L['xr_yc'], 'M5-Achse, darunter das\n'
+         'Umlenkritzel 20 Z'),
         # Riemen und Riemenhalter stehen schon links angeschrieben
         (xw1 + 30, 50, 'Toolhead am rechten\nEnde des X-Wegs (Umriss)')],
         fr_.ox + fr_.breite + 12, 'start')
@@ -612,7 +621,7 @@ def main():
 
     s3 = 4.2
     fd = Feld(fc.ox + fc.breite + 250, y2, (R - 46.0, R + 26.0),
-              (2.0, 50.0), s3)
+              (2.0, 60.0), s3)
     t += fd.ausschnitt('schnitt_uh', schnitt_umlenkung(fd, w, L, tw, TL))
     t += fd.rahmen('Schnitt B–B: X-Umlenkung')
     t.append(text(fd.ox, fd.oy + fd.hoehe + 14,
@@ -627,9 +636,12 @@ def main():
         (R - L['uh_lasche_u'][0] + 1.5, L['uh_zug_z'] - 1.5,
          'Zugschraube M3×{}'.format(de(L['zug_schraube'], 0))),
         (L['x_rolle'] + 14, L['uh_oben_z'][0] + 2, 'obere Platte'),
-        (L['x_rolle'] + 4.2, L['xr_zm'] + 1.5, 'Rolle 20 Z mit Lager'),
+        (L['x_rolle'] + 4.2, L['xr_zm'] + 1.5,
+         'Umlenkritzel 20 Z mit\nKugellagern, 16 mm'),
+        (L['x_rolle'] + w('rolle_nabe_d') / 2 - 1.0,
+         (L['rolle_nabe_z0'] + L['rolle_z1']) / 2, 'Nabe oben'),
         (L['x_rolle'] + w('ritzel_teilkreis') / 2, L['xr_zm'] - 1.5,
-         'X-Riemen (außen um die Rolle)'),
+         'X-Riemen (außen um das Ritzel)'),
         (L['x_rolle'] + 14, L['uh_unten_z'][1] - 2, 'untere Platte'),
         (L['x_rolle'] + 2, L['uh_mutter_z'][0] + 2,
          'M5-Mutter im Schlitz'),
@@ -639,11 +651,13 @@ def main():
          'Stirnblock (dahinter)')],
         fd.ox + fd.breite + 12, 'start', abstand=21.0,
         unten=fd.oy + fd.hoehe + 16)
-    zw = tw('x_wagen_breite') / 2
-    t += fd.luft(L['xw_max'] + tw('x_wagen_laenge') / 2 - 1.0, zw,
-                 L['xw_max'] + tw('x_wagen_laenge') / 2 - 1.0,
-                 L['rolle_z0'], '{} mm'.format(de(L['rolle_z0'] - zw, 1)),
-                 'end', -5, 22)
+    # Der untere Bord steht nur 2,75 mm ueber dem X-Wagen; ganz innen
+    # (Umriss) bleibt er am rechten Ende 3 mm daneben
+    xw_ende = L['xw_max'] + tw('x_wagen_laenge') / 2
+    x_bord = R - (L['rolle_u'][1] + w('rolle_d') / 2)
+    zb = L['rolle_z0'] + w('ritzel_bord') / 2
+    t += fd.luft(x_bord, zb, xw_ende, zb, '{} mm'.format(
+        de(x_bord - xw_ende, 1)), 'end', -5, 4)
     # Pfeil ueber dem Spannklotz, unter der Zeigerlinie der M5
     x0, y0 = fd.px(L['x_rolle'] + w('m5_kopf_d') / 2 + 2.0,
                    L['klotz_z'][1] + 1.8)
@@ -692,7 +706,8 @@ def main():
     # engste Luft am Ende des X-Wegs (portal_check.py misst dasselbe)
     luft_motor = (L['xw_min'] + tw('traeger_x_links') - L['x_motor']
                   - w('motor_flansch') / 2)
-    luft_rolle = L['rolle_z0'] - tw('x_wagen_breite') / 2
+    luft_rolle = (R - (L['rolle_u'][1] + w('rolle_d') / 2)
+                  - (L['xw_max'] + tw('x_wagen_laenge') / 2))
     # Fahnenlasche links neben dem Y-Riemen (rechts gleich weit, siehe
     # x_schiene_versatz)
     luft_yr = (L['xw_min'] + TL['ls_lasche_x0']
@@ -716,13 +731,13 @@ def main():
         ('', 'der Wagenmitte; gespannt am Y-Motor'),
         ('X-Riemen', 'Unterkante {} mm, Schleife ≈ {} mm'.format(
             de(L['xr_z0'], 2), de(riemen_x, 0))),
-        ('X-Spanner', 'Rolle ±{} mm, M3×{} von außen'.format(
+        ('X-Spanner', 'Umlenkritzel ±{} mm, M3×{} von außen'.format(
             de(w('rolle_weg'), 0), de(L['zug_schraube'], 0))),
         ('X-Motor', 'Ritzel ganz auf der Welle schon ab {} mm (gemessen {}):'
          .format(de(w('motor_welle_l'), 0), de(w('motor_welle_ist'), 0))),
         ('', 'Platte {} mm, Nabe {} mm in der Bundbohrung'.format(
             de(w('mp_dicke'), 1), de(L['ritzel_z1'] - L['mp_z0'], 0))),
-        ('engste Luft', '{} mm: Motor ↔ Trägerplatte, Rolle ↔ X-Wagen,'
+        ('engste Luft', '{} mm: Motor ↔ Trägerplatte, Umlenkritzel ↔ X-Wagen,'
          .format(de(min(luft_motor, luft_rolle), 1))),
         ('', 'Platte ↔ X-Wagen am Ende des X-Wegs'),
         ('', '{} mm: Toolhead ↔ Y-Riemen, an beiden Enden'.format(
@@ -740,7 +755,7 @@ def main():
                                   ('toolhead', 'Toolhead (vorhanden)'),
                                   ('fuehrung', 'Linearführung'),
                                   ('profil', 'Aluprofil'),
-                                  ('kauf', 'Motor, Rolle'),
+                                  ('kauf', 'Motor, Ritzel'),
                                   ('stahl', 'Stahl'),
                                   ('hinten', 'hinter der Schnittebene'))):
         x = 24 + (i % 4) * 190

@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 16, sechzehn gedruckte
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 17, sechzehn gedruckte
 Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
@@ -26,8 +26,8 @@ kommen seit Rev. 15 die Halter und Fahnen der Endschalter X und Y
 | 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende |
 | 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende |
 | 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten; dünne Motorplatte, damit die 20-mm-Welle das ganze Ritzel trägt |
-| 4 | **Umlenkhalter** | 1 | rechts: 20-Z-Rolle mit Lager auf einer M5 im Langloch |
-| 5 | **Spannklotz** | 1 | eine M3 von außen zieht ihn und damit die Rolle nach außen |
+| 4 | **Umlenkhalter** | 1 | rechts: Umlenkritzel (GT2 20 Z mit Kugellagern, 16 mm lang, Nabe oben) auf einer M5 im Langloch, 18 mm Platz zwischen den Platten. Seit Rev. 17 — der Halter bis Rev. 16 hatte nur Platz für die 8,5 mm breite Rolle, **neu drucken** |
+| 5 | **Spannklotz** | 1 | eine M3 von außen zieht ihn und damit das Umlenkritzel nach außen |
 | 6 | **Y-Motorhalter** | 2 (dasselbe Teil) | vorn an jeder 2040: U-Bügel mit Schenkeln an beiden Seitenflächen (4 × M5 in den unteren Nuten), NEMA 17 hängend, Ritzel mittig zur 2040 direkt auf der Welle. Seit Rev. 16 in diesem Skript (vorher `YMotorhalter.py`), Einzelheiten in [y-motorhalter.md](y-motorhalter.md) |
 | 7 | **Endschalter** | 5 | Halter_Y und Fahne_Y, Halter_X, Klammer_X und Fahne_X für die Gabellichtschranken; Fahnen und Klammer **schwarz**. Lage, Montage und Einstellen: [endschalter.md](endschalter.md) (bis Rev. 14 im eigenen Skript `Endschalter.py`) |
 | — | **Riemenhalter** | 1 | am Toolhead (ToolheadZ.py Rev. 33), klemmt beide Enden des X-Riemens |
@@ -48,8 +48,8 @@ sie mit „[Referenz, nicht drucken]“.
 |---|---|
 | `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
-| `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: schräg um das mittige Ritzel des Y-Motors, als Rücklauf gerade durch die äußere obere Nut des 2040, um das hintere Ritzel und schräg zurück |
-| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, die X-Umlenkrolle; vom Toolhead der Riemenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
+| `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkritzel, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: schräg um das mittige Ritzel des Y-Motors, als Rücklauf gerade durch die äußere obere Nut des 2040, um das hintere Ritzel und schräg zurück |
+| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, das X-Umlenkritzel; vom Toolhead der Riemenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
 | `Ref_Endschalter` | die beiden Lichtschranken LM393 (Platine und Gabel): Y fest am rechten 2040 hinter dem hinteren 2060, X vor dem linken Ende der 2020 |
 
 Was dabei angenommen ist:
@@ -61,8 +61,8 @@ Was dabei angenommen ist:
   hinten 110 mm über (gemessen 2026-09-27, Rev. 14; bis Rev. 13 400 mm
   `[?]`).
 * Der **Toolhead** steht in der Mitte des X-Wegs; von ihm sind nur X-Wagen,
-  Riemenhalter und die Trägerplatte (vereinfacht) drin. Die Umlenkrolle
-  steht in der Mitte ihres Spannwegs. Die Fahnen der Endschalter stehen
+  Riemenhalter und die Trägerplatte (vereinfacht) drin. Das Umlenkritzel
+  steht in der Mitte seines Spannwegs. Die Fahnen der Endschalter stehen
   deshalb nicht in ihrer Gabel; den Schaltpunkt zeigt
   [endschalter.svg](endschalter.svg).
 * Der **Y-Rücklauf** liegt mittig in der oberen Nut (Z −42 bis −36), auf
@@ -72,7 +72,7 @@ Was dabei angenommen ist:
   Gleitlager) `[v]`. Seine Achse ist 11 mm hinter der Stirnseite
   angenommen, wie vorn die alte Eckwelle `[?]`; Welle und Lager sind nicht
   gezeichnet. Von dieser Lage hängt nur die Riemenlänge ab.
-* Ritzel und Rolle sind am Fuß der Verzahnung gezeichnet, damit der Riemen
+* Die Ritzel sind am Fuß der Verzahnung gezeichnet, damit der Riemen
   sie nicht durchdringt. Die Massen der Referenzteile stimmen nur grob.
 
 ### Y-Weg, die 2060 und die Y-Motorhalter
@@ -332,22 +332,37 @@ Rohr 20,75 mm. Der Motorhalter sitzt mit 2 × M3×35 von oben in den
 Gewindeeinsätzen des Stirnblocks. Der Motor steht 3 mm neben der
 Trägerplatte, wenn der Toolhead links anschlägt.
 
-**Umlenkung rechts**, Achse X = +230,65: eine **20-Z-Rolle mit Kugellager**
-(Bohrung 5) auf einer M5×30 von oben — Kopf auf dem Spannklotz, Scheibe über
-und unter der Rolle, Mutter im Schlitz unter der unteren Platte.
+**Umlenkung rechts**, Achse X = +231,75: ein **Umlenkritzel**, also ein
+GT2-Ritzel 20 Z mit Kugellagern (Bohrung 5), **16 mm lang**. Es sitzt **mit
+der Nabe nach oben** auf einer M5×40 von oben: Kopf auf dem Spannklotz,
+Scheibe über und unter dem Ritzel, Mutter im Schlitz unter der unteren
+Platte. Zwischen den Platten sind **18 mm** Platz, 16 mm für das Ritzel und
+je 1 mm für die Scheiben.
 
-Warum die 20-Z-Rolle und nicht die glatte: In der geschlossenen Schleife läuft
+**Seit Rev. 17** — bis Rev. 16 war der Halter für eine 8,5 mm breite
+Umlenkrolle gebaut, das Ritzel passt nicht hinein. Die zusätzliche Höhe
+geht nach oben: Die Spur muss auf dem Riemen stehen, und darunter fährt der
+X-Wagen. Die obere Platte wird dicker, sie, die Säule und der Spannklotz
+enden 10 mm höher; die Achse wird M5×40 (vorher M5×30), die
+Halterschrauben M3×40 (vorher M3×30). Der untere Bord steht nur 1,5 mm unter dem Riemen, 2,75 mm über dem
+X-Wagen. Deshalb liegt die Achse 1,1 mm weiter außen als bisher: Am rechten
+Ende des X-Wegs bleibt das Ritzel auch ganz innen 3 mm neben dem Wagen.
+
+Warum ein Zahnrad und keine glatte Rolle: In der geschlossenen Schleife läuft
 die **Zahnseite** auf der Umlenkung. Eine glatte Rolle gehört auf den
-Riemenrücken; auf den Zähnen läuft sie laut und verschleißt sie. Die 20-Z-Rolle
-hat außerdem denselben Teilkreis wie das Ritzel, beide Trume laufen parallel.
+Riemenrücken; auf den Zähnen läuft sie laut und verschleißt sie. Das
+Umlenkritzel hat außerdem denselben Teilkreis wie das Ritzel am Motor, beide
+Trume laufen parallel.
 
 **Spannen:** M3×20 von außen durch die Lasche in die Mutter im Spannklotz.
-Eindrehen zieht Klotz und Rolle nach außen. Danach die M5 festziehen — sie
-hält, die M3 stellt nur ein. Die Rolle hat ±4 mm Weg, das sind 16 mm
+Eindrehen zieht Klotz und Umlenkritzel nach außen. Danach die M5 festziehen
+— sie hält, die M3 stellt nur ein. Das Ritzel hat ±4 mm Weg, das sind 16 mm
 Riemenlänge.
 
-**Riemenlänge:** Schleife ≈ **1001 mm**, beide Enden im Riemenhalter. Mit der
-Rolle in Mittelstellung ablängen.
+**Riemenlänge:** Schleife ≈ **1003 mm**, beide Enden im Riemenhalter. Mit dem
+Umlenkritzel in Mittelstellung ablängen. Ein schon abgelängter Riemen
+(≈ 1001 mm für Rev. 16) passt weiter: Das Ritzel steht dann 1,1 mm weiter
+innen, der Spannweg reicht.
 
 ## Riemenhalter am Toolhead (ToolheadZ.py Rev. 33)
 
@@ -379,7 +394,7 @@ Portalteile und beide Riemen. Keine Stelle liegt unter 3 mm:
 | Luft | wo |
 |---|---|
 | 3,0 mm | Motor ↔ Trägerplatte, am linken Ende des X-Wegs |
-| 3,0 mm | Umlenkrolle ↔ X-Wagen (in Z), am rechten Ende |
+| 3,0 mm | Umlenkritzel ↔ X-Wagen, am rechten Ende, das Ritzel ganz innen (daneben; sein Bord steht 2,75 mm über dem Wagen) |
 | 3,0 mm | Schlittenplatte ↔ X-Wagen, am linken Ende (Klemmturm 3,5 mm) |
 | 3,4 mm | Toolhead ↔ Y-Riemen, an beiden Enden |
 
@@ -400,10 +415,11 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 5. Motor von oben auf den Motorhalter, 4 × M3×8 von unten. Ritzel von unten
    auf die Welle, Nabe voraus, bis die Welle 0,5 mm unten heraussteht;
    Madenschrauben von vorn. Halter aufs linke Rohrende (2 × M3×35).
-6. Umlenkhalter aufs rechte Rohrende (2 × M3×30), Spannklotz, Rolle und M5
+6. Umlenkhalter aufs rechte Rohrende (2 × M3×40), Spannklotz, Umlenkritzel
+   (Nabe oben) mit je einer Scheibe darunter und darüber und die M5×40
    einsetzen, Zugschraube lose.
 7. Riemenhalter an den Toolhead (siehe oben).
-8. X-Riemen: ein Ende in den Riemenhalter, um Motor und Rolle, zweites Ende
+8. X-Riemen: ein Ende in den Riemenhalter, um Motor und Umlenkritzel, zweites Ende
    einlegen, spannen. Läuft er nicht mittig in der Spur, das Ritzel
    nachstellen.
 9. Y-Motorhalter ([Montage](y-motorhalter.md#montage)) — je Seite
@@ -445,10 +461,10 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Schlitten (je) | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
 | Klemmturm (je, 4×) | 4,5 cm³ | ≈ 6 g | 9 × 18 × 33 mm |
 | Motorhalter | 31,5 cm³ | ≈ 40 g | 50 × 51 × 28 mm |
-| Umlenkhalter | 35,1 cm³ | ≈ 45 g | 59 × 42 × 30 mm |
+| Umlenkhalter | 49,5 cm³ | ≈ 63 g | 59 × 41 × 40 mm |
 | Spannklotz | 1,7 cm³ | ≈ 2,2 g | 25 × 12 × 7 mm |
 | Y-Motorhalter (je) | 25,5 cm³ | ≈ 32 g | 52 × 87 × 17 mm |
-| **Portal zusammen** (ohne Endschalter) | 221 cm³ | **≈ 281 g** | |
+| **Portal zusammen** (ohne Endschalter) | 235 cm³ | **≈ 299 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
@@ -468,13 +484,13 @@ den Bohrer an der Trägerplatte.
 | 4 | Messing-Einsatz M3 | Stirnblöcke, für die Halter |
 | 4 | M3×8 Zylinderkopf | NEMA 17 → Motorhalter |
 | 2 | M3×35 Zylinderkopf | Motorhalter → Stirnblock |
-| 2 | M3×30 Zylinderkopf | Umlenkhalter → Stirnblock |
-| 1 + 1 + 3 | M5×30 Zylinderkopf + M5-Mutter + Scheibe M5 | Achse der Umlenkrolle |
+| 2 | M3×40 Zylinderkopf | Umlenkhalter → Stirnblock |
+| 1 + 1 + 3 | M5×40 Zylinderkopf + M5-Mutter + Scheibe M5 | Achse des Umlenkritzels |
 | 1 + 1 | M3×20 + M3-Mutter | Zugschraube der Umlenkung |
-| 1 | GT2-Umlenkrolle 20 Z mit Kugellager, Bohrung 5 | X-Umlenkung |
+| 1 | GT2-Ritzel 20 Z mit Kugellagern, Bohrung 5, 16 mm lang | X-Umlenkung (Umlenkritzel, Nabe oben) |
 | 1 | GT2-Ritzel 20 Z, Bohrung 5 | X-Motor |
 | 1 | NEMA 17 | X-Motor |
-| 1 | GT2-Riemen 6 mm, ≈ 1001 mm | X-Achse |
+| 1 | GT2-Riemen 6 mm, ≈ 1003 mm | X-Achse |
 | 2 | NEMA 17 | Y-Motoren, je Ecke vorn |
 | 2 | GT2-Ritzel 20 Z, Bohrung 5 | auf den Y-Motoren (die oberen Ritzel der alten Eckwellen) |
 | 8 + 8 | M3×10 Zylinderkopf + Scheibe DIN 125 | NEMA 17 → Y-Motorhalter, von oben |
@@ -485,9 +501,12 @@ den Bohrer an der Trägerplatte.
 
 ## Nicht gemessen `[?]`
 
-* **Umlenkrolle:** Außendurchmesser 18 mm (Bord) und Breite 8,5 mm sind
-  angenommen. Maßgeblich für die Luft zu den Platten der Umlenkung (je 1 mm)
-  und zum X-Wagen (3 mm).
+* **Umlenkritzel:** 16 mm lang nach deiner Angabe. Bord Ø16, Nabe Ø13 und
+  die Spur unten (1 mm Bord, 7 mm Spur, 1 mm Bord, darüber die Nabe) sind
+  angenommen, wie am Ritzel des Motors. Maßgeblich für die Höhe des Riemens
+  in der Spur und die Luft zum X-Wagen (3 mm daneben). Liegt die Spur in der
+  Mitte statt unten, passt es nicht: dann reicht das Ritzel bis in den Weg
+  des X-Wagens.
 * **Ritzel 20 Z:** Spur 7 mm und Nabe 7 mm mit den Madenschrauben in der
   Mitte sind angenommen `[w]`. Sitzen sie höher, bleibt am X-Motor weniger
   als 2,5 mm Platz unter der Platte. Am Y-Motor steckt die Nabe unten, 1 mm
@@ -520,8 +539,10 @@ die Prüfung als Erstes.
 | `motor_welle_l` | 20 mm | Wellenlänge, auf die die Halter ausgelegt sind; legt die Höhe der Motoren fest |
 | `motor_welle_ist` | 23 mm | gemessene Welle (60 − 37); steht 3,5 mm über das Ritzel hinaus |
 | `mp_dicke` / `welle_ueberstand` | 4,5 / 0,5 mm | Motorplatte und wie weit die Welle unter dem Ritzel heraussteht |
-| `rolle_u` / `rolle_weg` | 26,35 / 4 mm | Umlenkrolle in Mittelstellung und ihr Weg je Richtung |
-| `rolle_d` | 18 mm `[?]` | Außendurchmesser der Umlenkrolle |
+| `rolle_u` / `rolle_weg` | 25,25 / 4 mm | Umlenkritzel in Mittelstellung und sein Weg je Richtung (bis Rev. 16: 26,35) |
+| `rolle_laenge` | 16 mm | Länge des Umlenkritzels (Angabe); legt den Platz zwischen den Platten fest |
+| `rolle_d` / `rolle_nabe_d` | 16 / 13 mm `[?]` | Bord und Nabe des Umlenkritzels |
+| `uh_bolzen` | 40 mm | M5-Achse der Umlenkung; aus ihr folgen obere Platte und Spannklotz |
 | `motor_laenge` | 37 mm | Länge der Motoren ohne Welle (gemessen) |
 | `ymh_…` | | Y-Motorhalter, Tabelle in [y-motorhalter.md](y-motorhalter.md#parametrik) |
 | `quer_vorn_zurueck` | 35 mm | vorderes 2060 hinter der Stirnseite der 2040 (Referenz, Y-Weg) |

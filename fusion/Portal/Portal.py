@@ -17,9 +17,11 @@
 #                              platte, die Ritzelnabe taucht in ihre Bund-
 #                              bohrung: die 20-mm-Welle traegt das ganze
 #                              Ritzel.
-#   Umlenkhalter + Spannklotz  X-Umlenkung rechts: 20-Z-Rolle mit Lager auf
+#   Umlenkhalter + Spannklotz  X-Umlenkung rechts: Umlenkritzel (GT2 20 Z
+#                              mit Kugellagern, 16 mm lang, Nabe oben) auf
 #                              einer M5 im Langloch; eine M3 von aussen zieht
-#                              den Spannklotz und damit die Rolle nach aussen.
+#                              den Spannklotz und damit das Ritzel nach
+#                              aussen.
 #   Y-Motorhalter_links/rechts vorn an jeder 2040 (bis Rev. 15 eigenes
 #                              Skript YMotorhalter.py, Rev. 5): U-Buegel mit
 #                              Schenkeln an beiden Seitenflaechen, je 2x M5
@@ -44,7 +46,7 @@
 #   Bohrlehren                 ausgeblendet: Y-Wagen und Lichtschranke
 #   Referenz_nicht_drucken     nur zur Ansicht, NICHT drucken: Aluprofile,
 #                              Linearfuehrungen, X- und Y-Riemen, X- und
-#                              Y-Motoren mit Ritzel, Umlenkrolle, vom
+#                              Y-Motoren mit Ritzel, Umlenkritzel, vom
 #                              Toolhead Riemenhalter und Traegerplatte
 #                              (vereinfacht), die beiden Lichtschranken
 #
@@ -73,7 +75,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 16
+REVISION = 17
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -135,11 +137,17 @@ MASSE = {
     # Madenschrauben in ihrer Mitte [w]
     'ritzel_spur':          (7.0, 'GT2 20 Z Ritzel: Spur zwischen den Borden'),
     'ritzel_nabe_d':       (13.0, 'GT2 20 Z Ritzel: Nabe'),
-    # Umlenkung: 20-Z-Rolle mit Kugellager, Bohrung 5 [w]. Aussendurchmesser
-    # nicht gemessen — 18 ist die Huelle mit Bord [?].
-    'rolle_d':             (18.0, 'Umlenkrolle 20 Z: Huelle (Bord)'),
-    'rolle_breite':         (8.5, 'Umlenkrolle: Breite'),
-    'rolle_bohrung':        (5.0, 'Umlenkrolle: Bohrung'),
+    # Umlenkung seit Rev. 17: GT2-Ritzel 20 Z mit Kugellagern, Bohrung 5
+    # (vorhanden [v]), statt der 8,5 mm breiten Umlenkrolle. Es braucht
+    # 16 mm Platz (Angabe 2026-09-30); geformt wie das Ritzel am Motor
+    # angenommen [?]: unten Bord, Spur, Bord (ritzel_bord, ritzel_spur),
+    # oben die Nabe.
+    # Eingebaut mit der Nabe nach OBEN — die Spur steht auf dem Riemen,
+    # darunter ist nur 1,5 mm Platz bis zum X-Wagen.
+    'rolle_d':             (16.0, 'Umlenkritzel 20 Z: Bord (Huelle)'),
+    'rolle_laenge':        (16.0, 'Umlenkritzel: Gesamtlaenge (Angabe)'),
+    'rolle_nabe_d':        (13.0, 'Umlenkritzel: Nabe'),
+    'rolle_bohrung':        (5.0, 'Umlenkritzel: Bohrung (Kugellager)'),
 
     # --- X-Riemen: Lage wie in ToolheadZ.py (Riemenhalter) -----------------
     'x_riemen_y':         (-10.0, 'X-Riemen: Wirklinie des gezogenen Trums'),
@@ -246,11 +254,16 @@ MASSE = {
     'saeule_aussen_b':     (10.0, 'Motorhalter: aeussere Saeule, Breite'),
 
     # --- Umlenkhalter + Spannklotz (rechts) ---------------------------------
-    'rolle_u':            (26.35, 'X-Umlenkrolle: Achse in Mittelstellung (u)'),
-    'rolle_weg':            (4.0, 'X-Umlenkrolle: Spannweg je Richtung'),
-    # M5 x 30 von oben: Kopf auf dem Spannklotz, Mutter im Schlitz der
-    # unteren Platte. Die Plattendicken ergeben sich daraus.
-    'uh_bolzen':           (30.0, 'Umlenkung: Laenge der M5-Achse'),
+    # Der untere Bord des Umlenkritzels steht 2,75 mm ueber dem X-Wagen
+    # (Z +16), die Rolle bis Rev. 16 stand 3 mm darueber. Deshalb liegt die
+    # Achse 1,1 mm weiter aussen (bis Rev. 16: 26,35): Am rechten Ende des
+    # X-Wegs bleibt das Ritzel auch ganz innen 3 mm neben dem Wagen.
+    'rolle_u':            (25.25, 'X-Umlenkritzel: Achse in Mittelstellung (u)'),
+    'rolle_weg':            (4.0, 'X-Umlenkritzel: Spannweg je Richtung'),
+    # M5 x 40 von oben: Kopf auf dem Spannklotz, Mutter im Schlitz der
+    # unteren Platte. Die Plattendicken ergeben sich daraus (bis Rev. 16
+    # M5 x 30 fuer die 8,5 mm breite Rolle).
+    'uh_bolzen':           (40.0, 'Umlenkung: Laenge der M5-Achse'),
     'klotz_dicke':          (7.0, 'Spannklotz: Dicke'),
     'klotz_versatz':       (16.0, 'Spannklotz: Mutter so weit aussen neben der Achse'),
     'uh_lasche_b':          (5.0, 'Umlenkhalter: Lasche fuer die Zugschraube'),
@@ -603,10 +616,14 @@ def lage():
 
     # ---- Umlenkhalter (rechts) -----------------------------------------------
     L['rolle_u'] = (w('rolle_u') - w('rolle_weg'), w('rolle_u') + w('rolle_weg'))
-    L['rolle_z0'] = L['xr_zm'] - w('rolle_breite') / 2.0
-    L['rolle_z1'] = L['xr_zm'] + w('rolle_breite') / 2.0
+    # Umlenkritzel mit der Nabe nach oben, der Riemen mittig in der Spur
+    L['rolle_z0'] = L['xr_zm'] - w('ritzel_spur') / 2.0 - w('ritzel_bord')
+    L['rolle_z1'] = L['rolle_z0'] + w('rolle_laenge')
+    L['rolle_nabe_z0'] = (L['rolle_z0'] + 2.0 * w('ritzel_bord')
+                          + w('ritzel_spur'))
     # Stapel auf der M5 von unten: Mutter im Schlitz der unteren Platte,
-    # Platte, Scheibe, Rolle, Scheibe, obere Platte, Spannklotz, Scheibe, Kopf
+    # Platte, Scheibe, Umlenkritzel, Scheibe, obere Platte, Spannklotz,
+    # Scheibe, Kopf
     L['uh_unten_z'] = (L['wand_z1'], L['rolle_z0'] - w('m5_scheibe_h'))
     L['uh_mutter_z'] = (L['uh_unten_z'][0],
                         L['uh_unten_z'][0] + w('m5_mutter_h') + 0.3)
@@ -617,8 +634,8 @@ def lage():
     L['uh_oben_z'] = (L['rolle_z1'] + w('m5_scheibe_h'), L['klotz_z'][0])
     L['uh_kopf_z1'] = L['klotz_z'][1] + w('m5_scheibe_h') + w('m5_kopf_h')
     L['uh_zug_z'] = (L['klotz_z'][0] + L['klotz_z'][1]) / 2.0   # Zugschraube
-    # Platten: vorn und hinten 3 mm um die Rolle; innen so weit, dass die
-    # untere am Ende des X-Wegs 3 mm neben dem X-Wagen bleibt.
+    # Platten: vorn und hinten 3 mm um das Umlenkritzel; innen so weit, dass
+    # die untere am Ende des X-Wegs 3 mm neben dem X-Wagen bleibt.
     L['uh_y'] = (L['xr_yc'] - w('rolle_d') / 2.0 - 3.0,
                  L['xr_yc'] + w('rolle_d') / 2.0 + 3.0)
     L['uh_innen_u'] = R - (L['x_schiene_x'][1] + w('luft_bau'))
@@ -657,7 +674,7 @@ def lage():
 
     # ---- Referenz (nicht drucken) ---------------------------------------------
     # Rahmen mittig unter dem Y-Wagen, Toolhead in der Mitte des X-Wegs.
-    # Ritzel und Rolle mit dem Fuss der Verzahnung: dort liegen die Zaehne
+    # Ritzel mit dem Fuss der Verzahnung: dort liegen die Zaehne
     # des Riemens an, der Riemenkoerper durchdringt sie so nicht.
     L['rahmen_y'] = (w('wagen_y') - w('rahmen_laenge') / 2.0,
                      w('wagen_y') + w('rahmen_laenge') / 2.0)
@@ -1821,9 +1838,11 @@ def bau_y_motorhalter(app, design, comp, L, s, fehler):
 
 
 def bau_umlenkhalter(app, design, comp, L, fehler):
-    """X-Umlenkung rechts: 20-Z-Rolle mit Lager auf einer M5 zwischen zwei
-    Platten, die M5 laeuft in Langloechern. Die Mutter liegt im Schlitz
-    unter der unteren Platte und dreht nicht mit.
+    """X-Umlenkung rechts: Umlenkritzel (GT2 20 Z mit Kugellagern, Nabe
+    oben) auf einer M5 zwischen zwei Platten, die M5 laeuft in
+    Langloechern. Zwischen den Platten 16 mm fuer das Ritzel und je eine
+    Scheibe darueber und darunter. Die Mutter liegt im Schlitz unter der
+    unteren Platte und dreht nicht mit.
 
     Spannen: auf der oberen Platte sitzt der Spannklotz (eigenes Teil) auf
     der M5; eine M3 von aussen durch die Lasche zieht ihn nach aussen. Erst
@@ -2183,7 +2202,7 @@ def bau_referenz(app, design, teile, L, fehler):
     35 mm hinter der Stirnseite, das hintere 435 mm (Mitte zu Mitte)
     dahinter — die 2040 stehen hinten 110 mm ueber. Der Toolhead (hier
     nur X-Wagen, Riemenhalter und Traegerplatte vereinfacht) steht in der
-    Mitte des X-Wegs, die Umlenkrolle und die Y-Motoren in der Mitte ihres
+    Mitte des X-Wegs, das Umlenkritzel und die Y-Motoren in der Mitte ihres
     Spannwegs. Das hintere Y-Ritzel steht, wo es angenommen ist
     (yh_hinter); seine Welle und Lager sind nicht gezeichnet. Die
     Lichtschranken der Endschalter: Y fest am Rahmen, X vor der 2020.
@@ -2221,7 +2240,7 @@ def bau_referenz(app, design, teile, L, fehler):
         fertig(k, name, (x, y, z), material, farbe)
 
     def rad(c, name, mitte, stufen, bohrung_d, material):
-        """Ritzel oder Rolle: Zylinder (d, z0, z1) uebereinander, mittig
+        """Ritzel: Zylinder (d, z0, z1) uebereinander, mittig
         gebohrt. Die Spur hat den Fuss der Verzahnung als Durchmesser."""
         k = None
         for i, (dm, a0, a1) in enumerate(stufen):
@@ -2236,7 +2255,7 @@ def bau_referenz(app, design, teile, L, fehler):
                          (mitte[1] - r, mitte[1] + r), (z0, z1)), material)
 
     def x_riemen():
-        """Eine Schleife um Ritzel und Umlenkrolle, beide Enden im
+        """Eine Schleife um Ritzel und Umlenkritzel, beide Enden im
         Riemenhalter. Zaehne innen, Wirklinie auf dem Teilkreis."""
         c = teile['Ref_Riemen']
         rw = w('ritzel_teilkreis') / 2.0
@@ -2393,7 +2412,7 @@ def bau_referenz(app, design, teile, L, fehler):
     for s in (-1, 1):
         sicher('Y-Riemen_' + seite(s), y_riemen, s)
 
-    # ---- X-Antrieb: Motor, Ritzel, Umlenkrolle, Riemenhalter -----------------
+    # ---- X-Antrieb: Motor, Ritzel, Umlenkritzel, Riemenhalter ---------------
     c = teile['Ref_Antrieb']
     sicher('NEMA17_X', motor)
     z0 = L['ritzel_z0']
@@ -2418,10 +2437,11 @@ def bau_referenz(app, design, teile, L, fehler):
             name = 'Ritzel_Y_{}_{}'.format(t, n)
             sicher(name, rad, c, name, (xs(L, s, 0.0), y), y_stufen,
                    w('motor_welle_d'), 'Aluminum 6061')
-    rz0, rz1, rd = L['rolle_z0'], L['rolle_z1'], w('rolle_d')
-    sicher('Umlenkrolle_X', rad, c, 'Umlenkrolle_X', (xu, yc),
-           [(rd, rz0, rz0 + bo), (L['ritzel_fuss_d'], rz0 + bo, rz1 - bo),
-            (rd, rz1 - bo, rz1)], w('rolle_bohrung'), 'Aluminum 6061')
+    rz0, rn, rd = L['rolle_z0'], L['rolle_nabe_z0'], w('rolle_d')
+    sicher('Umlenkritzel_X', rad, c, 'Umlenkritzel_X', (xu, yc),
+           [(rd, rz0, rz0 + bo), (L['ritzel_fuss_d'], rz0 + bo, rn - bo),
+            (rd, rn - bo, rn), (w('rolle_nabe_d'), rn, L['rolle_z1'])],
+           w('rolle_bohrung'), 'Aluminum 6061')
     sicher('Riemenhalter_Toolhead', box, c, 'Riemenhalter_Toolhead',
            L['rh_x'], (-w('rh_tiefe'), 0.0),
            (w('x_wagen_breite') / 2.0,
@@ -2593,19 +2613,23 @@ def hinweise_bauen(L, fehler):
         '  Umlenkung rechts, Achse X={:+.2f} (Spannweg {:+.2f} bis {:+.2f}):'
         .format(L['x_rolle'], L['x_rolle_bereich'][0],
                 L['x_rolle_bereich'][1]),
-        '  20-Z-Rolle mit Kugellager, Bohrung 5, auf M5x{:.0f} von oben'.format(
-            w('uh_bolzen')),
-        '  (Kopf auf dem Spannklotz, Scheibe ueber und unter der Rolle,',
-        '  Mutter im Schlitz unter der unteren Platte).',
+        '  Umlenkritzel GT2 20 Z mit Kugellagern ({:.0f} mm lang, Bohrung 5)'
+        .format(w('rolle_laenge')),
+        '  mit der Nabe nach OBEN, die Spur unten auf dem Riemen. Auf',
+        '  M5x{:.0f} von oben (Kopf auf dem Spannklotz, Scheibe ueber und'
+        .format(w('uh_bolzen')),
+        '  unter dem Ritzel, Mutter im Schlitz unter der unteren Platte);',
+        '  zwischen den Platten {:.0f} mm.'.format(
+            L['uh_oben_z'][0] - L['uh_unten_z'][1]),
         '  Spannen: M3x{:.0f} aussen durch die Lasche in die Mutter im'.format(
             L['zug_schraube']),
-        '  Spannklotz — eindrehen zieht die Rolle nach aussen. Dann die M5',
+        '  Spannklotz — eindrehen zieht das Ritzel nach aussen. Dann die M5',
         '  festziehen; sie haelt, die M3 stellt nur ein.',
         '  Umlenkhalter: 2x M3x{:.0f} von oben in die Einsaetze des Stirnblocks.'
         .format(L['uh_schraube']),
         '  Riemenlaenge: Schleife {:.0f} mm, beide Enden im Riemenhalter'
         .format(riemen_x),
-        '  (ToolheadZ.py) — mit der Rolle in Mittelstellung ablaengen.',
+        '  (ToolheadZ.py) — mit dem Umlenkritzel in Mittelstellung ablaengen.',
         '',
         'ENDSCHALTER (Gabellichtschranken LM393, docs/endschalter.md):',
         '  Im Modell steht das Portal in der Mitte und der Toolhead in der',
@@ -2658,10 +2682,10 @@ def hinweise_bauen(L, fehler):
         '     Rohrende (2x M3x{:.0f}).'.format(L['mh_schraube']),
         '  6. Umlenkhalter aufs rechte Rohrende (2x M3x{:.0f}), Spannklotz,'
         .format(L['uh_schraube']),
-        '     Rolle und M5 einsetzen, Zugschraube lose.',
-        '  7. X-Riemen: ein Ende in den Riemenhalter, um Motor und Rolle,',
-        '     zweites Ende einlegen, spannen. Laeuft er nicht mittig in der',
-        '     Spur, das Ritzel nachstellen.',
+        '     Umlenkritzel (Nabe oben) und M5 einsetzen, Zugschraube lose.',
+        '  7. X-Riemen: ein Ende in den Riemenhalter, um Motor und',
+        '     Umlenkritzel, zweites Ende einlegen, spannen. Laeuft er nicht',
+        '     mittig in der Spur, das Ritzel nachstellen.',
         '  8. Y-Motorhalter: je Seite 4 Nutensteine in die UNTEREN Nuten',
         '     beider Seitenflaechen, Halter mit dem Joch an die Stirnseite,',
         '     {}x M5x{:.0f} mit Scheibe. Motor von unten, 4x M3x{:.0f} + Scheibe'
@@ -2693,9 +2717,9 @@ def hinweise_bauen(L, fehler):
         '  symmetrisch: zweimal dasselbe Teil.',
         '',
         'NICHT GEMESSEN — vor dem Druck pruefen [?]:',
-        '  Umlenkrolle: Aussendurchmesser {:.0f} mm und Breite {:.1f} mm sind'
-        .format(w('rolle_d'), w('rolle_breite')),
-        '    angenommen (20-Z-Rolle mit Lager, Bohrung 5).',
+        '  Umlenkritzel: {:.0f} mm lang (Angabe); Bord {:.0f} und Nabe {:.0f} mm'
+        .format(w('rolle_laenge'), w('rolle_d'), w('rolle_nabe_d')),
+        '    und die Spur unten wie am Motorritzel sind angenommen.',
         '  Hinteres Y-Ritzel: {:.0f} mm hinter der Stirnseite angenommen; davon'
         .format(w('yh_hinter')),
         '    haengt nur die Riemenlaenge ab. Es muss wie vorn mit der Spur',
@@ -2741,7 +2765,7 @@ def hinweise_bauen(L, fehler):
         '    Toolhead nur X-Wagen, Riemenhalter und Traegerplatte (vereinfacht),',
         '    in der Mitte des X-Wegs.',
         '  Lichtschranken der Endschalter: Y am Rahmen, X vor der 2020.',
-        '  X-Riemen: Schleife um Ritzel und Umlenkrolle, beide Enden im',
+        '  X-Riemen: Schleife um Ritzel und Umlenkritzel, beide Enden im',
         '    Riemenhalter.',
         '  Y-Riemen: je Seite offen, schraeg von der Klemme vorn um das',
         '    Ritzel des Y-Motors, der Ruecklauf gerade in der aeusseren',
@@ -2756,7 +2780,7 @@ def hinweise_bauen(L, fehler):
         '    Lager nicht gezeichnet), die Enden in den Klemmtuermen.',
         '  Y-Motoren mit Ritzel mittig zur 2040, in der Mitte ihres',
         '    Spannwegs.',
-        '  Ritzel und Rolle sind am Fuss der Verzahnung gezeichnet, die',
+        '  Die Ritzel sind am Fuss der Verzahnung gezeichnet, die',
         '    Massen der Referenzteile stimmen nur grob.',
         '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',

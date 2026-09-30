@@ -545,8 +545,11 @@ Enden** des X-Riemens.
 Die Lage des Riemens steht in **beiden** Skripten (`x_riemen_y`,
 `x_riemen_z0`), ebenso Schlitz und Rippen. `portal_check.py` prüft als Erstes,
 dass die Werte übereinstimmen. Die Unterkante liegt bei +20,25 statt direkt
-über dem Wagen, damit die Umlenkrolle am rechten Ende 3 mm über dem X-Wagen
-bleibt.
+über dem Wagen: So blieb die 8,5 mm breite Umlenkrolle am rechten Ende 3 mm
+über dem X-Wagen. Das Umlenkritzel, das seit Portal Rev. 17 umlenkt, steht
+mit seinem Bord 2,75 mm über dem Wagen und am rechten Ende 3 mm daneben
+([portal-y-schlitten.md](portal-y-schlitten.md#x-antrieb)). `ToolheadZ.py`
+Rev. 34 ändert nur den Kommentar dazu.
 
 **Einlegen:** Riemenende von oben in den Schlitz drücken, **Zähne nach
 hinten**, dann einen Stift Ø3 (oder eine M3×20) seitlich über dem Riemen durch

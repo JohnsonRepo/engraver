@@ -32,7 +32,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 33
+REVISION = 34
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -351,9 +351,12 @@ MASSE = {
     # vorn waeren sie nicht unterzubringen, weiter hinten rueckt die ganze
     # Riemenschleife ueber das Portalrohr.
     'x_riemen_y':        (-10.0,  'X-Riemen: Wirklinie des gezogenen Trums'),
-    # 4,25 mm ueber der Flanke des X-Wagens (Z = +16): die Umlenkrolle ist
-    # 8,5 breit und steht unten 1,25 ueber — so bleibt sie am rechten Ende
-    # des X-Wegs 3 mm ueber dem Wagen (tools/portal_check.py).
+    # 4,25 mm ueber der Flanke des X-Wagens (Z = +16), gewaehlt fuer die
+    # 8,5 mm breite Umlenkrolle: sie stand unten 1,25 ueber und blieb am
+    # rechten Ende des X-Wegs 3 mm ueber dem Wagen. Seit Portal Rev. 17
+    # lenkt ein 16 mm langes Umlenkritzel um (Nabe oben), sein Bord steht
+    # 1,5 mm unter dem Riemen; Portal.py haelt es am rechten Ende 3 mm neben
+    # dem Wagen (tools/portal_check.py). Rev. 34: nur dieser Kommentar.
     'x_riemen_z0':       (20.25,  'X-Riemen: Unterkante'),
     'riemen_breite':       (6.0,  'GT2: Riemenbreite'),
     'riemen_dicke':       (1.38,  'GT2: Gesamtdicke'),

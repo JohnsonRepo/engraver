@@ -129,7 +129,7 @@ def main():
             if 'X-Riemen' in a.name and 'X-Riemen' in b.name:
                 continue                     # Trume untereinander
             if {'X-Ritzel', 'X-Riemen links'} == {a.name, b.name} or \
-                    {'X-Umlenkrolle', 'X-Riemen rechts'} == {a.name, b.name}:
+                    {'X-Umlenkritzel', 'X-Riemen rechts'} == {a.name, b.name}:
                 continue                     # der Riemen laeuft auf ihnen
             schlechteste.append((a.abstand(b), a.name, b.name))
     schlechteste.sort()
@@ -164,8 +164,19 @@ def main():
         w('motor_welle_ist')), L['welle_ist_z0'] - L['profil_z1'], 3.0)
     p.info('laengste Welle, die noch 1 mm ueber dem Rohr endet',
            L['mp_z1'] - L['profil_z1'] - 1.0)
-    p.ok('Umlenkrolle mittig auf dem Riemen',
-         -abs((L['rolle_z0'] + L['rolle_z1']) / 2 - L['xr_zm']), -0.01)
+    # Umlenkritzel (seit Rev. 17): Nabe oben, die Spur auf dem Riemen. Es
+    # braucht zwischen den Platten mindestens 16 mm (Angabe), dazu je eine
+    # Scheibe M5 darueber und darunter.
+    spur0 = L['rolle_z0'] + w('ritzel_bord')
+    p.ok('Riemen in der Spur des Umlenkritzels (unten)', L['xr_z0'] - spur0,
+         0.5)
+    p.ok('Riemen in der Spur des Umlenkritzels (oben)',
+         spur0 + w('ritzel_spur') - L['xr_z1'], 0.5)
+    platz = L['uh_oben_z'][0] - L['uh_unten_z'][1]
+    p.ok('Umlenkung: Platz zwischen den Platten (Angabe: mindestens 16)',
+         platz, 16.0)
+    p.ok('Umlenkung: Platz fuer Umlenkritzel und zwei Scheiben', platz
+         - (w('rolle_laenge') + 2.0 * w('m5_scheibe_h')), -0.01)
     p.ok('Riemen zwischen den Platten der Umlenkung (unten)',
          L['xr_z0'] - L['uh_unten_z'][1], 2.0)
     p.ok('Riemen zwischen den Platten der Umlenkung (oben)',
@@ -187,8 +198,8 @@ def main():
          (L['xw_min'] + tw('traeger_x_links')) - (L['x_motor'] + fl), 3.0)
     riemen_x = 2.0 * (L['x_rolle'] - L['x_motor']) \
         + math.pi * w('ritzel_teilkreis')
-    p.info('Riemenschleife (Rolle in Mittelstellung)', riemen_x)
-    p.info('Spannweg der Rolle = Riemenlaenge', 4.0 * w('rolle_weg'))
+    p.info('Riemenschleife (Umlenkritzel in Mittelstellung)', riemen_x)
+    p.info('Spannweg des Umlenkritzels = Riemenlaenge', 4.0 * w('rolle_weg'))
     p.ok('Zugschraube: Spitze entspannt durch die Mutter',
          L['zug_spitze_ist'] - L['zug_spitze'][0], 0.0)
     p.ok('Zugschraube: Spitze gespannt vor der M5',
@@ -203,10 +214,10 @@ def main():
          L['uh_oben_z'][1] - L['uh_oben_z'][0], 4.0)
     p.ok('Umlenkung: Platte ueber dem Mutternschlitz',
          L['uh_unten_z'][1] - L['uh_mutter_z'][1], 2.0)
-    p.ok('Umlenkung: Rolle innen 3 mm vor der Traegerplatte (rechts)',
+    p.ok('Umlenkung: Ritzel innen 3 mm vor der Traegerplatte (rechts)',
          (R - (L['rolle_u'][1] + w('rolle_d') / 2))
          - (L['xw_max'] + tw('traeger_x_rechts')), 3.0)
-    p.ok('Umlenkung: Rolle aussen 3 mm vor dem Steg',
+    p.ok('Umlenkung: Ritzel aussen 3 mm vor dem Steg',
          (L['rolle_u'][0] - w('rolle_d') / 2) - L['uh_steg_u1'], 2.99)
     p.ok('Umlenkung: Langloch innen 2 mm vor dem Plattenrand',
          L['uh_innen_u'] - (L['rolle_u'][1] + w('m5_durchgang') / 2), 2.0)
@@ -545,10 +556,11 @@ def main():
             '2x M3x{:.0f} Zylinderkopf (Umlenkhalter -> Stirnblock)'.format(
                 L['uh_schraube']),
             '1x M5x{:.0f} Zylinderkopf + M5-Mutter + 3x Scheibe M5 '
-            '(Achse Umlenkrolle)'.format(w('uh_bolzen')),
+            '(Achse Umlenkritzel)'.format(w('uh_bolzen')),
             '1x M3x{:.0f} + 1x M3-Mutter (Zugschraube Umlenkung)'.format(
                 L['zug_schraube']),
-            '1x GT2-Umlenkrolle 20 Z mit Kugellager, Bohrung 5',
+            '1x GT2-Ritzel 20 Z mit Kugellagern, Bohrung 5, {:.0f} mm lang '
+            '(Umlenkritzel, Nabe oben)'.format(w('rolle_laenge')),
             '1x GT2-Ritzel 20 Z, Bohrung 5 (X-Motor)',
             '1x NEMA 17 (X)',
             '2x NEMA 17 (Y), je ein GT2-Ritzel 20 Z Bohrung 5 direkt auf der '

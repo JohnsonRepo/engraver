@@ -343,7 +343,7 @@ def portal_bauraeume(w, L):
     gespiegelt, die Namen tragen die Seite. Was das Portal nur in Y bewegt
     (Y-Schiene, Rahmen, Y-Riemen), laeuft als langer Quader durch.
 
-    Spannklotz und Umlenkrolle stehen als Huelle ueber ihren
+    Spannklotz und Umlenkritzel stehen als Huelle ueber ihren
     ganzen Stellweg; der Riemen als Koerper um seine Wirklinie."""
     R = L['R']
     lang = 800.0
@@ -419,6 +419,7 @@ def portal_bauraeume(w, L):
     s = 1
     ru = L['rolle_u']
     rr = w('rolle_d') / 2.0
+    rn = w('rolle_nabe_d') / 2.0
     kopf = w('m5_kopf_d') / 2.0
     feste += [
         q('Umlenkhalter Saeule', xb(s, *L['uh_saeule_u']), L['uh_saeule_y'],
@@ -434,8 +435,13 @@ def portal_bauraeume(w, L):
         q('Spannklotz', xb(s, ru[0] + L['klotz_u_rel'][0],
                            ru[1] + L['klotz_u_rel'][1]),
           L['klotz_y'], L['klotz_z']),
-        q('X-Umlenkrolle', xb(s, ru[0] - rr, ru[1] + rr), (yc - rr, yc + rr),
-          (L['rolle_z0'], L['rolle_z1']), 'kaufteil'),
+        # Umlenkritzel mit der Nabe nach oben: Borde und Spur, darueber
+        # die schmalere Nabe
+        q('X-Umlenkritzel', xb(s, ru[0] - rr, ru[1] + rr), (yc - rr, yc + rr),
+          (L['rolle_z0'], L['rolle_nabe_z0']), 'kaufteil'),
+        q('X-Umlenkritzel Nabe', xb(s, ru[0] - rn, ru[1] + rn),
+          (yc - rn, yc + rn), (L['rolle_nabe_z0'], L['rolle_z1']),
+          'kaufteil'),
         q('M5-Kopf Umlenkung', xb(s, ru[0] - kopf, ru[1] + kopf),
           (yc - kopf, yc + kopf),
           (L['klotz_z'][1] + w('m5_scheibe_h'), L['uh_kopf_z1']), 'stahl'),
@@ -478,7 +484,8 @@ def portal_bauraeume(w, L):
         ('Umlenkhalter Lasche', 'Zugschraube Kopf'),
         # der Riemen laeuft um Ritzel und Rolle
         ('X-Riemen Ruecklauf', 'X-Ritzel'),
-        ('X-Riemen Ruecklauf', 'X-Umlenkrolle'),
+        ('X-Riemen Ruecklauf', 'X-Umlenkritzel'),
+        ('X-Umlenkritzel', 'X-Umlenkritzel Nabe'),     # ein Teil
     }
     for n in ('links', 'rechts'):
         erlaubt |= {
@@ -500,7 +507,7 @@ def portal_bauraeume(w, L):
 
 def x_riemen_trume(L, xw, rh_x0, rh_x1):
     """Die beiden Stuecke des gezogenen Trums bei X-Wagenmitte xw: vom Motor
-    bis zum Riemenhalter und vom Riemenhalter bis zur Umlenkrolle (Mitte des
+    bis zum Riemenhalter und vom Riemenhalter bis zum Umlenkritzel (Mitte des
     Spannwegs). rh_x0/rh_x1: Enden des Riemenhalters relativ zum X-Wagen."""
     y0 = L['xr_y'] - L['riemen_innen']
     y1 = L['xr_y'] + L['riemen_aussen']

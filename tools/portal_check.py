@@ -164,29 +164,38 @@ def main():
         w('motor_welle_ist')), L['welle_ist_z0'] - L['profil_z1'], 3.0)
     p.info('laengste Welle, die noch 1 mm ueber dem Rohr endet',
            L['mp_z1'] - L['profil_z1'] - 1.0)
-    # Umlenkritzel (seit Rev. 17): Nabe oben, die Spur auf dem Riemen. Es
-    # braucht zwischen den Platten mindestens 16 mm (Angabe), dazu je eine
-    # Scheibe M5 darueber und darunter.
+    # Umlenkung (seit Rev. 18): Ritzel wie am Motor fest auf der Welle,
+    # Nabe oben, die Spur auf dem Riemen. Die Welle laeuft oben im
+    # Kugellager, unten im Gleitlager, beide im Lagerschlitten.
     spur0 = L['rolle_z0'] + w('ritzel_bord')
     p.ok('Riemen in der Spur des Umlenkritzels (unten)', L['xr_z0'] - spur0,
          0.5)
     p.ok('Riemen in der Spur des Umlenkritzels (oben)',
          spur0 + w('ritzel_spur') - L['xr_z1'], 0.5)
-    platz = L['uh_oben_z'][0] - L['uh_unten_z'][1]
-    p.ok('Umlenkung: Platz zwischen den Platten (Angabe: mindestens 16)',
-         platz, 16.0)
-    p.ok('Umlenkung: Platz fuer Umlenkritzel und zwei Scheiben', platz
-         - (w('rolle_laenge') + 2.0 * w('m5_scheibe_h')), -0.01)
-    p.ok('Riemen zwischen den Platten der Umlenkung (unten)',
-         L['xr_z0'] - L['uh_unten_z'][1], 2.0)
-    p.ok('Riemen zwischen den Platten der Umlenkung (oben)',
-         L['uh_oben_z'][0] - L['xr_z1'], 2.0)
+    p.ok('Umlenkritzel liegt mit dem Bord auf dem Gleitlager',
+         -abs(L['gl_z'][1] - L['rolle_z0']), -0.01)
+    p.ok('Gleitlager steht ueber den Arm (nur es beruehrt den Bord)',
+         L['gl_z'][1] - L['ls_unten_z'][1], 0.3)
+    p.ok('Gleitlager ganz im unteren Arm', L['gl_z'][0] - L['ls_unten_z'][0],
+         0.5)
+    p.ok('Nabe frei unter dem Kugellager', L['kl_z'][0] - L['rolle_z1'], 0.3)
+    p.ok('Decke ueber dem Kugellager', L['ls_oben_z'][1] - L['kl_z'][1], 1.5)
+    p.ok('Welle Ø{:.0f}x{:.0f}: im Gleitlager'.format(
+        w('uw_d'), w('uw_laenge')), L['gl_z'][1] - L['uw_z'][0], 6.0)
+    p.ok('Welle: ganz durch das Kugellager', L['uw_z'][1] - L['kl_z'][1], 1.0)
+    p.ok('Welle: endet ueber dem Rohr', L['uw_z'][0] - L['profil_z1'], 0.5)
+    p.ok('Riemen ueber dem unteren Arm des Schlittens',
+         L['xr_z0'] - L['ls_unten_z'][1], 2.0)
+    p.ok('Riemen unter dem oberen Arm des Schlittens',
+         L['ls_oben_z'][0] - L['xr_z1'], 2.0)
     p.ok('Ruecklauf hinter dem Riemenhalter',
          TL['rh_y0'] - (L['xr_y_rueck'] + L['riemen_innen']), 3.0)
     p.ok('Ruecklauf vor der Saeule des Motorhalters',
          (L['xr_y_rueck'] - L['riemen_aussen']) - L['mh_hinten_y'][1], 3.0)
-    p.ok('Ruecklauf vor der Saeule des Umlenkhalters',
-         (L['xr_y_rueck'] - L['riemen_aussen']) - L['uh_saeule_y'][1], 3.0)
+    p.ok('Ruecklauf vor dem Ruecken des Lagerschlittens',
+         (L['xr_y_rueck'] - L['riemen_aussen']) - L['ls_ruecken_y'][1], 3.0)
+    p.ok('Gezogener Trum hinter dem Pfosten des Lagerschlittens',
+         L['ls_pfosten_y'][0] - (L['xr_y'] + L['riemen_aussen']), 3.0)
     # Am linken Ende steht der Riemenhalter neben der Motorplatte (in X
     # getrennt), nicht unter ihr
     p.ok('Riemenhalter neben der Motorplatte (X, linkes Ende)',
@@ -198,32 +207,38 @@ def main():
          (L['xw_min'] + tw('traeger_x_links')) - (L['x_motor'] + fl), 3.0)
     riemen_x = 2.0 * (L['x_rolle'] - L['x_motor']) \
         + math.pi * w('ritzel_teilkreis')
-    p.info('Riemenschleife (Umlenkritzel in Mittelstellung)', riemen_x)
-    p.info('Spannweg des Umlenkritzels = Riemenlaenge', 4.0 * w('rolle_weg'))
-    p.ok('Zugschraube: Spitze entspannt durch die Mutter',
-         L['zug_spitze_ist'] - L['zug_spitze'][0], 0.0)
-    p.ok('Zugschraube: Spitze gespannt vor der M5',
-         L['zug_spitze'][1] - L['zug_spitze_ist'], 0.0)
-    p.ok('Spannklotz gespannt vor der Lasche',
-         (L['rolle_u'][0] + L['klotz_u_rel'][0]) - L['uh_lasche_u'][1], 0.3)
-    p.ok('M5-Achse: Spitze ueber dem Rohr', L['uh_spitze_z'] - L['profil_z1'],
-         0.5)
-    p.ok('M5-Achse: Gewinde in der Mutter',
-         L['uh_mutter_z'][1] - L['uh_spitze_z'], 3.5)
-    p.ok('Umlenkung: obere Platte dick genug',
-         L['uh_oben_z'][1] - L['uh_oben_z'][0], 4.0)
-    p.ok('Umlenkung: Platte ueber dem Mutternschlitz',
-         L['uh_unten_z'][1] - L['uh_mutter_z'][1], 2.0)
-    p.ok('Umlenkung: Ritzel innen 3 mm vor der Traegerplatte (rechts)',
-         (R - (L['rolle_u'][1] + w('rolle_d') / 2))
+    p.info('Riemenschleife (Schlitten in Mittelstellung)', riemen_x)
+    p.info('Spannweg des Schlittens = Riemenlaenge', 4.0 * w('rolle_weg'))
+    # Zugschraube: Kopf aussen am Spannbock, Gewindeeinsatz im Ruecken
+    p.ok('Zugschraube M3x{:.0f}: ganz entspannt im Einsatz'.format(
+        L['zug_schraube']), L['zug_eingriff_ist'], w('zug_eingriff'))
+    p.ok('Zugschraube: ganz gespannt endet die Spitze im Ruecken',
+         L['zug_rest'], 1.0)
+    p.ok('Schlitten ganz gespannt vor dem Spannbock',
+         (L['rolle_u'][0] + L['ls_u_rel'][0]) - L['sb_wand_u'][1], 0.3)
+    p.ok('Feder: ganz gespannt noch im Rohr',
+         (L['rolle_u'][0] + L['ls_feder_u_rel'][0]) - L['profil_ende_u'], 3.0)
+    p.ok('Feder: Spiel in der Nut je Seite',
+         (w('nut_b') - w('ls_feder_b')) / 2.0, 0.1)
+    p.ok('Feder: nicht tiefer als die Engstelle der Nut',
+         w('nut_t') - w('ls_feder_t'), 0.3)
+    # Am rechten Ende steht der X-Wagen neben der Umlenkung (in X getrennt);
+    # der Bord des Ritzels steht nur 2,75 mm ueber dem Wagen
+    wagen_ende = L['xw_max'] + tw('x_wagen_laenge') / 2.0
+    rf = w('ritzel_flansch_d') / 2.0
+    p.ok('Umlenkritzel ganz innen neben dem X-Wagen (rechtes Ende)',
+         (R - (L['rolle_u'][1] + rf)) - wagen_ende, 3.0)
+    p.ok('Lagerschlitten ganz innen neben dem X-Wagen (rechtes Ende)',
+         (R - (L['rolle_u'][1] + L['ls_u_rel'][1])) - wagen_ende, 3.0)
+    p.ok('Umlenkritzel innen vor der Traegerplatte (rechtes Ende)',
+         (R - (L['rolle_u'][1] + rf))
          - (L['xw_max'] + tw('traeger_x_rechts')), 3.0)
-    p.ok('Umlenkung: Ritzel aussen 3 mm vor dem Steg',
-         (L['rolle_u'][0] - w('rolle_d') / 2) - L['uh_steg_u1'], 2.99)
-    p.ok('Umlenkung: Langloch innen 2 mm vor dem Plattenrand',
-         L['uh_innen_u'] - (L['rolle_u'][1] + w('m5_durchgang') / 2), 2.0)
-    p.ok('Umlenkung: Mutternschlitz innen vor dem Plattenrand',
-         L['uh_innen_u'] - (L['rolle_u'][1] + w('m5_mutter_sw')
-                            / math.cos(math.radians(30)) / 2 + 0.2), 2.0)
+    p.ok('Lagerschlitten: Wand um das Kugellager (innen)',
+         L['ls_u_rel'][1] - (w('kl_d') + w('spiel_press')) / 2.0, 2.0)
+    p.ok('Lagerschlitten: Wand um das Gleitlager (innen)',
+         L['ls_u_rel'][1] - (w('gl_d') + w('spiel_press')) / 2.0, 2.0)
+    p.ok('Lagerschlitten: Wand um den Einsatz im Ruecken (Y)',
+         (w('ls_ruecken') - w('insert_m3_d')) / 2.0, 1.5)
 
     # ------------------------------------------------------------------
     p.titel('6) Y-Riemen und Klemmtuerme (wie v8)')
@@ -381,7 +396,7 @@ def main():
             y), u - w('insert_m3_d') / 2 - L['stirn_u'][0], 1.0)
 
     # ------------------------------------------------------------------
-    p.titel('8) Motorhalter und Umlenkhalter')
+    p.titel('8) Motorhalter und Spannbock')
     p.ok('Motorbund-Bohrung: Wand zur Hinterkante der Platte',
          (L['xr_yc'] - (w('motor_bund_d') + w('spiel_locker')) / 2)
          - L['mp_y'][0], 3.0)
@@ -407,29 +422,27 @@ def main():
              - (u + w('m3_senkung') / 2), 0.5)
     for name, klemm, schraube in (('Motorhalter', L['mh_klemm'],
                                    L['mh_schraube']),
-                                  ('Umlenkhalter', L['uh_klemm'],
-                                   L['uh_schraube'])):
+                                  ('Spannbock', L['sb_klemm'],
+                                   L['sb_schraube'])):
         p.ok('{}: M3x{:.0f} greift in den Einsatz'.format(name, schraube),
              schraube - klemm, 4.0)
         p.ok('{}: M3x{:.0f} setzt im Sackloch nicht auf'.format(
             name, schraube), w('insert_tief_t') - (schraube - klemm), 0.5)
-    p.ok('Umlenkhalter-Saeule deckt die Halterschrauben',
-         min(y for _, y in L['halter_schrauben']) - L['uh_saeule_y'][0]
+    p.ok('Spannbock deckt die Halterschrauben (hinten)',
+         min(y for _, y in L['halter_schrauben']) - L['sb_y'][0]
          - w('m3_durchgang') / 2, 2.0)
-    p.ok('Umlenkhalter-Saeule vorn hinter den Halterschrauben',
-         L['uh_saeule_y'][1] - (max(y for _, y in L['halter_schrauben'])
-                                + w('m3_durchgang') / 2), 2.0)
+    p.ok('Spannbock deckt die Halterschrauben (vorn)',
+         L['sb_y'][1] - (max(y for _, y in L['halter_schrauben'])
+                         + w('m3_durchgang') / 2), 2.0)
     p.ok('Motorhalter: aeussere Saeule deckt die vordere Halterschraube',
          L['mh_aussen_u'][1] - (w('halter_schraube_u')
                                 + w('m3_durchgang') / 2), 2.0)
-    p.ok('Lasche: Wand um die Zugschraube (Y)',
-         (L['klotz_y'][1] - L['klotz_y'][0]) / 2 - w('m3_durchgang') / 2, 3.0)
-    p.ok('Spannklotz: Mutter liegt auf (Boden unter der Tasche)',
-         (L['uh_zug_z'] - (w('m3_mutter_sw') + w('tasche_spiel')) / 2)
-         - L['klotz_z'][0], 0.5)
-    p.ok('Spannklotz: Wand zwischen Mutter und M5',
-         w('klotz_versatz') - (w('m3_mutter_h') + 0.3) / 2
-         - w('m5_durchgang') / 2, 5.0)
+    p.ok('Spannbock: Wand um die Zugschraube (Y)',
+         w('sb_wand_b') / 2 - w('m3_durchgang') / 2, 3.0)
+    p.ok('Spannbock: Wand ueber der Zugschraube',
+         L['sb_wand_z'][1] - (L['zug_z'] + w('m3_durchgang') / 2), 2.5)
+    p.ok('Spannbock: Kopf der Zugschraube ueber dem Boden',
+         (L['zug_z'] - w('m3_kopf_d') / 2) - L['sb_boden_z'][1], 0.5)
 
     # ------------------------------------------------------------------
     p.titel('9) Werkzeugzugang')
@@ -463,9 +476,7 @@ def main():
         # mit Rohr und Haltern, die dann schon sitzen
         halter = (('Motorplatte', 'Motorhalter Saeule hinten',
                    'Motorhalter Saeule aussen', 'X-Motor') if s < 0 else
-                  ('Umlenkhalter Saeule', 'Umlenkhalter oben',
-                   'Umlenkhalter unten', 'Umlenkhalter Steg',
-                   'Umlenkhalter Lasche'))
+                  ('Spannbock Boden', 'Spannbock Wand'))
         # Die Koepfe sitzen in Senkungen der Wand selbst — die kennt der
         # Quader nicht. Der Korridor beginnt deshalb an der Aussenflaeche
         # der Wand; die Senkung (5 bzw. 17 mm) reicht der Schluessel hinein.
@@ -489,7 +500,7 @@ def main():
                                            'Y-Wagen ' + n, 'Y-Schiene ' + n,
                                            'Rahmen 2040 ' + n), r=2.0)
         korridor('Halterschrauben {} (von oben)'.format(n),
-                 [(x(u), y, (L['mp_z1'] if s < 0 else L['uh_oben_z'][1])
+                 [(x(u), y, (L['mp_z1'] if s < 0 else L['sb_boden_z'][1])
                    + w('m3_kopf_h')) for u, y in L['halter_schrauben']],
                  'z', +1, schlitten + halter)
     korridor('Motorschrauben (von unten, bis Rohr/Stirnblock)',
@@ -499,14 +510,18 @@ def main():
               'Motorhalter Saeule aussen', 'Portalrohr', 'Stirnblock links',
               'Rueckwand links', 'X-Ritzel'))
     korridor('Zugschraube Umlenkung (von aussen)',
-             [(R - L['uh_lasche_u'][0] + 3.0, L['xr_yc'], L['uh_zug_z'])],
-             'x', +1, ('Umlenkhalter Saeule', 'Umlenkhalter oben',
-                       'Umlenkhalter Lasche', 'Stirnblock rechts',
-                       'Platte rechts'), r=2.5)
-    korridor('M5-Achse Umlenkung (von oben)',
-             [(R - u, L['xr_yc'], L['uh_kopf_z1']) for u in L['rolle_u']],
-             'z', +1, ('Umlenkhalter Saeule', 'Umlenkhalter oben',
-                       'Umlenkhalter Lasche', 'Spannklotz'), r=3.5)
+             [(R - L['sb_wand_u'][0] + w('m3_kopf_h'), L['zug_y'],
+               L['zug_z'])],
+             'x', +1, ('Spannbock Boden', 'Spannbock Wand',
+                       'Stirnblock rechts', 'Platte rechts'), r=2.5)
+    # Madenschrauben der Nabe: das Ritzel so drehen, dass eine nach innen
+    # zeigt, dann kommt der Schluessel durch die offene Seite des Schlittens
+    korridor('Madenschrauben Umlenkritzel (von innen)',
+             [(R - w('rolle_u') - w('ritzel_nabe_d') / 2, L['xr_yc'],
+               L['rolle_maden_z'])], 'x', -1,
+             ('Lagerschlitten unten', 'Lagerschlitten oben',
+              'Lagerschlitten Ruecken', 'Lagerschlitten Pfosten',
+              'X-Riemen Ruecklauf'), r=2.0)
 
     # ------------------------------------------------------------------
     p.titel('10) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
@@ -520,24 +535,28 @@ def main():
             ('Motorhalter', (L['mp_u'][1] - L['mp_u'][0],
                              L['mp_y'][1] - L['mp_y'][0],
                              L['mp_z1'] - L['mh_z'][0])),
-            ('Umlenkhalter', (L['uh_innen_u'] - L['uh_saeule_u'][0],
-                              L['uh_y'][1] - L['uh_saeule_y'][0],
-                              L['klotz_z'][1] - L['wand_z1'])),
+            ('Spannbock', (L['sb_u'][1] - L['sb_u'][0],
+                           L['sb_y'][1] - L['sb_y'][0],
+                           L['sb_wand_z'][1] - L['wand_z1'])),
+            ('Lagerschlitten', (L['ls_u_rel'][1] - L['ls_u_rel'][0],
+                                L['ls_y'][1] - L['ls_y'][0],
+                                L['ls_oben_z'][1] - L['ls_feder_z'][0])),
             ('Y-Motorhalter', (2.0 * L['ymh']['halbe_breite'],
                                L['ymh']['platte_y1'] - L['ymh']['wange_y0'],
                                L['ymh']['halter_z1']
                                - L['ymh']['halter_z0']))):
         p.ok('{}: groesste Kante'.format(name), max(masse), 250.0, '<=')
-    p.ok('Bruecke Mutternschlitz Umlenkung (stehend)',
-         (L['rolle_u'][1] - L['rolle_u'][0])
-         + w('m5_mutter_sw') / math.cos(math.radians(30)) + 0.4, 25.0, '<=')
+    # Lagerschlitten auf dem Ruecken liegend: der Pfosten ueberbrueckt
+    # die Oeffnung zwischen den Armen
+    p.ok('Bruecke Pfosten Lagerschlitten (auf dem Ruecken)',
+         L['ls_oben_z'][0] - L['ls_unten_z'][1], 25.0, '<=')
 
     # ------------------------------------------------------------------
     p.titel('11) Stueckliste Portal')
     for zeile in (
             '2x Y-Schlitten, 4x Klemmturm (links/rechts gespiegelt), '
             '2x Y-Motorhalter (zweimal dasselbe Teil), 1x Motorhalter, '
-            '1x Umlenkhalter, 1x Spannklotz',
+            '1x Spannbock, 1x Lagerschlitten',
             '8x M3x{:.0f} Zylinderkopf (Schlitten -> Y-Wagen)'.format(
                 L['wagen_schraube']),
             '8x M3x{:.0f} Zylinderkopf + 8x Messing-Einsatz M3 Ø5 '
@@ -553,14 +572,18 @@ def main():
                 L['motor_schraube']),
             '2x M3x{:.0f} Zylinderkopf (Motorhalter -> Stirnblock)'.format(
                 L['mh_schraube']),
-            '2x M3x{:.0f} Zylinderkopf (Umlenkhalter -> Stirnblock)'.format(
-                L['uh_schraube']),
-            '1x M5x{:.0f} Zylinderkopf + M5-Mutter + 3x Scheibe M5 '
-            '(Achse Umlenkritzel)'.format(w('uh_bolzen')),
-            '1x M3x{:.0f} + 1x M3-Mutter (Zugschraube Umlenkung)'.format(
+            '2x M3x{:.0f} Zylinderkopf (Spannbock -> Stirnblock)'.format(
+                L['sb_schraube']),
+            '1x M3x{:.0f} Zylinderkopf + 1x Messing-Einsatz M3 Ø5 '
+            '(Zugschraube, Einsatz im Lagerschlitten)'.format(
                 L['zug_schraube']),
-            '1x GT2-Ritzel 20 Z mit Kugellagern, Bohrung 5, {:.0f} mm lang '
-            '(Umlenkritzel, Nabe oben)'.format(w('rolle_laenge')),
+            '1x GT2-Ritzel 20 Z, Bohrung 5 (Umlenkung, Nabe oben)',
+            '1x Welle Ø{:.0f} x {:.0f} (Umlenkung)'.format(w('uw_d'),
+                                                          w('uw_laenge')),
+            '1x Rillenkugellager {:.0f}x{:.0f}, Bohrung 5 (z. B. MR105ZZ)'
+            .format(w('kl_d'), w('kl_b')),
+            '1x Gleitlager Ø{:.0f} x {:.0f}, Bohrung 5 (Sinterbronze)'.format(
+                w('gl_d'), w('gl_l')),
             '1x GT2-Ritzel 20 Z, Bohrung 5 (X-Motor)',
             '1x NEMA 17 (X)',
             '2x NEMA 17 (Y), je ein GT2-Ritzel 20 Z Bohrung 5 direkt auf der '

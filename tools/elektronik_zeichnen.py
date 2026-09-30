@@ -364,7 +364,7 @@ def draufsicht(f, w, L, K):
                     stroke_dasharray='6 4'))
     # Portal in der Mitte
     for n in ('Platte links', 'Platte rechts', 'Portalrohr', 'X-Schiene',
-              'Stirnblock links', 'Stirnblock rechts', 'Umlenkhalter Saeule',
+              'Stirnblock links', 'Stirnblock rechts', 'Spannbock Boden',
               'Motorhalter Saeule hinten'):
         q = P[n]
         art = 'profil' if n == 'Portalrohr' else (

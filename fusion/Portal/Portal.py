@@ -17,11 +17,13 @@
 #                              platte, die Ritzelnabe taucht in ihre Bund-
 #                              bohrung: die 20-mm-Welle traegt das ganze
 #                              Ritzel.
-#   Umlenkhalter + Spannklotz  X-Umlenkung rechts: Umlenkritzel (GT2 20 Z
-#                              mit Kugellagern, 16 mm lang, Nabe oben) auf
-#                              einer M5 im Langloch; eine M3 von aussen zieht
-#                              den Spannklotz und damit das Ritzel nach
-#                              aussen.
+#   Lagerschlitten + Spannbock X-Umlenkung rechts: ein Ritzel wie am Motor
+#                              (Nabe oben) fest auf einer Welle Ø5, die oben
+#                              in einem Kugellager, unten in einem Gleitlager
+#                              laeuft. Beide Lager sitzen im Lagerschlitten,
+#                              der auf dem Rohr gleitet (Feder in der oberen
+#                              Nut); eine M3 von aussen durch den Spannbock
+#                              zieht ihn nach aussen.
 #   Y-Motorhalter_links/rechts vorn an jeder 2040 (bis Rev. 15 eigenes
 #                              Skript YMotorhalter.py, Rev. 5): U-Buegel mit
 #                              Schenkeln an beiden Seitenflaechen, je 2x M5
@@ -75,7 +77,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 17
+REVISION = 18
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -137,17 +139,18 @@ MASSE = {
     # Madenschrauben in ihrer Mitte [w]
     'ritzel_spur':          (7.0, 'GT2 20 Z Ritzel: Spur zwischen den Borden'),
     'ritzel_nabe_d':       (13.0, 'GT2 20 Z Ritzel: Nabe'),
-    # Umlenkung seit Rev. 17: GT2-Ritzel 20 Z mit Kugellagern, Bohrung 5
-    # (vorhanden [v]), statt der 8,5 mm breiten Umlenkrolle. Es braucht
-    # 16 mm Platz (Angabe 2026-09-30); geformt wie das Ritzel am Motor
-    # angenommen [?]: unten Bord, Spur, Bord (ritzel_bord, ritzel_spur),
-    # oben die Nabe.
-    # Eingebaut mit der Nabe nach OBEN — die Spur steht auf dem Riemen,
-    # darunter ist nur 1,5 mm Platz bis zum X-Wagen.
-    'rolle_d':             (16.0, 'Umlenkritzel 20 Z: Bord (Huelle)'),
-    'rolle_laenge':        (16.0, 'Umlenkritzel: Gesamtlaenge (Angabe)'),
-    'rolle_nabe_d':        (13.0, 'Umlenkritzel: Nabe'),
-    'rolle_bohrung':        (5.0, 'Umlenkritzel: Bohrung (Kugellager)'),
+    # Umlenkung seit Rev. 18: ein normales Ritzel wie am X-Motor (ritzel_*)
+    # sitzt mit den Madenschrauben fest auf einer Welle Ø5. Die Welle laeuft
+    # oben in einem Rillenkugellager, unten in einem Gleitlager (Masse
+    # Angabe 2026-09-30, Bohrung 5 angenommen [?]). Eingebaut mit der Nabe
+    # nach OBEN — die Spur steht auf dem Riemen, darunter ist bis zum Rohr
+    # gerade Platz fuer das Gleitlager.
+    'kl_d':                (10.0, 'Kugellager (Umlenkung): Aussendurchmesser'),
+    'kl_b':                 (4.0, 'Kugellager (Umlenkung): Breite'),
+    'gl_d':                 (7.0, 'Gleitlager (Umlenkung): Aussendurchmesser'),
+    'gl_l':                 (8.0, 'Gleitlager (Umlenkung): Laenge'),
+    'uw_d':                 (5.0, 'Welle der Umlenkung: Durchmesser'),
+    'uw_laenge':           (30.0, 'Welle der Umlenkung: Laenge'),
 
     # --- X-Riemen: Lage wie in ToolheadZ.py (Riemenhalter) -----------------
     'x_riemen_y':         (-10.0, 'X-Riemen: Wirklinie des gezogenen Trums'),
@@ -202,6 +205,7 @@ MASSE = {
     'insert_tief_t':        (9.0, 'Gewindeeinsatz M3: tiefes Sackloch'),
     'inbus_frei_d':         (6.0, 'Werkzeugkorridor fuer den Inbus'),
     'spiel_locker':         (0.4, 'Montagespiel, diametral'),
+    'spiel_press':         (0.05, 'Presspassung, diametral (Lagersitze)'),
     'luft_bau':             (3.0, 'Mindestfreigang zu bewegten Teilen'),
     'fase_fuss':            (0.4, 'Fase gegen Elefantenfuss'),
     'lehre_dicke':          (3.0, 'Bohrlehren: Plattendicke'),
@@ -226,7 +230,7 @@ MASSE = {
     'm5_senk_t':            (5.0, 'Rueckwand: M5-Kopf versenkt'),
     # Kernbohrung: M5 durch den Stirnblock; unter dem Kopf bleiben 12 mm
     'kern_steg':           (12.0, 'Stirnblock: Material unter dem M5-Kopf'),
-    # Einsaetze im Stirnblock fuer Motor- bzw. Umlenkhalter (u, Y). Aussen
+    # Einsaetze im Stirnblock fuer Motorhalter bzw. Spannbock (u, Y). Aussen
     # neben dem Motorflansch, damit die Koepfe neben dem Motor liegen.
     'halter_schraube_u':  (-18.5, 'Halterschrauben: u'),
     'halter_schraube_y1': (-41.0, 'Halterschrauben: Y hinten'),
@@ -253,20 +257,29 @@ MASSE = {
     'mp_dicke':             (4.5, 'Motorplatte: Dicke'),
     'saeule_aussen_b':     (10.0, 'Motorhalter: aeussere Saeule, Breite'),
 
-    # --- Umlenkhalter + Spannklotz (rechts) ---------------------------------
-    # Der untere Bord des Umlenkritzels steht 2,75 mm ueber dem X-Wagen
-    # (Z +16), die Rolle bis Rev. 16 stand 3 mm darueber. Deshalb liegt die
-    # Achse 1,1 mm weiter aussen (bis Rev. 16: 26,35): Am rechten Ende des
-    # X-Wegs bleibt das Ritzel auch ganz innen 3 mm neben dem Wagen.
-    'rolle_u':            (25.25, 'X-Umlenkritzel: Achse in Mittelstellung (u)'),
-    'rolle_weg':            (4.0, 'X-Umlenkritzel: Spannweg je Richtung'),
-    # M5 x 40 von oben: Kopf auf dem Spannklotz, Mutter im Schlitz der
-    # unteren Platte. Die Plattendicken ergeben sich daraus (bis Rev. 16
-    # M5 x 30 fuer die 8,5 mm breite Rolle).
-    'uh_bolzen':           (40.0, 'Umlenkung: Laenge der M5-Achse'),
-    'klotz_dicke':          (7.0, 'Spannklotz: Dicke'),
-    'klotz_versatz':       (16.0, 'Spannklotz: Mutter so weit aussen neben der Achse'),
-    'uh_lasche_b':          (5.0, 'Umlenkhalter: Lasche fuer die Zugschraube'),
+    # --- Umlenkung (rechts): Lagerschlitten + Spannbock (seit Rev. 18) ------
+    # Beide Lager sitzen im Lagerschlitten, einem Rahmen um das Ritzel. Er
+    # liegt auf dem Rohr, eine Feder unter ihm laeuft in der oberen Nut.
+    # Eine M3 von aussen durch den Spannbock (fest auf dem Stirnblock) in
+    # einen Gewindeeinsatz im Ruecken des Schlittens zieht ihn nach aussen.
+    # Der untere Bord des Ritzels steht 2,75 mm ueber dem X-Wagen (Z +16):
+    # die Achse liegt so weit aussen, dass es am rechten Ende des X-Wegs
+    # auch ganz innen 3 mm neben dem Wagen bleibt (bis Rev. 16: 26,35).
+    'rolle_u':            (25.25, 'X-Umlenkung: Achse in Mittelstellung (u)'),
+    'rolle_weg':            (4.0, 'X-Umlenkung: Spannweg je Richtung'),
+    'ls_luft':              (0.5, 'Lagerschlitten: Luft Ritzel - Kugellager und Arme'),
+    'ls_wand':              (2.5, 'Lagerschlitten: Wand um die Lager'),
+    'ls_decke':             (2.0, 'Lagerschlitten: Decke ueber dem Kugellager'),
+    # 8 mm: darin der Gewindeeinsatz der Zugschraube (Ø4,6)
+    'ls_ruecken':           (8.0, 'Lagerschlitten: Ruecken hinter dem Ritzel'),
+    'ls_pfosten':           (5.0, 'Lagerschlitten: Pfosten vor dem Ritzel'),
+    'ls_aussen':            (8.0, 'Lagerschlitten: reicht so weit aussen neben die Achse'),
+    'ls_feder_b':           (5.8, 'Lagerschlitten: Feder in der oberen Nut, Breite'),
+    'ls_feder_t':           (1.5, 'Lagerschlitten: Feder, Tiefe'),
+    'sb_boden':             (6.0, 'Spannbock: Boden auf dem Stirnblock'),
+    'sb_wand':              (6.0, 'Spannbock: Wand fuer die Zugschraube, Dicke'),
+    'sb_wand_b':           (14.0, 'Spannbock: Wand, Breite'),
+    'zug_eingriff':         (5.0, 'Zugschraube: mindestens so weit im Einsatz'),
 
     # --- Y-Antrieb: je Ecke vorn ein NEMA 17 am Y-Motorhalter ---------------
     # Bis Rev. 15 eigenes Skript YMotorhalter.py (Rev. 5); der alte Halter
@@ -614,56 +627,69 @@ def lage():
     L['mh_klemm'] = L['mp_z1'] - L['wand_z1']
     L['mh_schraube'] = 5.0 * int((L['mh_klemm'] + 5.0) / 5.0 + 0.999)
 
-    # ---- Umlenkhalter (rechts) -----------------------------------------------
+    # ---- Umlenkung (rechts): Lagerschlitten und Spannbock --------------------
     L['rolle_u'] = (w('rolle_u') - w('rolle_weg'), w('rolle_u') + w('rolle_weg'))
-    # Umlenkritzel mit der Nabe nach oben, der Riemen mittig in der Spur
+    # Umlenkritzel wie am Motor, Nabe oben, der Riemen mittig in der Spur
     L['rolle_z0'] = L['xr_zm'] - w('ritzel_spur') / 2.0 - w('ritzel_bord')
-    L['rolle_z1'] = L['rolle_z0'] + w('rolle_laenge')
+    L['rolle_z1'] = L['rolle_z0'] + w('ritzel_laenge')
     L['rolle_nabe_z0'] = (L['rolle_z0'] + 2.0 * w('ritzel_bord')
                           + w('ritzel_spur'))
-    # Stapel auf der M5 von unten: Mutter im Schlitz der unteren Platte,
-    # Platte, Scheibe, Umlenkritzel, Scheibe, obere Platte, Spannklotz,
-    # Scheibe, Kopf
-    L['uh_unten_z'] = (L['wand_z1'], L['rolle_z0'] - w('m5_scheibe_h'))
-    L['uh_mutter_z'] = (L['uh_unten_z'][0],
-                        L['uh_unten_z'][0] + w('m5_mutter_h') + 0.3)
-    L['uh_spitze_z'] = L['uh_mutter_z'][1] - w('m5_mutter_h') + 0.7
-    L['klotz_z'] = (L['uh_spitze_z'] + w('uh_bolzen') - w('m5_scheibe_h')
-                    - w('klotz_dicke'),
-                    L['uh_spitze_z'] + w('uh_bolzen') - w('m5_scheibe_h'))
-    L['uh_oben_z'] = (L['rolle_z1'] + w('m5_scheibe_h'), L['klotz_z'][0])
-    L['uh_kopf_z1'] = L['klotz_z'][1] + w('m5_scheibe_h') + w('m5_kopf_h')
-    L['uh_zug_z'] = (L['klotz_z'][0] + L['klotz_z'][1]) / 2.0   # Zugschraube
-    # Platten: vorn und hinten 3 mm um das Umlenkritzel; innen so weit, dass
-    # die untere am Ende des X-Wegs 3 mm neben dem X-Wagen bleibt.
-    L['uh_y'] = (L['xr_yc'] - w('rolle_d') / 2.0 - 3.0,
-                 L['xr_yc'] + w('rolle_d') / 2.0 + 3.0)
-    L['uh_innen_u'] = R - (L['x_schiene_x'][1] + w('luft_bau'))
-    L['uh_steg_u1'] = L['rolle_u'][0] - w('rolle_d') / 2.0 - 3.0
-    # Saeule hinten: traegt beide Platten, steht auf Stirnblock und Rueckwand
-    L['uh_saeule_y'] = (L['rueck_y0'], L['uh_y'][0])
-    L['uh_saeule_u'] = (L['platte_u'][0], L['rueck_u'][1])
-    # Spannklotz: Bohrung fuer die M5 innen, Mutter der Zugschraube
-    # klotz_versatz weiter aussen. Die Zugschraube zieht ihn nach aussen.
-    L['klotz_u_rel'] = (-w('klotz_versatz') - (w('m3_mutter_h') + 0.3) / 2.0
-                        - 2.0,
-                        w('m5_durchgang') / 2.0 + 3.0)
-    L['klotz_y'] = (L['xr_yc'] - 6.0, L['xr_yc'] + 6.0)
-    # Lasche aussen: der Klotz kommt ganz gespannt bis 0,5 mm heran
-    L['uh_lasche_u'] = (L['rolle_u'][0] + L['klotz_u_rel'][0] - 0.5
-                        - w('uh_lasche_b'),
-                        L['rolle_u'][0] + L['klotz_u_rel'][0] - 0.5)
-    L['uh_oben_u'] = (L['uh_lasche_u'][0], L['uh_innen_u'])
-    # Zugschraube: Kopf aussen an der Lasche. Die Spitze muss ganz entspannt
-    # durch die Mutter reichen und darf ganz gespannt die M5 nicht erreichen.
-    spitze_min = (L['rolle_u'][1] - w('klotz_versatz')
-                  + (w('m3_mutter_h') + 0.3) / 2.0)
-    spitze_max = L['rolle_u'][0] - w('m5_durchgang') / 2.0 - 1.0
-    L['zug_spitze'] = (spitze_min, spitze_max)
-    L['zug_schraube'] = 2.0 * int((spitze_max - L['uh_lasche_u'][0]) / 2.0)
-    L['zug_spitze_ist'] = L['uh_lasche_u'][0] + L['zug_schraube']
-    L['uh_klemm'] = L['uh_oben_z'][1] - L['wand_z1']
-    L['uh_schraube'] = 5.0 * int((L['uh_klemm'] + 5.0) / 5.0 + 0.999)
+    L['rolle_maden_z'] = (L['rolle_nabe_z0'] + L['rolle_z1']) / 2.0
+    # Lager: das Ritzel liegt mit dem Bord auf dem Gleitlager, das ls_luft
+    # aus dem unteren Arm steht; ueber der Nabe ls_luft bis zum Kugellager
+    L['gl_z'] = (L['rolle_z0'] - w('gl_l'), L['rolle_z0'])
+    L['kl_z'] = (L['rolle_z1'] + w('ls_luft'),
+                 L['rolle_z1'] + w('ls_luft') + w('kl_b'))
+    # Lagerschlitten: unten und oben die Arme mit den Lagern, hinten der
+    # Ruecken, vorn der Pfosten, je luft_bau neben dem Bord des Ritzels
+    rf = w('ritzel_flansch_d') / 2.0
+    L['ls_unten_z'] = (L['wand_z1'], L['gl_z'][1] - w('ls_luft'))
+    L['ls_oben_z'] = (L['kl_z'][0], L['kl_z'][1] + w('ls_decke'))
+    L['ls_ruecken_y'] = (L['xr_yc'] - rf - w('luft_bau') - w('ls_ruecken'),
+                         L['xr_yc'] - rf - w('luft_bau'))
+    L['ls_pfosten_y'] = (L['xr_yc'] + rf + w('luft_bau'),
+                         L['xr_yc'] + rf + w('luft_bau') + w('ls_pfosten'))
+    L['ls_y'] = (L['ls_ruecken_y'][0], L['ls_pfosten_y'][1])
+    # u relativ zur Achse: aussen ls_aussen, innen die Wand um das Kugellager
+    L['ls_u_rel'] = (-w('ls_aussen'), w('kl_d') / 2.0 + w('ls_wand'))
+    # Feder unter dem unteren Arm, mittig in der oberen Nut des Rohrs; ihre
+    # hintere Flanke (zum Druckbett) unter 45 Grad
+    ym = L['profil_y0'] + w('profil_b') / 2.0
+    L['ls_feder_y'] = (ym - w('ls_feder_b') / 2.0, ym + w('ls_feder_b') / 2.0)
+    L['ls_feder_z'] = (L['wand_z1'] - w('ls_feder_t'), L['wand_z1'])
+    L['ls_feder_u_rel'] = (L['ls_u_rel'][0] + 1.0, L['ls_u_rel'][1] - 1.0)
+    # Welle: oben buendig mit dem Schlitten
+    L['uw_z'] = (L['ls_oben_z'][1] - w('uw_laenge'), L['ls_oben_z'][1])
+    # Zugschraube auf Riemenhoehe mitten im Ruecken: so kippt der Schlitten
+    # nicht; dass sie in Y neben der Achse zieht, faengt die Feder ab.
+    # Gewindeeinsatz von aussen in den Ruecken, dahinter Durchgang bis innen.
+    L['zug_y'] = (L['ls_ruecken_y'][0] + L['ls_ruecken_y'][1]) / 2.0
+    L['zug_z'] = L['xr_zm']
+    L['ls_einsatz_u_rel'] = (L['ls_u_rel'][0],
+                             L['ls_u_rel'][0] + w('insert_m3_t'))
+    # Spannbock: Wand 0,5 mm aussen vor dem ganz gespannten Schlitten, Boden
+    # auf Rohrende, Rueckwand und Stirnblock, 2x M3 in dessen Einsaetze
+    aussen = L['rolle_u'][0] + L['ls_u_rel'][0]        # Schlitten ganz aussen
+    innen = L['rolle_u'][1] + L['ls_u_rel'][0]         # ... und ganz innen
+    L['sb_wand_u'] = (aussen - 0.5 - w('sb_wand'), aussen - 0.5)
+    L['sb_u'] = (L['platte_u'][0], L['sb_wand_u'][1])
+    L['sb_wand_y'] = (L['zug_y'] - w('sb_wand_b') / 2.0,
+                      L['zug_y'] + w('sb_wand_b') / 2.0)
+    L['sb_y'] = (L['rueck_y0'], L['sb_wand_y'][1])
+    L['sb_boden_z'] = (L['wand_z1'], L['wand_z1'] + w('sb_boden'))
+    L['sb_wand_z'] = (L['sb_boden_z'][1],
+                      L['zug_z'] + w('m3_durchgang') / 2.0 + 3.0)
+    # Zugschraube: Kopf aussen an der Wand. Ganz entspannt (Schlitten innen)
+    # greift sie mindestens zug_eingriff in den Einsatz, ganz gespannt
+    # bleibt ihre Spitze im Ruecken.
+    L['zug_schraube'] = normlaenge(innen + w('zug_eingriff')
+                                   - L['sb_wand_u'][0], M3_LAENGEN)
+    L['zug_spitze_u'] = L['sb_wand_u'][0] + L['zug_schraube']
+    L['zug_eingriff_ist'] = min(L['zug_spitze_u'] - innen, w('insert_m3_t'))
+    L['zug_rest'] = L['rolle_u'][0] + L['ls_u_rel'][1] - L['zug_spitze_u']
+    # Spannbock -> Stirnblock: Boden + 5 mm Gewinde im Einsatz
+    L['sb_klemm'] = w('sb_boden')
+    L['sb_schraube'] = normlaenge(L['sb_klemm'] + 5.0, M3_LAENGEN)
 
     # ---- X-Riemen: Laenge ueber Motor, Umlenkung (Mitte) und Halter -----------
     x_m = -(R - w('motor_u'))
@@ -1669,7 +1695,7 @@ def bau_schlitten(app, design, comp, L, s, fehler):
     bohrung(comp, 'Kern_Senkung_' + n, 'x', pkt, w('m5_senkung'),
             xu(L['stirn_u'][0] - 1.0), xu(L['kern_senk_u']), k)
 
-    # Einsaetze fuer Motor- bzw. Umlenkhalter, von oben in den Stirnblock
+    # Einsaetze fuer Motorhalter bzw. Spannbock, von oben in den Stirnblock
     pkt = [(xu(u), y) for u, y in L['halter_schrauben']]
     bohrung(comp, 'Halter_Einsatz_' + n, 'z', pkt, w('insert_m3_d'),
             L['wand_z1'] - w('insert_tief_t'), L['wand_z1'] + 1.0, k)
@@ -1837,105 +1863,111 @@ def bau_y_motorhalter(app, design, comp, L, s, fehler):
     return k
 
 
-def bau_umlenkhalter(app, design, comp, L, fehler):
-    """X-Umlenkung rechts: Umlenkritzel (GT2 20 Z mit Kugellagern, Nabe
-    oben) auf einer M5 zwischen zwei Platten, die M5 laeuft in
-    Langloechern. Zwischen den Platten 16 mm fuer das Ritzel und je eine
-    Scheibe darueber und darunter. Die Mutter liegt im Schlitz unter der
-    unteren Platte und dreht nicht mit.
+def traene(sk, u, v, d_mm, richtung=1.0):
+    """Tropfenloch fuer liegend gedruckte Bohrungen: Kreis plus Spitze in
+    Druckrichtung (+v bei richtung=1), Flanken etwas steiler als 45 Grad.
+    Die Ecken der Spitze liegen knapp im Kreis, damit die Profile sauber
+    entstehen; beim Schneiden aller Profile ergibt die Vereinigung das
+    Loch (wie langloch_x)."""
+    r = d_mm / 2.0
+    c = 0.95 * r * math.sqrt(0.5)
+    kreis(sk, u, v, d_mm)
+    vieleck(sk, [(u - c, v + richtung * c),
+                 (u, v + richtung * r * math.sqrt(2.0)),
+                 (u + c, v + richtung * c)])
 
-    Spannen: auf der oberen Platte sitzt der Spannklotz (eigenes Teil) auf
-    der M5; eine M3 von aussen durch die Lasche zieht ihn nach aussen. Erst
-    ziehen, dann die M5 festziehen — sie haelt, die M3 stellt nur ein.
 
-    Die untere Platte liegt auf Rohr und Stirnblock; innen endet sie 3 mm
-    vor dem X-Wagen am Ende des X-Wegs. Befestigt wie der Motorhalter mit
-    2x M3 von oben in den Stirnblock.
+def traenen(comp, name, punkte, d, z0, z1, ziel):
+    """Senkrechte Bohrung(en) Ø d von z0 bis z1 als Traene mit der Spitze
+    nach +Y — der Lagerschlitten wird auf dem Ruecken liegend gedruckt."""
+    m = (z0 + z1) / 2.0
+    sk = skizze(comp, _ebene(comp, 'z', m, 'E_{}_Z{:.1f}'.format(
+        comp.name, m)), 'Sk_' + name)
+    for u, v in punkte:
+        traene(sk, u, v, d)
+    tasche(comp, alle_profile(sk), abs(z1 - z0), ziel)
 
-    Drucklage: auf der Rueckseite (Saeule) stehend; beide Platten stehen
-    senkrecht, Langloecher und Mutternschlitz werden kurze Bruecken."""
+
+def bau_spannbock(app, design, comp, L, fehler):
+    """Fester Anschlag der Zugschraube rechts: Boden auf Rohrende, Rueckwand
+    und Stirnblock (2x M3 von oben in dessen Einsaetze), innen eine Wand.
+    Die M3 geht von aussen durch die Wand in den Gewindeeinsatz im Ruecken
+    des Lagerschlittens; ganz gespannt bleibt der Schlitten 0,5 mm vor der
+    Wand.
+
+    Drucklage: Boden aufs Bett."""
     s = +1
     xu = lambda u: xs(L, s, u)
-    k = quader(comp, 'UH_Saeule', xb(L, s, *L['uh_saeule_u']),
-               L['uh_saeule_y'], (L['wand_z1'], L['uh_oben_z'][1]),
-               'neu').bodies.item(0)
-    k.name = 'Umlenkhalter'
-    quader(comp, 'UH_oben', xb(L, s, *L['uh_oben_u']), L['uh_y'],
-           L['uh_oben_z'], 'dazu', k)
-    quader(comp, 'UH_unten', xb(L, s, L['uh_oben_u'][0], L['uh_innen_u']),
-           L['uh_y'], L['uh_unten_z'], 'dazu', k)
-    quader(comp, 'UH_Steg', xb(L, s, L['uh_oben_u'][0], L['uh_steg_u1']),
-           L['uh_y'], (L['uh_unten_z'][1], L['uh_oben_z'][0]), 'dazu', k)
-    quader(comp, 'UH_Lasche', xb(L, s, *L['uh_lasche_u']), L['klotz_y'],
-           (L['uh_oben_z'][1], L['klotz_z'][1]), 'dazu', k)
-
-    # Langloecher fuer die M5 durch beide Platten
-    z0, z1 = L['uh_unten_z'][0] - 1.0, L['uh_oben_z'][1] + 1.0
-    zm = (z0 + z1) / 2.0
-    sk = skizze(comp, _ebene(comp, 'z', zm, 'E_UH_Langloch'), 'Sk_UH_Langloch')
-    langloch_x(sk, xu(L['rolle_u'][0]), xu(L['rolle_u'][1]), L['xr_yc'],
-               w('m5_durchgang'))
-    tasche(comp, alle_profile(sk), z1 - z0, k)
-    # Mutternschlitz von unten: die M5-Mutter gleitet mit, dreht nicht
-    ueber_eck = w('m5_mutter_sw') / math.cos(math.radians(30.0))
-    quader(comp, 'UH_Mutternschlitz',
-           xb(L, s, L['rolle_u'][0] - ueber_eck / 2.0 - 0.2,
-              L['rolle_u'][1] + ueber_eck / 2.0 + 0.2),
-           (L['xr_yc'] - (w('m5_mutter_sw') + 0.2) / 2.0,
-            L['xr_yc'] + (w('m5_mutter_sw') + 0.2) / 2.0),
-           (L['uh_mutter_z'][0] - 1.0, L['uh_mutter_z'][1]), 'weg', k)
-    # Zugschraube durch die Lasche
-    bohrung(comp, 'UH_Zugschraube', 'x', [(L['xr_yc'], L['uh_zug_z'])],
-            w('m3_durchgang'), xu(L['uh_lasche_u'][0] - 1.0),
-            xu(L['uh_lasche_u'][1] + 1.0), k)
-    # Halterschrauben von oben durch die Saeule in den Stirnblock
-    bohrung(comp, 'UH_Schrauben', 'z',
+    k = quader(comp, 'SB_Boden', xb(L, s, *L['sb_u']), L['sb_y'],
+               L['sb_boden_z'], 'neu').bodies.item(0)
+    k.name = 'Spannbock'
+    quader(comp, 'SB_Wand', xb(L, s, *L['sb_wand_u']), L['sb_wand_y'],
+           L['sb_wand_z'], 'dazu', k)
+    bohrung(comp, 'SB_Zugschraube', 'x', [(L['zug_y'], L['zug_z'])],
+            w('m3_durchgang'), *xb(L, s, L['sb_wand_u'][0] - 1.0,
+                                   L['sb_wand_u'][1] + 1.0), k)
+    bohrung(comp, 'SB_Schrauben', 'z',
             [(xu(u), y) for u, y in L['halter_schrauben']],
-            w('m3_durchgang'), L['wand_z1'] - 1.0, L['uh_oben_z'][1] + 1.0,
+            w('m3_durchgang'), L['wand_z1'] - 1.0, L['sb_boden_z'][1] + 1.0,
             k)
-    fussfase(comp, k, 'z', L['uh_saeule_y'][0], w('fase_fuss'), fehler,
-             'Umlenkhalter')
-    bbox_pruefen(k, 'Umlenkhalter',
-                 (xb(L, s, L['uh_saeule_u'][0], L['uh_innen_u']),
-                  (L['uh_saeule_y'][0], L['uh_y'][1]),
-                  (L['wand_z1'], L['klotz_z'][1])), fehler)
+    fussfase(comp, k, 'y', L['wand_z1'], w('fase_fuss'), fehler, 'Spannbock')
+    bbox_pruefen(k, 'Spannbock',
+                 (xb(L, s, *L['sb_u']), L['sb_y'],
+                  (L['wand_z1'], L['sb_wand_z'][1])), fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
 
-def bau_spannklotz(app, design, comp, L, fehler):
-    """Sitzt auf der oberen Platte des Umlenkhalters auf der M5. Innen die
-    Bohrung fuer die M5, aussen (klotz_versatz weiter) die Mutter der
-    Zugschraube, von oben eingelegt, auf einer Flanke liegend. Die Zug-
-    schraube kommt aus der Lasche, ihre Spitze bleibt ganz gespannt 1 mm vor
-    der M5. Gezeichnet in der Mitte des Spannwegs.
+def bau_lagerschlitten(app, design, comp, L, fehler):
+    """X-Umlenkung rechts: Rahmen um das Umlenkritzel. Unten ein Arm mit dem
+    Gleitlager, oben einer mit dem Kugellager (von unten eingepresst,
+    darueber eine Decke mit dem Durchgang fuer die Welle), hinten der
+    Ruecken mit dem Gewindeeinsatz der Zugschraube, vorn ein Pfosten.
+    Innen (zum X-Wagen) und aussen offen: dort laeuft der Riemen hinein und
+    um das Ritzel. Der Schlitten liegt auf dem Rohr, eine Feder unter dem
+    unteren Arm laeuft in der oberen Nut. Gezeichnet in der Mitte des
+    Spannwegs.
 
-    Drucklage: Unterseite aufs Bett."""
+    Drucklage: auf dem Ruecken liegend. Die Lagersitze liegen dann
+    waagerecht und sind als Traene ausgefuehrt, der Pfosten wird eine
+    kurze Bruecke zwischen den Armen."""
     s = +1
+    ua = w('rolle_u')
     xu = lambda u: xs(L, s, u)
-    u_i = w('rolle_u')
-    ku = (u_i + L['klotz_u_rel'][0], u_i + L['klotz_u_rel'][1])
-    x_klotz = xb(L, s, *ku)
-    k = quader(comp, 'Spannklotz', x_klotz, L['klotz_y'], L['klotz_z'],
+    x_ls = xb(L, s, ua + L['ls_u_rel'][0], ua + L['ls_u_rel'][1])
+    k = quader(comp, 'LS_unten', x_ls, L['ls_y'], L['ls_unten_z'],
                'neu').bodies.item(0)
-    k.name = 'Spannklotz'
-    bohrung(comp, 'Klotz_M5', 'z', [(xu(u_i), L['xr_yc'])],
-            w('m5_durchgang'), L['klotz_z'][0] - 1.0, L['klotz_z'][1] + 1.0,
-            k)
-    bohrung(comp, 'Klotz_M3', 'x', [(L['xr_yc'], L['uh_zug_z'])],
-            w('m3_durchgang'), xu(ku[0] - 1.0),
-            xu(u_i - w('m5_durchgang') / 2.0 - 1.5), k)
-    u_m = u_i - w('klotz_versatz')
-    ueber_eck = (w('m3_mutter_sw') / math.cos(math.radians(30.0))
-                 + w('tasche_spiel'))
-    dick = w('m3_mutter_h') + 0.3
-    quader(comp, 'Klotz_Mutter', xb(L, s, u_m - dick / 2.0, u_m + dick / 2.0),
-           (L['xr_yc'] - ueber_eck / 2.0, L['xr_yc'] + ueber_eck / 2.0),
-           (L['uh_zug_z'] - (w('m3_mutter_sw') + w('tasche_spiel')) / 2.0,
-            L['klotz_z'][1] + 1.0), 'weg', k)
-    fussfase(comp, k, 'y', L['klotz_z'][0], w('fase_fuss'), fehler,
-             'Spannklotz')
-    bbox_pruefen(k, 'Spannklotz', (x_klotz, L['klotz_y'], L['klotz_z']),
+    k.name = 'Lagerschlitten'
+    zm = (L['ls_unten_z'][1], L['ls_oben_z'][0])
+    quader(comp, 'LS_oben', x_ls, L['ls_y'], L['ls_oben_z'], 'dazu', k)
+    quader(comp, 'LS_Ruecken', x_ls, L['ls_ruecken_y'], zm, 'dazu', k)
+    quader(comp, 'LS_Pfosten', x_ls, L['ls_pfosten_y'], zm, 'dazu', k)
+    # Feder in der oberen Nut des Rohrs, hinten unter 45 Grad
+    fy, fz, t = L['ls_feder_y'], L['ls_feder_z'], w('ls_feder_t')
+    fu = L['ls_feder_u_rel']
+    prisma_vieleck(comp, 'LS_Feder', 'x',
+                   [(fy[0], fz[1]), (fy[1], fz[1]), (fy[1], fz[0]),
+                    (fy[0] + t, fz[0])],
+                   *xb(L, s, ua + fu[0], ua + fu[1]), 'dazu', k)
+    # Lagersitze (Presspassung) und Durchgang der Welle in der Decke
+    achse = [(xu(ua), L['xr_yc'])]
+    traenen(comp, 'LS_Gleitlager', achse, w('gl_d') + w('spiel_press'),
+            L['ls_unten_z'][0] - 1.0, L['ls_unten_z'][1] + 1.0, k)
+    traenen(comp, 'LS_Kugellager', achse, w('kl_d') + w('spiel_press'),
+            L['kl_z'][0] - 1.0, L['kl_z'][1], k)
+    traenen(comp, 'LS_Welle', achse, w('uw_d') + 1.0, L['kl_z'][1] - 0.5,
+            L['ls_oben_z'][1] + 1.0, k)
+    # Zugschraube: Gewindeeinsatz von aussen, dahinter Durchgang bis innen
+    e = L['ls_einsatz_u_rel']
+    bohrung(comp, 'LS_Einsatz', 'x', [(L['zug_y'], L['zug_z'])],
+            w('insert_m3_d'), *xb(L, s, ua + e[0] - 1.0, ua + e[1]), k)
+    bohrung(comp, 'LS_Zugschraube', 'x', [(L['zug_y'], L['zug_z'])],
+            w('m3_durchgang'), *xb(L, s, ua + e[1] - 0.5,
+                                   ua + L['ls_u_rel'][1] + 1.0), k)
+    fussfase(comp, k, 'z', L['ls_y'][0], w('fase_fuss'), fehler,
+             'Lagerschlitten')
+    bbox_pruefen(k, 'Lagerschlitten',
+                 (x_ls, L['ls_y'], (L['ls_feder_z'][0], L['ls_oben_z'][1])),
                  fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
@@ -2254,6 +2286,13 @@ def bau_referenz(app, design, teile, L, fehler):
         fertig(k, name, ((mitte[0] - r, mitte[0] + r),
                          (mitte[1] - r, mitte[1] + r), (z0, z1)), material)
 
+    def stab(c, name, mitte, d, z, material):
+        """Welle: Vollzylinder senkrecht, z = (z0, z1)."""
+        k = zylinder(c, name, 'z', mitte, d, z[0], z[1], 'neu').bodies.item(0)
+        r = d / 2.0
+        fertig(k, name, ((mitte[0] - r, mitte[0] + r),
+                         (mitte[1] - r, mitte[1] + r), z), material)
+
     def x_riemen():
         """Eine Schleife um Ritzel und Umlenkritzel, beide Enden im
         Riemenhalter. Zaehne innen, Wirklinie auf dem Teilkreis."""
@@ -2437,11 +2476,18 @@ def bau_referenz(app, design, teile, L, fehler):
             name = 'Ritzel_Y_{}_{}'.format(t, n)
             sicher(name, rad, c, name, (xs(L, s, 0.0), y), y_stufen,
                    w('motor_welle_d'), 'Aluminum 6061')
-    rz0, rn, rd = L['rolle_z0'], L['rolle_nabe_z0'], w('rolle_d')
+    # Umlenkritzel mit Welle und Lagern (Mitte des Spannwegs)
+    rz0, rn = L['rolle_z0'], L['rolle_nabe_z0']
     sicher('Umlenkritzel_X', rad, c, 'Umlenkritzel_X', (xu, yc),
-           [(rd, rz0, rz0 + bo), (L['ritzel_fuss_d'], rz0 + bo, rn - bo),
-            (rd, rn - bo, rn), (w('rolle_nabe_d'), rn, L['rolle_z1'])],
-           w('rolle_bohrung'), 'Aluminum 6061')
+           [(rf, rz0, rz0 + bo), (L['ritzel_fuss_d'], rz0 + bo, rn - bo),
+            (rf, rn - bo, rn), (w('ritzel_nabe_d'), rn, L['rolle_z1'])],
+           w('uw_d'), 'Aluminum 6061')
+    sicher('Welle_Umlenkung', stab, c, 'Welle_Umlenkung', (xu, yc),
+           w('uw_d'), L['uw_z'], 'Steel')
+    sicher('Kugellager_Umlenkung', rad, c, 'Kugellager_Umlenkung', (xu, yc),
+           [(w('kl_d'), L['kl_z'][0], L['kl_z'][1])], w('uw_d'), 'Steel')
+    sicher('Gleitlager_Umlenkung', rad, c, 'Gleitlager_Umlenkung', (xu, yc),
+           [(w('gl_d'), L['gl_z'][0], L['gl_z'][1])], w('uw_d'), 'Steel')
     sicher('Riemenhalter_Toolhead', box, c, 'Riemenhalter_Toolhead',
            L['rh_x'], (-w('rh_tiefe'), 0.0),
            (w('x_wagen_breite') / 2.0,
@@ -2613,23 +2659,25 @@ def hinweise_bauen(L, fehler):
         '  Umlenkung rechts, Achse X={:+.2f} (Spannweg {:+.2f} bis {:+.2f}):'
         .format(L['x_rolle'], L['x_rolle_bereich'][0],
                 L['x_rolle_bereich'][1]),
-        '  Umlenkritzel GT2 20 Z mit Kugellagern ({:.0f} mm lang, Bohrung 5)'
-        .format(w('rolle_laenge')),
-        '  mit der Nabe nach OBEN, die Spur unten auf dem Riemen. Auf',
-        '  M5x{:.0f} von oben (Kopf auf dem Spannklotz, Scheibe ueber und'
-        .format(w('uh_bolzen')),
-        '  unter dem Ritzel, Mutter im Schlitz unter der unteren Platte);',
-        '  zwischen den Platten {:.0f} mm.'.format(
-            L['uh_oben_z'][0] - L['uh_unten_z'][1]),
-        '  Spannen: M3x{:.0f} aussen durch die Lasche in die Mutter im'.format(
-            L['zug_schraube']),
-        '  Spannklotz — eindrehen zieht das Ritzel nach aussen. Dann die M5',
-        '  festziehen; sie haelt, die M3 stellt nur ein.',
-        '  Umlenkhalter: 2x M3x{:.0f} von oben in die Einsaetze des Stirnblocks.'
-        .format(L['uh_schraube']),
+        '  Umlenkritzel = GT2-Ritzel 20 Z wie am Motor, Nabe nach OBEN, mit',
+        '  den Madenschrauben fest auf einer Welle Ø{:.0f} x {:.0f}. Die Welle'
+        .format(w('uw_d'), w('uw_laenge')),
+        '  laeuft oben im Kugellager {:.0f}x{:.0f}, unten im Gleitlager'
+        .format(w('kl_d'), w('kl_b')),
+        '  Ø{:.0f}x{:.0f}; beide sitzen im LAGERSCHLITTEN. Das Ritzel liegt mit'
+        .format(w('gl_d'), w('gl_l')),
+        '  dem Bord auf dem Gleitlager, ueber der Nabe {:.1f} mm Luft.'
+        .format(w('ls_luft')),
+        '  Der Schlitten liegt auf dem Rohr, seine Feder laeuft in der oberen',
+        '  Nut. Spannen: M3x{:.0f} von aussen durch den SPANNBOCK in den'
+        .format(L['zug_schraube']),
+        '  Gewindeeinsatz im Ruecken des Schlittens — eindrehen zieht ihn',
+        '  nach aussen, die Schraube haelt ihn gegen den Riemenzug.',
+        '  Spannbock: 2x M3x{:.0f} von oben in die Einsaetze des Stirnblocks.'
+        .format(L['sb_schraube']),
         '  Riemenlaenge: Schleife {:.0f} mm, beide Enden im Riemenhalter'
         .format(riemen_x),
-        '  (ToolheadZ.py) — mit dem Umlenkritzel in Mittelstellung ablaengen.',
+        '  (ToolheadZ.py) — mit dem Schlitten in Mittelstellung ablaengen.',
         '',
         'ENDSCHALTER (Gabellichtschranken LM393, docs/endschalter.md):',
         '  Im Modell steht das Portal in der Mitte und der Toolhead in der',
@@ -2663,7 +2711,8 @@ def hinweise_bauen(L, fehler):
         '  Vor der ersten Referenzfahrt beide Schaltpunkte von Hand pruefen.',
         '',
         'MONTAGEREIHENFOLGE:',
-        '  1. Einsaetze einschmelzen: 2 je Klemmturm, 2 je Stirnblock (oben).',
+        '  1. Einsaetze einschmelzen: 2 je Klemmturm, 2 je Stirnblock (oben),',
+        '     1 von aussen in den Ruecken des Lagerschlittens.',
         '  2. Beide Klemmtuerme unter die Platte, je 2x M3x{:.0f} von oben.'
         .format(L['turm_schraube']),
         '     VOR dem Rohr: die Schrauben des vorderen liegen unter dem Rohr.',
@@ -2680,9 +2729,15 @@ def hinweise_bauen(L, fehler):
         ' {:.1f} mm'.format(w('welle_ueberstand')),
         '     unten heraussteht; Madenschrauben von vorn. Halter aufs linke',
         '     Rohrende (2x M3x{:.0f}).'.format(L['mh_schraube']),
-        '  6. Umlenkhalter aufs rechte Rohrende (2x M3x{:.0f}), Spannklotz,'
-        .format(L['uh_schraube']),
-        '     Umlenkritzel (Nabe oben) und M5 einsetzen, Zugschraube lose.',
+        '  6. Lagerschlitten: Kugellager von unten in den oberen Arm,',
+        '     Gleitlager von oben in den unteren (steht {:.1f} mm ueber).'
+        .format(w('ls_luft')),
+        '     Ritzel (Nabe oben) zwischen die Arme, Welle von oben durch',
+        '     Kugellager, Ritzel und Gleitlager, oben buendig; Ritzel auf',
+        '     das Gleitlager setzen, Madenschrauben fest. Schlitten aufs',
+        '     rechte Rohrende, Feder in die obere Nut. Spannbock auf den',
+        '     Stirnblock (2x M3x{:.0f}), Zugschraube M3x{:.0f} lose.'
+        .format(L['sb_schraube'], L['zug_schraube']),
         '  7. X-Riemen: ein Ende in den Riemenhalter, um Motor und',
         '     Umlenkritzel, zweites Ende einlegen, spannen. Laeuft er nicht',
         '     mittig in der Spur, das Ritzel nachstellen.',
@@ -2703,8 +2758,8 @@ def hinweise_bauen(L, fehler):
         '  Klemmturm (4x) .. Oberseite (Plattenseite) aufs Bett, Schlitz',
         '                    nach oben offen, Rippen senkrecht',
         '  Motorhalter ..... Motorplatte (Oberseite) aufs Bett',
-        '  Umlenkhalter .... auf der Rueckseite (Saeule) stehend',
-        '  Spannklotz ...... Unterseite aufs Bett',
+        '  Spannbock ....... Boden aufs Bett',
+        '  Lagerschlitten .. auf dem Ruecken liegend, Lagersitze als Traene',
         '  Y-Motorhalter .. Oberseite (Platte) aufs Bett, kopfueber',
         '  Halter_Y ........ Fussflaeche (die Seite am Profil) aufs Bett',
         '  Halter_X ........ Platinenseite aufs Bett, Zunge oben',
@@ -2717,9 +2772,11 @@ def hinweise_bauen(L, fehler):
         '  symmetrisch: zweimal dasselbe Teil.',
         '',
         'NICHT GEMESSEN — vor dem Druck pruefen [?]:',
-        '  Umlenkritzel: {:.0f} mm lang (Angabe); Bord {:.0f} und Nabe {:.0f} mm'
-        .format(w('rolle_laenge'), w('rolle_d'), w('rolle_nabe_d')),
-        '    und die Spur unten wie am Motorritzel sind angenommen.',
+        '  Lager der Umlenkung: Kugellager {:.0f}x{:.0f} und Gleitlager'
+        .format(w('kl_d'), w('kl_b')),
+        '    Ø{:.0f}x{:.0f} (Angabe), Bohrung {:.0f} angenommen. Die Sitze haben'
+        .format(w('gl_d'), w('gl_l'), w('uw_d')),
+        '    spiel_press; sitzen sie zu fest oder zu lose, den Wert anpassen.',
         '  Hinteres Y-Ritzel: {:.0f} mm hinter der Stirnseite angenommen; davon'
         .format(w('yh_hinter')),
         '    haengt nur die Riemenlaenge ab. Es muss wie vorn mit der Spur',
@@ -2830,7 +2887,7 @@ def run(context):
         for name in ('Schlitten_links', 'Klemmturm_hinten_links',
                      'Klemmturm_vorn_links', 'Motorhalter',
                      'Schlitten_rechts', 'Klemmturm_hinten_rechts',
-                     'Klemmturm_vorn_rechts', 'Umlenkhalter', 'Spannklotz',
+                     'Klemmturm_vorn_rechts', 'Spannbock', 'Lagerschlitten',
                      'Y-Motorhalter_links', 'Y-Motorhalter_rechts',
                      'Halter_Y', 'Fahne_Y', 'Halter_X', 'Klammer_X',
                      'Fahne_X', 'Bohrlehren'):
@@ -2850,9 +2907,9 @@ def run(context):
                               occ['Y-Motorhalter_' + n].component, L, s,
                               fehler)
         bau_motorhalter(app, design, occ['Motorhalter'].component, L, fehler)
-        bau_umlenkhalter(app, design, occ['Umlenkhalter'].component, L,
-                         fehler)
-        bau_spannklotz(app, design, occ['Spannklotz'].component, L, fehler)
+        bau_spannbock(app, design, occ['Spannbock'].component, L, fehler)
+        bau_lagerschlitten(app, design, occ['Lagerschlitten'].component, L,
+                           fehler)
         for name, bauen in (('Halter_Y', bau_halter_y),
                             ('Fahne_Y', bau_fahne_y),
                             ('Halter_X', bau_halter_x),

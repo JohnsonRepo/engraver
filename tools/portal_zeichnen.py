@@ -286,28 +286,30 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
         for u, y in L['halter_schrauben']:
             t.append(f.kreis(xu(u), y, 2.75, 'stahl'))
     else:
-        t.append(f.rect(xu(L['uh_oben_u'][0]), xu(L['uh_oben_u'][1]),
-                        *L['uh_y'], 'neu'))
-        t.append(f.rect(xu(L['uh_saeule_u'][0]), xu(L['uh_saeule_u'][1]),
-                        *L['uh_saeule_y'], 'neu'))
-        t.append(f.rect(xu(L['uh_lasche_u'][0]), xu(L['uh_lasche_u'][1]),
-                        *L['klotz_y'], 'neu', fill='#efbf91'))
-        ku = (w('rolle_u') + L['klotz_u_rel'][0],
-              w('rolle_u') + L['klotz_u_rel'][1])
-        t.append(f.rect(xu(ku[0]), xu(ku[1]), *L['klotz_y'], 'neu',
-                        fill='#efbf91'))
-        t.append(f.kreis(L['x_rolle'], L['xr_yc'], w('rolle_d') / 2,
-                         'stahl', fill='none', stroke_dasharray='2 2'))
-        t.append(f.kreis(L['x_rolle'], L['xr_yc'], w('m5_kopf_d') / 2,
-                         'stahl'))
-        xk = xu(L['uh_lasche_u'][0])
-        t.append(f.rect(xk, xk + 3.0, L['xr_yc'] - 2.75, L['xr_yc'] + 2.75,
-                        'stahl'))
-        t.append(f.linie(xk, L['xr_yc'], xu(L['zug_spitze_ist']),
-                         L['xr_yc'], '#4a4f57', 2.0))
+        # Spannbock auf dem Stirnblock, davor der Lagerschlitten (oberer
+        # Arm, in der Mitte des Spannwegs) mit Kugellager und Welle; das
+        # Ritzel darunter gestrichelt
+        t.append(f.rect(xu(L['sb_u'][0]), xu(L['sb_u'][1]), *L['sb_y'],
+                        'neu'))
+        t.append(f.rect(xu(L['sb_wand_u'][0]), xu(L['sb_wand_u'][1]),
+                        *L['sb_wand_y'], 'neu'))
         for u, y in L['halter_schrauben']:
             t.append(f.kreis(xu(u), y, 2.75, 'stahl'))
-    # Der vordere Klemmturm liegt unter Motor- bzw. Umlenkhalter: Umriss
+        ua = w('rolle_u')
+        t.append(f.rect(xu(ua + L['ls_u_rel'][0]), xu(ua + L['ls_u_rel'][1]),
+                        *L['ls_y'], 'neu', fill='#f3c79b'))
+        t.append(f.kreis(L['x_rolle'], L['xr_yc'], w('ritzel_flansch_d') / 2,
+                         'stahl', fill='none', stroke_dasharray='2 2'))
+        t.append(f.kreis(L['x_rolle'], L['xr_yc'], w('kl_d') / 2, 'stahl'))
+        t.append(f.kreis(L['x_rolle'], L['xr_yc'], w('uw_d') / 2, 'stahl',
+                         fill='#ffffff'))
+        xk = xu(L['sb_wand_u'][0])
+        t.append(f.rect(xk, xk + w('m3_kopf_h'), L['zug_y'] - 2.75,
+                        L['zug_y'] + 2.75, 'stahl'))
+        t.append(f.linie(xk, L['zug_y'], xu(L['zug_spitze_u']),
+                         L['zug_y'], '#4a4f57', 1.6, '3 2'))
+    # Der vordere Klemmturm liegt unter Motorhalter bzw. Lagerschlitten:
+    # Umriss
     # obendrauf
     t.append(f.rect(xu(L['kt_u'][0]), xu(L['kt_u'][1]), *L['kt_y_vorn'],
                     'neu', fill='none', stroke_dasharray='3 2'))
@@ -363,77 +365,65 @@ def schnitt_tuerme(f, w, L):
 # ---- Schnitt durch die Umlenkung ------------------------------------------
 def schnitt_umlenkung(f, w, L, tw, TL):
     """XZ-Schnitt durch die Achse des Umlenkritzels (Y = Ritzelachsen),
-    Blick von vorn. Der X-Wagen steht vor der Schnittebene: nur als
-    Umriss."""
+    Blick von vorn. Vor der Schnittebene stehen der X-Wagen (nur als
+    Umriss) und der Pfosten des Lagerschlittens (weggelassen); dahinter
+    der Ruecken des Schlittens, der Spannbock und die Zugschraube."""
     R = L['R']
     xu = lambda u: R - u
     t = []
-    # dahinter: Stirnblock, Platte, Saeule
+    ua, xr = w('rolle_u'), L['x_rolle']
+    x_ls = (xu(ua + L['ls_u_rel'][1]), xu(ua + L['ls_u_rel'][0]))
+    # dahinter: Stirnblock, Platte, Spannbock, Ruecken des Schlittens
     t.append(f.rect(xu(L['stirn_u'][0]), xu(L['stirn_u'][1]),
                     L['platte_z1'], L['wand_z1'], 'hinten'))
     t.append(f.rect(xu(L['platte_u'][0]), xu(L['platte_u'][1]),
                     L['platte_z0'], L['platte_z1'], 'hinten'))
-    t.append(f.rect(xu(L['uh_saeule_u'][0]), xu(L['uh_saeule_u'][1]),
-                    L['wand_z1'], L['uh_oben_z'][1], 'hinten'))
+    t.append(f.rect(xu(L['sb_u'][0]), xu(L['sb_u'][1]), *L['sb_boden_z'],
+                    'hinten'))
+    t.append(f.rect(xu(L['sb_wand_u'][0]), xu(L['sb_wand_u'][1]),
+                    *L['sb_wand_z'], 'hinten'))
+    t.append(f.rect(*x_ls, L['ls_unten_z'][1], L['ls_oben_z'][0], 'hinten'))
+    # Zugschraube (dahinter): Kopf aussen am Spannbock, Einsatz im Ruecken
+    xk, zz = xu(L['sb_wand_u'][0]), L['zug_z']
+    e = L['ls_einsatz_u_rel']
+    t.append(f.rect(xu(ua + e[1]), xu(ua + e[0]), zz - w('insert_m3_d') / 2,
+                    zz + w('insert_m3_d') / 2, 'stahl', fill='#e8d9a8'))
+    t.append(f.rect(xu(L['zug_spitze_u']), xk, zz - 1.5, zz + 1.5, 'stahl'))
+    t.append(f.rect(xk, xk + w('m3_kopf_h'), zz - 2.75, zz + 2.75, 'stahl'))
     # Rohr (geschnitten, die Ebene liegt knapp hinter seiner Vorderseite)
     t.append(f.rect(f.a[0] - 5, w('profil_laenge') / 2, L['profil_z0'],
                     L['profil_z1'], 'profil'))
-    # Platten mit Langloch, Steg, Lasche
-    ru = L['rolle_u']
-    sl = (xu(ru[1]) - w('m5_durchgang') / 2, xu(ru[0]) + w('m5_durchgang') / 2)
-    ueber_eck = w('m5_mutter_sw') / math.cos(math.radians(30)) + 0.4
-    ms = (xu(ru[1]) - ueber_eck / 2, xu(ru[0]) + ueber_eck / 2)
-    xi, xa = xu(L['uh_innen_u']), xu(L['uh_oben_u'][0])
-    oz0, oz1 = L['uh_oben_z']
-    uz0, uz1 = L['uh_unten_z']
-    t.append(f.rect(xi, sl[0], oz0, oz1, 'neu'))
-    t.append(f.rect(sl[1], xa, oz0, oz1, 'neu'))
-    t.append(f.rect(xi, ms[0], uz0, uz1, 'neu'))
-    t.append(f.rect(ms[1], xa, uz0, uz1, 'neu'))
-    t.append(f.rect(ms[0], sl[0], L['uh_mutter_z'][1], uz1, 'neu'))
-    t.append(f.rect(sl[1], ms[1], L['uh_mutter_z'][1], uz1, 'neu'))
-    t.append(f.rect(xu(L['uh_steg_u1']), xa, uz1, oz0, 'neu'))
-    t.append(f.rect(xu(L['uh_lasche_u'][1]), xa, oz1, L['klotz_z'][1], 'neu'))
-    # Spannklotz in Mittelstellung, mit M5-Bohrung und Mutter
-    xr = L['x_rolle']
-    ku = (xu(w('rolle_u') + L['klotz_u_rel'][1]),
-          xu(w('rolle_u') + L['klotz_u_rel'][0]))
-    t.append(f.rect(ku[0], xr - w('m5_durchgang') / 2, *L['klotz_z'], 'neu',
-                    fill='#efbf91'))
-    t.append(f.rect(xr + w('m5_durchgang') / 2, ku[1], *L['klotz_z'], 'neu',
-                    fill='#efbf91'))
-    xm = xu(w('rolle_u') - w('klotz_versatz'))
-    t.append(f.rect(xm - w('m3_mutter_h') / 2, xm + w('m3_mutter_h') / 2,
-                    L['uh_zug_z'] - 2.75, L['uh_zug_z'] + 2.75, 'stahl'))
-    # Zugschraube: Kopf aussen an der Lasche
-    t.append(f.rect(xa, xa + 3.0, L['uh_zug_z'] - 2.75, L['uh_zug_z'] + 2.75,
-                    'stahl'))
-    t.append(f.rect(xu(L['zug_spitze_ist']), xa, L['uh_zug_z'] - 1.5,
-                    L['uh_zug_z'] + 1.5, 'stahl'))
-    # Umlenkritzel mit der Nabe oben, Scheiben, M5 mit Kopf und Mutter
-    rr, rf = w('rolle_d') / 2, L['ritzel_fuss_d'] / 2
+    # Lagerschlitten geschnitten: unterer Arm mit dem Gleitlager, oberer
+    # mit dem Kugellager und der Decke darueber
+    gl, kl = w('gl_d') / 2, w('kl_d') / 2
+    ws = (w('uw_d') + 1.0) / 2
+    uz0, uz1 = L['ls_unten_z']
+    oz0, oz1 = L['ls_oben_z']
+    kz1 = L['kl_z'][1]
+    for a, b, z0_, z1_ in ((x_ls[0], xr - gl, uz0, uz1),
+                           (xr + gl, x_ls[1], uz0, uz1),
+                           (x_ls[0], xr - kl, oz0, kz1),
+                           (xr + kl, x_ls[1], oz0, kz1),
+                           (x_ls[0], xr - ws, kz1, oz1),
+                           (xr + ws, x_ls[1], kz1, oz1)):
+        t.append(f.rect(a, b, z0_, z1_, 'neu', fill='#f3c79b'))
+    t.append(f.rect(xr - gl, xr + gl, *L['gl_z'], 'kauf', fill='#d8b877'))
+    t.append(f.rect(xr - kl, xr + kl, *L['kl_z'], 'stahl'))
+    # Umlenkritzel wie am Motor, Nabe oben, fest auf der Welle
+    rr, rf = w('ritzel_flansch_d') / 2, L['ritzel_fuss_d'] / 2
     z0, zn, bo = L['rolle_z0'], L['rolle_nabe_z0'], w('ritzel_bord')
     for a, b, r in ((z0, z0 + bo, rr), (zn - bo, zn, rr),
-                    (zn, L['rolle_z1'], w('rolle_nabe_d') / 2)):
+                    (zn, L['rolle_z1'], w('ritzel_nabe_d') / 2)):
         t.append(f.rect(xr - r, xr + r, a, b, 'kauf'))
     t.append(f.rect(xr - rf, xr + rf, z0 + bo, zn - bo, 'kauf',
                     fill='#d9ccb8'))
+    t.append(f.rect(xr - w('uw_d') / 2, xr + w('uw_d') / 2, *L['uw_z'],
+                    'stahl'))
     # ganz innen (entspannt) als Umriss: dort steht es dem X-Wagen am
     # rechten Ende am naechsten
     xi_r = xu(L['rolle_u'][1])
     t.append(f.rect(xi_r - rr, xi_r + rr, z0, zn, 'kauf', fill='none',
                     stroke_dasharray='2 2'))
-    for zz in (uz1, L['rolle_z1'], L['klotz_z'][1]):
-        t.append(f.rect(xr - 5.0, xr + 5.0, zz, zz + w('m5_scheibe_h'),
-                        'stahl'))
-    t.append(f.rect(xr - 2.5, xr + 2.5, L['uh_spitze_z'],
-                    L['klotz_z'][1] + w('m5_scheibe_h'), 'stahl'))
-    t.append(f.rect(xr - w('m5_kopf_d') / 2, xr + w('m5_kopf_d') / 2,
-                    L['klotz_z'][1] + w('m5_scheibe_h'), L['uh_kopf_z1'],
-                    'stahl'))
-    t.append(f.rect(xr - w('m5_mutter_sw') / 2, xr + w('m5_mutter_sw') / 2,
-                    L['uh_mutter_z'][1] - w('m5_mutter_h'),
-                    L['uh_mutter_z'][1], 'stahl'))
     # Riemen um das Umlenkritzel: die Achsebene schneidet ihn nur aussen,
     # wo er vom gezogenen Trum auf den Ruecklauf umlenkt (Zaehne innen)
     t.append(f.rect(xr + w('ritzel_teilkreis') / 2 - L['riemen_innen'],
@@ -569,16 +559,16 @@ def main():
         (xu(19, 1), L['kt_stift_y_hinten'], 'Klemmturm hinten'),
         (xu(19, 1), -21.5, 'Klemmturm vorn'),
         (xu(w('y_riemen_linie'), 1), L['platte_y0'] - 5, 'Y-Riemen'),
-        (xu(0, 1), -38, 'Umlenkhalter'),
-        # der Stirnblock schaut rechts neben der oberen Platte heraus
-        (xu((L['stirn_u'][0] + L['uh_oben_u'][0]) / 2, 1),
-         (L['uh_saeule_y'][1] + L['stirn_y'][1]) / 2,
+        (xu(-10, 1), L['sb_y'][0] + 4.0, 'Spannbock (2× M3 von oben)'),
+        # der Stirnblock schaut vor dem Spannbock heraus
+        (xu((L['stirn_u'][0] + L['stirn_u'][1]) / 2, 1),
+         (L['sb_y'][1] + L['stirn_y'][1]) / 2,
          'Stirnblock: M5 in die\nKernbohrung des Rohrs'),
-        (xu(L['uh_lasche_u'][0], 1) + 1.5, L['xr_yc'] - 1.5,
+        (xu(L['sb_wand_u'][0], 1) + 1.5, L['zug_y'],
          'Zugschraube M3×{} (von außen)'.format(de(L['zug_schraube'], 0))),
-        (L['x_rolle'] + 9, L['xr_yc'] + 3.5, 'Spannklotz'),
-        (L['x_rolle'], L['xr_yc'], 'M5-Achse, darunter das\n'
-         'Umlenkritzel 20 Z'),
+        (L['x_rolle'] - 5.0, L['ls_pfosten_y'][0] + 1.0, 'Lagerschlitten'),
+        (L['x_rolle'], L['xr_yc'], 'Welle im Kugellager,\n'
+         'darunter das Umlenkritzel'),
         # Riemen und Riemenhalter stehen schon links angeschrieben
         (xw1 + 30, 50, 'Toolhead am rechten\nEnde des X-Wegs (Umriss)')],
         fr_.ox + fr_.breite + 12, 'start')
@@ -621,7 +611,7 @@ def main():
 
     s3 = 4.2
     fd = Feld(fc.ox + fc.breite + 250, y2, (R - 46.0, R + 26.0),
-              (2.0, 60.0), s3)
+              (2.0, 50.0), s3)
     t += fd.ausschnitt('schnitt_uh', schnitt_umlenkung(fd, w, L, tw, TL))
     t += fd.rahmen('Schnitt B–B: X-Umlenkung')
     t.append(text(fd.ox, fd.oy + fd.hoehe + 14,
@@ -629,22 +619,28 @@ def main():
     t.append(text(fd.ox, fd.oy + fd.hoehe + 25,
                   'Trägerplatte am rechten Ende als Umriss (liegen davor)',
                   8.0, GRAU))
+    kz = L['kl_z']
     t += fd.spalte([
-        (L['x_rolle'], L['uh_kopf_z1'] - 2, 'M5×{}'.format(
-            de(w('uh_bolzen'), 0))),
-        (L['x_rolle'] + 10, L['klotz_z'][1] - 2, 'Spannklotz'),
-        (R - L['uh_lasche_u'][0] + 1.5, L['uh_zug_z'] - 1.5,
-         'Zugschraube M3×{}'.format(de(L['zug_schraube'], 0))),
-        (L['x_rolle'] + 14, L['uh_oben_z'][0] + 2, 'obere Platte'),
-        (L['x_rolle'] + 4.2, L['xr_zm'] + 1.5,
-         'Umlenkritzel 20 Z mit\nKugellagern, 16 mm'),
-        (L['x_rolle'] + w('rolle_nabe_d') / 2 - 1.0,
-         (L['rolle_nabe_z0'] + L['rolle_z1']) / 2, 'Nabe oben'),
+        (L['x_rolle'], L['uw_z'][1] - 1.0, 'Welle Ø{} × {}'.format(
+            de(w('uw_d'), 0), de(w('uw_laenge'), 0))),
+        (L['x_rolle'] + w('kl_d') / 2 - 1.0, (kz[0] + kz[1]) / 2,
+         'Kugellager {} × {}'.format(de(w('kl_d'), 0), de(w('kl_b'), 0))),
+        (L['x_rolle'] - 6.0, L['ls_oben_z'][1] - 1.5,
+         'Lagerschlitten (Pfosten davor\nweggelassen)'),
+        (R - L['sb_wand_u'][0] + 1.5, L['zug_z'] + 1.0,
+         'Zugschraube M3×{} im Einsatz\n(dahinter)'.format(
+             de(L['zug_schraube'], 0))),
+        (R - L['sb_wand_u'][1] + 1.0, L['sb_wand_z'][1] - 1.5,
+         'Spannbock (dahinter)'),
+        (L['x_rolle'] + w('ritzel_nabe_d') / 2 - 1.0,
+         (L['rolle_nabe_z0'] + L['rolle_z1']) / 2,
+         'Nabe oben, Madenschrauben'),
+        (L['x_rolle'] + 4.2, L['xr_zm'] + 1.5, 'Ritzel 20 Z wie am Motor'),
         (L['x_rolle'] + w('ritzel_teilkreis') / 2, L['xr_zm'] - 1.5,
          'X-Riemen (außen um das Ritzel)'),
-        (L['x_rolle'] + 14, L['uh_unten_z'][1] - 2, 'untere Platte'),
-        (L['x_rolle'] + 2, L['uh_mutter_z'][0] + 2,
-         'M5-Mutter im Schlitz'),
+        (L['x_rolle'] + w('gl_d') / 2 - 1.0,
+         (L['gl_z'][0] + L['gl_z'][1]) / 2,
+         'Gleitlager Ø{} × {}'.format(de(w('gl_d'), 0), de(w('gl_l'), 0))),
         (w('profil_laenge') / 2 - 5, (L['profil_z1'] + fd.b[0]) / 2,
          'Portalrohr'),
         (w('profil_laenge') / 2 + 10, (L['profil_z1'] + fd.b[0]) / 2,
@@ -654,13 +650,13 @@ def main():
     # Der untere Bord steht nur 2,75 mm ueber dem X-Wagen; ganz innen
     # (Umriss) bleibt er am rechten Ende 3 mm daneben
     xw_ende = L['xw_max'] + tw('x_wagen_laenge') / 2
-    x_bord = R - (L['rolle_u'][1] + w('rolle_d') / 2)
+    x_bord = R - (L['rolle_u'][1] + w('ritzel_flansch_d') / 2)
     zb = L['rolle_z0'] + w('ritzel_bord') / 2
     t += fd.luft(x_bord, zb, xw_ende, zb, '{} mm'.format(
         de(x_bord - xw_ende, 1)), 'end', -5, 4)
-    # Pfeil ueber dem Spannklotz, unter der Zeigerlinie der M5
-    x0, y0 = fd.px(L['x_rolle'] + w('m5_kopf_d') / 2 + 2.0,
-                   L['klotz_z'][1] + 1.8)
+    # Pfeil ueber dem Lagerschlitten: die Zugschraube zieht ihn nach aussen
+    x0, y0 = fd.px(L['x_rolle'] + w('uw_d') / 2 + 2.0,
+                   L['ls_oben_z'][1] + 1.8)
     t += [linie(x0, y0, x0 + 22, y0, ORANGE, 1.4),
           pfeil(x0 + 25, y0, 1, 0, ORANGE),
           text(x0 + 30, y0 + 3, 'spannen', 8.0, ORANGE, fett=True,
@@ -706,7 +702,7 @@ def main():
     # engste Luft am Ende des X-Wegs (portal_check.py misst dasselbe)
     luft_motor = (L['xw_min'] + tw('traeger_x_links') - L['x_motor']
                   - w('motor_flansch') / 2)
-    luft_rolle = (R - (L['rolle_u'][1] + w('rolle_d') / 2)
+    luft_rolle = (R - (L['rolle_u'][1] + w('ritzel_flansch_d') / 2)
                   - (L['xw_max'] + tw('x_wagen_laenge') / 2))
     # Fahnenlasche links neben dem Y-Riemen (rechts gleich weit, siehe
     # x_schiene_versatz)
@@ -731,7 +727,7 @@ def main():
         ('', 'der Wagenmitte; gespannt am Y-Motor'),
         ('X-Riemen', 'Unterkante {} mm, Schleife ≈ {} mm'.format(
             de(L['xr_z0'], 2), de(riemen_x, 0))),
-        ('X-Spanner', 'Umlenkritzel ±{} mm, M3×{} von außen'.format(
+        ('X-Spanner', 'Lagerschlitten ±{} mm, M3×{} von außen'.format(
             de(w('rolle_weg'), 0), de(L['zug_schraube'], 0))),
         ('X-Motor', 'Ritzel ganz auf der Welle schon ab {} mm (gemessen {}):'
          .format(de(w('motor_welle_l'), 0), de(w('motor_welle_ist'), 0))),

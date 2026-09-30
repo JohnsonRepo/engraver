@@ -343,7 +343,7 @@ def portal_bauraeume(w, L):
     gespiegelt, die Namen tragen die Seite. Was das Portal nur in Y bewegt
     (Y-Schiene, Rahmen, Y-Riemen), laeuft als langer Quader durch.
 
-    Spannklotz und Umlenkritzel stehen als Huelle ueber ihren
+    Lagerschlitten und Umlenkritzel stehen als Huelle ueber ihren
     ganzen Stellweg; der Riemen als Koerper um seine Wirklinie."""
     R = L['R']
     lang = 800.0
@@ -417,38 +417,34 @@ def portal_bauraeume(w, L):
           (L['ritzel_z0'], L['ritzel_z1']), 'kaufteil'),
     ]
     s = 1
-    ru = L['rolle_u']
-    rr = w('rolle_d') / 2.0
-    rn = w('rolle_nabe_d') / 2.0
-    kopf = w('m5_kopf_d') / 2.0
+    ru, rel = L['rolle_u'], L['ls_u_rel']
+    rf = w('ritzel_flansch_d') / 2.0
+    rn = w('ritzel_nabe_d') / 2.0
+    ls_x = xb(s, ru[0] + rel[0], ru[1] + rel[1])      # ueber den Spannweg
+    fu = L['ls_feder_u_rel']
+    zw = (L['ls_unten_z'][1], L['ls_oben_z'][0])
     feste += [
-        q('Umlenkhalter Saeule', xb(s, *L['uh_saeule_u']), L['uh_saeule_y'],
-          (L['wand_z1'], L['uh_oben_z'][1])),
-        q('Umlenkhalter oben', xb(s, *L['uh_oben_u']), L['uh_y'],
-          L['uh_oben_z']),
-        q('Umlenkhalter unten', xb(s, L['uh_oben_u'][0], L['uh_innen_u']),
-          L['uh_y'], L['uh_unten_z']),
-        q('Umlenkhalter Steg', xb(s, L['uh_oben_u'][0], L['uh_steg_u1']),
-          L['uh_y'], (L['uh_unten_z'][1], L['uh_oben_z'][0])),
-        q('Umlenkhalter Lasche', xb(s, *L['uh_lasche_u']), L['klotz_y'],
-          (L['uh_oben_z'][1], L['klotz_z'][1])),
-        q('Spannklotz', xb(s, ru[0] + L['klotz_u_rel'][0],
-                           ru[1] + L['klotz_u_rel'][1]),
-          L['klotz_y'], L['klotz_z']),
+        q('Spannbock Boden', xb(s, *L['sb_u']), L['sb_y'], L['sb_boden_z']),
+        q('Spannbock Wand', xb(s, *L['sb_wand_u']), L['sb_wand_y'],
+          L['sb_wand_z']),
+        # Lagerschlitten: Rahmen um das Umlenkritzel
+        q('Lagerschlitten unten', ls_x, L['ls_y'], L['ls_unten_z']),
+        q('Lagerschlitten oben', ls_x, L['ls_y'], L['ls_oben_z']),
+        q('Lagerschlitten Ruecken', ls_x, L['ls_ruecken_y'], zw),
+        q('Lagerschlitten Pfosten', ls_x, L['ls_pfosten_y'], zw),
+        q('Lagerschlitten Feder', xb(s, ru[0] + fu[0], ru[1] + fu[1]),
+          L['ls_feder_y'], L['ls_feder_z']),
         # Umlenkritzel mit der Nabe nach oben: Borde und Spur, darueber
         # die schmalere Nabe
-        q('X-Umlenkritzel', xb(s, ru[0] - rr, ru[1] + rr), (yc - rr, yc + rr),
+        q('X-Umlenkritzel', xb(s, ru[0] - rf, ru[1] + rf), (yc - rf, yc + rf),
           (L['rolle_z0'], L['rolle_nabe_z0']), 'kaufteil'),
         q('X-Umlenkritzel Nabe', xb(s, ru[0] - rn, ru[1] + rn),
           (yc - rn, yc + rn), (L['rolle_nabe_z0'], L['rolle_z1']),
           'kaufteil'),
-        q('M5-Kopf Umlenkung', xb(s, ru[0] - kopf, ru[1] + kopf),
-          (yc - kopf, yc + kopf),
-          (L['klotz_z'][1] + w('m5_scheibe_h'), L['uh_kopf_z1']), 'stahl'),
-        q('Zugschraube Kopf', xb(s, L['uh_lasche_u'][0] - 3.0,
-                                 L['uh_lasche_u'][0]),
-          (yc - 2.75, yc + 2.75), (L['uh_zug_z'] - 2.75, L['uh_zug_z'] + 2.75),
-          'stahl'),
+        q('Zugschraube Kopf', xb(s, L['sb_wand_u'][0] - 3.0,
+                                 L['sb_wand_u'][0]),
+          (L['zug_y'] - 2.75, L['zug_y'] + 2.75),
+          (L['zug_z'] - 2.75, L['zug_z'] + 2.75), 'stahl'),
         # Ruecklauf des X-Riemens: fest zwischen Motor und Umlenkung
         q('X-Riemen Ruecklauf', (L['x_motor'], L['x_rolle_bereich'][1]),
           (L['xr_y_rueck'] - L['riemen_aussen'],
@@ -469,19 +465,20 @@ def portal_bauraeume(w, L):
         ('Motorhalter Saeule hinten', 'Rueckwand links'),
         ('Motorhalter Saeule hinten', 'Portalrohr'),
         ('Motorhalter Saeule aussen', 'Stirnblock links'),
-        ('Umlenkhalter Saeule', 'Umlenkhalter oben'),
-        ('Umlenkhalter Saeule', 'Umlenkhalter Steg'),
-        ('Umlenkhalter Saeule', 'Umlenkhalter unten'),
-        ('Umlenkhalter oben', 'Umlenkhalter Steg'),
-        ('Umlenkhalter unten', 'Umlenkhalter Steg'),
-        ('Umlenkhalter oben', 'Umlenkhalter Lasche'),
-        ('Umlenkhalter Saeule', 'Stirnblock rechts'),
-        ('Umlenkhalter Saeule', 'Rueckwand rechts'),
-        ('Umlenkhalter Saeule', 'Portalrohr'),
-        ('Umlenkhalter unten', 'Portalrohr'),
-        ('Umlenkhalter unten', 'Stirnblock rechts'),
-        ('Umlenkhalter oben', 'Spannklotz'),
-        ('Umlenkhalter Lasche', 'Zugschraube Kopf'),
+        # Spannbock auf Stirnblock, Rueckwand und Rohrende
+        ('Spannbock Boden', 'Spannbock Wand'),
+        ('Spannbock Boden', 'Stirnblock rechts'),
+        ('Spannbock Boden', 'Rueckwand rechts'),
+        ('Spannbock Boden', 'Portalrohr'),
+        ('Spannbock Wand', 'Zugschraube Kopf'),
+        # Lagerschlitten: ein Teil, liegt auf dem Rohr, die Feder in der Nut
+        ('Lagerschlitten unten', 'Lagerschlitten Ruecken'),
+        ('Lagerschlitten unten', 'Lagerschlitten Pfosten'),
+        ('Lagerschlitten oben', 'Lagerschlitten Ruecken'),
+        ('Lagerschlitten oben', 'Lagerschlitten Pfosten'),
+        ('Lagerschlitten unten', 'Lagerschlitten Feder'),
+        ('Lagerschlitten unten', 'Portalrohr'),
+        ('Lagerschlitten Feder', 'Portalrohr'),
         # der Riemen laeuft um Ritzel und Rolle
         ('X-Riemen Ruecklauf', 'X-Ritzel'),
         ('X-Riemen Ruecklauf', 'X-Umlenkritzel'),

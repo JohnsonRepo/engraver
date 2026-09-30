@@ -65,8 +65,8 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | X-Schiene | MGN15, **450 mm** | `[v]` |
 | Riemen, Ritzel | GT2 6 mm, **20 Z** | `[v]` |
 | Umlenkrollen | **glatt, Bohrung 5 mm**; 20-Z-Ritzel mit Kugellager vorhanden | `[v]` |
-| X-Umlenkung | **20-Z-Ritzel mit Kugellagern**, Bohrung 5, als Umlenkritzel mit der Nabe nach oben — in der Schleife läuft die Zahnseite auf der Umlenkung, eine glatte Rolle gehört auf den Riemenrücken | gewählt (Portal.py, seit Rev. 17 das vorhandene Ritzel statt einer 8,5 mm breiten Rolle) |
-| Umlenkritzel 20 Z | **16 mm** lang, braucht im Umlenkhalter mindestens 16 mm Platz; Bord Ø16, Nabe Ø13, Spur unten wie am Motorritzel | Länge Angabe 2026-09-30, Form `[?]` angenommen |
+| X-Umlenkung | **GT2-Ritzel 20 Z wie am Motor** fest auf einer **Welle Ø5**, die oben in einem Rillenkugellager, unten in einem Gleitlager läuft — wie die Y-Umlenkung hinten; beide Lager im Lagerschlitten, Nabe oben. In der Schleife läuft die Zahnseite auf der Umlenkung, eine glatte Rolle gehört auf den Riemenrücken | gewählt (Portal.py Rev. 18, Angabe 2026-09-30; Rev. 17 hatte ein Ritzel mit eingebauten Lagern, Rev. 16 eine 8,5 mm breite Rolle) |
+| Lager der X-Umlenkung | Rillenkugellager **10 × 4** (z. B. MR105ZZ), Gleitlager **Ø7 × 8**, Welle **Ø5**, 30 mm lang | Maße Angabe 2026-09-30, Bohrung 5 angenommen `[?]` |
 | Motoren | **Stepperonline** NEMA 17, **37 mm** ohne Welle, **60 mm** mit Welle | `[v]` Angabe am Aufbau |
 | Motordaten | **17HE15-1504S**: **1,5 A** je Phase, 2,3 Ω, 4,0 mH, 42 Ncm, Körper 38 mm, Welle Ø5 × 23,5 mm, D-Fläche 20 mm lang, 280 g (gemessen 37 / 23 mm, siehe oben) | `[v]` Typ laut Etikett (2026-09-27), Daten `[w]` Datenblatt Stepperonline |
 | NEMA 17, Welle | ragt **23 mm** heraus (60 − 37), Ø5. Die Halter sind auf **20 mm** ausgelegt (erste Angabe): so trägt die Welle das ganze Ritzel, die 3 mm mehr stehen frei über | `[v]` Angabe am Aufbau |

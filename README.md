@@ -91,9 +91,9 @@ Kernbohrung) — die Vorderseite bleibt frei für die X-Schiene. Unter jeder
 Platte hängen **zwei gleiche Klemmtürme wie bei v8** mit Rippen und
 Querstift, einer je Riemenende.
 Links steht der **X-Motor** über dem Rohrende — so tief, dass seine
-20-mm-Welle das ganze Ritzel trägt —, rechts die **Umlenkung** mit
-einem 16 mm langen Umlenkritzel (GT2 20 Z mit Kugellagern, seit Rev. 17),
-das ein Spannklotz nach außen zieht. Vorn an jedem 2040
+20-mm-Welle das ganze Ritzel trägt —, rechts die **Umlenkung**: ein Ritzel
+wie am Motor auf einer Welle in Kugel- und Gleitlager, beide in einem
+Lagerschlitten, den eine M3 nach außen zieht (seit Rev. 18). Vorn an jedem 2040
 sitzt der [Y-Motorhalter](#y-motorhalter-neu) mit dem Y-Motor, seit Rev. 16
 ebenfalls aus `Portal.py`. Aluprofile, Linearführungen,
 Riemen und Motoren stehen als Referenz mit im Modell (Komponente
@@ -223,10 +223,12 @@ und die Y-Motorhalter, den Y-Antrieb selbst mit dem Riemenweg über den
 ganzen Y-Weg und das Elektronikfach hinter
 dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 34, Portal Rev. 17 mit
-dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 17 baut den
-Umlenkhalter für das 16 mm lange Umlenkritzel um (ToolheadZ Rev. 34 ändert
-dazu nur einen Kommentar). Portal Rev. 14 legt das
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 34, Portal Rev. 18 mit
+dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 18 lenkt den
+X-Riemen mit einem Ritzel auf einer Welle um, die in Kugel- und Gleitlager
+im Lagerschlitten läuft; Spannbock und Schlitten ersetzen Umlenkhalter und
+Spannklotz (ToolheadZ Rev. 34 ändert dazu nur einen Kommentar). Portal
+Rev. 14 legt das
 hintere 2060 nach der Messung 435 mm hinter das vordere (die 2040 stehen
 hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
 Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,

@@ -473,6 +473,12 @@ def verkabelung_pruefen(p, Q):
     p.ja('Not-Aus: NO bleibt frei (am Wechsler laege dort C)',
          N.get('Not-Aus NO', {'Not-Aus NO'}) <= {'Not-Aus NO', 'Not-Aus C',
                                                  'Not-Aus NC'})
+    p.ok('Not-Aus-Kontakt {:.0f} A / {:.0f} V~ [v]: traegt die Dauerlast'
+         .format(vk.NOTAUS_A, vk.NOTAUS_V), vk.NOTAUS_A,
+         leistung.leistung()['strom'], '>=', 'A')
+    w2 = next((lt for lt in lts if lt['nr'] == 'W2'), None)
+    p.ok('   ... und den Strom, fuer den W2 ausgelegt ist (Netzteil)',
+         vk.NOTAUS_A, w2['strom'] if w2 else float('inf'), '>=', 'A')
     aus = vk.netze(zustand=('nicht gedrueckt',), lts=lts)
     p.ja('Schalter aus: hinter dem Schalter keine 24 V',
          not {'Shield +', 'Wandler IN+', 'Lüfter +'} & aus['Buchse +'])

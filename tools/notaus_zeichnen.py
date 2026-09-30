@@ -246,11 +246,12 @@ def main():
             de(x, 0, True))),
         ('Befestigung', '2 × M5×{} mit Scheibe, Hammermuttern M5'.format(
             de(NL['m5_schraube'], 0))),
-        ('Taster', 'Gewinde Ø{} [v] → Loch Ø{}; Mutter innen'.format(
-            de(nw('schalter_d'), 0), de(NL['loch_d'], 1))),
+        ('Taster', 'Gewinde Ø{} rund [v] → Loch Ø{}; Mutter innen, fest '
+         'anziehen'.format(de(nw('schalter_d'), 0), de(NL['loch_d'], 1))),
         ('', 'Kopf Ø{} und {} mm Tiefe angenommen [?]'.format(
             de(nw('schalter_kopf_d'), 0), de(nw('schalter_tiefe'), 0))),
-        ('Kabel', 'W2, 2 × 0,75 mm²: C und NC, NO bleibt frei'),
+        ('Kabel', 'W2, 2 × 0,75 mm²: C und NC, NO bleibt frei; Kontakte '
+         '3 A / 250 V [v]'),
         ('Druck', 'PETG, Front aufs Bett, keine Stützen'),
         ('Luft', '{} mm zum Y-Motor, {} mm zum Tisch'.format(
             de(NL['motor_x'][0] - NL['lasche_x'][1][1], 0),

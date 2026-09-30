@@ -15,11 +15,13 @@
 #               und Motor rechts (als Huelle, wie YMotorhalter.py) und der
 #               Taster.
 #
-# Der Taster [v] (Bild und Angabe vom 2026-09-30): Pilzkopf, rastet beim
-# Druecken ein, Drehen loest; ein Wechsler C, NO, NC mit Loetfahnen, Gewinde
-# 16 mm. Verdrahtet wird C und NC (Oeffner) in der 24-V-Leitung, NO bleibt
-# frei (docs/verkabelung.md). Kopf, Tiefe und Mutter sind nicht gemessen [?]:
-# sie dienen nur der Referenz und der Pruefung, das Gehaeuse hat Reserve.
+# Der Taster [v] (Bild und Angaben vom 2026-09-30): Pilzkopf, rastet beim
+# Druecken ein, Drehen loest; ein Wechsler C, NO, NC mit Loetfahnen,
+# 3 A / 250 V; Gewinde 16 mm, rund ohne Abflachung: gegen Verdrehen haelt
+# ihn nur die Mutter. Verdrahtet wird C und NC (Oeffner) in der
+# 24-V-Leitung, NO bleibt frei (docs/verkabelung.md). Kopf, Tiefe und
+# Mutter sind nicht gemessen [?]: sie dienen nur der Referenz und der
+# Pruefung, das Gehaeuse hat Reserve.
 #
 # Koordinaten = Maschinenkoordinaten wie Portal.py: X nach rechts, Y nach
 # vorn, Z senkrecht, Z = 0 in der Mitte des Portalrohrs. Im Fusion-Modell
@@ -32,7 +34,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'NotAus'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -70,6 +72,7 @@ MASSE = {
 
     # --- Taster (Pilzkopf, Wechsler C/NO/NC) --------------------------------
     # Rev. 2: Gewinde 16 mm [v] Angabe 2026-09-30 (Rev. 1: 19 mm angenommen).
+    # Rev. 3: nur der Bericht; das Gewinde ist rund [v], das Loch bleibt.
     # Kopf, Tiefe, Mutter und Klemmbereich sind nicht gemessen [?].
     'schalter_d':          (16.0, 'Not-Aus: Gewindedurchmesser [v] Angabe'),
     'schalter_spiel':       (0.3, 'Loch so viel groesser als das Gewinde'),
@@ -805,8 +808,9 @@ def hinweise_bauen(L, fehler):
         '  verschiebbar; rechts bleibt Abstand zum Y-Motorhalter.',
         'TASTER: Gewinde Ø{:.0f} [v], von vorn durch das Loch (Ø{:.1f}),'.format(
             w('schalter_d'), L['loch_d']),
-        '  Mutter innen. Vor dem Einbau anloeten: C und NC (Oeffner), NO',
-        '  bleibt frei.',
+        '  Mutter innen FEST anziehen: das Gewinde ist rund, beim Entriegeln',
+        '  (Drehen) haelt nur sie den Taster. Vorher anloeten: C und NC',
+        '  (Oeffner), NO bleibt frei.',
         'KABEL: rechts oben durch den Durchlass (Ø{:.0f}), innen mit einem'.format(
             w('kabel_d')),
         '  Kabelbinder durch die zwei Schlitze festlegen (Zugentlastung).',

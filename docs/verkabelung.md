@@ -177,7 +177,7 @@ Anschließen mit dem Ohmmeter prüfen
 | 4 | Aderendhülse 0,75 mm² | Schraubklemmen |
 | 1 | Widerstand 10 kΩ, ¼ W | W8 |
 | 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator 100 nF | W16 |
-| — | Not-Aus-Pilztaster 16 mm mit Wechsler C/NO/NC (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |
+| — | Not-Aus-Pilztaster 16 mm, Wechsler C/NO/NC, 3 A / 250 V (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |
 | — | Schrumpfschlauch 2–6 mm, Kabelbinder, Beschriftung (W-Nummer an beiden Enden) | alle |
 <!-- /tabelle:material -->
 
@@ -503,8 +503,8 @@ Standardwert von GRBL.
   Wago, AWG 26 hat nur 0,13 mm².
 * **Neu:** der Pull-down 10 kΩ an Z− (W8), der 24-V-Wächter an Abort (W16)
   und die Einschaltreihenfolge.
-* **Not-Aus** (2026-09-30): Wechsler C/NO/NC, C und NC in der 24-V-Leitung,
-  NO frei; im eigenen Gehäuse vorn am vorderen 2060.
+* **Not-Aus** (2026-09-30): Wechsler C/NO/NC, 3 A / 250 V, C und NC in der
+  24-V-Leitung, NO frei; im eigenen Gehäuse vorn am vorderen 2060.
 * **Lüfter:** 24 V an den Wagos. Der Hinweis auf einen 12-V-Lüfter ist
   gestrichen.
 * **GRBL:** `$130=385` und `$132=82`, beide mit 1 mm Rückzug und 2 mm
@@ -512,11 +512,9 @@ Standardwert von GRBL.
 
 ## Noch offen
 
-1. **Not-Aus** `[?]`: ob die Kontakte mindestens 3 A tragen. Das steht auf
-   dem Taster oder im Angebot ([notaus.md](notaus.md#noch-offen)).
-2. **Motorfarben** `[w]`: die übliche Belegung von Stepperonline. Beim
+1. **Motorfarben** `[w]`: die übliche Belegung von Stepperonline. Beim
    Anschließen mit dem Ohmmeter prüfen.
-3. **Lichtschranken** `[w]`: Reihenfolge der Stifte am Modul und ob D0 beim
+2. **Lichtschranken** `[w]`: Reihenfolge der Stifte am Modul und ob D0 beim
    Unterbrechen HIGH wird. Das zeigt Prüfung D.
-4. **Wandler:** Schraubklemmen oder Lötpunkte, und ob IN− und OUT−
+3. **Wandler:** Schraubklemmen oder Lötpunkte, und ob IN− und OUT−
    verbunden sind. Beides zeigt ein Blick auf das Modul.

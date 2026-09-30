@@ -234,7 +234,7 @@ Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
 Wandler, Wago) gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)). Endschalter Rev. 1 für X und Y mit
 `endschalter_check.py` geprüft ([endschalter.md](docs/endschalter.md)),
-Not-Aus-Gehäuse Rev. 2 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
+Not-Aus-Gehäuse Rev. 3 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)); die Halter der

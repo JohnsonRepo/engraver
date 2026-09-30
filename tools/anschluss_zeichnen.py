@@ -132,6 +132,8 @@ def main():
                                    'Pilztaster, Drehen löst',
                                    'Wechsler: C–NC trennt 24 V',
                                    'NO bleibt frei',
+                                   'Kontakte {:.0f} A / {:.0f} V'.format(
+                                       vk.NOTAUS_A, vk.NOTAUS_V),
                                    'Gehäuse: NotAus.py'], fett=1,
                fill='#fff4f4', stroke=P24)
     for y, s in ((250, 'C'), (268, 'NC'), (300, 'NO')):

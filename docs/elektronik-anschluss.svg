@@ -35,7 +35,8 @@
 <text x="31.0" y="260.0" font-size="8.3" fill="#5b6472" text-anchor="start">Pilztaster, Drehen löst</text>
 <text x="31.0" y="273.0" font-size="8.3" fill="#5b6472" text-anchor="start">Wechsler: C–NC trennt 24 V</text>
 <text x="31.0" y="286.0" font-size="8.3" fill="#5b6472" text-anchor="start">NO bleibt frei</text>
-<text x="31.0" y="299.0" font-size="8.3" fill="#5b6472" text-anchor="start">Gehäuse: NotAus.py</text>
+<text x="31.0" y="299.0" font-size="8.3" fill="#5b6472" text-anchor="start">Kontakte 3 A / 250 V</text>
+<text x="31.0" y="312.0" font-size="8.3" fill="#5b6472" text-anchor="start">Gehäuse: NotAus.py</text>
 <circle cx="204.0" cy="250.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
 <text x="198.0" y="253.0" font-size="7.5" fill="#5b6472" text-anchor="end">C</text>
 <circle cx="204.0" cy="268.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>

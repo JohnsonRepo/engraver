@@ -264,8 +264,8 @@ def main():
     p.titel('9) Stueckliste')
     for zeile in (
             'Druck (PETG, gelb wenn vorhanden): Gehaeuse_NotAus',
-            'Not-Aus-Pilztaster, Gewinde 16 mm, Wechsler C/NO/NC '
-            '(vorhanden)',
+            'Not-Aus-Pilztaster, Gewinde 16 mm rund, Wechsler C/NO/NC, '
+            '3 A / 250 V (vorhanden)',
             '2 x M5x{:.0f} + 2 Scheiben M5 + 2 Hammermuttern M5 (Nut 6), '
             'mittlere Nut vorn am 2060'.format(NL['m5_schraube']),
             '1 Kabelbinder 2,5 mm (Zugentlastung)'):

@@ -268,6 +268,11 @@ PULLUP = (20e3, 50e3)
 VCC, V_IL, V_IH = 5.0, 1.5, 3.0
 NETZ_TOLERANZ = 0.05        # 24 V +- 5 %
 
+# Not-Aus: Kontakte 3 A / 250 V [v] (Angabe 2026-09-30), wie bei solchen
+# Tastern ein Wechselstromwert. Bei 24 V Gleichstrom genuegt das fuer die
+# Dauerlast der Maschine von gut 2 A [w]; elektronik_check.py vergleicht.
+NOTAUS_A, NOTAUS_V = 3.0, 250.0
+
 
 def waechter_spannung(u24, r_pullup):
     """Spannung an A0 (V): Knoten aus R1 zu u24, R2 zu GND und dem
@@ -563,8 +568,9 @@ def tab_material(K):
     z.append('| 1 | Widerstand 10 kΩ, ¼ W | W8 |')
     z.append('| 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator '
              '100 nF | W16 |')
-    z.append('| — | Not-Aus-Pilztaster 16 mm mit Wechsler C/NO/NC '
-             '(vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |')
+    z.append('| — | Not-Aus-Pilztaster 16 mm, Wechsler C/NO/NC, {:.0f} A / '
+             '{:.0f} V (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | '
+             'W2 |'.format(NOTAUS_A, NOTAUS_V))
     z.append('| — | Schrumpfschlauch 2–6 mm, Kabelbinder, Beschriftung '
              '(W-Nummer an beiden Enden) | alle |')
     return '\n'.join(z)

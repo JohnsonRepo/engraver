@@ -1,6 +1,6 @@
 # Not-Aus — Gehäuse vorn am vorderen 2060
 
-Erzeugt von `fusion/NotAus/NotAus.py` (ein Druckteil, Rev. 2). Geprüft mit
+Erzeugt von `fusion/NotAus/NotAus.py` (ein Druckteil, Rev. 3). Geprüft mit
 `python3 tools/notaus_check.py`, Skizze in [notaus.svg](notaus.svg) (neu
 erzeugen mit `python3 tools/notaus_zeichnen.py`). Wie er verdrahtet wird,
 steht in [verkabelung.md](verkabelung.md) (W2 und W16).
@@ -9,15 +9,19 @@ steht in [verkabelung.md](verkabelung.md) (W2 und W16).
 
 ## Der Taster
 
-Nach deinem Bild und deiner Angabe vom 2026-09-30 `[v]`: roter Pilzkopf
+Nach deinem Bild und deinen Angaben vom 2026-09-30 `[v]`: roter Pilzkopf
 „STOP“, rastet beim Drücken ein, Drehen im Uhrzeigersinn löst ihn. Das
-Gewinde hat **16 mm**. Er hat **einen Wechsler** mit drei Lötfahnen, **C**,
-**NO** und **NC**.
+Gewinde hat **16 mm** und ist rund, ohne Abflachung. Er hat **einen
+Wechsler** mit drei Lötfahnen, **C**, **NO** und **NC**, belastbar mit
+**3 A / 250 V**.
 
 * **C und NC** liegen in der 24-V-Leitung (W2). Gedrückt trennt der Öffner
   die 24 V für Shield, Wandler und Lüfter, also Motoren und Laser.
 * **NO bleibt frei.** Beim Drücken liegt dort C, also +24 V. An einen Pin
   des Uno darf das nicht.
+* **3 A reichen:** Die Maschine zieht dauernd gut 2 A (Motoren, Laser über
+  den Wandler, Lüfter), das Netzteil liefert bis 3 A. 250 V ist ein
+  Wechselstromwert; bei 24 V Gleichstrom und 2 A genügt der Kontakt `[w]`.
 * GRBL erfährt vom Not-Aus über den **24-V-Wächter** (W16), einen
   Spannungsteiler an Abort. Fehlen die 24 V, bricht GRBL ab
   ([verkabelung.md](verkabelung.md#7-24-v-wächter-w16)).
@@ -48,7 +52,8 @@ beliebig weit, nach rechts bis etwa X +205; dann bleiben zum Y-Motor noch
 
 **Rev. 2:** Gewinde 16 mm `[v]` nach deiner Angabe; Rev. 1 hatte 19 mm
 angenommen. Geändert hat sich nur das Loch, Ø16,3 statt Ø19,3. Kasten,
-Laschen und Lage bleiben.
+Laschen und Lage bleiben. **Rev. 3** ändert nur den Bericht des Skripts
+(Mutter fest anziehen), die Geometrie ist dieselbe wie in Rev. 2.
 
 ## Montage
 
@@ -58,9 +63,9 @@ Laschen und Lage bleiben.
 2. **Anlöten:** Ader 1 an **C**, Ader 2 an **NC**, **NO frei**.
    Schrumpfschlauch über jede Fahne.
 3. **Taster** von vorn durch das Loch stecken, die Mutter von hinten durch
-   die offene Rückseite **fest** anziehen. Beim Entriegeln dreht man am
-   Pilz, und das Loch ist rund: Nur die Mutter hält den Taster dann gegen
-   Verdrehen.
+   die offene Rückseite **fest** anziehen. Das Gewinde ist rund: Beim
+   Entriegeln dreht man am Pilz, und nur die Mutter hält den Taster gegen
+   Verdrehen. Dreht er sich doch mit, die Mutter nachziehen.
 4. **Zugentlastung:** einen Kabelbinder durch die zwei Schlitze um das
    Kabel legen.
 5. Zwei **Hammermuttern M5** in die mittlere Nut vorn am 2060 setzen, das
@@ -94,17 +99,12 @@ Keine Bohrlehre: Das Gehäuse verbindet kein zweites Druckteil, und die
 
 ## Noch offen
 
-1. **Belastbarkeit** `[?]`: Die Kontakte sollten mindestens 3 A tragen,
-   denn die Maschine zieht bis 2 A, das Netzteil liefert bis 3 A. Für
-   Kontakte ist Gleichstrom härter als Wechselstrom. Ein Wert von 3 A bei
-   250 V~ reicht bei 24 V und 2 A üblicherweise `[w]`.
-2. **Verdrehschutz** `[?]`: Hat das Gewinde eine Abflachung oder eine Nut
-   für eine Nase? Dann bekommt das Loch die passende Form. Ohne sie hält
-   allein die Mutter den Taster beim Entriegeln. Das runde Loch passt in
-   beiden Fällen, gedruckt werden kann also schon.
-3. **Kopf, Tiefe und Mutter** `[?]`: 32 mm Kopf, 22 mm vor der Front,
-   30 mm dahinter und 24 mm über Eck sind angenommen. Das dient nur der
-   Zeichnung und der Prüfung; bis 33 mm Tiefe passt der Taster.
+Nichts, was den Druck aufhält. Nur **Kopf, Tiefe und Mutter** `[?]` sind
+angenommen: 32 mm Kopf, 22 mm vor der Front, 30 mm dahinter und 24 mm über
+Eck. Das dient nur der Zeichnung und der Prüfung; bis 33 mm Tiefe passt der
+Taster.
+
+Geklärt (2026-09-30): Gewinde 16 mm, rund; Kontakte 3 A / 250 V.
 
 ## Parametrik
 

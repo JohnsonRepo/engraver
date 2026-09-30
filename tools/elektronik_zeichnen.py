@@ -32,8 +32,6 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-platz.svg')
 ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                           'fusion', 'Elektronik', 'Elektronik.py')
-ENDSCHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                           'fusion', 'Endschalter', 'Endschalter.py')
 YMOTORHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                             'fusion', 'YMotorhalter', 'YMotorhalter.py')
 NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
@@ -175,12 +173,11 @@ def konzept(w, L, tw, TL, ew, EL):
     K['kx_z_oben'] = K['kx_z_unten'] + 2.0 * KETTE_R
     K['kx_laenge'] = K['kx_hub'] / 2.0 + math.pi * KETTE_R + KETTE_ENDEN
 
-    # Endschalter (Gabellichtschranken LM393) wie Endschalter.py: Y aussen
-    # am rechten 2040 hinter dem hinteren 2060 (links laeuft die Y-Kette),
-    # X vor dem linken Rohrende; jeweils der Strahl.
-    SL = bauraum.modul_laden(ENDSCHALTER, 'endschalter').lage()
-    K['es_y'] = (SL['gy_x'], SL['ly_strahl_y'])
-    K['es_x'] = (SL['lx_strahl_x'], SL['lx_strahl_y_rel'])
+    # Endschalter (Gabellichtschranken LM393, seit Rev. 15 in Portal.py): Y
+    # aussen am rechten 2040 hinter dem hinteren 2060 (links laeuft die
+    # Y-Kette), X vor dem linken Ende der 2020; jeweils der Strahl.
+    K['es_y'] = (L['gy_x'], L['ly_strahl_y'])
+    K['es_x'] = (L['lx_strahl_x'], L['lx_strahl_y_rel'])
     xm = K['kx_fest']
     K['es_z'] = (xm - 27.0, 32.0)
     K['xm'] = xm

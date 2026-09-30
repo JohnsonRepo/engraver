@@ -1,6 +1,7 @@
 # Portal — Y-Schlitten, Y-Klemmtürme und X-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, elf gedruckte Teile).
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 15, sechzehn gedruckte
+Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
 [portal-y-schlitten.svg](portal-y-schlitten.svg) (Portal) und
@@ -16,7 +17,9 @@ Vorderseite zu berühren — dort sitzt die **MGN15-Schiene (450 mm)** der
 X-Achse. Links steht der X-Motor, rechts die Umlenkung mit Spanner. Den
 Y-Riemen halten zwei gleiche Klemmtürme wie bei v8 unter jeder Platte.
 Angetrieben wird er vorn an jeder Ecke von einem NEMA 17, das Ritzel sitzt
-direkt auf der Motorwelle; gespannt wird am Motor (Langlöcher).
+direkt auf der Motorwelle; gespannt wird am Motor (Langlöcher). Dazu
+kommen seit Rev. 15 die Halter und Fahnen der Endschalter X und Y
+([endschalter.md](endschalter.md)).
 
 | Pos | Teil | Stück | Funktion |
 |---|---|---|---|
@@ -26,6 +29,7 @@ direkt auf der Motorwelle; gespannt wird am Motor (Langlöcher).
 | 4 | **Umlenkhalter** | 1 | rechts: 20-Z-Rolle mit Lager auf einer M5 im Langloch |
 | 5 | **Spannklotz** | 1 | eine M3 von außen zieht ihn und damit die Rolle nach außen |
 | 6 | **Y-Motorhalter** — **überholt** | 2 (gespiegelt) | nicht mehr drucken: es gilt der eigene [YMotorhalter](y-motorhalter.md) (Rev. 4), Ritzel mittig zur 2040, 4 × M5 in den unteren Nuten. War: vorn an der Stirnseite jedes 2040, NEMA 17 hängend, Achse 15,55 mm innen neben der Schienenmitte, Wange mit 2 × M5 in der oberen Nut außen |
+| 7 | **Endschalter** | 5 | Halter_Y und Fahne_Y, Halter_X, Klammer_X und Fahne_X für die Gabellichtschranken; Fahnen und Klammer **schwarz**. Lage, Montage und Einstellen: [endschalter.md](endschalter.md) (bis Rev. 14 im eigenen Skript `Endschalter.py`) |
 | — | **Riemenhalter** | 1 | am Toolhead (ToolheadZ.py Rev. 33), klemmt beide Enden des X-Riemens |
 
 Warum so viele Teile: Jedes ist nur so **ohne Stützmaterial** druckbar. Die
@@ -45,7 +49,8 @@ sie mit „[Referenz, nicht drucken]“.
 | `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
 | `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkrolle, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: um das Ritzel des Y-Motors, als Rücklauf durch die obere Nut des 2040, um das hintere Ritzel |
-| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, die X-Umlenkrolle; der Riemenhalter des Toolheads |
+| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, die X-Umlenkrolle; vom Toolhead der Riemenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
+| `Ref_Endschalter` | die beiden Lichtschranken LM393 (Platine und Gabel): Y fest am rechten 2040 hinter dem hinteren 2060, X vor dem linken Ende der 2020 |
 
 Was dabei angenommen ist:
 
@@ -55,8 +60,11 @@ Was dabei angenommen ist:
   `[v]`, das hintere 435 mm Mitte zu Mitte dahinter `[v]`: Die 2040 stehen
   hinten 110 mm über (gemessen 2026-09-27, Rev. 14; bis Rev. 13 400 mm
   `[?]`).
-* Der **Toolhead** steht in der Mitte des X-Wegs; von ihm sind nur X-Wagen
-  und Riemenhalter drin. Die Umlenkrolle steht in der Mitte ihres Spannwegs.
+* Der **Toolhead** steht in der Mitte des X-Wegs; von ihm sind nur X-Wagen,
+  Riemenhalter und die Trägerplatte (vereinfacht) drin. Die Umlenkrolle
+  steht in der Mitte ihres Spannwegs. Die Fahnen der Endschalter stehen
+  deshalb nicht in ihrer Gabel; den Schaltpunkt zeigt
+  [endschalter.svg](endschalter.svg).
 * Der **Y-Rücklauf** liegt mittig in der oberen Nut (Z −42 bis −36), auf
   derselben Höhe wie in der Klemme. Die **Y-Motoren** stehen in der Mitte
   ihres Spannwegs.
@@ -420,6 +428,9 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
    nach hinten, um das hintere Ritzel, in die hintere Klemme (≈ 1270 mm je
    Seite). Motor nach
    vorn ziehen und festschrauben, dann beide Seiten abgleichen (oben).
+11. Endschalter: Halter, Lichtschranken und Fahnen nach
+   [endschalter.md](endschalter.md#montage), die Schaltpunkte vor der
+   ersten Referenzfahrt von Hand prüfen.
 
 ## Druck (PETG, Bambu Lab A1)
 
@@ -432,6 +443,7 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 | Spannklotz | Unterseite |
 | Y-Motorhalter (2×) — überholt | nicht drucken; der YMotorhalter liegt kopfüber auf dem Bett ([y-motorhalter.md](y-motorhalter.md#druck-petg-bambu-lab-a1)) |
 | Riemenhalter (Toolhead) | Unterseite (Wagenflanke), Schlitz und Rippen stehen senkrecht |
+| Endschalter (5 Teile) | wie in [endschalter.md](endschalter.md#druck-petg-bambu-lab-a1); Fahne_Y, Klammer_X und Fahne_X **schwarz** |
 
 Keine Stützen. 4 Wandlinien, ≥ 40 % Infill. Rechter Schlitten, die rechten
 Klemmtürme und der rechte Y-Motorhalter sind gespiegelt modelliert — **im
@@ -452,8 +464,9 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
-das Lochbild 20 × 20 am Wagen, `Bohrlehre_Riemenhalter` (8,4 g, im
-ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
+das Lochbild 20 × 20 am Wagen, `Bohrlehre_LM393` Umriss und Lochbild der
+Lichtschranke, `Bohrlehre_Riemenhalter` (8,4 g, im ToolheadZ-Modell) führt
+den Bohrer an der Trägerplatte.
 
 ## Stückliste
 
@@ -480,6 +493,7 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
 | 8 + 8 + 8 | M5×12 Zylinderkopf + Scheibe + Hammermutter M5 (Nut 6) | YMotorhalter → untere Nuten beider Seitenflächen, je Seite 4 |
 | 2 | GT2-Riemen 6 mm, je ≈ 1270 mm | Y, offen, von Klemme zu Klemme (hinteres Ritzel angenommen) |
 | 2 + 2 + 2 | M3×10 + Messing-Einsatz M3 + Stift Ø3 | Riemenhalter am Toolhead |
+| — | Schrauben, Einsätze und Hammermuttern der Endschalter | [endschalter.md](endschalter.md#stückliste) |
 
 ## Nicht gemessen `[?]`
 
@@ -493,6 +507,8 @@ ToolheadZ-Modell) führt den Bohrer an der Trägerplatte.
   Davon hängt nur die Riemenlänge ab (≈ 1270 mm je Seite).
 * **Y-Schienen:** mittig auf den 2040 angenommen. Davon hängt ab, wie weit
   das Portal vorn an die Y-Motorhalter heranfährt (Abschnitt 14).
+* **Endschalter:** Boden des Gabelschlitzes, Lötstifte unter der Platine,
+  Schmiernippel am X-Wagen ([endschalter.md](endschalter.md#noch-offen)).
 
 ## Parametrik
 

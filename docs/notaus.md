@@ -1,6 +1,6 @@
 # Not-Aus — Gehäuse vorn am vorderen 2060
 
-Erzeugt von `fusion/NotAus/NotAus.py` (ein Druckteil, Rev. 3). Geprüft mit
+Erzeugt von `fusion/NotAus/NotAus.py` (ein Druckteil, Rev. 4). Geprüft mit
 `python3 tools/notaus_check.py`, Skizze in [notaus.svg](notaus.svg) (neu
 erzeugen mit `python3 tools/notaus_zeichnen.py`). Wie er verdrahtet wird,
 steht in [verkabelung.md](verkabelung.md) (W2 und W16).
@@ -53,7 +53,8 @@ beliebig weit, nach rechts bis etwa X +205; dann bleiben zum Y-Motor noch
 **Rev. 2:** Gewinde 16 mm `[v]` nach deiner Angabe; Rev. 1 hatte 19 mm
 angenommen. Geändert hat sich nur das Loch, Ø16,3 statt Ø19,3. Kasten,
 Laschen und Lage bleiben. **Rev. 3** ändert nur den Bericht des Skripts
-(Mutter fest anziehen), die Geometrie ist dieselbe wie in Rev. 2.
+(Mutter fest anziehen), **Rev. 4** nur einen Kommentar; die Geometrie ist
+dieselbe wie in Rev. 2.
 
 ## Montage
 

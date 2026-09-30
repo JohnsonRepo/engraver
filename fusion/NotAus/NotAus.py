@@ -34,7 +34,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'NotAus'
-REVISION = 3
+REVISION = 4
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -73,6 +73,7 @@ MASSE = {
     # --- Taster (Pilzkopf, Wechsler C/NO/NC) --------------------------------
     # Rev. 2: Gewinde 16 mm [v] Angabe 2026-09-30 (Rev. 1: 19 mm angenommen).
     # Rev. 3: nur der Bericht; das Gewinde ist rund [v], das Loch bleibt.
+    # Rev. 4: nur ein Kommentar (die Endschalter stehen jetzt in Portal.py).
     # Kopf, Tiefe, Mutter und Klemmbereich sind nicht gemessen [?].
     'schalter_d':          (16.0, 'Not-Aus: Gewindedurchmesser [v] Angabe'),
     'schalter_spiel':       (0.3, 'Loch so viel groesser als das Gewinde'),
@@ -156,7 +157,7 @@ def lage():
     L['lasche_z'] = (zm - lh / 2.0, zm + lh / 2.0)
     L['m5'] = [((a + c) / 2.0, zm) for a, c in L['lasche_x']]
     # Scheibe 1 + Lasche 6, dann 5 mm in die Nut: 1,8 Lippe, 3,2 im Stein,
-    # 1 mm vor dem Nutgrund (wie Halter_Y in Endschalter.py)
+    # 1 mm vor dem Nutgrund (wie Halter_Y der Endschalter in Portal.py)
     L['m5_schraube'] = 12.0
     rd = w('rippe_d')
     L['rippe_z'] = [(L['lasche_z'][0], L['lasche_z'][0] + rd),

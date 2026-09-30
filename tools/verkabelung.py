@@ -328,8 +328,8 @@ def laden():
     w, L = pm.w, pm.lage()
     em = bauraum.modul_laden(ez.ELEKTRONIK, 'elektronik')
     K = ez.konzept(w, L, tw, TL, em.w, em.lage())
-    es = bauraum.modul_laden(ez.ENDSCHALTER, 'endschalter')
-    return {'L': L, 'TL': TL, 'K': K, 'es_w': es.w}
+    # die Endschalter stehen seit Rev. 15 in Portal.py
+    return {'L': L, 'TL': TL, 'K': K, 'es_w': w}
 
 
 def laenge_m(lt, K):

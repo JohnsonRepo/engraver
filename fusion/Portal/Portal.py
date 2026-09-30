@@ -1,6 +1,6 @@
 # Portal.py — Y-Schlitten des Portals (MGN12H) mit X- und Y-Antrieb
 #
-# Baugruppe aus elf Druckteilen. Getrennt, weil jedes Teil nur so ohne
+# Baugruppe aus sechzehn Druckteilen. Getrennt, weil jedes Teil nur so ohne
 # Stuetzmaterial druckbar ist — die Y-Klemmtuerme haengen unter der Platte,
 # die Rohrhalterung steht auf ihr:
 #   Schlitten_links/rechts     Platte auf dem MGN12H-Wagen. Das Portalrohr
@@ -26,11 +26,30 @@
 #                              Lager und unteres Ritzel. Liegt an der
 #                              Stirnseite an, Wange aussen am 2040 (2x M5
 #                              in Hammermuttern der oberen Nut).
-#   Bohrlehren                 ausgeblendet
+#   Halter_Y, Fahne_Y          Endschalter Y (Gabellichtschranke LM393): der
+#                              Halter aussen am rechten 2040 hinter dem
+#                              hinteren 2060, 2x M5 in der UNTEREN Nut (in
+#                              der oberen laeuft der Ruecklauf des Y-Riemens);
+#                              die Fahne klemmt an der Aussenkante der
+#                              rechten Schlittenplatte.
+#   Halter_X, Klammer_X,       Endschalter X: der Halter vor dem linken Ende
+#   Fahne_X                    der 2020, M5 in ihrer vorderen Nut, stoesst
+#                              an das Ende der X-Schiene; Klammer und Fahne
+#                              unten an der Traegerplatte des Toolheads.
+#                              Bis Rev. 14 in Endschalter.py; Montage und
+#                              Einstellen: docs/endschalter.md.
+#   Bohrlehren                 ausgeblendet: Y-Wagen und Lichtschranke
 #   Referenz_nicht_drucken     nur zur Ansicht, NICHT drucken: Aluprofile,
 #                              Linearfuehrungen, X- und Y-Riemen, X- und
-#                              Y-Motoren mit Ritzel, Umlenkrolle und der
-#                              Riemenhalter des Toolheads
+#                              Y-Motoren mit Ritzel, Umlenkrolle, vom
+#                              Toolhead Riemenhalter und Traegerplatte
+#                              (vereinfacht), die beiden Lichtschranken
+#
+# Im Modell steht das Portal in der Mitte seines Wegs und der Toolhead in der
+# Mitte des X-Wegs; die Fahnen sitzen also dort, wo sie montiert werden, und
+# nicht in ihrer Gabel. Den Schaltpunkt rechnet lage() (schalt_dy,
+# schalt_xs), tools/endschalter_check.py prueft ihn und den Freiraum ueber
+# den ganzen Weg, docs/endschalter.svg zeigt ihn.
 #
 # Den X-Riemen klemmt der Riemenhalter hinten an der Traegerplatte
 # (ToolheadZ.py, Rev. 33). Seine Lage (x_riemen_y, x_riemen_z0) steht in
@@ -51,7 +70,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 14
+REVISION = 15
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -293,6 +312,82 @@ MASSE = {
     'traeger_x_rechts':    (22.0, 'Toolhead: rechte Kante (Riemenhalter)'),
     'rh_tiefe':            (14.0, 'Riemenhalter: Tiefe hinter der Traegerplatte'),
     'rh_hoehe':            (16.0, 'Riemenhalter: Hoehe ueber der Wagenflanke'),
+    # Traegerplatte links, dort klemmt die Fahne X (ToolheadZ.py);
+    # tools/endschalter_check.py vergleicht
+    'traeger_dicke':        (8.0, 'Toolhead: Traegerplatte, Dicke (Y 0 bis 8)'),
+    'traeger_z0':         (-66.0, 'Toolhead: Traegerplatte, Unterkante'),
+    'rippe_b':              (4.0, 'Toolhead: Saeulenrippe links, Breite (X)'),
+    'rippe_t':              (6.0, 'Toolhead: Saeulenrippe links, Tiefe vor der Platte'),
+
+    # --- Endschalter X und Y (bis Rev. 14 in Endschalter.py) ---------------
+    # Gabellichtschranke LM393 (Hailege), wie ToolheadZ.py [v]
+    'ls_pcb_laenge':       (25.0, 'Lichtschranke: Platinenlaenge'),
+    'ls_pcb_breite':       (20.0, 'Lichtschranke: Platinenbreite'),
+    'ls_pcb_dicke':         (1.8, 'Lichtschranke: Platinendicke'),
+    'ls_pcb_rand':          (2.5, 'Lichtschranke: Lochmitte von der Kante'),
+    'ls_schlitz':          (10.0, 'Lichtschranke: Schlitzbreite (Gabelspalt)'),
+    'ls_gabel_rand':        (1.0, 'Gabel: Abstand zur Stirnkante der Platine'),
+    'ls_gabel_dicke':       (6.0, 'Gabel: Dicke entlang der Platine'),
+    'ls_gabel_hoehe':      (15.0, 'Gabel: Hoehe ueber der Platine'),
+    'ls_gabel_breite':     (18.5, 'Gabel: aussen, quer zum Schlitz'),
+    'ls_strahl_hoehe':      (9.0, 'Gabel: Lichtfenster ueber der Platine'),
+    # nicht gemessen [?], wie in ToolheadZ.py: das Blatt bleibt 1,5 mm darueber
+    'ls_schlitz_boden':     (6.0, 'Gabel: Boden des Schlitzes ueber der Platine'),
+    # M2-Einsaetze 3,2 x 2,5 [v] (vorhanden): Einpressbohrung 0,4 kleiner,
+    # dahinter eine Freibohrung fuer die Schraubenspitze (M2x6)
+    'ls_pcb_loch_d':        (2.8, 'Lichtschranke: Einpressbohrung M2-Einsatz'),
+    'ls_pcb_loch_t':        (3.0, 'Lichtschranke: Tiefe der Einpressbohrung'),
+    'ls_pcb_frei_d':        (2.4, 'Lichtschranke: Freibohrung fuer die Schraubenspitze'),
+    'ls_pin_tasche':        (1.5, 'Tasche unter der Gabel fuer ihre Loetstifte'),
+    # Schaltpunkt und Blatt, beide Achsen. Das Blatt reicht bis 7,5 mm an
+    # die Platine (1,5 ueber den Schlitzboden, 1,5 ueber den Strahl hinaus)
+    # und 2 mm ueber die offene Seite der Gabel.
+    'schaltabstand':        (3.0, 'Schalter schaltet so weit vor dem Schienenende'),
+    'fahne_dicke':          (3.0, 'Blatt: Dicke im Gabelspalt (wie Z)'),
+    'fahne_ab_platine':     (7.5, 'Blatt: Kante so weit ueber der Platine'),
+    'fahne_ueber_gabel':    (2.0, 'Blatt: reicht so weit ueber die offene Gabelseite'),
+    # Halter Y. 16: der innere Arm der Gabel bleibt 3 mm neben dem Y-Wagen,
+    # der am Schienenende ueber die Gabel faehrt
+    'gy_mitte_aussen':     (16.0, 'Y: Spaltmitte so weit neben der Aussenflaeche des 2040'),
+    'ly_unter_kante':       (8.0, 'Y: Platine so weit unter der Oberkante der 2040'),
+    'hy_fuss_dicke':        (6.0, 'Halter Y: Fuss am 2040 (wie YMotorhalter)'),
+    'hy_fuss_unten':        (2.0, 'Halter Y: Fuss endet so weit ueber der Unterkante'),
+    'hy_boden':             (5.0, 'Halter Y: Boden unter der Platine'),
+    'hy_rand':              (1.5, 'Halter Y: Boden steht so weit um die Platine'),
+    'hy_m5_rand':           (6.0, 'Halter Y: M5 so weit von den Enden'),
+    'hy_fase':              (3.0, 'Halter Y: Fase unter dem Boden am Fuss'),
+    # Fahne Y: Hinterkante auf der Platte zwischen den Wagenschrauben (Y -70
+    # und -50), so steht der Halter 35 mm hinter dem 2060 und weit vor dem
+    # hinteren Ritzel
+    'fy_hinten':          (-66.0, 'Fahne Y: Hinterkante (Y, Portal in der Mitte)'),
+    'fy_laenge':           (12.0, 'Fahne Y: Laenge laengs der Plattenkante'),
+    'kl_spiel':             (0.3, 'Klammern: Spiel auf die geklemmte Dicke'),
+    'kl_kante':             (0.2, 'Klammern: Luft zur geklemmten Kante'),
+    'fy_backe_o':           (6.0, 'Fahne Y: obere Backe (Einsatz M3)'),
+    'fy_backe_u':           (2.5, 'Fahne Y: untere Backe'),
+    'fy_backe_innen':       (9.0, 'Fahne Y: obere Backe reicht so weit auf die Platte'),
+    'fy_wagen_luft':        (1.0, 'Fahne Y: untere Backe neben dem Y-Wagen'),
+    # Halter X
+    'hx_luft_wagen':        (3.0, 'X: Platine so weit links vom Wagenende am Schienenende'),
+    'hx_dicke':            (11.0, 'Halter X: Block vor dem Rohr (Y)'),
+    'hx_h':                (22.0, 'Halter X: Hoehe des Blocks (Z)'),
+    'hx_rand':              (1.0, 'Halter X: Block steht links so weit ueber die Platine'),
+    'hx_zunge_b':           (5.8, 'Halter X: Zunge in der Rohrnut (Breite)'),
+    'hx_zunge_t':           (2.0, 'Halter X: Zunge in der Rohrnut (Tiefe)'),
+    'hx_senk_t':            (5.2, 'Halter X: M5-Kopf versenkt, unter der Platine'),
+    # Klammer X und Fahne X: X relativ zur X-Wagenmitte, Z absolut.
+    # kx_backe_v 5,85: 3 mm vor dem Pad des Z-Schlittens, der Einsatz ist
+    # 5,7 lang; kx_breite: bis 3 mm vor den Z-Wagen (linke Kante -10)
+    'kx_z0':              (-40.0, 'Klammer X: Unterkante'),
+    'kx_z1':              (-20.0, 'Klammer X: Oberkante der Backen'),
+    'kx_wand':              (3.0, 'Klammer X: Seitenwand'),
+    'kx_backe_h':           (2.5, 'Klammer X: hintere Backe'),
+    'kx_backe_v':          (5.85, 'Klammer X: vordere Backe (Einsatz M3)'),
+    'kx_breite':            (9.2, 'Klammer X: Backen reichen so weit auf die Platte'),
+    'kx_wagen_luft':        (3.0, 'Klammer X: ueber dem Wagen nur vor der Platte'),
+    'kx_kopf_b':            (6.0, 'Klammer X: Kopf steht links ueber die Wand'),
+    'kx_kopf_h':            (6.0, 'Klammer X: Kopf (Einsatz M3 fuer die Fahne)'),
+    'fx_verstellung':       (2.0, 'Fahne X: Langloch je Richtung'),
 }
 
 
@@ -630,6 +725,166 @@ def lage():
                       + (L['ym_y'] - L['yh_y'])
                       + (L['yr_ende_hinten'] - L['yh_y'])
                       + math.pi * w('ritzel_teilkreis'))
+
+    # ---- Endschalter X und Y (bis Rev. 14 in Endschalter.py) ---------------
+    # Schaltpunkt: das Portal steht schalt_dy von der Mitte, schaltabstand
+    # vor dem hinteren Schienenende (dort sind die Y-Wagen buendig mit ihm);
+    # die X-Wagenmitte bei schalt_xs, schaltabstand vor dem linken. Schluessel
+    # mit _rel liegen relativ zum Portal in der Mitte (Fahne_Y, Halter_X)
+    # bzw. zur X-Wagenmitte (Klammer_X, Fahne_X). Der Halter Y steht fest am
+    # Rahmen, dort, wo die Fahne am Schaltpunkt durch seine Gabel laeuft. Im
+    # Modell steht alles in der Stellung von oben: Portal in der Mitte,
+    # Toolhead bei xw_mitte.
+    b = w('rahmen_b')
+    L['nut_u_z'] = L['rahmen_z0'] + b / 2.0            # untere Seitennut
+    L['nut_o_z'] = L['rahmen_z1'] - b / 2.0            # obere: Y-Riemen
+    L['aussen_x'] = R + b / 2.0                         # rechtes 2040 aussen
+    L['tisch_z'] = L['quer_z'][0]
+    L['y_weg_hinten'] = L['wagen_y0'] - L['y_schiene_y'][0]
+    L['schalt_dy'] = -(L['y_weg_hinten'] - w('schaltabstand'))
+    L['schalt_dy_ende'] = -L['y_weg_hinten']
+    L['schalt_xs'] = L['xw_min'] + w('schaltabstand')
+    pl, pb, pd = w('ls_pcb_laenge'), w('ls_pcb_breite'), w('ls_pcb_dicke')
+    r = w('ls_pcb_rand')
+    s, gb = w('ls_schlitz') / 2.0, w('ls_gabel_breite') / 2.0
+
+    # Y: Fahne auf der Platte, am Schaltpunkt der Strahl an ihrer Hinterkante
+    L['fy_y_rel'] = (w('fy_hinten'), w('fy_hinten') + w('fy_laenge'))
+    L['fy_y'] = tuple(y + L['schalt_dy'] for y in L['fy_y_rel'])
+    L['ly_strahl_y'] = L['fy_y'][0]
+    xg = L['aussen_x'] + w('gy_mitte_aussen')          # Spaltmitte
+    zp = L['rahmen_z1'] - w('ly_unter_kante')           # Oberseite Platine
+    L['gy_x'] = xg
+    L['ly_pcb_x'] = (xg - pb / 2.0, xg + pb / 2.0)
+    L['ly_pcb_z'] = (zp - pd, zp)
+    # Gabel an der vorderen Stirnkante (dorther kommt die Fahne), Strahl in
+    # ihrer Mitte; die Platine reicht von dort nach hinten.
+    g1 = L['ly_strahl_y'] + w('ls_gabel_dicke') / 2.0
+    L['ly_gabel_y'] = (g1 - w('ls_gabel_dicke'), g1)
+    L['ly_pcb_y'] = (g1 + w('ls_gabel_rand') - pl, g1 + w('ls_gabel_rand'))
+    L['ly_gabel_z'] = (zp, zp + w('ls_gabel_hoehe'))
+    L['ly_strahl_z'] = zp + w('ls_strahl_hoehe')
+    L['ly_boden_z'] = zp + w('ls_schlitz_boden')
+    L['ly_arme_x'] = [(xg - gb, xg - s), (xg + s, xg + gb)]
+    L['ly_loecher'] = [(L['ly_pcb_x'][0] + r, L['ly_pcb_y'][0] + r),
+                       (L['ly_pcb_x'][1] - r, L['ly_pcb_y'][0] + r)]
+
+    # Halter Y
+    rand = w('hy_rand')
+    L['hy_y'] = (L['ly_pcb_y'][0] - rand, L['ly_pcb_y'][1] + rand)
+    L['hy_boden_z'] = (L['ly_pcb_z'][0] - w('hy_boden'), L['ly_pcb_z'][0])
+    L['hy_boden_x'] = (L['aussen_x'], L['ly_pcb_x'][1] + rand)
+    L['hy_fuss_x'] = (L['aussen_x'], L['aussen_x'] + w('hy_fuss_dicke'))
+    L['hy_fuss_z'] = (L['rahmen_z0'] + w('hy_fuss_unten'),
+                      L['hy_boden_z'][1])
+    L['hy_m5'] = [(y, L['nut_u_z']) for y in (L['hy_y'][0] + w('hy_m5_rand'),
+                                            L['hy_y'][1] - w('hy_m5_rand'))]
+    # mit Scheibe (1) wie am YMotorhalter: Fuss 6, dann 5 mm in die Nut —
+    # 1,8 Lippe, 3,2 im Stein, 1 mm vor dem Nutgrund
+    L['hy_m5_schraube'] = 12.0
+    # Tasche fuer die Loetstifte der Gabel, so breit wie die Platine
+    L['hy_tasche'] = (L['ly_pcb_x'][0], L['ly_pcb_x'][1],
+                      L['ly_gabel_y'][0] - 0.75, L['ly_gabel_y'][1] + 0.75)
+    fa = w('hy_fase')
+    L['hy_fase_pkt'] = [(L['hy_fuss_x'][1], L['hy_boden_z'][0]),
+                        (L['hy_fuss_x'][1] + fa, L['hy_boden_z'][0]),
+                        (L['hy_fuss_x'][1], L['hy_boden_z'][0] - fa)]
+
+    # Fahne Y: Klammer um die Kante der rechten Schlittenplatte, Blatt aussen
+    pz0, pz1 = L['platte_z0'], L['platte_z1']
+    L['platte_z'] = (pz0, pz1)
+    L['platte_x1'] = R + w('platte_aussen')
+    L['y_wagen_x1'] = R + w('y_wagen_breite') / 2.0
+    sp = w('kl_spiel') / 2.0
+    L['fy_innen_z'] = (pz0 - sp, pz1 + sp)              # Maul der Klammer
+    L['fy_wand_x'] = (L['platte_x1'] + w('kl_kante'),
+                      xg + w('fahne_dicke') / 2.0)
+    L['fy_backe_o_x'] = (L['platte_x1'] - w('fy_backe_innen'),
+                         L['fy_wand_x'][1])
+    L['fy_backe_o_z'] = (L['fy_innen_z'][1],
+                         L['fy_innen_z'][1] + w('fy_backe_o'))
+    L['fy_backe_u_x'] = (L['y_wagen_x1'] + w('fy_wagen_luft'),
+                         L['fy_wand_x'][1])
+    L['fy_backe_u_z'] = (L['fy_innen_z'][0] - w('fy_backe_u'),
+                         L['fy_innen_z'][0])
+    L['fy_blatt_x'] = (xg - w('fahne_dicke') / 2.0, xg + w('fahne_dicke') / 2.0)
+    L['fy_blatt_z'] = (zp + w('fahne_ab_platine'), L['fy_backe_u_z'][0])
+    # Madenschraube mitten ueber dem Plattenrand neben dem Wagen
+    L['fy_einsatz_x'] = (L['fy_backe_o_x'][0] + L['platte_x1']) / 2.0
+    L['fy_einsatz_y_rel'] = sum(L['fy_y_rel']) / 2.0
+
+    # X: Lichtschranke senkrecht vor dem linken Ende der 2020. Die Platine
+    # endet hx_luft_wagen vor dem Wagen, wenn er am Schienenende steht; die
+    # Gabel an ihrer rechten Stirnkante (dorther kommt die Fahne), Spalt
+    # waagerecht.
+    x_rohr0 = -w('profil_laenge') / 2.0
+    x_schiene0 = L['x_schiene_x'][0]
+    px1 = x_schiene0 - w('hx_luft_wagen')
+    L['lx_pcb_x'] = (px1 - pl, px1)
+    L['hx_y_rel'] = (L['portal_y'], L['portal_y'] + w('hx_dicke'))
+    yb = L['hx_y_rel'][1]                               # Rueckseite Platine
+    L['lx_pcb_y_rel'] = (yb, yb + pd)
+    L['lx_pcb_z'] = (-pb / 2.0, pb / 2.0)
+    L['lx_gabel_x'] = (px1 - w('ls_gabel_rand') - w('ls_gabel_dicke'),
+                       px1 - w('ls_gabel_rand'))
+    L['lx_strahl_x'] = sum(L['lx_gabel_x']) / 2.0
+    L['lx_gabel_y_rel'] = (yb + pd, yb + pd + w('ls_gabel_hoehe'))
+    L['lx_strahl_y_rel'] = yb + pd + w('ls_strahl_hoehe')
+    L['lx_boden_y_rel'] = yb + pd + w('ls_schlitz_boden')
+    L['lx_arme_z'] = [(-gb, -s), (s, gb)]
+    L['lx_loecher'] = [(L['lx_pcb_x'][0] + r, z) for z in
+                       (L['lx_pcb_z'][0] + r, L['lx_pcb_z'][1] - r)]
+
+    # Halter X: Block vor der 2020, stoesst an das Schienenende
+    L['hx_x'] = (L['lx_pcb_x'][0] - w('hx_rand'), x_schiene0)
+    L['hx_z'] = (-w('hx_h') / 2.0, w('hx_h') / 2.0)
+    # M5 mitten im freien Stueck links der Schiene, auf der Nut; ohne
+    # Scheibe (Kopf in der Senkung): 5,8 Block, dann 6,2 in die Nut —
+    # 1,8 Lippe, 4 im Stein, 1,3 vor dem Grund
+    L['hx_m5_x'] = (x_rohr0 + x_schiene0) / 2.0
+    L['hx_m5_schraube'] = 12.0
+    L['hx_zunge_x'] = (x_rohr0 + 0.5, x_schiene0 - 0.75)
+    L['hx_tasche'] = (L['lx_gabel_x'][0] - 0.75, L['lx_gabel_x'][1] + 0.75,
+                      -gb - 0.75, gb + 0.75)
+
+    # Klammer X (relativ zur X-Wagenmitte; Z absolut)
+    xt = w('traeger_x_links')
+    ty1 = w('traeger_dicke')
+    ry1 = ty1 + w('rippe_t')                            # Vorderseite Rippe
+    L['kx_innen_x'] = xt - w('kl_kante')                # Seitenwand innen
+    L['kx_wand_x'] = (L['kx_innen_x'] - w('kx_wand'), L['kx_innen_x'])
+    L['kx_innen_y'] = (-w('kl_spiel') / 2.0, ry1 + w('kl_spiel') / 2.0)
+    L['kx_backe_h_y'] = (L['kx_innen_y'][0] - w('kx_backe_h'),
+                         L['kx_innen_y'][0])
+    L['kx_backe_v_y'] = (L['kx_innen_y'][1],
+                         L['kx_innen_y'][1] + w('kx_backe_v'))
+    L['kx_backe_x'] = (L['kx_wand_x'][0], L['kx_innen_x'] + w('kx_breite'))
+    # hintere Backe endet unter dem Wagen; ueber dem Wagen (Z -16..16) bleibt
+    # die Wand vor der Platte, 45 Grad dazwischen (druckt ohne Stuetzen)
+    L['kx_steg_y0'] = w('kx_wagen_luft')
+    uebergang = L['kx_steg_y0'] - L['kx_backe_h_y'][0]
+    L['kx_backe_h_z'] = (w('kx_z0'), -w('x_wagen_breite') / 2.0
+                         - w('kx_wagen_luft') - uebergang)
+    L['kx_backe_v_z'] = (w('kx_z0'), w('kx_z1'))
+    # Fahne X: Blatt waagerecht mitten im Spalt; die Spitze erreicht den
+    # Strahl, wenn der Wagen am Schaltpunkt steht
+    L['fx_z'] = (-w('fahne_dicke') / 2.0, w('fahne_dicke') / 2.0)
+    L['fx_spitze_rel'] = L['lx_strahl_x'] - L['schalt_xs']
+    L['fx_y_rel'] = (L['lx_pcb_y_rel'][1] + w('fahne_ab_platine'),
+                     L['lx_gabel_y_rel'][1] + w('fahne_ueber_gabel'))
+    L['fx_x_rel'] = (L['fx_spitze_rel'], L['kx_innen_x'])
+    # Kopf unter dem Blatt, links ueber die Wand hinaus, mit Fase darunter
+    kz1 = L['fx_z'][0]
+    L['kx_kopf_x'] = (L['kx_wand_x'][0] - w('kx_kopf_b'), L['kx_innen_x'])
+    L['kx_kopf_z'] = (kz1 - w('kx_kopf_h'), kz1)
+    L['kx_kopf_fase_z'] = L['kx_kopf_z'][0] - w('kx_kopf_b')
+    L['kx_steg_z1'] = L['kx_kopf_z'][0]
+    # vordere Madenschraube mitten auf die Seitenrippe
+    L['kx_einsatz_v'] = ((L['kx_innen_x'] + xt + w('rippe_b')) / 2.0,
+                         (w('kx_z0') + w('kx_z1')) / 2.0)
+    L['kx_einsatz_kopf'] = ((L['kx_kopf_x'][0] + L['kx_wand_x'][1]) / 2.0,
+                            sum(L['fx_y_rel']) / 2.0)
+    L['fx_schraube'] = 8.0          # Blatt 3 + 5 im Einsatz
     return L
 
 
@@ -654,7 +909,9 @@ def lage():
 #      stillschweigend falsche Massen zu melden.
 
 ZIELDICHTE = {'PLA': 1.24, 'PETG': 1.27,        # g/cm3
-              'Gummi': 1.25}                   # nur die Riemen der Referenz
+              'Gummi': 1.25,                   # nur die Riemen der Referenz
+              'Leiterplatte': 1.85,            # nur Referenz: FR4
+              'Kunststoff': 1.10}              # nur Referenz: Gabel
 # Kandidaten fuer das Basismaterial, aus dem kopiert wird (Reihenfolge = Vorzug)
 BASIS_KANDIDATEN = ('ABS Plastic', 'ABS', 'ABS-Kunststoff', 'Nylon',
                     'Polycarbonate', 'Polyethylene', 'Polypropylene',
@@ -1122,6 +1379,39 @@ def zylinder(comp, name, achse, mitte, d, a0, a1, art, ziel=None):
                         ziel)
 
 
+def vieleck(sk, punkte):
+    """Geschlossener Linienzug, Punkte in Maschinenkoordinaten (u, v wie bei
+    rechteck). Die Ecken sind ueber die SketchPoints der Nachbarlinien
+    verkettet (wie sechskant in ToolheadZ.py), damit das Profil sicher
+    schliesst."""
+    linien = sk.sketchCurves.sketchLines
+    erste = linien.addByTwoPoints(punkt(sk, *punkte[0]), punkt(sk, *punkte[1]))
+    vorher = erste
+    for p in punkte[2:]:
+        vorher = linien.addByTwoPoints(vorher.endSketchPoint, punkt(sk, *p))
+    linien.addByTwoPoints(vorher.endSketchPoint, erste.startSketchPoint)
+
+
+def prisma_vieleck(comp, name, achse, punkte, a0, a1, art, ziel=None):
+    """Vieleck quer zu `achse` (u, v wie bei prismen), entlang `achse` von a0
+    bis a1, symmetrisch um die Mitte extrudiert."""
+    m = (a0 + a1) / 2.0
+    sk = skizze(comp, _ebene(comp, achse, m, 'E_{}_{}{:.1f}'.format(
+        comp.name, achse.upper(), m)), 'Sk_' + name)
+    vieleck(sk, punkte)
+    return _symmetrisch(comp, groesstes_profil(sk), abs(a1 - a0), _op(art),
+                        ziel)
+
+
+def langloch_quer(sk, u, v, breite_mm, hub_mm):
+    """Langloch laengs u: zwei Kreise plus Rechteck, beim Schneiden werden
+    alle Profile entfernt (wie langloch_senkrecht in ToolheadZ.py)."""
+    r = breite_mm / 2.0
+    kreis(sk, u - hub_mm, v, breite_mm)
+    kreis(sk, u + hub_mm, v, breite_mm)
+    rechteck(sk, u - hub_mm, v - r, u + hub_mm, v + r)
+
+
 # Farbe fuer die Riemen der Referenz. Namen der Bibliothek sind lokalisiert,
 # deshalb mehrere Kandidaten; findet sich keiner, bleibt die Optik des
 # Materials. Wird in run() geleert (gehoert zum Dokument).
@@ -1478,14 +1768,208 @@ def bau_spannklotz(app, design, comp, L, fehler):
     return k
 
 
+# --- Endschalter X und Y (bis Rev. 14 in Endschalter.py) -----------------------
+def bau_halter_y(app, design, comp, L, fehler):
+    """Halter der Y-Lichtschranke aussen am rechten 2040, hinter dem hinteren
+    2060. Der Fuss liegt an der Aussenflaeche und haengt mit 2 x M5 in
+    Hammermuttern der UNTEREN Nut; ueber der Platine endet er, die obere Nut
+    (Ruecklauf des Y-Riemens) bleibt frei. Der Boden steht waagerecht nach
+    aussen, die Platine liegt darauf, die Gabel zeigt nach oben und nach
+    vorn — von dort kommt die Fahne.
+
+    Drucklage: Fussflaeche (die Seite am Profil) aufs Bett, der Boden steht
+    senkrecht nach oben — keine Stuetzen, die M5-Loecher werden rund."""
+    fx, fz = L['hy_fuss_x'], L['hy_fuss_z']
+    bx, bz = L['hy_boden_x'], L['hy_boden_z']
+    y = L['hy_y']
+    k = quader(comp, 'Fuss_Y', fx, y, fz, 'neu').bodies.item(0)
+    k.name = 'Halter_Y'
+    quader(comp, 'Boden_Y', bx, y, bz, 'dazu', k)
+    prisma_vieleck(comp, 'Fase_Y', 'y', L['hy_fase_pkt'], y[0], y[1], 'dazu',
+                   k)
+    bohrung(comp, 'M5_Y', 'x', L['hy_m5'], w('m5_durchgang'), fx[0] - 1.0,
+            fx[1] + 1.0, k)
+    tx0, tx1, ty0, ty1 = L['hy_tasche']
+    prismen(comp, 'Tasche_Y', 'z', [(tx0, ty0, tx1, ty1)],
+            bz[1] - w('ls_pin_tasche'), bz[1] + 1.0, 'weg', k)
+    # Einpressbohrung fuer die M2-Einsaetze, dahinter die Freibohrung
+    bohrung(comp, 'Einsatz_Y', 'z', L['ly_loecher'], w('ls_pcb_loch_d'),
+            bz[1] - w('ls_pcb_loch_t'), bz[1] + 1.0, k)
+    bohrung(comp, 'Frei_Y', 'z', L['ly_loecher'], w('ls_pcb_frei_d'),
+            bz[0] - 1.0, bz[1], k)
+    fussfase(comp, k, 'x', L['aussen_x'], w('fase_fuss'), fehler, 'Halter_Y')
+    bbox_pruefen(k, 'Halter_Y', ((fx[0], bx[1]), y, (fz[0], bz[1])), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    return k
+
+
+def bau_fahne_y(app, design, comp, L, fehler):
+    """Fahne der Y-Achse: Klammer um die Aussenkante der rechten
+    Schlittenplatte, das Blatt haengt aussen neben dem 2040 in die Gabel.
+    Die untere Backe bleibt neben dem Y-Wagen, die obere liegt auf dem
+    Plattenrand; eine Madenschraube M3 in ihrem Einsatz klemmt. Laengs der
+    Kante verschiebbar — so wird der Schaltpunkt eingestellt. Im Modell
+    steht das Portal in der Mitte: die Fahne sitzt auf der Platte, nicht in
+    der Gabel.
+
+    Drucklage: eine Stirnseite aufs Bett, das ganze Profil steht senkrecht —
+    keine Stuetzen. SCHWARZ drucken: helles PETG laesst das Infrarot der
+    Schranke durch."""
+    y = L['fy_y_rel']
+    wx, oz, uz = L['fy_wand_x'], L['fy_backe_o_z'], L['fy_backe_u_z']
+    k = quader(comp, 'Wand_FY', wx, y, (uz[0], oz[1]), 'neu').bodies.item(0)
+    k.name = 'Fahne_Y'
+    quader(comp, 'Backe_oben_FY', L['fy_backe_o_x'], y, oz, 'dazu', k)
+    quader(comp, 'Backe_unten_FY', L['fy_backe_u_x'], y, uz, 'dazu', k)
+    quader(comp, 'Blatt_FY', L['fy_blatt_x'], y, L['fy_blatt_z'], 'dazu', k)
+    bohrung(comp, 'Einsatz_FY', 'z', [(L['fy_einsatz_x'],
+                                       L['fy_einsatz_y_rel'])],
+            w('insert_m3_d'), oz[0] - 1.0, oz[1] + 1.0, k)
+    fussfase(comp, k, 'z', y[0], w('fase_fuss'), fehler, 'Fahne_Y')
+    bbox_pruefen(k, 'Fahne_Y', ((L['fy_backe_o_x'][0], wx[1]), y,
+                                (L['fy_blatt_z'][0], oz[1])), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    aussehen(app, design, k, SCHWARZ)
+    return k
+
+
+def bau_halter_x(app, design, comp, L, fehler):
+    """Halter der X-Lichtschranke vor dem linken Ende der 2020. Ein Block
+    liegt an ihrer Vorderseite, eine Zunge fuehrt ihn in der Nut, rechts
+    stoesst er an das Ende der X-Schiene: so steht er beim Einbau immer
+    gleich, und der Wagen faende dort einen Anschlag, bevor er von der
+    Schiene laeuft. Eine M5 mit versenktem Kopf haengt ihn in eine
+    Hammermutter. Die Platine sitzt vorn auf zwei M2-Einsaetzen und deckt
+    den Kopf ab — erst den Block anschrauben, dann die Lichtschranke.
+
+    Drucklage: Vorderseite (Platinenseite) aufs Bett, die Zunge oben —
+    keine Stuetzen."""
+    y = L['hx_y_rel']                      # faehrt mit dem Portal
+    k = quader(comp, 'Block_X', L['hx_x'], y, L['hx_z'], 'neu').bodies.item(0)
+    k.name = 'Halter_X'
+    zb = w('hx_zunge_b') / 2.0
+    quader(comp, 'Zunge_X', L['hx_zunge_x'], (y[0] - w('hx_zunge_t'), y[0]),
+           (-zb, zb), 'dazu', k)
+    m5 = [(L['hx_m5_x'], 0.0)]
+    bohrung(comp, 'M5_X', 'y', m5, w('m5_durchgang'),
+            y[0] - w('hx_zunge_t') - 1.0, y[1] + 1.0, k)
+    bohrung(comp, 'M5_Senkung_X', 'y', m5, w('m5_senkung'),
+            y[1] - w('hx_senk_t'), y[1] + 1.0, k)
+    tx0, tx1, tz0, tz1 = L['hx_tasche']
+    prismen(comp, 'Tasche_X', 'y', [(tx0, tz0, tx1, tz1)],
+            y[1] - w('ls_pin_tasche'), y[1] + 1.0, 'weg', k)
+    bohrung(comp, 'Einsatz_X', 'y', L['lx_loecher'], w('ls_pcb_loch_d'),
+            y[1] - w('ls_pcb_loch_t'), y[1] + 1.0, k)
+    bohrung(comp, 'Frei_X', 'y', L['lx_loecher'], w('ls_pcb_frei_d'),
+            y[1] - w('ls_pcb_loch_t') - 2.5, y[1], k)
+    fussfase(comp, k, 'z', y[1], w('fase_fuss'), fehler, 'Halter_X')
+    bbox_pruefen(k, 'Halter_X', (L['hx_x'], (y[0] - w('hx_zunge_t'), y[1]),
+                                 L['hx_z']), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    return k
+
+
+def bau_klammer_x(app, design, comp, L, fehler):
+    """Klammer an der linken unteren Kante der Traegerplatte, unter dem
+    X-Wagen: hintere Backe hinter der Platte, Seitenwand an ihrer Kante,
+    vordere Backe vor der Seitenrippe, eine Madenschraube M3 in einem
+    Einsatz klemmt auf die Rippe. Ueber dem Wagen bleibt die Wand vor der
+    Platte (45 Grad dazwischen) und traegt oben den Kopf mit dem Einsatz fuer
+    die Fahne. Im Modell am X-Wagen in der Mitte des X-Wegs.
+
+    Drucklage: Unterkante aufs Bett — die Backen stehen senkrecht, die Wand
+    wird nach oben schmaler, unter dem Kopf eine 45-Grad-Fase: keine
+    Stuetzen. Schwarz wie die Fahne."""
+    xs, dy = L['xw_mitte'], 0.0
+
+    def X(a):
+        return (a[0] + xs, a[1] + xs)
+
+    def Y(a):
+        return (a[0] + dy, a[1] + dy)
+    wx = X(L['kx_wand_x'])
+    hy0, vy1 = L['kx_backe_h_y'][0] + dy, L['kx_backe_v_y'][1] + dy
+    sy0 = L['kx_steg_y0'] + dy
+    hz1 = L['kx_backe_h_z'][1]
+    pts = [(hy0, w('kx_z0')), (vy1, w('kx_z0')), (vy1, L['kx_steg_z1']),
+           (sy0, L['kx_steg_z1']), (sy0, hz1 + (sy0 - hy0)), (hy0, hz1)]
+    k = prisma_vieleck(comp, 'Wand_KX', 'x', pts, wx[0], wx[1],
+                       'neu').bodies.item(0)
+    k.name = 'Klammer_X'
+    quader(comp, 'Backe_hinten_KX', X(L['kx_backe_x']), Y(L['kx_backe_h_y']),
+           L['kx_backe_h_z'], 'dazu', k)
+    quader(comp, 'Backe_vorn_KX', X(L['kx_backe_x']), Y(L['kx_backe_v_y']),
+           L['kx_backe_v_z'], 'dazu', k)
+    kx0, kx1 = X(L['kx_kopf_x'])
+    kz0, kz1 = L['kx_kopf_z']
+    pts = [(kx1, kz1), (kx0, kz1), (kx0, kz0), (wx[0], L['kx_kopf_fase_z']),
+           (kx1, L['kx_kopf_fase_z'])]
+    fy = Y(L['fx_y_rel'])
+    prisma_vieleck(comp, 'Kopf_KX', 'y', pts, fy[0], fy[1], 'dazu', k)
+    ex, ez = L['kx_einsatz_v']
+    by = Y(L['kx_backe_v_y'])
+    bohrung(comp, 'Einsatz_KX_vorn', 'y', [(ex + xs, ez)], w('insert_m3_d'),
+            by[0] - 1.0, by[1] + 1.0, k)
+    ex, ey = L['kx_einsatz_kopf']
+    bohrung(comp, 'Einsatz_KX_Kopf', 'z', [(ex + xs, ey + dy)],
+            w('insert_m3_d'), kz0, kz1 + 1.0, k)
+    fussfase(comp, k, 'y', w('kx_z0'), w('fase_fuss'), fehler, 'Klammer_X')
+    bbox_pruefen(k, 'Klammer_X', ((kx0, X(L['kx_backe_x'])[1]), (hy0, vy1),
+                                  (w('kx_z0'), kz1)), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    aussehen(app, design, k, SCHWARZ)
+    return k
+
+
+def bau_fahne_x(app, design, comp, L, fehler):
+    """Fahne der X-Achse: flaches Blatt auf dem Kopf der Klammer, mit M3x8 in
+    dessen Einsatz. Das Langloch (+-fx_verstellung) stellt den Schaltpunkt
+    ein; die Spitze laeuft waagerecht mitten durch den Gabelspalt. Im
+    Modell am X-Wagen in der Mitte des X-Wegs.
+
+    Drucklage: flach — SCHWARZ drucken."""
+    xs, dy = L['xw_mitte'], 0.0
+    x = (L['fx_x_rel'][0] + xs, L['fx_x_rel'][1] + xs)
+    y = (L['fx_y_rel'][0] + dy, L['fx_y_rel'][1] + dy)
+    k = quader(comp, 'Blatt_FX', x, y, L['fx_z'], 'neu').bodies.item(0)
+    k.name = 'Fahne_X'
+    ex, ey = L['kx_einsatz_kopf']
+    zm = sum(L['fx_z']) / 2.0
+    sk = skizze(comp, _ebene(comp, 'z', zm, 'E_Fahne_X_Mitte'),
+                'Sk_Langloch_FX')
+    langloch_quer(sk, ex + xs, ey + dy, w('m3_durchgang'),
+                  w('fx_verstellung'))
+    tasche(comp, alle_profile(sk), w('fahne_dicke') + 2.0, k)
+    fussfase(comp, k, 'y', L['fx_z'][0], w('fase_fuss'), fehler, 'Fahne_X')
+    bbox_pruefen(k, 'Fahne_X', (x, y, L['fx_z']), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    aussehen(app, design, k, SCHWARZ)
+    return k
+
+
 def bau_bohrlehren(app, design, comp, L, fehler):
     """Bohrlehre fuer das Lochbild des Y-Wagens (MGN12H, 20 x 20) — zum
-    Aufstecken auf den Wagen, bevor die Schlitten gedruckt werden. Liegt
-    abseits hinter der Maschine, ausgeblendet (Konvention SKILL.md).
+    Aufstecken auf den Wagen, bevor die Schlitten gedruckt werden — und fuer
+    die Platine der Lichtschranke (Umriss und Lochbild), bevor die Halter
+    der Endschalter gedruckt werden: auflegen, beide Loecher muessen
+    fluchten. Liegen abseits, ausgeblendet (Konvention SKILL.md).
 
     Weitere Lehren gibt es bewusst nicht: alle anderen Verbindungen liegen
     zwischen Teilen dieses Skripts und haengen an denselben Variablen
     (dieselbe Begruendung wie in ToolheadZ.py)."""
+    z = L['tisch_z'] - 20.0
+    sk = skizze(comp, ebene_z(comp, z, 'E_Bohrlehre_LM393'),
+                'Sk_Bohrlehre_LM393')
+    rechteck(sk, L['ly_pcb_x'][0], L['ly_pcb_y'][0], L['ly_pcb_x'][1],
+             L['ly_pcb_y'][1])
+    for x, y in L['ly_loecher']:
+        kreis(sk, x, y, w('ls_pcb_frei_d'))
+    lehre = neu_mittig(comp, groesstes_profil(sk),
+                       w('lehre_dicke')).bodies.item(0)
+    lehre.name = 'Bohrlehre_LM393'
+    material_zuweisen(app, design, lehre, 'PLA', fehler)
+    lehre.isLightBulbOn = False
+
     y0, z = -160.0, L['platte_z0'] - 20.0
     sk = skizze(comp, ebene_z(comp, z, 'E_Bohrlehre_YWagen'),
                 'Sk_Bohrlehre_YWagen')
@@ -1538,15 +2022,17 @@ def bau_profil(comp, name, laengs, bereich, quer, z):
 
 def bau_referenz(app, design, teile, L, fehler):
     """Kaufteile und Riemen, nur zur Ansicht — NICHT drucken. teile: die
-    Komponenten Ref_Profile, Ref_Fuehrungen, Ref_Riemen, Ref_Antrieb.
+    Komponenten Ref_Profile, Ref_Fuehrungen, Ref_Riemen, Ref_Antrieb,
+    Ref_Endschalter.
 
     Rahmen und Y-Schienen liegen mittig zum Y-Wagen, das vordere 2060
     35 mm hinter der Stirnseite, das hintere 435 mm (Mitte zu Mitte)
-    dahinter — die 2040 stehen hinten 110 mm ueber. Der Toolhead
-    (hier nur X-Wagen und Riemenhalter) steht in der Mitte des X-Wegs, die
-    Umlenkrolle und die Y-Motoren in der Mitte ihres Spannwegs. Das hintere
-    Y-Ritzel steht, wo es angenommen ist (yh_hinter); seine Welle und Lager
-    sind nicht gezeichnet.
+    dahinter — die 2040 stehen hinten 110 mm ueber. Der Toolhead (hier
+    nur X-Wagen, Riemenhalter und Traegerplatte vereinfacht) steht in der
+    Mitte des X-Wegs, die Umlenkrolle und die Y-Motoren in der Mitte ihres
+    Spannwegs. Das hintere Y-Ritzel steht, wo es angenommen ist
+    (yh_hinter); seine Welle und Lager sind nicht gezeichnet. Die
+    Lichtschranken der Endschalter: Y fest am Rahmen, X vor der 2020.
 
     Jedes Teil wird fuer sich gebaut: scheitert eines, steht das im Bericht
     und das Skript laeuft weiter. Die Druckteile sind dann schon fertig."""
@@ -1770,6 +2256,30 @@ def bau_referenz(app, design, teile, L, fehler):
            L['rh_x'], (-w('rh_tiefe'), 0.0),
            (w('x_wagen_breite') / 2.0,
             w('x_wagen_breite') / 2.0 + w('rh_hoehe')), 'PETG')
+    # Traegerplatte vereinfacht, mit der linken Saeulenrippe: daran klemmt
+    # die Fahne X (ToolheadZ.py)
+    xm, xt, td = L['xw_mitte'], w('traeger_x_links'), w('traeger_dicke')
+    th_z = (w('traeger_z0'), w('x_wagen_breite') / 2.0 + 4.0)
+    sicher('Traegerplatte_Toolhead', box, c, 'Traegerplatte_Toolhead',
+           (xm + xt, xm - xt), (0.0, td), th_z, 'PETG')
+    sicher('Saeulenrippe_links_Toolhead', box, c,
+           'Saeulenrippe_links_Toolhead', (xm + xt, xm + xt + w('rippe_b')),
+           (td, td + w('rippe_t')), th_z, 'PETG')
+
+    # ---- Lichtschranken der Endschalter: Y fest am Rahmen, X am Portal ------
+    c = teile['Ref_Endschalter']
+    sicher('LS_Y_Platine', box, c, 'LS_Y_Platine', L['ly_pcb_x'],
+           L['ly_pcb_y'], L['ly_pcb_z'], 'Leiterplatte')
+    for i, ax in enumerate(L['ly_arme_x']):
+        n = 'LS_Y_Gabel_{}'.format(i + 1)
+        sicher(n, box, c, n, ax, L['ly_gabel_y'], L['ly_gabel_z'],
+               'Kunststoff')
+    sicher('LS_X_Platine', box, c, 'LS_X_Platine', L['lx_pcb_x'],
+           L['lx_pcb_y_rel'], L['lx_pcb_z'], 'Leiterplatte')
+    for i, az in enumerate(L['lx_arme_z']):
+        n = 'LS_X_Gabel_{}'.format(i + 1)
+        sicher(n, box, c, n, L['lx_gabel_x'], L['lx_gabel_y_rel'], az,
+               'Kunststoff')
 
 
 def hinweise_bauen(L, fehler):
@@ -1922,6 +2432,37 @@ def hinweise_bauen(L, fehler):
         .format(riemen_x),
         '  (ToolheadZ.py) — mit der Rolle in Mittelstellung ablaengen.',
         '',
+        'ENDSCHALTER (Gabellichtschranken LM393, docs/endschalter.md):',
+        '  Im Modell steht das Portal in der Mitte und der Toolhead in der',
+        '  Mitte des X-Wegs: die Fahnen stehen NICHT in ihrer Gabel. Beide',
+        '  schalten {:.0f} mm vor dem Schienenende: Portal {:+.1f} von der'
+        .format(w('schaltabstand'), L['schalt_dy']),
+        '  Mitte, X-Wagenmitte {:+.2f}.'.format(L['schalt_xs']),
+        '  HALTER_Y: aussen an das rechte 2040, {:.0f} mm hinter dem hinteren'
+        .format(L['quer_y_hinten'][0] - L['hy_y'][1]),
+        '    2060; 2x M5x{:.0f} mit Scheibe in Hammermuttern der UNTEREN Nut'
+        .format(L['hy_m5_schraube']),
+        '    (Z {:+.0f}), NICHT in die obere: dort laeuft der Ruecklauf des'
+        .format(L['nut_u_z']),
+        '    Y-Riemens. Lichtschranke mit 2x M2x6, Gabel oben und vorn.',
+        '  FAHNE_Y: von aussen auf die Kante der rechten Schlittenplatte,',
+        '    Hinterkante {:.0f} mm vor der Hinterkante der Platte, Maden-'
+        .format(w('fy_hinten') - L['platte_y0']),
+        '    schraube M3x8 im Einsatz. Schaltpunkt: laengs der Kante schieben.',
+        '  HALTER_X: vor das linke Ende der 2020, Hammermutter M5 in ihre',
+        '    vordere Nut, Block rechts an das Ende der X-Schiene, M5x{:.0f}'
+        .format(L['hx_m5_schraube']),
+        '    (Kopf versenkt) — ERST DANN die Lichtschranke mit 2x M2x6, sie',
+        '    deckt den Kopf ab. Gabel nach vorn, Spalt waagerecht.',
+        '  KLAMMER_X: von links auf die untere Kante der Traegerplatte (unter',
+        '    dem X-Wagen), Madenschraube M3x8 vorn auf die Seitenrippe.',
+        '  FAHNE_X: M3x{:.0f} auf den Kopf der Klammer, Langloch +-{:.0f} mm'
+        .format(L['fx_schraube'], w('fx_verstellung')),
+        '    stellt den Schaltpunkt ein.',
+        '  Einsaetze: 4x M2 (3,2 x 2,5, Bohrung {:.1f}), 3x M3 (Bohrung {:.1f}).'
+        .format(w('ls_pcb_loch_d'), w('insert_m3_d')),
+        '  Vor der ersten Referenzfahrt beide Schaltpunkte von Hand pruefen.',
+        '',
         'MONTAGEREIHENFOLGE:',
         '  1. Einsaetze einschmelzen: 2 je Klemmturm, 2 je Stirnblock (oben).',
         '  2. Beide Klemmtuerme unter die Platte, je 2x M3x{:.0f} von oben.'
@@ -1966,6 +2507,11 @@ def hinweise_bauen(L, fehler):
         '  Umlenkhalter .... auf der Rueckseite (Saeule) stehend',
         '  Spannklotz ...... Unterseite aufs Bett',
         '  Y-Motorhalter .. Motorseite der Platte aufs Bett',
+        '  Halter_Y ........ Fussflaeche (die Seite am Profil) aufs Bett',
+        '  Halter_X ........ Platinenseite aufs Bett, Zunge oben',
+        '  Fahne_Y ......... eine Stirnseite aufs Bett   } SCHWARZ: helles',
+        '  Klammer_X ....... Unterkante aufs Bett        } PETG laesst das',
+        '  Fahne_X ......... flach                       } Infrarot durch',
         '  Keine Stuetzen noetig. Rechter Schlitten, rechte Klemmtuerme und',
         '  rechter Y-Motorhalter sind gespiegelt — im Slicer NICHT spiegeln,',
         '  die Koerper so exportieren, wie sie im Modell liegen.',
@@ -1987,6 +2533,15 @@ def hinweise_bauen(L, fehler):
         '    der Mitte angenommen [w]. Bis {:.0f} mm Welle endet sie ueber dem'
         .format(L['mp_z1'] - L['profil_z1'] - 1.0),
         '    Rohr.',
+        '  Lichtschranke: Boden des Gabelschlitzes {:.0f} mm ueber der Platine'
+        .format(w('ls_schlitz_boden')),
+        '    (das Blatt bleibt {:.1f} mm darueber); Loetstifte unter der'
+        .format(w('fahne_ab_platine') - w('ls_schlitz_boden')),
+        '    Platine (Taschen {:.1f} mm unter der Gabel); ob der X-Wagen links'
+        .format(w('ls_pin_tasche')),
+        '    einen Schmiernippel hat (die Platine steht {:.0f} mm vor dem'
+        .format(w('hx_luft_wagen')),
+        '    Wagenende).',
         '',
         'REFERENZ (Komponente Referenz_nicht_drucken): nur zur Ansicht,',
         '  NICHT drucken und beim Export weglassen. Eine Gluehbirne blendet',
@@ -2002,7 +2557,9 @@ def hinweise_bauen(L, fehler):
             L['quer_y_hinten'][0] - L['rahmen_y'][0]),
         '  Fuehrungen: MGN12 ({:.0f} mm) mit MGN12H, MGN15 mit MGN15H. Vom'
         .format(w('y_schiene_laenge')),
-        '    Toolhead nur X-Wagen und Riemenhalter, in der Mitte des X-Wegs.',
+        '    Toolhead nur X-Wagen, Riemenhalter und Traegerplatte (vereinfacht),',
+        '    in der Mitte des X-Wegs.',
+        '  Lichtschranken der Endschalter: Y am Rahmen, X vor der 2020.',
         '  X-Riemen: Schleife um Ritzel und Umlenkrolle, beide Enden im',
         '    Riemenhalter.',
         '  Y-Riemen: je Seite offen, vorn um das Ritzel des Y-Motors,',
@@ -2068,7 +2625,8 @@ def run(context):
                      'Schlitten_rechts', 'Klemmturm_hinten_rechts',
                      'Klemmturm_vorn_rechts', 'Umlenkhalter', 'Spannklotz',
                      'Y-Motorhalter_links', 'Y-Motorhalter_rechts',
-                     'Bohrlehren'):
+                     'Halter_Y', 'Fahne_Y', 'Halter_X', 'Klammer_X',
+                     'Fahne_X', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -2088,6 +2646,12 @@ def run(context):
         bau_umlenkhalter(app, design, occ['Umlenkhalter'].component, L,
                          fehler)
         bau_spannklotz(app, design, occ['Spannklotz'].component, L, fehler)
+        for name, bauen in (('Halter_Y', bau_halter_y),
+                            ('Fahne_Y', bau_fahne_y),
+                            ('Halter_X', bau_halter_x),
+                            ('Klammer_X', bau_klammer_x),
+                            ('Fahne_X', bau_fahne_x)):
+            bauen(app, design, occ[name].component, L, fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, fehler)
 
         for o in occ.values():
@@ -2099,7 +2663,7 @@ def run(context):
         ref.component.name = 'Referenz_nicht_drucken'
         teile = {}
         for name in ('Ref_Profile', 'Ref_Fuehrungen', 'Ref_Riemen',
-                     'Ref_Antrieb'):
+                     'Ref_Antrieb', 'Ref_Endschalter'):
             o = ref.component.occurrences.addNewComponent(einheit)
             o.component.name = name
             teile[name] = o.component

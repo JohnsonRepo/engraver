@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Rechnerische Pruefung der Endschalter-Halter (fusion/Endschalter) — laeuft
-ohne Fusion.
+"""Rechnerische Pruefung der Endschalter X und Y — laeuft ohne Fusion. Halter
+und Fahnen baut seit Rev. 15 fusion/Portal/Portal.py (bis Rev. 14
+fusion/Endschalter/Endschalter.py).
 
-Importiert Endschalter.py, Portal.py und ToolheadZ.py mit gestubbtem
-adsk-Modul und prueft: Abgleich der Bezugsmasse, Schaltpunkte, Blatt im
+Importiert Portal.py und ToolheadZ.py mit gestubbtem adsk-Modul und
+prueft: Abgleich der Bezugsmasse, Schaltpunkte, Blatt im
 Gabelspalt, Freiraum gegen alles, was faehrt (Portal ueber den Y-Weg,
 Toolhead ueber X- und Z-Weg), gegen Rahmen, Riemen, die Winkel an den
 Kreuzungen und die Y-Motorhalter, Nuten und Schrauben, die Klammern und
@@ -24,8 +25,6 @@ import portal_check                                   # noqa: E402
 from bauraum import Quader                            # noqa: E402
 from toolhead_check import Pruefung                   # noqa: E402
 
-ENDSCHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                           'fusion', 'Endschalter', 'Endschalter.py')
 WINKEL = 20.0          # Winkel an den Kreuzungen 2040/2060 [v] Angabe
 BETT = 250.0           # Bambu Lab A1: 256, mit Rand
 NUT_PLATZ = 6.0        # so weit darf eine Schraube in die Nut (YMotorhalter)
@@ -48,7 +47,7 @@ def teile(ew, EL):
     fest am Rahmen; Fahne_Y und Halter_X fahren mit dem Portal (relativ zum
     Portal in der Mitte); Klammer_X und Fahne_X mit dem Toolhead (X relativ
     zur Wagenmitte, Y relativ zum Portal)."""
-    dy, xs = EL['dy'], EL['xs']
+    dy, xs = EL['schalt_dy'], EL['schalt_xs']
     fx, fz = EL['hy_fuss_x'], EL['hy_fuss_z']
     y = EL['hy_y']
     k = ew('m5_kopf_d') / 2.0
@@ -134,8 +133,8 @@ def main():
     tw, TL = th.w, th.lage()
     pm = bauraum.modul_laden(bauraum.PORTAL, 'portal')
     w, L = pm.w, pm.lage()
-    em = bauraum.modul_laden(ENDSCHALTER, 'endschalter')
-    ew, EL = em.w, em.lage()
+    # die Endschalter stehen seit Rev. 15 in Portal.py
+    ew, EL = w, L
     p = Pruefung()
     feste, bewegte, _ = bauraum.bauraeume(tw, TL)
     feste = [q for q in feste if q.name not in portal_check.TOOLHEAD_OHNE]
@@ -149,22 +148,16 @@ def main():
     R = EL['R']
 
     # ------------------------------------------------------------------
-    p.titel('1) Abgleich Endschalter.py <-> Portal.py / ToolheadZ.py')
+    p.titel('1) Abgleich: Portal.py <-> ToolheadZ.py und Bauraeume')
     TH = {q.name: q for q in feste}
     abgleich = [
-        ('Y-Schienen Mitte (R)', R, L['R']),
-        ('Rahmen: hintere Stirnseite der 2040', ew('rahmen_y0'),
-         L['rahmen_y'][0]),
-        ('Rahmen: Unterkante der 2040', ew('rahmen_z0'), L['rahmen_z0']),
-        ('Rahmen: Oberkante der 2040', EL['rahmen_z1'], L['rahmen_z1']),
-        ('hinteres 2060: Rueckseite', ew('quer_y1'), L['quer_y_hinten'][0]),
-        ('Y-Schiene: hinteres Ende', ew('y_schiene_y0'), L['y_schiene_y'][0]),
-        ('Y-Weg bis ans Schienenende', ew('y_weg_hinten'), d_schiene),
+        ('Y-Weg bis ans Schienenende (portal_check)', EL['y_weg_hinten'],
+         d_schiene),
         ('Schlittenplatte rechts: Aussenkante', EL['platte_x1'],
          P['Platte rechts'].x[1]),
-        ('Schlittenplatte: Hinterkante', ew('platte_y0'),
+        ('Schlittenplatte: Hinterkante', L['platte_y0'],
          P['Platte rechts'].y[0]),
-        ('Schlittenplatte: Vorderkante', ew('platte_y1'),
+        ('Schlittenplatte: Vorderkante', L['platte_y1'],
          P['Platte rechts'].y[1]),
         ('Schlittenplatte: Unterseite', EL['platte_z'][0],
          P['Platte rechts'].z[0]),
@@ -172,42 +165,38 @@ def main():
          P['Platte rechts'].z[1]),
         ('Y-Wagen rechts: Aussenseite', EL['y_wagen_x1'],
          P['Y-Wagen rechts'].x[1]),
-        ('Y-Wagen: Hinterkante', ew('y_wagen_y0'), P['Y-Wagen rechts'].y[0]),
-        ('Y-Wagen: Vorderkante', ew('y_wagen_y1'), P['Y-Wagen rechts'].y[1]),
-        ('Y-Wagen: Unterkante', ew('y_wagen_z0'), P['Y-Wagen rechts'].z[0]),
-        ('Wagenschrauben hinten (Y)', ew('wagen_loch_y'),
-         min(y for _, y in L['wagen_loecher'])),
-        ('Wagenschrauben vorn (Y)', ew('wagen_loch_y2'),
-         max(y for _, y in L['wagen_loecher'])),
-        ('Portalrohr: linkes Ende', ew('rohr_x0'), P['Portalrohr'].x[0]),
-        ('Portalrohr: Rueckseite', ew('rohr_y0'), P['Portalrohr'].y[0]),
-        ('Portalrohr: Vorderseite', ew('rohr_y1'), P['Portalrohr'].y[1]),
-        ('X-Schiene: linkes Ende', ew('x_schiene_x0'), P['X-Schiene'].x[0]),
-        ('X-Schiene: Breite', ew('x_schiene_b'),
+        ('Y-Wagen: Hinterkante', L['wagen_y0'], P['Y-Wagen rechts'].y[0]),
+        ('Y-Wagen: Vorderkante', L['wagen_y1'], P['Y-Wagen rechts'].y[1]),
+        ('Y-Wagen: Unterkante', L['y_wagen_z0'], P['Y-Wagen rechts'].z[0]),
+        ('Portalrohr: linkes Ende', -w('profil_laenge') / 2.0,
+         P['Portalrohr'].x[0]),
+        ('Portalrohr: Rueckseite', L['profil_y0'], P['Portalrohr'].y[0]),
+        ('Portalrohr: Vorderseite', L['portal_y'], P['Portalrohr'].y[1]),
+        ('X-Schiene: linkes Ende', L['x_schiene_x'][0], P['X-Schiene'].x[0]),
+        ('X-Schiene: Breite', w('x_schiene_b'),
          P['X-Schiene'].z[1] - P['X-Schiene'].z[0]),
-        ('X-Schiene: Hoehe', ew('x_schiene_h'),
+        ('X-Schiene: Hoehe', w('x_schiene_h'),
          P['X-Schiene'].y[1] - P['X-Schiene'].y[0]),
-        ('X-Wagenmitte am linken Schienenende', ew('xw_min'), L['xw_min']),
-        ('Stirnblock links: Aussenkante', ew('stirn_x0'),
+        ('Stirnblock links: Aussenkante', -(R + w('platte_aussen')),
          P['Stirnblock links'].x[0]),
-        ('Stirnblock links: Hinterkante', ew('stirn_y0'),
+        ('Stirnblock links: Hinterkante', L['stirn_y'][0],
          P['Stirnblock links'].y[0]),
-        ('Stirnblock links: Vorderkante', ew('stirn_y1'),
+        ('Stirnblock links: Vorderkante', L['stirn_y'][1],
          P['Stirnblock links'].y[1]),
-        ('Traegerplatte: linke Kante', ew('traeger_x_links'),
+        ('Traegerplatte: linke Kante', w('traeger_x_links'),
          tw('traeger_x_links')),
-        ('Traegerplatte: Dicke', ew('traeger_dicke'),
+        ('Traegerplatte: Dicke', w('traeger_dicke'),
          TH['Traegerplatte Hauptsaeule'].y[1]
          - TH['Traegerplatte Hauptsaeule'].y[0]),
-        ('Traegerplatte: Unterkante', ew('traeger_z0'),
+        ('Traegerplatte: Unterkante', w('traeger_z0'),
          TH['Traegerplatte Hauptsaeule'].z[0]),
-        ('Saeulenrippe links: Breite', ew('rippe_b'),
+        ('Saeulenrippe links: Breite', w('rippe_b'),
          TH['Saeulenrippe links'].x[1] - TH['Saeulenrippe links'].x[0]),
-        ('Saeulenrippe links: Tiefe', ew('rippe_t'),
+        ('Saeulenrippe links: Tiefe', w('rippe_t'),
          TH['Saeulenrippe links'].y[1] - TH['Saeulenrippe links'].y[0]),
-        ('X-Wagen: Laenge', ew('x_wagen_laenge'),
+        ('X-Wagen: Laenge', w('x_wagen_laenge'),
          TH['X-Wagen MGN15H'].x[1] - TH['X-Wagen MGN15H'].x[0]),
-        ('X-Wagen: Breite', ew('x_wagen_breite'),
+        ('X-Wagen: Breite', w('x_wagen_breite'),
          TH['X-Wagen MGN15H'].z[1] - TH['X-Wagen MGN15H'].z[0]),
     ]
     for name in ('ls_pcb_laenge', 'ls_pcb_breite', 'ls_pcb_dicke',
@@ -226,9 +215,9 @@ def main():
     p.info('Portal beim Schalten (ab Mitte)', dy_s)
     p.ok('schaltet vor dem hinteren Schienenende', d_schiene + dy_s,
          ew('schaltabstand') - 0.01)
-    wagen_ende = ew('y_wagen_y0') - d_schiene
+    wagen_ende = L['wagen_y0'] - d_schiene
     p.ok('Y-Wagen am Schienenende buendig (Schiene hinten)',
-         abs(wagen_ende - ew('y_schiene_y0')), 0.05, '<=')
+         abs(wagen_ende - L['y_schiene_y'][0]), 0.05, '<=')
     s = ew('ls_schlitz') / 2.0
     bl = EL['fy_blatt_x']
     p.ok('Blatt im Spalt: Luft zum inneren Arm', bl[0] - (EL['gy_x'] - s),
@@ -244,13 +233,13 @@ def main():
     p.ok('am Schienenende: Blatt kommt nicht hinter die Gabel',
          vorne - EL['ly_gabel_y'][0], 0.0)
     p.info('Halter Y: Abstand zum hinteren 2060',
-           EL['quer_y'][0] - EL['hy_y'][1])
+           L['quer_y_hinten'][0] - EL['hy_y'][1])
     # hinteres Ritzel hinter der Stirnseite der 2040, Lage wie Portal.py [?]
     ritzel = L['yh_y'] + RITZEL_R
     p.ok('Halter Y: vor dem Flansch des hinteren Ritzels (Lage [?])',
          EL['hy_y'][0] - ritzel, 15.0)
     p.ok('Halter Y: vor dem Profilende (Lagerbock der Umlenkung [?])',
-         EL['hy_y'][0] - ew('rahmen_y0'), 40.0)
+         EL['hy_y'][0] - L['rahmen_y'][0], 40.0)
 
     # ------------------------------------------------------------------
     p.titel('3) Y: Freiraum ueber den ganzen Y-Weg')
@@ -352,12 +341,12 @@ def main():
     p.titel('5) X: Schaltpunkt und Blatt im Gabelspalt')
     xs = EL['lx_strahl_x'] - EL['fx_spitze_rel']
     p.info('X-Wagenmitte beim Schalten', xs)
-    p.ok('schaltet vor dem linken Schienenende', xs - ew('xw_min'),
+    p.ok('schaltet vor dem linken Schienenende', xs - L['xw_min'],
          ew('schaltabstand') - 0.01)
     for n, v in (('Langloch ganz nach rechts', +ew('fx_verstellung')),
                  ('Langloch ganz nach links', -ew('fx_verstellung'))):
         p.ok('   {}: schaltet vor dem Schienenende'.format(n),
-             xs + v - ew('xw_min'), 1.0)
+             xs + v - L['xw_min'], 1.0)
     fz = EL['fx_z']
     p.ok('Blatt im Spalt: Luft nach unten', fz[0] - EL['lx_arme_z'][0][1],
          2.0)
@@ -369,14 +358,14 @@ def main():
     p.ok('Blatt deckt den Strahl ab', EL['lx_strahl_y_rel'] - fy_[0], 1.0)
     p.ok('Blatt reicht ueber die offene Seite der Gabel',
          fy_[1] - EL['lx_gabel_y_rel'][1], 2.0)
-    spitze = EL['fx_spitze_rel'] + ew('xw_min')
+    spitze = EL['fx_spitze_rel'] + L['xw_min']
     p.ok('am Schienenende: Spitze bleibt in der Gabel',
          spitze - EL['lx_gabel_x'][0], -0.01)
     p.ok('Anschlag: Block stoesst an das Ende der X-Schiene',
-         abs(EL['hx_x'][1] - ew('x_schiene_x0')), 0.01, '<=')
+         abs(EL['hx_x'][1] - L['x_schiene_x'][0]), 0.01, '<=')
     # Rohrnut (2020) wie in Portal.py: Engstelle + Kammer bis zum Grund;
     # der Kopf sitzt ohne Scheibe in der Senkung
-    unter_kopf = ew('hx_dicke') - ew('m5_senk_t')
+    unter_kopf = ew('hx_dicke') - ew('hx_senk_t')
     in_nut = EL['hx_m5_schraube'] - unter_kopf
     p.ok('M5x{:.0f} (Kopf versenkt): Spitze vor dem Grund der Rohrnut'
          .format(EL['hx_m5_schraube']),
@@ -384,7 +373,7 @@ def main():
     p.ok('   Gewinde im Nutstein',
          min(in_nut, NUT_LIPPE + NUTSTEIN) - NUT_LIPPE, 3.0)
     p.ok('   Kopf ganz in der Senkung (die Platine liegt davor)',
-         ew('m5_senk_t') - ew('m5_kopf_h'), 0.1)
+         ew('hx_senk_t') - ew('m5_kopf_h'), 0.1)
 
     # ------------------------------------------------------------------
     p.titel('6) X: Freiraum ueber X- und Z-Weg')
@@ -399,7 +388,7 @@ def main():
     p.ok('Halter X <-> Portal, fest ({} / {})'.format(d[1], d[2]), d[0],
          0.0)
     p.ok('Zunge endet vor dem ersten Nutstein der X-Schiene',
-         ew('x_schiene_x0') + 15.0 - 5.0 - EL['hx_zunge_x'][1], 3.0)
+         L['x_schiene_x'][0] + 15.0 - 5.0 - EL['hx_zunge_x'][1], 3.0)
     lang_y = [Quader(q.name, *q.x, -2000.0, 2000.0, *q.z, q.art)
               for q in rahmen]
     d = engste(halter_x, lang_y)
@@ -432,7 +421,7 @@ def main():
     d = engste(ls_x, [q.verschoben(0.0, L['xw_min']) for q in feste])
     p.ok('   am Schienenende: Platine und Gabel vor dem Wagen ({})'.format(
         d[1]), d[0], ew('luft_bau') - 0.01)
-    kopf = EL['kx_kopf_x'][0] + ew('xw_min')
+    kopf = EL['kx_kopf_x'][0] + L['xw_min']
     p.ok('   am Schienenende: Kopf der Klammer bleibt vor der Gabel',
          kopf - EL['lx_gabel_x'][1], 1.0)
     best = (float('inf'),)
@@ -471,10 +460,11 @@ def main():
          0.2)
     p.ok('Fahne Y: untere Backe neben dem Y-Wagen',
          EL['fy_backe_u_x'][0] - EL['y_wagen_x1'], 0.5)
-    senk = ew('m3_senkung_d') / 2.0
+    senk = w('m3_senkung') / 2.0
     p.ok('Fahne Y: Klammer zwischen den Wagenschrauben', min(
-        EL['fy_y_rel'][0] - (ew('wagen_loch_y') + senk),
-        (ew('wagen_loch_y2') - senk) - EL['fy_y_rel'][1]), 0.5)
+        EL['fy_y_rel'][0] - (min(y for _, y in L['wagen_loecher']) + senk),
+        (max(y for _, y in L['wagen_loecher']) - senk) - EL['fy_y_rel'][1]),
+        0.5)
     p.ok('Fahne Y: Madenschraube drueckt auf die Platte (nicht daneben)',
          EL['platte_x1'] - EL['fy_einsatz_x'] - 1.5, 1.0)
     p.ok('Fahne Y: Wand um den Einsatz', min(
@@ -536,10 +526,10 @@ def main():
     p.info('Fahnen und Klammern SCHWARZ: helles PETG laesst IR durch')
 
     # ------------------------------------------------------------------
-    p.titel('9) Statische Pruefung der Schluessel in Endschalter.py')
-    quelle = open(ENDSCHALTER, encoding='utf-8').read()
+    p.titel('9) Statische Pruefung der Schluessel in Portal.py')
+    quelle = open(bauraum.PORTAL, encoding='utf-8').read()
     fehlt_m = sorted(set(re.findall(r"\bw\('([^']+)'\)", quelle))
-                     - set(em.MASSE))
+                     - set(pm.MASSE))
     fehlt_l = sorted(set(re.findall(r"L\['([^']+)'\]", quelle)) - set(EL))
     p.ok('alle w()-Schluessel in MASSE vorhanden', len(fehlt_m), 0, '<=', '')
     if fehlt_m:
@@ -547,7 +537,7 @@ def main():
     p.ok('alle L[]-Schluessel von lage() geliefert', len(fehlt_l), 0, '<=', '')
     if fehlt_l:
         p.info('FEHLT in lage(): ' + ', '.join(fehlt_l))
-    unbenutzt = sorted(set(em.MASSE)
+    unbenutzt = sorted(set(pm.MASSE)
                        - set(re.findall(r"\bw\('([^']+)'\)", quelle)))
     if unbenutzt:
         p.info('nur dokumentierend (nicht in Geometrie): '
@@ -555,7 +545,7 @@ def main():
 
     p.titel('10) Validierungsbericht des Fusion-Skripts')
     try:
-        for zeile in em.hinweise_bauen(EL, []):
+        for zeile in pm.hinweise_bauen(L, []):
             p.info(zeile if zeile else '.')
         p.ok('Bericht rendert ohne Fehler', 1.0, 1.0, '>=', '')
     except Exception as exc:

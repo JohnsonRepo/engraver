@@ -1,8 +1,10 @@
 # Endschalter X und Y — Halter und Schaltfahnen
 
-Erzeugt von `fusion/Endschalter/Endschalter.py` (fünf Druckteile und eine
-ausgeblendete Bohrlehre, Rev. 1). Geprüft mit
-`python3 tools/endschalter_check.py`, Skizze in
+Die fünf Druckteile und die ausgeblendete Bohrlehre der Lichtschranke
+erzeugt `fusion/Portal/Portal.py` (Rev. 15) als eigene Komponenten der
+Portal-Baugruppe, neben Schlitten, Klemmtürmen und Antrieben. Bis Portal
+Rev. 14 standen sie im eigenen Skript `Endschalter.py`; Maße und Lagen sind
+dieselben. Geprüft mit `python3 tools/endschalter_check.py`, Skizze in
 [endschalter.svg](endschalter.svg) (neu erzeugen mit
 `python3 tools/endschalter_zeichnen.py`).
 
@@ -34,10 +36,13 @@ Schlitten, das geht bei jeder Stellung von X. Jede Lichtschranke hat ihren
 eigenen Eingang, X− an D9 und Y+ an D10.
 
 Beide Schalter lösen **3 mm vor dem Schienenende** aus: Die Wagen dürfen
-nicht über das Ende hinaus, sonst fallen Kugeln heraus. Im Modell stehen
-Portal und Toolhead genau am Schaltpunkt, die Fahnen stecken mit der Kante
-im Strahl. Das Portal steht dort 224,3 mm hinter der Mitte, die
-X-Wagenmitte bei −200,85 mm.
+nicht über das Ende hinaus, sonst fallen Kugeln heraus. In der Skizze
+stehen Portal und Toolhead genau am Schaltpunkt, die Fahnen stecken mit der
+Kante im Strahl. Das Portal steht dort 224,3 mm hinter der Mitte, die
+X-Wagenmitte bei −200,85 mm. Im Fusion-Modell steht das Portal dagegen in
+der Mitte seines Wegs und der Toolhead in der Mitte des X-Wegs, wie alles
+in `Portal.py`: Die Fahnen sitzen dort, wo sie montiert werden, und nicht
+in ihrer Gabel.
 
 ### Korrektur: Y in der unteren Nut
 
@@ -87,7 +92,7 @@ rechten Schlittenplatte (6 mm dick, 0,3 mm Spiel). Die obere Backe reicht
 oben auf die Platte drückt. Die untere Backe endet 1 mm neben dem Y-Wagen.
 Außen hängt das Blatt senkrecht nach unten in die Gabel. Die Klammer sitzt
 **35 mm vor der Hinterkante der Platte**, zwischen den Senkungen der
-Wagenschrauben (je 1 mm Luft).
+Wagenschrauben (je 0,75 mm Luft).
 
 Über den ganzen Y-Weg bleibt die Fahne **8,5 mm** von Rahmen, Schiene,
 Riemen, 2060 und Winkeln weg. Am Schienenende, 3 mm nach dem Schaltpunkt,
@@ -155,7 +160,7 @@ der Kopf der Klammer 2,2 mm vor der Gabel.
 | Verbindung | Teile | Hinweis |
 |---|---|---|
 | Halter_Y → 2040 | **2 × M5×12 + Scheibe + Hammermutter M5 (Nut 6)** | untere Außennut. 5 mm ragen in die Nut, 3,2 mm Gewinde im Stein, 1 mm vor dem Nutgrund. Ohne Scheibe stünde die Spitze am Grund |
-| Halter_X → Portalrohr (2020) | **1 × M5×12 + Hammermutter M5** | vordere Rohrnut, ohne Scheibe (Kopf in der Senkung Ø9). 6,2 mm in der Nut, 4 mm im Stein, 1,3 mm vor dem Grund |
+| Halter_X → Portalrohr (2020) | **1 × M5×12 + Hammermutter M5** | vordere Rohrnut, ohne Scheibe (Kopf in der Senkung Ø9,5). 6,2 mm in der Nut, 4 mm im Stein, 1,3 mm vor dem Grund |
 | LM393 → Halter | **2 × M2×6** je Schranke | in Einsätze M2 3,2 × 2,5, Einpressbohrung Ø2,8 × 3 mm |
 | Fahne_Y, Klammer_X | je **1 × Madenschraube M3×8** | in Einsätze M3 (Bohrung Ø4,6) |
 | Fahne_X → Klammer_X | **1 × M3×8** | 5 mm im Einsatz |
@@ -174,7 +179,8 @@ Kein Teil braucht Stützen. An der Bettseite hält eine 0,4-mm-Fase den
 Elefantenfuß heraus. 4 Wandlinien, ≥ 40 % Infill. Einsätze: 4 × M2
 (3,2 × 2,5) und 3 × M3.
 
-**Bohrlehre_LM393:** Die ausgeblendete, 2 mm dünne Platte hat Umriss und
+**Bohrlehre_LM393** (Komponente `Bohrlehren` in `Portal.py`, neben der
+Lehre für den Y-Wagen): Die ausgeblendete, 3 mm dicke Platte hat Umriss und
 Lochbild der Platine. Vor dem Druck der Halter die Platine auflegen: Beide
 Löcher müssen fluchten.
 
@@ -279,9 +285,10 @@ Halter. Adern und Anschlüsse (W9, W10): [verkabelung.md](verkabelung.md).
 
 ## Parametrik
 
-Alle Werte aus `MASSE` landen als User-Parameter im Dialog *Ändern →
-Parameter*. Die Lagen rechnet `lage()` in Python: nach einer Änderung das
-Skript neu laufen lassen und `tools/endschalter_check.py` ausführen.
+Alle Werte aus `MASSE` in `Portal.py` landen als User-Parameter im Dialog
+*Ändern → Parameter*. Die Lagen rechnet `lage()` in Python: nach einer
+Änderung das Skript neu laufen lassen und `tools/endschalter_check.py`
+ausführen.
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
@@ -292,7 +299,7 @@ Skript neu laufen lassen und `tools/endschalter_check.py` ausführen.
 | `fy_hinten` | −66 mm | Fahne Y auf der Platte (35 mm vor ihrer Hinterkante) |
 | `hy_m5_rand` | 6 mm | M5 des Halters Y von seinen Enden |
 | `hx_luft_wagen` | 3 mm | Platine X links vom Wagenende am Schienenende |
-| `hx_dicke` / `m5_senk_t` | 11 / 5,2 mm | Block X, Kopf der M5 versenkt |
+| `hx_dicke` / `hx_senk_t` | 11 / 5,2 mm | Block X, Kopf der M5 versenkt (Senkung `m5_senkung` Ø9,5) |
 | `kx_z0` / `kx_z1` | −40 / −20 mm | Höhe der Klammer X (Z = 0 ist die Rohrmitte) |
 | `fx_verstellung` | 2 mm | Langloch der Fahne X, je Richtung |
 | `ls_schlitz_boden` / `ls_pin_tasche` | 6 / 1,5 mm `[?]` | siehe [Noch offen](#noch-offen) |

@@ -5,7 +5,8 @@ Y: rechte Seite von hinten und von rechts aussen — Halter aussen am rechten
 2040 hinter dem hinteren 2060, Fahne an der Schlittenplatte. X: linkes
 Rohrende von vorn und von oben, dazu die Klammer an der Traegerplatte von
 links. Portal und Toolhead stehen am Schaltpunkt (3 mm vor dem
-Schienenende). Alle Masse aus Endschalter.py, Portal.py und ToolheadZ.py;
+Schienenende). Alle Masse aus Portal.py (dort stehen seit Rev. 15 auch die
+Endschalter) und ToolheadZ.py;
 die Zeichnung ist massstaeblich und wandert mit den Parametern.
 
     python3 tools/endschalter_zeichnen.py   ->  docs/endschalter.svg
@@ -23,7 +24,6 @@ from antrieb_zeichnen import (text, linie, rect_px, de,  # noqa: E402
                               TEXT, GRAU, BLAU, FARBE)
 from portal_zeichnen import Feld                      # noqa: E402
 from y_antrieb_zeichnen import quer_mass              # noqa: E402
-from endschalter_check import ENDSCHALTER             # noqa: E402
 
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'endschalter.svg')
@@ -96,14 +96,13 @@ def main():
     tw, TL = th.w, th.lage()
     pm = bauraum.modul_laden(bauraum.PORTAL, 'portal')
     w, L = pm.w, pm.lage()
-    em = bauraum.modul_laden(ENDSCHALTER, 'endschalter')
-    ew, EL = em.w, em.lage()
+    ew, EL = w, L                  # Endschalter: seit Rev. 15 in Portal.py
     feste, bewegte, _ = bauraum.bauraeume(tw, TL)
     feste = [q for q in feste if q.name not in portal_check.TOOLHEAD_OHNE]
     TH = {q.name: q for q in feste}
     portal, _ = bauraum.portal_bauraeume(w, L)
     P = {q.name: q for q in portal}
-    dy, xs, R = EL['dy'], EL['xs'], EL['R']
+    dy, xs, R = EL['schalt_dy'], EL['schalt_xs'], EL['R']
     Q = Quader
     leer = {}
     gestr = {'fill': 'none', 'stroke_dasharray': '4 3', 'stroke_width': '1.0'}
@@ -112,10 +111,10 @@ def main():
     hy_y = EL['hy_y']
     k = ew('m5_kopf_d') / 2.0
     ruecklauf = Q('Ruecklauf', EL['aussen_x'] - 4.3, EL['aussen_x'] - 2.9,
-                  ew('rahmen_y0') + 11.0, 240.0, EL['nut_o_z'] - 3.0,
+                  L['rahmen_y'][0] + 11.0, 240.0, EL['nut_o_z'] - 3.0,
                   EL['nut_o_z'] + 3.0)
     y_rahmen = [
-        (Q('Y-Schiene', R - 6.0, R + 6.0, ew('y_schiene_y0'), 190.0,
+        (Q('Y-Schiene', R - 6.0, R + 6.0, L['y_schiene_y'][0], 190.0,
            EL['rahmen_z1'], EL['rahmen_z1'] + 8.0), 'fuehrung', leer),
         (ruecklauf, 'riemen', leer)]
     for i, (yy, zz) in enumerate(EL['hy_m5']):
@@ -149,7 +148,7 @@ def main():
     fase_y = ('vieleck', EL['hy_fase_pkt'], 'neu', leer, hy_y[0])
 
     t = [text(24, 30, 'Endschalter X und Y: Halter und Fahnen '
-              '(Endschalter.py Rev. {})'.format(em.REVISION), 14, TEXT,
+              '(Portal.py Rev. {})'.format(pm.REVISION), 14, TEXT,
               fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Portal und '
               'Toolhead stehen am Schaltpunkt, {} mm vor dem Schienenende. '
@@ -159,8 +158,8 @@ def main():
     # ---- Feld 1: Y von hinten (X nach rechts, Z nach oben) -----------------
     f1 = Feld(250, 100, (236.0, 300.0), (-72.0, 14.0), 4.4)
     rahmen_2040 = ('svg', profil_schnitt(f1, R - 10.0, R + 10.0,
-                                         ew('rahmen_z0'), EL['rahmen_z1'],
-                                         'lruo'), -ew('rahmen_y0'))
+                                         L['rahmen_z0'], EL['rahmen_z1'],
+                                         'lruo'), -L['rahmen_y'][0])
     teile1 = (y_rahmen + y_portal + y_neu + y_fahne + [fase_y, rahmen_2040])
     t += f1.ausschnitt('y1', ansicht(f1, teile1, 'x', 'z', 'y', -1))
     t += f1.rahmen('Y: rechte Seite, von hinten gesehen')
@@ -200,16 +199,16 @@ def main():
         f2, L['quer_y_hinten'][0], L['quer_y_hinten'][1], L['quer_z'][0],
         L['quer_z'][1], 'lruo'), 300.0)
     winkel = (Q('Winkel', EL['aussen_x'], EL['aussen_x'] + 20.0,
-                *L['quer_y_hinten'], ew('rahmen_z0'), ew('rahmen_z0') + 20.0),
+                *L['quer_y_hinten'], L['rahmen_z0'], L['rahmen_z0'] + 20.0),
               'stahl', {'fill_opacity': '0.8'})
     nut_linien = []
     for zn in (EL['nut_u_z'], EL['nut_o_z']):
         for s in (-1, 1):
             nut_linien.append(('svg', f2.linie(
-                ew('rahmen_y0'), zn + s * 3.1, -196.0, zn + s * 3.1,
+                L['rahmen_y'][0], zn + s * 3.1, -196.0, zn + s * 3.1,
                 '#8c939e', 0.6), EL['aussen_x'] + 0.01))
-    teile2 = ([(Q('2040', R - 10.0, R + 10.0, ew('rahmen_y0'), 240.0,
-                  ew('rahmen_z0'), EL['rahmen_z1']), 'profil', leer)]
+    teile2 = ([(Q('2040', R - 10.0, R + 10.0, L['rahmen_y'][0], 240.0,
+                  L['rahmen_z0'], EL['rahmen_z1']), 'profil', leer)]
               + nut_linien + y_rahmen + y_portal + y_neu + y_fahne
               + [winkel, quer_schnitt])
     kreise = [('svg', f2.kreis(yy, zz, k, 'stahl'), 400.0)
@@ -218,7 +217,7 @@ def main():
     t += f2.rahmen('Y: von rechts außen (vorn links, hinten rechts)')
     t += f2.spalte([
         (-240.0, -100.0, 'hinteres 2060'),
-        (-240.0, ew('rahmen_z0') + 10.0, 'Winkel an der\nKreuzung (20 mm)'),
+        (-240.0, L['rahmen_z0'] + 10.0, 'Winkel an der\nKreuzung (20 mm)'),
         (-275.0, -20.0, 'Y-Wagen: {} mm vor dem\nSchienenende'.format(
             de(ew('schaltabstand'), 0))),
         (-250.0, -12.0, 'Schlittenplatte')],
@@ -232,12 +231,12 @@ def main():
         f2.ox + f2.breite + 12, 'start', abstand=26.0)
     t += quer_mass(f2, hy_y[1], L['quer_y_hinten'][0], -122.0,
                    '{} mm'.format(de(L['quer_y_hinten'][0] - hy_y[1], 0)))
-    for yy, zz in ((ew('y_schiene_y0'), EL['rahmen_z1'] + 8.0),
-                   (ew('y_wagen_y0') + dy, ew('y_wagen_z0'))):
+    for yy, zz in ((L['y_schiene_y'][0], EL['rahmen_z1'] + 8.0),
+                   (L['wagen_y0'] + dy, L['y_wagen_z0'])):
         t.append(f2.linie(yy, zz, yy, 5.5, '#9aa4b1', 0.5))
-    t += quer_mass(f2, ew('y_schiene_y0'), ew('y_wagen_y0') + dy, 4.0,
-                   'Schienenende {} mm'.format(de(ew('y_wagen_y0') + dy
-                                                  - ew('y_schiene_y0'), 0)))
+    t += quer_mass(f2, L['y_schiene_y'][0], L['wagen_y0'] + dy, 4.0,
+                   'Schienenende {} mm'.format(de(L['wagen_y0'] + dy
+                                                  - L['y_schiene_y'][0], 0)))
 
     # ---- Teile X (relativ zum Portal; Toolhead am Schaltpunkt) -------------
     hyr = EL['hx_y_rel']
@@ -329,7 +328,7 @@ def main():
         (EL['lx_gabel_x'][0], 8.0, 'Gabel, Spalt waagerecht'),
         (fx[0] + 3.0, 10.0, 'Fahne X'), (xs, 4.0, 'Trägerplatte')],
         f4.ox + f4.breite + 12, 'start', abstand=24.0)
-    t += quer_mass(f4, EL['lx_pcb_x'][1], ew('x_schiene_x0'), 23.0,
+    t += quer_mass(f4, EL['lx_pcb_x'][1], L['x_schiene_x'][0], 23.0,
                    '{} mm'.format(de(ew('hx_luft_wagen'), 0)), dy=-4)
 
     # ---- Feld 5: Klammer X von links (Y nach links = vorn) -----------------
@@ -381,7 +380,7 @@ def main():
                                          1))),
         ('', 'Fahne: Klammer an der rechten Schlittenplatte, {} mm vor '
          'ihrer Hinterkante, verschiebbar'.format(
-             de(ew('fy_hinten') - ew('platte_y0'), 0))),
+             de(ew('fy_hinten') - L['platte_y0'], 0))),
         ('X', 'Halter vor dem linken Ende der 2020, M5×{} in ihrer '
          'vorderen Nut, stößt an die X-Schiene; fährt mit dem Portal'.format(
              de(EL['hx_m5_schraube'], 0))),
@@ -400,7 +399,7 @@ def main():
          '2 mm Reserve)'
          .format(de(L['xw_max'] - xs - 1.0 - 2.0, 0),
                  de(portal_check.y_weg(w, L, TL, feste, bewegte)[1]
-                    + ew('y_weg_hinten') - ew('schaltabstand') - 3.0, 0))),
+                    + EL['y_weg_hinten'] - ew('schaltabstand') - 3.0, 0))),
     ]
     t.append(text(tx, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))
     for i, (k_, v) in enumerate(zeilen):

@@ -18,10 +18,9 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
+fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb, Endschalter X und Y
 fusion/YMotorhalter/           Y-Motorhalter vorn an jeder 2040 (ersetzt den aus Portal)  ← neu
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
-fusion/Endschalter/            Halter und Fahnen der Lichtschranken X und Y  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
@@ -226,15 +225,16 @@ und die Y-Motorhalter (noch mit dem alten Halter aus `Portal.py` gerechnet),
 den Y-Antrieb selbst und das Elektronikfach hinter
 dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 14,
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 15,
 YMotorhalter Rev. 5, `y_motorhalter_check.py`). Portal Rev. 14 legt das
 hintere 2060 nach der Messung 435 mm hinter das vordere (die 2040 stehen
 hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
 Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
 Wandler, Wago) gezeichnet und geprüft
-([elektronik.md](docs/elektronik.md)). Endschalter Rev. 1 für X und Y mit
-`endschalter_check.py` geprüft ([endschalter.md](docs/endschalter.md)),
-Not-Aus-Gehäuse Rev. 3 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
+([elektronik.md](docs/elektronik.md)). Die Endschalter X und Y baut seit
+Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
+([endschalter.md](docs/endschalter.md)),
+Not-Aus-Gehäuse Rev. 4 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)); die Halter der

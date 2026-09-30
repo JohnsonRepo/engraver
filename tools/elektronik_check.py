@@ -427,8 +427,8 @@ def main():
          '>=', 'mm2')
 
     # ------------------------------------------------------------------
-    es = bauraum.modul_laden(leistung.ENDSCHALTER, 'endschalter')
-    verkabelung_pruefen(p, {'L': L, 'TL': TL, 'K': K, 'es_w': es.w})
+    # die Endschalter stehen seit Rev. 15 in Portal.py
+    verkabelung_pruefen(p, {'L': L, 'TL': TL, 'K': K, 'es_w': w})
     return p.bericht()
 
 

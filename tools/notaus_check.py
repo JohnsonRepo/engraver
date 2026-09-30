@@ -194,8 +194,9 @@ def main():
          NL['m5'][1][0] - NL['m5'][0][0], 11.0)
 
     # ------------------------------------------------------------------
-    p.titel('5) Taster im Gehaeuse [?]')
-    p.info('Loch fuer das Gewinde (Ø{:.0f} [?] + {:.1f})'.format(
+    p.titel('5) Taster im Gehaeuse (Gewinde Ø{:.0f} [v])'.format(
+        nw('schalter_d')))
+    p.info('Loch fuer das Gewinde (Ø{:.0f} + {:.1f})'.format(
         nw('schalter_d'), nw('schalter_spiel')), NL['loch_d'])
     p.ok('Frontwand nicht dicker als der Klemmbereich [?]', nw('na_front'),
          nw('klemm_max'), '<=')
@@ -204,11 +205,8 @@ def main():
          nw('schalter_tiefe') + nw('draht_biegen'))
     innen = min(NL['innen_x'][1] - NL['innen_x'][0],
                 NL['innen_z'][1] - NL['innen_z'][0])
-    p.ok('Mutter dreht sich innen (ueber Eck + 2 x 2 mm)', innen,
+    p.ok('Mutter dreht sich innen (ueber Eck [?] + 2 x 2 mm)', innen,
          nw('schalter_mutter') + 4.0)
-    for d_ in (16.0, 19.0, 22.0):
-        p.ok('   passt auch fuer {:.0f} mm (Mutter ~{:.0f} ueber Eck)'.format(
-            d_, 1.45 * d_), innen, 1.45 * d_ + 4.0)
     p.ok('Pilzkopf ueber dem Tisch', kopf_unten - L['quer_z'][0], 5.0)
     ky, kz = NL['kabel']
     p.ok('Kabeldurchlass unter der Decke (Steg)', (NL['innen_z'][1]
@@ -266,7 +264,8 @@ def main():
     p.titel('9) Stueckliste')
     for zeile in (
             'Druck (PETG, gelb wenn vorhanden): Gehaeuse_NotAus',
-            'Not-Aus-Pilztaster, Wechsler C/NO/NC (vorhanden)',
+            'Not-Aus-Pilztaster, Gewinde 16 mm, Wechsler C/NO/NC '
+            '(vorhanden)',
             '2 x M5x{:.0f} + 2 Scheiben M5 + 2 Hammermuttern M5 (Nut 6), '
             'mittlere Nut vorn am 2060'.format(NL['m5_schraube']),
             '1 Kabelbinder 2,5 mm (Zugentlastung)'):

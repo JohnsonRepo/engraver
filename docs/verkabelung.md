@@ -177,7 +177,7 @@ Anschließen mit dem Ohmmeter prüfen
 | 4 | Aderendhülse 0,75 mm² | Schraubklemmen |
 | 1 | Widerstand 10 kΩ, ¼ W | W8 |
 | 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator 100 nF | W16 |
-| — | Not-Aus-Pilztaster mit Wechsler C/NO/NC (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |
+| — | Not-Aus-Pilztaster 16 mm mit Wechsler C/NO/NC (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |
 | — | Schrumpfschlauch 2–6 mm, Kabelbinder, Beschriftung (W-Nummer an beiden Enden) | alle |
 <!-- /tabelle:material -->
 
@@ -512,9 +512,8 @@ Standardwert von GRBL.
 
 ## Noch offen
 
-1. **Not-Aus** `[?]`: der Gewindedurchmesser des Tasters (16, 19 oder
-   22 mm) fürs Gehäuse, und ob die Kontakte mindestens 3 A tragen. Das
-   steht auf dem Taster oder im Angebot ([notaus.md](notaus.md)).
+1. **Not-Aus** `[?]`: ob die Kontakte mindestens 3 A tragen. Das steht auf
+   dem Taster oder im Angebot ([notaus.md](notaus.md#noch-offen)).
 2. **Motorfarben** `[w]`: die übliche Belegung von Stepperonline. Beim
    Anschließen mit dem Ohmmeter prüfen.
 3. **Lichtschranken** `[w]`: Reihenfolge der Stifte am Modul und ob D0 beim

@@ -411,8 +411,8 @@ Netzteil, Endschalter und Kabel hinkommen, und das Gehäuse
 (`fusion/Elektronik`): [elektronik.md](elektronik.md). Hohlstecker des
 Netzteils: **5,5 × 2,1 mm** `[v]` Angabe; Lüfter 24 V. Not-Aus: Pilztaster
 „STOP“, rastet, Drehen löst, **ein Wechsler C/NO/NC** mit Lötfahnen `[v]`
-(Bild 2026-09-30); Gewinde und Belastbarkeit `[?]` — Gehäuse und
-Verdrahtung in [notaus.md](notaus.md).
+(Bild 2026-09-30), Gewinde **16 mm** `[v]` Angabe; Belastbarkeit `[?]` —
+Gehäuse und Verdrahtung in [notaus.md](notaus.md).
 
 | Steckplatz | Motor | Schritte/mm bei 1/16 |
 |---|---|---|

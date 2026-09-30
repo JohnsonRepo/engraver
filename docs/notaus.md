@@ -1,6 +1,6 @@
 # Not-Aus — Gehäuse vorn am vorderen 2060
 
-Erzeugt von `fusion/NotAus/NotAus.py` (ein Druckteil, Rev. 1). Geprüft mit
+Erzeugt von `fusion/NotAus/NotAus.py` (ein Druckteil, Rev. 2). Geprüft mit
 `python3 tools/notaus_check.py`, Skizze in [notaus.svg](notaus.svg) (neu
 erzeugen mit `python3 tools/notaus_zeichnen.py`). Wie er verdrahtet wird,
 steht in [verkabelung.md](verkabelung.md) (W2 und W16).
@@ -9,9 +9,10 @@ steht in [verkabelung.md](verkabelung.md) (W2 und W16).
 
 ## Der Taster
 
-Nach deinem Bild vom 2026-09-30 `[v]`: roter Pilzkopf „STOP“, rastet beim
-Drücken ein, Drehen im Uhrzeigersinn löst ihn. Er hat **einen Wechsler**
-mit drei Lötfahnen, **C**, **NO** und **NC**.
+Nach deinem Bild und deiner Angabe vom 2026-09-30 `[v]`: roter Pilzkopf
+„STOP“, rastet beim Drücken ein, Drehen im Uhrzeigersinn löst ihn. Das
+Gewinde hat **16 mm**. Er hat **einen Wechsler** mit drei Lötfahnen, **C**,
+**NO** und **NC**.
 
 * **C und NC** liegen in der 24-V-Leitung (W2). Gedrückt trennt der Öffner
   die 24 V für Shield, Wandler und Lüfter, also Motoren und Laser.
@@ -39,15 +40,15 @@ beliebig weit, nach rechts bis etwa X +205; dann bleiben zum Y-Motor noch
 | | |
 |---|---|
 | Kasten | 50 × 50 × 46 mm, Wände 3 mm, Rückseite offen: sie liegt am 2060 an |
-| Frontwand | 3 mm, Loch für das Gewinde des Tasters + 0,3 mm; die Mutter sitzt innen |
+| Frontwand | 3 mm, Loch Ø16,3 für das 16-mm-Gewinde (0,3 mm Spiel); die Mutter sitzt innen |
 | Laschen | links und rechts, 14 × 20 mm, 6 mm dick, je eine M5 in einer Hammermutter der mittleren Nut |
 | Rippen | zwei je Lasche, an ihren Kanten, 45°: tragen die Lasche beim Druck, Scheibe und Inbus bleiben frei |
 | Kabel | rechts oben ein Durchlass Ø7 für W2 (2 × 0,75 mm²), davor und dahinter je ein Schlitz für einen Kabelbinder |
-| innen | 44 × 44 mm, 43 mm tief: die Mutter dreht sich bei 16, 19 und 22 mm Gewinde, hinter den Lötfahnen bleiben 10 mm für die Litze |
+| innen | 44 × 44 mm, 43 mm tief: die Mutter dreht sich (bis 40 mm über Eck), hinter den Lötfahnen bleiben 10 mm für die Litze |
 
-**Gewinde `[?]`:** Eingetragen sind 19 mm. Vor dem Druck am Taster messen
-oder im Angebot nachsehen und `schalter_d` anpassen. Das Gehäuse passt für
-16, 19 und 22 mm, nur das Loch ändert sich.
+**Rev. 2:** Gewinde 16 mm `[v]` nach deiner Angabe; Rev. 1 hatte 19 mm
+angenommen. Geändert hat sich nur das Loch, Ø16,3 statt Ø19,3. Kasten,
+Laschen und Lage bleiben.
 
 ## Montage
 
@@ -57,7 +58,9 @@ oder im Angebot nachsehen und `schalter_d` anpassen. Das Gehäuse passt für
 2. **Anlöten:** Ader 1 an **C**, Ader 2 an **NC**, **NO frei**.
    Schrumpfschlauch über jede Fahne.
 3. **Taster** von vorn durch das Loch stecken, die Mutter von hinten durch
-   die offene Rückseite festziehen.
+   die offene Rückseite **fest** anziehen. Beim Entriegeln dreht man am
+   Pilz, und das Loch ist rund: Nur die Mutter hält den Taster dann gegen
+   Verdrehen.
 4. **Zugentlastung:** einen Kabelbinder durch die zwei Schlitze um das
    Kabel legen.
 5. Zwei **Hammermuttern M5** in die mittlere Nut vorn am 2060 setzen, das
@@ -91,15 +94,17 @@ Keine Bohrlehre: Das Gehäuse verbindet kein zweites Druckteil, und die
 
 ## Noch offen
 
-1. **Gewindedurchmesser** des Tasters `[?]`: 16, 19 oder 22 mm. Eingetragen
-   sind 19 mm, vor dem Druck bestätigen.
-2. **Belastbarkeit** `[?]`: Die Kontakte sollten mindestens 3 A tragen,
+1. **Belastbarkeit** `[?]`: Die Kontakte sollten mindestens 3 A tragen,
    denn die Maschine zieht bis 2 A, das Netzteil liefert bis 3 A. Für
    Kontakte ist Gleichstrom härter als Wechselstrom. Ein Wert von 3 A bei
    250 V~ reicht bei 24 V und 2 A üblicherweise `[w]`.
-3. **Kopf und Tiefe** `[?]`: 32 mm Kopf, 22 mm vor der Front und 30 mm
-   dahinter sind angenommen. Das dient nur der Zeichnung und der Prüfung;
-   bis 33 mm Tiefe passt der Taster.
+2. **Verdrehschutz** `[?]`: Hat das Gewinde eine Abflachung oder eine Nut
+   für eine Nase? Dann bekommt das Loch die passende Form. Ohne sie hält
+   allein die Mutter den Taster beim Entriegeln. Das runde Loch passt in
+   beiden Fällen, gedruckt werden kann also schon.
+3. **Kopf, Tiefe und Mutter** `[?]`: 32 mm Kopf, 22 mm vor der Front,
+   30 mm dahinter und 24 mm über Eck sind angenommen. Das dient nur der
+   Zeichnung und der Prüfung; bis 33 mm Tiefe passt der Taster.
 
 ## Parametrik
 
@@ -109,10 +114,10 @@ Skript neu laufen lassen und `tools/notaus_check.py` ausführen.
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
-| `schalter_d` | 19 mm `[?]` | Gewinde des Tasters; das Loch ist 0,3 mm größer |
+| `schalter_d` | 16 mm `[v]` | Gewinde des Tasters; das Loch ist 0,3 mm größer |
 | `na_x` | 180 mm | Lage längs des 2060 (Mitte des Gehäuses, X ab der Maschinenmitte) |
 | `na_b` / `na_h` / `na_t` | 50 / 50 / 46 mm | Kasten: Breite, Höhe, Tiefe vor dem 2060 |
 | `na_wand` / `na_front` | 3 / 3 mm | Wände; die Frontwand muss der Taster klemmen können (`klemm_max` 6 mm `[?]`) |
 | `lasche_b` / `lasche_h` / `lasche_t` | 14 / 20 / 6 mm | Laschen mit M5 |
 | `kabel_d` | 7 mm | Durchlass für W2 |
-| `schalter_kopf_d` / `schalter_kopf_h` / `schalter_tiefe` | 32 / 22 / 30 mm `[?]` | nur Zeichnung und Prüfung |
+| `schalter_kopf_d` / `schalter_kopf_h` / `schalter_tiefe` / `schalter_mutter` | 32 / 22 / 30 / 24 mm `[?]` | nur Zeichnung und Prüfung |

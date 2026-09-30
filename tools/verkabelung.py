@@ -563,8 +563,8 @@ def tab_material(K):
     z.append('| 1 | Widerstand 10 kΩ, ¼ W | W8 |')
     z.append('| 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator '
              '100 nF | W16 |')
-    z.append('| — | Not-Aus-Pilztaster mit Wechsler C/NO/NC (vorhanden), '
-             'Gehäuse aus [NotAus.py](notaus.md) | W2 |')
+    z.append('| — | Not-Aus-Pilztaster 16 mm mit Wechsler C/NO/NC '
+             '(vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |')
     z.append('| — | Schrumpfschlauch 2–6 mm, Kabelbinder, Beschriftung '
              '(W-Nummer an beiden Enden) | alle |')
     return '\n'.join(z)

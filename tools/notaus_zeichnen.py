@@ -92,8 +92,8 @@ def main():
     t = [text(24, 30, 'Not-Aus vorn am vorderen 2060: Gehäuse '
               '(NotAus.py Rev. {})'.format(nm.REVISION), 14, TEXT, fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Orange: neu '
-              '(PETG, gelb wenn vorhanden). Der Taster ist nicht gemessen '
-              '[?]: Gewinde Ø{} mm eingetragen.'.format(
+              '(PETG, gelb wenn vorhanden). Taster: Gewinde Ø{} mm [v], '
+              'Kopf und Tiefe angenommen [?].'.format(
                   de(nw('schalter_d'), 0)), 9, GRAU)]
 
     # ---- Feld 1: von vorn (X nach rechts, Z nach oben) ---------------------
@@ -246,9 +246,10 @@ def main():
             de(x, 0, True))),
         ('Befestigung', '2 × M5×{} mit Scheibe, Hammermuttern M5'.format(
             de(NL['m5_schraube'], 0))),
-        ('Taster', 'Gewinde Ø{} [?] → Loch Ø{}; Mutter innen'.format(
+        ('Taster', 'Gewinde Ø{} [v] → Loch Ø{}; Mutter innen'.format(
             de(nw('schalter_d'), 0), de(NL['loch_d'], 1))),
-        ('', 'passt für 16, 19 und 22 mm: nur das Loch ändert sich'),
+        ('', 'Kopf Ø{} und {} mm Tiefe angenommen [?]'.format(
+            de(nw('schalter_kopf_d'), 0), de(nw('schalter_tiefe'), 0))),
         ('Kabel', 'W2, 2 × 0,75 mm²: C und NC, NO bleibt frei'),
         ('Druck', 'PETG, Front aufs Bett, keine Stützen'),
         ('Luft', '{} mm zum Y-Motor, {} mm zum Tisch'.format(

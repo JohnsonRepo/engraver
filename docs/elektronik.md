@@ -344,8 +344,8 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
    der Seitenfläche der 2040 **vor** dem 2060, also in den 35 mm bis zur
    Stirnseite? Dort belegt der [Y-Motorhalter](y-motorhalter.md) die untere
    Nut.
-5. **Verkabelung:** der Gewindedurchmesser des Not-Aus-Tasters für sein
-   Gehäuse, dazu drei Dinge, die sich beim Anschließen zeigen
+5. **Verkabelung:** ob die Kontakte des Not-Aus mindestens 3 A tragen,
+   dazu drei Dinge, die sich beim Anschließen zeigen
    ([verkabelung.md](verkabelung.md#noch-offen)).
 
 Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit
@@ -363,4 +363,5 @@ zur 2040; die Winkel greifen in die obere Nut des 2060 und die untere der
 2040; Laserstecker von links PWM · GND · +12 V. 2026-09-29: Winkel an den
 Kreuzungen 20 mm; die Nuten für die Endschalterhalter sind frei; eine
 Klammer an der Trägerplatte ist in Ordnung. 2026-09-30: der Not-Aus ist da,
-ein Pilztaster mit Wechsler C/NO/NC und Lötfahnen; er sitzt vorn.
+ein Pilztaster mit Wechsler C/NO/NC und Lötfahnen, Gewinde 16 mm; er sitzt
+vorn.

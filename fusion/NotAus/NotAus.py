@@ -15,11 +15,11 @@
 #               und Motor rechts (als Huelle, wie YMotorhalter.py) und der
 #               Taster.
 #
-# Der Taster [v] (Bild vom 2026-09-30): Pilzkopf, rastet beim Druecken ein,
-# Drehen loest; ein Wechsler C, NO, NC mit Loetfahnen. Verdrahtet wird C und
-# NC (Oeffner) in der 24-V-Leitung, NO bleibt frei (docs/verkabelung.md).
-# Gewinde, Kopf und Tiefe sind nicht gemessen [?]: vor dem Druck
-# schalter_d eintragen (16, 19 oder 22 mm), das Gehaeuse passt fuer alle drei.
+# Der Taster [v] (Bild und Angabe vom 2026-09-30): Pilzkopf, rastet beim
+# Druecken ein, Drehen loest; ein Wechsler C, NO, NC mit Loetfahnen, Gewinde
+# 16 mm. Verdrahtet wird C und NC (Oeffner) in der 24-V-Leitung, NO bleibt
+# frei (docs/verkabelung.md). Kopf, Tiefe und Mutter sind nicht gemessen [?]:
+# sie dienen nur der Referenz und der Pruefung, das Gehaeuse hat Reserve.
 #
 # Koordinaten = Maschinenkoordinaten wie Portal.py: X nach rechts, Y nach
 # vorn, Z senkrecht, Z = 0 in der Mitte des Portalrohrs. Im Fusion-Modell
@@ -32,7 +32,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'NotAus'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -68,14 +68,15 @@ MASSE = {
     'motor_z0':           (-25.5, 'Motor unten'),
     'motor_z1':            (11.5, 'Motorflansch = Platte unten'),
 
-    # --- Taster (Pilzkopf, Wechsler C/NO/NC) [?] ----------------------------
-    # nicht gemessen: vor dem Druck schalter_d eintragen (16, 19 oder 22)
-    'schalter_d':          (19.0, 'Not-Aus: Gewindedurchmesser [?]'),
+    # --- Taster (Pilzkopf, Wechsler C/NO/NC) --------------------------------
+    # Rev. 2: Gewinde 16 mm [v] Angabe 2026-09-30 (Rev. 1: 19 mm angenommen).
+    # Kopf, Tiefe, Mutter und Klemmbereich sind nicht gemessen [?].
+    'schalter_d':          (16.0, 'Not-Aus: Gewindedurchmesser [v] Angabe'),
     'schalter_spiel':       (0.3, 'Loch so viel groesser als das Gewinde'),
     'schalter_kopf_d':     (32.0, 'Not-Aus: Pilzkopf [?]'),
     'schalter_kopf_h':     (22.0, 'Not-Aus: Kopf vor der Frontwand [?]'),
     'schalter_tiefe':      (30.0, 'Not-Aus: hinter der Frontwand mit Loetfahnen [?]'),
-    'schalter_mutter':     (28.0, 'Not-Aus: Mutter ueber Eck [?]'),
+    'schalter_mutter':     (24.0, 'Not-Aus: Mutter ueber Eck [?]'),
     'klemm_max':            (6.0, 'Not-Aus: so dick darf die Wand sein [?]'),
     'draht_biegen':        (10.0, 'hinter den Loetfahnen fuer die Litze'),
 
@@ -802,9 +803,10 @@ def hinweise_bauen(L, fehler):
         '  2 x M5x{:.0f} mit Scheibe durch die Laschen. Laengs der Nut'.format(
             L['m5_schraube']),
         '  verschiebbar; rechts bleibt Abstand zum Y-Motorhalter.',
-        'TASTER: von vorn durch das Loch (Ø{:.1f}), Mutter innen. Vor dem'.format(
-            L['loch_d']),
-        '  Einbau anloeten: C und NC (Oeffner), NO bleibt frei.',
+        'TASTER: Gewinde Ø{:.0f} [v], von vorn durch das Loch (Ø{:.1f}),'.format(
+            w('schalter_d'), L['loch_d']),
+        '  Mutter innen. Vor dem Einbau anloeten: C und NC (Oeffner), NO',
+        '  bleibt frei.',
         'KABEL: rechts oben durch den Durchlass (Ø{:.0f}), innen mit einem'.format(
             w('kabel_d')),
         '  Kabelbinder durch die zwei Schlitze festlegen (Zugentlastung).',
@@ -812,10 +814,8 @@ def hinweise_bauen(L, fehler):
         'DRUCK (PETG, Bambu Lab A1): Frontwand aufs Bett, keine Stuetzen.',
         '  Gelb, wenn vorhanden. 4 Wandlinien, 30 % Infill.',
         '',
-        'NICHT GEMESSEN [?]: Gewindedurchmesser des Tasters ({:.0f} mm'.format(
-            w('schalter_d')),
-        '  eingetragen; 16, 19 oder 22 moeglich) — vor dem Druck pruefen und',
-        '  schalter_d anpassen; Kopf, Tiefe und Klemmbereich des Tasters.',
+        'NICHT GEMESSEN [?]: Kopf, Tiefe, Mutter und Klemmbereich des',
+        '  Tasters; nur fuer Referenz und Pruefung, das Gehaeuse hat Reserve.',
     ]
     if fehler:
         h += ['', 'FEHLER / WARNUNGEN:'] + ['  ' + f for f in fehler]

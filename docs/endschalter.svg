@@ -210,8 +210,8 @@
 <text x="611.8" y="753.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Gabel nach vorn</text>
 <line x1="495.0" y1="748.3" x2="608.8" y2="776.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="495.0" cy="748.3" r="1.5" fill="#5b6472"/>
-<text x="611.8" y="779.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Halter X: M5 in der</text>
-<text x="611.8" y="789.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderen Rohrnut</text>
+<text x="611.8" y="779.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Halter X: M5 in der vorderen</text>
+<text x="611.8" y="789.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Nut der 2020 (Portalrohr)</text>
 <line x1="484.3" y1="878.6" x2="608.8" y2="878.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="484.3" cy="878.6" r="1.5" fill="#5b6472"/>
 <text x="611.8" y="881.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">linkes 2040, Y-Schiene</text>
@@ -257,7 +257,7 @@
 <text x="1191.6" y="611.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Motor darüber (Umriss)</text>
 <line x1="1001.4" y1="654.2" x2="1188.6" y2="654.2" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="1001.4" cy="654.2" r="1.5" fill="#5b6472"/>
-<text x="1191.6" y="657.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portalrohr</text>
+<text x="1191.6" y="657.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portalrohr 2020</text>
 <line x1="937.9" y1="707.0" x2="1188.6" y2="707.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="937.9" cy="707.0" r="1.5" fill="#5b6472"/>
 <text x="1191.6" y="710.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Halter X</text>
@@ -318,7 +318,7 @@
 <text x="651.6" y="1111.2" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="695.6" y="1111.2" font-size="8.5" fill="#1c2733" text-anchor="start">Fahne: Klammer an der rechten Schlittenplatte, 35 mm vor ihrer Hinterkante, verschiebbar</text>
 <text x="651.6" y="1126.2" font-size="8.5" fill="#5b6472" text-anchor="start">X</text>
-<text x="695.6" y="1126.2" font-size="8.5" fill="#1c2733" text-anchor="start">Halter vor dem linken Rohrende, M5×12 in der vorderen Rohrnut, stößt an die X-Schiene</text>
+<text x="695.6" y="1126.2" font-size="8.5" fill="#1c2733" text-anchor="start">Halter vor dem linken Ende der 2020, M5×12 in ihrer vorderen Nut, stößt an die X-Schiene; fährt mit dem Portal</text>
 <text x="651.6" y="1141.2" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="695.6" y="1141.2" font-size="8.5" fill="#1c2733" text-anchor="start">Platine 3 mm vor dem Wagenende am Schienenende; Blatt verstellbar ±2 mm</text>
 <text x="651.6" y="1156.2" font-size="8.5" fill="#5b6472" text-anchor="start">Blatt</text>

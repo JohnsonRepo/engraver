@@ -307,7 +307,8 @@ def main():
         (-262.0, 0.0, 'Stirnblock am Rohrende'),
         (EL['lx_pcb_x'][0] + 4.0, -8.0, 'Lichtschranke senkrecht,\nGabel '
          'nach vorn'),
-        (EL['hx_x'][0] + 2.0, -10.5, 'Halter X: M5 in der\nvorderen Rohrnut'),
+        (EL['hx_x'][0] + 2.0, -10.5, 'Halter X: M5 in der vorderen\n'
+         'Nut der 2020 (Portalrohr)'),
         (-257.0, -50.0, 'linkes 2040, Y-Schiene')],
         f3.ox + f3.breite + 12, 'start', abstand=26.0)
 
@@ -322,8 +323,8 @@ def main():
     t += f4.ausschnitt('x4', ansicht(f4, teile4, 'x', 'y', 'z', 1))
     t += f4.rahmen('X: linkes Ende, von oben (vorn unten)')
     t += f4.spalte([
-        (-240.0, -26.0, 'Portalrohr'), (-265.0, -40.0, 'X-Motor darüber '
-                                        '(Umriss)'),
+        (-240.0, -26.0, 'Portalrohr 2020'), (-265.0, -40.0, 'X-Motor darüber '
+                                             '(Umriss)'),
         (EL['hx_x'][0] + 3.0, -10.0, 'Halter X'),
         (EL['lx_gabel_x'][0], 8.0, 'Gabel, Spalt waagerecht'),
         (fx[0] + 3.0, 10.0, 'Fahne X'), (xs, 4.0, 'Trägerplatte')],
@@ -381,8 +382,8 @@ def main():
         ('', 'Fahne: Klammer an der rechten Schlittenplatte, {} mm vor '
          'ihrer Hinterkante, verschiebbar'.format(
              de(ew('fy_hinten') - ew('platte_y0'), 0))),
-        ('X', 'Halter vor dem linken Rohrende, M5×{} in der vorderen '
-         'Rohrnut, stößt an die X-Schiene'.format(
+        ('X', 'Halter vor dem linken Ende der 2020, M5×{} in ihrer '
+         'vorderen Nut, stößt an die X-Schiene; fährt mit dem Portal'.format(
              de(EL['hx_m5_schraube'], 0))),
         ('', 'Platine {} mm vor dem Wagenende am Schienenende; Blatt '
          'verstellbar ±{} mm'.format(de(ew('hx_luft_wagen'), 0),

@@ -546,7 +546,8 @@ def main():
          'Energiekette Y außen\nam linken 2040'),
         (sum(K['ky_x']) / 2, K['ky_wanne'][0] + 6.0,
          'Kettenwanne, hängt außen\nam 2040 (untere Nut)'),
-        (K['es_x'][0], K['es_x'][1], 'X-Endschalter'),
+        (K['es_x'][0], K['es_x'][1], 'X-Endschalter auf der 2020\n'
+         '(fährt mit dem Portal)'),
         (-200.0, K['portal']['Portalrohr'].y[0] - K['d_hinten'] + 5.0,
          'Portal an der hinteren\nGrenze (Softlimit Y)')],
         fa.ox - 12, 'end', abstand=24.0)
@@ -638,7 +639,8 @@ def main():
              de(NETZTEIL_W, 0), de(K['leistung']['motoren'], 0),
              de(LUEFTER_W, 0), de(K['leistung']['laser'], 0),
              de(K['leistung']['summe'], 0), de(K['leistung']['dauer'], 0))),
-        ('Endschalter', 'LM393-Gabellichtschranken: X links am Portal, Y '
+        ('Endschalter', 'LM393-Gabellichtschranken: X links auf der 2020 '
+         'des Portals, Y '
          'außen am rechten 2040 — schaltet {} (Toolhead mit Z unten {} mm '
          'vor dem 2060); Z vorhanden'.format(K['grenze_hinten'],
                                              de(K['luft_2060'], 0))),

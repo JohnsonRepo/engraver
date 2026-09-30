@@ -422,8 +422,8 @@ In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
 
 * GRBL-Werte wie [unten](#grbl-einstellungen), die Hand am Not-Aus.
 * `$H`: Z fährt nach oben bis zu seiner Lichtschranke, dann X nach links
-  und Y nach hinten. Jede Achse muss an ihrer Lichtschranke anhalten und
-  darf nirgends anschlagen.
+  und Y nach hinten, beide zugleich. Jede Achse muss an ihrer eigenen
+  Lichtschranke anhalten und darf nirgends anschlagen.
 * Den Schaltpunkt von X und Y stellst du wie in
   [endschalter.md](endschalter.md#schaltpunkt-einstellen) ein.
 

@@ -21,11 +21,17 @@ Trägerplatte ist in Ordnung.
 |---|---|---|---|
 | **Halter_Y** | PETG | außen am **rechten 2040**, 35 mm hinter dem hinteren 2060 | 2 × M5×12 + Scheibe + Hammermutter in der **unteren** Außennut |
 | **Fahne_Y** | PETG **schwarz** | Klammer um die Außenkante der rechten Schlittenplatte, das Blatt hängt außen neben dem 2040 | Madenschraube M3×8 in einem Einsatz |
-| **Halter_X** | PETG | Block vor dem **linken Ende des Portalrohrs**, stößt an das Ende der X-Schiene | 1 × M5×12 + Hammermutter in der vorderen Rohrnut, Kopf versenkt |
+| **Halter_X** | PETG | Block vor dem **linken Ende des Portalrohrs**, also der 2020 der X-Achse, stößt an das Ende der X-Schiene | 1 × M5×12 + Hammermutter in der vorderen Nut der 2020, Kopf versenkt |
 | **Klammer_X** | PETG **schwarz** | um die linke untere Kante der Trägerplatte und ihre Seitenrippe, unter dem X-Wagen | Madenschraube M3×8 in einem Einsatz |
 | **Fahne_X** | PETG **schwarz** | flaches Blatt auf dem Kopf der Klammer | M3×8 in einen Einsatz, Langloch ±2 mm |
 | 2 × LM393 | vorhanden | auf den Haltern | je 2 × M2×6 in Einsätze M2 3,2 × 2,5 |
 | Bohrlehre_LM393 | PLA, ausgeblendet | — | Umriss und Lochbild der Platine |
+
+**X und Y referenzieren unabhängig voneinander.** Halter und Fahne X
+fahren beide mit dem Portal, X findet seinen Schaltpunkt also bei jeder
+Stellung von Y. Der Halter Y sitzt am Rahmen, seine Fahne am rechten
+Schlitten, das geht bei jeder Stellung von X. Jede Lichtschranke hat ihren
+eigenen Eingang, X− an D9 und Y+ an D10.
 
 Beide Schalter lösen **3 mm vor dem Schienenende** aus: Die Wagen dürfen
 nicht über das Ende hinaus, sonst fallen Kugeln heraus. Im Modell stehen
@@ -149,7 +155,7 @@ der Kopf der Klammer 2,2 mm vor der Gabel.
 | Verbindung | Teile | Hinweis |
 |---|---|---|
 | Halter_Y → 2040 | **2 × M5×12 + Scheibe + Hammermutter M5 (Nut 6)** | untere Außennut. 5 mm ragen in die Nut, 3,2 mm Gewinde im Stein, 1 mm vor dem Nutgrund. Ohne Scheibe stünde die Spitze am Grund |
-| Halter_X → Portalrohr | **1 × M5×12 + Hammermutter M5** | vordere Rohrnut, ohne Scheibe (Kopf in der Senkung Ø9). 6,2 mm in der Nut, 4 mm im Stein, 1,3 mm vor dem Grund |
+| Halter_X → Portalrohr (2020) | **1 × M5×12 + Hammermutter M5** | vordere Rohrnut, ohne Scheibe (Kopf in der Senkung Ø9). 6,2 mm in der Nut, 4 mm im Stein, 1,3 mm vor dem Grund |
 | LM393 → Halter | **2 × M2×6** je Schranke | in Einsätze M2 3,2 × 2,5, Einpressbohrung Ø2,8 × 3 mm |
 | Fahne_Y, Klammer_X | je **1 × Madenschraube M3×8** | in Einsätze M3 (Bohrung Ø4,6) |
 | Fahne_X → Klammer_X | **1 × M3×8** | 5 mm im Einsatz |

@@ -177,7 +177,7 @@ und Y auch, bräuchte aber 6–36 V und einen Optokoppler.
 
 | Achse | wo | Fahne | Referenz |
 |---|---|---|---|
-| X | vor dem linken Ende des Portalrohrs, Block an der X-Schiene | Klammer unten an der Trägerplatte | nach links |
+| X | vor dem linken Ende des Portalrohrs (der 2020), Block an der X-Schiene; fährt mit dem Portal | Klammer unten an der Trägerplatte | nach links |
 | Y | außen am **rechten** 2040, 35 mm hinter dem hinteren 2060, untere Nut | Klammer an der rechten Schlittenplatte | nach hinten |
 | Z | am Toolhead (vorhanden) | Schaltfahne (vorhanden) | nach oben |
 

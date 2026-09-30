@@ -100,7 +100,8 @@
 <text x="250.0" y="336.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am linken 2040</text>
 <line x1="346.1" y1="434.1" x2="253.0" y2="434.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="346.1" cy="434.1" r="1.5" fill="#5b6472"/>
-<text x="250.0" y="437.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Endschalter</text>
+<text x="250.0" y="437.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Endschalter auf der 2020</text>
+<text x="250.0" y="447.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(fährt mit dem Portal)</text>
 <line x1="390.3" y1="560.3" x2="253.0" y2="560.3" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="390.3" cy="560.3" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="563.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arbeitsfläche: Strahl mit</text>
@@ -272,7 +273,7 @@
 <text x="24.0" y="1182.5" font-size="8.5" fill="#5b6472" text-anchor="start">Netzteil</text>
 <text x="110.0" y="1182.5" font-size="8.5" fill="#1c2733" text-anchor="start">Steckernetzteil 24 V / 3 A (72 W), steht außerhalb; Motoren ≈ 23 W, Lüfter ≈ 2 W, Laser über den Wandler ≈ 24 W — zusammen ≈ 49 W, dauernd gehen 61 W</text>
 <text x="24.0" y="1197.5" font-size="8.5" fill="#5b6472" text-anchor="start">Endschalter</text>
-<text x="110.0" y="1197.5" font-size="8.5" fill="#1c2733" text-anchor="start">LM393-Gabellichtschranken: X links am Portal, Y außen am rechten 2040 — schaltet am hinteren Schienenende (Toolhead mit Z unten 26 mm vor dem 2060); Z vorhanden</text>
+<text x="110.0" y="1197.5" font-size="8.5" fill="#1c2733" text-anchor="start">LM393-Gabellichtschranken: X links auf der 2020 des Portals, Y außen am rechten 2040 — schaltet am hinteren Schienenende (Toolhead mit Z unten 26 mm vor dem 2060); Z vorhanden</text>
 <text x="24.0" y="1212.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kette Y</text>
 <text x="110.0" y="1212.5" font-size="8.5" fill="#1c2733" text-anchor="start">333 mm Hub, Festpunkt 267 mm vom hinteren Ende des 2040, Schleife nach hinten, ≈ 263 mm Kette (R18)</text>
 <text x="24.0" y="1227.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kette X</text>

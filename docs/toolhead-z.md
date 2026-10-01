@@ -1,6 +1,6 @@
 # Toolhead Z-Achse — kompletter Aufbau
 
-Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, sieben gedruckte Teile).
+Erzeugt von `fusion/ToolheadZ/ToolheadZ.py` (Baugruppe, acht gedruckte Teile).
 Geprüft mit `python3 tools/toolhead_check.py`, Layout in
 [toolhead-z-layout.svg](toolhead-z-layout.svg).
 
@@ -22,6 +22,7 @@ Der Laser sitzt auf dem Z-Schlitten.
 | 5 | **Schaltfahne** | PETG **schwarz** | dünnes Blatt für die Gabellichtschranke, Schaltpunkt über Langlöcher einstellbar (Rev. 32) |
 | 6 | **Endschalterhalter** | PETG | hält die Gabellichtschranke — gedruckt und eingebaut, bleibt |
 | 7 | **Riemenhalter** | PETG | hinten an der Trägerplatte, klemmt beide Enden des X-Riemens (Rev. 33) |
+| 8 | **Kettenhalter** | PETG | hinten an der Trägerplatte über dem Riemenhalter, trägt das bewegte Ende der X-Energiekette (Rev. 35) |
 
 Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
 [Motorbefestigung](#motorbefestigung-alle-vier-schrauben-erreichbar).
@@ -571,6 +572,32 @@ gedruckte Platte bekommt sie aus dem Modell. Für die vorhandene gibt es die
    Bohrfutter hinter dem Portalrohr bleibt.
 4. Vorn Ø6,5 × 3,2 mm ansenken.
 
+## Kettenhalter (Rev. 35)
+
+Die X-Energiekette ist gedruckt und liegt direkt hinter der Trägerplatte.
+Ihr Festpunkt sitzt in einer Wanne über dem Portalrohr (`fusion/Portal`,
+Rev. 19). Am Toolhead trägt der **Kettenhalter** das bewegte Ende. Alles
+Weitere steht in [energiekette.md](energiekette.md).
+
+| Maß | Wert |
+|---|---|
+| Form | Winkel 44 mm breit wie die Säule: Fuß 8 mm an der Plattenrückseite (Z +61,8 bis +84,8), Auflage 8 mm, 24,8 mm tief |
+| Auflage | Z = +84,8 = Wannenboden +44,5, Riegel 0,3, 2 R (40); 68,8 mm über dem X-Wagen |
+| Luft Fuß ↔ Untertrum der Kette | 3,0 mm |
+| Anfangsstück | Platte unten zwischen zwei Leisten (0,3 mm Spiel je Seite), Gelenk 22 mm rechts der Wagenmitte; 2 × M3×8 + Scheibe DIN 125 in Einsätze der Auflage |
+| Befestigung | 2 × M3×10 von vorn durch die Trägerplatte (X ±13,5, Z +72) in Einsätze im Fuß, Kopf in der Senkung Ø6,5 × 3,2 |
+| Zugentlastung | ein Kabelbinder durch zwei Schlitze links neben dem Anfangsstück |
+
+Die Kettenmaße stehen in **beiden** Skripten (`kette_…`, `endstueck_…`,
+`xk_…`). `portal_check.py` prüft als Erstes, dass sie übereinstimmen.
+
+**Die gedruckte Trägerplatte hat die zwei Löcher noch nicht.** Dafür gibt es
+die `Bohrlehre_Kettenhalter`, gebaut wie die Lehre des Riemenhalters, nur
+höher. Sie steht mit zwei Beinen links und rechts neben dem Riemenhalter auf
+der Flanke des X-Wagens, der darf also schon montiert sein. Z-Schlitten
+ganz nach unten, Lippen an die Kanten der Säule, Ø3,4 von hinten bohren,
+vorn Ø6,5 × 3,2 ansenken.
+
 ## Massen
 
 Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Rev. 16 = Rev. 17, dort hat sich nur Berichtstext geändert):
@@ -584,22 +611,23 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 | Schaltfahne | ≈ 2,6 cm³ | **≈ 3,4 g** | 18 × 60 × 5,5 mm | gerechnet |
 | Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet (gedruckt, bleibt) |
 | Riemenhalter | ≈ 8,8 cm³ | **≈ 11 g** | 44 × 14 × 16 mm | gerechnet (Rev. 33) |
-| **Druckteile zusammen** | ≈ 210 cm³ | **≈ 266 g** | | |
+| Kettenhalter | ≈ 14,2 cm³ | **≈ 18 g** | 44 × 24,8 × 26 mm | gerechnet (Rev. 35) |
+| **Druckteile zusammen** | ≈ 224 cm³ | **≈ 284 g** | | |
 
 Die Werte für Trägerplatte und Schlittenplatte sind gemessen (154,3 / 50,9 g)
 plus die gerechneten Zuwächse: Endschaltersockel (+3 g), an der
 Schlittenplatte die 5 mm aus Rev. 27 und die Fahnenlasche anstelle der
-angeformten Fahne (+1 g). Motoradapter, Schaltfahne, Halter und
-Riemenhalter sind ganz gerechnet. **Maßgeblich ist der nächste Fusion-Lauf.**
+angeformten Fahne (+1 g). Motoradapter, Schaltfahne, Halter,
+Riemenhalter und Kettenhalter sind ganz gerechnet. **Maßgeblich ist der nächste Fusion-Lauf.**
 
 Die Trägerplatte ist mit Rev. 16 von 145 auf 222 mm gewachsen (Schiene 200 mm,
 Konsole auf +145) und wog vorher 98,4 g. Gerechnet hatte ich 154 g, gemessen
 sind es 154,3 g. Der Mutternwinkel ersetzt den 12,4 g schweren Mutternblock;
 die Schlittenplatte ändert sich nur an der Lasche (wenige Zehntel Gramm).
 
-Dazu die vier Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
+Dazu die fünf Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
 werden: 6,1 g (X-Wagen) · 3,6 g (Z-Wagen) · 6,7 g (Laser) · 8,4 g
-(Riemenhalter).
+(Riemenhalter) · 19,5 g (Kettenhalter).
 
 Das sind **Vollmaterial-Massen** (100 % Füllung) und damit eine Obergrenze.
 Für den Druck selbst ist die Dichte in Fusion ohne Bedeutung — Bambu Studio
@@ -609,9 +637,10 @@ Druckgewicht rund ein Drittel darunter; maßgeblich ist die Anzeige im Slicer.
 Die Werte hier dienen der Plausibilitätskontrolle und der Abschätzung der
 bewegten Masse.
 
-Bewegte Masse auf der X-Achse, grob: 266 g Druckteile + 280 g NEMA 17 + 400 g
+Bewegte Masse auf der X-Achse, grob: 284 g Druckteile + 280 g NEMA 17 + 400 g
 Laser + 115 g MGN9-Schiene (200 mm) und Wagen + 71 g Gewindestange und
-Kupplung ≈ **1,13 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
+Kupplung + 24 g Energiekette (Anfangsstück und etwa die halbe Kette)
+≈ **1,17 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
 im zweistelligen Nm-Bereich, hier rund 1 Nm).
 
 Die Trägerplatte ist mit 121,5 cm³ das schwerste Teil, davon etwa 23 cm³
@@ -966,6 +995,8 @@ wird der Parameter nachgezogen.
 | Lichtschranke → Halter | 2 × M2×6 + 2 × Heat Insert M2 (Ø3,2 × 2,5) | Ø2,8 × 3 mm Sackloch in der 4-mm-Wand, dahinter Ø2,4 frei |
 | Riemenhalter → Trägerplatte | **2 × M3×10 + 2 × Messing-Einsatz M3** | von vorn, Kopf in der Senkung Ø6,5 × 3,2; 5,2 mm Gewinde, 1,8 mm vor dem Grund des Sacklochs. In einer schon gedruckten Platte mit `Bohrlehre_Riemenhalter` nachbohren |
 | X-Riemen → Riemenhalter | 2 × Stift Ø3 × 20 (oder M3×20) | seitlich über dem Riemen durch die Stiftbohrung |
+| Kettenhalter → Trägerplatte | **2 × M3×10 + 2 × Messing-Einsatz M3** | von vorn, Kopf in der Senkung Ø6,5 × 3,2; 5,2 mm Gewinde, 1,8 mm vor dem Grund. In einer schon gedruckten Platte mit `Bohrlehre_Kettenhalter` nachbohren |
+| Anfangsstück der Kette → Kettenhalter | **2 × M3×8 + 2 × Scheibe DIN 125 + 2 × Messing-Einsatz M3** | von oben durch die Löcher Ø5,5; 5,5 mm Gewinde, 1,5 mm vor dem Grund |
 
 Kaufteile: **MGN9-Schiene 200 mm** + Wagen MGN9H · NEMA 17 (Körper 40 mm,
 Welle 5 mm) · **Tr8×2-Trapezgewindespindel 200 mm, auf 160 mm kürzen**
@@ -994,6 +1025,7 @@ ist: 20 mm ist der kürzeste nutzbare Schenkel eines 2,5-mm-Inbus.
 | 9 | **Laser zuletzt**, 4 × M3×10 + Scheibe DIN 125, von hinten in die Langlöcher | Inbus von hinten | Schlitten ganz unten: beide Reihen liegen dann unter der Trägerplatte, freie Bahn |
 | 10 | Endschalterhalter (vorhanden) **ganz nach unten** in seine Langlöcher schieben, festziehen. **Schaltfahne** mit 2 × M3-Mutter in den Taschen hinter die Lasche, 2 × M3×12 + Scheibe von vorn, Schaltpunkt einstellen ([Endschalter](#einstellen)) | Inbus von vorn | frei, auch mit dem Laser daneben |
 | 11 | **Riemenhalter**: 2 × Einsatz einschmelzen, hinten an die Platte stellen (steht auf der Wagenflanke), 2 × M3×10 von vorn. Den Riemen erst einlegen, wenn Motor und Umlenkung auf den Y-Schlitten sitzen ([X-Riemenhalter](#x-riemenhalter-rev-33)) | Inbus von vorn | frei mit dem Z-Schlitten ganz unten |
+| 12 | **Kettenhalter**: 4 × Einsatz einschmelzen (2 von vorn in den Fuß, 2 von oben in die Auflage), hinten an die Platte über den Riemenhalter, 2 × M3×10 von vorn. Das Anfangsstück der Kette kommt mit Wanne und Festpunkt ([energiekette.md](energiekette.md#montage)) | Inbus von vorn, fürs Anfangsstück von oben | frei mit dem Z-Schlitten ganz unten |
 
 Schritt 4 und Schritt 9 haben sich bis Rev. 13 gegenseitig zugebaut: das
 Gewinde der Laserbefestigung sitzt im Modul, also wird von hinten verschraubt —
@@ -1079,6 +1111,7 @@ reicht Ø4,5 (±1,25 mm) — die DIN-125-Scheibe deckt das noch.
 | Schaltfahne | Rückseite (Muttertaschen) unten, **schwarzes PETG** | Fuß, Steg und Blatt beginnen alle auf dem Bett, keine Stützen; die Taschen liegen unten, ihr Deckel ist eine kurze Brücke |
 | Endschalterhalter | Flansch unten | gedruckt und eingebaut — **nicht neu drucken** |
 | Riemenhalter | Unterseite (Wagenflanke) unten | Schlitz und Rippen stehen senkrecht, die Stiftbohrung liegt waagerecht darüber; keine Stützen |
+| Kettenhalter | auf der linken Seite liegend | das Profil ist über die ganze Breite gleich, alles steht senkrecht; die Einsatzbohrungen liegen waagerecht, keine Stützen |
 
 4 Wandlinien, ≥ 40 % Infill. An jeder Auflagefläche sitzt eine Fase von
 0,4 × 45° — ohne sie hebt der Elefantenfuß der ersten Schicht das Teil von der
@@ -1086,7 +1119,7 @@ Passfläche ab.
 
 ## Vor dem Druck prüfen
 
-Das Skript legt vier **ausgeblendete Bohrlehren** an (PLA): im Browser
+Das Skript legt fünf **ausgeblendete Bohrlehren** an (PLA): im Browser
 einblenden, drucken, ans reale Teil halten.
 
 | Lehre | prüft |
@@ -1095,11 +1128,12 @@ einblenden, drucken, ans reale Teil halten.
 | `Bohrlehre_ZWagen` | 16 × 15 mm — MGN9H, am 2026-09-17 am Teil bestätigt `[v]` |
 | `Bohrlehre_Laser` | 40,5 × 16,5 mm — am 2026-09-17 am Teil bestätigt `[v]` |
 | `Bohrlehre_Riemenhalter` | keine Prüflehre, sondern eine Bohrhilfe (6 mm): zwei Löcher Ø3,4 in der schon gedruckten Trägerplatte (Rev. 33) |
+| `Bohrlehre_Kettenhalter` | ebenso eine Bohrhilfe: zwei Löcher Ø3,4 für den Kettenhalter, die Lehre steht neben dem Riemenhalter (Rev. 35) |
 
 **Eine Lehre gibt es nur für Lochbilder von Kaufteilen** — also für Teile, die
-dieses Skript nicht selbst erzeugt. Die Ausnahme ist die Lehre für den
-Riemenhalter: Die Trägerplatte ist schon gedruckt, die zwei Löcher werden
-von Hand gebohrt. Damit weicht das bewusst von der
+dieses Skript nicht selbst erzeugt. Die Ausnahmen sind die Lehren für
+Riemenhalter und Kettenhalter: Die Trägerplatte ist schon gedruckt, ihre
+Löcher werden von Hand gebohrt. Damit weicht das bewusst von der
 Konvention des `fusion-python`-Skills ab, die auch für Verbindungen zwischen
 zwei getrennt gedruckten Teilen eine Lehre vorsieht. Für Mutternwinkel ↔
 Schlittenplatte wäre sie ohne Nutzen: beide Lochbilder hängen an derselben
@@ -1183,3 +1217,6 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `winkel_luft` | 0,5 mm | Luft Regal → Oberkante Schlittenplatte |
 | `x_riemen_y` / `x_riemen_z0` | −10 / 20,25 mm | Lage des X-Riemens (Wirklinie, Unterkante) — steht gleich in `Portal.py`, `portal_check.py` vergleicht |
 | `klemm_schlitz` / `klemm_rippe` | 1,6 / 0,8 mm | Klemmschlitz und Rippen des Riemenhalters; lässt sich der Riemen nicht eindrücken, Schlitz +0,1 |
+| `kette_r` / `kette_h` / `kette_riegel` | 20 / 14 / 0,3 mm | gedruckte Energiekette: der Obertrum liegt 2 R über dem Untertrum, darauf die Auflage des Kettenhalters — steht gleich in `Portal.py`, `portal_check.py` vergleicht |
+| `xk_boden_z` / `xk_y_vorn` / `xk_gelenk_x` | 44,5 / −5,3 / 22 mm | Wannenboden, Vorderkante der Kette, Gelenk des Anfangsstücks rechts der Wagenmitte — ebenso in beiden Skripten |
+| `kh_fuss` / `kh_auflage` / `kh_schraube_z` | 8 / 8 / 72 mm | Kettenhalter: Fuß, Auflage, Höhe der M3 in der Trägerplatte; alle Werte in [energiekette.md](energiekette.md#parametrik) |

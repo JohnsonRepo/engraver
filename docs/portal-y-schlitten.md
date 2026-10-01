@@ -1,11 +1,12 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 18, sechzehn gedruckte
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 19, zwanzig gedruckte
 Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
 [portal-y-schlitten.svg](portal-y-schlitten.svg) (Portal) und
-[y-motorhalter.svg](y-motorhalter.svg) (Y-Motorhalter vorn).
+[y-motorhalter.svg](y-motorhalter.svg) (Y-Motorhalter vorn) und
+[energiekette.svg](energiekette.svg) (X-Energiekette).
 
 ![Portal](portal-y-schlitten.svg)
 
@@ -19,7 +20,8 @@ Y-Riemen halten zwei gleiche Klemmtürme wie bei v8 unter jeder Platte.
 Angetrieben wird er vorn an jeder Ecke von einem NEMA 17, das Ritzel sitzt
 direkt auf der Motorwelle; gespannt wird am Motor (Langlöcher). Dazu
 kommen seit Rev. 15 die Halter und Fahnen der Endschalter X und Y
-([endschalter.md](endschalter.md)).
+([endschalter.md](endschalter.md)) und seit Rev. 19 die Wanne der
+gedruckten X-Energiekette mit ihren Stützen ([energiekette.md](energiekette.md)).
 
 | Pos | Teil | Stück | Funktion |
 |---|---|---|---|
@@ -30,7 +32,10 @@ kommen seit Rev. 15 die Halter und Fahnen der Endschalter X und Y
 | 5 | **Lagerschlitten** | 1 | Rahmen um das Umlenkritzel: oben das Kugellager, unten das Gleitlager der Welle; gleitet auf dem Rohr (Feder in der oberen Nut), die Zugschraube zieht ihn nach außen. Seit Rev. 18, ersetzt Umlenkhalter und Spannklotz |
 | 6 | **Y-Motorhalter** | 2 (dasselbe Teil) | vorn an jeder 2040: U-Bügel mit Schenkeln an beiden Seitenflächen (4 × M5 in den unteren Nuten), NEMA 17 hängend, Ritzel mittig zur 2040 direkt auf der Welle. Seit Rev. 16 in diesem Skript (vorher `YMotorhalter.py`), Einzelheiten in [y-motorhalter.md](y-motorhalter.md) |
 | 7 | **Endschalter** | 5 | Halter_Y und Fahne_Y, Halter_X, Klammer_X und Fahne_X für die Gabellichtschranken; Fahnen und Klammer **schwarz**. Lage, Montage und Einstellen: [endschalter.md](endschalter.md) (bis Rev. 14 im eigenen Skript `Endschalter.py`) |
+| 8 | **Kettenwanne** | 1 | Rinne über dem Portalrohr direkt hinter der Trägerplatte, führt den Untertrum der X-Energiekette und trägt ihren Festpunkt. Seit Rev. 19 |
+| 9 | **Wannenstütze** | 3 | hinten am Rohr (M5 in der hinteren Nut), Arm über X-Riemen und Riemenhalter unter die Wanne; die am Festpunkt ist breiter. Seit Rev. 19 |
 | — | **Riemenhalter** | 1 | am Toolhead (ToolheadZ.py Rev. 33), klemmt beide Enden des X-Riemens |
+| — | **Kettenhalter** | 1 | am Toolhead (ToolheadZ.py Rev. 35), trägt das bewegte Ende der X-Energiekette |
 
 Warum so viele Teile: Jedes ist nur so **ohne Stützmaterial** druckbar. Die
 Klemmtürme hängen unter der Platte, die Rohrhalterung steht auf ihr — an
@@ -49,7 +54,8 @@ sie mit „[Referenz, nicht drucken]“.
 | `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
 | `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkritzel, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: schräg um das mittige Ritzel des Y-Motors, als Rücklauf gerade durch die äußere obere Nut des 2040, um das hintere Ritzel und schräg zurück |
-| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, das X-Umlenkritzel mit Welle, Kugellager und Gleitlager; vom Toolhead der Riemenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
+| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, das X-Umlenkritzel mit Welle, Kugellager und Gleitlager; vom Toolhead der Riemenhalter, der Kettenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
+| `Ref_Kette` | die X-Energiekette vereinfacht als U aus Untertrum, Bogen und Obertrum, mit dem Toolhead in der Mitte des X-Wegs (das bewegte Ende steht dann über dem Festpunkt) |
 | `Ref_Endschalter` | die beiden Lichtschranken LM393 (Platine und Gabel): Y fest am rechten 2040 hinter dem hinteren 2060, X vor dem linken Ende der 2020 |
 
 Was dabei angenommen ist:
@@ -61,7 +67,7 @@ Was dabei angenommen ist:
   hinten 110 mm über (gemessen 2026-09-27, Rev. 14; bis Rev. 13 400 mm
   `[?]`).
 * Der **Toolhead** steht in der Mitte des X-Wegs; von ihm sind nur X-Wagen,
-  Riemenhalter und die Trägerplatte (vereinfacht) drin. Lagerschlitten und
+  Riemenhalter, Kettenhalter und die Trägerplatte (vereinfacht) drin. Lagerschlitten und
   Umlenkritzel stehen in der Mitte des Spannwegs. Die Fahnen der Endschalter stehen
   deshalb nicht in ihrer Gabel; den Schaltpunkt zeigt
   [endschalter.svg](endschalter.svg).
@@ -400,6 +406,19 @@ die `Bohrlehre_Riemenhalter` (6 mm dick, im ToolheadZ-Modell ausgeblendet):
    langen Bohrer, damit das Bohrfutter hinter dem Portalrohr bleibt.
 4. Vorn Ø6,5 × 3,2 mm ansenken.
 
+## Energiekette X (Rev. 19)
+
+Die X-Energiekette ist gedruckt (dein Modell „Energiekette“, Teilung 16,
+außen 18 × 14, R 20) und liegt direkt hinter der Trägerplatte. Der
+Festpunkt sitzt in der Mitte des X-Wegs, die Schleife zeigt nach rechts.
+Der Untertrum läuft in der **Kettenwanne** über dem Rohr (Boden Z +44,5),
+der Obertrum 40 mm höher auf dem Kettenhalter des Toolheads. Drei
+**Wannenstützen** tragen die Wanne. Sie sitzen mit je einer M5 in der
+hinteren Nut, ihr Block steht auf dem Rohr hinter dem Rücklauf, der Arm
+reicht über Riemen und Riemenhalter. 17 Glieder reichen, am rechten Ende
+läuft der Bogen 3,25 mm über den Lagerschlitten. Maße, Freigänge, Montage
+und Druck stehen in [energiekette.md](energiekette.md).
+
 ## Engste Stellen
 
 `portal_check.py` fährt den Toolhead über 81 X- × 11 Z-Stellungen gegen alle
@@ -411,7 +430,10 @@ Portalteile und beide Riemen. Keine Stelle liegt unter 3 mm:
 | 3,0 mm | Umlenkritzel ↔ X-Wagen, am rechten Ende, das Ritzel ganz innen (daneben; sein Bord steht 2,75 mm über dem Wagen) |
 | 3,0 mm | Schlittenplatte ↔ X-Wagen, am linken Ende (Klemmturm 3,5 mm) |
 | 3,4 mm | Toolhead ↔ Y-Riemen, an beiden Enden |
+| 3,0 mm | Kettenhalter ↔ X-Motor, am linken Ende; Trägerplatte ↔ Kettenwanne |
 
+Die Energiekette selbst prüft Abschnitt 17 über den ganzen Weg, auch dort
+liegt keine Stelle unter 3 mm ([energiekette.md](energiekette.md#freigänge-und-engste-stellen)).
 Dazu wird geprüft, dass sich jede Schraube mit mindestens 20 mm Inbus
 erreichen lässt. Außerdem geprüft: die Wände um Einsätze, Muttern und
 Senkungen, die Schraubenlängen und die Druckbarkeit.
@@ -453,6 +475,10 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 11. Endschalter: Halter, Lichtschranken und Fahnen nach
    [endschalter.md](endschalter.md#montage), die Schaltpunkte vor der
    ersten Referenzfahrt von Hand prüfen.
+12. Energiekette X: Stützen mit Hammermuttern in die hintere Nut, Wanne
+   auflegen und an den Laschen verschrauben, Endstück 180 als Festpunkt,
+   Anfangsstück auf den Kettenhalter, Litzen einziehen
+   ([energiekette.md](energiekette.md#montage)).
 
 ## Druck (PETG, Bambu Lab A1)
 
@@ -465,6 +491,9 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 | Lagerschlitten | auf dem Rücken liegend; die Lagersitze liegen dann waagerecht und sind als Träne gezeichnet, der Pfosten wird eine Brücke über 17 mm |
 | Y-Motorhalter (2×, dasselbe Teil) | kopfüber, die Oberseite der Platte aufs Bett ([y-motorhalter.md](y-motorhalter.md#druck-petg-bambu-lab-a1)) |
 | Riemenhalter (Toolhead) | Unterseite (Wagenflanke), Schlitz und Rippen stehen senkrecht |
+| Kettenwanne | Boden unten, längs (242,5 mm) |
+| Wannenstützen (3) | Rückseite der Platte unten: Block und Arm wachsen aus der Platte |
+| Kettenhalter (Toolhead) | auf der linken Seite liegend |
 | Endschalter (5 Teile) | wie in [endschalter.md](endschalter.md#druck-petg-bambu-lab-a1); Fahne_Y, Klammer_X und Fahne_X **schwarz** |
 
 Keine Stützen. 4 Wandlinien, ≥ 40 % Infill. Rechter Schlitten, die rechten
@@ -483,13 +512,17 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Spannbock | 5,4 cm³ | ≈ 7 g | 35 × 22 × 18 mm |
 | Lagerschlitten | 10,4 cm³ | ≈ 13 g | 16 × 35 × 33 mm |
 | Y-Motorhalter (je) | 25,5 cm³ | ≈ 32 g | 52 × 87 × 17 mm |
-| **Portal zusammen** (ohne Endschalter) | 200 cm³ | **≈ 254 g** | |
+| Kettenwanne | 26,8 cm³ | ≈ 34 g | 242,5 × 32,6 × 13 mm |
+| Wannenstütze Festpunkt | 15,2 cm³ | ≈ 19 g | 26 × 32 × 49,5 mm |
+| Wannenstütze mitte, rechts (je) | 9,3 cm³ | ≈ 12 g | 16 × 32 × 49,5 mm |
+| **Portal zusammen** (ohne Endschalter) | 260,7 cm³ | **≈ 331 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
+| Kettenhalter (Toolhead) | 14,2 cm³ | ≈ 18 g | 44 × 24,8 × 26 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
 das Lochbild 20 × 20 am Wagen, `Bohrlehre_LM393` Umriss und Lochbild der
-Lichtschranke, `Bohrlehre_Riemenhalter` (8,4 g, im ToolheadZ-Modell) führt
-den Bohrer an der Trägerplatte.
+Lichtschranke. `Bohrlehre_Riemenhalter` (8,4 g) und `Bohrlehre_Kettenhalter`
+(19,5 g), beide im ToolheadZ-Modell, führen den Bohrer an der Trägerplatte.
 
 ## Stückliste
 
@@ -518,6 +551,11 @@ den Bohrer an der Trägerplatte.
 | 8 + 8 + 8 | M5×12 Zylinderkopf + Scheibe + Hammermutter M5 (Nut 6) | Y-Motorhalter → untere Nuten beider Seitenflächen, je Seite 4 |
 | 2 | GT2-Riemen 6 mm, je ≈ 1276 mm | Y, offen, von Klemme zu Klemme (hinteres Ritzel angenommen) |
 | 2 + 2 + 2 | M3×10 + Messing-Einsatz M3 + Stift Ø3 | Riemenhalter am Toolhead |
+| 3 + 3 | M5×10 Zylinderkopf + Hammermutter M5 (Nut 6) | Wannenstützen → hintere Nut des Rohrs |
+| 2 + 2 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Laschen der Kettenwanne → Wannenstützen |
+| 2 + 2 + 2 | M3×10 Zylinderkopf + Scheibe DIN 125 + Messing-Einsatz M3 | Endstück 180 → Wanne → Stütze am Festpunkt |
+| 1 | Energiekette, gedruckt: Anfangsstück, 17 Glieder mit Riegel, Endstück 180 | X-Achse |
+| — | Schrauben und Einsätze des Kettenhalters | [energiekette.md](energiekette.md#verschraubung) |
 | — | Schrauben, Einsätze und Hammermuttern der Endschalter | [endschalter.md](endschalter.md#stückliste) |
 
 ## Nicht gemessen `[?]`
@@ -536,14 +574,17 @@ den Bohrer an der Trägerplatte.
   das Portal vorn an die Y-Motorhalter heranfährt (Abschnitt 14).
 * **Endschalter:** Boden des Gabelschlitzes, Lötstifte unter der Platine,
   Schmiernippel am X-Wagen ([endschalter.md](endschalter.md#noch-offen)).
+* **Energiekette:** Der Biegeradius R 20 ist aus dem Modell gerechnet. Um
+  180° gebogen darf die Schleife außen höchstens 54,6 mm hoch sein
+  ([energiekette.md](energiekette.md#noch-offen)).
 
 ## Parametrik
 
 Alle Werte aus dem `MASSE`-Block landen als Fusion-User-Parameter. Die
 absoluten Lagen rechnet `lage()` in Python — nach einer Parameteränderung das
 Skript neu laufen lassen und `tools/portal_check.py` ausführen. Die Werte, die
-beide Skripte teilen (Lage des X-Riemens, Klemmschlitz, X-Wagen), vergleicht
-die Prüfung als Erstes.
+beide Skripte teilen (Lage des X-Riemens, Klemmschlitz, X-Wagen, Energiekette),
+vergleicht die Prüfung als Erstes.
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
@@ -568,6 +609,7 @@ die Prüfung als Erstes.
 | `spiel_press` | 0,05 mm | Presspassung der Lagersitze |
 | `motor_laenge` | 37 mm | Länge der Motoren ohne Welle (gemessen) |
 | `ymh_…` | | Y-Motorhalter, Tabelle in [y-motorhalter.md](y-motorhalter.md#parametrik) |
+| `kette_…`, `endstueck_…`, `xk_…`, `wanne_…`, `st_…` | | Energiekette X, Wanne und Stützen, Tabelle in [energiekette.md](energiekette.md#parametrik) |
 | `quer_vorn_zurueck` | 35 mm | vorderes 2060 hinter der Stirnseite der 2040 (Referenz, Y-Weg) |
 | `yh_hinter` | 11 mm `[?]` | hinteres Y-Ritzel hinter der Stirnseite (Referenz, Riemenlänge) |
 | `rahmen_laenge` / `y_schiene_laenge` | 600 / 500 mm | Länge der 2040 und der Y-Schienen (Referenz, Y-Weg) |

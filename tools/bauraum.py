@@ -166,6 +166,19 @@ def bauraeume(w, L):
         # zugang von hinten darstellt.
         Quader('Riemenhalter', w('traeger_x_links'), w('traeger_x_rechts'),
                L['rh_y0'], L['rh_y1'], L['rh_z0'], L['rh_z1']),
+        # Kettenhalter (Rev. 35): hinten an der Traegerplatte ueber dem
+        # Riemenhalter, darauf das Anfangsstueck der X-Kette. Wanne, Kette
+        # und Festpunkt prueft tools/portal_check.py (Abschnitt 17).
+        Quader('Kettenhalter Fuss', *L['kh_x'], *L['kh_fuss_y'],
+               L['kh_fuss_z0'], L['kh_auflage_z1']),
+        Quader('Kettenhalter Auflage', *L['kh_x'], L['kh_y0'],
+               L['traeger_y0'], L['kh_auflage_z0'], L['kh_auflage_z1']),
+        Quader('Kettenhalter Leiste hinten', *L['kh_x'],
+               *L['kh_leiste_hinten_y'], *L['kh_leiste_z']),
+        Quader('Kettenhalter Leiste vorn', *L['kh_x'],
+               *L['kh_leiste_vorn_y'], *L['kh_leiste_z']),
+        Quader('Kette Anfangsstueck', *L['kh_endstueck_x'], *L['kh_kette_y'],
+               *L['kh_endstueck_z']),
         # Die Spindel in ihrer gekuerzten Laenge — sie haengt unter der
         # Mutter frei weiter und ist dort die tiefste feste Kante.
         Quader('Tr8x2-Spindel', sx - r_spi, sx + r_spi, sy - r_spi,
@@ -302,6 +315,16 @@ def bauraeume(w, L):
         # Riemenhalter: verschraubt an der Platte, steht auf der Wagenflanke
         ('Riemenhalter', 'Traegerplatte Hauptsaeule'),
         ('Riemenhalter', 'X-Wagen MGN15H'),
+        # Kettenhalter: ein Teil, verschraubt an der Platte; das Anfangsstueck
+        # liegt auf der Auflage zwischen den Leisten
+        ('Kettenhalter Fuss', 'Traegerplatte Hauptsaeule'),
+        ('Kettenhalter Auflage', 'Traegerplatte Hauptsaeule'),
+        ('Kettenhalter Leiste vorn', 'Traegerplatte Hauptsaeule'),
+        ('Kettenhalter Fuss', 'Kettenhalter Auflage'),
+        ('Kettenhalter Fuss', 'Kettenhalter Leiste vorn'),
+        ('Kettenhalter Auflage', 'Kettenhalter Leiste hinten'),
+        ('Kettenhalter Auflage', 'Kettenhalter Leiste vorn'),
+        ('Kettenhalter Auflage', 'Kette Anfangsstueck'),
     }
     return feste, bewegte, erlaubt
 
@@ -450,7 +473,28 @@ def portal_bauraeume(w, L):
           (L['xr_y_rueck'] - L['riemen_aussen'],
            L['xr_y_rueck'] + L['riemen_innen']),
           (L['xr_z0'], L['xr_z1']), 'riemen'),
+        # X-Energiekette (Rev. 19): Wanne direkt hinter der Traegerplatte, der
+        # Untertrum als Huelle ueber seinen ganzen Weg (vom Endstueck am
+        # Festpunkt bis zum Bogenanfang am rechten Ende). Bogen und Obertrum
+        # fahren mit: tools/portal_check.py, Abschnitt 17.
+        q('Kettenwanne', L['wanne_x'], L['wanne_y'], L['wanne_z']),
+        q('X-Kette Untertrum', (L['xk_fest'] - w('endstueck_l'),
+                                L['xk_bogen_x'][1]),
+          L['xk_y'], L['xk_unter_z']),
     ]
+    hb = w('wanne_lasche_b') / 2.0
+    for i, (xl, _) in enumerate(L['wanne_laschen']):
+        feste.append(q('Kettenwanne Lasche {}'.format(i + 1),
+                       (xl - hb, xl + hb), L['wanne_lasche_y'],
+                       L['wanne_boden_z']))
+    for n, x in L['st_x'].items():
+        feste += [
+            q('Wannenstuetze {} Platte'.format(n), x, L['st_platte_y'],
+              L['st_platte_z']),
+            q('Wannenstuetze {} Block'.format(n), x, L['st_block_y'],
+              L['st_block_z']),
+            q('Wannenstuetze {} Arm'.format(n), x, L['st_arm_y'],
+              L['st_arm_z'])]
     erlaubt = {
         ('Portalrohr', 'X-Schiene'),
         ('Motorplatte', 'Motorhalter Saeule hinten'),
@@ -483,7 +527,26 @@ def portal_bauraeume(w, L):
         ('X-Riemen Ruecklauf', 'X-Ritzel'),
         ('X-Riemen Ruecklauf', 'X-Umlenkritzel'),
         ('X-Umlenkritzel', 'X-Umlenkritzel Nabe'),     # ein Teil
+        # Kette: der Untertrum liegt in der Wanne, sie auf den Armen, ihre
+        # Laschen auf den Bloecken; die Stuetzen an und auf dem Rohr
+        ('Kettenwanne', 'X-Kette Untertrum'),
+        ('Kettenwanne', 'Kettenwanne Lasche 1'),
+        ('Kettenwanne', 'Kettenwanne Lasche 2'),
+        ('Kettenwanne Lasche 1', 'Wannenstuetze mitte Block'),
+        ('Kettenwanne Lasche 2', 'Wannenstuetze rechts Block'),
     }
+    for n in L['st_x']:
+        erlaubt |= {
+            ('Kettenwanne', 'Wannenstuetze {} Arm'.format(n)),
+            ('Wannenstuetze {} Platte'.format(n),
+             'Wannenstuetze {} Block'.format(n)),
+            ('Wannenstuetze {} Block'.format(n),
+             'Wannenstuetze {} Arm'.format(n)),
+            ('Wannenstuetze {} Platte'.format(n),
+             'Wannenstuetze {} Arm'.format(n)),
+            ('Wannenstuetze {} Platte'.format(n), 'Portalrohr'),
+            ('Wannenstuetze {} Block'.format(n), 'Portalrohr'),
+        }
     for n in ('links', 'rechts'):
         erlaubt |= {
             ('Portalrohr', 'Platte ' + n), ('Portalrohr', 'Rueckwand ' + n),

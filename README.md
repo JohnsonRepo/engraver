@@ -6,7 +6,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 400 mm auseinander, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
 | Y-Achse | 2 Linearführungen MGN12H (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn je Seite ein NEMA 17 mit dem Ritzel direkt auf der Welle, mittig zur 2040 |
 | Portal | Y-Schlitten auf den MGN12H-Wagen, dazwischen ein 2020-V-Slot-Profil (500 mm); Y-Schienen 514 mm Mitte zu Mitte |
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
@@ -18,7 +18,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y
+fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y, Wanne der X-Energiekette
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
@@ -41,6 +41,8 @@ docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
 docs/y-motorhalter.svg         Y-Motorhalter: Draufsicht, Seitenansicht, Schnitt, Riemen in der Nut
+docs/energiekette.md           X-Energiekette (gedruckt): Kette, Lage, Kettenhalter, Wanne, Stützen, Montage, Druck
+docs/energiekette.svg          X-Energiekette von vorn und im Schnitt durch eine Wannenstütze
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
 tools/toolhead_check.py        rechnerische Prüfung der Baugruppe (ohne Fusion)
 tools/portal_check.py          Prüfung des Portals mit dem Toolhead über X- und Z-Weg
@@ -56,6 +58,7 @@ tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im 
 tools/endschalter_zeichnen.py  erzeugt die Zeichnung der Endschalter
 tools/notaus_check.py          Prüfung des Not-Aus-Gehäuses: Lage, Freiraum, Schrauben, Taster, Druck
 tools/notaus_zeichnen.py       erzeugt die Zeichnung des Not-Aus-Gehäuses
+tools/kette_zeichnen.py        erzeugt die Zeichnung der X-Energiekette
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
 tools/y_motorhalter_zeichnen.py erzeugt die Zeichnung des Y-Motorhalters
@@ -164,6 +167,20 @@ Klammer unten an der Trägerplatte und ist im Langloch ±2 mm verstellbar.
 Fahnen und Klammern werden schwarz gedruckt. Details in
 [docs/endschalter.md](docs/endschalter.md).
 
+### Energiekette X (neu)
+
+Die Energiekette ist gedruckt (Modell „Energiekette“, Teilung 16, außen
+18 × 14 mm, R 20) und liegt direkt hinter der Trägerplatte. Der Festpunkt
+sitzt in der Mitte des X-Wegs auf einer **Wanne** über dem Portalrohr, die
+Schleife zeigt nach rechts. Drei **Stützen** halten die Wanne. Sie sitzen mit
+je einer M5 in der hinteren Nut des Rohrs und reichen über X-Riemen und
+Riemenhalter. Am Toolhead trägt ein **Kettenhalter** über dem Riemenhalter
+das bewegte Ende. 17 Glieder reichen, am rechten Ende läuft der Bogen
+3,25 mm über den Lagerschlitten. Wanne und Stützen baut `Portal.py`
+(Rev. 19), den Kettenhalter `ToolheadZ.py` (Rev. 35), mit einer Bohrlehre
+für die schon gedruckte Trägerplatte. Details in
+[docs/energiekette.md](docs/energiekette.md).
+
 ### Toolhead-Grundplatte (überholt)
 
 Die erste Ausführung: nur die Platte, die den Laser am MGN9-Z-Wagen hält, ohne
@@ -204,6 +221,7 @@ python3 tools/endschalter_check.py  # Endschalter: Schaltpunkte, Freigänge, Sch
 python3 tools/endschalter_zeichnen.py  # docs/endschalter.svg neu erzeugen
 python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schrauben, Druck
 python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
+python3 tools/kette_zeichnen.py     # docs/energiekette.svg neu erzeugen
 ```
 
 `toolhead_check.py` importiert das Fusion-Skript mit gestubbtem `adsk`-Modul und
@@ -220,11 +238,15 @@ bestanden.
 den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile, den Y-Weg gegen die 2060
 und die Y-Motorhalter, den Y-Antrieb selbst mit dem Riemenweg über den
-ganzen Y-Weg und das Elektronikfach hinter
-dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
+ganzen Y-Weg, das Elektronikfach hinter
+dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren, und
+die X-Energiekette mit Wanne und Stützen über den ganzen X-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 34, Portal Rev. 18 mit
-dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 18 lenkt den
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 35, Portal Rev. 19 mit
+dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 19 und ToolheadZ
+Rev. 35 bringen die gedruckte X-Energiekette: Wanne mit Festpunkt und drei
+Stützen am Portalrohr, Kettenhalter an der Trägerplatte
+([energiekette.md](docs/energiekette.md)). Portal Rev. 18 lenkt den
 X-Riemen mit einem Ritzel auf einer Welle um, die in Kugel- und Gleitlager
 im Lagerschlitten läuft; Spannbock und Schlitten ersetzen Umlenkhalter und
 Spannklotz (ToolheadZ Rev. 34 ändert dazu nur einen Kommentar). Portal
@@ -239,8 +261,8 @@ Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
-Tabellen in [verkabelung.md](docs/verkabelung.md)); die Halter der
-Energieketten folgen. Der
+Tabellen in [verkabelung.md](docs/verkabelung.md)); Wanne und Halter der
+Y-Kette folgen. Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

@@ -1,6 +1,6 @@
 # ToolheadZ.py — kompletter Laser-Toolhead mit NEMA17-Z-Achse
 #
-# Baugruppe (sechs gedruckte Teile), weil sich Teile relativ zueinander bewegen:
+# Baugruppe (acht gedruckte Teile), weil sich Teile relativ zueinander bewegen:
 #   Traegerplatte   — geerdet, sitzt auf dem MGN15H-Wagen der Portalfuehrung,
 #                     traegt die MGN9-Z-Schiene (Sockel) und die angeformte
 #                     Motorkonsole
@@ -16,6 +16,9 @@
 #   Riemenhalter    — klemmt beide Enden des X-Riemens, hinten an der
 #                     Traegerplatte ueber dem X-Wagen (Motor und Umlenkung
 #                     sitzen auf den Y-Schlitten, fusion/Portal)
+#   Kettenhalter    — hinten an der Traegerplatte ueber dem Riemenhalter
+#                     (Rev. 35): traegt das Anfangsstueck der gedruckten
+#                     X-Energiekette; Wanne und Festpunkt in fusion/Portal
 #
 # Koordinatensystem = Maschinenkoordinaten, global fuer alle Komponenten:
 #   X = quer, laengs des Portals          Y = nach vorn, weg vom Portal
@@ -32,7 +35,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 34
+REVISION = 35
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -379,6 +382,41 @@ MASSE = {
     'rh_schraube_x':      (13.5,  'Riemenhalter: Schrauben bei +-X'),
     'rh_schraube_z':      (24.0,  'Riemenhalter: Schrauben bei Z'),
     'rh_senkung_t':        (3.2,  'Riemenhalter: Senkung vorn in der Traegerplatte'),
+
+    # --- X-Energiekette: Kettenhalter hinten an der Traegerplatte (Rev. 35) -
+    # Gedruckte Kette, Wanne und Festpunkt in fusion/Portal (Rev. 19). Ihr
+    # bewegtes Ende, das Anfangsstueck, liegt mit der Platte nach unten auf
+    # dem Kettenhalter: 2x M3 + Scheibe durch seine Loecher Ø5,5 in Gewinde-
+    # einsaetze. Der Obertrum liegt 2 R ueber dem Untertrum, der auf den
+    # Riegeln in der Wanne liegt: Auflage = Wannenboden + Riegel + 2 R. Der
+    # Fuss bleibt luft_bau ueber dem Untertrum. kette_*, endstueck_*, xk_*
+    # stehen gleich in Portal.py, tools/portal_check.py vergleicht sie.
+    'kette_b':            (18.0,  'Energiekette: Breite aussen'),
+    'kette_h':            (14.0,  'Energiekette: Hoehe der Laschen'),
+    'kette_riegel':        (0.3,  'Energiekette: Riegel steht ueber die Laschen'),
+    'kette_r':            (20.0,  'Energiekette: Biegeradius der Gelenkachse'),
+    'kette_spiel':         (0.3,  'Energiekette: Spiel je Seite in Wanne und Halter'),
+    'endstueck_l':        (36.0,  'Endstueck: Gelenk bis Ende'),
+    'endstueck_auge':      (7.0,  'Endstueck: Auge vor dem Gelenk'),
+    'endstueck_loch_a':   (18.0,  'Endstueck: Gelenk bis erstes Loch'),
+    'endstueck_loch_ab':  (12.0,  'Endstueck: Lochabstand'),
+    'endstueck_loch_d':    (5.5,  'Endstueck: Loecher'),
+    'endstueck_platte':    (2.0,  'Endstueck: Platte, Dicke'),
+    'xk_y_vorn':          (-5.3,  'X-Kette: Vorderseite'),
+    'xk_boden_z':         (44.5,  'X-Kette: Oberkante Wannenboden'),
+    # Gelenk an der rechten Kante der Saeule: das Endstueck liegt ganz
+    # hinter der Platte, der Bogen beginnt rechts daneben
+    'xk_gelenk_x':        (22.0,  'X-Kette: bewegtes Gelenk rechts der X-Wagenmitte'),
+    'kh_fuss':             (8.0,  'Kettenhalter: Fuss hinter der Platte (Einsaetze)'),
+    'kh_auflage':          (8.0,  'Kettenhalter: Auflage, Dicke (Einsaetze)'),
+    'kh_leiste':           (1.2,  'Kettenhalter: hintere Fuehrungsleiste, Dicke'),
+    'kh_leiste_h':         (3.0,  'Kettenhalter: Fuehrungsleisten, Hoehe'),
+    # Zwischen Schienensockel und Saeulenrippe wie beim Riemenhalter (X),
+    # unter dem Sockel des Endschalterhalters
+    'kh_schraube_z':      (72.0,  'Kettenhalter: Schrauben bei Z'),
+    'kh_binder_b':         (4.0,  'Kettenhalter: Schlitz fuer Kabelbinder, laengs'),
+    'kh_binder_t':         (2.2,  'Kettenhalter: Schlitz fuer Kabelbinder, quer'),
+    'kh_binder_abstand':   (9.0,  'Kettenhalter: Abstand der Binderschlitze'),
 
     # --- Druckgerecht + Freigaenge -----------------------------------------
     'luft_bau':            (3.0,   'Mindestfreigang zwischen bewegten Teilen'),
@@ -749,6 +787,54 @@ def lage():
     L['rh_klemm'] = w('traeger_dicke') - w('rh_senkung_t')
     L['rh_schraube'] = 2.0 * int((L['rh_klemm'] + 4.0) / 2.0 + 0.999)
     L['rh_eingriff'] = L['rh_schraube'] - L['rh_klemm']
+
+    # ---- Kettenhalter (Rev. 35) ---------------------------------------------
+    # Fuss an der Plattenrueckseite, Auflage nach hinten unter dem Anfangs-
+    # stueck, Fuehrungsleisten vor und hinter ihm. Gleiches Profil ueber die
+    # ganze Breite der Saeule: liegend auf der Seite gedruckt.
+    L['kh_x'] = (w('traeger_x_links'), w('xk_gelenk_x'))
+    L['kh_auflage_z1'] = (w('xk_boden_z') + w('kette_riegel')
+                          + 2.0 * w('kette_r'))
+    L['kh_auflage_z0'] = L['kh_auflage_z1'] - w('kh_auflage')
+    L['kh_untertrum_z1'] = (w('xk_boden_z') + w('kette_riegel')
+                            + w('kette_h'))
+    L['kh_fuss_z0'] = L['kh_untertrum_z1'] + w('luft_bau')
+    L['kh_fuss_y'] = (L['traeger_y0'] - w('kh_fuss'), L['traeger_y0'])
+    yv = w('xk_y_vorn')
+    L['kh_kette_y'] = (yv - w('kette_b'), yv)
+    L['kh_kette_y_mitte'] = yv - w('kette_b') / 2.0
+    L['kh_leiste_hinten_y'] = (yv - w('kette_b') - w('kette_spiel')
+                               - w('kh_leiste'),
+                               yv - w('kette_b') - w('kette_spiel'))
+    L['kh_leiste_vorn_y'] = (yv + w('kette_spiel'), L['traeger_y0'])
+    L['kh_y0'] = L['kh_leiste_hinten_y'][0]
+    L['kh_leiste_z'] = (L['kh_auflage_z1'],
+                        L['kh_auflage_z1'] + w('kh_leiste_h'))
+    # Anfangsstueck: Gelenk bei xk_gelenk_x, die Platte reicht nach links
+    L['kh_endstueck_x'] = (w('xk_gelenk_x') - w('endstueck_l'),
+                           w('xk_gelenk_x') + w('endstueck_auge'))
+    L['kh_endstueck_z'] = (L['kh_auflage_z1'], L['kh_auflage_z1']
+                           + w('kette_h') + w('kette_riegel'))
+    L['kh_loecher'] = [(w('xk_gelenk_x') - a, L['kh_kette_y_mitte'])
+                       for a in (w('endstueck_loch_a'),
+                                 w('endstueck_loch_a')
+                                 + w('endstueck_loch_ab'))]
+    # Kabelbinder links neben dem Endstueck, wo die Litzen herauskommen:
+    # je ein Schlitz vor und hinter dem Buendel
+    xb = (L['kh_x'][0] + L['kh_endstueck_x'][0]) / 2.0
+    L['kh_binder'] = [(xb, L['kh_kette_y_mitte'] + s * w('kh_binder_abstand')
+                       / 2.0) for s in (-1, 1)]
+    # Befestigung wie beim Riemenhalter: 2x M3 von vorn, Kopf in der Senkung
+    L['kh_schrauben'] = [(sx * w('rh_schraube_x'), w('kh_schraube_z'))
+                         for sx in (-1, 1)]
+    L['kh_klemm'] = w('traeger_dicke') - w('rh_senkung_t')
+    L['kh_schraube'] = 2.0 * int((L['kh_klemm'] + 4.0) / 2.0 + 0.999)
+    L['kh_eingriff'] = L['kh_schraube'] - L['kh_klemm']
+    # Anfangsstueck -> Auflage: Scheibe und Platte, dann >= 4 mm im Einsatz
+    L['kh_ende_klemm'] = w('m3_scheibe_h') + w('endstueck_platte')
+    L['kh_ende_schraube'] = 2.0 * int((L['kh_ende_klemm'] + 4.0) / 2.0
+                                      + 0.999)
+    L['kh_ende_eingriff'] = L['kh_ende_schraube'] - L['kh_ende_klemm']
     return L
 
 
@@ -1299,6 +1385,17 @@ def bau_traegerplatte(app, design, comp, L, fehler):
         kreis(sk, x, z, w('m3_senkung'))
     weg(comp, alle_profile(sk), -w('rh_senkung_t'), koerper)
 
+    # Kettenhalter (Rev. 35): ebenso, hoeher ueber dem Riemenhalter. Eine
+    # schon gedruckte Platte bekommt sie mit Bohrlehre_Kettenhalter.
+    sk = skizze(comp, e_hinten, 'Sk_Bohrungen_Kettenhalter')
+    for x, z in L['kh_schrauben']:
+        kreis(sk, x, z, w('m3_durchgang'))
+    durch(comp, alle_profile(sk), koerper)
+    sk = skizze(comp, e_vorn, 'Sk_Senkungen_Kettenhalter')
+    for x, z in L['kh_schrauben']:
+        kreis(sk, x, z, w('m3_senkung'))
+    weg(comp, alle_profile(sk), -w('rh_senkung_t'), koerper)
+
     fussfase(comp, koerper, 'z', 0.0, w('fase_fuss'), fehler, 'Traegerplatte')
     bbox_pruefen(koerper, 'Traegerplatte',
                  ((w('traeger_x_links'), w('traeger_x_kopf')),
@@ -1717,6 +1814,71 @@ def bau_riemenhalter(app, design, comp, L, fehler):
     return koerper
 
 
+def bau_kettenhalter(app, design, comp, L, fehler):
+    """Kettenhalter (Rev. 35): traegt das bewegte Ende der gedruckten
+    X-Energiekette. Ein Fuss liegt hinten an der Traegerplatte ueber dem
+    Riemenhalter, die Auflage reicht nach hinten unter das Anfangsstueck.
+    Das liegt mit der Platte nach unten darauf, 2x M3 + Scheibe durch seine
+    Loecher Ø5,5 in Gewindeeinsaetze; zwei Leisten fuehren es seitlich.
+    Links daneben zwei Schlitze fuer den Kabelbinder der Zugentlastung.
+    Wanne und Festpunkt der Kette: fusion/Portal.
+
+    Befestigung: 2x M3 von vorn durch die Traegerplatte in Einsaetze im
+    Fuss, wie beim Riemenhalter.
+
+    Drucklage: auf der linken Seite liegend. Das Profil ist ueber die ganze
+    Breite gleich, alles steht senkrecht; die Einsatzbohrungen liegen
+    waagerecht (Ø4,6, ohne Stuetzen)."""
+    x0, x1 = L['kh_x']
+    z1 = L['kh_auflage_z1']
+    # Fuss an der Plattenrueckseite, bis unter die Auflage
+    sk = skizze(comp, ebene_y(comp, L['kh_fuss_y'][0], 'E_KH_Fuss'),
+                'Sk_KH_Fuss')
+    rechteck(sk, x0, L['kh_fuss_z0'], x1, z1)
+    koerper = neu(comp, groesstes_profil(sk), w('kh_fuss')).bodies.item(0)
+    koerper.name = 'Kettenhalter'
+    # Auflage nach hinten unter das Anfangsstueck
+    e_hinten = ebene_y(comp, L['kh_y0'], 'E_KH_hinten')
+    sk = skizze(comp, e_hinten, 'Sk_KH_Auflage')
+    rechteck(sk, x0, L['kh_auflage_z0'], x1, z1)
+    dazu(comp, groesstes_profil(sk), L['traeger_y0'] - L['kh_y0'], koerper)
+    # Fuehrungsleisten vor und hinter dem Anfangsstueck
+    sk = skizze(comp, e_hinten, 'Sk_KH_Leiste_hinten')
+    rechteck(sk, x0, z1, x1, L['kh_leiste_z'][1])
+    dazu(comp, groesstes_profil(sk), w('kh_leiste'), koerper)
+    sk = skizze(comp, ebene_y(comp, L['kh_leiste_vorn_y'][0], 'E_KH_vorn'),
+                'Sk_KH_Leiste_vorn')
+    rechteck(sk, x0, z1, x1, L['kh_leiste_z'][1])
+    dazu(comp, groesstes_profil(sk),
+         L['kh_leiste_vorn_y'][1] - L['kh_leiste_vorn_y'][0], koerper)
+    # Gewindeeinsaetze fuer das Anfangsstueck, von oben in die Auflage
+    sk = skizze(comp, ebene_z(comp, z1 + 1.0 - (w('insert_m3_t') + 1.0) / 2.0,
+                              'E_KH_Einsaetze'), 'Sk_KH_Einsaetze')
+    for x, y in L['kh_loecher']:
+        kreis(sk, x, y, w('insert_m3_d'))
+    tasche(comp, alle_profile(sk), w('insert_m3_t') + 1.0, koerper)
+    # Schlitze fuer den Kabelbinder, durch die Auflage
+    sk = skizze(comp, ebene_z(comp, (L['kh_auflage_z0'] + z1) / 2.0,
+                              'E_KH_Binder'), 'Sk_KH_Binder')
+    for x, y in L['kh_binder']:
+        rechteck(sk, x - w('kh_binder_b') / 2.0, y - w('kh_binder_t') / 2.0,
+                 x + w('kh_binder_b') / 2.0, y + w('kh_binder_t') / 2.0)
+    tasche(comp, alle_profile(sk), w('kh_auflage') + 2.0, koerper)
+    # Gewindeeinsaetze fuer die Befestigung, von der Plattenseite her
+    sk = skizze(comp, ebene_y(comp, L['traeger_y0'], 'E_KH_Platte'),
+                'Sk_KH_Inserts')
+    for x, z in L['kh_schrauben']:
+        kreis(sk, x, z, w('insert_m3_d'))
+    weg(comp, alle_profile(sk), -w('insert_m3_t'), koerper)
+
+    fussfase(comp, koerper, 'x', x0, w('fase_fuss'), fehler, 'Kettenhalter')
+    bbox_pruefen(koerper, 'Kettenhalter',
+                 ((x0, x1), (L['kh_y0'], L['traeger_y0']),
+                  (L['kh_fuss_z0'], L['kh_leiste_z'][1])), fehler)
+    material_zuweisen(app, design, koerper, 'PETG', fehler)
+    return koerper
+
+
 def bau_bohrlehren(app, design, comp, L, zc, fehler):
     """Duenne Lehrenplatten mit den kritischen Lochbildern — auflegen,
     anzeichnen, pruefen. Nach dem Lauf ausgeblendet (Konvention SKILL.md).
@@ -1783,6 +1945,34 @@ def bau_bohrlehren(app, design, comp, L, zc, fehler):
     dazu(comp, alle_profile(sk), w('traeger_dicke') - 2.0, lehre)
     sk = skizze(comp, ebene, 'Sk_Lehre_RH_Loecher')
     for x, z in L['rh_schrauben']:
+        kreis(sk, dx + x, z, w('m3_durchgang'))
+    durch(comp, alle_profile(sk), lehre)
+    material_zuweisen(app, design, lehre, 'PLA', fehler)
+    lehre.isLightBulbOn = False
+
+    # Kettenhalter (Rev. 35): dieselbe Lehre, nur hoeher. Ein Ausschnitt
+    # laesst den Riemenhalter frei (er darf schon montiert sein): die Lehre
+    # steht mit zwei Beinen daneben auf der Wagenflanke, die Lippen fassen
+    # wieder die Saeulenkanten.
+    dx = 180.0
+    zf = L['rh_z1'] + w('luft_bau')          # Platte ueber dem Riemenhalter
+    z1 = w('kh_schraube_z') + 8.0
+    sk = skizze(comp, ebene, 'Sk_Bohrlehre_Kettenhalter')
+    rechteck(sk, dx + ax0, z0, dx + ax1, z1)
+    lehre = neu(comp, groesstes_profil(sk), dicke).bodies.item(0)
+    lehre.name = 'Bohrlehre_Kettenhalter'
+    sk = skizze(comp, ebene, 'Sk_Lehre_KH_Freiraum')
+    rechteck(sk, dx + w('traeger_x_links') - spiel, z0 - 1.0,
+             dx + w('traeger_x_rechts') + spiel, zf)
+    durch(comp, alle_profile(sk), lehre)
+    sk = skizze(comp, ebene_y(comp, y_vorn, 'E_Lehre_KH_Lippen'),
+                'Sk_Lehre_KH_Lippen')
+    for a, b in ((ax0, w('traeger_x_links') - spiel),
+                 (w('traeger_x_rechts') + spiel, ax1)):
+        rechteck(sk, dx + a, z0, dx + b, z1)
+    dazu(comp, alle_profile(sk), w('traeger_dicke') - 2.0, lehre)
+    sk = skizze(comp, ebene, 'Sk_Lehre_KH_Loecher')
+    for x, z in L['kh_schrauben']:
         kreis(sk, dx + x, z, w('m3_durchgang'))
     durch(comp, alle_profile(sk), lehre)
     material_zuweisen(app, design, lehre, 'PLA', fehler)
@@ -1939,6 +2129,31 @@ def hinweise_bauen(L, zc, fehler):
         '  vorn Ø{:.1f} x {:.1f} ansenken.'.format(w('m3_senkung'),
                                                 w('rh_senkung_t')),
         '',
+        'KETTENHALTER (Rev. 35): traegt das bewegte Ende der gedruckten',
+        '  X-Energiekette (Wanne und Festpunkt: fusion/Portal, Rev. 19).',
+        '  Das ANFANGSSTUECK liegt mit der Platte nach unten auf der Auflage,',
+        '  Gelenk {:.0f} mm rechts der Wagenmitte (rechte Kante der Saeule),'
+        .format(w('xk_gelenk_x')),
+        '  die Kette laeuft von dort nach rechts. 2x M3x{:.0f} + Scheibe'
+        .format(L['kh_ende_schraube']),
+        '  DIN 125 durch seine Loecher Ø5,5 in die Einsaetze der Auflage.',
+        '  Auflage Z={:+.1f}: Wannenboden {:+.1f} + Riegel {:.1f} + 2 R ({:.0f}),'
+        .format(L['kh_auflage_z1'], w('xk_boden_z'), w('kette_riegel'),
+                2.0 * w('kette_r')),
+        '  {:.1f} mm ueber der Oberkante des X-Wagens; der Fuss bleibt'
+        .format(L['kh_auflage_z1'] - w('x_wagen_breite') / 2.0),
+        '  {:.0f} mm ueber dem Untertrum in der Wanne.'.format(w('luft_bau')),
+        '  Zugentlastung: die Litzen kommen links aus dem Anfangsstueck,',
+        '  dort ein Kabelbinder durch die beiden Schlitze der Auflage.',
+        '  Befestigung: 2x M3x{:.0f} von VORN durch die Traegerplatte (Z={:+.0f},'
+        .format(L['kh_schraube'], w('kh_schraube_z')),
+        '  X wie beim Riemenhalter, Kopf in der Senkung) in Einsaetze im Fuss.',
+        '  Die gedruckte Platte hat die Loecher noch nicht: Bohrlehre_Ketten-',
+        '  halter hinten anlegen — sie steht mit zwei Beinen neben dem',
+        '  Riemenhalter auf der Wagenflanke, die Lippen an den Saeulenkanten.',
+        '  Ø3,4 bohren, vorn Ø{:.1f} x {:.1f} ansenken.'.format(
+            w('m3_senkung'), w('rh_senkung_t')),
+        '',
         'MONTAGEREIHENFOLGE (wichtig, sonst kommt man nicht mehr dran):',
         '  1. Gewindeeinsaetze in den Schienensockel einschmelzen',
         '  2. Traegerplatte an den X-Wagen (4x M3x12 + Scheibe) — die Koepfe',
@@ -1985,6 +2200,11 @@ def hinweise_bauen(L, zc, fehler):
         .format(L['rh_schraube']),
         '     dafuer ganz nach unten. Riemen erst einlegen, wenn Motor und',
         '     Umlenkung auf den Y-Schlitten sitzen.',
+        ' 11. Kettenhalter: 4 Einsaetze einschmelzen (2 von vorn in den Fuss,',
+        '     2 von oben in die Auflage), hinten an die Platte ueber den',
+        '     Riemenhalter, 2x M3x{:.0f} von vorn, Z-Schlitten unten. Das'
+        .format(L['kh_schraube']),
+        '     Anfangsstueck der Kette kommt mit der Wanne (fusion/Portal).',
         '',
         'FOKUS UND LANGLOCH (senkrechte Langloecher, +-{:.0f} mm):'.format(
             w('laser_langloch_hub')),
@@ -2105,6 +2325,8 @@ def hinweise_bauen(L, zc, fehler):
         '                    Fuss, Steg und Blatt beginnen alle dort.',
         '  Riemenhalter .... Unterseite (Wagenflanke) aufs Bett, Schlitz und',
         '                    Rippen stehen senkrecht; keine Stuetzen.',
+        '  Kettenhalter .... auf der linken Seite liegend: das Profil ist',
+        '                    ueber die ganze Breite gleich; keine Stuetzen.',
         '  4 Wandlinien, >=40% Infill. PETG wegen der Abwaerme des Lasers.',
         '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
@@ -2150,7 +2372,7 @@ def run(context):
         occ = {}
         for name in ('Traegerplatte', 'Motoradapter', 'Schlittenplatte',
                      'Mutternwinkel', 'Schaltfahne', 'Endschalterhalter',
-                     'Riemenhalter', 'Bohrlehren'):
+                     'Riemenhalter', 'Kettenhalter', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -2167,12 +2389,15 @@ def run(context):
                               occ['Endschalterhalter'].component, L, fehler)
         bau_riemenhalter(app, design, occ['Riemenhalter'].component, L,
                          fehler)
+        bau_kettenhalter(app, design, occ['Kettenhalter'].component, L,
+                         fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, zc, fehler)
 
         occ['Traegerplatte'].isGrounded = True
         occ['Motoradapter'].isGrounded = True
         occ['Endschalterhalter'].isGrounded = True
         occ['Riemenhalter'].isGrounded = True
+        occ['Kettenhalter'].isGrounded = True
         occ['Bohrlehren'].isGrounded = True
 
         # Starre As-Built-Joints fuer die festen Verschraubungen ...

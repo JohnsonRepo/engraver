@@ -28,6 +28,9 @@ X_SCHRITTE = 81               # Stellungen ueber den X-Weg
 Z_SCHRITTE = 11               # Stellungen ueber den Z-Weg
 # Teile des Toolhead-Modells, die das Portal selbst richtig abbildet
 TOOLHEAD_OHNE = ('Portalprofil 2020', 'X-Schiene MGN15')
+# Gedruckte Energiekette: zwei Glieder schlagen bei diesem Winkel
+# aneinander an (aus der 3MF ausgemessen, 2026-10-01)
+KETTE_ANSCHLAG = 47.3
 
 
 def main():
@@ -45,7 +48,11 @@ def main():
                  'klemm_rippe_b', 'klemm_stift_d', 'x_wagen_laenge',
                  'x_wagen_breite', 'x_wagen_hoehe', 'insert_m3_d',
                  'traeger_x_links', 'traeger_x_rechts', 'rh_tiefe',
-                 'rh_hoehe'):
+                 'rh_hoehe', 'kette_b', 'kette_h', 'kette_riegel',
+                 'kette_r', 'kette_spiel', 'endstueck_l', 'endstueck_auge',
+                 'endstueck_loch_a', 'endstueck_loch_ab',
+                 'endstueck_loch_d', 'endstueck_platte', 'xk_y_vorn',
+                 'xk_boden_z', 'xk_gelenk_x'):
         p.ja('{} gleich in beiden Skripten'.format(name),
              abs(tw(name) - w(name)) < 1e-9,
              '   ({} / {})'.format(tw(name), w(name)))
@@ -522,6 +529,20 @@ def main():
              ('Lagerschlitten unten', 'Lagerschlitten oben',
               'Lagerschlitten Ruecken', 'Lagerschlitten Pfosten',
               'X-Riemen Ruecklauf'), r=2.0)
+    # Wannenstuetzen: M5 von hinten in die Hammermutter, an allem vorbei,
+    # was hinter dem Rohr steht
+    hinten = tuple(n for n in fest if n.startswith(
+        ('Klemmturm', 'Y-Wagen', 'Platte ', 'Rueckwand', 'Stirnblock',
+         'Motorhalter', 'Spannbock')))
+    korridor('Wannenstuetzen: M5 von hinten',
+             [((x[0] + x[1]) / 2.0, L['st_platte_y'][0] - w('m5_kopf_h'),
+               L['kern_z']) for x in L['st_x'].values()], 'y', -1, hinten)
+    # Laschen der Wanne: M3 von oben, ueber ihnen nichts
+    korridor('Wanne: Laschen-Schrauben (von oben)',
+             [(x, y, L['wanne_boden_z'][1] + w('m3_kopf_h'))
+              for x, y in L['wanne_laschen']], 'z', +1,
+             tuple(n for n in fest if n != 'Kettenwanne'
+                   and not n.startswith('Kettenwanne Lasche')))
 
     # ------------------------------------------------------------------
     p.titel('10) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
@@ -544,7 +565,14 @@ def main():
             ('Y-Motorhalter', (2.0 * L['ymh']['halbe_breite'],
                                L['ymh']['platte_y1'] - L['ymh']['wange_y0'],
                                L['ymh']['halter_z1']
-                               - L['ymh']['halter_z0']))):
+                               - L['ymh']['halter_z0'])),
+            ('Kettenwanne', (L['wanne_x'][1] - L['wanne_x'][0],
+                             L['wanne_y'][1] - L['wanne_lasche_y'][0],
+                             L['wanne_z'][1] - L['wanne_z'][0])),
+            ('Wannenstuetze Festpunkt',
+             (L['st_x']['Festpunkt'][1] - L['st_x']['Festpunkt'][0],
+              L['st_arm_y'][1] - L['st_platte_y'][0],
+              L['st_platte_z'][1] - L['st_platte_z'][0]))):
         p.ok('{}: groesste Kante'.format(name), max(masse), 250.0, '<=')
     # Lagerschlitten auf dem Ruecken liegend: der Pfosten ueberbrueckt
     # die Oeffnung zwischen den Armen
@@ -602,7 +630,23 @@ def main():
                 2.0 * (L['x_rolle'] - L['x_motor'])
                 + math.pi * w('ritzel_teilkreis')),
             'dazu am Toolhead: Riemenhalter, 2x M3x{:.0f} + 2x Einsatz, '
-            '2x Stift Ø3 (siehe toolhead_check.py)'.format(TL['rh_schraube'])):
+            '2x Stift Ø3 (siehe toolhead_check.py)'.format(TL['rh_schraube']),
+            'X-Energiekette, gedruckt (Modell "Energiekette"): 1x '
+            'Anfangsstueck, {}x Kettenglied mit Riegel, 1x Endstueck 180'
+            .format(L['xk_glieder']),
+            '1x Kettenwanne, 3x Wannenstuetze (am Festpunkt die breite)',
+            '3x M5x{:.0f} Zylinderkopf + 3x Hammermutter M5 Nut 6 '
+            '(Wannenstuetzen -> hintere Nut des Rohrs)'.format(
+                L['st_m5_schraube']),
+            '2x M3x{:.0f} Zylinderkopf + 2x Messing-Einsatz M3 Ø5 '
+            '(Laschen der Wanne -> Wannenstuetzen)'.format(
+                L['wanne_schraube']),
+            '2x M3x{:.0f} Zylinderkopf + 2x Scheibe DIN 125 + 2x Messing-'
+            'Einsatz M3 Ø5 (Endstueck 180 -> Wanne -> Stuetze)'.format(
+                L['xk_fest_schraube']),
+            'dazu am Toolhead: Kettenhalter, 2x M3x{:.0f} + 2x Einsatz (von '
+            'vorn), 2x M3x{:.0f} + Scheibe + 2x Einsatz (Anfangsstueck)'
+            .format(TL['kh_schraube'], TL['kh_ende_schraube'])):
         p.info(zeile)
 
     # ------------------------------------------------------------------
@@ -863,6 +907,113 @@ def main():
                                           zm[1]), zm[0] - w('luft_bau'))
     p.info('   direkt hinter dem 2060 nur bis Z [{}]'.format(zd[1]),
            zd[0] - w('luft_bau'))
+
+    # ------------------------------------------------------------------
+    p.titel('17) Energiekette X: gedruckte Kette, Wanne, Kettenhalter')
+    tk, rk = w('kette_teilung'), w('kette_r')
+    # Wie eng sich die Kette biegen laesst, legt der Anschlag der Glieder
+    # fest (aus der 3MF ausgemessen); der Radius darf ihn nicht verlangen.
+    p.ok('Gelenkwinkel fuer R{:.0f} bei Teilung {:.0f}'.format(rk, tk),
+         math.degrees(2.0 * math.asin(tk / (2.0 * rk))), KETTE_ANSCHLAG,
+         '<=', 'Grad')
+    p.info('Glieder', L['xk_glieder'], 'Stk')
+    p.info('Kette zwischen den Gelenken', L['xk_laenge'])
+    p.info('  gebraucht: halber Hub + Bogen (pi R)', L['xk_noetig'])
+    p.info('  mit beiden Endstuecken', L['xk_laenge'] + 2.0 * w('endstueck_l'))
+    p.ok('Kette reicht (Schlupf)', L['xk_schlupf'], 0.0)
+    p.ok('kein Glied zu viel (Schlupf kleiner als eine Teilung)',
+         L['xk_schlupf'], tk, '<')
+    mitte = (L['xw_min'] + L['xw_max']) / 2.0 + w('xk_gelenk_x')
+    p.ok('Festpunkt in der Mitte des Wegs des bewegten Gelenks',
+         -abs(L['xk_fest'] - mitte), -0.01)
+    p.ok('Bogen beginnt links nicht vor dem Festpunkt',
+         L['xk_bogen_x'][0] - L['xk_fest'], 0.0)
+    p.ok('Untertrum am rechten Ende noch auf der Wanne',
+         L['wanne_x'][1] - L['xk_bogen_x'][1], 0.0)
+    # Toolhead <-> Portal: das Anfangsstueck liegt auf der Linie der Kette
+    p.ok('Auflage des Kettenhalters = Unterseite des Obertrums',
+         -abs(TL['kh_auflage_z1'] - L['xk_ober_z'][0]), -0.01)
+    p.ok('Anfangsstueck auf der Linie der Kette (Y)',
+         -abs(TL['kh_kette_y'][0] - L['xk_y'][0]), -0.01)
+    p.ok('Fuss des Kettenhalters ueber dem Untertrum',
+         TL['kh_fuss_z0'] - L['xk_unter_z'][1] + 0.01, w('luft_bau'))
+    # Bogen und Obertrum fahren mit: gegen das Portal und den Toolhead
+    ra = L['xk_bogen_r'][1]
+    yk, zu, zo = L['xk_y'], L['xk_unter_z'], L['xk_ober_z']
+    engste_k = {}
+    for xw in xs_:
+        xb_ = pm.xk_bogen(L, xw)
+        xm_ = xw + w('xk_gelenk_x')
+        kette = [bauraum.Quader('X-Kette Bogen', xb_, xb_ + ra, yk[0], yk[1],
+                                zu[0], zo[1]),
+                 bauraum.Quader('X-Kette Obertrum', xm_, xb_, yk[0], yk[1],
+                                zo[0], zo[1])]
+        # die Kette laeuft in der Wanne: sie und ihre Laschen (hinter der
+        # Rueckwand) zaehlen nicht, der Untertrum ist dieselbe Kette
+        gegen = ([q for q in portal
+                  if not q.name.startswith(('Kettenwanne',
+                                            'X-Kette Untertrum'))]
+                 + [q.verschoben(0.0, xw) for q in feste_th
+                    if q.name != 'Kette Anfangsstueck'])
+        for a in kette:
+            for b in gegen:
+                # der Obertrum geht am Kettenhalter in das Anfangsstueck
+                if (a.name == 'X-Kette Obertrum'
+                        and b.name.startswith('Kettenhalter')):
+                    continue
+                d = a.abstand(b)
+                if (a.name, b.name) not in engste_k \
+                        or d < engste_k[(a.name, b.name)][0]:
+                    engste_k[(a.name, b.name)] = (d, xw)
+    for (a, b), (d, xw) in sorted(engste_k.items(),
+                                  key=lambda t: t[1][0])[:6]:
+        p.ok('{} <-> {} (X-Wagen {:+.1f})'.format(a, b, xw), d + 0.01,
+             w('luft_bau'))
+    # Wanne und Stuetzen ueber Riemen, Riemenhalter und Lagerschlitten
+    rh_oben = tw('x_wagen_breite') / 2.0 + tw('rh_hoehe')
+    p.ok('Wanne: Luft zur Traegerplatte (vorn)', -L['wanne_y'][1] + 0.01,
+         w('luft_bau'))
+    p.ok('Arme der Stuetzen ueber dem Riemenhalter',
+         L['st_arm_z'][0] - rh_oben, w('luft_bau'))
+    p.ok('Arme ueber dem X-Riemen', L['st_arm_z'][0] - L['xr_z1'],
+         w('luft_bau'))
+    p.ok('Block der Stuetzen hinter dem Ruecklauf',
+         (L['xr_y_rueck'] - L['riemen_aussen']) - L['st_block_y'][1],
+         w('luft_bau'))
+    p.ok('Wanne endet vor dem Lagerschlitten',
+         L['ls_innen_x'] - L['wanne_x'][1] + 0.01, w('luft_bau'))
+    p.ok('Kette im Bogen ueber dem Lagerschlitten',
+         L['xk_unter_z'][0] - L['ls_oben_z'][1], w('luft_bau'))
+    # Schrauben und Einsaetze
+    e = L['xk_fest_schraube'] - L['xk_fest_klemm']
+    p.ok('Endstueck 180: M3x{:.0f} greift in den Einsatz im Arm'.format(
+        L['xk_fest_schraube']), e, 4.0)
+    p.ok('   und endet im Arm (er ist nicht dicker)', w('st_arm') - e, 0.5)
+    e = L['wanne_schraube'] - w('wanne_boden')
+    p.ok('Laschen: M3x{:.0f} greift in den Einsatz im Block'.format(
+        L['wanne_schraube']), e, 4.0)
+    p.ok('   setzt im Sackloch nicht auf', w('insert_m3_t') - e, 0.5)
+    e = L['st_m5_schraube'] - w('st_platte') - w('nut_lippe')
+    p.ok('Stuetzen: M5x{:.0f} greift in die Hammermutter'.format(
+        L['st_m5_schraube']), e, 3.5)
+    r_e = w('insert_m3_d') / 2.0
+    _, yl = L['wanne_laschen'][0]
+    p.ok('Block: Wand vor dem Einsatz', L['st_block_y'][1] - (yl + r_e), 2.0)
+    p.ok('Lasche: Schraubenkopf liegt ganz auf',
+         (yl - w('m3_kopf_d') / 2.0) - L['wanne_lasche_y'][0], 0.5)
+    p.ok('Stuetze am Festpunkt: Rand neben den Einsaetzen',
+         w('st_rand') - r_e, 2.0)
+    p.ok('Stuetze am Festpunkt: Einsaetze vor dem Ende des Arms',
+         w('st_arm_vorn') - (L['xk_y_mitte'] + r_e), 2.0)
+    p.ok('Scheibe DIN 125 deckt die Loecher Ø{:.1f} der Endstuecke'.format(
+        w('endstueck_loch_d')), w('m3_scheibe_d') - w('endstueck_loch_d'),
+         1.0)
+    # Schrauben am Festpunkt: von oben, der Toolhead steht dafuer rechts —
+    # dann reicht der Obertrum nur von seinem Gelenk bis zum Bogen
+    links_frei = (L['xw_max'] + w('xk_gelenk_x')) - (
+        max(x for x, _ in L['xk_fest_loecher']) + INBUS_FREI_D / 2.0)
+    p.ok('Schrauben am Festpunkt von oben frei (Toolhead rechts)',
+         links_frei, 0.0)
 
     return p.bericht()
 

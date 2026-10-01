@@ -12,9 +12,10 @@ die [Draufsicht auf das Gehäuse](#gehäuse-elektronikpy)
 `python3 tools/anschluss_zeichnen.py`. **Stand:** Gehäuse gezeichnet
 (Elektronik.py Rev. 2, mit den Angaben vom Aufbau vom 2026-09-27:
 Stapelhöhe, Wandler 12 V / 5 A, Wago-Bestand, 110 mm Überstand der 2040
-hinten, Ketten 15 × 27 mm außen, Laseranschluss); die Endschalter sind
-gebaut ([endschalter.md](endschalter.md)), die Halter der Ketten folgen
-([offen](#was-noch-fehlt)). **Die ganze Verdrahtung** — Kabelliste,
+hinten, Laseranschluss); die Endschalter sind gebaut
+([endschalter.md](endschalter.md)). Die Energieketten sind gedruckt: Die
+X-Kette hat Wanne, Festpunkt und Halter ([energiekette.md](energiekette.md)),
+die der Y-Kette folgen ([offen](#was-noch-fehlt)). **Die ganze Verdrahtung** — Kabelliste,
 Anschlussliste, Klemmen, Schritt für Schritt und Inbetriebnahme — steht in
 [verkabelung.md](verkabelung.md). Pinbelegung, Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
@@ -232,28 +233,30 @@ sie nach [verkabelung.md](verkabelung.md#4-5-v-und-lichtschranken-w6-w9w11).
 
 | | Y-Kette | X-Kette |
 |---|---|---|
-| wo | außen am linken 2040, neben dem Schlitten (der steht bis 12 mm über das 2040 hinaus) | über dem Portalrohr, hinter dem X-Riemen |
+| wo | außen am linken 2040, neben dem Schlitten (der steht bis 12 mm über das 2040 hinaus) | direkt hinter der Trägerplatte, in einer Wanne über Portalrohr und X-Riemen |
 | Hub | 333 mm | 391 mm |
-| Festpunkt | 267 mm vom hinteren Ende des 2040 (halber Hub) | Mitte des X-Wegs |
+| Festpunkt | 267 mm vom hinteren Ende des 2040 (halber Hub) | Mitte des X-Wegs: Endstück 180 auf Wanne und Stütze |
 | Schleife | nach hinten; die Wanne hängt in der unteren Nut außen am 2040 | nach rechts — links stünde am Wegende der X-Motor darin |
-| bewegtes Ende | linker Y-Schlitten, am Stirnblock | hinten an der Trägerplatte, über dem Riemenhalter |
-| Länge (R18, mit Anschlussgliedern) | ≈ 263 mm | ≈ 292 mm |
-| darin | X- und Z-Motor, Laser, X- und Z-Endschalter | Z-Motor, Laser, Z-Endschalter |
+| bewegtes Ende | linker Y-Schlitten, am Stirnblock | Kettenhalter hinten an der Trägerplatte, über dem Riemenhalter |
+| Länge (R20, mit Anfangs- und Endstück) | 15 Glieder, 312 mm | 17 Glieder, 344 mm |
+| darin | X- und Z-Motor, Laser, X- und Z-Endschalter: 17 Adern, 34 % gefüllt | Z-Motor, Laser, Z-Endschalter: 10 Adern, 21 % gefüllt |
+| Stand | Wanne und Halter offen | konstruiert, [energiekette.md](energiekette.md) |
 
-Gekauft sind zwei Ketten mit **10 × 20 mm innen, 15 × 27 mm außen**, je
-1 m `[v]` — so gezeichnet: Die Y-Kette steht 27 mm breit außen neben dem
-linken 2040, die X-Kette liegt 27 mm tief hinter dem X-Riemen. Noch
-angenommen sind der Biegeradius (R18 `[?]`) und die Anschlussglieder
-(zusammen 40 mm `[?]`); davon hängen die Längen ab — 1 m reicht für beide
-reichlich.
+Beide Ketten sind **gedruckt** (Angabe vom 2026-10-01), nach dem Modell
+„Energiekette“ von lingnau.florian: außen 18 × 14 mm, innen 10 × 8,8 mm,
+Teilung 16, Biegeradius R 20 (aus dem Modell gerechnet `[?]`). Die
+gekauften Ketten mit 10 × 20 mm innen und 15 × 27 mm außen braucht es
+nicht mehr. Gezeichnet ist die X-Kette so, wie `Portal.py` sie baut. Die
+Y-Kette steht als Platzhalter 18 mm breit außen neben dem linken 2040.
 
 Die Längen bis zum Gerät (Weg wie gezeichnet, 15 % Reserve, aufgerundet)
 stehen mit Litze, Weg und Kette jeder Leitung in der Kabelliste von
 [verkabelung.md](verkabelung.md#leitungen); `tools/elektronik_zeichnen.py`
 gibt sie auch beim Zeichnen aus.
 
-In den Ketten nur **hochflexible Litzen** (Schleppkettenkabel), kein
-Massivdraht und keine starren Flachbandkabel. Die üblichen 1-m-Motorkabel
+In den Ketten nur **Einzellitzen aus Silikon**, keine Mantelleitungen,
+kein Massivdraht und keine starren Flachbandkabel: Für Mantelleitungen ist
+R 20 zu eng ([energiekette.md](energiekette.md#litzen-in-der-kette)). Die üblichen 1-m-Motorkabel
 reichen also nur links und für X. Der Laser bekommt ein eigenes 3-adriges
 Kabel mit XH-Stecker ([Einkaufsliste](#einkaufsliste-vorschlag)).
 
@@ -275,14 +278,13 @@ in `tools/elektronik_check.py` (Abschnitt 14), jeweils am längsten Weg:
 
 * In Schraubklemmen (Shield, Wandler, Not-Aus) mit **Aderendhülse**, in die
   Wago ohne.
-* In den Ketten Silikonlitze oder Schleppkettenleitung. Je kleiner der
-  Biegeradius der Kette, desto eher dünne Einzeladern statt dicker
-  Mantelleitungen — der Radius der gekauften Ketten fehlt noch
-  ([Was noch fehlt](#was-noch-fehlt)).
+* In den Ketten nur Einzellitzen aus Silikon, die Motorkabel nur als lose
+  Adern ohne Schlauch. Die gedruckten Ketten biegen mit R 20, dafür sind
+  Mantelleitungen zu steif.
 * Die Y-Kette trägt fünf Leitungen (X- und Z-Motor, Laser, X- und
-  Z-Endschalter), die X-Kette drei. In 10 × 20 mm innen passen fünf
-  Mantelleitungen bis etwa 4,5 mm Außendurchmesser in zwei Lagen — beim
-  Kauf darauf achten.
+  Z-Endschalter) mit 17 Adern, die X-Kette drei mit 10 Adern. Innen sind
+  10 × 8,8 mm frei. Die Adern füllen das zu 34 und 21 %, höchstens 60 %
+  sind gut `[w]` (Prüfung in `tools/elektronik_check.py`).
 
 ## Anschlussplan
 
@@ -316,7 +318,7 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
 | 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Gehäuse: Loch 8,2) | 24-V-Eingang |
 | 1 | Wippschalter KCD1 (Ausschnitt 19,2 × 12,9 mm), ≥ 3 A | EIN/AUS |
 | 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
-| 2 | Energiekette 10 × 20 mm innen, 15 × 27 mm außen, 1 m | Y und X — gekauft |
+| 2 | Energiekette, gedruckt: X 17 Glieder, Y 15 Glieder, je Anfangsstück und Endstück 180 | Y und X; Wanne, Stützen und Halter der X-Kette: [energiekette.md](energiekette.md#verschraubung) |
 | 1 + 2 | Wago 221-415 (+24 V), 221-420 (GND, +5 V); 221-413 Reserve | vorhanden |
 | — | Not-Aus, Kabel, Litzen, Stecker, Aderendhülsen, Pull-down | [verkabelung.md](verkabelung.md#material-und-werkzeug) |
 | 4 + 4 | M5×12 + Hammermutter M5 (Nut 6) | Gehäuse → Rückseite des 2060 |
@@ -332,10 +334,11 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
    Kleinigkeiten am Aufbau: Boden des Gabelschlitzes, Lötstifte, ein
    Schmiernippel am X-Wagen und der Lagerbock der hinteren Umlenkung
    ([Noch offen](endschalter.md#noch-offen)).
-2. **Energieketten** (15 × 27 außen): Biegeradius und die Anschlussglieder
-   (Lochbild, Breite) messen — dann Längen, Wannen, Festpunkte und bewegte
-   Enden. Den Radius zeigt eine um 180° gebogene Kette: Außenhöhe der
-   Schleife minus 15, geteilt durch 2.
+2. **Energieketten** (gedruckt): Die X-Kette ist konstruiert, mit Wanne,
+   Festpunkt und Kettenhalter ([energiekette.md](energiekette.md)). Offen
+   sind dort der Biegeradius am gedruckten Teil (um 180° gebogen außen
+   höchstens 54,6 mm), der Kabelweg vom linken Y-Schlitten zum Festpunkt
+   und die ganze Y-Kette: Wanne, Festpunkt und bewegtes Ende.
 3. **Treiber:** Messwiderstand unbekannt — mit Vref 1,37 V anfangen (siehe
    [Anschlussplan](#anschlussplan)). Wer den Aufdruck der zwei kleinen
    Widerstände neben dem Chip findet (je nach Modul oben oder unten),
@@ -363,4 +366,6 @@ zur 2040; die Winkel greifen in die obere Nut des 2060 und die untere der
 Kreuzungen 20 mm; die Nuten für die Endschalterhalter sind frei; eine
 Klammer an der Trägerplatte ist in Ordnung. 2026-09-30: der Not-Aus ist da,
 ein Pilztaster mit Wechsler C/NO/NC und Lötfahnen, 3 A / 250 V, Gewinde
-16 mm rund; er sitzt vorn.
+16 mm rund; er sitzt vorn. 2026-10-01: Die Energieketten werden gedruckt,
+nach dem Modell „Energiekette“, auch für Y; die X-Kette liegt direkt
+hinter der Trägerplatte.

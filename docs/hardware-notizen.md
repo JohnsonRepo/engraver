@@ -547,6 +547,23 @@ aber spiegelbildlich: Die Motoren müssen gegenläufig drehen. Am CNC Shield
 bekommt der zweite Y-Motor (A, Klon von Y) dasselbe DIR-Signal, deshalb an
 ihm eine Spule tauschen — siehe [Zwei Y-Motoren](#zwei-y-motoren).
 
+## Energieketten
+
+Angabe vom 2026-10-01: Die Ketten sind **selbst gedruckt**, für X und Y.
+Die Maße stammen aus deiner 3MF. Wanne, Festpunkt und Kettenhalter der
+X-Kette stehen in [energiekette.md](energiekette.md).
+
+| Wert | Maß | Status |
+|---|---|---|
+| Modell | „Energiekette“ von lingnau.florian (CC BY-NC-SA): Kettenglied mit Riegel, Anfangsstück, Endstück, Endstück 180, Drehkonsole | Angabe 2026-10-01, 3MF |
+| Glied | Teilung **16**, außen **18 × 14** (der Riegel steht 0,3 über), innen **10 × 8,8**, 30 lang | aus dem Modell gemessen |
+| Gelenk | Zapfen Ø5,0 im Loch Ø5,4, mittig in der Höhe; Anschlag **47,3°** je Gelenk, rückwärts 0° | aus dem Modell gemessen |
+| Biegeradius | **R 20** auf der Gelenklinie; um 180° gebogen außen **54,6 mm** hoch | gerechnet `[?]`, am gedruckten Teil prüfen |
+| Anschlussstücke | 43 lang: 36 hinter dem Gelenk, Auge 7; Platte 2 mm mit 2 × Ø5,5, 18 und 30 mm hinter dem Gelenk | aus dem Modell gemessen |
+| X-Kette | 17 Glieder, 344 mm mit Anfangsstück und Endstück 180 | gerechnet (Portal.py Rev. 19) |
+| Y-Kette | 15 Glieder, 312 mm | gerechnet, Wanne und Halter offen |
+| gekaufte Ketten | 10 × 20 mm innen, 15 × 27 mm außen, je 1 m | `[v]` vorhanden, werden nicht verwendet |
+
 ## Normteile (aus hardware.md, `[w]`)
 
 | Gewinde | Durchgang | Kopf-Ø | Kopfhöhe |

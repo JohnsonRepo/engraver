@@ -535,10 +535,18 @@ def verkabelung_pruefen(p, Q):
             p.ok('{} {}: Kauflaenge >= Weg + 15 %'.format(
                 lt['nr'], lt['name']), kauf,
                  weg * (1.0 + leistung.RESERVE), '>=', 'm')
+    # Energieketten (gedruckt): Einzellitzen, Fuellgrad des lichten
+    # Querschnitts; Mantelleitungen sind fuer den Biegeradius zu steif
+    q = vk.kette_querschnitt()
     for kette in ('Y', 'X'):
-        n = sum(1 for lt in lts if kette in lt.get('kette', '').split())
-        p.ok('{}-Kette: Leitungen darin'.format(kette), n, vk.KETTE_PLAETZE,
-             '<=', 'St.')
+        n, f = vk.kette_fuellung(lts, kette)
+        p.ok('{}-Kette: {} Adern fuellen den Querschnitt zu'.format(kette, n),
+             100.0 * f / q, 100.0 * vk.FUELLGRAD_MAX, '<=', '%')
+        mantel = [lt['nr'] for lt in lts
+                  if kette in lt.get('kette', '').split()
+                  and lt['art'].startswith('Leitung')]
+        p.ja('{}-Kette: keine Mantelleitung darin'.format(kette), not mantel,
+             ' ({})'.format(', '.join(mantel)) if mantel else '')
     ma = vk.UNO_MA + 4 * vk.TREIBER_LOGIK_MA + 3 * vk.LS_MA
     p.ok('5 V aus USB: Uno, Treiberlogik, drei Lichtschranken', ma,
          vk.USB_MA, '<=', 'mA')

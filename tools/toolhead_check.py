@@ -480,6 +480,22 @@ def main():
     zugang('Riemenhalter -> Traegerplatte (von vorn, Z-Schlitten bei '
            'zc={:+.1f})'.format(zc_r), d, wer)
 
+    # 5d) Kettenhalter (Rev. 35): ebenso, hoeher ueber dem Riemenhalter
+    d, wer, zc_k = beste_stellung(
+        [(x, L['traeger_y1'] - w('rh_senkung_t'), z)
+         for x, z in L['kh_schrauben']], 'y', +1, alle_namen,
+        ('Traegerplatte Hauptsaeule', 'Kettenhalter Fuss'), mitbewegt=False)
+    zugang('Kettenhalter -> Traegerplatte (von vorn, Z-Schlitten bei '
+           'zc={:+.1f})'.format(zc_k), d, wer)
+    # Anfangsstueck -> Auflage: von oben, ueber ihm ist nichts. Die Wand
+    # 'Portalprofil 2020' steht hier nur fuer Korridore von hinten — das
+    # echte Rohr liegt weit unter dem Kettenhalter.
+    d, wer = kuerzester(
+        [(x, y, L['kh_auflage_z1'] + w('endstueck_platte')
+          + w('m3_scheibe_h') + M3_KOPF_H) for x, y in L['kh_loecher']],
+        'z', +1, list(feste), ('Kette Anfangsstueck', 'Portalprofil 2020'))
+    zugang('Anfangsstueck -> Kettenhalter (von oben)', d, wer)
+
     # 6) Motorschrauben: von unten, der Z-Schlitten wird dafuer weggefahren.
     #    Gemessen ab dem Kopf, also ab der Konsolenunterseite — Konsole und
     #    Adapter liegen zwischen Kopf und Motor und zaehlen nicht.
@@ -1023,6 +1039,65 @@ def main():
     p.ok('M3x{:.0f}: setzt im Sackloch nicht auf'.format(L['rh_schraube']),
          w('insert_m3_t') - L['rh_eingriff'], 0.5)
 
+    p.titel('9c) Kettenhalter (Rev. 35, X-Energiekette)')
+    # Lage: Hoehe und Linie der Kette kommen aus Portal.py — dort und in
+    # tools/portal_check.py (Abschnitt 17) wird beides gegengeprueft
+    p.info('Auflage ueber der Oberkante des X-Wagens',
+           L['kh_auflage_z1'] - w('x_wagen_breite') / 2.0)
+    p.ok('Gelenk nicht rechts der Saeule (Fuss liegt ganz an der Platte)',
+         w('traeger_x_rechts') - w('xk_gelenk_x'), 0.0)
+    p.ok('Fuss ueber dem Untertrum der Kette',
+         L['kh_fuss_z0'] - L['kh_untertrum_z1'] + 0.01, w('luft_bau'))
+    p.ok('Fuss ueber dem Riemenhalter', L['kh_fuss_z0'] - L['rh_z1'], 0.0)
+    p.ok('Anfangsstueck liegt ganz auf der Auflage (links)',
+         L['kh_endstueck_x'][0] - L['kh_x'][0], 0.0)
+    p.ok('Loecher des Anfangsstuecks ueber der Auflage',
+         min(x for x, _ in L['kh_loecher']) - w('insert_m3_d') / 2
+         - L['kh_x'][0], 2.0)
+    p.info('Spiel zwischen den Leisten je Seite', w('kette_spiel'))
+    # Einsaetze
+    p.ok('Auflage: Boden unter den Einsaetzen',
+         w('kh_auflage') - w('insert_m3_t'), 1.0)
+    p.ok('Auflage: Einsaetze vor der hinteren Leiste',
+         (L['kh_kette_y_mitte'] - w('insert_m3_d') / 2)
+         - L['kh_leiste_hinten_y'][1], 2.0)
+    p.ok('Auflage: Einsaetze hinter dem Fuss',
+         L['kh_fuss_y'][0] - (L['kh_kette_y_mitte']
+                              + w('insert_m3_d') / 2), 2.0)
+    p.ok('Fuss: Einsatz endet vor seiner Rueckseite',
+         w('kh_fuss') - w('insert_m3_t'), 1.0)
+    p.ok('Fuss: Wand unter dem Einsatz',
+         w('kh_schraube_z') - w('insert_m3_d') / 2 - L['kh_fuss_z0'], 2.0)
+    p.ok('Fuss: Einsatz unter der Auflage-Einsatzbohrung',
+         (L['kh_auflage_z1'] - w('insert_m3_t'))
+         - (w('kh_schraube_z') + w('insert_m3_d') / 2), 1.0)
+    # Kabelbinder links neben dem Anfangsstueck
+    xb = L['kh_binder'][0][0]
+    p.ok('Binderschlitze links neben dem Anfangsstueck',
+         L['kh_endstueck_x'][0] - (xb + w('kh_binder_b') / 2), 1.0)
+    p.ok('Binderschlitze in der Auflage (links)',
+         (xb - w('kh_binder_b') / 2) - L['kh_x'][0], 1.0)
+    p.ok('Binderschlitz hinter dem Fuss (darunter frei)',
+         L['kh_fuss_y'][0] - (max(y for _, y in L['kh_binder'])
+                              + w('kh_binder_t') / 2), 0.5)
+    # Befestigung wie der Riemenhalter: X gleich, also gleiche Waende zu
+    # Rippe und Sockel (Abschnitt 9b); hier die Hoehe
+    p.ok('Senkung unter dem Endschaltersockel',
+         L['ls_sockel_z0'] - (w('kh_schraube_z') + w('m3_senkung') / 2), 2.0)
+    p.ok('Bohrung ueber dem Riemenhalter (Lochrand)',
+         w('kh_schraube_z') - w('m3_durchgang') / 2 - L['rh_z1'], 3.0)
+    p.ok('M3x{:.0f} (von vorn): Gewinde im Einsatz'.format(L['kh_schraube']),
+         L['kh_eingriff'], 4.0)
+    p.ok('M3x{:.0f}: setzt im Sackloch nicht auf'.format(L['kh_schraube']),
+         w('insert_m3_t') - L['kh_eingriff'], 0.5)
+    p.ok('M3x{:.0f} (Anfangsstueck): Gewinde im Einsatz'.format(
+        L['kh_ende_schraube']), L['kh_ende_eingriff'], 4.0)
+    p.ok('M3x{:.0f}: setzt im Sackloch nicht auf'.format(
+        L['kh_ende_schraube']), w('insert_m3_t') - L['kh_ende_eingriff'],
+         0.5)
+    p.ok('Scheibe DIN 125 deckt das Loch Ø{:.1f} des Anfangsstuecks'.format(
+        w('endstueck_loch_d')), SCHEIBE_NORM - w('endstueck_loch_d'), 1.0)
+
     p.titel('10) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
     for name, a, b in (
             ('Traegerplatte (mit Konsole)',
@@ -1039,7 +1114,9 @@ def main():
              L['ls_halter_z1'] - L['ls_halter_z0']),
             ('Motoradapter', w('motor_flansch'), w('motor_flansch')),
             ('Riemenhalter', w('traeger_x_rechts') - w('traeger_x_links'),
-             w('rh_hoehe'))):
+             w('rh_hoehe')),
+            ('Kettenhalter', L['kh_x'][1] - L['kh_x'][0],
+             L['kh_leiste_z'][1] - L['kh_fuss_z0'])):
         p.ok('{}: groesste Kante'.format(name), max(a, b), 250.0, '<=')
     p.ok('Bruecke Schlittenplatte zwischen den Rippen',
          w('rippe_seite_innen') - w('rippe_mitte_breite') / 2, 25.0, '<=')
@@ -1083,7 +1160,14 @@ def main():
             '(Riemenhalter, von vorn)'.format(L['rh_schraube']),
             '2x Stift Ø3 x {:.0f} (oder M3x20) (Riemenhalter, '
             'Sicherung ueber dem Riemen)'.format(
-                (w('traeger_x_rechts') - w('traeger_x_links')) / 2.0 - 2.0)):
+                (w('traeger_x_rechts') - w('traeger_x_links')) / 2.0 - 2.0),
+            '2x M3x{:.0f} Zylinderkopf + 2x Messing-Einsatz M3 Ø5 '
+            '(Kettenhalter, von vorn)'.format(L['kh_schraube']),
+            '2x M3x{:.0f} Zylinderkopf + 2x Scheibe DIN 125 + 2x Messing-'
+            'Einsatz M3 Ø5 (Anfangsstueck -> Kettenhalter)'.format(
+                L['kh_ende_schraube']),
+            '1x Kabelbinder (Zugentlastung am Kettenhalter); Kette, Wanne '
+            'und Festpunkt: tools/portal_check.py'):
         p.info(zeile)
 
     p.titel('12) Statische Pruefung der Schluessel im Skript')

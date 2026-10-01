@@ -60,15 +60,15 @@ begrenzt den Strom selbst.
 | W4 | **Wandler-Eingang** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
 | W5 | **Lüfter 24 V** — Litze dünner als 0,14 mm²: abisoliert doppelt legen | Litze des Lüfters | im Kasten, durch die Öffnung im Deckel | — | — | — |
 | W6 | **5 V für die Lichtschranken** | 0,25 mm² (AWG 24) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
-| W7 | **Laser** | 3 × 0,34 mm² (AWG 22), Schleppkette | links raus, untere Nut am linken 2040, Y-Kette, über dem Rohr zur X-Kette, X-Kette, Trägerplatte | 1,43 m | **2 m** | Y + X |
+| W7 | **Laser** | 3 Silikonlitzen 0,34 mm² (AWG 22) | links raus, untere Nut am linken 2040, Y-Kette, über dem Rohr zur X-Kette, X-Kette, Trägerplatte | 1,5 m | **2 m** | Y + X |
 | W8 | **Pull-down 10 kΩ** — hält den Laser aus, solange der Uno startet oder ohne USB ist | Widerstand | auf dem Shield | — | — | — |
-| W9 | **Lichtschranke X** | 3 × 0,25 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, am Stirnblock nach vorn zum Halter X | 0,72 m | **1 m** | Y |
+| W9 | **Lichtschranke X** | 3 Silikonlitzen 0,25 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, am Stirnblock nach vorn zum Halter X | 0,76 m | **1 m** | Y |
 | W10 | **Lichtschranke Y** | 3 × 0,25 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach hinten | 0,49 m | **1 m** | — |
-| W11 | **Lichtschranke Z** | 3 × 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,34 m | **2 m** | Y + X |
-| W12 | **X-Motor** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, zum Motor über dem Rohrende | 0,73 m | mitgeliefert (1 m) | Y |
+| W11 | **Lichtschranke Z** | 3 Silikonlitzen 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,39 m | **2 m** | Y + X |
+| W12 | **X-Motor** — in der Kette nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, zum Motor über dem Rohrende | 0,76 m | mitgeliefert (1 m) | Y |
 | W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn | 0,69 m | mitgeliefert (1 m) | — |
 | W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,98 m | **1,5 m**, fertig | — |
-| W15 | **Z-Motor** | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,43 m | **2 m**, fertig | Y + X |
+| W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,47 m | **2 m**, fertig | Y + X |
 | W16 | **24-V-Wächter an Abort** — fehlen die 24 V (Not-Aus, Schalter, Netzteil), bricht GRBL ab | Widerstand | im Kasten | — | — | — |
 | W17 | **USB** | USB-Kabel A–B | hinten raus zum PC | — | vorhanden | — |
 <!-- /tabelle:leitungen -->
@@ -167,9 +167,14 @@ Anschließen mit dem Ohmmeter prüfen
 | 0,5 m | Einzelader 0,75 mm² (AWG 18), rot | W1 0,15 m · W3 0,15 m · W4 0,15 m |
 | 0,5 m | Einzelader 0,75 mm² (AWG 18), schwarz | W1 0,15 m · W3 0,15 m · W4 0,15 m |
 | 1,5 m | 2 × 0,75 mm² (AWG 18) | W2 1,5 m |
-| 4,5 m | 3 × 0,25 mm² (AWG 24) | W6 0,15 m · W9 1 m · W10 1 m · W11 2 m |
-| 2 m | 3 × 0,34 mm² (AWG 22), Schleppkette | W7 2 m |
-| 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker zum Motor, Dupont 4-polig zum Shield | W14, W15 (W12, W13: die mitgelieferten 1-m-Kabel) |
+| 1,5 m | 3 × 0,25 mm² (AWG 24) | W6 0,15 m · W10 1 m |
+| 2 m | Silikonlitze 0,34 mm² (AWG 22), rot | W7 2 m |
+| 2 m | Silikonlitze 0,34 mm² (AWG 22), schwarz | W7 2 m |
+| 2 m | Silikonlitze 0,34 mm² (AWG 22), weiß | W7 2 m |
+| 3 m | Silikonlitze 0,25 mm² (AWG 24), rot | W9 1 m · W11 2 m |
+| 3 m | Silikonlitze 0,25 mm² (AWG 24), schwarz | W9 1 m · W11 2 m |
+| 3 m | Silikonlitze 0,25 mm² (AWG 24), gelb | W9 1 m · W11 2 m |
+| 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker zum Motor, Dupont 4-polig zum Shield; für W15 lose Adern ohne Mantel (läuft durch beide Ketten) | W14, W15 (W12, W13: die mitgelieferten 1-m-Kabel) |
 | 17 + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, Lichtschranken, W8, W16 |
 | 6 · 1 · 3 | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, Pull-down, Lichtschranken |
 | 1 + 3 | XH2.54-Gehäuse 3-polig + Crimpkontakte | Laser |
@@ -181,8 +186,10 @@ Anschließen mit dem Ohmmeter prüfen
 | — | Schrumpfschlauch 2–6 mm, Kabelbinder, Beschriftung (W-Nummer an beiden Enden) | alle |
 <!-- /tabelle:material -->
 
-* **Litze:** in den Ketten hochflexibel (LiYY, LiFY, Silikon oder
-  Schleppkettenleitung). Für die Signale 0,25 mm²: Das hält sicher in der
+* **Litze:** in den Ketten nur Einzellitzen aus Silikon, keine
+  Mantelleitungen: Die gedruckten Ketten biegen mit R 20
+  ([energiekette.md](energiekette.md#litzen-in-der-kette)). Für die
+  Signale 0,25 mm²: Das hält sicher in der
   Wago (ab 0,14 mm²), und in den Dupont-Kontakt passen bis 0,34 mm². Ist
   schon Litze mit 0,14 mm² oder AWG 26 (0,13 mm²) da, geht sie auch: in
   der Wago das abisolierte Ende doppelt legen.
@@ -292,7 +299,10 @@ Dann [Prüfung D](#d-uno-grbl-und-lichtschranken).
    Kontakte lassen sich mit einer Nadel aus dem Dupont-Gehäuse lösen. Den
    4-poligen Stecker um 180° gedreht aufzustecken, wirkt genauso
    ([Zwei Y-Motoren](hardware-notizen.md#zwei-y-motoren)).
-5. Alles nur bei ausgeschaltetem Strom.
+5. **In den Ketten nur die losen Adern:** Beim X-Motor (W12) und beim
+   Z-Motor (W15) den Schlauch oder Mantel so weit entfernen, wie das Kabel
+   durch die Ketten läuft, und die vier Adern einzeln einziehen.
+6. Alles nur bei ausgeschaltetem Strom.
 
 ### 7. 24-V-Wächter (W16)
 
@@ -341,13 +351,16 @@ sind sie in [elektronik.md](elektronik.md#kabel).
   verlässt die Nut vor dem 2060, läuft in dessen oberer Nut vorn nach
   links und rechts oben ins Gehäuse des Not-Aus.
 * **Y-Kette:** W7, W9, W11, W12, W15. Am linken Schlitten verlassen W9 und
-  W12 die Kette, W7, W11 und W15 laufen über dem Rohr zum Festpunkt der
-  X-Kette.
-* **X-Kette:** W7, W11, W15 bis hinten an die Trägerplatte.
+  W12 die Kette, W7, W11 und W15 laufen am Rohr entlang zum Festpunkt der
+  X-Kette. Wie sie dort geführt werden, ist noch offen
+  ([energiekette.md](energiekette.md#noch-offen)).
+* **X-Kette:** W7, W11, W15 bis zum Kettenhalter hinten an der
+  Trägerplatte ([energiekette.md](energiekette.md)).
 
-In den Ketten: Die Kabel liegen lose nebeneinander, nicht verdrillt, die
-dicken außen. An beiden Enden der Kette mit Kabelbindern an den
-Anschlussgliedern zugentlasten. Keine Löt- oder Steckstelle in der Kette.
+In den Ketten: Die Adern liegen lose nebeneinander, nicht verdrillt, auch
+die der Motorkabel, ohne Schlauch. Am Kettenhalter des Toolheads hält sie
+ein Kabelbinder durch die zwei Schlitze neben dem Anfangsstück. Keine Löt-
+oder Steckstelle in der Kette.
 In den Nuten halten Nutabdeckungen oder Clips die Kabel.
 
 ## Inbetriebnahme

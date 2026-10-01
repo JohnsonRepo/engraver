@@ -165,7 +165,7 @@ def leitungen():
         dict(nr='W6', name='5 V für die Lichtschranken', art='Einzelader',
              mm2=SIG, laenge=kasten, strom=0.1, weg='im Kasten',
              adern=[('+5 V', 'rot', 'Shield 5V', 'Wago +5 V')]),
-        dict(nr='W7', name='Laser', art='Leitung 3-adrig, Schleppkette',
+        dict(nr='W7', name='Laser', art='Litzen 3-adrig, Silikon',
              mm2=ez.LITZE_LASER, kabel='Laser (12 V + PWM)',
              strom=ez.LASER_A, kette='Y + X',
              weg='links raus, untere Nut am linken 2040, Y-Kette, über dem '
@@ -178,7 +178,7 @@ def leitungen():
              hinweis='hält den Laser aus, solange der Uno startet oder '
                      'ohne USB ist',
              adern=[('10 kΩ', '—', 'Shield Z− S', 'Shield Z− GND')]),
-        dict(nr='W9', name='Lichtschranke X', art='Leitung 3-adrig',
+        dict(nr='W9', name='Lichtschranke X', art='Litzen 3-adrig, Silikon',
              mm2=SIG, kabel='X-Endschalter', strom=0.03, kette='Y',
              weg='links raus, untere Nut am linken 2040, Y-Kette, am '
                  'Stirnblock nach vorn zum Halter X',
@@ -192,7 +192,7 @@ def leitungen():
              adern=[('+5 V', 'rot', 'Wago +5 V', 'LS Y VCC'),
                     ('GND', 'schwarz', 'Wago GND', 'LS Y GND'),
                     ('Signal', 'gelb', 'Shield Y+', 'LS Y D0')]),
-        dict(nr='W11', name='Lichtschranke Z', art='Leitung 3-adrig',
+        dict(nr='W11', name='Lichtschranke Z', art='Litzen 3-adrig, Silikon',
              mm2=SIG, kabel='Z-Endschalter', strom=0.03, kette='Y + X',
              weg='wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead',
              adern=[('+5 V', 'rot', 'Wago +5 V', 'LS Z VCC'),
@@ -201,6 +201,7 @@ def leitungen():
         dict(nr='W12', name='X-Motor', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='X-Motor', strom=ez.MOTOR_I,
              kette='Y', fertig=True, mitgeliefert=1.0,
+             hinweis='in der Kette nur die losen Adern, ohne Schlauch',
              weg='links raus, untere Nut am linken 2040, Y-Kette, zum Motor '
                  'über dem Rohrende',
              adern=[('Spule A', 'schwarz · grün', 'Shield X 2B·2A',
@@ -228,6 +229,7 @@ def leitungen():
         dict(nr='W15', name='Z-Motor', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Z-Motor', strom=ez.MOTOR_I,
              kette='Y + X', fertig=True, mitgeliefert=1.0,
+             hinweis='in den Ketten nur die losen Adern, ohne Schlauch',
              weg='wie W7 bis zur Trägerplatte, dann zum Motor oben',
              adern=[('Spule A', 'schwarz · grün', 'Shield Z 2B·2A',
                      'Z-Motor A'),
@@ -279,9 +281,33 @@ def waechter_spannung(u24, r_pullup):
     Pull-up zu VCC."""
     g = 1.0 / WAECHTER_R1 + 1.0 / WAECHTER_R2 + 1.0 / r_pullup
     return (u24 / WAECHTER_R1 + VCC / r_pullup) / g
-# In eine Kette 10 x 20 mm innen passen fuenf Mantelleitungen bis etwa
-# 4,5 mm aussen, in zwei Lagen (elektronik.md, Litzen)
-KETTE_PLAETZE = 5
+# Energieketten: gedruckt (Portal.py, Rev. 19), innen 10 x 8,8 mm,
+# Biegeradius 20 mm. Darin nur Einzellitzen — eine Mantelleitung ist fuer
+# den Radius zu steif. Aussendurchmesser der Silikonlitzen [w]; die
+# mitgelieferten Motorkabel haben lose PVC-Adern AWG 26 [w], hier wie
+# 0,2 mm2 gerechnet. Fuellgrad hoechstens 60 % (Faustregel [w]).
+ADER_D = {0.34: 1.7, 0.25: 1.5, 0.2: 1.4}
+FUELLGRAD_MAX = 0.6
+
+
+def kette_querschnitt():
+    """Lichter Querschnitt der Kette in mm2 (Portal.py)."""
+    pm = bauraum.modul_laden(bauraum.PORTAL, 'portal')
+    return pm.w('kette_innen_b') * pm.w('kette_innen_h')
+
+
+def kette_fuellung(lts, kette):
+    """(Adern, Flaeche in mm2) aller Adern in der Kette 'Y' oder 'X'.
+    Ein Motorkabel hat vier Adern (zwei Paare in den Adernlisten)."""
+    adern, flaeche = 0, 0.0
+    for lt in lts:
+        if kette not in lt.get('kette', '').split():
+            continue
+        n = 4 if lt['art'].startswith('Motorkabel') else len(lt['adern'])
+        d = ADER_D[lt['mm2']]
+        adern += n
+        flaeche += n * math.pi * d * d / 4.0
+    return adern, flaeche
 
 
 def netze(zustand=BETRIEB, lts=None):
@@ -425,9 +451,11 @@ def _litze(lt):
         return '4 × {}{}'.format(_mm2(lt['mm2']), _awg(lt['mm2']))
     if lt['art'].startswith('Leitung'):
         n = int(lt['art'].split()[1][0])
-        zusatz = ', Schleppkette' if 'Schleppkette' in lt['art'] else ''
-        return '{} × {}{}{}'.format(n, _mm2(lt['mm2']), _awg(lt['mm2']),
-                                    zusatz)
+        return '{} × {}{}'.format(n, _mm2(lt['mm2']), _awg(lt['mm2']))
+    if lt['art'].startswith('Litzen'):
+        n = int(lt['art'].split()[1][0])
+        return '{} Silikonlitzen {}{}'.format(n, _mm2(lt['mm2']),
+                                               _awg(lt['mm2']))
     return _mm2(lt['mm2']) + _awg(lt['mm2'])
 
 
@@ -506,6 +534,12 @@ def material(K):
             if lt['art'].startswith('Leitung'):
                 meter.setdefault(_litze(lt), []).append(
                     (lt['nr'], kauf or lt.get('laenge') or 0.0))
+            elif lt['art'].startswith('Litzen'):
+                # in den Ketten: je Ader eine Silikonlitze in ihrer Farbe
+                for _, farbe, _, _ in lt['adern']:
+                    meter.setdefault('Silikonlitze {}{}, {}'.format(
+                        _mm2(lt['mm2']), _awg(lt['mm2']), farbe),
+                        []).append((lt['nr'], kauf or 0.0))
             elif lt['mm2'] == SIG:
                 # eine Ader aus der Signalleitung
                 meter.setdefault('3 × {}{}'.format(
@@ -552,7 +586,8 @@ def tab_material(K):
             de(math.ceil(summe * 2.0) / 2.0, 1), art, ' · '.join(
                 '{} {} m'.format(nr, de(m, 2)) for nr, m in teile)))
     z.append('| 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker '
-             'zum Motor, Dupont 4-polig zum Shield | W14, W15 (W12, W13: die '
+             'zum Motor, Dupont 4-polig zum Shield; für W15 lose Adern ohne '
+             'Mantel (läuft durch beide Ketten) | W14, W15 (W12, W13: die '
              'mitgelieferten 1-m-Kabel) |')
     z.append('| {} + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, '
              'Lichtschranken, W8, W16 |'.format(kontakte.get('Dupont', 0)))

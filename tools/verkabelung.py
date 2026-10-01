@@ -281,11 +281,12 @@ def waechter_spannung(u24, r_pullup):
     Pull-up zu VCC."""
     g = 1.0 / WAECHTER_R1 + 1.0 / WAECHTER_R2 + 1.0 / r_pullup
     return (u24 / WAECHTER_R1 + VCC / r_pullup) / g
-# Energieketten: gedruckt (Portal.py, Rev. 19), innen 10 x 8,8 mm,
-# Biegeradius 20 mm. Darin nur Einzellitzen — eine Mantelleitung ist fuer
-# den Radius zu steif. Aussendurchmesser der Silikonlitzen [w]; die
-# mitgelieferten Motorkabel haben lose PVC-Adern AWG 26 [w], hier wie
-# 0,2 mm2 gerechnet. Fuellgrad hoechstens 60 % (Faustregel [w]).
+# Energieketten: gedruckt (Portal.py, seit Rev. 19), innen 10 x 8,8 mm,
+# Biegeradius 32 mm (30 Grad je Glied, seit Rev. 20). Darin nur
+# Einzellitzen — eine Mantelleitung ist fuer den Radius zu steif.
+# Aussendurchmesser der Silikonlitzen [w]; die mitgelieferten Motorkabel
+# haben lose Adern in einem Schlauch [v] (AWG 26 [w], hier wie 0,2 mm2
+# gerechnet), der Schlauch kommt ab. Fuellgrad hoechstens 60 % [w].
 ADER_D = {0.34: 1.7, 0.25: 1.5, 0.2: 1.4}
 FUELLGRAD_MAX = 0.6
 

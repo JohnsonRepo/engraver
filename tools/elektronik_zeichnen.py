@@ -37,8 +37,9 @@ NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                       'fusion', 'NotAus', 'NotAus.py')
 
 # ---- Ketten ----------------------------------------------------------------
-# Gedruckt (Portal.py, Rev. 19, aus der 3MF ausgemessen): aussen 18 x 14,
-# der Riegel 0,3 hoeher, Biegeradius 20 mm, die Endstuecke je 36 mm hinter
+# Gedruckt (Portal.py, seit Rev. 19, aus der 3MF ausgemessen): aussen
+# 18 x 14, der Riegel 0,3 hoeher, Biegeradius 32 mm (30 Grad je Glied am
+# gedruckten Teil, seit Rev. 20), die Endstuecke je 36 mm hinter
 # dem Gelenk. Die X-Kette liegt wie in Portal.py, die Y-Kette ist noch ein
 # Platzhalter mit diesen Massen.
 _PM = bauraum.modul_laden(bauraum.PORTAL, 'portal')
@@ -47,6 +48,9 @@ KETTE_H = _PM.w('kette_h') + _PM.w('kette_riegel')
 KETTE_R = _PM.w('kette_r')
 KETTE_T = _PM.w('kette_teilung')
 KETTE_ENDEN = 2.0 * _PM.w('endstueck_l')
+# Y-Kette: Arbeitsweg plus Reserve nach vorn (Wahl 2026-10-01); damit
+# laesst sie das Portal etwas ueber die Grenze am vorderen 2060.
+KETTE_Y_RESERVE = 26.0
 RESERVE = 0.15                   # Kabel: Boegen, Zugentlastung, Stecker
 KAUFLAENGEN = (0.5, 1.0, 1.5, 2.0, 2.5, 3.0)   # m
 
@@ -163,8 +167,8 @@ def konzept(w, L, tw, TL, ew, EL):
     K['ky_z_unten'] = K['ky_z_wanne'] + 3.0 + KETTE_H / 2.0
     K['ky_z_oben'] = K['ky_z_unten'] + 2.0 * KETTE_R
     # ganze Glieder wie bei X: die Litzen laufen durch die ganze Kette
-    K['ky_glieder'] = int(math.ceil((K['ky_hub'] / 2.0 + math.pi * KETTE_R)
-                                    / KETTE_T - 1e-9))
+    K['ky_glieder'] = int(math.ceil((K['ky_hub'] / 2.0 + KETTE_Y_RESERVE
+                                     + math.pi * KETTE_R) / KETTE_T - 1e-9))
     K['ky_laenge'] = K['ky_glieder'] * KETTE_T + KETTE_ENDEN
 
     # X-Kette (Portal.py, Rev. 19): direkt hinter der Traegerplatte, die

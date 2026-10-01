@@ -170,15 +170,17 @@ Fahnen und Klammern werden schwarz gedruckt. Details in
 ### Energiekette X (neu)
 
 Die Energiekette ist gedruckt (Modell „Energiekette“, Teilung 16, außen
-18 × 14 mm, R 20) und liegt direkt hinter der Trägerplatte. Der Festpunkt
+18 × 14 mm, R 32) und liegt direkt hinter der Trägerplatte. Der Festpunkt
 sitzt in der Mitte des X-Wegs auf einer **Wanne** über dem Portalrohr, die
 Schleife zeigt nach rechts. Drei **Stützen** halten die Wanne. Sie sitzen mit
 je einer M5 in der hinteren Nut des Rohrs und reichen über X-Riemen und
 Riemenhalter. Am Toolhead trägt ein **Kettenhalter** über dem Riemenhalter
-das bewegte Ende. 17 Glieder reichen, am rechten Ende läuft der Bogen
+das bewegte Ende. 19 Glieder reichen, am rechten Ende läuft der Bogen
 3,25 mm über den Lagerschlitten. Wanne und Stützen baut `Portal.py`
-(Rev. 19), den Kettenhalter `ToolheadZ.py` (Rev. 35), mit einer Bohrlehre
-für die schon gedruckte Trägerplatte. Details in
+(seit Rev. 19), den Kettenhalter `ToolheadZ.py` (seit Rev. 35), mit einer
+Bohrlehre für die schon gedruckte Trägerplatte. Seit Portal Rev. 20 und
+ToolheadZ Rev. 36 rechnen beide mit R 32: Ein Glied dreht sich am
+gedruckten Teil nur um 30°. Details in
 [docs/energiekette.md](docs/energiekette.md).
 
 ### Toolhead-Grundplatte (überholt)
@@ -242,11 +244,13 @@ ganzen Y-Weg, das Elektronikfach hinter
 dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren, und
 die X-Energiekette mit Wanne und Stützen über den ganzen X-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 35, Portal Rev. 19 mit
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 36, Portal Rev. 20 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 19 und ToolheadZ
 Rev. 35 bringen die gedruckte X-Energiekette: Wanne mit Festpunkt und drei
 Stützen am Portalrohr, Kettenhalter an der Trägerplatte
-([energiekette.md](docs/energiekette.md)). Portal Rev. 18 lenkt den
+([energiekette.md](docs/energiekette.md)). Portal Rev. 20 und ToolheadZ
+Rev. 36 rechnen sie mit R 32 statt R 20, wie die gedruckte Kette sich
+biegt: 19 Glieder, der Kettenhalter 24 mm höher. Portal Rev. 18 lenkt den
 X-Riemen mit einem Ritzel auf einer Welle um, die in Kugel- und Gleitlager
 im Lagerschlitten läuft; Spannbock und Schlitten ersetzen Umlenkhalter und
 Spannklotz (ToolheadZ Rev. 34 ändert dazu nur einen Kommentar). Portal

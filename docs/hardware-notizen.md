@@ -549,19 +549,24 @@ ihm eine Spule tauschen — siehe [Zwei Y-Motoren](#zwei-y-motoren).
 
 ## Energieketten
 
-Angabe vom 2026-10-01: Die Ketten sind **selbst gedruckt**, für X und Y.
-Die Maße stammen aus deiner 3MF. Wanne, Festpunkt und Kettenhalter der
-X-Kette stehen in [energiekette.md](energiekette.md).
+Angabe vom 2026-10-01: Die Ketten werden **selbst gedruckt**, für X und Y.
+Gedruckt ist bisher eine, die zweite kommt in derselben Größe. Die Maße
+stammen aus deiner 3MF, der Anschlag vom gedruckten Teil. Wanne, Festpunkt
+und Kettenhalter der X-Kette stehen in [energiekette.md](energiekette.md).
 
 | Wert | Maß | Status |
 |---|---|---|
 | Modell | „Energiekette“ von lingnau.florian (CC BY-NC-SA): Kettenglied mit Riegel, Anfangsstück, Endstück, Endstück 180, Drehkonsole | Angabe 2026-10-01, 3MF |
 | Glied | Teilung **16**, außen **18 × 14** (der Riegel steht 0,3 über), innen **10 × 8,8**, 30 lang | aus dem Modell gemessen |
-| Gelenk | Zapfen Ø5,0 im Loch Ø5,4, mittig in der Höhe; Anschlag **47,3°** je Gelenk, rückwärts 0° | aus dem Modell gemessen |
-| Biegeradius | **R 20** auf der Gelenklinie; um 180° gebogen außen **54,6 mm** hoch | gerechnet `[?]`, am gedruckten Teil prüfen |
+| Gelenk | Zapfen Ø5,0 im Loch Ø5,4, mittig in der Höhe; rückwärts 0° | aus dem Modell gemessen |
+| Anschlag | **30°** je Gelenk am gedruckten Teil, die ganze Kette biegt sich um 180°. Im Modell stoßen die Glieder erst bei 47° an | Angabe am Teil 2026-10-01 |
+| Biegeradius | bei 30° 30,9 mm auf der Gelenklinie, gerechnet **R 32**; um 180° gebogen außen höchstens **78,6 mm** (bei 30°: 76,4) | gerechnet, Schleife am Teil messen (bis Portal Rev. 19: R 20 aus dem Modell) |
+| Riegelseite | nur durch einzelne Streben geschlossen, die Litzen lassen sich jederzeit einlegen und herausnehmen | Angabe 2026-10-01 |
 | Anschlussstücke | 43 lang: 36 hinter dem Gelenk, Auge 7; Platte 2 mm mit 2 × Ø5,5, 18 und 30 mm hinter dem Gelenk | aus dem Modell gemessen |
-| X-Kette | 17 Glieder, 344 mm mit Anfangsstück und Endstück 180 | gerechnet (Portal.py Rev. 19) |
-| Y-Kette | 15 Glieder, 312 mm | gerechnet, Wanne und Halter offen |
+| X-Kette | 19 Glieder, 376 mm mit Anfangsstück und Endstück 180 | gerechnet (Portal.py Rev. 20) |
+| Y-Kette | 19 Glieder, 376 mm, gleiche Größe wie X: Arbeitsweg plus Reserve nach vorn | gerechnet, Wahl 2026-10-01; Wanne und Halter offen |
+| Motorkabel (mitgeliefert) | lose Adern in einem Schlauch; in den Ketten ohne Schlauch | Angabe 2026-10-01 |
+| Untere Nut an der Unterseite des linken 2040 | belegt | Angabe 2026-10-01 |
 | gekaufte Ketten | 10 × 20 mm innen, 15 × 27 mm außen, je 1 m | `[v]` vorhanden, werden nicht verwendet |
 
 ## Normteile (aus hardware.md, `[w]`)

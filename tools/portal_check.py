@@ -30,7 +30,7 @@ Z_SCHRITTE = 11               # Stellungen ueber den Z-Weg
 TOOLHEAD_OHNE = ('Portalprofil 2020', 'X-Schiene MGN15')
 # Gedruckte Energiekette: zwei Glieder schlagen bei diesem Winkel
 # aneinander an (aus der 3MF ausgemessen, 2026-10-01)
-KETTE_ANSCHLAG = 47.3
+KETTE_ANSCHLAG = 30.0       # Grad je Glied, am gedruckten Teil (2026-10-01)
 
 
 def main():
@@ -912,7 +912,7 @@ def main():
     p.titel('17) Energiekette X: gedruckte Kette, Wanne, Kettenhalter')
     tk, rk = w('kette_teilung'), w('kette_r')
     # Wie eng sich die Kette biegen laesst, legt der Anschlag der Glieder
-    # fest (aus der 3MF ausgemessen); der Radius darf ihn nicht verlangen.
+    # fest (am gedruckten Teil 30 Grad); der Radius darf ihn nicht verlangen.
     p.ok('Gelenkwinkel fuer R{:.0f} bei Teilung {:.0f}'.format(rk, tk),
          math.degrees(2.0 * math.asin(tk / (2.0 * rk))), KETTE_ANSCHLAG,
          '<=', 'Grad')

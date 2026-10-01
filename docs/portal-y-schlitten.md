@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 19, zwanzig gedruckte
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 20, zwanzig gedruckte
 Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
@@ -406,16 +406,16 @@ die `Bohrlehre_Riemenhalter` (6 mm dick, im ToolheadZ-Modell ausgeblendet):
    langen Bohrer, damit das Bohrfutter hinter dem Portalrohr bleibt.
 4. Vorn Ø6,5 × 3,2 mm ansenken.
 
-## Energiekette X (Rev. 19)
+## Energiekette X (seit Rev. 19, R 32 seit Rev. 20)
 
 Die X-Energiekette ist gedruckt (dein Modell „Energiekette“, Teilung 16,
-außen 18 × 14, R 20) und liegt direkt hinter der Trägerplatte. Der
+außen 18 × 14, R 32) und liegt direkt hinter der Trägerplatte. Der
 Festpunkt sitzt in der Mitte des X-Wegs, die Schleife zeigt nach rechts.
 Der Untertrum läuft in der **Kettenwanne** über dem Rohr (Boden Z +44,5),
-der Obertrum 40 mm höher auf dem Kettenhalter des Toolheads. Drei
+der Obertrum 64 mm höher auf dem Kettenhalter des Toolheads. Drei
 **Wannenstützen** tragen die Wanne. Sie sitzen mit je einer M5 in der
 hinteren Nut, ihr Block steht auf dem Rohr hinter dem Rücklauf, der Arm
-reicht über Riemen und Riemenhalter. 17 Glieder reichen, am rechten Ende
+reicht über Riemen und Riemenhalter. 19 Glieder reichen, am rechten Ende
 läuft der Bogen 3,25 mm über den Lagerschlitten. Maße, Freigänge, Montage
 und Druck stehen in [energiekette.md](energiekette.md).
 
@@ -554,7 +554,7 @@ Lichtschranke. `Bohrlehre_Riemenhalter` (8,4 g) und `Bohrlehre_Kettenhalter`
 | 3 + 3 | M5×10 Zylinderkopf + Hammermutter M5 (Nut 6) | Wannenstützen → hintere Nut des Rohrs |
 | 2 + 2 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Laschen der Kettenwanne → Wannenstützen |
 | 2 + 2 + 2 | M3×10 Zylinderkopf + Scheibe DIN 125 + Messing-Einsatz M3 | Endstück 180 → Wanne → Stütze am Festpunkt |
-| 1 | Energiekette, gedruckt: Anfangsstück, 17 Glieder mit Riegel, Endstück 180 | X-Achse |
+| 1 | Energiekette, gedruckt: Anfangsstück, 19 Glieder mit Riegel, Endstück 180 | X-Achse |
 | — | Schrauben und Einsätze des Kettenhalters | [energiekette.md](energiekette.md#verschraubung) |
 | — | Schrauben, Einsätze und Hammermuttern der Endschalter | [endschalter.md](endschalter.md#stückliste) |
 
@@ -574,8 +574,9 @@ Lichtschranke. `Bohrlehre_Riemenhalter` (8,4 g) und `Bohrlehre_Kettenhalter`
   das Portal vorn an die Y-Motorhalter heranfährt (Abschnitt 14).
 * **Endschalter:** Boden des Gabelschlitzes, Lötstifte unter der Platine,
   Schmiernippel am X-Wagen ([endschalter.md](endschalter.md#noch-offen)).
-* **Energiekette:** Der Biegeradius R 20 ist aus dem Modell gerechnet. Um
-  180° gebogen darf die Schleife außen höchstens 54,6 mm hoch sein
+* **Energiekette:** gerechnet mit R 32, weil sich ein Glied am gedruckten
+  Teil nur um 30° dreht (bis Rev. 19: R 20 aus dem Modell). Um 180°
+  gebogen darf die Schleife außen höchstens 78,6 mm hoch sein
   ([energiekette.md](energiekette.md#noch-offen)).
 
 ## Parametrik

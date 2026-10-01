@@ -294,7 +294,7 @@
 <text x="24.0" y="948.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W7</text>
 <text x="60.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">Laser</text>
 <text x="200.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">3 Silikonlitzen 0,34 mm² (AWG 22)</text>
-<text x="384.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,5 → 2 m</text>
+<text x="384.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,6 → 2 m</text>
 <text x="476.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y + X</text>
 <text x="24.0" y="962.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W8</text>
 <text x="60.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">Pull-down 10 kΩ</text>
@@ -304,7 +304,7 @@
 <text x="24.0" y="976.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W9</text>
 <text x="60.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">Lichtschranke X</text>
 <text x="200.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">3 Silikonlitzen 0,25 mm² (AWG 24)</text>
-<text x="384.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,76 → 1 m</text>
+<text x="384.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,8 → 1 m</text>
 <text x="476.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y</text>
 <text x="604.0" y="864.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W10</text>
 <text x="640.0" y="864.0" font-size="8.2" fill="#5b6472" text-anchor="start">Lichtschranke Y</text>
@@ -314,12 +314,12 @@
 <text x="604.0" y="878.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W11</text>
 <text x="640.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">Lichtschranke Z</text>
 <text x="780.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">3 Silikonlitzen 0,25 mm² (AWG 24)</text>
-<text x="964.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,39 → 2 m</text>
+<text x="964.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,45 → 2 m</text>
 <text x="1056.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y + X</text>
 <text x="604.0" y="892.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W12</text>
 <text x="640.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">X-Motor</text>
 <text x="780.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">4 × 0,2 mm² (AWG 24)</text>
-<text x="964.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,76 m, mitgeliefert</text>
+<text x="964.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,8 m, mitgeliefert</text>
 <text x="1056.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y</text>
 <text x="604.0" y="906.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W13</text>
 <text x="640.0" y="906.0" font-size="8.2" fill="#5b6472" text-anchor="start">Y-Motor links</text>
@@ -334,7 +334,7 @@
 <text x="604.0" y="934.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W15</text>
 <text x="640.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">Z-Motor</text>
 <text x="780.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">4 × 0,2 mm² (AWG 24)</text>
-<text x="964.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,47 → 2 m</text>
+<text x="964.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,52 → 2 m</text>
 <text x="1056.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y + X</text>
 <text x="604.0" y="948.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W16</text>
 <text x="640.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">24-V-Wächter an Abort</text>

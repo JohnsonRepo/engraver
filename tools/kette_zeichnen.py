@@ -206,7 +206,8 @@ def main():
                   de(w('kette_innen_h'), 1), de(w('kette_r'), 0)), 9, GRAU)]
 
     # ---- Ansicht von vorn --------------------------------------------------
-    fa = Feld(250, 92, (-290.0, 290.0), (-30.0, 128.0), 1.5)
+    fa = Feld(250, 92, (-290.0, 290.0),
+              (-30.0, L['xk_ober_z'][1] + 9.0), 1.5)
     t += fa.ausschnitt('vorn', ansicht(fa, w, L, tw, TL, portal))
     t += fa.rahmen('Ansicht von vorn: Toolhead in der Mitte, gestrichelt an '
                    'beiden Enden des X-Wegs (Trägerplatte davor als Umriss)')
@@ -252,7 +253,8 @@ def main():
                  dx=6, dy=10)
 
     # ---- Querschnitt -------------------------------------------------------
-    fb = Feld(250, fa.oy + fa.hoehe + 80, (-50.0, 18.0), (-14.0, 106.0), 3.4)
+    fb = Feld(250, fa.oy + fa.hoehe + 80, (-50.0, 18.0),
+              (-14.0, L['xk_ober_z'][1] + 7.0), 3.4)
     t += fb.ausschnitt('quer', querschnitt(fb, w, L, tw, TL))
     t += fb.rahmen('Querschnitt durch die mittlere Stütze (Blick von links, '
                    'vorn rechts)')
@@ -269,7 +271,7 @@ def main():
         (yk[0] + 2.0, sum(L['xk_ober_z']) / 2.0, 'Obertrum\n(Boden unten)')],
         fb.ox - 12, 'end', abstand=32.0)
     t += fb.spalte([
-        (8.0, 100.0, 'Trägerplatte'),
+        (8.0, L['xk_ober_z'][1], 'Trägerplatte'),
         (-4.0, TL['kh_leiste_z'][1] - 1.0, 'Kettenhalter: Auflage,\n'
          'Leisten, Fuß an der Platte'),
         (6.0, tw('kh_schraube_z'), 'M3 von vorn in den\nEinsatz im Fuß'),
@@ -291,7 +293,7 @@ def main():
                  dx=4, dy=4)
     t += fb.mass(-46.0, L['xk_achse_unten'], L['xk_achse_oben'],
                  '2 R', dx=4)
-    t += quer_mass(fb, yk[0], yk[1], 104.0, '{} mm'.format(
+    t += quer_mass(fb, yk[0], yk[1], L['xk_ober_z'][1] + 3.0, '{} mm'.format(
         de(w('kette_b'), 0)))
 
     # ---- Zahlen ------------------------------------------------------------

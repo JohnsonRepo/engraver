@@ -60,15 +60,15 @@ begrenzt den Strom selbst.
 | W4 | **Wandler-Eingang** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
 | W5 | **Lüfter 24 V** — Litze dünner als 0,14 mm²: abisoliert doppelt legen | Litze des Lüfters | im Kasten, durch die Öffnung im Deckel | — | — | — |
 | W6 | **5 V für die Lichtschranken** | 0,25 mm² (AWG 24) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
-| W7 | **Laser** | 3 Silikonlitzen 0,34 mm² (AWG 22) | links raus, untere Nut am linken 2040, Y-Kette, über dem Rohr zur X-Kette, X-Kette, Trägerplatte | 1,5 m | **2 m** | Y + X |
+| W7 | **Laser** | 3 Silikonlitzen 0,34 mm² (AWG 22) | links raus, untere Nut am linken 2040, Y-Kette, über dem Rohr zur X-Kette, X-Kette, Trägerplatte | 1,6 m | **2 m** | Y + X |
 | W8 | **Pull-down 10 kΩ** — hält den Laser aus, solange der Uno startet oder ohne USB ist | Widerstand | auf dem Shield | — | — | — |
-| W9 | **Lichtschranke X** | 3 Silikonlitzen 0,25 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, am Stirnblock nach vorn zum Halter X | 0,76 m | **1 m** | Y |
+| W9 | **Lichtschranke X** | 3 Silikonlitzen 0,25 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, am Stirnblock nach vorn zum Halter X | 0,8 m | **1 m** | Y |
 | W10 | **Lichtschranke Y** | 3 × 0,25 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach hinten | 0,49 m | **1 m** | — |
-| W11 | **Lichtschranke Z** | 3 Silikonlitzen 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,39 m | **2 m** | Y + X |
-| W12 | **X-Motor** — in der Kette nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, zum Motor über dem Rohrende | 0,76 m | mitgeliefert (1 m) | Y |
+| W11 | **Lichtschranke Z** | 3 Silikonlitzen 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,45 m | **2 m** | Y + X |
+| W12 | **X-Motor** — in der Kette nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, zum Motor über dem Rohrende | 0,8 m | mitgeliefert (1 m) | Y |
 | W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn | 0,69 m | mitgeliefert (1 m) | — |
 | W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,98 m | **1,5 m**, fertig | — |
-| W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,47 m | **2 m**, fertig | Y + X |
+| W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,52 m | **2 m**, fertig | Y + X |
 | W16 | **24-V-Wächter an Abort** — fehlen die 24 V (Not-Aus, Schalter, Netzteil), bricht GRBL ab | Widerstand | im Kasten | — | — | — |
 | W17 | **USB** | USB-Kabel A–B | hinten raus zum PC | — | vorhanden | — |
 <!-- /tabelle:leitungen -->
@@ -187,7 +187,7 @@ Anschließen mit dem Ohmmeter prüfen
 <!-- /tabelle:material -->
 
 * **Litze:** in den Ketten nur Einzellitzen aus Silikon, keine
-  Mantelleitungen: Die gedruckten Ketten biegen mit R 20
+  Mantelleitungen: Die gedruckten Ketten biegen mit R 32
   ([energiekette.md](energiekette.md#litzen-in-der-kette)). Für die
   Signale 0,25 mm²: Das hält sicher in der
   Wago (ab 0,14 mm²), und in den Dupont-Kontakt passen bis 0,34 mm². Ist

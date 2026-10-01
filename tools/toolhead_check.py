@@ -1039,7 +1039,7 @@ def main():
     p.ok('M3x{:.0f}: setzt im Sackloch nicht auf'.format(L['rh_schraube']),
          w('insert_m3_t') - L['rh_eingriff'], 0.5)
 
-    p.titel('9c) Kettenhalter (Rev. 35, X-Energiekette)')
+    p.titel('9c) Kettenhalter (seit Rev. 35, X-Energiekette)')
     # Lage: Hoehe und Linie der Kette kommen aus Portal.py — dort und in
     # tools/portal_check.py (Abschnitt 17) wird beides gegengeprueft
     p.info('Auflage ueber der Oberkante des X-Wagens',

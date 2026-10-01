@@ -22,7 +22,7 @@ Der Laser sitzt auf dem Z-Schlitten.
 | 5 | **Schaltfahne** | PETG **schwarz** | dünnes Blatt für die Gabellichtschranke, Schaltpunkt über Langlöcher einstellbar (Rev. 32) |
 | 6 | **Endschalterhalter** | PETG | hält die Gabellichtschranke — gedruckt und eingebaut, bleibt |
 | 7 | **Riemenhalter** | PETG | hinten an der Trägerplatte, klemmt beide Enden des X-Riemens (Rev. 33) |
-| 8 | **Kettenhalter** | PETG | hinten an der Trägerplatte über dem Riemenhalter, trägt das bewegte Ende der X-Energiekette (Rev. 35) |
+| 8 | **Kettenhalter** | PETG | hinten an der Trägerplatte über dem Riemenhalter, trägt das bewegte Ende der X-Energiekette (Rev. 35, höher seit Rev. 36) |
 
 Die Motorkonsole ist **Teil der Trägerplatte**, kein eigenes Bauteil — siehe
 [Motorbefestigung](#motorbefestigung-alle-vier-schrauben-erreichbar).
@@ -572,7 +572,7 @@ gedruckte Platte bekommt sie aus dem Modell. Für die vorhandene gibt es die
    Bohrfutter hinter dem Portalrohr bleibt.
 4. Vorn Ø6,5 × 3,2 mm ansenken.
 
-## Kettenhalter (Rev. 35)
+## Kettenhalter (Rev. 35, höher seit Rev. 36)
 
 Die X-Energiekette ist gedruckt und liegt direkt hinter der Trägerplatte.
 Ihr Festpunkt sitzt in einer Wanne über dem Portalrohr (`fusion/Portal`,
@@ -581,15 +581,22 @@ Weitere steht in [energiekette.md](energiekette.md).
 
 | Maß | Wert |
 |---|---|
-| Form | Winkel 44 mm breit wie die Säule: Fuß 8 mm an der Plattenrückseite (Z +61,8 bis +84,8), Auflage 8 mm, 24,8 mm tief |
-| Auflage | Z = +84,8 = Wannenboden +44,5, Riegel 0,3, 2 R (40); 68,8 mm über dem X-Wagen |
+| Form | Winkel 44 mm breit wie die Säule: Fuß 8 mm an der Plattenrückseite (Z +61,8 bis +108,8), Auflage 8 mm, 24,8 mm tief |
+| Auflage | Z = +108,8 = Wannenboden +44,5, Riegel 0,3, 2 R (64); 92,8 mm über dem X-Wagen |
 | Luft Fuß ↔ Untertrum der Kette | 3,0 mm |
 | Anfangsstück | Platte unten zwischen zwei Leisten (0,3 mm Spiel je Seite), Gelenk 22 mm rechts der Wagenmitte; 2 × M3×8 + Scheibe DIN 125 in Einsätze der Auflage |
-| Befestigung | 2 × M3×10 von vorn durch die Trägerplatte (X ±13,5, Z +72) in Einsätze im Fuß, Kopf in der Senkung Ø6,5 × 3,2 |
+| Befestigung | 2 × M3×10 von vorn durch die Trägerplatte (X ±13,5, Z +85, mitten im Fuß) in Einsätze, Kopf in der Senkung Ø6,5 × 3,2 |
 | Zugentlastung | ein Kabelbinder durch zwei Schlitze links neben dem Anfangsstück |
 
 Die Kettenmaße stehen in **beiden** Skripten (`kette_…`, `endstueck_…`,
 `xk_…`). `portal_check.py` prüft als Erstes, dass sie übereinstimmen.
+
+**Rev. 36:** Am gedruckten Teil dreht sich ein Glied nur um 30° gegen das
+nächste (Angabe vom 2026-10-01), nicht um 47° wie im Modell. Gerechnet
+wird deshalb mit R 32 statt R 20, und die Auflage liegt 24 mm höher. Der
+Fuß ist jetzt 47 mm hoch, die zwei M3 sitzen in seiner Mitte (Z +85
+statt +72). **Vor dem Druck die Schleife der Kette messen:** um 180°
+gebogen außen höchstens 78,6 mm ([energiekette.md](energiekette.md#noch-offen)).
 
 **Die gedruckte Trägerplatte hat die zwei Löcher noch nicht.** Dafür gibt es
 die `Bohrlehre_Kettenhalter`, gebaut wie die Lehre des Riemenhalters, nur
@@ -611,8 +618,8 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 | Schaltfahne | ≈ 2,6 cm³ | **≈ 3,4 g** | 18 × 60 × 5,5 mm | gerechnet |
 | Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet (gedruckt, bleibt) |
 | Riemenhalter | ≈ 8,8 cm³ | **≈ 11 g** | 44 × 14 × 16 mm | gerechnet (Rev. 33) |
-| Kettenhalter | ≈ 14,2 cm³ | **≈ 18 g** | 44 × 24,8 × 26 mm | gerechnet (Rev. 35) |
-| **Druckteile zusammen** | ≈ 224 cm³ | **≈ 284 g** | | |
+| Kettenhalter | ≈ 22,7 cm³ | **≈ 29 g** | 44 × 24,8 × 50 mm | gerechnet (Rev. 36) |
+| **Druckteile zusammen** | ≈ 233 cm³ | **≈ 295 g** | | |
 
 Die Werte für Trägerplatte und Schlittenplatte sind gemessen (154,3 / 50,9 g)
 plus die gerechneten Zuwächse: Endschaltersockel (+3 g), an der
@@ -627,7 +634,7 @@ die Schlittenplatte ändert sich nur an der Lasche (wenige Zehntel Gramm).
 
 Dazu die fünf Bohrlehren aus PLA (1,24 g/cm³), die nur bei Bedarf gedruckt
 werden: 6,1 g (X-Wagen) · 3,6 g (Z-Wagen) · 6,7 g (Laser) · 8,4 g
-(Riemenhalter) · 19,5 g (Kettenhalter).
+(Riemenhalter) · 24,8 g (Kettenhalter).
 
 Das sind **Vollmaterial-Massen** (100 % Füllung) und damit eine Obergrenze.
 Für den Druck selbst ist die Dichte in Fusion ohne Bedeutung — Bambu Studio
@@ -637,10 +644,10 @@ Druckgewicht rund ein Drittel darunter; maßgeblich ist die Anzeige im Slicer.
 Die Werte hier dienen der Plausibilitätskontrolle und der Abschätzung der
 bewegten Masse.
 
-Bewegte Masse auf der X-Achse, grob: 284 g Druckteile + 280 g NEMA 17 + 400 g
+Bewegte Masse auf der X-Achse, grob: 295 g Druckteile + 280 g NEMA 17 + 400 g
 Laser + 115 g MGN9-Schiene (200 mm) und Wagen + 71 g Gewindestange und
-Kupplung + 24 g Energiekette (Anfangsstück und etwa die halbe Kette)
-≈ **1,17 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
+Kupplung + 26 g Energiekette (Anfangsstück und etwa die halbe Kette)
+≈ **1,19 kg**. Für einen MGN15H unkritisch (statische Momenttragzahl
 im zweistelligen Nm-Bereich, hier rund 1 Nm).
 
 Die Trägerplatte ist mit 121,5 cm³ das schwerste Teil, davon etwa 23 cm³
@@ -1217,6 +1224,6 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `winkel_luft` | 0,5 mm | Luft Regal → Oberkante Schlittenplatte |
 | `x_riemen_y` / `x_riemen_z0` | −10 / 20,25 mm | Lage des X-Riemens (Wirklinie, Unterkante) — steht gleich in `Portal.py`, `portal_check.py` vergleicht |
 | `klemm_schlitz` / `klemm_rippe` | 1,6 / 0,8 mm | Klemmschlitz und Rippen des Riemenhalters; lässt sich der Riemen nicht eindrücken, Schlitz +0,1 |
-| `kette_r` / `kette_h` / `kette_riegel` | 20 / 14 / 0,3 mm | gedruckte Energiekette: der Obertrum liegt 2 R über dem Untertrum, darauf die Auflage des Kettenhalters — steht gleich in `Portal.py`, `portal_check.py` vergleicht |
+| `kette_r` / `kette_h` / `kette_riegel` | 32 / 14 / 0,3 mm | gedruckte Energiekette: der Obertrum liegt 2 R über dem Untertrum, darauf die Auflage des Kettenhalters — steht gleich in `Portal.py`, `portal_check.py` vergleicht |
 | `xk_boden_z` / `xk_y_vorn` / `xk_gelenk_x` | 44,5 / −5,3 / 22 mm | Wannenboden, Vorderkante der Kette, Gelenk des Anfangsstücks rechts der Wagenmitte — ebenso in beiden Skripten |
-| `kh_fuss` / `kh_auflage` / `kh_schraube_z` | 8 / 8 / 72 mm | Kettenhalter: Fuß, Auflage, Höhe der M3 in der Trägerplatte; alle Werte in [energiekette.md](energiekette.md#parametrik) |
+| `kh_fuss` / `kh_auflage` / `kh_schraube_z` | 8 / 8 / 85 mm | Kettenhalter: Fuß, Auflage, Höhe der M3 in der Trägerplatte; alle Werte in [energiekette.md](energiekette.md#parametrik) |

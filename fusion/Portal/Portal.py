@@ -89,7 +89,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 19
+REVISION = 20
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -296,8 +296,11 @@ MASSE = {
     # --- Energiekette X (seit Rev. 19) -------------------------------------
     # Gedruckte Kette (Modell "Energiekette" von lingnau.florian, aus der
     # 3MF ausgemessen am 2026-10-01): Teilung 16, aussen 18 x 14, innen
-    # 10 x 8,8. Zwei Glieder schlagen bei 47,3 Grad aneinander an, die
-    # Gelenkachse biegt sich also mit 16 / (2 sin 23,65 Grad) = 19,9 mm.
+    # 10 x 8,8. Am gedruckten Teil laesst sich ein Glied gegen das naechste
+    # hoechstens 30 Grad drehen (Angabe 2026-10-01; im Modell waeren es 47).
+    # Die Gelenkachse biegt sich also mit 16 / (2 sin 15 Grad) = 30,9 mm;
+    # gerechnet wird mit R 32 (28,96 Grad je Glied, 1 Grad Reserve). Bis
+    # Rev. 19 stand hier R 20 aus dem Modell.
     # Der Riegel steht 0,3 ueber die Laschen. Endstuecke: Platte 2 mm mit
     # zwei Loechern Ø5,5 im Abstand 12, das erste 18 mm hinter dem Gelenk;
     # sie reichen 36 mm hinter das Gelenk, das Auge 7 mm davor. Anfangs-
@@ -316,7 +319,7 @@ MASSE = {
     'kette_b':            (18.0, 'Energiekette: Breite aussen'),
     'kette_h':            (14.0, 'Energiekette: Hoehe der Laschen'),
     'kette_riegel':        (0.3, 'Energiekette: Riegel steht ueber die Laschen'),
-    'kette_r':            (20.0, 'Energiekette: Biegeradius der Gelenkachse'),
+    'kette_r':            (32.0, 'Energiekette: Biegeradius der Gelenkachse'),
     'kette_innen_b':      (10.0, 'Energiekette: innen, Breite'),
     'kette_innen_h':       (8.8, 'Energiekette: innen, Boden bis Riegel'),
     'kette_spiel':         (0.3, 'Energiekette: Spiel je Seite in Wanne und Halter'),
@@ -3126,8 +3129,9 @@ def hinweise_bauen(L, fehler):
         '    einen Schmiernippel hat (die Platine steht {:.0f} mm vor dem'
         .format(w('hx_luft_wagen')),
         '    Wagenende).',
-        '  Energiekette: der Biegeradius ist aus dem Modell gerechnet',
-        '    (Anschlag 47,3 Grad je Glied). Am gedruckten Teil pruefen: um',
+        '  Energiekette: je Glied hoechstens 30 Grad (am Teil, geschaetzt),',
+        '    gerechnet mit R {:.0f}. Vor dem Druck des Kettenhalters messen: um'
+        .format(w('kette_r')),
         '    180 Grad gebogen darf die Schleife aussen hoechstens {:.1f} mm'
         .format(2.0 * w('kette_r') + w('kette_h') + 2.0 * w('kette_riegel')),
         '    hoch sein, sonst kette_r in beiden Skripten erhoehen (der',

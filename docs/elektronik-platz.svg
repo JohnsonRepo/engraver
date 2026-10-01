@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1093" height="1479" viewBox="0 0 1093 1479" font-family="Inter, Helvetica, Arial, sans-serif"><defs ><pattern id="schraffur" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#fbeee2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#e8a871" stroke-width="1.4"/></pattern></defs>
-<text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Platz für die Elektronik (Elektronik.py Rev. 2, Portal.py Rev. 20, ToolheadZ.py Rev. 36)</text>
-<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Ketten gedruckt: die X-Kette mit Wanne wie in Portal.py, die Y-Kette als Platzhalter. Das Netzteil (24 V / 3 A) steht außerhalb.</text>
+<text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Platz für die Elektronik (Elektronik.py Rev. 2, Portal.py Rev. 21, ToolheadZ.py Rev. 36)</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Ketten gedruckt, beide mit Wanne, Festpunkt und Kettenhalter wie in Portal.py. Das Netzteil (24 V / 3 A) steht außerhalb.</text>
 <clipPath id="drauf"><rect x="262.0" y="92.0" width="581.4" height="599.4"/></clipPath>
 <g clip-path="url(#drauf)">
 <rect x="294.7" y="588.2" width="516.0" height="17.2" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
@@ -64,8 +64,12 @@
 <rect x="313.5" y="643.3" width="36.4" height="36.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
 <rect x="755.5" y="643.3" width="36.4" height="36.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
 <rect x="673.9" y="605.4" width="67.1" height="39.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="293.0" y="172.0" width="18.9" height="177.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.6"/>
-<rect x="294.7" y="269.8" width="15.5" height="131.4" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
+<rect x="291.8" y="316.6" width="31.2" height="22.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="291.8" y="405.9" width="31.2" height="20.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="291.8" y="483.3" width="31.2" height="20.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="292.7" y="307.1" width="19.4" height="205.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.6"/>
+<rect x="291.8" y="346.6" width="27.8" height="42.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="294.7" y="317.5" width="15.5" height="165.1" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
 <rect x="531.0" y="407.1" width="208.6" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.6"/>
 <rect x="533.5" y="409.1" width="152.2" height="15.5" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
 <rect x="358.3" y="209.8" width="174.0" height="4.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
@@ -74,11 +78,12 @@
 <rect x="438.2" y="124.6" width="40.4" height="18.9" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3"/>
 <rect x="432.1" y="143.5" width="79.1" height="47.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3"/>
 <rect x="387.7" y="142.9" width="34.4" height="34.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.85"/>
-<polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,607.1 310.9,661.4" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+<polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,309.7 318.8,316.6 318.8,339.0 318.8,345.8 318.8,399.0 318.8,405.9 318.8,426.5 318.8,433.4 318.8,476.4 318.8,483.3 318.8,503.9 318.8,510.8 318.8,607.1 310.9,661.4" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,607.1 794.5,661.4" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,179.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
-<polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,349.0 302.4,349.0" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+<polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,302.8 302.4,302.8 302.4,317.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,607.1 786.6,607.1 731.6,607.1 731.6,617.5 729.0,617.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+<polyline points="302.4,351.7 360.0,351.7 360.0,395.6 360.0,406.8 520.5,406.8 525.6,400.7 525.6,400.7 525.6,416.8 533.5,416.8" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <circle cx="346.1" cy="434.1" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="796.1" cy="179.5" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="522.4" cy="456.6" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
@@ -88,21 +93,21 @@
 <line x1="331.7" y1="136.7" x2="253.0" y2="136.7" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="331.7" cy="136.7" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="139.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">linkes 2040 (600 mm)</text>
-<line x1="302.4" y1="177.2" x2="253.0" y2="177.2" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="302.4" cy="177.2" r="1.5" fill="#5b6472"/>
-<text x="250.0" y="180.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenwanne, hängt außen</text>
-<text x="250.0" y="190.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am 2040 (untere Nut)</text>
-<line x1="380.7" y1="207.0" x2="253.0" y2="211.2" stroke="#5b6472" stroke-width="0.6"/>
+<line x1="380.7" y1="207.0" x2="253.0" y2="207.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="380.7" cy="207.0" r="1.5" fill="#5b6472"/>
-<text x="250.0" y="214.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portal an der hinteren</text>
-<text x="250.0" y="224.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Grenze (Softlimit Y)</text>
-<line x1="423.7" y1="221.0" x2="253.0" y2="245.2" stroke="#5b6472" stroke-width="0.6"/>
+<text x="250.0" y="210.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portal an der hinteren</text>
+<text x="250.0" y="220.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Grenze (Softlimit Y)</text>
+<line x1="423.7" y1="221.0" x2="253.0" y2="241.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="423.7" cy="221.0" r="1.5" fill="#5b6472"/>
-<text x="250.0" y="248.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
-<line x1="302.4" y1="323.2" x2="253.0" y2="323.2" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="302.4" cy="323.2" r="1.5" fill="#5b6472"/>
-<text x="250.0" y="326.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette Y außen</text>
-<text x="250.0" y="336.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am linken 2040</text>
+<text x="250.0" y="244.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
+<line x1="292.7" y1="310.6" x2="253.0" y2="310.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="292.7" cy="310.6" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="313.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wanne Y auf drei Trägern</text>
+<text x="250.0" y="323.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(untere Seitennut), Festpunkt</text>
+<line x1="302.4" y1="374.2" x2="253.0" y2="374.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="302.4" cy="374.2" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="377.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette Y außen am</text>
+<text x="250.0" y="387.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">linken 2040, Schleife vorn</text>
 <line x1="346.1" y1="434.1" x2="253.0" y2="434.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="346.1" cy="434.1" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="437.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Endschalter auf der 2020</text>
@@ -224,20 +229,26 @@
 <rect x="477.6" y="842.6" width="23.2" height="46.4" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="4 3"/>
 <rect x="500.8" y="699.1" width="11.6" height="262.5" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="4 3"/>
 <rect x="448.6" y="851.3" width="29.0" height="29.0" fill="none" stroke="#8c939e" stroke-width="0.8" stroke-dasharray="4 3"/>
-<rect x="396.9" y="961.5" width="298.4" height="4.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
-<path d="M 695.3 951.2 L 453.7 951.2 A 46.4 46.4 0 0 1 453.7 858.4" fill="none" stroke="#a3abb8" stroke-width="20.7" stroke-linecap="butt"/>
-<path d="M 695.3 951.2 L 453.7 951.2 A 46.4 46.4 0 0 1 453.7 858.4" fill="none" stroke="#3d4552" stroke-width="0.8" stroke-dasharray="3 2"/>
+<rect x="640.7" y="941.2" width="37.7" height="33.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="791.2" y="941.2" width="34.8" height="33.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="921.8" y="941.2" width="34.8" height="33.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="624.7" y="947.5" width="345.8" height="18.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.6"/>
+<polygon points="642.1,962.0 698.7,962.0 712.3,960.3 725.2,955.4 736.5,947.6 745.6,937.3 752.0,925.2 755.3,911.8 755.3,898.1 752.0,884.8 745.6,872.6 736.5,862.3 725.2,854.5 712.3,849.6 698.7,848.0 379.0,848.0 379.0,868.7 698.7,868.7 707.4,869.8 715.5,872.9 722.7,877.8 728.5,884.4 732.6,892.1 734.7,900.6 734.7,909.3 732.6,917.8 728.5,925.6 722.7,932.1 715.5,937.1 707.4,940.2 698.7,941.2 642.1,941.2" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8" fill-opacity="0.8"/>
+<rect x="361.6" y="868.7" width="71.8" height="11.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 </g>
 <rect x="262.0" y="761.4" width="597.4" height="316.1" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="262.0" y="753.4" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Seitenansicht von links, hinterer Teil (vorn rechts): Portal an der hinteren Grenze, Z unten</text>
+<line x1="540.4" y1="858.6" x2="253.0" y2="858.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="540.4" cy="858.6" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="861.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette Y (davor),</text>
+<text x="250.0" y="871.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portal hinten</text>
 <line x1="395.4" y1="902.1" x2="253.0" y2="902.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="395.4" cy="902.1" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="905.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">in der Mitte darf es höher</text>
 <text x="250.0" y="915.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">werden (gestrichelt)</text>
-<line x1="440.4" y1="951.2" x2="253.0" y2="951.2" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="440.4" cy="951.2" r="1.5" fill="#5b6472"/>
-<text x="250.0" y="954.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette Y (davor),</text>
-<text x="250.0" y="964.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schleife am Portal</text>
+<line x1="653.7" y1="966.3" x2="253.0" y2="966.3" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="653.7" cy="966.3" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="969.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wanne Y und Träger (davor)</text>
 <line x1="334.5" y1="1032.6" x2="253.0" y2="1032.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="334.5" cy="1032.6" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="1035.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Elektronikfach</text>
@@ -285,25 +296,25 @@
 <text x="24.0" y="1197.5" font-size="8.5" fill="#5b6472" text-anchor="start">Endschalter</text>
 <text x="110.0" y="1197.5" font-size="8.5" fill="#1c2733" text-anchor="start">LM393-Gabellichtschranken: X links auf der 2020 des Portals, Y außen am rechten 2040 — schaltet am hinteren Schienenende (Toolhead mit Z unten 26 mm vor dem 2060); Z vorhanden</text>
 <text x="24.0" y="1212.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kette Y</text>
-<text x="110.0" y="1212.5" font-size="8.5" fill="#1c2733" text-anchor="start">333 mm Hub, Festpunkt 267 mm vom hinteren Ende des 2040, Schleife nach hinten, 19 Glieder, 376 mm mit Endstücken (R32; Wanne und Halter offen)</text>
+<text x="110.0" y="1212.5" font-size="8.5" fill="#1c2733" text-anchor="start">333 mm Hub + 36 mm Reserve, Festpunkt hinten in der Wanne Y (266 mm vom hinteren Ende des 2040), Schleife nach vorn, 18 Glieder, 360 mm mit Endstücken (R32)</text>
 <text x="24.0" y="1227.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kette X</text>
 <text x="110.0" y="1227.5" font-size="8.5" fill="#1c2733" text-anchor="start">391 mm Hub, Festpunkt in der Mitte des Wegs, Schleife nach rechts (links steht der X-Motor), 19 Glieder, 376 mm mit Endstücken (R32)</text>
 <text x="24.0" y="1242.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kabel</text>
-<text x="110.0" y="1242.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motor links: Weg ≈ 0,69 m → 1 m kaufen</text>
+<text x="110.0" y="1242.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motor links: Weg ≈ 0,71 m → 1 m kaufen</text>
 <text x="24.0" y="1257.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1257.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motor rechts: Weg ≈ 0,98 m → 1,5 m kaufen</text>
 <text x="24.0" y="1272.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1272.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Motor: Weg ≈ 0,8 m → 1 m kaufen</text>
+<text x="110.0" y="1272.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Motor: Weg ≈ 0,82 m → 1 m kaufen</text>
 <text x="24.0" y="1287.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1287.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Motor: Weg ≈ 1,52 m → 2 m kaufen</text>
+<text x="110.0" y="1287.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Motor: Weg ≈ 1,56 m → 2 m kaufen</text>
 <text x="24.0" y="1302.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (12 V + PWM): Weg ≈ 1,6 m → 2 m kaufen</text>
+<text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (12 V + PWM): Weg ≈ 1,64 m → 2 m kaufen</text>
 <text x="24.0" y="1317.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,8 m → 1 m kaufen</text>
+<text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,85 m → 1 m kaufen</text>
 <text x="24.0" y="1332.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1332.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Endschalter: Weg ≈ 0,49 m → 1 m kaufen</text>
 <text x="24.0" y="1347.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1347.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Endschalter: Weg ≈ 1,45 m → 2 m kaufen</text>
+<text x="110.0" y="1347.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Endschalter: Weg ≈ 1,49 m → 2 m kaufen</text>
 <text x="24.0" y="1362.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1362.5" font-size="8.5" fill="#1c2733" text-anchor="start">Not-Aus: Weg ≈ 1,01 m → 1,5 m kaufen</text>
 <rect x="24.0" y="1397.5" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>

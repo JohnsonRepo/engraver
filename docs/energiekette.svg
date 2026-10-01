@@ -1,10 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="1116" viewBox="0 0 1320 1116" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Energiekette X: Wanne, Wannenstützen, Kettenhalter (Portal.py Rev. 20, ToolheadZ.py Rev. 36)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="1149" viewBox="0 0 1320 1149" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Energiekette X: Wanne, Wannenstützen, Kettenhalter, Kabelweg (Portal.py Rev. 21, ToolheadZ.py Rev. 36)</text>
 <text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Gedruckte Kette: Teilung 16, außen 18 × 14, innen 10 × 8,8 mm, Biegeradius 32 mm.</text>
 <clipPath id="vorn"><rect x="250.0" y="92.0" width="870.0" height="243.1"/></clipPath>
 <g clip-path="url(#vorn)">
 <rect x="650.1" y="227.9" width="39.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="815.5" y="227.9" width="24.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="973.0" y="227.9" width="24.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="625.5" y="227.9" width="24.6" height="47.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="310.0" y="275.1" width="750.0" height="30.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
 <rect x="266.5" y="239.5" width="75.2" height="35.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
 <rect x="266.5" y="232.8" width="75.2" height="6.8" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
@@ -16,6 +17,11 @@
 <rect x="278.3" y="177.3" width="63.4" height="55.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
 <rect x="298.0" y="238.0" width="24.0" height="24.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
 <rect x="1014.6" y="248.5" width="36.0" height="13.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
+<line x1="349.0" y1="300.6" x2="349.0" y2="279.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="349.0" y1="279.6" x2="628.8" y2="279.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<polyline points="628.8,279.6 637.8,275.1 637.8,217.4 651.6,217.4" fill="none" stroke="#6d3fb5" stroke-opacity="0.8" stroke-width="12.0" stroke-linejoin="round"/>
+<rect x="628.5" y="262.2" width="18.6" height="1.8" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="628.5" y="238.2" width="18.6" height="1.8" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
 <rect x="310.0" y="250.8" width="728.6" height="9.0" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
 <rect x="647.1" y="223.4" width="363.8" height="4.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="647.1" y="208.4" width="363.8" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.45"/>
@@ -34,29 +40,37 @@
 </g>
 <rect x="250.0" y="92.0" width="870.0" height="243.1" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="250.0" y="84.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Ansicht von vorn: Toolhead in der Mitte, gestrichelt an beiden Enden des X-Wegs (Trägerplatte davor als Umriss)</text>
-<line x1="645.6" y1="188.4" x2="241.0" y2="188.4" stroke="#5b6472" stroke-width="0.6"/>
+<line x1="645.6" y1="188.4" x2="241.0" y2="91.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="645.6" cy="188.4" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="191.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenhalter (ToolheadZ.py)</text>
-<text x="238.0" y="201.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">mit dem Anfangsstück</text>
-<line x1="311.5" y1="200.1" x2="241.0" y2="228.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="311.5" cy="200.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="231.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Motor</text>
-<line x1="663.6" y1="218.9" x2="241.0" y2="258.4" stroke="#5b6472" stroke-width="0.6"/>
+<text x="238.0" y="94.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenhalter (ToolheadZ.py)</text>
+<text x="238.0" y="104.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">mit dem Anfangsstück</text>
+<line x1="663.6" y1="218.9" x2="241.0" y2="126.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="663.6" cy="218.9" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="261.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Festpunkt: Endstück 180,</text>
-<text x="238.0" y="271.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platte unten auf Wanne</text>
-<text x="238.0" y="281.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und Stütze</text>
-<line x1="460.0" y1="290.1" x2="241.0" y2="308.4" stroke="#5b6472" stroke-width="0.6"/>
+<text x="238.0" y="129.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Festpunkt: Endstück 180,</text>
+<text x="238.0" y="139.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platte unten auf Wanne</text>
+<text x="238.0" y="149.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und Stütze</text>
+<line x1="311.5" y1="200.1" x2="241.0" y2="171.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="311.5" cy="200.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="174.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Motor</text>
+<line x1="627.0" y1="239.1" x2="241.0" y2="196.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="627.0" cy="239.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="199.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelflügel: davor die Litzen,</text>
+<text x="238.0" y="209.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 Binder durch die Schlitze</text>
+<line x1="400.0" y1="279.6" x2="241.0" y2="231.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="400.0" cy="279.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="234.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen von der Y-Kette in der</text>
+<text x="238.0" y="244.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">oberen Nut (gestrichelt)</text>
+<line x1="460.0" y1="290.1" x2="241.0" y2="266.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="460.0" cy="290.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="311.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portalrohr 2020</text>
-<line x1="669.6" y1="296.1" x2="241.0" y2="338.4" stroke="#5b6472" stroke-width="0.6"/>
+<text x="238.0" y="269.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portalrohr 2020</text>
+<line x1="669.6" y1="296.1" x2="241.0" y2="291.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="669.6" cy="296.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="341.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wannenstütze am Festpunkt</text>
-<text x="238.0" y="351.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(breit, 2 Einsätze im Arm)</text>
-<line x1="645.6" y1="305.1" x2="241.0" y2="378.4" stroke="#5b6472" stroke-width="0.6"/>
+<text x="238.0" y="294.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wannenstütze am Festpunkt</text>
+<text x="238.0" y="304.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(breit, 2 Einsätze im Arm)</text>
+<line x1="645.6" y1="305.1" x2="241.0" y2="326.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="645.6" cy="305.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="381.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Trägerplatte (Umriss),</text>
-<text x="238.0" y="391.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Riemenhalter</text>
+<text x="238.0" y="329.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Trägerplatte (Umriss),</text>
+<text x="238.0" y="339.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Riemenhalter</text>
 <line x1="1057.9" y1="146.4" x2="1129.0" y2="146.4" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="1057.9" cy="146.4" r="1.5" fill="#5b6472"/>
 <text x="1132.0" y="149.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am rechten Ende: über</text>
@@ -111,7 +125,7 @@
 <rect x="267.0" y="843.0" width="17.0" height="28.9" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="284.0" y="849.0" width="30.6" height="17.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="303.6" y="696.0" width="18.7" height="10.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="307.8" y="706.2" width="10.2" height="17.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="307.8" y="706.2" width="10.2" height="27.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="436.3" y="559.1" width="10.2" height="18.7" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="402.3" y="563.4" width="34.0" height="10.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 </g>
@@ -192,6 +206,66 @@
 <line x1="340.8" y1="425.8" x2="340.8" y2="431.8" stroke="#2f5d92" stroke-width="0.8"/>
 <line x1="402.0" y1="425.8" x2="402.0" y2="431.8" stroke="#2f5d92" stroke-width="0.8"/>
 <text x="371.4" y="423.8" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">18 mm</text>
+<clipPath id="fluegel"><rect x="780.0" y="415.1" width="170.0" height="272.0"/></clipPath>
+<g clip-path="url(#fluegel)">
+<rect x="814.0" y="605.5" width="68.0" height="68.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="882.0" y="614.0" width="34.0" height="51.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="895.6" y="585.1" width="40.8" height="108.8" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.7"/>
+<rect x="936.4" y="398.1" width="27.2" height="306.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="888.8" y="530.8" width="47.6" height="54.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="899.0" y="550.3" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="855.7" y="550.3" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="837.5" y="605.5" width="21.1" height="20.4" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
+<polygon points="800.4,666.8 814.0,666.8 814.0,602.1 817.4,605.5 844.6,605.5 844.6,518.9 909.2,518.9 909.2,498.4 800.4,498.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="849.4" y="454.2" width="76.8" height="44.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="857.2" y="439.6" width="61.2" height="48.6" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8" fill-opacity="0.5"/>
+<rect x="800.4" y="498.4" width="13.6" height="107.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="839.2" y="606.9" width="17.7" height="17.7" fill="#b9a3e3" stroke="#6d3fb5" stroke-width="0.8"/>
+<polyline points="848.0,615.8 824.2,595.3 824.2,474.6 887.8,474.6" fill="none" stroke="#6d3fb5" stroke-opacity="0.75" stroke-width="20.4" stroke-linejoin="round"/>
+<rect x="797.7" y="576.3" width="39.4" height="4.1" fill="none" stroke="#2b2f36" stroke-width="1.2"/>
+<rect x="797.7" y="521.9" width="39.4" height="4.1" fill="none" stroke="#2b2f36" stroke-width="1.2"/>
+<rect x="909.2" y="398.1" width="27.2" height="31.3" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+</g>
+<rect x="780.0" y="415.1" width="170.0" height="272.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="780.0" y="407.1" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Kabelweg am Festpunkt: Schnitt durch den Kabelflügel</text>
+<line x1="916.0" y1="428.8" x2="959.0" y2="428.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="916.0" cy="428.8" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="431.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fuß des Kettenhalters</text>
+<text x="962.0" y="441.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Toolhead links, gestrichelt)</text>
+<line x1="894.6" y1="474.6" x2="959.0" y2="474.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="894.6" cy="474.6" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="477.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen oben über den Riemen</text>
+<text x="962.0" y="487.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">nach vorn in die Wanne</text>
+<line x1="800.4" y1="508.6" x2="959.0" y2="514.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="800.4" cy="508.6" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="517.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelflügel (Schnitt), dahinter die</text>
+<text x="962.0" y="527.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Stütze, die Wanne, das Endstück 180</text>
+<line x1="824.2" y1="523.9" x2="959.0" y2="554.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="824.2" cy="523.9" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="557.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">je ein Binder um Litzen und</text>
+<text x="962.0" y="567.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Flügel, durch die Schlitze</text>
+<line x1="859.1" y1="553.7" x2="959.0" y2="594.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="859.1" cy="553.7" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="597.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf</text>
+<line x1="848.0" y1="615.8" x2="959.0" y2="624.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="848.0" cy="615.8" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="627.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen in der oberen</text>
+<text x="962.0" y="637.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Nut des Rohrs</text>
+<line x1="933.0" y1="639.5" x2="959.0" y2="664.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="933.0" cy="639.5" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="667.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Schiene</text>
+<line x1="834.4" y1="591.9" x2="857.8" y2="591.9" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="834.4,591.9 839.4,589.9 839.4,593.9" fill="#b4342f"/>
+<polygon points="857.8,591.9 852.8,593.9 852.8,589.9" fill="#b4342f"/>
+<text x="853.8" y="585.9" font-size="8.0" fill="#b4342f" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">6,9 mm</text>
+<line x1="926.2" y1="530.8" x2="926.2" y2="484.8" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="926.2,530.8 924.2,525.8 928.2,525.8" fill="#b4342f"/>
+<polygon points="926.2,484.8 928.2,489.8 924.2,489.8" fill="#b4342f"/>
+<text x="930.2" y="498.8" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">13,5 mm</text>
+<line x1="898.0" y1="442.3" x2="909.2" y2="442.3" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="898.0,442.3 903.0,440.3 903.0,444.3" fill="#b4342f"/>
+<polygon points="909.2,442.3 904.2,444.3 904.2,440.3" fill="#b4342f"/>
+<text x="913.2" y="438.3" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,3 mm</text>
 <text x="24.0" y="943.1" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
 <text x="24.0" y="961.1" font-size="8.5" fill="#5b6472" text-anchor="start">Kette</text>
 <text x="110.0" y="961.1" font-size="8.5" fill="#1c2733" text-anchor="start">19 Glieder = 304 mm zwischen den Gelenken (296,1 gebraucht: halber Hub 195,6 + Bogen 100,5), mit Anfangsstück und Endstück 180 376 mm</text>
@@ -201,22 +275,26 @@
 <text x="110.0" y="991.1" font-size="8.5" fill="#1c2733" text-anchor="start">Wannenboden Z +44,5, Untertrum bis +58,8; Obertrum ab +108,8 (= Auflage des Kettenhalters, 92,8 mm über der Oberkante des X-Wagens)</text>
 <text x="24.0" y="1006.1" font-size="8.5" fill="#5b6472" text-anchor="start">Wanne</text>
 <text x="110.0" y="1006.1" font-size="8.5" fill="#1c2733" text-anchor="start">X −25,25 bis +217,25, liegt auf den Armen der Stützen; vorn 3 mm Luft zur Trägerplatte, am Ende 3 mm vor dem Lagerschlitten</text>
-<text x="24.0" y="1021.1" font-size="8.5" fill="#5b6472" text-anchor="start">Schrauben</text>
-<text x="110.0" y="1021.1" font-size="8.5" fill="#1c2733" text-anchor="start">3 × M5 × 10 + Hammermutter (Stützen), 2 × M3 × 8 + Einsatz (Laschen), 2 × M3 × 10 + Scheibe + Einsatz (Endstück 180); Kettenhalter: 2 × M3 × 10 von vorn, 2 × M3 × 8 + Scheibe (Anfangsstück)</text>
-<rect x="24.0" y="1054.1" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<text x="43.0" y="1062.1" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
-<rect x="194.0" y="1054.1" width="14.0" height="9.0" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8"/>
-<text x="213.0" y="1062.1" font-size="8.5" fill="#1c2733" text-anchor="start">Energiekette (gedruckt)</text>
-<rect x="364.0" y="1054.1" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="383.0" y="1062.1" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead</text>
-<rect x="534.0" y="1054.1" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="553.0" y="1062.1" font-size="8.5" fill="#1c2733" text-anchor="start">Portal</text>
-<rect x="24.0" y="1072.1" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
-<text x="43.0" y="1080.1" font-size="8.5" fill="#1c2733" text-anchor="start">Kaufteil</text>
-<rect x="194.0" y="1072.1" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<text x="213.0" y="1080.1" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
-<rect x="364.0" y="1072.1" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<text x="383.0" y="1080.1" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
-<rect x="534.0" y="1072.1" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<text x="553.0" y="1080.1" font-size="8.5" fill="#1c2733" text-anchor="start">Schraube</text>
-<text x="24.0" y="1100.1" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: Kette und Kettenhalter an den Enden des X-Wegs, die Trägerplatte (sie steht vor der Kette).</text></svg>
+<text x="24.0" y="1021.1" font-size="8.5" fill="#5b6472" text-anchor="start">Kabelweg</text>
+<text x="110.0" y="1021.1" font-size="8.5" fill="#1c2733" text-anchor="start">in der oberen Nut des Rohrs von X −224 bis −37,4, am Kabelflügel hoch (6,9 mm hinter dem Rücklauf, 2 Binder), oben 13,5 mm über dem Riemenhalter nach vorn in die Wanne</text>
+<text x="24.0" y="1036.1" font-size="8.5" fill="#5b6472" text-anchor="start">Schrauben</text>
+<text x="110.0" y="1036.1" font-size="8.5" fill="#1c2733" text-anchor="start">3 × M5 × 10 + Hammermutter (Stützen), 2 × M3 × 8 + Einsatz (Laschen), 2 × M3 × 10 + Scheibe + Einsatz (Endstück 180); Kettenhalter: 2 × M3 × 10 von vorn, 2 × M3 × 8 + Scheibe (Anfangsstück)</text>
+<rect x="24.0" y="1069.1" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="43.0" y="1077.1" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
+<rect x="194.0" y="1069.1" width="14.0" height="9.0" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8"/>
+<text x="213.0" y="1077.1" font-size="8.5" fill="#1c2733" text-anchor="start">Energiekette (gedruckt)</text>
+<rect x="364.0" y="1069.1" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="383.0" y="1077.1" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead</text>
+<rect x="534.0" y="1069.1" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="553.0" y="1077.1" font-size="8.5" fill="#1c2733" text-anchor="start">Portal</text>
+<rect x="24.0" y="1087.1" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<text x="43.0" y="1095.1" font-size="8.5" fill="#1c2733" text-anchor="start">Kaufteil</text>
+<rect x="194.0" y="1087.1" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="213.0" y="1095.1" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<rect x="364.0" y="1087.1" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<text x="383.0" y="1095.1" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
+<rect x="534.0" y="1087.1" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<text x="553.0" y="1095.1" font-size="8.5" fill="#1c2733" text-anchor="start">Schraube</text>
+<rect x="24.0" y="1105.1" width="14.0" height="9.0" fill="#b9a3e3" stroke="#6d3fb5" stroke-width="0.8"/>
+<text x="43.0" y="1113.1" font-size="8.5" fill="#1c2733" text-anchor="start">Litzen</text>
+<text x="24.0" y="1133.1" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: Kette und Kettenhalter an den Enden des X-Wegs, die Trägerplatte (sie steht vor der Kette).</text></svg>

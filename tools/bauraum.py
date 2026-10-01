@@ -495,6 +495,27 @@ def portal_bauraeume(w, L):
               L['st_block_z']),
             q('Wannenstuetze {} Arm'.format(n), x, L['st_arm_y'],
               L['st_arm_z'])]
+    # Kabelfluegel am Festpunkt (Rev. 21) und die Litzen davor: aus der
+    # oberen Nut hoch, oben ueber den Riemen nach vorn in die Wanne
+    feste += [
+        q('Wannenstuetze Festpunkt Fluegel', L['kf_x'], L['kf_y'],
+          L['kf_z']),
+        q('Litzen X am Fluegel', L['kf_buendel_x'], L['kf_buendel_y'],
+          (L['profil_z1'], L['kf_quer_z'][1]), 'kabel'),
+        q('Litzen X zur Wanne', (L['kf_buendel_x'][0], L['wanne_x'][0]),
+          (L['kf_buendel_y'][0], L['xk_y_mitte'] + w('kf_buendel_t') / 2.0),
+          L['kf_quer_z'], 'kabel')]
+    # Y-Kette (Rev. 21): was mit dem Portal faehrt — Kettenhalter Y auf dem
+    # linken Schlitten und das Anfangsstueck darauf. Wanne, Traeger und
+    # Kette selbst: y_kette_rahmen() und tools/portal_check.py, Abschnitt 18
+    feste += [
+        q('Kettenhalter Y', L['khy_x'], L['khy_y'], L['khy_z']),
+        q('Kettenhalter Y Leiste aussen', L['khy_leiste_aussen_x'],
+          L['khy_leiste_y'], L['khy_leiste_z']),
+        q('Kettenhalter Y Leiste innen', L['khy_leiste_innen_x'],
+          L['khy_leiste_y'], L['khy_leiste_z']),
+        q('Y-Kette Anfangsstueck', L['yk_x'], L['khy_ende_y'],
+          L['yk_ober_z'], 'kette')]
     erlaubt = {
         ('Portalrohr', 'X-Schiene'),
         ('Motorplatte', 'Motorhalter Saeule hinten'),
@@ -534,6 +555,22 @@ def portal_bauraeume(w, L):
         ('Kettenwanne', 'Kettenwanne Lasche 2'),
         ('Kettenwanne Lasche 1', 'Wannenstuetze mitte Block'),
         ('Kettenwanne Lasche 2', 'Wannenstuetze rechts Block'),
+        # Kabelfluegel: ein Teil mit der Stuetze, steht auf dem Rohr; die
+        # Litzen kommen aus der Nut, liegen am Fluegel und gehen in die Wanne
+        ('Wannenstuetze Festpunkt Fluegel', 'Wannenstuetze Festpunkt Platte'),
+        ('Wannenstuetze Festpunkt Fluegel', 'Wannenstuetze Festpunkt Block'),
+        ('Wannenstuetze Festpunkt Fluegel', 'Portalrohr'),
+        ('Litzen X am Fluegel', 'Wannenstuetze Festpunkt Fluegel'),
+        ('Litzen X am Fluegel', 'Portalrohr'),
+        ('Litzen X am Fluegel', 'Litzen X zur Wanne'),
+        ('Litzen X zur Wanne', 'Kettenwanne'),
+        # Kettenhalter Y: ein Teil, liegt auf der Platte des linken
+        # Schlittens, das Anfangsstueck liegt zwischen den Leisten darauf
+        ('Kettenhalter Y', 'Platte links'),
+        ('Kettenhalter Y', 'Kettenhalter Y Leiste aussen'),
+        ('Kettenhalter Y', 'Kettenhalter Y Leiste innen'),
+        ('Kettenhalter Y', 'Y-Kette Anfangsstueck'),
+        ('Kettenhalter Y Leiste innen', 'Platte links'),
     }
     for n in L['st_x']:
         erlaubt |= {
@@ -563,6 +600,45 @@ def portal_bauraeume(w, L):
             ('Y-Ruecklauf ' + n, 'Rahmen 2040 ' + n),   # laeuft in der Nut
         }
     return feste, erlaubt
+
+
+
+def y_kette_rahmen(w, L):
+    """Rahmenfeste Teile der Y-Kette (Portal.py Rev. 21) in Rahmenkoordinaten
+    (Portal in der Mitte, wie Abschnitt 14 von portal_check.py): Wanne Y mit
+    Laschen, die drei Traeger (Wand und Arm) und — angenommen — die Winkel
+    an den Kreuzungen aussen am linken 2040 (je 20 mm vom Profil und ueber
+    dem 2060, vor und hinter dem 2060). Liefert (quader, erlaubte_paare)."""
+    def q(name, x, y, z, art='druck'):
+        return Quader(name, x[0], x[1], y[0], y[1], z[0], z[1], art)
+
+    xw, yw = L['ywanne_x'], L['ywanne_y']
+    teile = [q('Kettenwanne Y', xw, yw, L['ywanne_z'])]
+    hb = w('wanne_lasche_b') / 2.0
+    for i, (_, yl) in enumerate(L['ywanne_laschen']):
+        teile.append(q('Kettenwanne Y Lasche {}'.format(i + 1),
+                       L['ywanne_lasche_x'], (yl - hb, yl + hb),
+                       L['ywanne_boden_z']))
+    erlaubt = set()
+    for n, y in L['ytr_y'].items():
+        wand, arm = 'Traeger Y {} Wand'.format(n), 'Traeger Y {} Arm'.format(n)
+        teile += [q(wand, L['ytr_wand_x'], y, L['ytr_wand_z']),
+                  q(arm, L['ytr_arm_x'], y, L['ytr_arm_z'])]
+        erlaubt |= {(wand, arm), (arm, 'Kettenwanne Y'),
+                    (wand, 'Rahmen 2040 links')}
+    for i in (1, 2):
+        erlaubt.add(('Kettenwanne Y', 'Kettenwanne Y Lasche {}'.format(i)))
+    erlaubt |= {('Kettenwanne Y Lasche 1', 'Traeger Y mitte Arm'),
+                ('Kettenwanne Y Lasche 2', 'Traeger Y vorn Arm')}
+    # Winkel an den Kreuzungen: 20 mm, in der unteren Nut der 2040 (Angaben
+    # 2026-09-27/29); aussen am linken 2040 direkt am 2060 angenommen
+    xa = -L['aussen_x']
+    zq = L['quer_z'][1]
+    for n, (y0, y1) in (('hinten', L['quer_y_hinten']),
+                        ('vorn', L['quer_y_vorn'])):
+        teile.append(q('Winkel 2040/2060 ' + n, (xa - 20.0, xa),
+                       (y0 - 20.0, y1 + 20.0), (zq, zq + 20.0), 'kaufteil'))
+    return teile, erlaubt
 
 
 def x_riemen_trume(L, xw, rh_x0, rh_x1):

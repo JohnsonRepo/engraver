@@ -551,8 +551,9 @@ ihm eine Spule tauschen — siehe [Zwei Y-Motoren](#zwei-y-motoren).
 
 Angabe vom 2026-10-01: Die Ketten werden **selbst gedruckt**, für X und Y.
 Gedruckt ist bisher eine, die zweite kommt in derselben Größe. Die Maße
-stammen aus deiner 3MF, der Anschlag vom gedruckten Teil. Wanne, Festpunkt
-und Kettenhalter der X-Kette stehen in [energiekette.md](energiekette.md).
+stammen aus deiner 3MF, der Anschlag vom gedruckten Teil. Wannen,
+Festpunkte und Kettenhalter beider Ketten und der Kabelweg zwischen ihnen
+stehen in [energiekette.md](energiekette.md).
 
 | Wert | Maß | Status |
 |---|---|---|
@@ -564,9 +565,11 @@ und Kettenhalter der X-Kette stehen in [energiekette.md](energiekette.md).
 | Riegelseite | nur durch einzelne Streben geschlossen, die Litzen lassen sich jederzeit einlegen und herausnehmen | Angabe 2026-10-01 |
 | Anschlussstücke | 43 lang: 36 hinter dem Gelenk, Auge 7; Platte 2 mm mit 2 × Ø5,5, 18 und 30 mm hinter dem Gelenk | aus dem Modell gemessen |
 | X-Kette | 19 Glieder, 376 mm mit Anfangsstück und Endstück 180 | gerechnet (Portal.py Rev. 20) |
-| Y-Kette | 19 Glieder, 376 mm, gleiche Größe wie X: Arbeitsweg plus Reserve nach vorn | gerechnet, Wahl 2026-10-01; Wanne und Halter offen |
+| Y-Kette | 18 Glieder, 360 mm, gleiche Größe wie X: Arbeitsweg plus 35,6 mm Reserve nach vorn (gewählt: mindestens 26) | gerechnet (Portal.py Rev. 21), Wahl 2026-10-01 |
+| Kabelweg zur X-Kette | in der oberen Nut des Portalrohrs, am Festpunkt ein Kabelflügel mit zwei Kabelbindern | Wahl 2026-10-01, Portal.py Rev. 21 |
 | Motorkabel (mitgeliefert) | lose Adern in einem Schlauch; in den Ketten ohne Schlauch | Angabe 2026-10-01 |
-| Untere Nut an der Unterseite des linken 2040 | belegt | Angabe 2026-10-01 |
+| Untere Nut an der Unterseite des linken 2040 | belegt: die Wanne Y hängt deshalb an der unteren Seitennut außen | Angabe 2026-10-01 |
+| Winkel an den Kreuzungen 2040/2060 | 20 mm, in der unteren Nut der 2040; Lage außen direkt am 2060 angenommen | Angaben 2026-09-27/29 |
 | gekaufte Ketten | 10 × 20 mm innen, 15 × 27 mm außen, je 1 m | `[v]` vorhanden, werden nicht verwendet |
 
 ## Normteile (aus hardware.md, `[w]`)

@@ -1,18 +1,26 @@
-# Energiekette X — Wanne, Festpunkt und Kettenhalter
+# Energieketten X und Y — Wannen, Festpunkte, Kettenhalter, Kabelweg
 
-Die gedruckte Energiekette der X-Achse, vom Festpunkt über dem Portalrohr
-bis zum Toolhead. Zwei Skripte bauen die Teile:
+Die gedruckten Energieketten der X- und der Y-Achse. Die X-Kette läuft vom
+Festpunkt über dem Portalrohr bis zum Toolhead, die Y-Kette vom Rahmen
+außen am linken 2040 bis zum linken Y-Schlitten. Dazwischen laufen die
+Litzen in der oberen Nut des Rohrs. Zwei Skripte bauen die Teile:
 
-* `fusion/Portal/Portal.py` (seit Rev. 19) baut die **Kettenwanne** und
+* `fusion/Portal/Portal.py` baut seit Rev. 19 die **Kettenwanne** und
   drei **Wannenstützen** (Komponenten `Kettenwanne`,
   `Wannenstuetze_Festpunkt`, `Wannenstuetze_mitte`, `Wannenstuetze_rechts`).
-  Die Kette selbst steht dort als Referenz (`Ref_Kette`).
-* `fusion/ToolheadZ/ToolheadZ.py` (seit Rev. 35) baut den **Kettenhalter**
-  für das bewegte Ende und die ausgeblendete `Bohrlehre_Kettenhalter`.
+  Seit Rev. 21 trägt die Stütze am Festpunkt den **Kabelflügel**. Dazu
+  kommen für Y der **Kettenhalter Y**, die **Kettenwanne Y**, drei
+  **Träger Y** (`Kettenhalter_Y`, `Kettenwanne_Y`,
+  `Wannentraeger_Y_Festpunkt`, `_mitte`, `_vorn`) und die ausgeblendete
+  `Bohrlehre_Kettenhalter_Y`. Beide Ketten stehen dort als Referenz.
+* `fusion/ToolheadZ/ToolheadZ.py` baut seit Rev. 35 den **Kettenhalter**
+  für das bewegte Ende der X-Kette und die ausgeblendete
+  `Bohrlehre_Kettenhalter`.
 
-Geprüft mit `python3 tools/portal_check.py` (Abschnitt 17) und
-`python3 tools/toolhead_check.py` (Abschnitt 9c). Die Zeichnung
-[energiekette.svg](energiekette.svg) erzeugt
+Geprüft wird mit `python3 tools/portal_check.py` (Abschnitt 17: X und
+Kabelweg, Abschnitt 18: Y) und mit `python3 tools/toolhead_check.py`
+(Abschnitt 9c). Die Zeichnungen [energiekette.svg](energiekette.svg) und
+[energiekette-y.svg](energiekette-y.svg) erzeugt
 `python3 tools/kette_zeichnen.py` neu.
 
 ![Energiekette X](energiekette.svg)
@@ -20,27 +28,46 @@ Geprüft mit `python3 tools/portal_check.py` (Abschnitt 17) und
 ## Was hier zusammenkommt
 
 Deine Frage vom 2026-10-01 war, wie die Energiekette an den Toolhead kommt.
-Deine Vorgaben dazu:
+Deine Vorgaben und Antworten dazu (alle vom 2026-10-01):
 
-* Die Kette ist **selbst gedruckt**, nach dem Modell „Energiekette“ von
+* Die Ketten sind **selbst gedruckt**, nach dem Modell „Energiekette“ von
   lingnau.florian (deine 3MF). Die gekauften Ketten (15 × 27 mm außen)
   fallen damit weg. **Auch die Y-Kette wird gedruckt.**
 * Die X-Kette liegt **direkt hinter der Trägerplatte**.
 * Konstruiert werden **Halter und Wanne**: der Kettenhalter am Toolhead,
   die Wanne mit dem Festpunkt am Portal und die Stützen, die sie tragen.
+* **Kabelweg zur X-Kette:** in der **oberen Nut** des Rohrs, an der Stütze
+  am Festpunkt ein **Halter mit Schlitzen** für Kabelbinder
+  ([Kabelweg am Festpunkt](#kabelweg-am-festpunkt)).
+* **Y-Kette:** gleich mit konstruieren. Ihr Weg ist der **Arbeitsweg plus
+  mindestens 26 mm** nach vorn. Die **Nut an der Unterseite** des linken
+  2040 ist **belegt**, die Wanne hängt deshalb an der unteren Seitennut
+  ([Y-Kette](#y-kette)).
+* **Motorkabel:** Die mitgelieferten Kabel haben lose Adern in einem
+  Schlauch ([Litzen in der Kette](#litzen-in-der-kette)).
+* **Gedruckt ist bisher eine Kette.** Sie biegt sich um 180°, ein Glied
+  dreht höchstens 30°. Eine Seite des Kanals ist nur durch einzelne Streben
+  geschlossen, die Litzen lassen sich dort jederzeit ein- und ausfädeln.
+  Die zweite Kette kannst du noch anpassen: Ich empfehle **dieselbe
+  Größe** mit **18 Gliedern** für Y.
 
 | Teil | Skript | Stück | Funktion |
 |---|---|---|---|
-| **Kettenhalter** | ToolheadZ.py | 1 | hinten an der Trägerplatte über dem Riemenhalter, trägt das Anfangsstück |
+| **Kettenhalter** | ToolheadZ.py | 1 | hinten an der Trägerplatte über dem Riemenhalter, trägt das Anfangsstück der X-Kette |
 | **Kettenwanne** | Portal.py | 1 | Rinne über dem Portalrohr, 242,5 mm lang: führt den Untertrum und trägt den Festpunkt |
-| **Wannenstütze Festpunkt** | Portal.py | 1 | die breite (26 mm), mit zwei Einsätzen für das Endstück 180 |
+| **Wannenstütze Festpunkt** | Portal.py | 1 | die breite (26 mm), mit zwei Einsätzen für das Endstück 180 und links dem Kabelflügel |
 | **Wannenstütze mitte, rechts** | Portal.py | 2 | 16 mm breit, bei X = +95 und +200 |
-| Anfangsstück, 19 Glieder mit Riegel, Endstück 180 | deine 3MF | 21 | die Kette |
-| `Bohrlehre_Kettenhalter` | ToolheadZ.py | bei Bedarf | Bohrhilfe für die zwei Löcher in der schon gedruckten Trägerplatte |
+| X-Kette: Anfangsstück, 19 Glieder mit Riegel, Endstück 180 | deine 3MF | 21 | |
+| **Kettenhalter Y** | Portal.py | 1 | auf der Platte des linken Y-Schlittens hinter dem Stirnblock, trägt das Anfangsstück der Y-Kette |
+| **Kettenwanne Y** | Portal.py | 1 | Rinne außen am linken 2040, 238,5 mm lang: führt den Untertrum und trägt den Festpunkt |
+| **Träger Y Festpunkt, mitte, vorn** | Portal.py | 3 | an der unteren Seitennut des 2040, tragen die Wanne Y |
+| Y-Kette: Anfangsstück, 18 Glieder mit Riegel, Endstück 180 | deine 3MF | 20 | |
+| `Bohrlehre_Kettenhalter` | ToolheadZ.py | bei Bedarf | Bohrhilfe für die schon gedruckte Trägerplatte |
+| `Bohrlehre_Kettenhalter_Y` | Portal.py | bei Bedarf | Bohrhilfe für den schon gedruckten linken Schlitten |
 
 Die 3MF liegt nicht im Repo, das Modell steht unter CC BY-NC-SA. Gemessen
-habe ich daran die Maße im nächsten Abschnitt. Die Kette selbst bleibt,
-wie du sie gedruckt hast.
+habe ich daran die Maße im nächsten Abschnitt. Die Ketten selbst bleiben,
+wie du sie druckst.
 
 ## Die gedruckte Kette
 
@@ -61,7 +88,7 @@ Endstück 180):
 
 Mit R 32 knickt jedes Gelenk im Bogen um 28,96°, die Prüfung verlangt
 höchstens 30°. Die Schleifenhöhe zeigt, ob das stimmt: Miss sie, bevor
-du den Kettenhalter druckst ([Noch offen](#noch-offen), Punkt 1).
+du die Kettenhalter druckst ([Noch offen](#noch-offen), Punkt 1).
 
 **Bis Portal Rev. 19 und ToolheadZ Rev. 35 stand hier R 20.** Den Radius
 hatte ich aus dem Modell gerechnet: Dort stoßen zwei Glieder erst bei
@@ -75,10 +102,14 @@ bleiben, wie sie sind.
 Der **Boden** der Glieder liegt innen im Bogen, der Riegel außen. Im
 Obertrum ist der Boden also unten, im Untertrum oben, und der Untertrum
 liegt auf seinen Riegeln. Deshalb sitzt am Festpunkt das **Endstück 180**:
-Seine Platte ist um 180° gedreht und liegt im Untertrum unten. Am Toolhead
-sitzt das **Anfangsstück**, im Obertrum ebenfalls mit der Platte unten. Das
-normale Endstück und die Drehkonsole für ein 18-mm-Rohr aus der 3MF
-brauchst du nicht.
+Seine Platte ist um 180° gedreht und liegt im Untertrum unten. Am bewegten
+Ende sitzt das **Anfangsstück**, im Obertrum ebenfalls mit der Platte
+unten. Das gilt für beide Ketten. Das normale Endstück und die Drehkonsole
+für ein 18-mm-Rohr aus der 3MF brauchst du nicht.
+
+**Die zweite Kette** druckst du in derselben Größe: Wannen, Halter und
+Prüfungen rechnen für beide mit denselben Maßen. Für Y reichen
+**18 Glieder** ([Länge](#lage-und-länge-der-y-kette)).
 
 ## Lage und Schleife
 
@@ -104,13 +135,14 @@ läuft der Bogen hinweg.
 | −8 | Arme der Stützen vorn |
 | −9,6 … −11,0 | X-Riemen, gezogenes Trum (unter den Armen) |
 | −14 | Riemenhalter hinten (unter den Armen) |
-| −16 … −36 | Portalrohr 2020 |
+| −16 … −36 | Portalrohr 2020, obere Nut bei −26 |
 | −21,7 … −23,1 | X-Riemen, Rücklauf (unter den Armen) |
 | −23,6 | Wanne hinten innen, ebenso die hintere Leiste |
 | −25,6 | Wanne hinten außen |
 | −27 … −36 | Block der Stützen, steht auf dem Rohr hinter dem Rücklauf |
+| −30 … −36 | Litzen vor dem Kabelflügel |
 | −31,5 | M3 der Laschen im Block |
-| −36 … −40 | Platte der Stützen an der Rückseite des Rohrs |
+| −36 … −40 | Platte der Stützen an der Rückseite des Rohrs, ebenso der Kabelflügel |
 
 ### Höhe (Z)
 
@@ -126,13 +158,15 @@ läuft der Bogen hinweg.
 | +58,8 | Untertrum oben |
 | +54,5 | Wände der Wanne oben |
 | +51,8 | Gelenklinie des Untertrums |
+| +45,5 … +51,5 | Litzen vom Kabelflügel über den Riemen in die Wanne |
 | **+44,5** | **Wannenboden oben = Untertrum unten** (Riegel) |
-| +41,5 | Wanne unten = Arme der Stützen oben |
+| +41,5 | Wanne unten = Arme der Stützen oben = Kabelflügel oben |
 | +41,25 | Lagerschlitten oben (rechtes Rohrende) |
 | +35,5 | Arme unten: 3,5 mm über dem Riemenhalter |
+| +34 / +18 | Kabelbinder am Kabelflügel |
 | +32 | Riemenhalter oben |
 | +26,25 / +20,25 | X-Riemen oben / unten |
-| +10 | Rohr oben = Block der Stützen unten |
+| +10 | Rohr oben = Block der Stützen und Kabelflügel unten |
 | 0 | Mitte des Rohrs, M5 in der hinteren Nut |
 | −8 | Platte der Stützen unten |
 
@@ -146,9 +180,12 @@ der Untertrum bei Z +44,5 und der Obertrum 2 R = 64 mm höher bei +108,8.
 |---|---|
 | −228,85 | X-Motor, rechte Kante |
 | −225,85 | Kettenhalter links, Toolhead ganz links: 3 mm zum X-Motor wie die Trägerplatte |
+| −224 … −37,45 | Litzen in der oberen Nut des Rohrs |
+| −39,65 … −23,25 | Kabelflügel, links an der Stütze am Festpunkt |
+| −35,45 … −27,45 | Litzen vor dem Flügel, zwischen den Schlitzen |
 | −25,25 | Wanne links |
 | −23,25 … +2,75 | Stütze am Festpunkt, Mitte −10,25 |
-| −22,25 | Endstück 180, Ende |
+| −22,25 | Endstück 180, Ende: hier gehen die Litzen hinein |
 | −16,25 / −4,25 | Löcher des Endstücks 180, M3×10 |
 | **+13,75** | **Gelenk am Festpunkt** = Mitte des Wegs des bewegten Gelenks |
 | +17,7 … +213,3 | Beginn des Bogens, vom Toolhead ganz links bis ganz rechts |
@@ -174,7 +211,7 @@ reicht die kürzeste Kette.
   vor dem Ende der Wanne: Der Untertrum liegt immer ganz in der Wanne. Der
   Bogen reicht dann bis X +252,6, über Lagerschlitten und Spannbock hinweg.
 
-## Kettenhalter (ToolheadZ.py Rev. 35)
+## Kettenhalter (ToolheadZ.py, seit Rev. 35)
 
 Ein Winkel hinten an der Trägerplatte, 44 mm breit wie die Säule:
 
@@ -206,7 +243,7 @@ frei, er darf schon montiert sein.
 3. Ø3,4 von hinten durchbohren. Hinter der Platte ist auf dieser Höhe frei.
 4. Vorn Ø6,5 × 3,2 mm ansenken.
 
-## Wanne und Wannenstützen (Portal.py Rev. 19)
+## Wanne und Wannenstützen (Portal.py, seit Rev. 19)
 
 **Wanne.** Eine Rinne von X −25,25 bis +217,25 (**242,5 mm**, ein Stück im
 A1). Der Boden ist 3 mm dick, die Wände sind 2 mm dick und 10 mm hoch.
@@ -230,12 +267,53 @@ X-Riemens und der Riemenhalter. Die Stützen greifen deshalb von hinten an:
 | Arm | 6 mm dick (Z +35,5 bis +41,5), reicht nach vorn bis Y −8, über Riemen und Riemenhalter unter die Wanne |
 | Breite | 16 mm; am Festpunkt 26 mm, 7 mm Rand neben den Löchern |
 | Einsätze | am Festpunkt zwei von oben durch den Arm, sonst einer oben im Block für die Lasche |
+| Kabelflügel | nur am Festpunkt (seit Rev. 21): die Platte geht links über dem Rohr 16,4 mm weiter, mit vier Schlitzen für zwei Kabelbinder |
 
 Unter den Armen fährt der Riemenhalter mit 3,5 mm Luft durch. In der
 Innenecke zwischen Platte und Block ist eine Fase von 1 mm in die Stütze
 hinein ausgespart. So sitzt die Kante des Rohrs nicht auf, ob sie gerundet
 ist oder scharf. Die M5 sind von hinten frei zugänglich, auch wenn alles
 montiert ist.
+
+## Kabelweg am Festpunkt
+
+Seit Portal Rev. 21. Die Litzen der X-Kette (W7 Laser, W11 Z-Endschalter,
+W15 Z-Motor) kommen hinten aus der Y-Kette am linken Y-Schlitten
+([Y-Kette](#y-kette)). Bis Rev. 20 war ihr Weg zum Festpunkt nur für die
+Kabellängen gezeichnet. Entschieden hast du: in der oberen Nut des Rohrs,
+an der Stütze am Festpunkt ein Halter mit Schlitzen für Kabelbinder.
+
+1. **Auf dem Schlitten:** Vom Kettenhalter Y laufen sie auf der
+   Schlittenplatte hinter Stirnblock und Rückwand nach innen. Rechts neben
+   der Rückwand (X −224, 3 mm Luft) gehen sie an der Rückseite des Rohrs
+   hoch in die obere Nut. Bis hier fährt alles mit dem Portal, nichts
+   reibt.
+2. **In der oberen Nut** bis X −37,45, das sind **rund 187 mm**. Eine
+   Nutabdeckung oder Clips halten sie dort. Die Nut bleibt unter den Trumen
+   des X-Riemens, sie laufen darüber hinweg.
+3. **Am Kabelflügel hoch:** Links neben der Stütze am Festpunkt kommen sie
+   aus der Nut und laufen **vor dem Kabelflügel** senkrecht hoch, in einem
+   Bündel von 8 × 6 mm. Der Flügel ist die nach links verlängerte Platte der
+   Stütze: X −39,65 bis −23,25, Y −40 bis −36, Z +10 bis +41,5. Durch je
+   zwei Schlitze 2,2 × 4,5 mm (X −36,55 und −26,35) geht ein Kabelbinder
+   bei Z +18 und einer bei Z +34, um Litzen und Flügel. Das ist die
+   Zugentlastung am Festpunkt, die Köpfe der Binder liegen hinten.
+4. **Über den Riemen nach vorn:** Oben (Z +45,5 bis +51,5) biegen sie nach
+   vorn, über Rücklauf, Riemenhalter und gezogenes Trum hinweg, und gehen
+   von links in die offene Wanne und in das Endstück 180.
+
+| Stelle | Luft | |
+|---|---|---|
+| Litzen am Flügel ↔ Rücklauf des X-Riemens | 6,9 mm | quer |
+| Litzen über dem Riemenhalter | 13,5 mm | wenn der Toolhead darunter durchfährt |
+| Litzen ↔ Fuß des Kettenhalters | 3,3 mm | quer, wenn der Toolhead links steht |
+| Litzen in der Nut ↔ Rückwand des Schlittens | 3 mm | links in der Nut |
+| Wand neben den Schlitzen | 2 mm | |
+
+Im Endstück 180 ist kein Platz für einen Binder, und links daneben bleiben
+in der Wanne nur 3 mm. Deshalb hält der Flügel die Litzen, bevor sie in
+die Wanne gehen. Der Schnitt rechts unten in
+[energiekette.svg](energiekette.svg) zeigt den Weg.
 
 ## Freigänge und engste Stellen
 
@@ -251,11 +329,13 @@ Toolhead. Keine Stelle liegt unter 3 mm:
 | Wanne ↔ Lagerschlitten | 3,0 mm | rechtes Rohrende |
 | Bogen ↔ Arme der Stützen mitte und rechts | 3,0 mm | wenn der Bogen über ihnen steht |
 | Bogen ↔ Lagerschlitten | 3,25 mm | rechtes Ende |
+| Litzen ↔ Fuß des Kettenhalters | 3,3 mm | links, am Festpunkt |
 | Bogen ↔ Fuß des Kettenhalters | 3,9 mm | rechtes Ende |
 | Arme ↔ Riemenhalter | 3,5 mm | der Riemenhalter fährt darunter durch |
 | Bogen ↔ Blöcke der Stützen | 3,7 mm | |
 | Block ↔ Rücklauf des X-Riemens | 3,9 mm | |
 | Obertrum ↔ Trägerplatte | 5,3 mm | quer |
+| Litzen am Flügel ↔ Rücklauf | 6,9 mm | quer |
 | Arme ↔ X-Riemen | 9,25 mm | |
 
 `toolhead_check.py` prüft den Kettenhalter für sich: Wände um die Einsätze,
@@ -272,9 +352,12 @@ Inbus.
 | Wanne → Stützen mitte und rechts | **2 × M3×8 + 2 × Einsatz** | durch die Laschen von oben in den Block, 5 mm Gewinde |
 | Endstück 180 → Wanne → Stütze am Festpunkt | **2 × M3×10 + 2 × Scheibe DIN 125 + 2 × Einsatz** | durch 2 mm Platte und 3 mm Boden in den Arm; 4,5 mm Gewinde, endet 1,5 mm vor der Unterseite |
 | Litzen → Kettenhalter | 1 Kabelbinder | durch die zwei Schlitze der Auflage |
+| Litzen → Kabelflügel | 2 Kabelbinder | durch je zwei Schlitze, Z +18 und +34 |
+| Litzen in der oberen Nut | Nutabdeckung Nut 6 oder Clips, rund 187 mm | X −224 bis −37,45 |
 
 Zusammen: 4 × M3×10, 4 × M3×8, 4 Scheiben M3, 8 Messing-Einsätze M3 Ø5,
-3 × M5×10, 3 Hammermuttern M5 und Kabelbinder.
+3 × M5×10, 3 Hammermuttern M5, 3 Kabelbinder und die Nutabdeckung. Die
+Teile der Y-Kette stehen unter [Verschraubung Y](#verschraubung-y).
 
 ## Montage
 
@@ -287,9 +370,10 @@ Zusammen: 4 × M3×10, 4 × M3×8, 4 Scheiben M3, 8 Messing-Einsätze M3 Ø5,
    2 × M3×10 von vorn. Den Z-Schlitten dafür ganz nach unten fahren.
 4. **Stützen ansetzen:** je eine Hammermutter M5 in die hintere Nut des
    Rohrs, jede Stütze mit einer M5×10 lose. Der Block steht auf dem Rohr,
-   der Arm reicht über den Riemen. Die Mitten liegen **239,75 / 345 /
-   450 mm vom linken Rohrende** (X = −10,25, +95, +200). Den X-Riemen
-   kannst du vorher einlegen oder später von vorn unter die Arme schieben.
+   der Arm reicht über den Riemen, der Kabelflügel der Stütze am Festpunkt
+   zeigt nach links. Die Mitten liegen **239,75 / 345 / 450 mm vom linken
+   Rohrende** (X = −10,25, +95, +200). Den X-Riemen kannst du vorher
+   einlegen oder später von vorn unter die Arme schieben.
 5. **Wanne** auf die Arme legen, an den Laschen je 1 × M3×8 in die Blöcke.
    Dann die M5 der Stützen mitte und rechts festziehen.
 6. **Kette** zusammenstecken: 19 Glieder, das Anfangsstück an das eine
@@ -302,11 +386,15 @@ Zusammen: 4 × M3×10, 4 × M3×8, 4 Scheiben M3, 8 Messing-Einsätze M3 Ø5,
    in die Wanne, um 180° nach oben und zurück. Das Anfangsstück mit der
    Platte nach unten zwischen die Leisten des Kettenhalters legen,
    2 × M3×8 + Scheibe von oben.
-9. **Litzen** einziehen (Riegel öffnen), lose nebeneinander, nicht
-   verdrillt. Am Kettenhalter einen Kabelbinder durch die zwei Schlitze.
+9. **Litzen** einziehen: Sie kommen von der Y-Kette in der oberen Nut
+   ([Kabelweg](#kabelweg-am-festpunkt)). Durch die offene Seite der Glieder
+   einfädeln, lose nebeneinander, nicht verdrillt. Am Kettenhalter einen
+   Kabelbinder durch die zwei Schlitze, am Kabelflügel zwei. Dann die
+   Nutabdeckung eindrücken.
 10. **Von Hand durchfahren:** Den Toolhead langsam von Ende zu Ende
     schieben. Die Kette darf nirgends streifen, der Untertrum bleibt in der
     Wanne, und am rechten Ende läuft der Bogen über den Lagerschlitten.
+    Die Litzen am Flügel bleiben hinter dem Fuß des Kettenhalters.
 
 ## Druck (PETG, Bambu Lab A1)
 
@@ -314,8 +402,12 @@ Zusammen: 4 × M3×10, 4 × M3×8, 4 Scheiben M3, 8 Messing-Einsätze M3 Ø5,
 |---|---|---|
 | Kettenhalter | auf der linken Seite liegend | das Profil ist über die ganze Breite gleich, alles steht senkrecht; die Einsatzbohrungen liegen waagerecht, keine Stützen |
 | Kettenwanne | Boden unten, längs | 242,5 mm, passt in den A1 (256 mm) |
-| Wannenstützen (3) | Rückseite der Platte unten | Block und Arm wachsen aus der Platte, keine Überhänge; die M5-Bohrung steht senkrecht |
+| Wannenstützen (3) | Rückseite der Platte unten | Block und Arm wachsen aus der Platte, keine Überhänge; die M5-Bohrung steht senkrecht, der Kabelflügel liegt flach |
+| Kettenhalter Y | Unterseite (Auflage auf dem Schlitten) unten | die Leisten oben, die Einsatzbohrungen senkrecht |
+| Kettenwanne Y | Boden unten, längs | 238,5 mm, passt in den A1 |
+| Träger Y (3) | Unterseite des Arms unten | die Wand steht darauf; die M5-Bohrung Ø5,5 liegt waagerecht und druckt ohne Stütze |
 | `Bohrlehre_Kettenhalter` (PLA) | Plattenseite unten, Lippen nach oben | nur bei Bedarf |
+| `Bohrlehre_Kettenhalter_Y` (PLA) | Oberseite der Platte unten, Lippe nach oben | nur bei Bedarf |
 
 4 Wandlinien, ≥ 40 % Infill. An den Auflageflächen sitzt eine Fase gegen
 den Elefantenfuß.
@@ -327,14 +419,23 @@ Fusion-Lauf):
 |---|---|---|---|
 | Kettenhalter | 22,7 cm³ | ≈ 29 g | 44 × 24,8 × 50 mm |
 | Kettenwanne | 26,8 cm³ | ≈ 34 g | 242,5 × 32,6 × 13 mm |
-| Wannenstütze Festpunkt | 15,2 cm³ | ≈ 19 g | 26 × 32 × 49,5 mm |
+| Wannenstütze Festpunkt mit Kabelflügel | 17,0 cm³ | ≈ 22 g | 42,4 × 32 × 49,5 mm |
 | Wannenstütze mitte, rechts (je) | 9,3 cm³ | ≈ 12 g | 16 × 32 × 49,5 mm |
-| **zusammen** | 83,3 cm³ | **≈ 106 g** | |
-| Kette (Anfangsstück, 19 Glieder mit Riegel, Endstück 180) | 42,3 cm³ | ≈ 52 g in PLA | aus der 3MF |
+| **zusammen X** | 85,1 cm³ | **≈ 108 g** | |
+| Kettenhalter Y | 12,7 cm³ | ≈ 16 g | 32,3 × 49,5 × 11 mm |
+| Kettenwanne Y | 26,1 cm³ | ≈ 33 g | 30,3 × 238,5 × 13 mm |
+| Träger Y Festpunkt | 7,1 cm³ | ≈ 9 g | 36,3 × 26 × 23,3 mm |
+| Träger Y mitte, vorn (je) | 6,7 cm³ | ≈ 8,5 g | 36,3 × 24 × 23,3 mm |
+| **zusammen Y** | 59,3 cm³ | **≈ 75 g** | |
+| X-Kette (Anfangsstück, 19 Glieder mit Riegel, Endstück 180) | 42,3 cm³ | ≈ 52 g in PLA | aus der 3MF |
+| Y-Kette (Anfangsstück, 18 Glieder mit Riegel, Endstück 180) | 40,4 cm³ | ≈ 50 g in PLA | aus der 3MF |
 | `Bohrlehre_Kettenhalter` | 20,0 cm³ | ≈ 25 g PLA | 49,4 × 12 × 77 mm |
+| `Bohrlehre_Kettenhalter_Y` | 4,4 cm³ | ≈ 5 g PLA | 12,5 × 50 × 12 mm |
 
 Mit dem Toolhead bewegen sich der Kettenhalter, das Anfangsstück und etwa
-die halbe Kette, zusammen rund 55 g ohne Litzen.
+die halbe X-Kette, zusammen rund 55 g ohne Litzen. Mit dem Portal fahren
+der Kettenhalter Y, sein Anfangsstück und etwa die halbe Y-Kette mit, rund
+40 g.
 
 ## Litzen in der Kette
 
@@ -353,40 +454,227 @@ die halbe Kette, zusammen rund 55 g ohne Litzen.
   Zulässig sind höchstens 60 % `[w]`. Geprüft in
   `tools/elektronik_check.py`, die Kabelliste steht in
   [verkabelung.md](verkabelung.md#leitungen).
+* **Einfädeln:** Eine Seite des Kanals ist nur durch einzelne Streben
+  geschlossen. Dort lassen sich die Litzen jederzeit einlegen und
+  herausnehmen, ohne die Kette zu öffnen.
+* **Zugentlastung** an jedem Ende einer Kette, keine Löt- oder
+  Steckstelle in der Kette: X am Kettenhalter (1 Binder) und am Kabelflügel
+  (2), Y am Kettenhalter Y (1) und hinten in der Wanne Y (1).
 
 ## Y-Kette
 
-Auch die Y-Kette wird gedruckt, nach demselben Modell und in derselben
-Größe. Ihr Arbeitsweg ist 333 mm (bis 3 mm vor das vordere 2060). Mit R 32
-braucht sie 166,65 + 100,5 = 267,2 mm. Vorgesehen sind **19 Glieder wie
-bei X**: 304 mm, damit 36,8 mm Reserve nach vorn (deine Wahl: Arbeitsweg
-plus Reserve). Du druckst also zweimal dieselbe Kette.
-**Wanne, Festpunkt und Halter der Y-Kette sind noch nicht konstruiert.**
-In [elektronik-platz.svg](elektronik-platz.svg) steht sie als Platzhalter
-außen am linken 2040, mit dem Querschnitt der gedruckten Kette.
+Seit Portal Rev. 21 konstruiert. Dieselbe gedruckte Kette wie X, außen am
+linken 2040, die **Schleife zeigt nach vorn**. Das bewegte Ende sitzt auf
+dem **Kettenhalter Y** auf der Platte des linken Y-Schlittens, der
+Festpunkt hinten in der **Wanne Y**. Sie hängt an drei **Trägern** an der
+unteren Seitennut des 2040.
+
+![Energiekette Y](energiekette-y.svg)
+
+### Lage und Länge der Y-Kette
+
+Rahmenkoordinaten wie in `portal_check.py` Abschnitt 14: X und Z wie oben,
+Y wie im Portal, wenn es **in der Mitte seines Wegs** steht. Fährt das
+Portal um Δ nach vorn, wandern Schlitten, Kettenhalter Y und bewegtes
+Gelenk um Δ mit, der Bogen um Δ/2.
+
+**Quer:** Die Kette läuft **3 mm außen neben der Schlittenplatte**, bei
+X −300 bis −282 (Mitte −291). Die Platte steht bis X −279 über das 2040
+(Außenseite −267) hinaus.
+
+| Z | |
+|---|---|
+| +12,3 | Obertrum oben |
+| +5 | Gelenklinie des Obertrums |
+| −2 … +1 | Leisten des Kettenhalters Y |
+| **−2** | **Obertrum unten = Oberseite des Kettenhalters Y** |
+| −10 | Oberseite der Schlittenplatte = Kettenhalter Y unten |
+| −29 | 2040 oben, darauf die Y-Schiene |
+| −52 | Untertrum oben, Wände der Träger oben |
+| −56,3 | Wände der Wanne Y oben |
+| −59 | Gelenklinie des Untertrums; Mitte der unteren Seitennut, M5 der Träger |
+| **−66,3** | **Wannenboden oben = Untertrum unten** (Riegel) |
+| −69 | 2040 unten = Oberkante der 2060 |
+| −69,3 | Wanne Y unten = Arme der Träger oben |
+| −75,3 | Arme der Träger unten |
+
+| Y (Portal in der Mitte) | |
+|---|---|
+| −250 … −230 | hinteres 2060 |
+| −141,8 | Wanne Y hinten, Binderschlitze bei −135,8 |
+| −130,8 … −104,8 | Träger am Festpunkt, M5 bei −117,8 |
+| −129,8 | Endstück 180, hinteres Ende: hier gehen die Litzen hinein |
+| −123,8 / −111,8 | Löcher des Endstücks 180, M3×10 |
+| −96 … −46,5 | Kettenhalter Y, Binderschlitze bei −90 |
+| **−93,8** | **Gelenk am Festpunkt** |
+| −84 … −41 | Anfangsstück, die Litzen kommen hinten heraus |
+| **−48** | **bewegtes Gelenk** |
+| −46 … −19 | Stirnblock des linken Schlittens |
+| −27 … −3 | Träger mitte, M5 bei −21, Lasche bei −9 |
+| +22,8 | Beginn des Bogens |
+| +63 … +87 | Träger vorn, M5 bei +69, Lasche bei +81 |
+| +96,6 | Wanne Y vorn |
+| +185 … +205 | vorderes 2060 |
+
+**Weg:** Das Portal fährt aus der Mitte **227,3 mm nach hinten** bis ans
+Schienenende und **106 mm nach vorn**, bis der Toolhead mit Z unten 3 mm
+vor dem vorderen 2060 steht (wie `portal_check.py` Abschnitt 14). Das
+sind 333,3 mm.
+
+**Länge:** Du wolltest den Arbeitsweg plus mindestens 26 mm Reserve nach
+vorn. Mit 3 mm Luft an beiden Enden braucht die Kette
+(333,3 + 26 + 2 × 3) / 2 + π · 32 = 182,7 + 100,5 = **283,2 mm** zwischen
+den Gelenken. **18 Glieder** = 288 mm, mit beiden Anschlussstücken
+**360 mm**. Bis Rev. 20 standen hier 19 Glieder wie bei X: Das war
+vorläufig, der Festpunkt lag noch nicht fest.
+
+**Festpunkt:** Er liegt so, dass am hinteren Schienenende noch **3 mm
+Untertrum** in der Wanne bleiben. Vorn reicht die Kette dann, bis das
+Portal 141,6 mm vor der Mitte steht: **35,6 mm Reserve** über die vordere
+Grenze hinaus. Das Portal fährt nie gegen das Ende der Kette.
+
+### Kettenhalter Y (Portal.py, seit Rev. 21)
+
+Eine Platte hinter dem Stirnblock auf der Schlittenplatte. Sie reicht nach
+außen unter das Anfangsstück:
+
+| | |
+|---|---|
+| Platte | 8 mm dick (Z −10 bis −2), X −303,3 bis −271: liegt 8 mm breit auf der Schlittenplatte, der Rest steht 24,3 mm nach außen über; Y −96 bis −46,5, endet 0,5 mm vor dem Stirnblock |
+| Leisten | 3 mm hoch links und rechts des Anfangsstücks, 0,3 mm Spiel je Seite; außen 3 mm dick, innen bis an die Kante der Schlittenplatte |
+| Anfangsstück | Platte unten, Gelenk bei Y −48, die Kette läuft nach vorn. 2 × M3×8 + Scheibe DIN 125 durch seine Löcher in Einsätze von oben |
+| Befestigung | 2 × M3×12 von unten durch die Schlittenplatte (X −275, Y −56 und −90) in Einsätze von unten; der Kopf sitzt 1,75 mm neben dem Y-Wagen |
+| Zugentlastung | zwei Schlitze 4 × 2,2 mm hinter dem Anfangsstück (Y −90): ein Kabelbinder um die Litzen |
+
+Ein neu gedruckter linker Schlitten bekommt die zwei Löcher Ø3,4 aus dem
+Modell. In den schon gedruckten bohrst du sie mit der
+`Bohrlehre_Kettenhalter_Y` (PLA, im Portal-Modell ausgeblendet, 150 mm
+unter dem Schlitten):
+
+1. Lehre hinter dem Stirnblock auf die Schlittenplatte legen: Die Lippe
+   fasst die Außenkante der Platte, vorn stößt die Lehre an den Stirnblock.
+2. Ø3,4 von oben durch die Platte bohren (6 mm). Unter den Löchern ist
+   neben dem Y-Wagen frei.
+
+### Wanne Y und Träger (Portal.py, seit Rev. 21)
+
+**Wanne Y.** Eine Rinne von Y −141,8 bis +96,6 (**238,5 mm**, ein Stück
+im A1), wie die Wanne X: Boden 3 mm, Wände 2 × 10 mm, innen 18,6 mm, an den
+Enden offen. Hinten trägt sie den Festpunkt, dahinter zwei Schlitze für
+einen Kabelbinder. Innen, zum 2040 hin, stehen zwei Laschen ab
+(7,7 × 12 mm, bei Y −9 und +81), je eine M3×8 hält sie im Arm des Trägers
+darunter. Vorn reicht sie, bis der Untertrum am Ende der Kette 3 mm vor
+ihrem Ende aufhört.
+
+**Festpunkt.** Das Endstück 180 liegt hinten in der Wanne, Platte unten,
+Gelenk bei Y −93,8. 2 × M3×10 mit Scheibe DIN 125 gehen durch Endstück und
+Boden in die Einsätze im Arm des Trägers darunter.
+
+**Träger.** Die Nut an der Unterseite des 2040 ist belegt (deine Angabe),
+deshalb hängen die Träger an der **unteren Seitennut** außen (Z −59):
+
+| | |
+|---|---|
+| Wand | 4 mm an der Außenseite des 2040 (X −271 bis −267), Z −75,3 bis −52. 1 × M5×10 in eine Hammermutter der unteren Seitennut, 4,2 mm Eingriff; 2,75 mm Wand über dem Kopf |
+| Arm | 6 mm dick (Z −75,3 bis −69,3), reicht nach außen bis X −303,3 unter die Wanne |
+| Breite | 24 mm; am Festpunkt 26 mm, 7 mm Rand neben den Löchern |
+| Lage | Festpunkt: unter dem Endstück 180, M5 in der Mitte. Mitte und vorn: Mitte bei Y −15 und +75, die M5 6 mm dahinter, die Lasche 6 mm davor. So treffen sich die Köpfe nicht (5 mm Luft) |
+| Einsätze | am Festpunkt zwei von oben in den Arm, sonst einer für die Lasche |
+
+Die M5 ziehst du an, **bevor** die Wanne liegt: Danach deckt sie die
+Köpfe. Zwischen Wanne und Wand des Trägers bleiben 8,7 mm, dort sitzt der
+Kopf der Laschenschraube (3,2 mm Luft).
+
+**Kabel in der Seitennut.** In der unteren Seitennut läuft W13 zum linken
+Y-Motor nach vorn. An jedem Träger kommt es kurz aus der Nut und geht
+**über die Wand** hinweg (vor ihr sitzt der M5-Kopf). Über der Wand ist
+bis zum Y-Wagen 26 mm frei. Die Litzen zur Y-Kette verlassen die Nut schon
+hinter der Wanne: Sie gehen hinten über den Wannenboden in das Endstück 180,
+ein Kabelbinder durch die zwei Schlitze hält sie.
+
+### Freigänge Y
+
+`portal_check.py` (Abschnitt 18) fährt das Portal in Schritten von 2,5 mm
+vom hinteren Schienenende bis ans Ende der Kette und prüft Obertrum,
+Bogen und Schlitten gegen den Rahmen (2040, 2060, Winkel, Y-Motorhalter,
+Elektronikfach) und gegen Wanne, Träger und Untertrum:
+
+| Stelle | Luft | wo |
+|---|---|---|
+| Kette ↔ Schlittenplatte, Stirnblock, Motorhalter | 3,0 mm | quer, über den ganzen Weg |
+| Bogen ↔ Arme der Träger mitte und vorn | 3,0 mm | quer, wenn der Bogen über ihnen steht |
+| Untertrum am hinteren Schienenende | 3 mm | so viel bleibt in der Wanne |
+| Reserve vorn | 35,6 mm | über die vordere Grenze hinaus |
+| Kettenhalter Y ↔ Stirnblock | 0,5 mm | Fuge, beide auf der Platte |
+| Kopf der M3 ↔ Y-Wagen | 1,75 mm | unter der Platte |
+| Rand der Schlittenplatte neben den Löchern | 2,3 mm | |
+| Wanne Y ↔ Winkel an den 2060 | 68 mm | vorn und hinten, Lage der Winkel angenommen |
+
+### Verschraubung Y
+
+| Verbindung | Teile | Hinweis |
+|---|---|---|
+| Kettenhalter Y → Schlittenplatte | **2 × M3×12 + 2 × Messing-Einsatz M3** | von unten durch die 6 mm Platte, 6 mm Gewinde, 1 mm vor dem Grund |
+| Anfangsstück → Kettenhalter Y | **2 × M3×8 + 2 × Scheibe DIN 125 + 2 × Einsatz** | von oben, 5,5 mm Gewinde |
+| Träger → 2040 | **3 × M5×10 + 3 × Hammermutter M5 (Nut 6)** | untere Seitennut außen, 4,2 mm Eingriff |
+| Wanne Y → Träger mitte und vorn | **2 × M3×8 + 2 × Einsatz** | durch die Laschen von oben in den Arm, 5 mm Gewinde, endet 1 mm vor der Unterseite |
+| Endstück 180 → Wanne Y → Träger am Festpunkt | **2 × M3×10 + 2 × Scheibe DIN 125 + 2 × Einsatz** | 4,5 mm Gewinde, endet 1,5 mm vor der Unterseite |
+| Litzen → Kettenhalter Y, Wanne Y | 2 Kabelbinder | durch je zwei Schlitze |
+
+Zusammen: 2 × M3×12, 4 × M3×8, 2 × M3×10, 4 Scheiben M3, 10 Messing-Einsätze
+M3 Ø5, 3 × M5×10, 3 Hammermuttern M5 und 2 Kabelbinder.
+
+### Montage Y
+
+1. **Einsätze einschmelzen:** in den Kettenhalter Y 2 von unten (für die
+   Schlittenplatte) und 2 von oben (für das Anfangsstück), in den Träger am
+   Festpunkt 2 von oben in den Arm, in die anderen je 1.
+2. **Schlittenplatte nachbohren**, wenn sie schon gedruckt ist
+   ([Kettenhalter Y](#kettenhalter-y-portalpy-seit-rev-21)).
+3. **Kettenhalter Y** hinter den Stirnblock auf die Platte, die äußere
+   Leiste außen. 2 × M3×12 von unten, das Portal steht dafür in der Mitte.
+4. **Träger:** je eine Hammermutter M5 in die untere Seitennut außen am
+   linken 2040. Die M5 liegen **112,2 / 209 / 299 mm vor der Vorderseite
+   des hinteren 2060** (Y −117,8, −21, +69). Träger mit M5×10 anschrauben,
+   den Arm nach außen, und festziehen.
+5. **Wanne Y** auf die Arme legen, die Laschen innen, je 1 × M3×8.
+6. **Kette** zusammenstecken: 18 Glieder, das Anfangsstück an das eine
+   Ende, das Endstück 180 an das andere.
+7. **Endstück 180** hinten in die Wanne legen, Platte unten, Gelenk nach
+   vorn. 2 × M3×10 + Scheibe durch Endstück und Boden in den Träger. Das
+   Portal steht dabei in der Mitte oder weiter vorn, dann ist darüber frei.
+8. **Kette einlegen:** den Untertrum mit den Riegeln nach unten nach vorn
+   in die Wanne, um 180° nach oben und zurück. Das Anfangsstück mit der
+   Platte nach unten zwischen die Leisten des Kettenhalters Y,
+   2 × M3×8 + Scheibe von oben.
+9. **Litzen** von der offenen Seite einlegen. Je ein Kabelbinder am
+   Kettenhalter Y und hinten in der Wanne Y. W13 in der Seitennut an jedem
+   Träger über die Wand legen.
+10. **Von Hand durchfahren:** Das Portal langsam vom hinteren Schienenende
+    bis vorn schieben. Die Kette darf nirgends streifen. Hinten bleibt der
+    Untertrum in der Wanne, vorn bleibt Reserve.
 
 ## Noch offen
 
-1. **Schleifenhöhe messen, bevor du den Kettenhalter druckst:** Die Kette
+1. **Schleifenhöhe messen, bevor du die Kettenhalter druckst:** Die Kette
    um 180° biegen, bis die Glieder anschlagen. Außen darf die Schleife
    höchstens **78,6 mm** hoch sein, bei genau 30° je Glied sind es
    76,4 mm. Ist sie höher, ist der Radius größer als 32 mm: dann
-   `kette_r` in beiden Skripten erhöhen. Der Kettenhalter wandert mit
-   nach oben, die Wanne bleibt. Danach beide Prüfungen laufen lassen.
+   `kette_r` in beiden Skripten erhöhen. Der Kettenhalter X wandert mit
+   nach oben, die Wanne Y nach unten; die Wanne X bleibt. Danach beide
+   Prüfungen laufen lassen.
 2. **Breite der gedruckten Kette:** Aus dem Modell ist sie 18 mm breit.
-   Wanne und Leisten lassen 0,3 mm je Seite. Ist deine Kette breiter, zum
+   Wannen und Leisten lassen 0,3 mm je Seite. Ist deine Kette breiter, zum
    Beispiel durch den Elefantenfuß, dann `kette_spiel` erhöhen.
-3. **Kabelweg zum Festpunkt:** W7, W11 und W15 kommen vom linken
-   Y-Schlitten, wo die Y-Kette endet. Bis zum Festpunkt sind es rund
-   225 mm am Rohr entlang, an beiden Trumen des X-Riemens und am
-   Riemenhalter vorbei. Gezeichnet ist dieser Weg nur für die Kabellängen.
-   Weg und Zugentlastung am Festpunkt sind noch nicht konstruiert. Das
-   Endstück 180 hat keine Schlitze für einen Kabelbinder, und links neben
-   ihm bleiben in der Wanne nur 3 mm. Entschieden ist (2026-10-01): in der
-   oberen Nut des Rohrs, an der Stütze am Festpunkt ein Halter mit
-   Schlitzen für Kabelbinder. Er kommt mit Portal Rev. 21.
-4. **Y-Kette:** Wanne, Festpunkt und bewegtes Ende fehlen noch
-   ([Y-Kette](#y-kette)), sie kommen ebenfalls mit Portal Rev. 21.
+3. **Winkel an den 2060:** Die 20-mm-Winkel greifen in die untere Nut der
+   2040 (deine Angaben vom 2026-09-27 und -29), also in dieselbe Seitennut
+   wie die Träger. Gerechnet sind sie außen, direkt vor und hinter jedem
+   2060; Wanne und Träger enden 68 mm davor. Sitzt in der unteren Seitennut
+   zwischen den 2060 noch etwas anderes, sag Bescheid. Die Kabel in der Nut
+   gehen außen um die Winkel herum, wie vorn am Y-Motorhalter.
+4. **Linker Schlitten schon gedruckt?** Dann bohrst du die zwei Löcher für
+   den Kettenhalter Y mit der Lehre nach. Druckst du ihn neu, sind sie im
+   Modell.
 
 ## Parametrik
 
@@ -402,22 +690,38 @@ Die Werte stehen in `MASSE` und landen als User-Parameter im Dialog
 | `kette_b` / `kette_h` / `kette_riegel` | 18 / 14 / 0,3 mm | Außenmaße, der Riegel steht über |
 | `kette_r` | 32 mm | Biegeradius auf der Gelenklinie (30° je Glied ergeben 30,9); der Obertrum liegt 2 R über dem Untertrum, darauf der Kettenhalter |
 | `kette_innen_b` / `kette_innen_h` | 10 / 8,8 mm | Querschnitt für die Füllung (Portal.py) |
-| `kette_spiel` | 0,3 mm | Spiel je Seite in der Wanne und zwischen den Leisten |
+| `kette_spiel` | 0,3 mm | Spiel je Seite in den Wannen und zwischen den Leisten |
 | `endstueck_l` / `endstueck_auge` | 36 / 7 mm | Anschlussstück hinter und vor dem Gelenk |
 | `endstueck_loch_a` / `endstueck_loch_ab` | 18 / 12 mm | erstes Loch hinter dem Gelenk, Abstand zum zweiten |
 | `endstueck_loch_d` / `endstueck_platte` | 5,5 / 2 mm | Löcher (für die Scheibe), Dicke der Platte (Schraubenlänge) |
 | `xk_y_vorn` | −5,3 mm | Vorderkante der Kette, 5,3 mm hinter der Trägerplatte |
 | `xk_boden_z` | 44,5 mm | Oberkante des Wannenbodens, 3 mm über dem Lagerschlitten |
 | `xk_gelenk_x` | 22 mm | bewegtes Gelenk rechts der X-Wagenmitte, an der rechten Kante der Säule |
-| `wanne_boden` / `wanne_wand` / `wanne_wand_h` | 3 / 2 / 10 mm | Wanne |
+| `wanne_boden` / `wanne_wand` / `wanne_wand_h` | 3 / 2 / 10 mm | beide Wannen |
 | `wanne_rand` | 3 mm | Boden links vor dem Endstück 180 |
-| `wanne_lasche` / `wanne_lasche_b` | 10 / 12 mm | Laschen hinten an der Wanne |
+| `wanne_lasche` / `wanne_lasche_b` | 10 / 12 mm | Laschen hinten an der Wanne; die Breite gilt auch für Y |
 | `st_platte` / `st_unten` | 4 / 8 mm | Platte der Stützen und wie weit sie unter die Mitte des Rohrs reicht |
 | `st_block_y` | −27 mm | Vorderkante des Blocks, hinter dem Rücklauf |
 | `st_arm` / `st_arm_vorn` | 6 / −8 mm | Arm unter der Wanne und seine Vorderkante |
-| `st_b` / `st_rand` | 16 / 7 mm | Breite der Stützen; am Festpunkt der Rand neben den Löchern |
+| `st_b` / `st_rand` | 16 / 7 mm | Breite der Stützen; am Festpunkt (auch Y) der Rand neben den Löchern |
 | `st_x_mitte` / `st_x_rechts` | 95 / 200 mm | Mitte der beiden anderen Stützen |
 | `profil_fase` | 1 mm | Fase in der Innenecke der Stützen, dort liegt die Kante des Rohrs frei |
+| `kf_buendel_b` / `kf_buendel_t` | 8 / 6 mm | Platz für die Litzen vor dem Kabelflügel: breit (X) und tief (Y) |
+| `kf_steg` | 2 mm | Wand neben den Schlitzen, Abstand zur Stütze |
+| `kf_binder_b` / `kf_binder_t` | 4,5 / 2,2 mm | Schlitze im Kabelflügel |
+| `kf_binder_z1` / `kf_binder_z2` | 18 / 34 mm | Höhe der beiden Kabelbinder |
+| `y_weg_vorn` | 106 mm | Y-Weg nach vorn aus der Mitte (Z unten, 3 mm vor dem 2060); `portal_check.py` vergleicht ihn mit Abschnitt 14 |
+| `yk_reserve` | 26 mm | Reserve der Y-Kette nach vorn über den Y-Weg |
+| `yk_abstand` | 3 mm | Y-Kette außen neben der Schlittenplatte |
+| `yk_gelenk_y` | −48 mm | bewegtes Gelenk der Y-Kette (Portal in der Mitte) |
+| `khy_dicke` / `khy_auflage_b` / `khy_hinten` | 8 / 8 / 12 mm | Kettenhalter Y: Dicke, Auflage auf der Schlittenplatte, Rand hinter dem Anfangsstück |
+| `khy_leiste` / `khy_leiste_h` | 3 / 3 mm | äußere Leiste und Höhe der Leisten |
+| `khy_schraube_y1` | −56 mm | vordere M3 des Kettenhalters Y |
+| `khy_binder_b` / `khy_binder_t` / `khy_binder_abstand` | 4 / 2,2 / 9 mm | Binderschlitze am Kettenhalter Y und in der Wanne Y |
+| `ywanne_hinten` / `ywanne_lasche` | 12 / 7,7 mm | Wanne Y: Boden hinter dem Endstück 180, Laschen innen |
+| `ytr_wand` / `ytr_arm` / `ytr_ueber` | 4 / 6 / 7 mm | Träger Y: Wand, Arm, Wand über der Mitte der Nut |
+| `ytr_b` / `ytr_versatz` | 24 / 6 mm | Breite der Träger mitte und vorn; M5 dahinter, Lasche davor |
+| `ytr_y_mitte` / `ytr_y_vorn` | −15 / +75 mm | Mitte der Träger mitte und vorn |
 | `kh_fuss` / `kh_auflage` | 8 / 8 mm | Dicke von Fuß und Auflage des Kettenhalters (ToolheadZ.py) |
 | `kh_leiste` / `kh_leiste_h` | 1,2 / 3 mm | hintere Leiste und Höhe der Leisten |
 | `kh_schraube_z` | 85 mm | Höhe der M3 in der Trägerplatte, mitten im Fuß |

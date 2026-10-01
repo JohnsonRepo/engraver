@@ -168,8 +168,9 @@ def leitungen():
         dict(nr='W7', name='Laser', art='Litzen 3-adrig, Silikon',
              mm2=ez.LITZE_LASER, kabel='Laser (12 V + PWM)',
              strom=ez.LASER_A, kette='Y + X',
-             weg='links raus, untere Nut am linken 2040, Y-Kette, über dem '
-                 'Rohr zur X-Kette, X-Kette, Trägerplatte',
+             weg='links raus, untere Nut außen am linken 2040, hinten in die '
+                 'Y-Kette, hinter dem Schlitten in die obere Nut des Rohrs, '
+                 'am Kabelflügel hoch in die X-Kette, Trägerplatte',
              adern=[('+12 V', 'rot', 'Wandler OUT+', 'Laser +12 V'),
                     ('GND', 'schwarz', 'Wandler OUT−', 'Laser GND'),
                     ('PWM', 'weiß', 'Shield Z+', 'Laser PWM')]),
@@ -180,8 +181,8 @@ def leitungen():
              adern=[('10 kΩ', '—', 'Shield Z− S', 'Shield Z− GND')]),
         dict(nr='W9', name='Lichtschranke X', art='Litzen 3-adrig, Silikon',
              mm2=SIG, kabel='X-Endschalter', strom=0.03, kette='Y',
-             weg='links raus, untere Nut am linken 2040, Y-Kette, am '
-                 'Stirnblock nach vorn zum Halter X',
+             weg='links raus, untere Nut außen am linken 2040, Y-Kette, '
+                 'hinter dem Schlitten über das Rohr nach vorn zum Halter X',
              adern=[('+5 V', 'rot', 'Wago +5 V', 'LS X VCC'),
                     ('GND', 'schwarz', 'Wago GND', 'LS X GND'),
                     ('Signal', 'gelb', 'Shield X−', 'LS X D0')]),
@@ -202,8 +203,8 @@ def leitungen():
              mm2=ez.LITZE_MOTOR, kabel='X-Motor', strom=ez.MOTOR_I,
              kette='Y', fertig=True, mitgeliefert=1.0,
              hinweis='in der Kette nur die losen Adern, ohne Schlauch',
-             weg='links raus, untere Nut am linken 2040, Y-Kette, zum Motor '
-                 'über dem Rohrende',
+             weg='links raus, untere Nut außen am linken 2040, Y-Kette, '
+                 'hinter dem Motorhalter hoch zum Motor',
              adern=[('Spule A', 'schwarz · grün', 'Shield X 2B·2A',
                      'X-Motor A'),
                     ('Spule B', 'rot · blau', 'Shield X 1A·1B',
@@ -211,7 +212,9 @@ def leitungen():
         dict(nr='W13', name='Y-Motor links', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor links', strom=ez.MOTOR_I,
              fertig=True, mitgeliefert=1.0,
-             weg='links raus, untere Nut außen am linken 2040 nach vorn',
+             weg='links raus, untere Nut außen am linken 2040 nach vorn; an '
+                 'den drei Trägern der Wanne Y kurz aus der Nut, über ihre '
+                 'Wand',
              adern=[('Spule A', 'schwarz · grün', 'Shield Y 2B·2A',
                      'Y-Motor links A'),
                     ('Spule B', 'rot · blau', 'Shield Y 1A·1B',

@@ -1,8 +1,8 @@
 # Portal.py — Y-Schlitten des Portals (MGN12H) mit X- und Y-Antrieb
 #
-# Baugruppe aus zwanzig Druckteilen. Getrennt, weil jedes Teil nur so ohne
-# Stuetzmaterial druckbar ist — die Y-Klemmtuerme haengen unter der Platte,
-# die Rohrhalterung steht auf ihr:
+# Baugruppe aus fuenfundzwanzig Druckteilen. Getrennt, weil jedes Teil nur
+# so ohne Stuetzmaterial druckbar ist — die Y-Klemmtuerme haengen unter der
+# Platte, die Rohrhalterung steht auf ihr:
 #   Schlitten_links/rechts     Platte auf dem MGN12H-Wagen. Das Portalrohr
 #                              liegt unten auf, eine Rueckwand (2x M5 in
 #                              Nutensteinen) und ein Stirnblock (M5 in die
@@ -55,14 +55,22 @@
 #                              Festpunkt sitzt das Endstueck 180 auf Wanne
 #                              und Stuetze; das bewegte Ende traegt der
 #                              Kettenhalter am Toolhead (ToolheadZ.py).
+#                              Seit Rev. 21 traegt die Stuetze am Festpunkt
+#                              links einen Kabelfluegel fuer die Litzen.
 #                              docs/energiekette.md.
-#   Bohrlehren                 ausgeblendet: Y-Wagen und Lichtschranke
+#   Kettenhalter_Y,            Y-Energiekette (seit Rev. 21): dieselbe Kette
+#   Kettenwanne_Y,             aussen am linken 2040. Der Kettenhalter Y
+#   Wannentraeger_Y_*          sitzt auf dem linken Schlitten, die Wanne Y
+#                              mit dem Festpunkt auf drei Traegern in der
+#                              unteren Seitennut des 2040.
+#   Bohrlehren                 ausgeblendet: Y-Wagen, Lichtschranke und die
+#                              Loecher fuer den Kettenhalter Y im Schlitten
 #   Referenz_nicht_drucken     nur zur Ansicht, NICHT drucken: Aluprofile,
 #                              Linearfuehrungen, X- und Y-Riemen, X- und
 #                              Y-Motoren mit Ritzel, Umlenkritzel, vom
 #                              Toolhead Riemenhalter, Traegerplatte und
-#                              Kettenhalter (vereinfacht), die X-Kette, die
-#                              beiden Lichtschranken
+#                              Kettenhalter (vereinfacht), X- und Y-Kette,
+#                              die beiden Lichtschranken
 #
 # Im Modell steht das Portal in der Mitte seines Wegs und der Toolhead in der
 # Mitte des X-Wegs; die Fahnen sitzen also dort, wo sie montiert werden, und
@@ -89,7 +97,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 20
+REVISION = 21
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -350,6 +358,57 @@ MASSE = {
     'st_x_mitte':         (95.0, 'Wannenstuetze mitte: X'),
     'st_x_rechts':       (200.0, 'Wannenstuetze rechts: X'),
     'profil_fase':         (1.0, 'Stuetzen: Fase in der Innenecke (Rohrkante)'),
+
+    # --- Kabelfluegel an der Stuetze am Festpunkt (seit Rev. 21) ------------
+    # Die Litzen der X-Kette (W7, W11, W15) kommen in der oberen Nut des
+    # Rohrs vom linken Y-Schlitten, treten links neben der Stuetze am
+    # Festpunkt aus der Nut und laufen vor einem Fluegel der Stuetze hinter
+    # dem Ruecklauf hoch, dann ueber den Riemen nach vorn und von links in
+    # das Endstueck 180. Zwei Kabelbinder durch je zwei Schlitze im Fluegel
+    # halten sie (Zugentlastung, die Koepfe hinten).
+    'kf_buendel_b':        (8.0, 'Kabelfluegel: Platz fuer die Litzen (X)'),
+    'kf_buendel_t':        (6.0, 'Kabelfluegel: Litzen vor dem Fluegel (Y)'),
+    'kf_steg':             (2.0, 'Kabelfluegel: Wand neben den Schlitzen'),
+    'kf_binder_b':         (4.5, 'Kabelfluegel: Schlitz, hoch (Binderbreite)'),
+    'kf_binder_t':         (2.2, 'Kabelfluegel: Schlitz, quer (Binderdicke)'),
+    'kf_binder_z1':       (18.0, 'Kabelfluegel: unterer Kabelbinder bei Z'),
+    'kf_binder_z2':       (34.0, 'Kabelfluegel: oberer Kabelbinder bei Z'),
+
+    # --- Energiekette Y (seit Rev. 21) ---------------------------------------
+    # Dieselbe gedruckte Kette wie X, aussen am linken 2040, Schleife nach
+    # vorn. Das bewegte Ende (Anfangsstueck) liegt auf dem Kettenhalter Y,
+    # der hinter dem Stirnblock auf der Platte des linken Y-Schlittens sitzt
+    # (2x M3 von unten durch die Platte). Der Untertrum laeuft in der
+    # Wanne Y zwischen den beiden 2060, sie liegt auf drei Traegern an der
+    # unteren Seitennut des 2040 (die Nut an der Unterseite ist belegt,
+    # Angabe 2026-10-01). Der Festpunkt (Endstueck 180) sitzt hinten in der
+    # Wanne: die Litzen kommen dort aus der Nut direkt hinein.
+    # Laenge: Arbeitsweg (hinten bis ans Schienenende, vorn bis luft_bau vor
+    # das vordere 2060, y_weg_vorn) plus yk_reserve nach vorn (Wahl vom
+    # 2026-10-01). Der Festpunkt liegt so, dass am hinteren Schienenende noch
+    # luft_bau Untertrum bleibt; vorn bleibt so mehr als die Reserve.
+    'y_weg_vorn':        (106.0, 'Y-Weg nach vorn, Z unten, bis 3 mm vor das 2060'),
+    'yk_reserve':         (26.0, 'Y-Kette: Reserve nach vorn ueber den Y-Weg'),
+    'yk_abstand':          (3.0, 'Y-Kette: aussen neben der Schlittenplatte'),
+    'yk_gelenk_y':       (-48.0, 'Y-Kette: bewegtes Gelenk bei Y (Portal)'),
+    'khy_dicke':            (8.0, 'Kettenhalter Y: Dicke (Einsaetze)'),
+    'khy_auflage_b':        (8.0, 'Kettenhalter Y: liegt so breit auf der Platte'),
+    'khy_hinten':          (12.0, 'Kettenhalter Y: reicht hinter das Anfangsstueck'),
+    'khy_leiste':           (3.0, 'Kettenhalter Y: aeussere Leiste, Dicke'),
+    'khy_leiste_h':         (3.0, 'Kettenhalter Y: Leisten, Hoehe'),
+    'khy_schraube_y1':    (-56.0, 'Kettenhalter Y: vordere M3 bei Y'),
+    'khy_binder_b':         (4.0, 'Binderschlitze Y-Kette: laengs'),
+    'khy_binder_t':         (2.2, 'Binderschlitze Y-Kette: quer'),
+    'khy_binder_abstand':   (9.0, 'Binderschlitze Y-Kette: Abstand'),
+    'ywanne_hinten':      (12.0, 'Wanne Y: Boden hinter dem Endstueck 180'),
+    'ywanne_lasche':       (7.7, 'Wanne Y: Lasche zum 2040 hin'),
+    'ytr_wand':            (4.0, 'Traeger Y: Wand am 2040'),
+    'ytr_arm':             (6.0, 'Traeger Y: Arm unter der Wanne'),
+    'ytr_ueber':           (7.0, 'Traeger Y: Wand reicht so weit ueber die M5'),
+    'ytr_b':              (24.0, 'Traeger Y mitte/vorn: Breite'),
+    'ytr_versatz':         (6.0, 'Traeger Y: M5 hinten, Laschenschraube vorn'),
+    'ytr_y_mitte':       (-15.0, 'Traeger Y mitte: Y'),
+    'ytr_y_vorn':         (75.0, 'Traeger Y vorn: Y'),
 
     # --- Y-Antrieb: je Ecke vorn ein NEMA 17 am Y-Motorhalter ---------------
     # Bis Rev. 15 eigenes Skript YMotorhalter.py (Rev. 5); der alte Halter
@@ -1055,6 +1114,129 @@ def lage():
     L['wanne_schraube'] = normlaenge(w('wanne_boden') + 5.0, M3_LAENGEN)
     L['st_m5_schraube'] = normlaenge(w('st_platte') + w('nut_lippe')
                                      + w('nutenstein_h'), M5_LAENGEN)
+
+    # ---- Kabelfluegel an der Stuetze am Festpunkt (seit Rev. 21) -----------
+    # Fluegel links an der Platte der Stuetze, ueber dem Rohr. Davor laufen
+    # die Litzen hoch, je ein Kabelbinder durch die zwei Schlitze links und
+    # rechts von ihnen. Oben laufen sie ueber den Riemen nach vorn, knapp
+    # ueber dem Wannenboden in das offene linke Ende der Wanne.
+    xs0, tb = L['st_x']['Festpunkt'][0], w('kf_binder_t')
+    xr = xs0 - w('kf_steg') - tb / 2.0
+    xl = xr - tb - w('kf_buendel_b')
+    L['kf_x'] = (xl - tb / 2.0 - w('kf_steg'), xs0)
+    L['kf_y'] = L['st_platte_y']
+    L['kf_z'] = (L['profil_z1'], L['st_platte_z'][1])
+    L['kf_schlitze'] = [(x, z) for x in (xl, xr)
+                        for z in (w('kf_binder_z1'), w('kf_binder_z2'))]
+    L['kf_buendel_x'] = (xl + tb / 2.0, xr - tb / 2.0)
+    L['kf_buendel_y'] = (L['kf_y'][1], L['kf_y'][1] + w('kf_buendel_t'))
+    L['kf_quer_z'] = (L['xk_unter_z'][0] + 1.0,
+                      L['xk_unter_z'][0] + 1.0 + w('kf_buendel_t'))
+    # in der oberen Nut: von rechts neben Rueckwand und Motorhalter des
+    # linken Schlittens bis links neben den Kabelfluegel
+    L['kf_nut_x'] = (-(L['R'] - L['rueck_u'][1]) + w('luft_bau'),
+                     L['kf_buendel_x'][0] - w('kf_steg'))
+
+    # ---- Energiekette Y (seit Rev. 21) -------------------------------------
+    # Kette aussen neben der Platte des linken Y-Schlittens. Hoehen: der
+    # Halter liegt auf der Platte, der Obertrum darauf, der Untertrum 2 R
+    # tiefer auf den Riegeln in der Wanne.
+    xa = -(L['platte_x1'] + w('yk_abstand'))
+    L['yk_x'] = (xa - w('kette_b'), xa)
+    L['yk_x_mitte'] = xa - w('kette_b') / 2.0
+    L['khy_z'] = (L['platte_z1'], L['platte_z1'] + w('khy_dicke'))
+    zo = L['khy_z'][1]
+    L['yk_ober_z'] = (zo, zo + w('kette_h') + w('kette_riegel'))
+    L['yk_achse_oben'] = zo + w('kette_h') / 2.0
+    L['yk_achse_unten'] = L['yk_achse_oben'] - 2.0 * w('kette_r')
+    zu = L['yk_achse_unten'] - w('kette_h') / 2.0 - w('kette_riegel')
+    L['yk_unter_z'] = (zu, zu + w('kette_riegel') + w('kette_h'))
+    L['yk_bogen_z'] = (L['yk_achse_unten'] + L['yk_achse_oben']) / 2.0
+    # Laenge aus Arbeitsweg und Reserve; der Festpunkt so, dass am hinteren
+    # Schienenende luft_bau Untertrum bleibt. yk_dy_*: Stellung des Portals
+    # aus der Mitte (wie y_weg_hinten), yk_frei: Unter- plus Obertrum.
+    hinten, vorn, lb = L['y_weg_hinten'], w('y_weg_vorn'), w('luft_bau')
+    pr = math.pi * w('kette_r')
+    L['yk_noetig'] = (hinten + vorn + w('yk_reserve') + 2.0 * lb) / 2.0 + pr
+    L['yk_glieder'] = int(math.ceil(L['yk_noetig'] / w('kette_teilung')
+                                    - 1e-9))
+    L['yk_laenge'] = L['yk_glieder'] * w('kette_teilung')
+    frei = L['yk_laenge'] - pr
+    L['yk_frei'] = frei
+    L['yk_dy_fest'] = -hinten + frei - 2.0 * lb
+    L['yk_fest'] = w('yk_gelenk_y') + L['yk_dy_fest']
+    L['yk_dy_bereich'] = (L['yk_dy_fest'] - frei, L['yk_dy_fest'] + frei)
+    L['yk_reserve_vorn'] = L['yk_dy_bereich'][1] - vorn
+    a, ab = w('endstueck_loch_a'), w('endstueck_loch_ab')
+    L['yk_fest_loecher'] = [(L['yk_x_mitte'], L['yk_fest'] - a),
+                            (L['yk_x_mitte'], L['yk_fest'] - a - ab)]
+    # Wanne Y: hinten ywanne_hinten Boden hinter dem Endstueck 180 (Binder-
+    # schlitze), vorn so weit, wie der Untertrum am Ende der Kette reicht
+    sp = w('kette_spiel')
+    L['ywanne_innen_x'] = (L['yk_x'][0] - sp, L['yk_x'][1] + sp)
+    L['ywanne_x'] = (L['ywanne_innen_x'][0] - w('wanne_wand'),
+                     L['ywanne_innen_x'][1] + w('wanne_wand'))
+    L['ywanne_boden_z'] = (zu - w('wanne_boden'), zu)
+    L['ywanne_z'] = (zu - w('wanne_boden'), zu + w('wanne_wand_h'))
+    L['ywanne_y'] = (L['yk_fest'] - w('endstueck_l') - w('ywanne_hinten'),
+                     L['yk_fest'] + frei + lb)
+    L['ywanne_binder'] = [(L['yk_x_mitte'] + s * w('khy_binder_abstand') / 2.0,
+                           L['ywanne_y'][0] + w('ywanne_hinten') / 2.0)
+                          for s in (-1, 1)]
+    L['ywanne_lasche_x'] = (L['ywanne_x'][1],
+                            L['ywanne_x'][1] + w('ywanne_lasche'))
+    # Laschen vor der M5 des Traegers, damit sich die Koepfe nicht treffen
+    xlm = sum(L['ywanne_lasche_x']) / 2.0
+    L['ywanne_laschen'] = [(xlm, w(n) + w('ytr_versatz'))
+                           for n in ('ytr_y_mitte', 'ytr_y_vorn')]
+    # Traeger Y: Wand an der Aussenseite des 2040 (M5 in der unteren
+    # Seitennut), Arm darunter nach aussen unter die Wanne
+    xf = -L['aussen_x']
+    L['ytr_wand_x'] = (xf - w('ytr_wand'), xf)
+    L['ytr_arm_x'] = (L['ywanne_x'][0] - 1.0, xf - w('ytr_wand'))
+    L['ytr_arm_z'] = (L['ywanne_z'][0] - w('ytr_arm'), L['ywanne_z'][0])
+    L['ytr_wand_z'] = (L['ytr_arm_z'][0], L['nut_u_z'] + w('ytr_ueber'))
+    yl = [y for _, y in L['yk_fest_loecher']]
+    hb = w('ytr_b') / 2.0
+    L['ytr_y'] = {
+        'Festpunkt': (min(yl) - w('st_rand'), max(yl) + w('st_rand')),
+        'mitte': (w('ytr_y_mitte') - hb, w('ytr_y_mitte') + hb),
+        'vorn': (w('ytr_y_vorn') - hb, w('ytr_y_vorn') + hb)}
+    # M5: am Festpunkt in der Mitte (die Einsaetze liegen aussen unter dem
+    # Endstueck), sonst ytr_versatz hinter der Mitte
+    L['ytr_m5_y'] = {
+        'Festpunkt': sum(L['ytr_y']['Festpunkt']) / 2.0,
+        'mitte': w('ytr_y_mitte') - w('ytr_versatz'),
+        'vorn': w('ytr_y_vorn') - w('ytr_versatz')}
+    L['ytr_m5_schraube'] = normlaenge(w('ytr_wand') + w('nut_lippe')
+                                      + w('nutenstein_h'), M5_LAENGEN)
+    # Kettenhalter Y auf der Platte des linken Schlittens (Portal in der
+    # Mitte): aussen die Leiste, innen liegt er khy_auflage_b breit auf, vorn
+    # endet er vor dem Stirnblock. Das Anfangsstueck liegt mit der Platte
+    # nach unten zwischen den Leisten, sein Gelenk bei yk_gelenk_y.
+    yg = w('yk_gelenk_y')
+    L['khy_leiste_aussen_x'] = (L['ywanne_innen_x'][0] - w('khy_leiste'),
+                               L['ywanne_innen_x'][0])
+    L['khy_leiste_innen_x'] = (L['ywanne_innen_x'][1], -L['platte_x1'])
+    L['khy_x'] = (L['khy_leiste_aussen_x'][0],
+                 -L['platte_x1'] + w('khy_auflage_b'))
+    L['khy_y'] = (yg - w('endstueck_l') - w('khy_hinten'),
+                 L['stirn_y'][0] - 0.5)
+    L['khy_ende_y'] = (yg - w('endstueck_l'), yg + w('endstueck_auge'))
+    L['khy_leiste_y'] = (L['khy_ende_y'][0], L['khy_y'][1])
+    L['khy_leiste_z'] = (zo, zo + w('khy_leiste_h'))
+    L['khy_loecher'] = [(L['yk_x_mitte'], yg - a),
+                       (L['yk_x_mitte'], yg - a - ab)]
+    L['khy_binder'] = [(L['yk_x_mitte'] + s * w('khy_binder_abstand') / 2.0,
+                       yg - w('endstueck_l') - w('khy_hinten') / 2.0)
+                      for s in (-1, 1)]
+    xsy = -L['platte_x1'] + w('khy_auflage_b') / 2.0
+    L['khy_schrauben'] = [(xsy, w('khy_schraube_y1')),
+                         (xsy, L['khy_binder'][0][1])]
+    L['khy_schraube'] = normlaenge(w('platte_dicke') + 5.0, M3_LAENGEN)
+    L['khy_ende_schraube'] = normlaenge(w('m3_scheibe_h')
+                                        + w('endstueck_platte') + 4.0,
+                                        M3_LAENGEN)
     return L
 
 
@@ -1853,6 +2035,14 @@ def bau_schlitten(app, design, comp, L, s, fehler):
     bohrung(comp, 'Halter_Einsatz_' + n, 'z', pkt, w('insert_m3_d'),
             L['wand_z1'] - w('insert_tief_t'), L['wand_z1'] + 1.0, k)
 
+    # Kettenhalter Y (seit Rev. 21, nur links): 2x M3 von unten durch die
+    # Platte, aussen neben dem Y-Wagen. Ein schon gedruckter Schlitten
+    # bekommt die Loecher mit Bohrlehre_Kettenhalter_Y.
+    if s < 0:
+        bohrung(comp, 'Kettenhalter_Y_' + n, 'z', L['khy_schrauben'],
+                w('m3_durchgang'), L['platte_z0'] - 1.0,
+                L['platte_z1'] + 1.0, k)
+
     fussfase(comp, k, 'y', L['platte_z0'], w('fase_fuss'), fehler,
              'Schlitten ' + n)
     bbox_pruefen(k, 'Schlitten ' + n,
@@ -2165,10 +2355,12 @@ def bau_stuetze(app, design, comp, L, n, fehler):
     eine Fase in die Stuetze hinein: die Kante des Rohrs sitzt nicht auf,
     ob sie gerundet ist oder scharf. Am Festpunkt breiter, mit den beiden
     Einsaetzen fuer das Endstueck 180 im Arm; sonst ein Einsatz oben im
-    Block fuer die Lasche der Wanne.
+    Block fuer die Lasche der Wanne. Am Festpunkt dazu links der
+    Kabelfluegel (seit Rev. 21): vor ihm laufen die Litzen aus der oberen
+    Nut hoch, zwei Kabelbinder durch je zwei Schlitze halten sie.
 
     Drucklage: Rueckseite der Platte aufs Bett. Block und Arm stehen darauf,
-    die M5-Bohrung steht senkrecht."""
+    die M5-Bohrung steht senkrecht, der Fluegel liegt flach."""
     x = L['st_x'][n]
     py, pz = L['st_platte_y'], L['st_platte_z']
     by, bz = L['st_block_y'], L['st_block_z']
@@ -2180,6 +2372,16 @@ def bau_stuetze(app, design, comp, L, n, fehler):
     k = prisma_vieleck(comp, 'ST_Profil_' + n, 'x', punkte, x[0], x[1],
                        'neu').bodies.item(0)
     k.name = 'Wannenstuetze_' + n
+    x_aussen = x
+    if n == 'Festpunkt':
+        quader(comp, 'ST_Kabelfluegel', L['kf_x'], L['kf_y'], L['kf_z'],
+               'dazu', k)
+        tb, bb = w('kf_binder_t') / 2.0, w('kf_binder_b') / 2.0
+        prismen(comp, 'ST_Kabelbinder', 'y',
+                [(xk - tb, zk - bb, xk + tb, zk + bb)
+                 for xk, zk in L['kf_schlitze']],
+                L['kf_y'][0] - 1.0, L['kf_y'][1] + 1.0, 'weg', k)
+        x_aussen = (L['kf_x'][0], x[1])
     xm = (x[0] + x[1]) / 2.0
     bohrung(comp, 'ST_M5_' + n, 'y', [(xm, L['kern_z'])], w('m5_durchgang'),
             py[0] - 1.0, py[1] + 1.0, k)
@@ -2193,7 +2395,112 @@ def bau_stuetze(app, design, comp, L, n, fehler):
     fussfase(comp, k, 'z', py[0], w('fase_fuss'), fehler,
              'Wannenstuetze ' + n)
     bbox_pruefen(k, 'Wannenstuetze ' + n,
-                 (x, (py[0], ay[1]), (pz[0], az[1])), fehler)
+                 (x_aussen, (py[0], ay[1]), (pz[0], az[1])), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    return k
+
+
+
+# --- Energiekette Y (seit Rev. 21) ---------------------------------------------
+def bau_kettenhalter_y(app, design, comp, L, fehler):
+    """Kettenhalter Y: traegt das bewegte Ende der Y-Kette. Eine 8 mm dicke
+    Platte liegt hinter dem Stirnblock auf der Platte des linken Y-Schlittens
+    und reicht nach aussen unter das Anfangsstueck; zwei Leisten fuehren
+    es. Das Anfangsstueck liegt mit der Platte nach unten darauf, 2x M3 +
+    Scheibe in Gewindeeinsaetze von oben. Dahinter zwei Schlitze fuer den
+    Kabelbinder der Zugentlastung.
+
+    Befestigung: 2x M3 von unten durch die Schlittenplatte in Einsaetze im
+    Halter (aussen neben dem Y-Wagen). Ein schon gedruckter Schlitten wird
+    mit Bohrlehre_Kettenhalter_Y nachgebohrt.
+
+    Drucklage: Unterseite (Auflage auf dem Schlitten) aufs Bett."""
+    z0, z1 = L['khy_z']
+    k = quader(comp, 'KHY_Platte', L['khy_x'], L['khy_y'], L['khy_z'],
+               'neu').bodies.item(0)
+    k.name = 'Kettenhalter_Y'
+    for name, xl in (('aussen', L['khy_leiste_aussen_x']),
+                     ('innen', L['khy_leiste_innen_x'])):
+        quader(comp, 'KHY_Leiste_' + name, xl, L['khy_leiste_y'],
+               L['khy_leiste_z'], 'dazu', k)
+    bohrung(comp, 'KHY_Einsaetze_Ende', 'z', L['khy_loecher'],
+            w('insert_m3_d'), z1 - w('insert_m3_t'), z1 + 1.0, k)
+    tb, bb = w('khy_binder_t') / 2.0, w('khy_binder_b') / 2.0
+    prismen(comp, 'KHY_Binder', 'z',
+            [(x - tb, y - bb, x + tb, y + bb) for x, y in L['khy_binder']],
+            z0 - 1.0, z1 + 1.0, 'weg', k)
+    bohrung(comp, 'KHY_Einsaetze_Schlitten', 'z', L['khy_schrauben'],
+            w('insert_m3_d'), z0 - 1.0, z0 + w('insert_m3_t'), k)
+    fussfase(comp, k, 'y', z0, w('fase_fuss'), fehler, 'Kettenhalter Y')
+    bbox_pruefen(k, 'Kettenhalter Y',
+                 (L['khy_x'], L['khy_y'], (z0, L['khy_leiste_z'][1])), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    return k
+
+
+def bau_kettenwanne_y(app, design, comp, L, fehler):
+    """Wanne fuer den Untertrum der Y-Kette, aussen am linken 2040 zwischen
+    den beiden 2060. Oben und an den Enden offen; hinten liegt der
+    Festpunkt (Endstueck 180, 2x M3 durch Endstueck und Boden in den
+    Traeger darunter), dahinter zwei Schlitze fuer den Kabelbinder. Innen
+    (zum 2040 hin) zwei Laschen, je eine M3 in den Traeger darunter.
+
+    Drucklage: Boden aufs Bett, laengs."""
+    x, xi, y = L['ywanne_x'], L['ywanne_innen_x'], L['ywanne_y']
+    zb, z = L['ywanne_boden_z'], L['ywanne_z']
+    k = quader(comp, 'WanneY_Boden', x, y, zb, 'neu').bodies.item(0)
+    k.name = 'Kettenwanne_Y'
+    quader(comp, 'WanneY_Wand_aussen', (x[0], xi[0]), y, (zb[1], z[1]),
+           'dazu', k)
+    quader(comp, 'WanneY_Wand_innen', (xi[1], x[1]), y, (zb[1], z[1]),
+           'dazu', k)
+    hb = w('wanne_lasche_b') / 2.0
+    for i, (_, yl) in enumerate(L['ywanne_laschen']):
+        quader(comp, 'WanneY_Lasche_{}'.format(i + 1), L['ywanne_lasche_x'],
+               (yl - hb, yl + hb), zb, 'dazu', k)
+    bohrung(comp, 'WanneY_Laschen_M3', 'z', L['ywanne_laschen'],
+            w('m3_durchgang'), zb[0] - 1.0, zb[1] + 1.0, k)
+    bohrung(comp, 'WanneY_Festpunkt_M3', 'z', L['yk_fest_loecher'],
+            w('m3_durchgang'), zb[0] - 1.0, zb[1] + 1.0, k)
+    tb, bb = w('khy_binder_t') / 2.0, w('khy_binder_b') / 2.0
+    prismen(comp, 'WanneY_Binder', 'z',
+            [(xb_ - tb, yb_ - bb, xb_ + tb, yb_ + bb)
+             for xb_, yb_ in L['ywanne_binder']],
+            zb[0] - 1.0, zb[1] + 1.0, 'weg', k)
+    fussfase(comp, k, 'y', zb[0], w('fase_fuss'), fehler, 'Kettenwanne Y')
+    bbox_pruefen(k, 'Kettenwanne Y',
+                 ((x[0], L['ywanne_lasche_x'][1]), y, z), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    return k
+
+
+def bau_traeger_y(app, design, comp, L, n, fehler):
+    """Traeger der Wanne Y, n = 'Festpunkt', 'mitte' oder 'vorn': eine Wand
+    an der Aussenseite des linken 2040 (1x M5 in eine Hammermutter der
+    unteren Seitennut) und darunter ein Arm nach aussen unter die Wanne.
+    Am Festpunkt zwei Einsaetze fuer das Endstueck 180 im Arm, sonst einer
+    fuer die Lasche der Wanne.
+
+    Drucklage: Unterseite des Arms aufs Bett, die Wand steht darauf."""
+    y = L['ytr_y'][n]
+    k = quader(comp, 'TrY_Wand_' + n, L['ytr_wand_x'], y, L['ytr_wand_z'],
+               'neu').bodies.item(0)
+    k.name = 'Wannentraeger_Y_' + n
+    quader(comp, 'TrY_Arm_' + n, L['ytr_arm_x'], y, L['ytr_arm_z'], 'dazu', k)
+    bohrung(comp, 'TrY_M5_' + n, 'x', [(L['ytr_m5_y'][n], L['nut_u_z'])],
+            w('m5_durchgang'),
+            L['ytr_wand_x'][0] - 1.0, L['ytr_wand_x'][1] + 1.0, k)
+    if n == 'Festpunkt':
+        pkt = L['yk_fest_loecher']
+    else:
+        pkt = [p for p in L['ywanne_laschen'] if y[0] < p[1] < y[1]]
+    bohrung(comp, 'TrY_Einsaetze_' + n, 'z', pkt, w('insert_m3_d'),
+            L['ytr_arm_z'][0] - 1.0, L['ytr_arm_z'][1] + 1.0, k)
+    fussfase(comp, k, 'y', L['ytr_arm_z'][0], w('fase_fuss'), fehler,
+             'Wannentraeger Y ' + n)
+    bbox_pruefen(k, 'Wannentraeger Y ' + n,
+                 ((L['ytr_arm_x'][0], L['ytr_wand_x'][1]), y,
+                  (L['ytr_arm_z'][0], L['ytr_wand_z'][1])), fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
@@ -2384,6 +2691,9 @@ def bau_bohrlehren(app, design, comp, L, fehler):
     der Endschalter gedruckt werden: auflegen, beide Loecher muessen
     fluchten. Liegen abseits, ausgeblendet (Konvention SKILL.md).
 
+    Dazu seit Rev. 21 Bohrlehre_Kettenhalter_Y: die zwei Loecher fuer den
+    Kettenhalter Y in der Platte eines schon gedruckten linken Schlittens.
+
     Weitere Lehren gibt es bewusst nicht: alle anderen Verbindungen liegen
     zwischen Teilen dieses Skripts und haengen an denselben Variablen
     (dieselbe Begruendung wie in ToolheadZ.py)."""
@@ -2412,6 +2722,23 @@ def bau_bohrlehren(app, design, comp, L, fehler):
     lehre = neu_mittig(comp, groesstes_profil(sk),
                        w('lehre_dicke')).bodies.item(0)
     lehre.name = 'Bohrlehre_YWagen'
+    material_zuweisen(app, design, lehre, 'PLA', fehler)
+    lehre.isLightBulbOn = False
+
+    # Kettenhalter Y: die Lehre liegt auf der Platte des linken Schlittens,
+    # eine Lippe fasst ihre Aussenkante, vorn stoesst sie an den Stirnblock.
+    # 6 mm dick, damit sie den Bohrer fuehrt. Gebaut 150 mm tiefer (unter
+    # dem Tisch), damit sie nicht im Schlitten steckt.
+    dz, x0 = -150.0, -L['platte_x1']
+    yl = (L['khy_y'][0], L['stirn_y'][0])
+    zl = (L['platte_z1'] + dz, L['platte_z1'] + 6.0 + dz)
+    lehre = quader(comp, 'Lehre_KHY_Platte', (x0, x0 + 10.0), yl, zl,
+                   'neu').bodies.item(0)
+    lehre.name = 'Bohrlehre_Kettenhalter_Y'
+    quader(comp, 'Lehre_KHY_Lippe', (x0 - 2.5, x0), yl,
+           (L['platte_z0'] + dz, zl[1]), 'dazu', lehre)
+    bohrung(comp, 'Lehre_KHY_Loecher', 'z', L['khy_schrauben'],
+            w('m3_durchgang'), zl[0] - 1.0, zl[1] + 1.0, lehre)
     material_zuweisen(app, design, lehre, 'PLA', fehler)
     lehre.isLightBulbOn = False
 
@@ -2453,8 +2780,8 @@ def bau_profil(comp, name, laengs, bereich, quer, z):
 def bau_referenz(app, design, teile, L, fehler):
     """Kaufteile und Riemen, nur zur Ansicht — NICHT drucken. teile: die
     Komponenten Ref_Profile, Ref_Fuehrungen, Ref_Riemen, Ref_Antrieb,
-    Ref_Endschalter, Ref_Kette (die X-Kette, vereinfacht; sie wird nach
-    ihrem eigenen Modell gedruckt).
+    Ref_Endschalter, Ref_Kette (X- und seit Rev. 21 Y-Kette, vereinfacht;
+    sie werden nach ihrem eigenen Modell gedruckt).
 
     Rahmen und Y-Schienen liegen mittig zum Y-Wagen, das vordere 2060
     35 mm hinter der Stirnseite, das hintere 435 mm (Mitte zu Mitte)
@@ -2580,6 +2907,39 @@ def bau_referenz(app, design, teile, L, fehler):
                 sk.sketchCurves.sketchArcs.addByThreePoints(*pp)
         k = neu_mittig(c, groesstes_profil(sk), w('kette_b')).bodies.item(0)
         fertig(k, 'X-Energiekette', ((x0, xb_ + ra), L['xk_y'], (u0, o1)),
+               'PLA', SCHWARZ)
+
+    def kette_y():
+        """Y-Energiekette mit dem Portal in der Mitte (wie alles hier):
+        Untertrum vom Endstueck 180 in der Wanne nach vorn, Bogen,
+        Obertrum zurueck zum Anfangsstueck auf dem Kettenhalter Y.
+        Vereinfacht wie die X-Kette."""
+        c = teile['Ref_Kette']
+        yg = w('yk_gelenk_y')
+        y0u = L['yk_fest'] - w('endstueck_l')
+        y0o = yg - w('endstueck_l')
+        yb = (L['yk_frei'] + L['yk_fest'] + yg) / 2.0
+        zc, (ri, ra) = L['yk_bogen_z'], L['xk_bogen_r']
+        u0, u1 = L['yk_unter_z']
+        o0, o1 = L['yk_ober_z']
+        sk = skizze(c, _ebene(c, 'x', L['yk_x_mitte'], 'E_Ref_Y-Kette'),
+                    'Sk_Y-Kette')
+        zug = [((y0u, u0), (yb, u0)),
+               ((yb, u0), (yb + ra, zc), (yb, o1)),
+               ((yb, o1), (y0o, o1)),
+               ((y0o, o1), (y0o, o0)),
+               ((y0o, o0), (yb, o0)),
+               ((yb, o0), (yb + ri, zc), (yb, u1)),
+               ((yb, u1), (y0u, u1)),
+               ((y0u, u1), (y0u, u0))]
+        for pkt in zug:
+            pp = [punkt(sk, u, v) for u, v in pkt]
+            if len(pp) == 2:
+                sk.sketchCurves.sketchLines.addByTwoPoints(*pp)
+            else:
+                sk.sketchCurves.sketchArcs.addByThreePoints(*pp)
+        k = neu_mittig(c, groesstes_profil(sk), w('kette_b')).bodies.item(0)
+        fertig(k, 'Y-Energiekette', (L['yk_x'], (y0u, yb + ra), (u0, o1)),
                'PLA', SCHWARZ)
 
     def motor():
@@ -2765,6 +3125,7 @@ def bau_referenz(app, design, teile, L, fehler):
            (xm + xt, xm + w('xk_gelenk_x')),
            (L['wanne_innen_y'][0] - 1.2, 0.0), kh_z, 'PETG')
     sicher('X-Energiekette', kette)
+    sicher('Y-Energiekette', kette_y)
 
     # ---- Lichtschranken der Endschalter: Y fest am Rahmen, X am Portal ------
     c = teile['Ref_Endschalter']
@@ -2984,8 +3345,47 @@ def hinweise_bauen(L, fehler):
         .format(L['st_m5_schraube']),
         '  Block steht auf dem Rohr hinter dem Ruecklauf, der Arm reicht',
         '  ueber Riemen und Riemenhalter unter die Wanne.',
+        '  KABELWEG (seit Rev. 21) der Litzen W7, W11, W15: vom Kettenhalter Y',
+        '  auf der Platte hinter Stirnblock und Rueckwand nach innen, rechts',
+        '  neben der Rueckwand hoch und ueber die hintere Kante in die OBERE',
+        '  Nut des Rohrs (Nutabdeckung oder Clips), bis links neben die Stuetze',
+        '  am Festpunkt. Dort vor dem KABELFLUEGEL hoch, je ein Kabelbinder',
+        '  durch zwei Schlitze bei Z={:+.0f} und Z={:+.0f} (Kopf hinten), oben ueber'
+        .format(w('kf_binder_z1'), w('kf_binder_z2')),
+        '  den Riemen nach vorn und von links in das Endstueck 180.',
         '  In der Kette nur Einzellitzen (Silikon), keine Mantelleitungen:',
         '  fuer sie ist der Biegeradius zu klein (docs/verkabelung.md).',
+        '',
+        'ENERGIEKETTE Y (seit Rev. 21, docs/energiekette.md): dieselbe',
+        '  Kette wie X, aussen am linken 2040 (X {:+.1f} bis {:+.1f}),'
+        .format(*L['yk_x']),
+        '  Schleife nach vorn. {} Glieder = {:.0f} mm, mit den Endstuecken'
+        .format(L['yk_glieder'], L['yk_laenge']),
+        '  {:.0f} mm: Arbeitsweg (hinten Schienenende, vorn {:+.0f}) plus'
+        .format(L['yk_laenge'] + 2.0 * w('endstueck_l'), w('y_weg_vorn')),
+        '  {:.1f} mm Reserve. Weiter vorn haelt die Kette das Portal an.'
+        .format(L['yk_reserve_vorn']),
+        '  Bewegtes Ende: ANFANGSSTUECK, Platte unten, auf dem KETTENHALTER',
+        '  Y hinter dem Stirnblock des linken Schlittens (Gelenk Y={:+.0f}),'
+        .format(w('yk_gelenk_y')),
+        '  2x M3x{:.0f} + Scheibe in seine Einsaetze. Der Halter: 2x M3x{:.0f}'
+        .format(L['khy_ende_schraube'], L['khy_schraube']),
+        '  von UNTEN durch die Schlittenplatte in Einsaetze (schon',
+        '  gedruckter Schlitten: Bohrlehre_Kettenhalter_Y).',
+        '  Festpunkt: ENDSTUECK 180 hinten in der WANNE Y (Y {:+.1f} bis'
+        .format(L['ywanne_y'][0]),
+        '  {:+.1f}, Boden Z={:+.1f}), 2x M3x{:.0f} + Scheibe in den Traeger'
+        .format(L['ywanne_y'][1], L['ywanne_boden_z'][1],
+                L['xk_fest_schraube']),
+        '  darunter; dahinter zwei Binderschlitze fuer die Zugentlastung.',
+        '  Drei TRAEGER Y (Festpunkt, mitte Y={:+.0f}, vorn Y={:+.0f}), je'
+        .format(w('ytr_y_mitte'), w('ytr_y_vorn')),
+        '  1x M5x{:.0f} in eine Hammermutter der UNTEREN SEITENNUT aussen am'
+        .format(L['ytr_m5_schraube']),
+        '  2040 (die Nut an der Unterseite ist belegt). Die Wanne an den',
+        '  Laschen je M3x{:.0f}. Die Kabel in der Seitennut gehen an jedem'
+        .format(L['wanne_schraube']),
+        '  Traeger kurz aus der Nut, ueber seine Wand.',
         '',
         'ENDSCHALTER (Gabellichtschranken LM393, docs/endschalter.md):',
         '  Im Modell steht das Portal in der Mitte und der Toolhead in der',
@@ -3072,8 +3472,21 @@ def hinweise_bauen(L, fehler):
         '     Ende; Endstueck 180 mit 2x M3x{:.0f} + Scheibe auf Wanne und'
         .format(L['xk_fest_schraube']),
         '     Stuetze, Anfangsstueck auf den Kettenhalter. Litzen einziehen,',
-        '     am Kettenhalter mit einem Kabelbinder zugentlasten. Kabelweg',
-        '     und Zugentlastung am Festpunkt: offen (docs/energiekette.md).',
+        '     am Kettenhalter mit einem Kabelbinder zugentlasten, am',
+        '     Festpunkt mit zwei Kabelbindern am Kabelfluegel.',
+        ' 11. Energiekette Y: Einsaetze einschmelzen (Kettenhalter Y 2 von',
+        '     unten und 2 von oben, Traeger 2 + 1 + 1). Kettenhalter Y mit',
+        '     2x M3x{:.0f} von unten an den linken Schlitten. Je eine'
+        .format(L['khy_schraube']),
+        '     Hammermutter in die untere Seitennut, Traeger mit M5x{:.0f} ans'
+        .format(L['ytr_m5_schraube']),
+        '     2040 (vor der Wanne: sie deckt die Koepfe). Wanne auflegen,',
+        '     Laschen M3x{:.0f}. Kette mit {} Gliedern, Endstueck 180 hinten'
+        .format(L['wanne_schraube'], L['yk_glieder']),
+        '     mit 2x M3x{:.0f} + Scheibe, Anfangsstueck auf den Kettenhalter'
+        .format(L['xk_fest_schraube']),
+        '     Y. Litzen einziehen, Kabelbinder an beiden Enden. W13 in der',
+        '     Seitennut an jedem Traeger kurz aus der Nut, ueber seine Wand.',
         '',
         'DRUCK (PETG, Bambu Lab A1, 4 Wandlinien, >=40 % Infill):',
         '  Schlitten ....... Unterseite aufs Bett, Waende stehen darauf',
@@ -3090,7 +3503,12 @@ def hinweise_bauen(L, fehler):
         '  Fahne_X ......... flach                       } Infrarot durch',
         '  Kettenwanne ..... Boden aufs Bett, laengs ({:.0f} mm)'.format(
             L['wanne_x'][1] - L['wanne_x'][0]),
-        '  Wannenstuetzen .. Rueckseite der Platte aufs Bett (3 Stueck)',
+        '  Wannenstuetzen .. Rueckseite der Platte aufs Bett (3 Stueck),',
+        '                    der Kabelfluegel liegt mit flach',
+        '  Kettenhalter Y .. Unterseite (Auflage) aufs Bett',
+        '  Kettenwanne Y ... Boden aufs Bett, laengs ({:.0f} mm)'.format(
+            L['ywanne_y'][1] - L['ywanne_y'][0]),
+        '  Traeger Y ....... Unterseite des Arms aufs Bett (3 Stueck)',
         '  Keine Stuetzen noetig. Rechter Schlitten und rechte Klemmtuerme',
         '  sind gespiegelt — im Slicer NICHT spiegeln, die Koerper so',
         '  exportieren, wie sie im Modell liegen. Die Y-Motorhalter sind',
@@ -3136,6 +3554,9 @@ def hinweise_bauen(L, fehler):
         .format(2.0 * w('kette_r') + w('kette_h') + 2.0 * w('kette_riegel')),
         '    hoch sein, sonst kette_r in beiden Skripten erhoehen (der',
         '    Kettenhalter wandert mit nach oben, die Wanne bleibt).',
+        '  Winkel an den Kreuzungen 2040/2060: aussen am 2040 bis 20 mm',
+        '    vom Profil und 20 mm ueber dem 2060 angenommen. Wanne Y und',
+        '    Kette Y bleiben ausserhalb (tools/portal_check.py).',
         '',
         'REFERENZ (Komponente Referenz_nicht_drucken): nur zur Ansicht,',
         '  NICHT drucken und beim Export weglassen. Eine Gluehbirne blendet',
@@ -3154,7 +3575,8 @@ def hinweise_bauen(L, fehler):
         '    Toolhead nur X-Wagen, Riemenhalter, Traegerplatte und Ketten-',
         '    halter (vereinfacht), in der Mitte des X-Wegs.',
         '  X-Energiekette: das bewegte Ende steht dann ueber dem Festpunkt;',
-        '    vereinfacht als U aus Untertrum, Bogen und Obertrum.',
+        '    vereinfacht als U aus Untertrum, Bogen und Obertrum. Y-Energie-',
+        '    kette ebenso, mit dem Portal in der Mitte seines Wegs.',
         '  Lichtschranken der Endschalter: Y am Rahmen, X vor der 2020.',
         '  X-Riemen: Schleife um Ritzel und Umlenkritzel, beide Enden im',
         '    Riemenhalter.',
@@ -3226,7 +3648,9 @@ def run(context):
                      'Halter_Y', 'Fahne_Y', 'Halter_X', 'Klammer_X',
                      'Fahne_X', 'Kettenwanne', 'Wannenstuetze_Festpunkt',
                      'Wannenstuetze_mitte', 'Wannenstuetze_rechts',
-                     'Bohrlehren'):
+                     'Kettenhalter_Y', 'Kettenwanne_Y',
+                     'Wannentraeger_Y_Festpunkt', 'Wannentraeger_Y_mitte',
+                     'Wannentraeger_Y_vorn', 'Bohrlehren'):
             o = root.occurrences.addNewComponent(einheit)
             o.component.name = name
             occ[name] = o
@@ -3256,6 +3680,14 @@ def run(context):
         for n in ('Festpunkt', 'mitte', 'rechts'):
             bau_stuetze(app, design, occ['Wannenstuetze_' + n].component,
                         L, n, fehler)
+        bau_kettenhalter_y(app, design, occ['Kettenhalter_Y'].component, L,
+                           fehler)
+        bau_kettenwanne_y(app, design, occ['Kettenwanne_Y'].component, L,
+                          fehler)
+        for n in ('Festpunkt', 'mitte', 'vorn'):
+            bau_traeger_y(app, design,
+                          occ['Wannentraeger_Y_' + n].component, L, n,
+                          fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, fehler)
 
         for o in occ.values():

@@ -41,8 +41,9 @@ docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
 docs/y-motorhalter.svg         Y-Motorhalter: Draufsicht, Seitenansicht, Schnitt, Riemen in der Nut
-docs/energiekette.md           X-Energiekette (gedruckt): Kette, Lage, Kettenhalter, Wanne, Stützen, Montage, Druck
-docs/energiekette.svg          X-Energiekette von vorn und im Schnitt durch eine Wannenstütze
+docs/energiekette.md           Energieketten X und Y (gedruckt): Kette, Lage, Halter, Wannen, Stützen, Träger, Kabelweg, Montage, Druck
+docs/energiekette.svg          X-Energiekette von vorn, im Schnitt durch eine Wannenstütze und durch den Kabelflügel
+docs/energiekette-y.svg        Y-Energiekette von links und im Schnitt durch einen Träger
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
 tools/toolhead_check.py        rechnerische Prüfung der Baugruppe (ohne Fusion)
 tools/portal_check.py          Prüfung des Portals mit dem Toolhead über X- und Z-Weg
@@ -167,10 +168,10 @@ Klammer unten an der Trägerplatte und ist im Langloch ±2 mm verstellbar.
 Fahnen und Klammern werden schwarz gedruckt. Details in
 [docs/endschalter.md](docs/endschalter.md).
 
-### Energiekette X (neu)
+### Energieketten X und Y (neu)
 
-Die Energiekette ist gedruckt (Modell „Energiekette“, Teilung 16, außen
-18 × 14 mm, R 32) und liegt direkt hinter der Trägerplatte. Der Festpunkt
+Beide Energieketten sind gedruckt (Modell „Energiekette“, Teilung 16,
+außen 18 × 14 mm, R 32). Die X-Kette liegt direkt hinter der Trägerplatte. Der Festpunkt
 sitzt in der Mitte des X-Wegs auf einer **Wanne** über dem Portalrohr, die
 Schleife zeigt nach rechts. Drei **Stützen** halten die Wanne. Sie sitzen mit
 je einer M5 in der hinteren Nut des Rohrs und reichen über X-Riemen und
@@ -180,7 +181,12 @@ das bewegte Ende. 19 Glieder reichen, am rechten Ende läuft der Bogen
 (seit Rev. 19), den Kettenhalter `ToolheadZ.py` (seit Rev. 35), mit einer
 Bohrlehre für die schon gedruckte Trägerplatte. Seit Portal Rev. 20 und
 ToolheadZ Rev. 36 rechnen beide mit R 32: Ein Glied dreht sich am
-gedruckten Teil nur um 30°. Details in
+gedruckten Teil nur um 30°. Seit Portal Rev. 21 laufen die Litzen in der
+oberen Nut des Rohrs zum Festpunkt, ein **Kabelflügel** an der Stütze hält
+sie mit zwei Kabelbindern. Die **Y-Kette** (18 Glieder) liegt außen am
+linken 2040: Ihr bewegtes Ende trägt ein **Kettenhalter Y** auf dem linken
+Schlitten, der Untertrum läuft in einer **Wanne Y** auf drei **Trägern** an
+der unteren Seitennut, die Schleife zeigt nach vorn. Details in
 [docs/energiekette.md](docs/energiekette.md).
 
 ### Toolhead-Grundplatte (überholt)
@@ -223,7 +229,7 @@ python3 tools/endschalter_check.py  # Endschalter: Schaltpunkte, Freigänge, Sch
 python3 tools/endschalter_zeichnen.py  # docs/endschalter.svg neu erzeugen
 python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schrauben, Druck
 python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
-python3 tools/kette_zeichnen.py     # docs/energiekette.svg neu erzeugen
+python3 tools/kette_zeichnen.py     # docs/energiekette.svg und energiekette-y.svg neu erzeugen
 ```
 
 `toolhead_check.py` importiert das Fusion-Skript mit gestubbtem `adsk`-Modul und
@@ -241,11 +247,16 @@ den Rahmen; dazu Riemenlage, Klemmung, Spannwege, Wände, Schraubenlängen,
 Werkzeugzugang und Druckbarkeit der Portalteile, den Y-Weg gegen die 2060
 und die Y-Motorhalter, den Y-Antrieb selbst mit dem Riemenweg über den
 ganzen Y-Weg, das Elektronikfach hinter
-dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren, und
-die X-Energiekette mit Wanne und Stützen über den ganzen X-Weg.
+dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren, die
+X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
+und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
+Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 36, Portal Rev. 20 mit
-dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 19 und ToolheadZ
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 36, Portal Rev. 21 mit
+dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 21 bringt die
+gedruckte Y-Energiekette (Kettenhalter Y, Wanne Y, drei Träger, 18 Glieder)
+und den Kabelweg zur X-Kette in der oberen Nut mit dem Kabelflügel am
+Festpunkt ([energiekette.md](docs/energiekette.md)). Portal Rev. 19 und ToolheadZ
 Rev. 35 bringen die gedruckte X-Energiekette: Wanne mit Festpunkt und drei
 Stützen am Portalrohr, Kettenhalter an der Trägerplatte
 ([energiekette.md](docs/energiekette.md)). Portal Rev. 20 und ToolheadZ
@@ -265,8 +276,7 @@ Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
-Tabellen in [verkabelung.md](docs/verkabelung.md)); Wanne und Halter der
-Y-Kette folgen. Der
+Tabellen in [verkabelung.md](docs/verkabelung.md)). Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

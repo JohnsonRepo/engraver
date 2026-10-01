@@ -543,6 +543,20 @@ def main():
               for x, y in L['wanne_laschen']], 'z', +1,
              tuple(n for n in fest if n != 'Kettenwanne'
                    and not n.startswith('Kettenwanne Lasche')))
+    # Kettenhalter Y: 2x M3 von unten durch die Platte des linken
+    # Schlittens; darunter stehen Y-Wagen, Klemmturm, Schiene und 2040
+    unten = tuple(n for n in fest if n.startswith(
+        ('Y-Wagen', 'Klemmturm', 'Y-Schiene', 'Rahmen 2040', 'Y-Riemen',
+         'Y-Ruecklauf')))
+    korridor('Kettenhalter Y: M3 von unten durch die Schlittenplatte',
+             [(x, y, L['platte_z0'] - w('m3_kopf_h'))
+              for x, y in L['khy_schrauben']], 'z', -1, unten)
+    # Anfangsstueck Y: von oben, ueber ihm nichts
+    korridor('Anfangsstueck Y -> Kettenhalter Y (von oben)',
+             [(x, y, L['khy_z'][1] + w('endstueck_platte')
+               + w('m3_kopf_h')) for x, y in L['khy_loecher']], 'z', +1,
+             tuple(n for n in fest if not n.startswith(
+                 ('Kettenhalter Y', 'Y-Kette'))))
 
     # ------------------------------------------------------------------
     p.titel('10) Druckbarkeit (Bambu Lab A1, Bauraum 256)')
@@ -569,10 +583,20 @@ def main():
             ('Kettenwanne', (L['wanne_x'][1] - L['wanne_x'][0],
                              L['wanne_y'][1] - L['wanne_lasche_y'][0],
                              L['wanne_z'][1] - L['wanne_z'][0])),
-            ('Wannenstuetze Festpunkt',
-             (L['st_x']['Festpunkt'][1] - L['st_x']['Festpunkt'][0],
+            ('Wannenstuetze Festpunkt (mit Fluegel)',
+             (L['st_x']['Festpunkt'][1] - L['kf_x'][0],
               L['st_arm_y'][1] - L['st_platte_y'][0],
-              L['st_platte_z'][1] - L['st_platte_z'][0]))):
+              L['st_platte_z'][1] - L['st_platte_z'][0])),
+            ('Kettenwanne Y', (L['ywanne_lasche_x'][1] - L['ywanne_x'][0],
+                               L['ywanne_y'][1] - L['ywanne_y'][0],
+                               L['ywanne_z'][1] - L['ywanne_z'][0])),
+            ('Kettenhalter Y', (L['khy_x'][1] - L['khy_x'][0],
+                                L['khy_y'][1] - L['khy_y'][0],
+                                L['khy_leiste_z'][1] - L['khy_z'][0])),
+            ('Traeger Y Festpunkt',
+             (L['ytr_wand_x'][1] - L['ytr_arm_x'][0],
+              L['ytr_y']['Festpunkt'][1] - L['ytr_y']['Festpunkt'][0],
+              L['ytr_wand_z'][1] - L['ytr_arm_z'][0]))):
         p.ok('{}: groesste Kante'.format(name), max(masse), 250.0, '<=')
     # Lagerschlitten auf dem Ruecken liegend: der Pfosten ueberbrueckt
     # die Oeffnung zwischen den Armen
@@ -646,7 +670,29 @@ def main():
                 L['xk_fest_schraube']),
             'dazu am Toolhead: Kettenhalter, 2x M3x{:.0f} + 2x Einsatz (von '
             'vorn), 2x M3x{:.0f} + Scheibe + 2x Einsatz (Anfangsstueck)'
-            .format(TL['kh_schraube'], TL['kh_ende_schraube'])):
+            .format(TL['kh_schraube'], TL['kh_ende_schraube']),
+            'Kabelweg X: Nutabdeckung Nut 6 oder Clips, ca. {:.0f} mm (obere '
+            'Nut des Rohrs), 2x Kabelbinder am Kabelfluegel'.format(
+                L['kf_nut_x'][1] - L['kf_nut_x'][0]),
+            'Y-Energiekette, gedruckt: 1x Anfangsstueck, {}x Kettenglied '
+            'mit Riegel, 1x Endstueck 180'.format(L['yk_glieder']),
+            '1x Kettenhalter Y, 1x Kettenwanne Y, 3x Traeger Y (am '
+            'Festpunkt der breite)',
+            '2x M3x{:.0f} Zylinderkopf + 2x Messing-Einsatz M3 Ø5 '
+            '(Kettenhalter Y, von unten durch die Schlittenplatte)'.format(
+                L['khy_schraube']),
+            '2x M3x{:.0f} Zylinderkopf + 2x Scheibe DIN 125 + 2x Messing-'
+            'Einsatz M3 Ø5 (Anfangsstueck -> Kettenhalter Y)'.format(
+                L['khy_ende_schraube']),
+            '3x M5x{:.0f} Zylinderkopf + 3x Hammermutter M5 Nut 6 (Traeger Y '
+            '-> untere Seitennut des linken 2040)'.format(
+                L['ytr_m5_schraube']),
+            '2x M3x{:.0f} Zylinderkopf + 2x Messing-Einsatz M3 Ø5 (Laschen '
+            'der Wanne Y -> Traeger)'.format(L['wanne_schraube']),
+            '2x M3x{:.0f} Zylinderkopf + 2x Scheibe DIN 125 + 2x Messing-'
+            'Einsatz M3 Ø5 (Endstueck 180 -> Wanne Y -> Traeger)'.format(
+                L['xk_fest_schraube']),
+            '2x Kabelbinder (Zugentlastung Y: Kettenhalter Y und Wanne Y)'):
         p.info(zeile)
 
     # ------------------------------------------------------------------
@@ -1014,6 +1060,183 @@ def main():
         max(x for x, _ in L['xk_fest_loecher']) + INBUS_FREI_D / 2.0)
     p.ok('Schrauben am Festpunkt von oben frei (Toolhead rechts)',
          links_frei, 0.0)
+    # Kabelweg am Festpunkt (Rev. 21): die Litzen kommen links neben der
+    # Stuetze aus der oberen Nut, laufen vor dem Kabelfluegel hoch und oben
+    # ueber den Riemen nach vorn in die Wanne
+    rl = L['xr_y_rueck'] - L['riemen_aussen']
+    p.ok('Litzen am Kabelfluegel hinter dem Ruecklauf', rl
+         - L['kf_buendel_y'][1], w('luft_bau'))
+    p.ok('Litzen ueber den Riemen: ueber dem Riemenhalter',
+         L['kf_quer_z'][0] - TL['rh_z1'], w('luft_bau'))
+    p.ok('Litzen zur Wanne: hinter dem Fuss des Kettenhalters',
+         TL['kh_fuss_y'][0] - (L['xk_y_mitte'] + w('kf_buendel_t') / 2.0),
+         w('luft_bau'))
+    p.ok('Kabelfluegel: Wand neben den Schlitzen', w('kf_steg'), 2.0)
+    p.ok('Kabelfluegel: unterer Schlitz ueber dem Rohr',
+         w('kf_binder_z1') - w('kf_binder_b') / 2.0 - L['kf_z'][0], 2.0)
+    p.ok('Kabelfluegel: oberer Schlitz unter der Oberkante',
+         L['kf_z'][1] - (w('kf_binder_z2') + w('kf_binder_b') / 2.0), 2.0)
+    p.info('Litzen in der oberen Nut, von X {:+.0f} bis'.format(
+        L['kf_nut_x'][0]), L['kf_nut_x'][1])
+
+    # ------------------------------------------------------------------
+    p.titel('18) Energiekette Y: Kettenhalter Y, Wanne Y, Traeger (Y-Weg)')
+    frei = L['yk_frei']
+    p.info('Glieder', L['yk_glieder'], 'Stk')
+    p.info('Kette zwischen den Gelenken', L['yk_laenge'])
+    p.info('  gebraucht: Y-Weg + Reserve + 2 Luft, halb, + pi R',
+           L['yk_noetig'])
+    p.info('  mit beiden Endstuecken', L['yk_laenge'] + 2.0 * w('endstueck_l'))
+    p.ok('Kette reicht', L['yk_laenge'] - L['yk_noetig'], 0.0)
+    p.ok('kein Glied zu viel', L['yk_laenge'] - L['yk_noetig'], tk, '<')
+    p.ok('y_weg_vorn wie in Abschnitt 14 (Z unten, 3 mm vor dem 2060)',
+         abs(w('y_weg_vorn') - d_vorn), 0.5, '<=')
+    p.ok('y_weg_hinten bis ans Schienenende wie in Abschnitt 14',
+         abs(L['y_weg_hinten'] - d_schiene), 0.01, '<=')
+    dy_lo, dy_hi = -d_schiene, L['yk_dy_bereich'][1]
+    p.ok('Reserve nach vorn ueber den Y-Weg', L['yk_reserve_vorn'],
+         w('yk_reserve'))
+    p.ok('am hinteren Schienenende bleibt Untertrum',
+         (frei + (dy_lo - L['yk_dy_fest'])) / 2.0, w('luft_bau') - 0.01)
+    p.ok('Untertrum am vorderen Ende der Kette noch in der Wanne',
+         L['ywanne_y'][1] - (L['yk_fest'] + frei), 0.0)
+    p.ok('Wanne Y passt in den A1', L['ywanne_y'][1] - L['ywanne_y'][0],
+         250.0, '<=')
+    # Ueber den Weg: was mit dem Portal faehrt (Schlitten, Kettenhalter Y,
+    # Obertrum, Bogen) gegen den Rahmen (2040, 2060, Winkel, Y-Motorhalter,
+    # Elektronikfach) und die rahmenfesten Teile der Kette (Wanne, Traeger,
+    # Untertrum). Rahmenkoordinaten wie Abschnitt 14.
+    rahmen, erl_r = bauraum.y_kette_rahmen(w, L)
+    durch = ('Rahmen 2040 links', 'Y-Schiene links', 'Y-Ruecklauf links',
+             'Y-Riemen links')
+    fest_r = (rahmen + quer_quader(w, L) + y_halter_quader(w, L)
+              + [elektronikfach(w, L)]
+              + [q for q in portal if q.name in durch])
+    mit_portal = [q for q in portal if q.x[1] < -200.0
+                  and q.name not in durch]
+    kette_teile = ('Kettenhalter Y', 'Y-Kette')
+    ra = L['xk_bogen_r'][1]
+    xk = L['yk_x']
+    # die Kette laeuft in der Wanne: sie und ihre Laschen (hinter der
+    # Innenwand) zaehlen nicht, der Untertrum ist dieselbe Kette
+    erlaubt_y = erl_r | {
+        ('Y-Kette Untertrum', 'Kettenwanne Y'),
+        ('Y-Kette Bogen', 'Kettenwanne Y'),
+        ('Y-Kette Untertrum', 'Kettenwanne Y Lasche 1'),
+        ('Y-Kette Untertrum', 'Kettenwanne Y Lasche 2'),
+        ('Y-Kette Bogen', 'Kettenwanne Y Lasche 1'),
+        ('Y-Kette Bogen', 'Kettenwanne Y Lasche 2'),
+        ('Y-Kette Bogen', 'Y-Kette Untertrum'),
+        ('Y-Kette Bogen', 'Y-Kette Obertrum'),
+        ('Y-Kette Obertrum', 'Y-Kette Anfangsstueck'),
+        ('Y-Kette Obertrum', 'Kettenhalter Y'),
+        ('Y-Kette Obertrum', 'Kettenhalter Y Leiste aussen'),
+        ('Y-Kette Obertrum', 'Kettenhalter Y Leiste innen')}
+
+    def vor_y(qq, dy):
+        return bauraum.Quader(qq.name, qq.x[0], qq.x[1], qq.y[0] + dy,
+                              qq.y[1] + dy, qq.z[0], qq.z[1], qq.art)
+
+    engste = {}
+    n_y = int((dy_hi - dy_lo) / 2.5) + 1
+    for i in range(n_y + 1):
+        dy = min(dy_lo + 2.5 * i, dy_hi)
+        ym = w('yk_gelenk_y') + dy
+        yb = (frei + L['yk_fest'] + ym) / 2.0
+        unter = bauraum.Quader('Y-Kette Untertrum', xk[0], xk[1],
+                               L['yk_fest'] - w('endstueck_l'), yb,
+                               *L['yk_unter_z'], 'kette')
+        bogen = bauraum.Quader('Y-Kette Bogen', xk[0], xk[1], yb, yb + ra,
+                               L['yk_unter_z'][0], L['yk_ober_z'][1],
+                               'kette')
+        ober = bauraum.Quader('Y-Kette Obertrum', xk[0], xk[1], ym, yb,
+                              *L['yk_ober_z'], 'kette')
+        faehrt = [vor_y(q, dy) for q in mit_portal] + [ober, bogen]
+        steht = fest_r + [unter]
+        for a_ in faehrt:
+            for b_ in steht:
+                if ((a_.name, b_.name) in erlaubt_y
+                        or (b_.name, a_.name) in erlaubt_y):
+                    continue
+                # nur Paare, an denen die Kette beteiligt ist
+                if not (a_.name.startswith(kette_teile)
+                        or b_.name.startswith(kette_teile)
+                        or b_.name.startswith(('Kettenwanne Y',
+                                               'Traeger Y'))):
+                    continue
+                d = a_.abstand(b_)
+                k_ = (a_.name, b_.name)
+                if d < engste.get(k_, (float('inf'),))[0]:
+                    engste[k_] = (d, dy)
+        # Obertrum und Bogen gegen den Schlitten (faehrt mit)
+        for a_ in (ober, bogen):
+            for b_ in [vor_y(q, dy) for q in mit_portal]:
+                if ((a_.name, b_.name) in erlaubt_y
+                        or (b_.name, a_.name) in erlaubt_y
+                        or b_.name.startswith(kette_teile)):
+                    continue
+                d = a_.abstand(b_)
+                k_ = (a_.name, b_.name)
+                if d < engste.get(k_, (float('inf'),))[0]:
+                    engste[k_] = (d, dy)
+    for (a_, b_), (d, dy) in sorted(engste.items(),
+                                    key=lambda t: t[1][0])[:8]:
+        p.ok('{} <-> {} (Portal {:+.1f})'.format(a_, b_, dy), d,
+             w('luft_bau'))
+    # Kettenhalter Y auf dem Schlitten
+    e = L['khy_schraube'] - w('platte_dicke')
+    p.ok('Kettenhalter Y: M3x{:.0f} von unten greift in den Einsatz'.format(
+        L['khy_schraube']), e, 4.0)
+    p.ok('   setzt im Sackloch nicht auf', w('insert_m3_t') - e, 0.5)
+    p.ok('Kettenhalter Y: Wand ueber bzw. unter den Einsaetzen',
+         w('khy_dicke') - w('insert_m3_t'), 1.0)
+    e = L['khy_ende_schraube'] - w('m3_scheibe_h') - w('endstueck_platte')
+    p.ok('Anfangsstueck Y: M3x{:.0f} greift in den Einsatz'.format(
+        L['khy_ende_schraube']), e, 4.0)
+    p.ok('   setzt im Sackloch nicht auf', w('insert_m3_t') - e, 0.5)
+    xs_ = L['khy_schrauben'][0][0]
+    p.ok('Schlittenplatte: Rand neben den Loechern',
+         (xs_ - w('m3_durchgang') / 2.0) + L['platte_x1'], 2.0)
+    p.ok('Schraubenkopf unter der Platte neben dem Y-Wagen',
+         -L['y_wagen_x1'] - (xs_ + w('m3_kopf_d') / 2.0), 1.0)
+    p.ok('Kettenhalter Y endet vor dem Stirnblock',
+         L['stirn_y'][0] - L['khy_y'][1], 0.3)
+    p.ok('Anfangsstueck Y liegt ganz auf dem Halter (hinten)',
+         L['khy_ende_y'][0] - L['khy_y'][0], 0.0)
+    # Wanne Y und Traeger
+    e = L['wanne_schraube'] - w('wanne_boden')
+    p.ok('Laschen Y: M3x{:.0f} greift in den Einsatz im Arm'.format(
+        L['wanne_schraube']), e, 4.0)
+    p.ok('   endet im Arm', w('ytr_arm') - e, 0.5)
+    e = L['xk_fest_schraube'] - L['xk_fest_klemm']
+    p.ok('Festpunkt Y: M3x{:.0f} greift in den Einsatz im Arm'.format(
+        L['xk_fest_schraube']), e, 4.0)
+    p.ok('   endet im Arm', w('ytr_arm') - e, 0.5)
+    e = L['ytr_m5_schraube'] - w('ytr_wand') - w('nut_lippe')
+    p.ok('Traeger Y: M5x{:.0f} greift in die Hammermutter'.format(
+        L['ytr_m5_schraube']), e, 3.5)
+    p.ok('Traeger Y: Wand ueber dem M5-Kopf',
+         L['ytr_wand_z'][1] - (L['nut_u_z'] + w('m5_kopf_d') / 2.0), 2.0)
+    p.ok('Traeger Y: Rand neben der M5',
+         w('ytr_b') / 2.0 - w('ytr_versatz') - w('m5_durchgang') / 2.0, 2.0)
+    p.ok('Traeger Y: M5-Kopf neben der Laschenschraube',
+         2.0 * w('ytr_versatz') - (w('m5_kopf_d') + w('m3_kopf_d')) / 2.0,
+         2.0)
+    p.ok('Lasche Y: Luft zur Wand des Traegers',
+         L['ytr_wand_x'][0] - L['ywanne_lasche_x'][1], 0.5)
+    p.ok('Laschenschraube: Kopf zwischen Wanne und Traeger',
+         L['ytr_wand_x'][0] - L['ywanne_x'][1] - w('m3_kopf_d'), 1.0)
+    # W13 in der Seitennut geht an jedem Traeger kurz aus der Nut und
+    # ueber die Wand (vor ihr steht der M5-Kopf); darueber steht erst der
+    # Y-Wagen ueber. Das Motorkabel im Schlauch etwa 4,5 mm dick.
+    p.ok('W13 ueber der Wand des Traegers: frei bis zum Y-Wagen',
+         L['y_wagen_z0'] - (L['ytr_wand_z'][1] + 4.5), w('luft_bau'))
+    yb0 = L['ywanne_binder'][0][1]
+    p.ok('Binderschlitze Wanne Y hinter dem Endstueck 180',
+         (L['yk_fest'] - w('endstueck_l')) - (yb0 + w('khy_binder_b') / 2.0),
+         1.0)
+    p.ok('Binderschlitze Wanne Y hinter dem Traeger (darunter frei)',
+         L['ytr_y']['Festpunkt'][0] - (yb0 + w('khy_binder_b') / 2.0), 1.0)
 
     return p.bericht()
 

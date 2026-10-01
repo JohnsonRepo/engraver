@@ -60,15 +60,15 @@ begrenzt den Strom selbst.
 | W4 | **Wandler-Eingang** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
 | W5 | **Lüfter 24 V** — Litze dünner als 0,14 mm²: abisoliert doppelt legen | Litze des Lüfters | im Kasten, durch die Öffnung im Deckel | — | — | — |
 | W6 | **5 V für die Lichtschranken** | 0,25 mm² (AWG 24) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
-| W7 | **Laser** | 3 Silikonlitzen 0,34 mm² (AWG 22) | links raus, untere Nut am linken 2040, Y-Kette, über dem Rohr zur X-Kette, X-Kette, Trägerplatte | 1,6 m | **2 m** | Y + X |
+| W7 | **Laser** | 3 Silikonlitzen 0,34 mm² (AWG 22) | links raus, untere Nut außen am linken 2040, hinten in die Y-Kette, hinter dem Schlitten in die obere Nut des Rohrs, am Kabelflügel hoch in die X-Kette, Trägerplatte | 1,64 m | **2 m** | Y + X |
 | W8 | **Pull-down 10 kΩ** — hält den Laser aus, solange der Uno startet oder ohne USB ist | Widerstand | auf dem Shield | — | — | — |
-| W9 | **Lichtschranke X** | 3 Silikonlitzen 0,25 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, am Stirnblock nach vorn zum Halter X | 0,8 m | **1 m** | Y |
+| W9 | **Lichtschranke X** | 3 Silikonlitzen 0,25 mm² (AWG 24) | links raus, untere Nut außen am linken 2040, Y-Kette, hinter dem Schlitten über das Rohr nach vorn zum Halter X | 0,85 m | **1 m** | Y |
 | W10 | **Lichtschranke Y** | 3 × 0,25 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach hinten | 0,49 m | **1 m** | — |
-| W11 | **Lichtschranke Z** | 3 Silikonlitzen 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,45 m | **2 m** | Y + X |
-| W12 | **X-Motor** — in der Kette nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut am linken 2040, Y-Kette, zum Motor über dem Rohrende | 0,8 m | mitgeliefert (1 m) | Y |
-| W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn | 0,69 m | mitgeliefert (1 m) | — |
+| W11 | **Lichtschranke Z** | 3 Silikonlitzen 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,49 m | **2 m** | Y + X |
+| W12 | **X-Motor** — in der Kette nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040, Y-Kette, hinter dem Motorhalter hoch zum Motor | 0,82 m | mitgeliefert (1 m) | Y |
+| W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn; an den drei Trägern der Wanne Y kurz aus der Nut, über ihre Wand | 0,71 m | mitgeliefert (1 m) | — |
 | W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,98 m | **1,5 m**, fertig | — |
-| W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,52 m | **2 m**, fertig | Y + X |
+| W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,56 m | **2 m**, fertig | Y + X |
 | W16 | **24-V-Wächter an Abort** — fehlen die 24 V (Not-Aus, Schalter, Netzteil), bricht GRBL ab | Widerstand | im Kasten | — | — | — |
 | W17 | **USB** | USB-Kabel A–B | hinten raus zum PC | — | vorhanden | — |
 <!-- /tabelle:leitungen -->
@@ -261,11 +261,11 @@ Dann [Prüfung C](#c-wandler-auf-120-v).
 3. Im Gehäuse: rot an die **Wago +5 V**, schwarz an die **Wago GND**, gelb
    mit einem 1-poligen Dupont-Gehäuse auf den Eingang: X → **X−** (D9),
    Y → **Y+** (D10), Z → **SpnEn** (D12).
-4. Wege: X durch die Y-Kette und am Stirnblock nach vorn zum Halter
-   ([endschalter.md](endschalter.md)); Y durch den Kanal und in der unteren
-   Nut außen am rechten 2040 nach hinten; Z durch beide Ketten zum
-   Toolhead. Hat die Z-Lichtschranke schon ein Kabel: Es muss bis zum
-   Gehäuse reichen, also 2 m lang sein.
+4. Wege: X durch die Y-Kette, hinter dem Schlitten über das Rohr nach
+   vorn zum Halter ([endschalter.md](endschalter.md)); Y durch den Kanal
+   und in der unteren Nut außen am rechten 2040 nach hinten; Z durch beide
+   Ketten zum Toolhead. Hat die Z-Lichtschranke schon ein Kabel: Es muss
+   bis zum Gehäuse reichen, also 2 m lang sein.
 
 Dann [Prüfung D](#d-uno-grbl-und-lichtschranken).
 
@@ -343,17 +343,23 @@ Die Wege zeigt [elektronik-platz.svg](elektronik-platz.svg), beschrieben
 sind sie in [elektronik.md](elektronik.md#kabel).
 
 * **Links aus dem Gehäuse** unter dem linken 2040 durch in dessen untere
-  Außennut: W13 nach vorn zum linken Y-Motor; W7, W9, W11, W12 und W15 zum
-  Festpunkt der Y-Kette.
+  Außennut: W13 nach vorn zum linken Y-Motor, an jedem der drei Träger der
+  Wanne Y kurz aus der Nut und über seine Wand; W7, W9, W11, W12 und W15
+  bis hinter die Wanne Y, dort aus der Nut und von hinten in das Endstück
+  180 der Y-Kette (zwei Kabelbinder durch die Schlitze im Wannenboden).
 * **Vorn aus dem Gehäuse** in den Kanal, darin nach rechts, an der
   Rückseite des hinteren 2060 (mittlere Nut) zum rechten 2040 und in dessen
   untere Außennut: W14 und W2 nach vorn, W10 nach hinten zum Halter Y. W2
   verlässt die Nut vor dem 2060, läuft in dessen oberer Nut vorn nach
   links und rechts oben ins Gehäuse des Not-Aus.
-* **Y-Kette:** W7, W9, W11, W12, W15. Am linken Schlitten verlassen W9 und
-  W12 die Kette, W7, W11 und W15 laufen am Rohr entlang zum Festpunkt der
-  X-Kette. Wie sie dort geführt werden, ist noch offen
-  ([energiekette.md](energiekette.md#noch-offen)).
+* **Y-Kette:** W7, W9, W11, W12, W15. Sie kommen hinten aus dem
+  Anfangsstück auf dem Kettenhalter Y (ein Kabelbinder). W12 läuft hinter
+  dem Motorhalter hoch zum X-Motor, W9 über das Rohr nach vorn zum Halter X.
+  W7, W11 und W15 laufen auf der Schlittenplatte hinter Rückwand und
+  Motorhalter nach innen, rechts daneben in die obere Nut des Rohrs, darin
+  bis an den Kabelflügel der Wannenstütze am Festpunkt, vor ihm hoch (zwei
+  Kabelbinder) und oben über den Riemen nach vorn in das Endstück 180 der
+  X-Kette ([energiekette.md](energiekette.md#kabelweg-am-festpunkt)).
 * **X-Kette:** W7, W11, W15 bis zum Kettenhalter hinten an der
   Trägerplatte ([energiekette.md](energiekette.md)).
 

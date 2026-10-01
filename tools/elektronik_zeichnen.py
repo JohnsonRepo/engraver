@@ -6,9 +6,9 @@ Elektronikfach hinter dem hinteren 2060 mit dem Gehaeuse der Steuerung, die
 Endschalter, die festen Kabelwege und die beiden Energieketten. Rahmen,
 Portal und Toolhead kommen aus Portal.py und ToolheadZ.py, das Gehaeuse aus
 Elektronik.py, das Fach und der Y-Weg aus tools/portal_check.py
-(Abschnitte 14 und 16). Die Ketten sind gedruckt (Portal.py, Rev. 19): die
-X-Kette mit Wanne wie dort, die Y-Kette noch als Platzhalter (Wanne und
-Halter fehlen). Das Netzteil ist ein Steckernetzteil und steht ausserhalb.
+(Abschnitte 14 und 16). Die Ketten sind gedruckt und liegen wie in
+Portal.py, jede mit Wanne, Festpunkt und Kettenhalter (X seit Rev. 19, Y
+seit Rev. 21). Das Netzteil ist ein Steckernetzteil und steht ausserhalb.
 
     python3 tools/elektronik_zeichnen.py   ->  docs/elektronik-platz.svg
 
@@ -28,6 +28,7 @@ from antrieb_zeichnen import (el, f1, text, linie, rect_px,  # noqa: E402
                               de, TEXT, GRAU, BLAU, ROT, FARBE)
 from portal_zeichnen import Feld, ORANGE              # noqa: E402
 from portal_zeichnen import quer_mass                 # noqa: E402
+from kette_zeichnen import schleife_y                 # noqa: E402
 
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-platz.svg')
@@ -38,19 +39,12 @@ NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
 
 # ---- Ketten ----------------------------------------------------------------
 # Gedruckt (Portal.py, seit Rev. 19, aus der 3MF ausgemessen): aussen
-# 18 x 14, der Riegel 0,3 hoeher, Biegeradius 32 mm (30 Grad je Glied am
-# gedruckten Teil, seit Rev. 20), die Endstuecke je 36 mm hinter
-# dem Gelenk. Die X-Kette liegt wie in Portal.py, die Y-Kette ist noch ein
-# Platzhalter mit diesen Massen.
+# 18 x 14, Biegeradius 32 mm (30 Grad je Glied am gedruckten Teil, seit
+# Rev. 20), die Endstuecke je 36 mm hinter dem Gelenk. Beide Ketten liegen
+# wie in Portal.py (Y seit Rev. 21: Arbeitsweg plus Reserve nach vorn).
 _PM = bauraum.modul_laden(bauraum.PORTAL, 'portal')
-KETTE_B = _PM.w('kette_b')
-KETTE_H = _PM.w('kette_h') + _PM.w('kette_riegel')
 KETTE_R = _PM.w('kette_r')
-KETTE_T = _PM.w('kette_teilung')
 KETTE_ENDEN = 2.0 * _PM.w('endstueck_l')
-# Y-Kette: Arbeitsweg plus Reserve nach vorn (Wahl 2026-10-01); damit
-# laesst sie das Portal etwas ueber die Grenze am vorderen 2060.
-KETTE_Y_RESERVE = 26.0
 RESERVE = 0.15                   # Kabel: Boegen, Zugentlastung, Stecker
 KAUFLAENGEN = (0.5, 1.0, 1.5, 2.0, 2.5, 3.0)   # m
 
@@ -150,26 +144,22 @@ def konzept(w, L, tw, TL, ew, EL):
     K['x_aussen'] = R + w('rahmen_b') / 2.0 + 5.0
     K['z_nut_u'] = L['rahmen_z0'] + w('rahmen_b') / 2.0
 
-    # Y-Kette: aussen am linken 2040, ausserhalb des Schlittens (der steht
-    # bis X = -279 ueber). Festpunkt auf halbem Weg, Schleife nach hinten;
-    # die Wanne haengt in der unteren Nut aussen am 2040.
-    stirn = portal['Stirnblock links']
-    xk1 = stirn.x[0] - 3.0
-    K['ky_x'] = (xk1 - KETTE_B, xk1)
-    ym = (stirn.y[0] + stirn.y[1]) / 2.0        # bewegtes Ende, Portal Mitte
-    K['ky_ende0'] = ym
-    K['ky_bewegt'] = (ym - d_hinten, ym + d_vorn)
-    K['ky_hub'] = d_hinten + d_vorn
-    K['ky_fest'] = ym + (d_vorn - d_hinten) / 2.0
-    K['ky_wanne'] = (K['ky_bewegt'][0] - KETTE_R - KETTE_H / 2.0,
-                     K['ky_fest'])
-    K['ky_z_wanne'] = L['quer_z'][1]            # Unterkante wie die 2040
-    K['ky_z_unten'] = K['ky_z_wanne'] + 3.0 + KETTE_H / 2.0
-    K['ky_z_oben'] = K['ky_z_unten'] + 2.0 * KETTE_R
-    # ganze Glieder wie bei X: die Litzen laufen durch die ganze Kette
-    K['ky_glieder'] = int(math.ceil((K['ky_hub'] / 2.0 + KETTE_Y_RESERVE
-                                     + math.pi * KETTE_R) / KETTE_T - 1e-9))
-    K['ky_laenge'] = K['ky_glieder'] * KETTE_T + KETTE_ENDEN
+    # Y-Kette (Portal.py, Rev. 21): aussen am linken 2040, neben der Platte
+    # des linken Schlittens; Schleife nach vorn. Der Festpunkt (Endstueck
+    # 180) sitzt hinten in der Wanne Y, die auf drei Traegern an der
+    # unteren Seitennut haengt; das bewegte Ende auf dem Kettenhalter Y.
+    # Die Litzen gehen hinten in das Endstueck 180 und kommen hinten aus
+    # dem Anfangsstueck.
+    K['ky_x'] = L['yk_x']
+    K['ky_hub'] = L['y_weg_hinten'] + w('y_weg_vorn')
+    K['ky_fest'] = L['yk_fest']
+    K['ky_eintritt'] = L['yk_fest'] - w('endstueck_l')
+    K['ky_austritt'] = w('yk_gelenk_y') - w('endstueck_l')  # Portal Mitte
+    K['ky_wanne'] = L['ywanne_y']
+    K['ky_z_unten'] = L['yk_achse_unten']
+    K['ky_z_oben'] = L['yk_achse_oben']
+    K['ky_glieder'] = L['yk_glieder']
+    K['ky_laenge'] = L['yk_laenge'] + KETTE_ENDEN
 
     # X-Kette (Portal.py, Rev. 19): direkt hinter der Traegerplatte, die
     # Wanne ueber dem Riemen. Festpunkt (Gelenk des Endstuecks 180) in der
@@ -277,9 +267,17 @@ def kabelwege(w, L, TL, K):
     # vorn verlaesst das Kabel die untere Nut zwischen dem 2060 und den
     # Schenkeln des Y-Motorhalters
     y_vor = L['quer_y_vorn'][1] + 2.0
+    # links geht die Litze an jedem Traeger der Wanne Y kurz aus der Nut,
+    # ueber seine Wand (Portal.py, Rev. 21)
+    z_ueber = L['ytr_wand_z'][1] + 2.5
+    umweg = []
+    for y0, y1 in sorted(L['ytr_y'].values()):
+        umweg += [(-xa, y0 - 8.0, zn), (-xa, y0, z_ueber),
+                  (-xa, y1, z_ueber), (-xa, y1 + 8.0, zn)]
 
     def y_motor(s):
-        return [(s * xa, y_vor, zn), (s * (R + fl + 3.0), K['ym_y'], zm)]
+        return (umweg if s < 0 else []) + [
+            (s * xa, y_vor, zn), (s * (R + fl + 3.0), K['ym_y'], zm)]
 
     # vorn aus dem Kabelausschnitt in den Kanal, darin nach rechts, dann an
     # der Rueckseite des 2060 (mittlere Nut) zum rechten 2040
@@ -291,16 +289,41 @@ def kabelwege(w, L, TL, K):
     rechts = [(xv, st.y[1], z_k), (xv, y_kanal, z_k), (x_ende, y_kanal, z_k),
               (x_ende, y_2060, z_2060), (xa, y_2060, z_2060),
               (xa, y_2060, zn)]
+    # zur Y-Kette: in der Seitennut nach vorn bis hinter die Wanne Y, dort
+    # aus der Nut nach aussen und hinten in das Endstueck 180
     xk = sum(K['ky_x']) / 2.0
-    zur_kette = raus + [(-xa, K['ky_fest'], zn),
-                        (xk, K['ky_fest'], K['ky_z_unten'])]
-    ende_y = (xk, K['ky_ende0'], K['ky_z_oben'])     # Portal in der Mitte
-    motor = K['portal']['X-Motor']
-    x_motor = [ende_y, (xk, ende_y[1], 65.0), (motor.x[0], -16.4, 65.0)]
-    x_es = [ende_y, (xk, ende_y[1], 20.0), (K['es_x'][0], K['es_x'][1], 20.0)]
+    y_wanne = K['ky_wanne'][0] - 5.0
+    zur_kette = raus + [(-xa, y_wanne, zn), (xk, y_wanne, K['ky_z_unten']),
+                        (xk, K['ky_eintritt'], K['ky_z_unten'])]
+    # bewegtes Ende (Portal in der Mitte): hinten aus dem Anfangsstueck, ein
+    # Kabelbinder am Kettenhalter Y
+    aus_y = (xk, K['ky_austritt'], K['ky_z_oben'])
+    binder = (xk, L['khy_binder'][0][1], L['khy_z'][1] + 2.0)
+    # zur X-Kette (seit Rev. 21): auf der Platte hinter Rueckwand und
+    # Motorhalter nach innen, rechts neben ihnen in die obere Nut des
+    # Rohrs, darin bis an den Kabelfluegel, vor ihm hoch und oben ueber
+    # den Riemen nach vorn in das Endstueck 180
+    zp = L['platte_z1'] + 3.0
+    x0, x1 = L['kf_nut_x']
+    yn = (L['profil_y0'] + L['portal_y']) / 2.0
+    zr = L['profil_z1'] - 3.0
+    xb, yb = sum(L['kf_buendel_x']) / 2.0, sum(L['kf_buendel_y']) / 2.0
+    zq = sum(L['kf_quer_z']) / 2.0
     yk = sum(K['kx_y']) / 2.0
-    zur_x = [ende_y, (xk, yk, K['kx_z_unten']),
+    zur_x = [aus_y, binder, (x0, binder[1], zp),
+             (x0, L['profil_y0'] - 3.0, zp), (x0, yn, zr), (x1, yn, zr),
+             (xb, yb, L['profil_z1']), (xb, yb, zq), (xb, yk, zq),
              (K['kx_eintritt'], yk, K['kx_z_unten'])]
+    K['weg_portal'] = zur_x
+    # X-Motor: hinter dem Motorhalter hoch, seine Litze kommt seitlich aus
+    # dem Motor (links angenommen); X-Endschalter ueber das Rohr nach vorn
+    motor = K['portal']['X-Motor']
+    yh = L['stirn_y'][0] - 3.0
+    x_motor = [aus_y, binder, (motor.x[0] - 3.0, yh, zp),
+               (motor.x[0] - 3.0, yh, 65.0), (motor.x[0], -16.4, 65.0)]
+    x_es = [aus_y, binder, (x0, binder[1], zp), (x0, yh, zp),
+            (x0, yn, L['profil_z1'] + 3.0),
+            (K['es_x'][0], K['es_x'][1], 20.0)]
     xm = K['xm']
     am_th = [(xm, yk, K['kx_z_oben']), (xm, 0.0, K['kx_z_oben'])]
     z_motor = am_th + [(xm, 0.0, 183.0), (xm + 30.0, 7.4, 183.0)]
@@ -408,16 +431,16 @@ def draufsicht(f, w, L, K):
                         'kauf'))
     q = K['notaus']
     t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], 'neu'))
-    # Energieketten: Wanne und die Huelle der Kette in der Mitte
-    t.append(f.rect(K['ky_x'][0] - 2, K['ky_x'][1] + 2, *K['ky_wanne'], 'neu',
-                    stroke_dasharray='4 3', fill_opacity='0.6'))
-    # Schleife nach hinten: sie steht auf halbem Weg zwischen Festpunkt und
-    # bewegtem Ende, um den halben Hub nach hinten versetzt
-    ym0 = K['ky_ende0']
-    y_schleife = (K['ky_fest'] + ym0 - K['ky_hub'] / 2.0) / 2.0
-    t.append(f.rect(K['ky_x'][0], K['ky_x'][1],
-                    y_schleife - KETTE_R - KETTE_H / 2.0,
-                    max(K['ky_fest'], ym0), 'kette'))
+    # Energieketten: Traeger, Wanne und Kettenhalter, die Huelle der Kette
+    # mit dem Portal in der Mitte (Y: vom Festpunkt bis vorn an den Bogen)
+    for y in L['ytr_y'].values():
+        t.append(f.rect(L['ytr_arm_x'][0], L['ytr_wand_x'][1], *y, 'neu'))
+    t.append(f.rect(*L['ywanne_x'], *K['ky_wanne'], 'neu',
+                    fill_opacity='0.6'))
+    t.append(f.rect(*L['khy_x'], *L['khy_y'], 'neu'))
+    _, yb = schleife_y(L, w, 0.0)
+    t.append(f.rect(K['ky_x'][0], K['ky_x'][1], K['ky_eintritt'],
+                    yb + L['xk_bogen_r'][1], 'kette'))
     t.append(f.rect(K['kx_wanne'][0], K['kx_wanne'][1], *K['kx_wanne_y'],
                     'neu', fill_opacity='0.6'))
     # Toolhead in der Mitte: das bewegte Ende steht ueber dem Festpunkt
@@ -432,11 +455,12 @@ def draufsicht(f, w, L, K):
                          ('luefter', 'kauf', {'fill_opacity': '0.85'})):
         q = K[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
-    # feste Kabelwege
+    # feste Kabelwege, dazu der Weg mit dem Portal von der Y- zur X-Kette
     for n in ('Y-Motor links', 'Y-Motor rechts', 'Y-Endschalter', 'X-Motor',
               'Not-Aus'):
         weg = K['kabel'][n][1]
         t.append(linienzug(f, [(p[0], p[1]) for p in weg]))
+    t.append(linienzug(f, [(p[0], p[1]) for p in K['weg_portal'][1:]]))
     # Endschalter
     for a, b in (K['es_x'], K['es_y'], K['es_z']):
         t.append(punkt(f, a, b))
@@ -492,23 +516,16 @@ def seitenansicht(f, w, L, TL, K):
     q = P['Portalrohr']
     t.append(f.rect(q.y[0] + ds, q.y[1] + ds, q.z[0], q.z[1], 'profil',
                     fill='none', stroke_dasharray='4 3'))
-    # Y-Kette mit dem Portal an der hinteren Grenze: ganz abgerollt, die
-    # Schleife steht am bewegten Ende
-    yb = K['ky_bewegt'][0]
-    zu, zo = K['ky_z_unten'], K['ky_z_oben']
-    t.append(f.rect(K['ky_wanne'][0], K['ky_wanne'][1], K['ky_z_wanne'],
-                    K['ky_z_wanne'] + 3.0, 'neu', stroke_dasharray='4 3'))
-    x0, y0 = f.px(K['ky_fest'], zu)
-    x1, y1 = f.px(yb, zu)
-    _, y2 = f.px(yb, zo)
-    r = (y1 - y2) / 2.0
-    d = 'M {} {} L {} {} A {} {} 0 0 1 {} {}'.format(
-        f1(x0), f1(y0), f1(x1), f1(y1), f1(r), f1(r), f1(x1), f1(y2))
-    t.append(el('path', {'d': d, 'fill': 'none', 'stroke': '#a3abb8',
-                         'stroke-width': f1(KETTE_H * f.s),
-                         'stroke-linecap': 'butt'}))
-    t.append(el('path', {'d': d, 'fill': 'none', 'stroke': '#3d4552',
-                         'stroke-width': '0.8', 'stroke-dasharray': '3 2'}))
+    # Y-Kette (davor): Traeger, Wanne; die Kette mit dem Portal an der
+    # hinteren Grenze, der Untertrum dann fast ganz im Obertrum
+    for y in L['ytr_y'].values():
+        t.append(f.rect(*y, *L['ytr_wand_z'], 'neu'))
+    t.append(f.rect(*K['ky_wanne'], *L['ywanne_z'], 'neu',
+                    fill_opacity='0.6'))
+    umr, _ = schleife_y(L, w, dh)
+    t.append(f.poly(umr, 'kette', fill_opacity='0.8'))
+    q = P['Kettenhalter Y']
+    t.append(f.rect(q.y[0] + dh, q.y[1] + dh, q.z[0], q.z[1], 'neu'))
     return t
 
 
@@ -533,8 +550,8 @@ def main():
                   em.REVISION, pm.REVISION, th.REVISION), 14, TEXT,
               fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Ketten '
-              'gedruckt: die X-Kette mit Wanne wie in Portal.py, die Y-Kette '
-              'als Platzhalter. Das Netzteil (24 V / 3 A) steht außerhalb.',
+              'gedruckt, beide mit Wanne, Festpunkt und Kettenhalter wie in '
+              'Portal.py. Das Netzteil (24 V / 3 A) steht außerhalb.',
               9, GRAU)]
 
     # ---- Draufsicht --------------------------------------------------------
@@ -553,10 +570,10 @@ def main():
              de(L['xw_max'] - L['xw_min'], 0),
              de(K['d_vorn'] + K['d_hinten'], 0))),
         (-R, K['ym_y'], 'Y-Motor links'),
-        (sum(K['ky_x']) / 2, K['ky_fest'] - 30.0,
-         'Energiekette Y außen\nam linken 2040'),
-        (sum(K['ky_x']) / 2, K['ky_wanne'][0] + 6.0,
-         'Kettenwanne, hängt außen\nam 2040 (untere Nut)'),
+        (sum(K['ky_x']) / 2, K['ky_fest'] + 30.0,
+         'Energiekette Y außen am\nlinken 2040, Schleife vorn'),
+        (L['ywanne_x'][0], K['ky_wanne'][0] + 4.0,
+         'Wanne Y auf drei Trägern\n(untere Seitennut), Festpunkt'),
         (K['es_x'][0], K['es_x'][1], 'X-Endschalter auf der 2020\n'
          '(fährt mit dem Portal)'),
         (-200.0, K['portal']['Portalrohr'].y[0] - K['d_hinten'] + 5.0,
@@ -598,8 +615,9 @@ def main():
         (fach.y[0] + 15.0, fach.z[0] + 12.0, 'Elektronikfach'),
         (-300.0, K['z_frei'] - 6.0,
          'in der Mitte darf es höher\nwerden (gestrichelt)'),
-        (K['ky_wanne'][0] + 30.0, K['ky_z_unten'],
-         'Energiekette Y (davor),\nSchleife am Portal'),
+        (K['ky_wanne'][0] + 20.0, L['ywanne_z'][0],
+         'Wanne Y und Träger (davor)'),
+        (-200.0, K['ky_z_oben'], 'Energiekette Y (davor),\nPortal hinten'),
         (L['quer_y_hinten'][0] + 5.0, L['quer_z'][0] + 10.0,
          'hinteres 2060'),
         (-150.0, L['quer_z'][0], 'Tisch')],
@@ -655,11 +673,12 @@ def main():
          'außen am rechten 2040 — schaltet {} (Toolhead mit Z unten {} mm '
          'vor dem 2060); Z vorhanden'.format(K['grenze_hinten'],
                                              de(K['luft_2060'], 0))),
-        ('Kette Y', '{} mm Hub, Festpunkt {} mm vom hinteren Ende des 2040, '
-         'Schleife nach hinten, {} Glieder, {} mm mit Endstücken (R{}; '
-         'Wanne und Halter offen)'.format(
-             de(K['ky_hub'], 0), de(K['ky_fest'] - L['rahmen_y'][0], 0),
-             K['ky_glieder'], de(K['ky_laenge'], 0), de(KETTE_R, 0))),
+        ('Kette Y', '{} mm Hub + {} mm Reserve, Festpunkt hinten in der '
+         'Wanne Y ({} mm vom hinteren Ende des 2040), Schleife nach vorn, '
+         '{} Glieder, {} mm mit Endstücken (R{})'.format(
+             de(K['ky_hub'], 0), de(L['yk_reserve_vorn'], 0),
+             de(K['ky_fest'] - L['rahmen_y'][0], 0), K['ky_glieder'],
+             de(K['ky_laenge'], 0), de(KETTE_R, 0))),
         ('Kette X', '{} mm Hub, Festpunkt in der Mitte des Wegs, Schleife '
          'nach rechts (links steht der X-Motor), {} Glieder, {} mm mit '
          'Endstücken (R{})'.format(

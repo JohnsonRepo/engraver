@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 22, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 23, fünfundzwanzig
 gedruckte Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
@@ -28,7 +28,7 @@ Festpunkt der X-Kette ([energiekette.md](energiekette.md)).
 
 | Pos | Teil | Stück | Funktion |
 |---|---|---|---|
-| 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende |
+| 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende. Der linke hat seit Rev. 21 zwei Löcher Ø3,4 für den Kettenhalter Y |
 | 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende |
 | 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten; dünne Motorplatte, damit die 20-mm-Welle das ganze Ritzel trägt |
 | 4 | **Spannbock** | 1 | rechts fest auf dem Stirnblock (2 × M3): Anschlag für die Zugschraube |
@@ -540,16 +540,16 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Spannbock | 5,4 cm³ | ≈ 7 g | 35 × 22 × 18 mm |
 | Lagerschlitten | 10,4 cm³ | ≈ 13 g | 16 × 35 × 33 mm |
 | Y-Motorhalter (je) | 25,5 cm³ | ≈ 32 g | 52 × 87 × 17 mm |
-| Kettenwanne | 26,8 cm³ | ≈ 34 g | 242,5 × 32,6 × 13 mm |
+| Kettenwanne | 27,0 cm³ | ≈ 34 g | 242,5 × 33 × 13 mm |
 | Wannenstütze Festpunkt mit Kabelflügel | 17,0 cm³ | ≈ 22 g | 42,4 × 32 × 49,5 mm |
 | Wannenstütze mitte, rechts (je) | 9,3 cm³ | ≈ 12 g | 16 × 32 × 49,5 mm |
-| Kettenhalter Y | 12,7 cm³ | ≈ 16 g | 32,3 × 49,5 × 11 mm |
-| Kettenwanne Y | 26,7 cm³ | ≈ 34 g | 30,3 × 244,2 × 13 mm |
-| Träger Y Festpunkt | 6,8 cm³ | ≈ 9 g | 36,3 × 26 × 19,7 mm |
-| Träger Y mitte, vorn (je) | 6,3 cm³ | ≈ 8 g | 36,3 × 24 × 19,7 mm |
-| **Portal zusammen** (ohne Endschalter) | 321,3 cm³ | **≈ 408 g** | |
+| Kettenhalter Y | 12,8 cm³ | ≈ 16 g | 32,5 × 49,5 × 11 mm |
+| Kettenwanne Y | 27,0 cm³ | ≈ 34 g | 30,7 × 244,2 × 13 mm |
+| Träger Y Festpunkt | 6,8 cm³ | ≈ 9 g | 36,5 × 26 × 19,7 mm |
+| Träger Y mitte, vorn (je) | 6,4 cm³ | ≈ 8 g | 36,5 × 24 × 19,7 mm |
+| **Portal zusammen** (ohne Endschalter) | 322,1 cm³ | **≈ 409 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
-| Kettenhalter (Toolhead) | 14,2 cm³ | ≈ 18 g | 44 × 24,8 × 26 mm |
+| Kettenhalter (Toolhead) | 14,3 cm³ | ≈ 18 g | 44 × 25,2 × 26 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
 das Lochbild 20 × 20 am Wagen, `Bohrlehre_LM393` Umriss und Lochbild der

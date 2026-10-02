@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1093" height="1479" viewBox="0 0 1093 1479" font-family="Inter, Helvetica, Arial, sans-serif"><defs ><pattern id="schraffur" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#fbeee2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#e8a871" stroke-width="1.4"/></pattern></defs>
-<text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Platz für die Elektronik (Elektronik.py Rev. 2, Portal.py Rev. 22, ToolheadZ.py Rev. 37)</text>
+<text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Platz für die Elektronik (Elektronik.py Rev. 2, Portal.py Rev. 23, ToolheadZ.py Rev. 38)</text>
 <text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Ketten gedruckt, beide mit Wanne, Festpunkt und Kettenhalter wie in Portal.py. Das Netzteil (24 V / 3 A) steht außerhalb.</text>
 <clipPath id="drauf"><rect x="262.0" y="92.0" width="581.4" height="599.4"/></clipPath>
 <g clip-path="url(#drauf)">
@@ -42,10 +42,10 @@
 <rect x="563.2" y="445.5" width="16.3" height="16.3" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="526.7" y="417.1" width="37.8" height="12.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="526.7" y="422.2" width="37.8" height="6.9" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
-<rect x="526.7" y="407.8" width="37.8" height="21.3" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
-<rect x="526.7" y="407.8" width="37.8" height="1.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
+<rect x="526.7" y="407.4" width="37.8" height="21.7" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
+<rect x="526.7" y="407.4" width="37.8" height="1.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="526.7" y="424.8" width="37.8" height="4.3" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
-<rect x="533.5" y="409.1" width="37.0" height="15.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
+<rect x="533.5" y="408.9" width="37.0" height="15.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="567.9" y="450.2" width="6.9" height="6.9" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="537.0" y="440.3" width="17.2" height="8.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="532.7" y="448.9" width="25.8" height="10.3" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
@@ -64,14 +64,14 @@
 <rect x="313.5" y="643.3" width="36.4" height="36.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
 <rect x="755.5" y="643.3" width="36.4" height="36.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
 <rect x="673.9" y="605.4" width="67.1" height="39.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="291.8" y="321.5" width="31.2" height="22.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="291.8" y="405.9" width="31.2" height="20.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="291.8" y="483.3" width="31.2" height="20.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="292.7" y="312.0" width="19.4" height="210.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.6"/>
-<rect x="291.8" y="346.6" width="27.8" height="42.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="291.7" y="321.5" width="31.4" height="22.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="291.7" y="405.9" width="31.4" height="20.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="291.7" y="483.3" width="31.4" height="20.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="292.5" y="312.0" width="19.8" height="210.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.6"/>
+<rect x="291.7" y="346.6" width="27.9" height="42.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="294.7" y="322.4" width="15.5" height="154.8" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
-<rect x="531.0" y="407.1" width="208.6" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.6"/>
-<rect x="533.5" y="409.1" width="144.4" height="15.5" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
+<rect x="531.0" y="406.8" width="208.6" height="19.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.6"/>
+<rect x="533.5" y="408.9" width="144.4" height="15.5" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
 <rect x="358.3" y="209.8" width="174.0" height="4.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="376.4" y="122.5" width="137.9" height="77.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="382.0" y="130.6" width="45.9" height="59.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.7"/>
@@ -83,7 +83,7 @@
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,179.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,307.7 302.4,307.7 302.4,322.4" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,607.1 786.6,607.1 731.6,607.1 731.6,617.5 729.0,617.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
-<polyline points="302.4,351.7 360.0,351.7 360.0,395.6 360.0,406.8 520.5,406.8 525.6,400.7 525.6,400.7 525.6,416.8 533.5,416.8" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+<polyline points="302.4,351.7 360.0,351.7 360.0,395.6 360.0,406.8 520.5,406.8 525.6,400.7 525.6,400.7 525.6,416.6 533.5,416.6" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <circle cx="346.1" cy="434.1" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="796.1" cy="179.5" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="522.4" cy="456.6" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
@@ -100,8 +100,8 @@
 <line x1="423.7" y1="221.0" x2="253.0" y2="241.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="423.7" cy="221.0" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="244.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
-<line x1="292.7" y1="315.5" x2="253.0" y2="315.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="292.7" cy="315.5" r="1.5" fill="#5b6472"/>
+<line x1="292.5" y1="315.5" x2="253.0" y2="315.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="292.5" cy="315.5" r="1.5" fill="#5b6472"/>
 <text x="250.0" y="318.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wanne Y auf drei Trägern</text>
 <text x="250.0" y="328.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(untere Seitennut), Festpunkt</text>
 <line x1="302.4" y1="379.1" x2="253.0" y2="379.1" stroke="#5b6472" stroke-width="0.6"/>
@@ -146,10 +146,10 @@
 <circle cx="525.5" cy="211.5" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="301.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Montageplatte: 4 × M5 in die</text>
 <text x="855.4" y="311.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rückseite des 2060, Kabelkanal</text>
-<line x1="722.3" y1="409.1" x2="852.4" y2="409.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="722.3" cy="409.1" r="1.5" fill="#5b6472"/>
-<text x="855.4" y="412.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette X: direkt hinter der</text>
-<text x="855.4" y="422.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Trägerplatte, über dem Riemen</text>
+<line x1="722.3" y1="408.9" x2="852.4" y2="408.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="722.3" cy="408.9" r="1.5" fill="#5b6472"/>
+<text x="855.4" y="411.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette X: direkt hinter der</text>
+<text x="855.4" y="421.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Trägerplatte, über dem Riemen</text>
 <line x1="522.4" y1="456.6" x2="852.4" y2="456.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="522.4" cy="456.6" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="459.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Z-Endschalter (vorhanden)</text>
@@ -210,10 +210,10 @@
 <rect x="528.4" y="652.7" width="27.5" height="36.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="480.5" y="819.4" width="20.3" height="23.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="489.2" y="742.9" width="11.6" height="33.3" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
-<rect x="464.9" y="742.9" width="36.0" height="11.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
-<rect x="464.9" y="738.5" width="1.7" height="4.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
+<rect x="464.3" y="742.9" width="36.5" height="11.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
+<rect x="464.3" y="738.5" width="1.7" height="4.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="493.6" y="738.5" width="7.2" height="4.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
-<rect x="467.0" y="722.1" width="26.1" height="20.7" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
+<rect x="466.7" y="722.1" width="26.1" height="20.7" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="536.3" y="677.3" width="11.6" height="232.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="519.7" y="895.0" width="14.5" height="57.9" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>
 <rect x="534.2" y="899.2" width="17.4" height="148.3" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.55"/>

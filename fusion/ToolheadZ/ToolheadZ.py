@@ -35,7 +35,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 37
+REVISION = 38
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -395,14 +395,14 @@ MASSE = {
     'kette_h':            (14.0,  'Energiekette: Hoehe der Laschen'),
     'kette_riegel':        (0.3,  'Energiekette: Riegel steht ueber die Laschen'),
     'kette_r':            (20.0,  'Energiekette: Biegeradius der Gelenkachse'),
-    'kette_spiel':         (0.3,  'Energiekette: Spiel je Seite in Wanne und Halter'),
+    'kette_spiel':         (0.5,  'Energiekette: Spiel je Seite in Wanne und Halter'),
     'endstueck_l':        (36.0,  'Endstueck: Gelenk bis Ende'),
     'endstueck_auge':      (7.0,  'Endstueck: Auge vor dem Gelenk'),
     'endstueck_loch_a':   (18.0,  'Endstueck: Gelenk bis erstes Loch'),
     'endstueck_loch_ab':  (12.0,  'Endstueck: Lochabstand'),
     'endstueck_loch_d':    (5.5,  'Endstueck: Loecher'),
     'endstueck_platte':    (2.0,  'Endstueck: Platte, Dicke'),
-    'xk_y_vorn':          (-5.3,  'X-Kette: Vorderseite'),
+    'xk_y_vorn':          (-5.5,  'X-Kette: Vorderseite'),
     'xk_boden_z':         (44.5,  'X-Kette: Oberkante Wannenboden'),
     # Gelenk an der rechten Kante der Saeule: das Endstueck liegt ganz
     # hinter der Platte, der Bogen beginnt rechts daneben

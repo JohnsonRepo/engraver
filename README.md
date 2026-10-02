@@ -252,8 +252,13 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 37, Portal Rev. 22 mit
-dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 22 und ToolheadZ
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 23 mit
+dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 23 und ToolheadZ
+Rev. 38 geben der Kette 0,5 mm Spiel je Seite in Wannen und Kettenhaltern
+(vorher 0,3); die X-Kette liegt dafür 0,2 mm weiter hinten. Der linke
+Schlitten hat die zwei Löcher für den Kettenhalter Y im Modell (seit
+Rev. 21, für einen Neudruck), in den schon gedruckten bohrt man sie mit
+der Bohrlehre. Portal Rev. 22 und ToolheadZ
 Rev. 37 rechnen die Ketten wieder mit R 20, nach der gemessenen Schleife
 (außen 50 mm, 4 Gelenke im Bogen): X 17, Y 16 Glieder, der Kettenhalter
 24 mm tiefer, die Wanne Y 24 mm höher. Portal Rev. 21 bringt die

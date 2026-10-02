@@ -581,10 +581,10 @@ Weitere steht in [energiekette.md](energiekette.md).
 
 | Maß | Wert |
 |---|---|
-| Form | Winkel 44 mm breit wie die Säule: Fuß 8 mm an der Plattenrückseite (Z +61,8 bis +84,8), Auflage 8 mm, 24,8 mm tief |
+| Form | Winkel 44 mm breit wie die Säule: Fuß 8 mm an der Plattenrückseite (Z +61,8 bis +84,8), Auflage 8 mm, 25,2 mm tief |
 | Auflage | Z = +84,8 = Wannenboden +44,5, Riegel 0,3, 2 R (40); 68,8 mm über dem X-Wagen |
 | Luft Fuß ↔ Untertrum der Kette | 3,0 mm |
-| Anfangsstück | Platte unten zwischen zwei Leisten (0,3 mm Spiel je Seite), Gelenk 22 mm rechts der Wagenmitte; 2 × M3×8 + Scheibe DIN 125 in Einsätze der Auflage |
+| Anfangsstück | Platte unten zwischen zwei Leisten (0,5 mm Spiel je Seite, seit Rev. 38), Gelenk 22 mm rechts der Wagenmitte; 2 × M3×8 + Scheibe DIN 125 in Einsätze der Auflage |
 | Befestigung | 2 × M3×10 von vorn durch die Trägerplatte (X ±13,5, Z +72, mitten im Fuß) in Einsätze, Kopf in der Senkung Ø6,5 × 3,2 |
 | Zugentlastung | ein Kabelbinder durch zwei Schlitze links neben dem Anfangsstück |
 
@@ -618,7 +618,7 @@ Alle Werte gemessen, PETG mit eingemessener Dichte 1,27 g/cm³ (Geometrie von Re
 | Schaltfahne | ≈ 2,6 cm³ | **≈ 3,4 g** | 18 × 60 × 5,5 mm | gerechnet |
 | Endschalterhalter | ≈ 5,4 cm³ | **≈ 7 g** | 19 × 35 × 27 mm | gerechnet (gedruckt, bleibt) |
 | Riemenhalter | ≈ 8,8 cm³ | **≈ 11 g** | 44 × 14 × 16 mm | gerechnet (Rev. 33) |
-| Kettenhalter | ≈ 14,2 cm³ | **≈ 18 g** | 44 × 24,8 × 26 mm | gerechnet (Rev. 37 = Rev. 35) |
+| Kettenhalter | ≈ 14,3 cm³ | **≈ 18 g** | 44 × 25,2 × 26 mm | gerechnet (Rev. 38) |
 | **Druckteile zusammen** | ≈ 224 cm³ | **≈ 284 g** | | |
 
 Die Werte für Trägerplatte und Schlittenplatte sind gemessen (154,3 / 50,9 g)
@@ -1225,5 +1225,5 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `x_riemen_y` / `x_riemen_z0` | −10 / 20,25 mm | Lage des X-Riemens (Wirklinie, Unterkante) — steht gleich in `Portal.py`, `portal_check.py` vergleicht |
 | `klemm_schlitz` / `klemm_rippe` | 1,6 / 0,8 mm | Klemmschlitz und Rippen des Riemenhalters; lässt sich der Riemen nicht eindrücken, Schlitz +0,1 |
 | `kette_r` / `kette_h` / `kette_riegel` | 20 / 14 / 0,3 mm | gedruckte Energiekette: der Obertrum liegt 2 R über dem Untertrum, darauf die Auflage des Kettenhalters — steht gleich in `Portal.py`, `portal_check.py` vergleicht |
-| `xk_boden_z` / `xk_y_vorn` / `xk_gelenk_x` | 44,5 / −5,3 / 22 mm | Wannenboden, Vorderkante der Kette, Gelenk des Anfangsstücks rechts der Wagenmitte — ebenso in beiden Skripten |
+| `xk_boden_z` / `xk_y_vorn` / `xk_gelenk_x` | 44,5 / −5,5 / 22 mm | Wannenboden, Vorderkante der Kette, Gelenk des Anfangsstücks rechts der Wagenmitte — ebenso in beiden Skripten |
 | `kh_fuss` / `kh_auflage` / `kh_schraube_z` | 8 / 8 / 72 mm | Kettenhalter: Fuß, Auflage, Höhe der M3 in der Trägerplatte; alle Werte in [energiekette.md](energiekette.md#parametrik) |

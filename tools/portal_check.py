@@ -1205,6 +1205,13 @@ def main():
     p.ok('Anfangsstueck Y: M3x{:.0f} greift in den Einsatz'.format(
         L['khy_ende_schraube']), e, 4.0)
     p.ok('   setzt im Sackloch nicht auf', w('insert_m3_t') - e, 0.5)
+    # die Loecher im linken Schlitten (Neudruck) bzw. nach der Bohrlehre:
+    # neben den Senkungen der Wagenschrauben
+    d_w = min(math.dist(pk, (u - L['R'], y)) - (w('m3_durchgang')
+                                                + w('m3_senkung')) / 2.0
+              for pk in L['khy_schrauben'] for u, y in L['wagen_loecher'])
+    p.ok('Schlitten links: Loecher Kettenhalter Y neben den Senkungen der '
+         'Wagenschrauben', d_w, 2.0)
     xs_ = L['khy_schrauben'][0][0]
     p.ok('Schlittenplatte: Rand neben den Loechern',
          (xs_ - w('m3_durchgang') / 2.0) + L['platte_x1'], 2.0)

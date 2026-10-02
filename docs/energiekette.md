@@ -52,7 +52,10 @@ Deine Vorgaben und Antworten dazu (vom 2026-10-01 und -02):
   und ausfädeln. Die zweite Kette kannst du noch anpassen: Ich empfehle
   **dieselbe Größe** mit **16 Gliedern** für Y.
 * **Der linke Y-Schlitten ist schon gedruckt:** Die zwei Löcher für den
-  Kettenhalter Y bohrst du mit der Lehre nach.
+  Kettenhalter Y bohrst du mit der Lehre nach. Druckst du ihn neu, sind
+  sie im Modell gleich mit drin.
+* **Spiel der Kette:** 0,5 mm je Seite in Wannen und Kettenhaltern
+  (2026-10-02, vorher 0,3).
 * **In der unteren Seitennut** des linken 2040 sitzen zwischen den 2060 nur
   die 20-mm-Winkel, direkt an den 2060.
 
@@ -141,14 +144,14 @@ läuft der Bogen hinweg.
 | 0 | Rückseite der Trägerplatte |
 | −3,0 | Wanne vorn außen: 3 mm Luft zur Platte |
 | −5,0 | Wanne vorn innen, ebenso die vordere Leiste des Kettenhalters |
-| **−5,3 … −23,3** | **Kette**, 18 mm breit, Mitte −14,3 (Löcher der Anschlussstücke) |
+| **−5,5 … −23,5** | **Kette**, 18 mm breit, Mitte −14,5 (Löcher der Anschlussstücke) |
 | −8 | Arme der Stützen vorn |
 | −9,6 … −11,0 | X-Riemen, gezogenes Trum (unter den Armen) |
 | −14 | Riemenhalter hinten (unter den Armen) |
 | −16 … −36 | Portalrohr 2020, obere Nut bei −26 |
 | −21,7 … −23,1 | X-Riemen, Rücklauf (unter den Armen) |
-| −23,6 | Wanne hinten innen, ebenso die hintere Leiste |
-| −25,6 | Wanne hinten außen |
+| −24,0 | Wanne hinten innen, ebenso die hintere Leiste |
+| −26,0 | Wanne hinten außen |
 | −27 … −36 | Block der Stützen, steht auf dem Rohr hinter dem Rücklauf |
 | −30 … −36 | Litzen vor dem Kabelflügel |
 | −31,5 | M3 der Laschen im Block |
@@ -231,8 +234,8 @@ Ein Winkel hinten an der Trägerplatte, 44 mm breit wie die Säule:
 | | |
 |---|---|
 | Fuß | 8 mm dick, liegt hinten an der Säule (X ±22 um die Wagenmitte), Z +61,8 bis +84,8, über dem Riemenhalter |
-| Auflage | 8 mm dick (Z +76,8 bis +84,8), reicht 24,8 mm nach hinten unter das Anfangsstück |
-| Leisten | 3 mm hoch vor und hinter dem Anfangsstück, 0,3 mm Spiel je Seite; hinten 1,2 mm dick, vorn 5 mm |
+| Auflage | 8 mm dick (Z +76,8 bis +84,8), reicht 25,2 mm nach hinten unter das Anfangsstück |
+| Leisten | 3 mm hoch vor und hinter dem Anfangsstück, 0,5 mm Spiel je Seite; hinten 1,2 mm dick, vorn 5 mm |
 | Anfangsstück | Platte unten, Gelenk an der rechten Kante, die Kette läuft nach rechts. 2 × M3×8 + Scheibe DIN 125 durch seine Löcher Ø5,5 in Einsätze der Auflage |
 | Befestigung | 2 × M3×10 von vorn durch die Trägerplatte (X ±13,5, Z +72, mitten im Fuß) in Einsätze, Kopf in einer Senkung Ø6,5 × 3,2 |
 | Zugentlastung | zwei Schlitze 4 × 2,2 mm in der Auflage, links neben dem Anfangsstück: ein Kabelbinder um die Litzen |
@@ -260,7 +263,7 @@ frei, er darf schon montiert sein.
 
 **Wanne.** Eine Rinne von X −25,25 bis +217,25 (**242,5 mm**, ein Stück im
 A1). Der Boden ist 3 mm dick, die Wände sind 2 mm dick und 10 mm hoch.
-Innen ist sie 18,6 mm breit, 0,3 mm Spiel je Seite. Links und rechts ist
+Innen ist sie 19 mm breit, 0,5 mm Spiel je Seite. Links und rechts ist
 sie offen. Links ruht sie auf der Stütze am Festpunkt, sonst auf den Armen
 der beiden anderen. Hinten stehen zwei Laschen ab (10 × 12 mm, bei X = +95
 und +200), dort hält je eine M3×8 sie im Block der Stütze darunter. Am
@@ -429,16 +432,16 @@ Fusion-Lauf):
 
 | Teil | Volumen | Masse | Bauraum |
 |---|---|---|---|
-| Kettenhalter | 14,2 cm³ | ≈ 18 g | 44 × 24,8 × 26 mm |
-| Kettenwanne | 26,8 cm³ | ≈ 34 g | 242,5 × 32,6 × 13 mm |
+| Kettenhalter | 14,3 cm³ | ≈ 18 g | 44 × 25,2 × 26 mm |
+| Kettenwanne | 27,0 cm³ | ≈ 34 g | 242,5 × 33 × 13 mm |
 | Wannenstütze Festpunkt mit Kabelflügel | 17,0 cm³ | ≈ 22 g | 42,4 × 32 × 49,5 mm |
 | Wannenstütze mitte, rechts (je) | 9,3 cm³ | ≈ 12 g | 16 × 32 × 49,5 mm |
-| **zusammen X** | 76,6 cm³ | **≈ 97 g** | |
-| Kettenhalter Y | 12,7 cm³ | ≈ 16 g | 32,3 × 49,5 × 11 mm |
-| Kettenwanne Y | 26,7 cm³ | ≈ 34 g | 30,3 × 244,2 × 13 mm |
-| Träger Y Festpunkt | 6,8 cm³ | ≈ 9 g | 36,3 × 26 × 19,7 mm |
-| Träger Y mitte, vorn (je) | 6,3 cm³ | ≈ 8 g | 36,3 × 24 × 19,7 mm |
-| **zusammen Y** | 58,8 cm³ | **≈ 75 g** | |
+| **zusammen X** | 76,9 cm³ | **≈ 98 g** | |
+| Kettenhalter Y | 12,8 cm³ | ≈ 16 g | 32,5 × 49,5 × 11 mm |
+| Kettenwanne Y | 27,0 cm³ | ≈ 34 g | 30,7 × 244,2 × 13 mm |
+| Träger Y Festpunkt | 6,8 cm³ | ≈ 9 g | 36,5 × 26 × 19,7 mm |
+| Träger Y mitte, vorn (je) | 6,4 cm³ | ≈ 8 g | 36,5 × 24 × 19,7 mm |
+| **zusammen Y** | 59,4 cm³ | **≈ 75 g** | |
 | X-Kette (Anfangsstück, 17 Glieder mit Riegel, Endstück 180) | 38,5 cm³ | ≈ 48 g in PLA | aus der 3MF |
 | Y-Kette (Anfangsstück, 16 Glieder mit Riegel, Endstück 180) | 36,6 cm³ | ≈ 45 g in PLA | aus der 3MF |
 | `Bohrlehre_Kettenhalter` | 15,7 cm³ | ≈ 19 g PLA | 49,4 × 12 × 64 mm |
@@ -553,16 +556,18 @@ außen unter das Anfangsstück:
 
 | | |
 |---|---|
-| Platte | 8 mm dick (Z −10 bis −2), X −303,3 bis −271: liegt 8 mm breit auf der Schlittenplatte, der Rest steht 24,3 mm nach außen über; Y −96 bis −46,5, endet 0,5 mm vor dem Stirnblock |
-| Leisten | 3 mm hoch links und rechts des Anfangsstücks, 0,3 mm Spiel je Seite; außen 3 mm dick, innen bis an die Kante der Schlittenplatte |
+| Platte | 8 mm dick (Z −10 bis −2), X −303,5 bis −271: liegt 8 mm breit auf der Schlittenplatte, der Rest steht 24,5 mm nach außen über; Y −96 bis −46,5, endet 0,5 mm vor dem Stirnblock |
+| Leisten | 3 mm hoch links und rechts des Anfangsstücks, 0,5 mm Spiel je Seite; außen 3 mm dick, innen bis an die Kante der Schlittenplatte |
 | Anfangsstück | Platte unten, Gelenk bei Y −48, die Kette läuft nach vorn. 2 × M3×8 + Scheibe DIN 125 durch seine Löcher in Einsätze von oben |
 | Befestigung | 2 × M3×12 von unten durch die Schlittenplatte (X −275, Y −56 und −90) in Einsätze von unten; der Kopf sitzt 1,75 mm neben dem Y-Wagen |
 | Zugentlastung | zwei Schlitze 4 × 2,2 mm hinter dem Anfangsstück (Y −90): ein Kabelbinder um die Litzen |
 
-Dein linker Schlitten ist schon gedruckt (Angabe vom 2026-10-02). Die zwei
-Löcher Ø3,4 bohrst du mit der `Bohrlehre_Kettenhalter_Y` nach (PLA, im
-Portal-Modell ausgeblendet, 150 mm unter dem Schlitten). Ein neu
-gedruckter Schlitten hätte sie schon:
+Die zwei Löcher Ø3,4 sind im Modell des linken Schlittens (`Schlitten_links`,
+seit Portal Rev. 21, 5 mm neben den Senkungen der Wagenschrauben): Druckst
+du ihn neu, sind sie gleich mit drin. Dein schon gedruckter Schlitten hat
+sie noch nicht (Angabe vom 2026-10-02). Dort bohrst du sie mit der
+`Bohrlehre_Kettenhalter_Y` nach (PLA, im Portal-Modell ausgeblendet, 150 mm
+unter dem Schlitten), sie hat dasselbe Lochbild:
 
 1. Lehre hinter dem Stirnblock auf die Schlittenplatte legen: Die Lippe
    fasst die Außenkante der Platte, vorn stößt die Lehre an den Stirnblock.
@@ -572,7 +577,7 @@ gedruckter Schlitten hätte sie schon:
 ### Wanne Y und Träger (Portal.py, seit Rev. 21)
 
 **Wanne Y.** Eine Rinne von Y −136,1 bis +108 (**244,2 mm**, ein Stück
-im A1), wie die Wanne X: Boden 3 mm, Wände 2 × 10 mm, innen 18,6 mm, an den
+im A1), wie die Wanne X: Boden 3 mm, Wände 2 × 10 mm, innen 19 mm, an den
 Enden offen. Hinten trägt sie den Festpunkt, dahinter zwei Schlitze für
 einen Kabelbinder. Innen, zum 2040 hin, stehen zwei Laschen ab
 (7,7 × 12 mm, bei Y −9 und +81), je eine M3×8 hält sie im Arm des Trägers
@@ -591,7 +596,7 @@ der Wand:
 | | |
 |---|---|
 | Wand | 4 mm an der Außenseite des 2040 (X −271 bis −267), Z −65 bis −45,3. 1 × M5×10 in eine Hammermutter der unteren Seitennut, 4,2 mm Eingriff; 1,75 mm Wand unter dem Kopf |
-| Arm | 6 mm dick (Z −51,3 bis −45,3), oben an der Wand, reicht nach außen bis X −303,3 unter die Wanne |
+| Arm | 6 mm dick (Z −51,3 bis −45,3), oben an der Wand, reicht nach außen bis X −303,5 unter die Wanne |
 | Breite | 24 mm; am Festpunkt 26 mm, 7 mm Rand neben den Löchern |
 | Lage | Festpunkt: unter dem Endstück 180, M5 in der Mitte. Mitte und vorn: Mitte bei Y −15 und +75, die M5 6 mm dahinter, die Lasche 6 mm davor. So treffen sich die Köpfe nicht (5 mm Luft) |
 | Einsätze | am Festpunkt zwei von oben in den Arm, sonst einer für die Lasche |
@@ -647,8 +652,9 @@ M3 Ø5, 3 × M5×10, 3 Hammermuttern M5 und 2 Kabelbinder.
 1. **Einsätze einschmelzen:** in den Kettenhalter Y 2 von unten (für die
    Schlittenplatte) und 2 von oben (für das Anfangsstück), in den Träger am
    Festpunkt 2 von oben in den Arm, in die anderen je 1.
-2. **Schlittenplatte nachbohren**, sie ist schon gedruckt
-   ([Kettenhalter Y](#kettenhalter-y-portalpy-seit-rev-21)).
+2. **Schlittenplatte nachbohren**, deine ist schon gedruckt
+   ([Kettenhalter Y](#kettenhalter-y-portalpy-seit-rev-21)). Ein neu
+   gedruckter linker Schlitten hat die Löcher schon.
 3. **Kettenhalter Y** hinter den Stirnblock auf die Platte, die äußere
    Leiste außen. 2 × M3×12 von unten, das Portal steht dafür in der Mitte.
 4. **Träger:** je eine Hammermutter M5 in die untere Seitennut außen am
@@ -674,16 +680,14 @@ M3 Ø5, 3 × M5×10, 3 Hammermuttern M5 und 2 Kabelbinder.
 
 ## Noch offen
 
-1. **Breite der gedruckten Kette:** Aus dem Modell ist sie 18 mm breit.
-   Wannen und Leisten lassen 0,3 mm je Seite. Ist deine Kette breiter, zum
-   Beispiel durch den Elefantenfuß, dann `kette_spiel` erhöhen.
-
-Geklärt am 2026-10-02: Die Schleife ist um 180° gebogen außen 50 mm hoch,
-4 Gelenke knicken im Bogen (daher R 20). Der linke Schlitten ist schon
-gedruckt (Bohrlehre). In der unteren Seitennut sitzen zwischen den 2060 nur
-die 20-mm-Winkel direkt an den 2060; Wanne und Träger enden 57 und 74 mm
-davor. Die Kabel in der Nut gehen außen um die Winkel herum, wie vorn am
-Y-Motorhalter.
+Nichts mehr. Geklärt am 2026-10-02: Die Schleife ist um 180° gebogen
+außen 50 mm hoch, 4 Gelenke knicken im Bogen (daher R 20). Wannen und
+Kettenhalter lassen der Kette 0,5 mm Spiel je Seite (vorher 0,3), damit
+eine etwas breitere gedruckte Kette (Elefantenfuß) nicht klemmt. Der linke
+Schlitten ist schon gedruckt (Bohrlehre); ein Neudruck hat die Löcher. In
+der unteren Seitennut sitzen zwischen den 2060 nur die 20-mm-Winkel
+direkt an den 2060; Wanne und Träger enden 57 und 74 mm davor. Die Kabel
+in der Nut gehen außen um die Winkel herum, wie vorn am Y-Motorhalter.
 
 ## Parametrik
 
@@ -699,11 +703,11 @@ Die Werte stehen in `MASSE` und landen als User-Parameter im Dialog
 | `kette_b` / `kette_h` / `kette_riegel` | 18 / 14 / 0,3 mm | Außenmaße, der Riegel steht über |
 | `kette_r` | 20 mm | Biegeradius auf der Gelenklinie (47° je Glied im Modell ergeben 20,1; Schleife gemessen außen 50 mm); der Obertrum liegt 2 R über dem Untertrum, darauf der Kettenhalter |
 | `kette_innen_b` / `kette_innen_h` | 10 / 8,8 mm | Querschnitt für die Füllung (Portal.py) |
-| `kette_spiel` | 0,3 mm | Spiel je Seite in den Wannen und zwischen den Leisten |
+| `kette_spiel` | 0,5 mm | Spiel je Seite in den Wannen und zwischen den Leisten (bis Rev. 22: 0,3) |
 | `endstueck_l` / `endstueck_auge` | 36 / 7 mm | Anschlussstück hinter und vor dem Gelenk |
 | `endstueck_loch_a` / `endstueck_loch_ab` | 18 / 12 mm | erstes Loch hinter dem Gelenk, Abstand zum zweiten |
 | `endstueck_loch_d` / `endstueck_platte` | 5,5 / 2 mm | Löcher (für die Scheibe), Dicke der Platte (Schraubenlänge) |
-| `xk_y_vorn` | −5,3 mm | Vorderkante der Kette, 5,3 mm hinter der Trägerplatte |
+| `xk_y_vorn` | −5,5 mm | Vorderkante der Kette: 3 mm Luft, 2 mm Wand und 0,5 mm Spiel hinter der Trägerplatte |
 | `xk_boden_z` | 44,5 mm | Oberkante des Wannenbodens, 3 mm über dem Lagerschlitten |
 | `xk_gelenk_x` | 22 mm | bewegtes Gelenk rechts der X-Wagenmitte, an der rechten Kante der Säule |
 | `wanne_boden` / `wanne_wand` / `wanne_wand_h` | 3 / 2 / 10 mm | beide Wannen |

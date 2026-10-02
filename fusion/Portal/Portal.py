@@ -7,7 +7,8 @@
 #                              liegt unten auf, eine Rueckwand (2x M5 in
 #                              Nutensteinen) und ein Stirnblock (M5 in die
 #                              Kernbohrung) halten es. Die Vorderseite bleibt
-#                              frei — dort sitzt die X-Schiene.
+#                              frei — dort sitzt die X-Schiene. Links mit
+#                              den 2 Loechern fuer den Kettenhalter Y.
 #   Klemmturm_vorn/hinten_*    zwei gleiche Y-Klemmtuerme je Schlitten wie
 #                              in v8, einer je Riemenende: Schlitz mit
 #                              Rippen, Querstift unter dem Riemen. Gespannt
@@ -97,7 +98,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 22
+REVISION = 23
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -322,7 +323,8 @@ MASSE = {
     # Die Kette liegt direkt hinter der Traegerplatte, die Schleife zeigt
     # nach rechts und laeuft am Ende des X-Wegs ueber den Lagerschlitten:
     # deshalb liegt der Wannenboden so hoch (3,25 mm ueber ihm). Vorn bleibt
-    # luft_bau bis zur Traegerplatte, dann Wand 2 und Spiel 0,3.
+    # luft_bau bis zur Traegerplatte, dann Wand 2 und Spiel 0,5 (seit
+    # Rev. 23, vorher 0,3: gedruckte Kette, Elefantenfuss).
     # kette_*, endstueck_*, xk_* stehen gleich in ToolheadZ.py,
     # tools/portal_check.py vergleicht sie.
     'kette_teilung':      (16.0, 'Energiekette: Teilung'),
@@ -332,14 +334,14 @@ MASSE = {
     'kette_r':            (20.0, 'Energiekette: Biegeradius der Gelenkachse'),
     'kette_innen_b':      (10.0, 'Energiekette: innen, Breite'),
     'kette_innen_h':       (8.8, 'Energiekette: innen, Boden bis Riegel'),
-    'kette_spiel':         (0.3, 'Energiekette: Spiel je Seite in Wanne und Halter'),
+    'kette_spiel':         (0.5, 'Energiekette: Spiel je Seite in Wanne und Halter'),
     'endstueck_l':        (36.0, 'Endstueck: Gelenk bis Ende'),
     'endstueck_auge':      (7.0, 'Endstueck: Auge vor dem Gelenk'),
     'endstueck_loch_a':   (18.0, 'Endstueck: Gelenk bis erstes Loch'),
     'endstueck_loch_ab':  (12.0, 'Endstueck: Lochabstand'),
     'endstueck_loch_d':    (5.5, 'Endstueck: Loecher'),
     'endstueck_platte':    (2.0, 'Endstueck: Platte, Dicke'),
-    'xk_y_vorn':          (-5.3, 'X-Kette: Vorderseite'),
+    'xk_y_vorn':          (-5.5, 'X-Kette: Vorderseite'),
     'xk_boden_z':         (44.5, 'X-Kette: Oberkante Wannenboden'),
     'xk_gelenk_x':        (22.0, 'X-Kette: bewegtes Gelenk rechts der X-Wagenmitte'),
     'wanne_boden':         (3.0, 'Kettenwanne: Boden'),
@@ -2042,8 +2044,9 @@ def bau_schlitten(app, design, comp, L, s, fehler):
             L['wand_z1'] - w('insert_tief_t'), L['wand_z1'] + 1.0, k)
 
     # Kettenhalter Y (seit Rev. 21, nur links): 2x M3 von unten durch die
-    # Platte, aussen neben dem Y-Wagen. Ein schon gedruckter Schlitten
-    # bekommt die Loecher mit Bohrlehre_Kettenhalter_Y.
+    # Platte, aussen neben dem Y-Wagen. Ein neu gedruckter Schlitten hat
+    # die Loecher; in einen schon gedruckten bohrt man sie mit
+    # Bohrlehre_Kettenhalter_Y (dasselbe Lochbild khy_schrauben).
     if s < 0:
         bohrung(comp, 'Kettenhalter_Y_' + n, 'z', L['khy_schrauben'],
                 w('m3_durchgang'), L['platte_z0'] - 1.0,
@@ -3383,8 +3386,10 @@ def hinweise_bauen(L, fehler):
         .format(w('yk_gelenk_y')),
         '  2x M3x{:.0f} + Scheibe in seine Einsaetze. Der Halter: 2x M3x{:.0f}'
         .format(L['khy_ende_schraube'], L['khy_schraube']),
-        '  von UNTEN durch die Schlittenplatte in Einsaetze (schon',
-        '  gedruckter Schlitten: Bohrlehre_Kettenhalter_Y).',
+        '  von UNTEN durch die Schlittenplatte in Einsaetze. Schlitten_links',
+        '  hat die 2 Loecher Ø{:.1f} im Modell (Neudruck); in den schon'
+        .format(w('m3_durchgang')),
+        '  gedruckten bohrt man sie mit Bohrlehre_Kettenhalter_Y.',
         '  Festpunkt: ENDSTUECK 180 hinten in der WANNE Y (Y {:+.1f} bis'
         .format(L['ywanne_y'][0]),
         '  {:+.1f}, Boden Z={:+.1f}), 2x M3x{:.0f} + Scheibe in den Traeger'
@@ -3503,7 +3508,8 @@ def hinweise_bauen(L, fehler):
         '     unter seiner Wand durch.',
         '',
         'DRUCK (PETG, Bambu Lab A1, 4 Wandlinien, >=40 % Infill):',
-        '  Schlitten ....... Unterseite aufs Bett, Waende stehen darauf',
+        '  Schlitten ....... Unterseite aufs Bett, Waende stehen darauf;',
+        '                    links mit den 2 Loechern fuer den Kettenhalter Y',
         '  Klemmturm (4x) .. Oberseite (Plattenseite) aufs Bett, Schlitz',
         '                    nach oben offen, Rippen senkrecht',
         '  Motorhalter ..... Motorplatte (Oberseite) aufs Bett',

@@ -567,7 +567,8 @@ stehen in [energiekette.md](energiekette.md).
 | Anschlussstücke | 43 lang: 36 hinter dem Gelenk, Auge 7; Platte 2 mm mit 2 × Ø5,5, 18 und 30 mm hinter dem Gelenk | aus dem Modell gemessen |
 | X-Kette | 17 Glieder, 344 mm mit Anfangsstück und Endstück 180 | gerechnet (Portal.py Rev. 22) |
 | Y-Kette | 16 Glieder, 328 mm, gleiche Größe wie X: Arbeitsweg plus 47 mm Reserve nach vorn (gewählt: mindestens 26) | gerechnet (Portal.py Rev. 22), Wahl 2026-10-01 |
-| Linker Y-Schlitten | schon gedruckt: Löcher für den Kettenhalter Y mit der Bohrlehre nachbohren | Angabe 2026-10-02 |
+| Linker Y-Schlitten | schon gedruckt: Löcher für den Kettenhalter Y mit der Bohrlehre nachbohren; ein Neudruck hat sie im Modell | Angabe 2026-10-02 |
+| Spiel der Kette | 0,5 mm je Seite in Wannen und Kettenhaltern (vorher 0,3) | Wahl 2026-10-02, Portal.py Rev. 23, ToolheadZ.py Rev. 38 |
 | Kabelweg zur X-Kette | in der oberen Nut des Portalrohrs, am Festpunkt ein Kabelflügel mit zwei Kabelbindern | Wahl 2026-10-01, Portal.py Rev. 21 |
 | Motorkabel (mitgeliefert) | lose Adern in einem Schlauch; in den Ketten ohne Schlauch | Angabe 2026-10-01 |
 | Untere Nut an der Unterseite des linken 2040 | belegt: die Wanne Y hängt deshalb an der unteren Seitennut außen | Angabe 2026-10-01 |

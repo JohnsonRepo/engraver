@@ -35,6 +35,14 @@ TOOLHEAD_OHNE = ('Portalprofil 2020', 'X-Schiene MGN15')
 KETTE_SCHLEIFE = 50.0       # mm aussen, gemessen
 KETTE_SCHLEIFE_WEITER = 5.0     # so viel weiter darf die Konstruktion sein
 KETTE_ANSCHLAG_MODELL = 47.0    # Grad je Glied im Modell der 3MF
+# X-Riemen am Motorhalter (Rechnung wie y_motorhalter_check.py): Richtwert
+# 20 N je Trum; kraeftig ueberspannt das Dreifache. Bis Rev. 23 hielt den
+# Halter nur die Reibung unter den zwei M3, seit Rev. 24 ein Anschlag.
+VORSPANNUNG = 20.0          # N je Trum, Richtwert
+VORSPANNUNG_MAX = 60.0      # N je Trum, kraeftig ueberspannt
+M3_KLEMMKRAFT = 300.0       # N je M3, vorsichtig: PETG unter dem Kopf
+REIBWERT = 0.2              # PETG auf PETG
+PETG_SCHICHT = 20.0         # N/mm2, Zugfestigkeit quer zu den Schichten
 
 
 def main():
@@ -448,6 +456,40 @@ def main():
     p.ok('Motorhalter: aeussere Saeule deckt die vordere Halterschraube',
          L['mh_aussen_u'][1] - (w('halter_schraube_u')
                                 + w('m3_durchgang') / 2), 2.0)
+    # Anschlag (Rev. 24): Beide Trume ziehen das Ritzel nach innen. Bis
+    # Rev. 23 hielt den Halter dagegen nur die Reibung unter den zwei
+    # Halterschrauben, die durch 28 mm PETG klemmen.
+    reib = 2 * M3_KLEMMKRAFT * REIBWERT
+    p.info('ohne Anschlag (bis Rev. 23): Reibung unter 2 x M3', reib, 'N')
+    p.info('   so rutscht er ab {:.0f} N je Trum (Richtwert {:.0f} N)'
+           .format(reib / 2.0, VORSPANNUNG))
+    sp = L['mha_u'][0] - L['mh_aussen_u'][1]
+    p.ok('Anschlag Motorhalter: Luft zur aeusseren Saeule', sp, 0.1)
+    p.ok('   Halter erreicht ihn im Spiel seiner Schrauben', sp,
+         (w('m3_durchgang') - 3.0) / 2.0 + 1e-9, '<=')
+    p.ok('Anschlag: hinter ihm frei fuer die aeussere Motorschraube',
+         L['mha_y'][0] - (hinten + INBUS_FREI_D / 2), 0.0)
+    p.ok('Anschlag endet an der Vorderkante des Stirnblocks',
+         L['stirn_y'][1] - L['mha_y'][1], 0.0)
+    p.ok('Anschlag: neben dem Ritzel',
+         (w('motor_u') - w('ritzel_flansch_d') / 2) - L['mha_u'][1], 2.0)
+    p.ok('Anschlag: unter dem Riemen', L['xr_z0'] - L['mha_z'][1], 3.0)
+    zug = 2.0 * VORSPANNUNG_MAX
+    lang = L['mha_y'][1] - L['mha_y'][0]
+    hoch = L['mha_z'][1] - L['mha_z'][0]
+    dick = L['mha_u'][1] - L['mha_u'][0]
+    p.info('Riemenzug, kraeftig ueberspannt ({:.0f} N je Trum)'.format(
+        VORSPANNUNG_MAX), zug, 'N')
+    p.ok('Anschlag: Flaechenpressung an der Saeule', zug / (lang * hoch),
+         5.0, '<=', 'MPa')
+    # Biegung am Fuss (Kraft in halber Hoehe) zieht quer an den Schichten
+    sig = zug * hoch / 2.0 / (lang * dick ** 2 / 6.0)
+    p.ok('Anschlag: Biegespannung am Fuss (Schichten), Sicherheit',
+         PETG_SCHICHT / sig, 4.0, '>=', 'x')
+    # Der Zug greift vor dem Anschlag an: das kleine Moment um die
+    # Hochachse halten Reibung und Schrauben
+    p.ok('Anschlag: Riemenzug greift so weit vor seinem Ende an',
+         L['xr_yc'] - L['mha_y'][1], 5.0, '<=')
     p.ok('Spannbock: Wand um die Zugschraube (Y)',
          w('sb_wand_b') / 2 - w('m3_durchgang') / 2, 3.0)
     p.ok('Spannbock: Wand ueber der Zugschraube',
@@ -474,6 +516,8 @@ def main():
     for n, s in (('links', -1), ('rechts', 1)):
         x = lambda u, s=s: s * (R - u)
         schlitten = ('Platte ' + n, 'Rueckwand ' + n, 'Stirnblock ' + n)
+        if s < 0:
+            schlitten += ('Anschlag Motorhalter',)
         korridor('Wagenschrauben {} (von oben, vor dem Rohr)'.format(n),
                  [(x(u), y, L['platte_z1']) for u, y in L['wagen_loecher']],
                  'z', +1, schlitten)
@@ -519,7 +563,7 @@ def main():
               for u, y in L['motor_schrauben']], 'z', -1,
              ('Motorplatte', 'Motorhalter Saeule hinten',
               'Motorhalter Saeule aussen', 'Portalrohr', 'Stirnblock links',
-              'Rueckwand links', 'X-Ritzel'))
+              'Rueckwand links', 'X-Ritzel', 'Anschlag Motorhalter'))
     korridor('Zugschraube Umlenkung (von aussen)',
              [(R - L['sb_wand_u'][0] + w('m3_kopf_h'), L['zug_y'],
                L['zug_z'])],
@@ -537,7 +581,7 @@ def main():
     # was hinter dem Rohr steht
     hinten = tuple(n for n in fest if n.startswith(
         ('Klemmturm', 'Y-Wagen', 'Platte ', 'Rueckwand', 'Stirnblock',
-         'Motorhalter', 'Spannbock')))
+         'Motorhalter', 'Spannbock', 'Anschlag')))
     korridor('Wannenstuetzen: M5 von hinten',
              [((x[0] + x[1]) / 2.0, L['st_platte_y'][0] - w('m5_kopf_h'),
                L['kern_z']) for x in L['st_x'].values()], 'y', -1, hinten)

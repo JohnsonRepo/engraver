@@ -8,7 +8,9 @@
 #                              Nutensteinen) und ein Stirnblock (M5 in die
 #                              Kernbohrung) halten es. Die Vorderseite bleibt
 #                              frei — dort sitzt die X-Schiene. Links mit
-#                              den 2 Loechern fuer den Kettenhalter Y.
+#                              den 2 Loechern fuer den Kettenhalter Y und
+#                              (seit Rev. 24) dem Anschlag, an dem der
+#                              Motorhalter gegen den Riemenzug anliegt.
 #   Klemmturm_vorn/hinten_*    zwei gleiche Y-Klemmtuerme je Schlitten wie
 #                              in v8, einer je Riemenende: Schlitz mit
 #                              Rippen, Querstift unter dem Riemen. Gespannt
@@ -98,7 +100,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 23
+REVISION = 24
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -277,6 +279,15 @@ MASSE = {
     'welle_ueberstand':     (0.5, 'X-Motor: Welle steht unter dem Ritzel vor'),
     'mp_dicke':             (4.5, 'Motorplatte: Dicke'),
     'saeule_aussen_b':     (10.0, 'Motorhalter: aeussere Saeule, Breite'),
+    # Anschlag (seit Rev. 24, nur links): Der Riemenzug schiebt den Halter
+    # nach innen; bis Rev. 23 hielt ihn dagegen nur die Reibung unter den
+    # zwei Schrauben, und bei kraeftig gespanntem Riemen rutschte er. Der
+    # Anschlag steht auf dem Stirnblock innen neben der aeusseren Saeule
+    # und passt auch an den schon gedruckten Halter. Nach hinten endet er
+    # vor dem Werkzeug der hinteren aeusseren Motorschraube.
+    'mha_spiel':            (0.2, 'Anschlag Motorhalter: Luft zur aeusseren Saeule'),
+    'mha_dicke':            (8.0, 'Anschlag Motorhalter: Dicke nach innen'),
+    'mha_hoehe':            (6.0, 'Anschlag Motorhalter: Hoehe ueber dem Stirnblock'),
 
     # --- Umlenkung (rechts): Lagerschlitten + Spannbock (seit Rev. 18) ------
     # Beide Lager sitzen im Lagerschlitten, einem Rahmen um das Ritzel. Er
@@ -759,6 +770,14 @@ def lage():
     # Halterschrauben von oben durch Platte und Saeule in den Stirnblock
     L['mh_klemm'] = L['mp_z1'] - L['wand_z1']
     L['mh_schraube'] = 5.0 * int((L['mh_klemm'] + 5.0) / 5.0 + 0.999)
+    # Anschlag (seit Rev. 24) auf dem linken Stirnblock: innen mha_spiel
+    # neben der aeusseren Saeule, von 0,5 mm hinter dem Werkzeug der
+    # hinteren aeusseren Motorschraube bis an die Vorderkante des Blocks
+    y_ms = min(y for u, y in L['motor_schrauben'] if u < w('motor_u'))
+    u_a = L['mh_aussen_u'][1] + w('mha_spiel')
+    L['mha_u'] = (u_a, u_a + w('mha_dicke'))
+    L['mha_y'] = (y_ms + w('inbus_frei_d') / 2.0 + 0.5, L['stirn_y'][1])
+    L['mha_z'] = (L['wand_z1'], L['wand_z1'] + w('mha_hoehe'))
 
     # ---- Umlenkung (rechts): Lagerschlitten und Spannbock --------------------
     L['rolle_u'] = (w('rolle_u') - w('rolle_weg'), w('rolle_u') + w('rolle_weg'))
@@ -2052,11 +2071,19 @@ def bau_schlitten(app, design, comp, L, s, fehler):
                 w('m3_durchgang'), L['platte_z0'] - 1.0,
                 L['platte_z1'] + 1.0, k)
 
+    # Anschlag fuer den Motorhalter (seit Rev. 24, nur links): steht innen
+    # neben seiner aeusseren Saeule auf dem Stirnblock und nimmt den
+    # Riemenzug auf, der den Halter nach innen schiebt
+    if s < 0:
+        quader(comp, 'Anschlag_Motorhalter', xb(L, s, *L['mha_u']),
+               L['mha_y'], L['mha_z'], 'dazu', k)
+
     fussfase(comp, k, 'y', L['platte_z0'], w('fase_fuss'), fehler,
              'Schlitten ' + n)
     bbox_pruefen(k, 'Schlitten ' + n,
                  (x_platte, (L['platte_y0'], L['platte_y1']),
-                  (L['platte_z0'], L['wand_z1'])), fehler)
+                  (L['platte_z0'],
+                   L['mha_z'][1] if s < 0 else L['wand_z1'])), fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
@@ -2123,6 +2150,9 @@ def bau_motorhalter(app, design, comp, L, fehler):
     gehalten — der Riemenzug greift unter ihr am Ritzel an und wuerde eine
     nur hinten gehaltene Platte verdrillen. Befestigt mit 2x M3 von oben
     in die Einsaetze des Stirnblocks; die Koepfe liegen neben dem Flansch.
+    Seit Rev. 24 liegt die aeussere Saeule innen am Anschlag des linken
+    Schlittens: Er nimmt den Riemenzug auf, die Schrauben halten den
+    Halter nur noch nieder. Der Halter selbst ist unveraendert.
 
     Drucklage: Motorplatte (Oberseite) aufs Bett, die Saeulen wachsen nach
     oben — keine Stuetzen."""
@@ -3294,6 +3324,13 @@ def hinweise_bauen(L, fehler):
         '  Platte, Inbus von vorn; eine davon auf die Abflachung der Welle.',
         '  Motorhalter: 2x M3x{:.0f} von oben in die Einsaetze des Stirnblocks.'
         .format(L['mh_schraube']),
+        '  ANSCHLAG (seit Rev. 24) auf dem linken Stirnblock, innen neben',
+        '  der aeusseren Saeule ({:.1f} mm Luft, {:.1f} x {:.1f} mm Flaeche):'
+        .format(w('mha_spiel'), L['mha_y'][1] - L['mha_y'][0],
+                w('mha_hoehe')),
+        '  er nimmt den Riemenzug auf, der den Halter nach innen schiebt;',
+        '  die Schrauben halten ihn nur noch nieder. Passt auch an den',
+        '  schon gedruckten Halter.',
         '  Umlenkung rechts, Achse X={:+.2f} (Spannweg {:+.2f} bis {:+.2f}):'
         .format(L['x_rolle'], L['x_rolle_bereich'][0],
                 L['x_rolle_bereich'][1]),
@@ -3454,7 +3491,8 @@ def hinweise_bauen(L, fehler):
         '     Ritzel von unten auf die Welle, Nabe voraus, bis die Welle'
         ' {:.1f} mm'.format(w('welle_ueberstand')),
         '     unten heraussteht; Madenschrauben von vorn. Halter aufs linke',
-        '     Rohrende (2x M3x{:.0f}).'.format(L['mh_schraube']),
+        '     Rohrende, nach innen an den Anschlag schieben und so',
+        '     festziehen (2x M3x{:.0f}).'.format(L['mh_schraube']),
         '  6. Lagerschlitten: Kugellager von unten in den oberen Arm,',
         '     Gleitlager von oben in den unteren (steht {:.1f} mm ueber).'
         .format(w('ls_luft')),
@@ -3510,6 +3548,7 @@ def hinweise_bauen(L, fehler):
         'DRUCK (PETG, Bambu Lab A1, 4 Wandlinien, >=40 % Infill):',
         '  Schlitten ....... Unterseite aufs Bett, Waende stehen darauf;',
         '                    links mit den 2 Loechern fuer den Kettenhalter Y',
+        '                    und dem Anschlag fuer den Motorhalter',
         '  Klemmturm (4x) .. Oberseite (Plattenseite) aufs Bett, Schlitz',
         '                    nach oben offen, Rippen senkrecht',
         '  Motorhalter ..... Motorplatte (Oberseite) aufs Bett',

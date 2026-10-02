@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 23, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 24, fünfundzwanzig
 gedruckte Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
@@ -24,13 +24,15 @@ kommen seit Rev. 15 die Halter und Fahnen der Endschalter X und Y
 ([endschalter.md](endschalter.md)), seit Rev. 19 die Wanne der
 gedruckten X-Energiekette mit ihren Stützen und seit Rev. 21 die
 Y-Energiekette mit Kettenhalter, Wanne und Trägern sowie der Kabelflügel am
-Festpunkt der X-Kette ([energiekette.md](energiekette.md)).
+Festpunkt der X-Kette ([energiekette.md](energiekette.md)). Seit Rev. 24
+hat der linke Schlitten einen [Anschlag](#anschlag-für-den-motorhalter-seit-rev-24),
+an dem der Motorhalter gegen den Riemenzug anliegt.
 
 | Pos | Teil | Stück | Funktion |
 |---|---|---|---|
-| 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende. Der linke hat seit Rev. 21 zwei Löcher Ø3,4 für den Kettenhalter Y |
+| 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende. Der linke hat seit Rev. 21 zwei Löcher Ø3,4 für den Kettenhalter Y und seit Rev. 24 den Anschlag für den Motorhalter |
 | 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende |
-| 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten; dünne Motorplatte, damit die 20-mm-Welle das ganze Ritzel trägt |
+| 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten; dünne Motorplatte, damit die 20-mm-Welle das ganze Ritzel trägt. Liegt seit Rev. 24 innen am Anschlag des linken Schlittens an (der Halter selbst ist unverändert) |
 | 4 | **Spannbock** | 1 | rechts fest auf dem Stirnblock (2 × M3): Anschlag für die Zugschraube |
 | 5 | **Lagerschlitten** | 1 | Rahmen um das Umlenkritzel: oben das Kugellager, unten das Gleitlager der Welle; gleitet auf dem Rohr (Feder in der oberen Nut), die Zugschraube zieht ihn nach außen. Seit Rev. 18, ersetzt Umlenkhalter und Spannklotz |
 | 6 | **Y-Motorhalter** | 2 (dasselbe Teil) | vorn an jeder 2040: U-Bügel mit Schenkeln an beiden Seitenflächen (4 × M5 in den unteren Nuten), NEMA 17 hängend, Ritzel mittig zur 2040 direkt auf der Welle. Seit Rev. 16 in diesem Skript (vorher `YMotorhalter.py`), Einzelheiten in [y-motorhalter.md](y-motorhalter.md) |
@@ -341,8 +343,10 @@ stört nicht: bis 27 mm endet sie noch über dem Rohr — deine 23 mm enden
 5,2 mm darüber. Vier M3×8 von unten
 (3,5 mm im Flanschgewinde); alle vier sind erreichbar, der Inbus hat bis zum
 Rohr 20,75 mm. Der Motorhalter sitzt mit 2 × M3×35 von oben in den
-Gewindeeinsätzen des Stirnblocks. Der Motor steht 3 mm neben der
-Trägerplatte, wenn der Toolhead links anschlägt.
+Gewindeeinsätzen des Stirnblocks; gegen den Riemenzug liegt er seit
+Rev. 24 an einem [Anschlag](#anschlag-für-den-motorhalter-seit-rev-24)
+an. Der Motor steht 3 mm neben der Trägerplatte, wenn der Toolhead links
+anschlägt.
 
 **Umlenkung rechts**, Achse X = +231,75: ein **normales Ritzel 20 Z** wie am
 Motor, mit den Madenschrauben fest auf einer **Welle Ø5 × 30**, die Nabe
@@ -389,6 +393,36 @@ dem Spannbock.
 Schlitten in Mittelstellung ablängen. Ein schon abgelängter Riemen
 (≈ 1001 mm für Rev. 16) passt weiter: Das Ritzel steht dann 1,1 mm weiter
 innen, der Spannweg reicht.
+
+### Anschlag für den Motorhalter (seit Rev. 24)
+
+Beide Trume des X-Riemens ziehen das Ritzel nach innen, zur
+Maschinenmitte. Bis Rev. 23 hielt den Motorhalter dagegen nur die Reibung
+unter seinen zwei M3×35, und die klemmen durch 28 mm PETG. Gerechnet hält
+das rund 120 N, also 60 N je Trum (Richtwert 20 N). Bei kräftig
+gespanntem Riemen, und wenn das PETG unter den langen Schrauben nachgibt,
+rutscht der Halter nach innen (Angabe vom 2026-10-02).
+
+Deshalb steht auf dem linken Stirnblock jetzt ein **Anschlag**, 8 mm dick
+und 6 mm hoch. Er sitzt innen neben der äußeren Säule des Halters, mit
+0,2 mm Luft, von der Vorderkante des Stirnblocks 9,4 mm nach hinten. So
+drückt der Riemenzug die Säule gegen den Anschlag (Formschluss), und die
+Schrauben halten den Halter nur noch nieder. Nach hinten endet der
+Anschlag 0,5 mm vor dem Werkzeug der hinteren äußeren Motorschraube, die
+bleibt von unten erreichbar. Den Halter selbst ändert das nicht: Dein
+schon gedruckter passt, nur der linke Schlitten muss neu gedruckt
+werden.
+
+| | |
+|---|---|
+| Lage | auf dem Stirnblock, X −268,8 bis −260,8 (0,2 mm innen neben der äußeren Säule), Y −28,4 bis −19, Z +10 bis +16 |
+| Abstände | 2,8 mm neben dem Ritzel, 4,25 mm unter dem Riemen, 0,5 mm vor dem Werkzeug der hinteren äußeren Motorschraube |
+| Fläche an der Säule | 9,4 × 6 mm |
+| Last, kräftig überspannt (2 × 60 N) | Pressung 2,1 MPa, Biegung am Fuß mit 5,5-facher Sicherheit gegen das Reißen der Schichten |
+| Montage | Halter aufsetzen, nach innen an den Anschlag schieben, die beiden M3×35 anziehen |
+
+Der Riemenzug greift 2,6 mm vor dem Ende des Anschlags an. Das kleine
+Drehmoment, das dabei bleibt, halten Reibung und Schrauben.
 
 ## Riemenhalter am Toolhead (ToolheadZ.py Rev. 33)
 
@@ -472,7 +506,8 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
    2 × M5×12 hinten, 1 × M5×25 stirnseitig.
 5. Motor von oben auf den Motorhalter, 4 × M3×8 von unten. Ritzel von unten
    auf die Welle, Nabe voraus, bis die Welle 0,5 mm unten heraussteht;
-   Madenschrauben von vorn. Halter aufs linke Rohrende (2 × M3×35).
+   Madenschrauben von vorn. Halter aufs linke Rohrende, nach innen an den
+   Anschlag schieben und so festziehen (2 × M3×35).
 6. Lagerschlitten: Kugellager von unten in den oberen Arm, Gleitlager von
    oben in den unteren (steht 0,5 mm über). Ritzel mit der Nabe nach oben
    zwischen die Arme, Welle von oben durch Kugellager, Ritzel und Gleitlager,
@@ -509,7 +544,7 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 
 | Teil | Lage aufs Bett |
 |---|---|
-| Schlitten | Unterseite, die Wände stehen darauf |
+| Schlitten | Unterseite, die Wände stehen darauf; der linke mit dem Anschlag oben auf dem Stirnblock |
 | Klemmturm (4×) | Oberseite (Plattenseite) unten: Schlitz nach oben offen, Rippen senkrecht |
 | Motorhalter | Motorplatte (Oberseite) unten |
 | Spannbock | Boden |
@@ -534,7 +569,8 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 
 | Teil | Volumen | Masse | Bauraum |
 |---|---|---|---|
-| Schlitten (je) | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
+| Schlitten links (mit Anschlag) | 42,2 cm³ | ≈ 54 g | 52 × 82 × 32 mm |
+| Schlitten rechts | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
 | Klemmturm (je, 4×) | 4,5 cm³ | ≈ 6 g | 9 × 18 × 33 mm |
 | Motorhalter | 31,5 cm³ | ≈ 40 g | 50 × 51 × 28 mm |
 | Spannbock | 5,4 cm³ | ≈ 7 g | 35 × 22 × 18 mm |
@@ -547,7 +583,7 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Kettenwanne Y | 27,0 cm³ | ≈ 34 g | 30,7 × 244,2 × 13 mm |
 | Träger Y Festpunkt | 6,8 cm³ | ≈ 9 g | 36,5 × 26 × 19,7 mm |
 | Träger Y mitte, vorn (je) | 6,4 cm³ | ≈ 8 g | 36,5 × 24 × 19,7 mm |
-| **Portal zusammen** (ohne Endschalter) | 322,1 cm³ | **≈ 409 g** | |
+| **Portal zusammen** (ohne Endschalter) | 322,4 cm³ | **≈ 409 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 | Kettenhalter (Toolhead) | 14,3 cm³ | ≈ 18 g | 44 × 25,2 × 26 mm |
 
@@ -641,6 +677,7 @@ vergleicht die Prüfung als Erstes.
 | `motor_welle_l` | 20 mm | Wellenlänge, auf die die Halter ausgelegt sind; legt die Höhe der Motoren fest |
 | `motor_welle_ist` | 23 mm | gemessene Welle (60 − 37); steht 3,5 mm über das Ritzel hinaus |
 | `mp_dicke` / `welle_ueberstand` | 4,5 / 0,5 mm | Motorplatte und wie weit die Welle unter dem Ritzel heraussteht |
+| `mha_spiel` / `mha_dicke` / `mha_hoehe` | 0,2 / 8 / 6 mm | Anschlag für den Motorhalter (seit Rev. 24): Luft zur äußeren Säule, Dicke, Höhe über dem Stirnblock |
 | `rolle_u` / `rolle_weg` | 25,25 / 4 mm | Achse der Umlenkung in Mittelstellung und der Weg des Schlittens je Richtung (bis Rev. 16: 26,35) |
 | `kl_d` / `kl_b` | 10 / 4 mm | Kugellager der Umlenkung (Angabe) |
 | `gl_d` / `gl_l` | 7 / 8 mm | Gleitlager der Umlenkung (Angabe); legt mit dem Ritzel die Höhe fest |

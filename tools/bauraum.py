@@ -432,6 +432,10 @@ def portal_bauraeume(w, L):
           L['mh_hinten_y'], L['mh_z']),
         q('Motorhalter Saeule aussen', xb(s, *L['mh_aussen_u']),
           (L['mh_hinten_y'][1], L['mp_y'][1]), L['mh_z']),
+        # Anschlag (Rev. 24) auf dem linken Stirnblock, innen neben der
+        # aeusseren Saeule: nimmt den Riemenzug auf
+        q('Anschlag Motorhalter', xb(s, *L['mha_u']), L['mha_y'],
+          L['mha_z']),
         q('X-Motor', (xm - fl, xm + fl), (yc - fl, yc + fl),
           (L['mp_z1'], L['motor_z1']), 'kaufteil'),
         q('X-Ritzel', (xm - w('ritzel_flansch_d') / 2,
@@ -530,6 +534,7 @@ def portal_bauraeume(w, L):
         ('Motorhalter Saeule hinten', 'Rueckwand links'),
         ('Motorhalter Saeule hinten', 'Portalrohr'),
         ('Motorhalter Saeule aussen', 'Stirnblock links'),
+        ('Anschlag Motorhalter', 'Stirnblock links'),     # ein Teil
         # Spannbock auf Stirnblock, Rueckwand und Rohrende
         ('Spannbock Boden', 'Spannbock Wand'),
         ('Spannbock Boden', 'Stirnblock rechts'),

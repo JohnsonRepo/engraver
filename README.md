@@ -252,8 +252,12 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 23 mit
-dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 23 und ToolheadZ
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 24 mit
+dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 24 stellt auf den
+linken Stirnblock einen Anschlag für den X-Motorhalter: Bis dahin hielt
+ihn nur die Reibung unter seinen zwei Schrauben, und bei kräftig
+gespanntem Riemen rutschte er nach innen. Der gedruckte Halter passt
+weiter, neu gedruckt wird nur der linke Schlitten. Portal Rev. 23 und ToolheadZ
 Rev. 38 geben der Kette 0,5 mm Spiel je Seite in Wannen und Kettenhaltern
 (vorher 0,3); die X-Kette liegt dafür 0,2 mm weiter hinten. Der linke
 Schlitten hat die zwei Löcher für den Kettenhalter Y im Modell (seit

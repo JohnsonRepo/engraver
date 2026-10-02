@@ -285,6 +285,10 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
                          stroke_dasharray='2 2'))
         for u, y in L['halter_schrauben']:
             t.append(f.kreis(xu(u), y, 2.75, 'stahl'))
+        # Anschlag (Rev. 24) auf dem Stirnblock, unter der Motorplatte
+        t.append(f.rect(xu(L['mha_u'][0]), xu(L['mha_u'][1]),
+                        *L['mha_y'], 'neu', fill='none',
+                        stroke_dasharray='3 2'))
     else:
         # Spannbock auf dem Stirnblock, davor der Lagerschlitten (oberer
         # Arm, in der Mitte des Spannwegs) mit Kugellager und Welle; das
@@ -455,6 +459,10 @@ def schnitt_motor(f, w, L, tw, TL):
                     L['platte_z1'], L['wand_z1'], 'hinten'))
     t.append(f.rect(xu(L['platte_u'][0]), xu(L['platte_u'][1]),
                     L['platte_z0'], L['platte_z1'], 'hinten'))
+    # Anschlag (Rev. 24) auf dem Stirnblock, hinter der Schnittebene: die
+    # aeussere Saeule liegt innen an ihm an
+    t.append(f.rect(xu(L['mha_u'][0]), xu(L['mha_u'][1]), *L['mha_z'],
+                    'neu', fill_opacity='0.55'))
     t.append(f.rect(-w('profil_laenge') / 2, f.a[1] + 5, L['profil_z0'],
                     L['profil_z1'], 'profil'))
     # Motorplatte mit Bundbohrung, aeussere Saeule
@@ -549,6 +557,9 @@ def main():
         (-215, -26, 'Portalrohr 2020'),
         (L['x_motor'] - 12, L['xr_yc'] + 12, 'Motorhalter mit NEMA 17\n'
          '(Ritzel darunter)'),
+        (xu((L['mha_u'][0] + L['mha_u'][1]) / 2, -1),
+         (L['mha_y'][0] + L['mha_y'][1]) / 2,
+         'Anschlag für den Motorhalter\n(unter der Motorplatte)'),
         (-227.3, L['xr_y'], 'X-Riemen, gezogener Trum'),
         (-200, L['xr_y_rueck'], 'X-Riemen, Rücklauf'),
         (xw0 - 10, -7, 'Riemenhalter am Toolhead'),
@@ -684,12 +695,17 @@ def main():
         (L['x_motor'] - w('ritzel_teilkreis') / 2, L['xr_zm'],
          'X-Riemen, mittig in der Spur'),
         (xu(-17, -1), 20, 'äußere Säule'),
+        (xu((L['mha_u'][0] + L['mha_u'][1]) / 2, -1),
+         (L['mha_z'][0] + L['mha_z'][1]) / 2,
+         'Anschlag (dahinter, {} mm Luft):\nhält den Halter gegen den '
+         'Riemenzug'.format(de(w('mha_spiel'), 1))),
         (xu(26, -1), 14, 'hintere Säule (dahinter)'),
         (-R + 25, 3, 'Portalrohr'),
         (xu(-10, -1), -3, 'Stirnblock (dahinter)'),
         (L['xw_min'] + tw('traeger_x_links') + 2, 85,
          'Trägerplatte am linken Ende\n(Umriss, liegt davor)')],
-        fe.ox + fe.breite + 12, 'start', abstand=22.0)
+        fe.ox + fe.breite + 12, 'start', abstand=22.0,
+        unten=fe.oy + fe.hoehe + 16)
     t += fe.luft(L['x_motor'] + w('motor_flansch') / 2, 58,
                  L['xw_min'] + tw('traeger_x_links'), 58,
                  '{} mm'.format(de(L['xw_min'] + tw('traeger_x_links')

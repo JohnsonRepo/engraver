@@ -6,7 +6,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; steht auf 4 gedruckten Führungsfüßen 25 mm über dem Tisch, dazwischen die Opferplatte |
 | Y-Achse | 2 Linearführungen MGN12H (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn je Seite ein NEMA 17 mit dem Ritzel direkt auf der Welle, mittig zur 2040 |
 | Portal | Y-Schlitten auf den MGN12H-Wagen, dazwischen ein 2020-V-Slot-Profil (500 mm); Y-Schienen 514 mm Mitte zu Mitte |
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
@@ -21,6 +21,7 @@ fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← a
 fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y, Wanne der X-Energiekette
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
+fusion/Opferplatte/            Führungsfüße unter den 2060 für die Opferplatte (Spanplatte)  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
@@ -37,6 +38,8 @@ docs/endschalter.md            Endschalter X und Y: Halter, Fahnen, Montage, Ein
 docs/endschalter.svg           Endschalter: Y von hinten und von außen, X von vorn und von oben, Klammer X
 docs/notaus.md                 Not-Aus: Taster, Lage, Gehäuse, Montage, Druck
 docs/notaus.svg                Not-Aus-Gehäuse von vorn, im Schnitt und von oben
+docs/opferplatte.md            Opferplatte und Führungsfüße: Lage, Höhen, Montage, Druck
+docs/opferplatte.svg           Gestell von oben mit Platte und Füßen, Schnitte durch Füße und Anschlag
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
@@ -59,6 +62,8 @@ tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im 
 tools/endschalter_zeichnen.py  erzeugt die Zeichnung der Endschalter
 tools/notaus_check.py          Prüfung des Not-Aus-Gehäuses: Lage, Freiraum, Schrauben, Taster, Druck
 tools/notaus_zeichnen.py       erzeugt die Zeichnung des Not-Aus-Gehäuses
+tools/opferplatte_check.py     Prüfung von Opferplatte und Füßen: Arbeitsfeld, Höhen, Freiraum, Schrauben, Druck
+tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte und Füßen
 tools/kette_zeichnen.py        erzeugt die Zeichnung der X-Energiekette
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
@@ -156,6 +161,18 @@ mittleren Nut und längs verschiebbar. Das Gehäuse ist hinten offen,
 fehlen, meldet ein Spannungsteiler an Abort, und GRBL bricht ab. Details
 in [docs/notaus.md](docs/notaus.md).
 
+### Opferplatte und Führungsfüße (neu)
+
+Die Opferplatte ist eine Spanplatte 615 × 349 × 25 mm. Sie liegt auf dem
+Tisch zwischen vier gedruckten **Führungsfüßen** unter den Enden der
+beiden 2060. Die Füße sind so hoch, wie die Platte dick ist: Ihre
+Oberfläche liegt dort, wo bisher der Tisch war, und Fokus und
+Werkstückhöhe (58 mm) bleiben. Jeder Fuß greift mit einer Feder in die
+untere Nut und hält mit einem Flansch und 2 × M5 in Hammermuttern der
+unteren Seitennut. Innen führen die Füße die Platte, links sitzt der
+Anschlag, nach rechts wird sie herausgezogen. Details in
+[docs/opferplatte.md](docs/opferplatte.md).
+
 ### Endschalter X und Y (neu)
 
 Zwei LM393-Gabellichtschranken wie an Z, beide schalten 3 mm vor dem
@@ -204,7 +221,7 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
 Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
-*Portal*, *Elektronik* oder *NotAus*). Jeder Lauf legt ein **neues
+*Portal*, *Elektronik*, *NotAus* oder *Opferplatte*). Jeder Lauf legt ein **neues
 Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
@@ -229,6 +246,8 @@ python3 tools/endschalter_check.py  # Endschalter: Schaltpunkte, Freigänge, Sch
 python3 tools/endschalter_zeichnen.py  # docs/endschalter.svg neu erzeugen
 python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schrauben, Druck
 python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
+python3 tools/opferplatte_check.py  # Opferplatte und Füße: Feld, Höhen, Freiraum, Schrauben
+python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
 python3 tools/kette_zeichnen.py     # docs/energiekette.svg und energiekette-y.svg neu erzeugen
 ```
 
@@ -253,7 +272,10 @@ und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
 **Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 24 mit
-dem Y-Motorhalter, `y_motorhalter_check.py`). Portal Rev. 24 stellt auf den
+dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 1). Neu ist
+`Opferplatte.py`: vier Führungsfüße, 25 mm hoch, für die Spanplatte
+615 × 349 × 25 mm; die Maschine steht darauf, die Plattenoberfläche liegt
+auf der alten Tischhöhe. Portal Rev. 24 stellt auf den
 linken Stirnblock einen Anschlag für den X-Motorhalter: Bis dahin hielt
 ihn nur die Reibung unter seinen zwei Schrauben, und bei kräftig
 gespanntem Riemen rutschte er nach innen. Der gedruckte Halter passt

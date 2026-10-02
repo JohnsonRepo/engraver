@@ -1,0 +1,254 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1270" height="1373" viewBox="0 0 1270 1373" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1270" height="1373" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Opferplatte und Führungsfüße unter dem Gestell (Opferplatte.py Rev. 1)</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Spanplatte 615 × 349 × 25 mm [v]; die Füße sind so hoch, wie die Platte dick ist: Ihre Oberfläche liegt, wo bisher der Tisch war.</text>
+<clipPath id="drauf"><rect x="250.0" y="100.0" width="685.0" height="512.0"/></clipPath>
+<g clip-path="url(#drauf)">
+<rect x="290.0" y="195.3" width="615.0" height="349.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="285.0" y="577.0" width="50.0" height="6.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="285.0" y="545.4" width="50.0" height="11.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="285.0" y="530.4" width="5.0" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="289.8" y="583.0" width="8.5" height="6.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="321.8" y="583.0" width="8.5" height="6.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="835.0" y="577.0" width="50.0" height="6.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="835.0,545.4 880.0,545.4 885.0,550.4 885.0,557.0 835.0,557.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="839.8" y="583.0" width="8.5" height="6.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="871.8" y="583.0" width="8.5" height="6.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="285.0" y="116.0" width="50.0" height="6.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="285.0" y="142.0" width="50.0" height="52.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="285.0" y="194.3" width="5.0" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<line x1="285.0" y1="194.3" x2="335.0" y2="194.3" stroke="#c2621b" stroke-width="0.7"/>
+<rect x="289.8" y="110.0" width="8.5" height="6.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="321.8" y="110.0" width="8.5" height="6.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="835.0" y="116.0" width="50.0" height="6.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="835.0,194.3 880.0,194.3 885.0,189.3 885.0,142.0 835.0,142.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<line x1="835.0" y1="194.3" x2="880.0" y2="194.3" stroke="#c2621b" stroke-width="0.7"/>
+<rect x="839.8" y="110.0" width="8.5" height="6.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="871.8" y="110.0" width="8.5" height="6.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="285.0" y="557.0" width="600.0" height="20.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
+<rect x="285.0" y="122.0" width="600.0" height="20.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
+<rect x="318.0" y="12.0" width="20.0" height="600.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
+<rect x="832.0" y="12.0" width="20.0" height="600.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
+<rect x="381.1" y="203.2" width="391.2" height="333.3" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 3"/>
+<line x1="860.0" y1="104.0" x2="860.0" y2="608.0" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="10 3 2 3"/>
+<line x1="255.0" y1="537.9" x2="370.0" y2="537.9" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="10 3 2 3"/>
+</g>
+<text x="864.0" y="110.0" font-size="9.5" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">A</text>
+<text x="864.0" y="600.0" font-size="9.5" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">A</text>
+<text x="370.0" y="533.9" font-size="9.5" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">B</text>
+<rect x="250.0" y="100.0" width="685.0" height="512.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="250.0" y="92.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Von oben (vorn unten)</text>
+<line x1="909.0" y1="255.3" x2="943.0" y2="255.3" stroke="#c2621b" stroke-width="1.6"/>
+<polygon points="947.0,255.3 942.0,257.4 942.0,253.3" fill="#c2621b"/>
+<text x="911.0" y="248.3" font-size="8.5" fill="#c2621b" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">herausziehen</text>
+<line x1="310.0" y1="116.0" x2="241.0" y2="116.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="310.0" cy="116.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="119.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fuß hinten links:</text>
+<text x="238.0" y="129.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Flansch mit 2 × M5 außen</text>
+<line x1="435.0" y1="132.0" x2="241.0" y2="156.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="435.0" cy="132.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="159.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
+<line x1="290.0" y1="206.3" x2="241.0" y2="206.3" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="290.0" cy="206.3" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="209.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag (links, hinten</text>
+<text x="238.0" y="219.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und vorn)</text>
+<line x1="435.0" y1="332.0" x2="241.0" y2="332.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="435.0" cy="332.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="335.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte, Spanplatte</text>
+<text x="238.0" y="345.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">615 × 349 × 25 mm</text>
+<line x1="381.1" y1="432.0" x2="241.0" y2="432.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="381.1" cy="432.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="435.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arbeitsfeld 391 × 333 mm</text>
+<text x="238.0" y="445.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Strahl, gestrichelt)</text>
+<line x1="328.0" y1="472.0" x2="241.0" y2="472.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="328.0" cy="472.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="475.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040 links</text>
+<text x="238.0" y="485.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(liegt darüber)</text>
+<line x1="435.0" y1="567.0" x2="241.0" y2="567.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="435.0" cy="567.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="570.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
+<line x1="310.0" y1="583.0" x2="241.0" y2="597.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="310.0" cy="583.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="600.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fuß vorn links</text>
+<line x1="860.0" y1="116.0" x2="944.0" y2="116.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="860.0" cy="116.0" r="1.5" fill="#5b6472"/>
+<text x="947.0" y="119.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fuß hinten rechts</text>
+<line x1="884.0" y1="196.3" x2="944.0" y2="196.3" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="884.0" cy="196.3" r="1.5" fill="#5b6472"/>
+<text x="947.0" y="199.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Einführschräge 5 mm</text>
+<line x1="902.0" y1="255.3" x2="944.0" y2="255.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="902.0" cy="255.3" r="1.5" fill="#5b6472"/>
+<text x="947.0" y="258.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">steht 20 mm über:</text>
+<text x="947.0" y="268.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hier fassen</text>
+<line x1="842.0" y1="472.0" x2="944.0" y2="472.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="842.0" cy="472.0" r="1.5" fill="#5b6472"/>
+<text x="947.0" y="475.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040 rechts (darüber)</text>
+<line x1="884.0" y1="543.4" x2="944.0" y2="543.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="884.0" cy="543.4" r="1.5" fill="#5b6472"/>
+<text x="947.0" y="546.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Führung, 1 mm Luft</text>
+<text x="947.0" y="556.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">je Seite</text>
+<line x1="876.0" y1="586.0" x2="944.0" y2="586.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="876.0" cy="586.0" r="1.5" fill="#5b6472"/>
+<text x="947.0" y="589.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5×12 + Scheibe in</text>
+<text x="947.0" y="599.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Hammermutter</text>
+<line x1="290.0" y1="591.0" x2="905.0" y2="591.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="290.0" y1="588.0" x2="290.0" y2="594.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="905.0" y1="588.0" x2="905.0" y2="594.0" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="597.5" y="603.0" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">615 mm</text>
+<line x1="921.0" y1="195.3" x2="921.0" y2="544.4" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="918.0" y1="195.3" x2="924.0" y2="195.3" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="918.0" y1="544.4" x2="924.0" y2="544.4" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="927.0" y="372.9" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">349 mm</text>
+<line x1="381.1" y1="215.2" x2="772.4" y2="215.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="381.1" y1="212.2" x2="381.1" y2="218.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="772.4" y1="212.2" x2="772.4" y2="218.2" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="576.8" y="227.2" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">391 mm</text>
+<clipPath id="hinten"><rect x="250.0" y="722.0" width="334.0" height="297.0"/></clipPath>
+<g clip-path="url(#hinten)">
+<polygon points="310.0,920.0 330.7,920.0 330.7,902.0 349.3,902.0 349.3,920.0 370.0,920.0 370.0,899.3 352.0,899.3 352.0,880.7 370.0,880.7 370.0,839.3 352.0,839.3 352.0,820.7 370.0,820.7 370.0,779.3 352.0,779.3 352.0,760.7 370.0,760.7 370.0,740.0 349.3,740.0 349.3,758.0 330.7,758.0 330.7,740.0 310.0,740.0 310.0,760.7 328.0,760.7 328.0,779.3 310.0,779.3 310.0,820.7 328.0,820.7 328.0,839.3 310.0,839.3 310.0,880.7 328.0,880.7 328.0,899.3 310.0,899.3" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.9"/>
+<rect x="530.0" y="920.0" width="69.0" height="75.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="310.0" y="920.0" width="60.0" height="75.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="292.0" y="863.0" width="18.0" height="132.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="331.3" y="915.5" width="17.4" height="4.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="509.0" y="920.0" width="18.0" height="75.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="370.0" y="980.0" width="139.0" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="289.0" y="875.0" width="3.0" height="30.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="274.0" y="877.2" width="15.0" height="25.5" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="289.0" y="882.5" width="36.0" height="15.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="315.4" y="875.0" width="12.0" height="30.0" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<line x1="235.0" y1="995.0" x2="599.0" y2="995.0" stroke="#5b6472" stroke-width="1.4"/>
+<line x1="370.0" y1="908.9" x2="599.0" y2="908.9" stroke="#b4342f" stroke-width="1.0" stroke-dasharray="5 3"/>
+</g>
+<rect x="250.0" y="722.0" width="334.0" height="297.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="250.0" y="714.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt A–A: Fuß hinten rechts (von rechts)</text>
+<line x1="319.0" y1="770.0" x2="241.0" y2="770.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="319.0" cy="770.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="773.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
+<line x1="280.0" y1="881.0" x2="241.0" y2="881.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="280.0" cy="881.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="884.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5×12 + Scheibe,</text>
+<text x="238.0" y="894.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Hammermutter in der</text>
+<text x="238.0" y="904.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">unteren Seitennut</text>
+<line x1="298.0" y1="905.0" x2="241.0" y2="931.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="298.0" cy="905.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="934.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Flansch außen</text>
+<line x1="340.0" y1="917.0" x2="241.0" y2="961.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="340.0" cy="917.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="964.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Feder in der</text>
+<text x="238.0" y="974.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">unteren Nut</text>
+<line x1="262.0" y1="995.0" x2="241.0" y2="1001.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="262.0" cy="995.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1004.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Tisch</text>
+<line x1="569.0" y1="908.9" x2="593.0" y2="908.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="569.0" cy="908.9" r="1.5" fill="#5b6472"/>
+<text x="596.0" y="911.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Toolhead, Z ganz unten</text>
+<line x1="548.0" y1="932.0" x2="593.0" y2="938.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="548.0" cy="932.0" r="1.5" fill="#5b6472"/>
+<text x="596.0" y="941.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte</text>
+<line x1="518.0" y1="941.0" x2="593.0" y2="968.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="518.0" cy="941.0" r="1.5" fill="#5b6472"/>
+<text x="596.0" y="971.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Führungswand, 1 mm</text>
+<text x="596.0" y="981.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Luft zur Platte</text>
+<line x1="430.0" y1="989.0" x2="593.0" y2="1008.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="430.0" cy="989.0" r="1.5" fill="#5b6472"/>
+<text x="596.0" y="1011.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Boden 5 mm</text>
+<line x1="575.0" y1="920.0" x2="575.0" y2="908.9" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="572.0" y1="920.0" x2="578.0" y2="920.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="572.0" y1="908.9" x2="578.0" y2="908.9" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="569.0" y="917.5" font-size="8.0" fill="#2f5d92" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,7 mm</text>
+<line x1="382.0" y1="995.0" x2="382.0" y2="920.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="379.0" y1="995.0" x2="385.0" y2="995.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="379.0" y1="920.0" x2="385.0" y2="920.0" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="388.0" y="960.5" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">25 mm</text>
+<clipPath id="vorn"><rect x="844.0" y="722.0" width="206.0" height="297.0"/></clipPath>
+<g clip-path="url(#vorn)">
+<polygon points="930.0,920.0 950.7,920.0 950.7,902.0 969.3,902.0 969.3,920.0 990.0,920.0 990.0,899.3 972.0,899.3 972.0,880.7 990.0,880.7 990.0,839.3 972.0,839.3 972.0,820.7 990.0,820.7 990.0,779.3 972.0,779.3 972.0,760.7 990.0,760.7 990.0,740.0 969.3,740.0 969.3,758.0 950.7,758.0 950.7,740.0 930.0,740.0 930.0,760.7 948.0,760.7 948.0,779.3 930.0,779.3 930.0,820.7 948.0,820.7 948.0,839.3 930.0,839.3 930.0,880.7 948.0,880.7 948.0,899.3 930.0,899.3" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.9"/>
+<rect x="829.0" y="920.0" width="63.0" height="75.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="930.0" y="920.0" width="60.0" height="75.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="990.0" y="863.0" width="18.0" height="132.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="951.3" y="915.5" width="17.4" height="4.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="895.0" y="920.0" width="35.0" height="75.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1008.0" y="875.0" width="3.0" height="30.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="1011.0" y="877.2" width="15.0" height="25.5" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="975.0" y="882.5" width="36.0" height="15.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="972.6" y="875.0" width="12.0" height="30.0" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<line x1="829.0" y1="995.0" x2="1065.0" y2="995.0" stroke="#5b6472" stroke-width="1.4"/>
+<line x1="829.0" y1="908.9" x2="921.0" y2="908.9" stroke="#b4342f" stroke-width="1.0" stroke-dasharray="5 3"/>
+</g>
+<rect x="844.0" y="722.0" width="206.0" height="297.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="844.0" y="714.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt A–A: Fuß vorn rechts</text>
+<line x1="862.0" y1="908.9" x2="835.0" y2="908.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="862.0" cy="908.9" r="1.5" fill="#5b6472"/>
+<text x="832.0" y="911.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Toolhead, Z ganz unten:</text>
+<text x="832.0" y="921.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am vorderen Wegende 3 mm</text>
+<text x="832.0" y="931.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vor dem 2060</text>
+<line x1="856.0" y1="932.0" x2="835.0" y2="962.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="856.0" cy="932.0" r="1.5" fill="#5b6472"/>
+<text x="832.0" y="965.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte</text>
+<line x1="904.0" y1="959.0" x2="835.0" y2="996.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="904.0" cy="959.0" r="1.5" fill="#5b6472"/>
+<text x="832.0" y="999.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Innenteil voll</text>
+<text x="832.0" y="1009.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(11,7 mm breit)</text>
+<line x1="981.0" y1="770.0" x2="1059.0" y2="770.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="981.0" cy="770.0" r="1.5" fill="#5b6472"/>
+<text x="1062.0" y="773.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
+<line x1="1020.0" y1="899.0" x2="1059.0" y2="899.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1020.0" cy="899.0" r="1.5" fill="#5b6472"/>
+<text x="1062.0" y="902.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5 von vorn</text>
+<line x1="1002.0" y1="905.0" x2="1059.0" y2="929.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1002.0" cy="905.0" r="1.5" fill="#5b6472"/>
+<text x="1062.0" y="932.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Flansch</text>
+<clipPath id="anschlag"><rect x="250.0" y="1119.0" width="294.0" height="165.0"/></clipPath>
+<g clip-path="url(#anschlag)">
+<rect x="304.0" y="1200.0" width="15.0" height="60.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="319.0" y="1185.0" width="240.0" height="75.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<line x1="235.0" y1="1260.0" x2="559.0" y2="1260.0" stroke="#5b6472" stroke-width="1.4"/>
+</g>
+<rect x="250.0" y="1119.0" width="294.0" height="165.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="250.0" y="1111.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt B–B: Anschlag links (von vorn, Y +166)</text>
+<line x1="310.0" y1="1212.0" x2="241.0" y2="1212.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="310.0" cy="1212.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1215.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag 5 × 20 mm, 5 mm unter der</text>
+<text x="238.0" y="1225.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Oberfläche; sitzt am Fuß vorn links,</text>
+<text x="238.0" y="1235.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">der vor der Schnittebene liegt</text>
+<line x1="274.0" y1="1260.0" x2="241.0" y2="1262.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="274.0" cy="1260.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1265.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Tisch</text>
+<line x1="379.0" y1="1203.0" x2="553.0" y2="1203.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="379.0" cy="1203.0" r="1.5" fill="#5b6472"/>
+<text x="556.0" y="1206.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platte, links am Anschlag</text>
+<text x="774.0" y="1115.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
+<text x="774.0" y="1133.0" font-size="8.5" fill="#5b6472" text-anchor="start">Platte</text>
+<text x="852.0" y="1133.0" font-size="8.5" fill="#1c2733" text-anchor="start">Spanplatte 615 × 349 × 25 mm [v], ≈ 3,5 kg</text>
+<text x="774.0" y="1148.0" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="852.0" y="1148.0" font-size="8.5" fill="#1c2733" text-anchor="start">X −295 bis +320: links am Anschlag, rechts 20 mm über dem Gestell</text>
+<text x="774.0" y="1163.0" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="852.0" y="1163.0" font-size="8.5" fill="#1c2733" text-anchor="start">Y −176,7 bis +172,3: mittig unter dem Arbeitsfeld</text>
+<text x="774.0" y="1178.0" font-size="8.5" fill="#5b6472" text-anchor="start">Arbeitsfeld</text>
+<text x="852.0" y="1178.0" font-size="8.5" fill="#1c2733" text-anchor="start">391 × 333 mm; in Y je Seite 7,8 mm Platte darüber hinaus</text>
+<text x="774.0" y="1193.0" font-size="8.5" fill="#5b6472" text-anchor="start">Höhe</text>
+<text x="852.0" y="1193.0" font-size="8.5" fill="#1c2733" text-anchor="start">Oberfläche Z −129 = Unterkante der 2060 = bisher der Tisch</text>
+<text x="774.0" y="1208.0" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="852.0" y="1208.0" font-size="8.5" fill="#1c2733" text-anchor="start">Werkstück bis 58 mm (5 mm unter dem Toolhead frei)</text>
+<text x="774.0" y="1223.0" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="852.0" y="1223.0" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead mit Z ganz unten: 3,7 mm über Platte und Füßen</text>
+<text x="774.0" y="1238.0" font-size="8.5" fill="#5b6472" text-anchor="start">Füße</text>
+<text x="852.0" y="1238.0" font-size="8.5" fill="#1c2733" text-anchor="start">50 mm lang, 25 mm hoch; der Tisch liegt jetzt 25 mm tiefer</text>
+<text x="774.0" y="1253.0" font-size="8.5" fill="#5b6472" text-anchor="start">Befestigung</text>
+<text x="852.0" y="1253.0" font-size="8.5" fill="#1c2733" text-anchor="start">je Fuß 2 × M5×12 + Scheibe, Hammermuttern in der unteren Seitennut</text>
+<text x="774.0" y="1268.0" font-size="8.5" fill="#5b6472" text-anchor="start">Druck</text>
+<text x="852.0" y="1268.0" font-size="8.5" fill="#1c2733" text-anchor="start">PETG, Unterseite aufs Bett, keine Stützen, 4 Teile</text>
+<rect x="774.0" y="1303.0" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="793.0" y="1311.0" font-size="8.5" fill="#1c2733" text-anchor="start">neu (PETG)</text>
+<rect x="924.0" y="1303.0" width="14.0" height="9.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<text x="943.0" y="1311.0" font-size="8.5" fill="#1c2733" text-anchor="start">Opferplatte</text>
+<rect x="1074.0" y="1303.0" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="1093.0" y="1311.0" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<rect x="774.0" y="1321.0" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<text x="793.0" y="1329.0" font-size="8.5" fill="#1c2733" text-anchor="start">Schrauben</text>
+<rect x="924.0" y="1321.0" width="14.0" height="9.0" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<text x="943.0" y="1329.0" font-size="8.5" fill="#1c2733" text-anchor="start">Hammermutter</text>
+<rect x="1074.0" y="1321.0" width="14.0" height="9.0" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8"/>
+<text x="1093.0" y="1329.0" font-size="8.5" fill="#1c2733" text-anchor="start">hinter der Schnittebene</text>
+<line x1="774.0" y1="1347.5" x2="790.0" y2="1347.5" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 3"/>
+<text x="795.0" y="1351.0" font-size="8.5" fill="#1c2733" text-anchor="start">Arbeitsfeld</text>
+<line x1="924.0" y1="1347.5" x2="940.0" y2="1347.5" stroke="#b4342f" stroke-width="1.0" stroke-dasharray="5 3"/>
+<text x="945.0" y="1351.0" font-size="8.5" fill="#1c2733" text-anchor="start">tiefster Punkt des Toolheads</text></svg>

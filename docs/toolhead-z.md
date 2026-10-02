@@ -329,7 +329,9 @@ harte Kollision, kein weicher Anschlag.
 
 Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
 (1 mm dicker = 1 mm tiefer) — mit dem langen Verfahrweg brauchst du sie für den
-Fokus nicht mehr.
+Fokus nicht mehr. Die Spanplatte (25 mm) liegt zwischen Führungsfüßen
+derselben Höhe, ihre Oberfläche also auf dem bisherigen Bett
+([opferplatte.md](opferplatte.md)).
 
 ## Endschalter: Gabellichtschranke
 

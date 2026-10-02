@@ -10,8 +10,9 @@ Geprüft mit `python3 tools/opferplatte_check.py`, Zeichnung in
 ## Die Platte
 
 Deine Opferplatte ist eine **Spanplatte 615 × 349 × 25 mm** (Angabe vom
-2026-10-02), gemessen **25,3 mm** dick `[v]`, rund 3,5 kg. Gezogen wird
-sie **nach rechts**, sie liegt also längs in X.
+2026-10-02, die Länge von 615 mm hast du bestätigt), gemessen **25,3 mm**
+dick `[v]`, rund 3,5 kg. Gezogen wird sie **nach rechts**, sie liegt also
+längs in X.
 
 Läge sie einfach auf dem Tisch, kostete ihre Dicke genau so viel
 Werkstückhöhe: Statt 50 passten nur noch knapp 33 mm unter den Toolhead,
@@ -86,7 +87,7 @@ nur die Reibung.
 | Lagerbock | 7 mm dick (X +330 bis +337), 20 mm breit, auf dem Ausleger |
 | Schraube | Sechskantschraube M5×20 (ISO 4017). Der Kopf sitzt auf der Plattenseite in einer Sechskanttasche (SW 8,3, 4 mm tief) und dreht sich mit dem Riegel. Rechts kommen Scheibe und Stoppmutter M5 (DIN 985) drauf, die Schraube steht 2 mm über. |
 | Bahn frei | Ausleger und Lagerbock beginnen 2 mm vor der Führung, der offene Riegel 4,5 mm: Die Platte gleitet an allem vorbei |
-| Platz | zwischen Anschlag und Riegel 616 mm: länger darf die Platte nicht sein |
+| Platz | zwischen Anschlag und Riegel 616 mm: Die Platte (615 mm) hat 1 mm Spiel; eine längere ließe den Riegel nicht zu |
 | Schwenkkreis | Radius 31 mm über oben, bis Z −109; Gestell, Not-Aus und Portal bleiben weit weg |
 
 Bei einem kräftigen Stoß von 100 N biegt sich die Nase mit 5,7 MPa,
@@ -180,15 +181,17 @@ weniger.
 
 ## Noch offen
 
-* **Länge der Platte nachmessen.** Gerechnet ist mit deiner Angabe von
-  615 mm. Zwischen Anschlag und Riegel sind 616 mm, eine längere Platte
-  ließe den Riegel nicht zu. Riegel, Lagerbock und Ausleger richten sich
-  nach `platte_l`. Mit der gemessenen Länge lässt du das Skript neu laufen
-  und druckst den Fuß vorn rechts neu.
+Nichts mehr. Geklärt am 2026-10-02:
 
-Geklärt am 2026-10-02: Die Platte ist 25,3 mm dick (Nennmaß 25), die Füße
-sind seit Rev. 2 genau so hoch. Die untere Nut und die untere Seitennut an
-den Enden der 2060 sind frei.
+* Die Platte ist **615 mm lang** (bestätigt) und 25,3 mm dick (Nennmaß
+  25). Die Füße sind seit Rev. 2 genau so hoch. Zwischen Anschlag und
+  Riegel sind 616 mm, die Platte hat also 1 mm Spiel.
+* **Falls der Riegel einmal nicht zugeht**, etwa weil die Spanplatte bei
+  feuchter Luft etwas quillt, kürzt du die Platte an der Kreissäge um 1
+  bis 2 mm. Am Riegel und an den Füßen ändert sich dafür nichts. Nimm nur
+  so viel ab wie nötig: Jeder Millimeter mehr ist Spiel, um das die Platte
+  rutschen kann.
+* Die untere Nut und die untere Seitennut an den Enden der 2060 sind frei.
 
 ## Parametrik
 

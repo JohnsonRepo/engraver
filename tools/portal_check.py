@@ -28,9 +28,13 @@ X_SCHRITTE = 81               # Stellungen ueber den X-Weg
 Z_SCHRITTE = 11               # Stellungen ueber den Z-Weg
 # Teile des Toolhead-Modells, die das Portal selbst richtig abbildet
 TOOLHEAD_OHNE = ('Portalprofil 2020', 'X-Schiene MGN15')
-# Gedruckte Energiekette: zwei Glieder schlagen bei diesem Winkel
-# aneinander an (aus der 3MF ausgemessen, 2026-10-01)
-KETTE_ANSCHLAG = 30.0       # Grad je Glied, am gedruckten Teil (2026-10-01)
+# Gedruckte Energiekette: um 180 Grad bis an die Anschlaege gebogen ist die
+# Schleife aussen so hoch (Messschieber, 4 Gelenke im Bogen, 2026-10-02).
+# Die Konstruktion darf nicht enger sein, sonst drueckt die Kette den
+# Kettenhalter hoch, und nur wenig weiter, sonst haengt der Bogen durch.
+KETTE_SCHLEIFE = 50.0       # mm aussen, gemessen
+KETTE_SCHLEIFE_WEITER = 5.0     # so viel weiter darf die Konstruktion sein
+KETTE_ANSCHLAG_MODELL = 47.0    # Grad je Glied im Modell der 3MF
 
 
 def main():
@@ -596,7 +600,7 @@ def main():
             ('Traeger Y Festpunkt',
              (L['ytr_wand_x'][1] - L['ytr_arm_x'][0],
               L['ytr_y']['Festpunkt'][1] - L['ytr_y']['Festpunkt'][0],
-              L['ytr_wand_z'][1] - L['ytr_arm_z'][0]))):
+              L['ytr_wand_z'][1] - L['ytr_wand_z'][0]))):
         p.ok('{}: groesste Kante'.format(name), max(masse), 250.0, '<=')
     # Lagerschlitten auf dem Ruecken liegend: der Pfosten ueberbrueckt
     # die Oeffnung zwischen den Armen
@@ -957,11 +961,18 @@ def main():
     # ------------------------------------------------------------------
     p.titel('17) Energiekette X: gedruckte Kette, Wanne, Kettenhalter')
     tk, rk = w('kette_teilung'), w('kette_r')
-    # Wie eng sich die Kette biegen laesst, legt der Anschlag der Glieder
-    # fest (am gedruckten Teil 30 Grad); der Radius darf ihn nicht verlangen.
-    p.ok('Gelenkwinkel fuer R{:.0f} bei Teilung {:.0f}'.format(rk, tk),
-         math.degrees(2.0 * math.asin(tk / (2.0 * rk))), KETTE_ANSCHLAG,
-         '<=', 'Grad')
+    # Wie eng sich die Kette biegen laesst, zeigt die gemessene Schleife;
+    # die Konstruktion (2 R + Hoehe + beide Riegel) darf nicht enger sein.
+    schleife = 2.0 * rk + w('kette_h') + 2.0 * w('kette_riegel')
+    p.info('Schleife aussen gemessen (Messschieber, 4 Gelenke im Bogen)',
+           KETTE_SCHLEIFE)
+    p.ok('Schleife der Konstruktion (R{:.0f}) nicht enger als gemessen'
+         .format(rk), schleife - KETTE_SCHLEIFE, 0.0)
+    p.ok('   und hoechstens {:.0f} mm weiter'.format(KETTE_SCHLEIFE_WEITER),
+         schleife - KETTE_SCHLEIFE, KETTE_SCHLEIFE_WEITER, '<=')
+    p.info('Gelenkwinkel fuer R{:.0f} bei Teilung {:.0f} (Modell: {:.0f})'
+           .format(rk, tk, KETTE_ANSCHLAG_MODELL),
+           math.degrees(2.0 * math.asin(tk / (2.0 * rk))), 'Grad')
     p.info('Glieder', L['xk_glieder'], 'Stk')
     p.info('Kette zwischen den Gelenken', L['xk_laenge'])
     p.info('  gebraucht: halber Hub + Bogen (pi R)', L['xk_noetig'])
@@ -1216,7 +1227,20 @@ def main():
     p.ok('Traeger Y: M5x{:.0f} greift in die Hammermutter'.format(
         L['ytr_m5_schraube']), e, 3.5)
     p.ok('Traeger Y: Wand ueber dem M5-Kopf',
-         L['ytr_wand_z'][1] - (L['nut_u_z'] + w('m5_kopf_d') / 2.0), 2.0)
+         L['ytr_wand_z'][1] - (L['nut_u_z'] + w('m5_kopf_d') / 2.0), 1.0)
+    p.ok('Traeger Y: Wand unter dem M5-Kopf',
+         (L['nut_u_z'] - w('m5_kopf_d') / 2.0) - L['ytr_wand_z'][0], 1.0)
+    p.ok('Traeger Y: M5-Kopf unter dem Arm (Inbus von aussen, auch mit '
+         'Wanne)', L['ytr_arm_z'][0] - (L['nut_u_z'] + w('m5_kopf_d') / 2.0),
+         2.0)
+    for n in L['ytr_y']:
+        pt = (L['ytr_wand_x'][0] - w('m5_kopf_h'), L['ytr_m5_y'][n],
+              L['nut_u_z'])
+        d, wer = bauraum.freier_korridor(pt, 'x', -1, INBUS_FREI_D / 2.0,
+                                         rahmen)
+        p.ok('   M5 am Traeger {} von aussen frei{}'.format(
+            n, '' if wer is None else '  [' + wer + ']'),
+             999.0 if d == float('inf') else d, WERKZEUG_LAENGE)
     p.ok('Traeger Y: Rand neben der M5',
          w('ytr_b') / 2.0 - w('ytr_versatz') - w('m5_durchgang') / 2.0, 2.0)
     p.ok('Traeger Y: M5-Kopf neben der Laschenschraube',
@@ -1226,11 +1250,36 @@ def main():
          L['ytr_wand_x'][0] - L['ywanne_lasche_x'][1], 0.5)
     p.ok('Laschenschraube: Kopf zwischen Wanne und Traeger',
          L['ytr_wand_x'][0] - L['ywanne_x'][1] - w('m3_kopf_d'), 1.0)
-    # W13 in der Seitennut geht an jedem Traeger kurz aus der Nut und
-    # ueber die Wand (vor ihr steht der M5-Kopf); darueber steht erst der
-    # Y-Wagen ueber. Das Motorkabel im Schlauch etwa 4,5 mm dick.
-    p.ok('W13 ueber der Wand des Traegers: frei bis zum Y-Wagen',
-         L['y_wagen_z0'] - (L['ytr_wand_z'][1] + 4.5), w('luft_bau'))
+    # W13 in der Seitennut geht an jedem Traeger kurz aus der Nut und unter
+    # der Wand durch (oben sitzen Arm und Wanne, vor der Wand der M5-Kopf);
+    # darunter ist bis zum Tisch frei.
+    p.info('W13 unter der Wand des Traegers: Wand endet ueber der '
+           'Unterkante des 2040', L['ytr_wand_z'][0] - L['rahmen_z0'])
+    # Schrauben der Wanne Y von oben (Laschen, Endstueck 180): mit dem
+    # Portal in der Mitte sind Schlitten, Kettenhalter Y und Kette weg
+    ym0 = w('yk_gelenk_y')
+    yb0_ = (frei + L['yk_fest'] + ym0) / 2.0
+    ueber = mit_portal + [
+        bauraum.Quader('Y-Kette Obertrum', xk[0], xk[1],
+                       ym0 - w('endstueck_l'), yb0_, *L['yk_ober_z']),
+        bauraum.Quader('Y-Kette Bogen', xk[0], xk[1], yb0_, yb0_ + ra,
+                       L['yk_unter_z'][0], L['yk_ober_z'][1])]
+    zb1 = L['ywanne_boden_z'][1]
+    for text_, pkt in (
+            ('Laschen', [(x, y, zb1 + w('m3_kopf_h'))
+                         for x, y in L['ywanne_laschen']]),
+            ('Endstueck 180', [(x, y, zb1 + w('endstueck_platte')
+                                + w('m3_scheibe_h') + w('m3_kopf_h'))
+                               for x, y in L['yk_fest_loecher']])):
+        d, wer = float('inf'), None
+        for pt in pkt:
+            d_, wer_ = bauraum.freier_korridor(pt, 'z', +1,
+                                               INBUS_FREI_D / 2.0, ueber)
+            if d_ < d:
+                d, wer = d_, wer_
+        p.ok('Wanne Y: {} von oben frei (Portal in der Mitte){}'.format(
+            text_, '' if wer is None else '  [' + wer + ']'),
+             999.0 if d == float('inf') else d, WERKZEUG_LAENGE)
     yb0 = L['ywanne_binder'][0][1]
     p.ok('Binderschlitze Wanne Y hinter dem Endstueck 180',
          (L['yk_fest'] - w('endstueck_l')) - (yb0 + w('khy_binder_b') / 2.0),

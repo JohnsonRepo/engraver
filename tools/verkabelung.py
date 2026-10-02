@@ -213,8 +213,8 @@ def leitungen():
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor links', strom=ez.MOTOR_I,
              fertig=True, mitgeliefert=1.0,
              weg='links raus, untere Nut außen am linken 2040 nach vorn; an '
-                 'den drei Trägern der Wanne Y kurz aus der Nut, über ihre '
-                 'Wand',
+                 'den drei Trägern der Wanne Y kurz aus der Nut, unter ihrer '
+                 'Wand durch',
              adern=[('Spule A', 'schwarz · grün', 'Shield Y 2B·2A',
                      'Y-Motor links A'),
                     ('Spule B', 'rot · blau', 'Shield Y 1A·1B',
@@ -285,7 +285,7 @@ def waechter_spannung(u24, r_pullup):
     g = 1.0 / WAECHTER_R1 + 1.0 / WAECHTER_R2 + 1.0 / r_pullup
     return (u24 / WAECHTER_R1 + VCC / r_pullup) / g
 # Energieketten: gedruckt (Portal.py, seit Rev. 19), innen 10 x 8,8 mm,
-# Biegeradius 32 mm (30 Grad je Glied, seit Rev. 20). Darin nur
+# Biegeradius 20 mm (Schleife gemessen, seit Rev. 22). Darin nur
 # Einzellitzen — eine Mantelleitung ist fuer den Radius zu steif.
 # Aussendurchmesser der Silikonlitzen [w]; die mitgelieferten Motorkabel
 # haben lose Adern in einem Schlauch [v] (AWG 26 [w], hier wie 0,2 mm2

@@ -355,7 +355,7 @@ def querschnitt_y(f, w, L, portal):
     """Schnitt durch den mittleren Traeger an der Laschenschraube (Blick
     von vorn, Portal in der Mitte): 2040 mit Schiene, Traeger, Wanne Y mit
     Lasche, Unter- und Obertrum; dahinter Schlitten, Kettenhalter Y und die
-    M5 des Traegers. W13 geht hier aus der Nut, ueber die Wand."""
+    M5 des Traegers. W13 geht hier aus der Nut, unter der Wand durch."""
     t = []
     q = {p.name: p for p in portal}
     hell = {'fill_opacity': '0.4'}
@@ -383,11 +383,17 @@ def querschnitt_y(f, w, L, portal):
     zn = L['nut_u_z']
     t.append(f.rect(xw0 - w('m5_kopf_h'), xw0, zn - w('m5_kopf_d') / 2.0,
                     zn + w('m5_kopf_d') / 2.0, 'stahl', fill_opacity='0.6'))
-    # Traeger im Schnitt: Wand am 2040, Arm unter der Wanne
+    # Traeger im Schnitt: Wand am 2040, Arm unter der Wanne (oben an der
+    # Wand, wenn die Wanne hoeher liegt als die Nut, sonst unten)
     wx, wz = L['ytr_wand_x'], L['ytr_wand_z']
     ax, az = L['ytr_arm_x'], L['ytr_arm_z']
-    t.append(f.poly([(wx[1], wz[1]), (wx[0], wz[1]), (wx[0], az[1]),
-                     (ax[0], az[1]), (ax[0], az[0]), (wx[1], az[0])], 'neu'))
+    if az[1] >= wz[1]:
+        profil = [(wx[1], wz[0]), (wx[1], wz[1]), (ax[0], az[1]),
+                  (ax[0], az[0]), (wx[0], az[0]), (wx[0], wz[0])]
+    else:
+        profil = [(wx[1], wz[1]), (wx[0], wz[1]), (wx[0], az[1]),
+                  (ax[0], az[1]), (ax[0], az[0]), (wx[1], az[0])]
+    t.append(f.poly(profil, 'neu'))
     t.append(f.rect(xw0, xw0 + L['ytr_m5_schraube'], zn - 2.5, zn + 2.5,
                     'stahl', fill_opacity='0.6', stroke_dasharray='3 2'))
     # Wanne: U mit der Lasche innen (auf dem Arm)
@@ -404,8 +410,8 @@ def querschnitt_y(f, w, L, portal):
     t.append(f.rect(xl - k, xl + k, zb[1], zb[1] + 3.0, 'stahl'))
     t.append(f.rect(xl - 1.5, xl + 1.5, zb[1] - L['wanne_schraube'], zb[1],
                     'stahl'))
-    # W13 (Y-Motor links) geht am Traeger aus der Nut, ueber die Wand
-    t.append(f.kreis(sum(wx) / 2.0, wz[1] + 2.5, 2.25, 'kabel'))
+    # W13 (Y-Motor links) geht am Traeger aus der Nut, unter der Wand durch
+    t.append(f.kreis(sum(wx) / 2.0, wz[0] - 2.5, 2.25, 'kabel'))
     return t
 
 
@@ -454,8 +460,10 @@ def zeichnung_x(w, L, tw, TL, portal, rev, th_rev):
              w)
 
     # ---- Ansicht von vorn --------------------------------------------------
-    fa = Feld(250, 92, (-290.0, 290.0),
-              (-30.0, L['xk_ober_z'][1] + 9.0), 1.5)
+    # mindestens 172 mm hoch, sonst haben die Beschriftungen links keinen
+    # Platz (mit R 20 ist die Schleife niedrig)
+    z1 = L['xk_ober_z'][1] + 9.0
+    fa = Feld(250, 92, (-290.0, 290.0), (min(-30.0, z1 - 172.0), z1), 1.5)
     t += fa.ausschnitt('vorn', ansicht(fa, w, L, tw, TL, portal))
     t += fa.rahmen('Ansicht von vorn: Toolhead in der Mitte, gestrichelt an '
                    'beiden Enden des X-Wegs (Trägerplatte davor als Umriss)')
@@ -650,7 +658,8 @@ def zeichnung_y(w, L, portal, rev):
     t += fa.spalte([
         (sum(L['quer_y_hinten']) / 2.0, L['quer_z'][0] + 10.0,
          'hinteres 2060'),
-        (wi.y[1] - 4.0, wi.z[1] - 3.0, 'Winkel 20 mm\n(Lage angenommen)'),
+        (wi.y[1] - 4.0, wi.z[1] - 3.0,
+         'Winkel 20 mm in der\nunteren Seitennut'),
         (-185.0, L['rahmen_z1'] - 4.0, 'linkes 2040 (Rahmen)\nmit der '
          'Y-Schiene'),
         (L['ywanne_binder'][0][1], L['ywanne_boden_z'][1],
@@ -713,11 +722,11 @@ def zeichnung_y(w, L, portal, rev):
         (-262.0, 4.0, 'Stirnblock, Platte\n(dahinter)'),
         (-247.0, -22.0, 'Y-Wagen, Y-Schiene'),
         (-250.0, -45.0, 'linkes 2040'),
-        (xw0 - 2.0, L['nut_u_z'] + 3.0, 'M5 + Hammermutter in der\nunteren '
-         'Seitennut ({} mm dahinter)'.format(
+        (xw0 - 2.0, L['nut_u_z'] + 3.0, 'M5 + Hammermutter in der unteren\n'
+         'Seitennut ({} mm dahinter), von außen frei'.format(
              de(L['ywanne_laschen'][0][1] - L['ytr_m5_y']['mitte'], 0))),
-        (sum(L['ytr_wand_x']) / 2.0, L['ytr_wand_z'][1] + 3.5,
-         'W13 (Y-Motor links): hier\naus der Nut, über die Wand'),
+        (sum(L['ytr_wand_x']) / 2.0, L['ytr_wand_z'][0] - 2.5,
+         'W13 (Y-Motor links): hier aus\nder Nut, unter der Wand durch'),
         (L['ywanne_laschen'][0][0], L['ywanne_boden_z'][1] + 2.0,
          'Lasche: M3 × {} in den\nEinsatz im Arm'.format(
              de(L['wanne_schraube'], 0))),
@@ -725,8 +734,9 @@ def zeichnung_y(w, L, portal, rev):
         fb.ox + fb.breite + 12, 'start', abstand=32.0)
     t += fb.luft(L['yk_x'][1], 7.0, -L['platte_x1'], 7.0, '{} mm'.format(
         de(-L['platte_x1'] - L['yk_x'][1], 0)), dx=4, dy=-6)
-    t += fb.luft(x[1], -62.0, xw0, -62.0, '{} mm'.format(
-        de(xw0 - x[1], 1)), dx=4, dy=12)
+    zk = L['nut_u_z'] + w('m5_kopf_d') / 2.0
+    t += fb.luft(xw0 - 3.5, zk, xw0 - 3.5, L['ytr_arm_z'][0], '{} mm'.format(
+        de(L['ytr_arm_z'][0] - zk, 1)), dx=-4, dy=8, anker='end')
     t += fb.mass(-309.0, L['yk_achse_unten'], L['yk_achse_oben'], '2 R',
                  dx=4)
     t += quer_mass(fb, L['yk_x'][0], L['yk_x'][1], L['yk_ober_z'][1] + 3.0,
@@ -780,7 +790,7 @@ def zeichnung_y(w, L, portal, rev):
                          ('kabel', 'Kabel')))
     t.append(text(24, ly + 10, 'Gestrichelt: Kette, Platte und Kettenhalter '
                   'Y an den Enden des Y-Wegs, die Winkel an den 2060 '
-                  '(20 mm, ihre Lage angenommen).', 8.5, GRAU))
+                  '(20 mm, in der unteren Seitennut).', 8.5, GRAU))
     schreiben(ZIEL_Y, t, int(fa.ox + fa.breite + 200), int(ly + 26))
 
 

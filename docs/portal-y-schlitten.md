@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 21, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 22, fünfundzwanzig
 gedruckte Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
@@ -415,7 +415,9 @@ die `Bohrlehre_Riemenhalter` (6 mm dick, im ToolheadZ-Modell ausgeblendet):
 ## Energieketten (X seit Rev. 19, Y seit Rev. 21)
 
 Beide Ketten sind gedruckt (dein Modell „Energiekette“, Teilung 16,
-außen 18 × 14, R 32 seit Rev. 20). Maße, Freigänge, Montage und Druck
+außen 18 × 14). Gerechnet wird seit Rev. 22 mit R 20: Um 180° gebogen ist
+die Schleife außen 50 mm hoch, 4 Gelenke knicken (gemessen 2026-10-02);
+Rev. 20 und 21 rechneten mit R 32. Maße, Freigänge, Montage und Druck
 stehen in [energiekette.md](energiekette.md).
 
 **X:** direkt hinter der Trägerplatte. Der Festpunkt sitzt in der Mitte
@@ -424,7 +426,7 @@ des X-Wegs, die Schleife zeigt nach rechts. Der Untertrum läuft in der
 dem Kettenhalter des Toolheads. Drei **Wannenstützen** tragen die Wanne.
 Sie sitzen mit je einer M5 in der hinteren Nut, ihr Block steht auf dem
 Rohr hinter dem Rücklauf, der Arm reicht über Riemen und Riemenhalter.
-19 Glieder reichen, am rechten Ende läuft der Bogen 3,25 mm über den
+17 Glieder reichen, am rechten Ende läuft der Bogen 3,25 mm über den
 Lagerschlitten. Die Litzen kommen in der **oberen Nut** des Rohrs vom
 linken Schlitten und laufen am **Kabelflügel** der Stütze am Festpunkt
 hoch, zwei Kabelbinder halten sie.
@@ -432,9 +434,9 @@ hoch, zwei Kabelbinder halten sie.
 **Y:** außen am linken 2040, 3 mm neben der Schlittenplatte, die Schleife
 zeigt nach vorn. Das bewegte Ende liegt auf dem **Kettenhalter Y** hinter
 dem Stirnblock des linken Schlittens, der Obertrum direkt darauf. Der
-Untertrum läuft 2 R tiefer in der **Wanne Y** (Boden Z −66,3), die auf
+Untertrum läuft 2 R tiefer in der **Wanne Y** (Boden Z −42,3), die auf
 drei **Trägern** an der unteren Seitennut hängt. Der Festpunkt sitzt hinten
-in der Wanne. 18 Glieder reichen für den ganzen Y-Weg und 35,6 mm Reserve
+in der Wanne. 16 Glieder reichen für den ganzen Y-Weg und 47 mm Reserve
 nach vorn.
 
 ## Engste Stellen
@@ -518,8 +520,8 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 | Wannenstützen (3) | Rückseite der Platte unten: Block und Arm wachsen aus der Platte, der Kabelflügel liegt flach |
 | Kettenhalter (Toolhead) | auf der linken Seite liegend |
 | Kettenhalter Y | Unterseite (Auflage auf dem Schlitten) unten |
-| Kettenwanne Y | Boden unten, längs (238,5 mm) |
-| Träger Y (3) | Unterseite des Arms unten, die Wand steht darauf |
+| Kettenwanne Y | Boden unten, längs (244,2 mm) |
+| Träger Y (3) | Oberseite des Arms unten, die Wand steht darauf |
 | Endschalter (5 Teile) | wie in [endschalter.md](endschalter.md#druck-petg-bambu-lab-a1); Fahne_Y, Klammer_X und Fahne_X **schwarz** |
 
 Keine Stützen. 4 Wandlinien, ≥ 40 % Infill. Rechter Schlitten, die rechten
@@ -542,18 +544,18 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Wannenstütze Festpunkt mit Kabelflügel | 17,0 cm³ | ≈ 22 g | 42,4 × 32 × 49,5 mm |
 | Wannenstütze mitte, rechts (je) | 9,3 cm³ | ≈ 12 g | 16 × 32 × 49,5 mm |
 | Kettenhalter Y | 12,7 cm³ | ≈ 16 g | 32,3 × 49,5 × 11 mm |
-| Kettenwanne Y | 26,1 cm³ | ≈ 33 g | 30,3 × 238,5 × 13 mm |
-| Träger Y Festpunkt | 7,1 cm³ | ≈ 9 g | 36,3 × 26 × 23,3 mm |
-| Träger Y mitte, vorn (je) | 6,7 cm³ | ≈ 8,5 g | 36,3 × 24 × 23,3 mm |
-| **Portal zusammen** (ohne Endschalter) | 321,8 cm³ | **≈ 409 g** | |
+| Kettenwanne Y | 26,7 cm³ | ≈ 34 g | 30,3 × 244,2 × 13 mm |
+| Träger Y Festpunkt | 6,8 cm³ | ≈ 9 g | 36,3 × 26 × 19,7 mm |
+| Träger Y mitte, vorn (je) | 6,3 cm³ | ≈ 8 g | 36,3 × 24 × 19,7 mm |
+| **Portal zusammen** (ohne Endschalter) | 321,3 cm³ | **≈ 408 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
-| Kettenhalter (Toolhead) | 22,7 cm³ | ≈ 29 g | 44 × 24,8 × 50 mm |
+| Kettenhalter (Toolhead) | 14,2 cm³ | ≈ 18 g | 44 × 24,8 × 26 mm |
 
 Dazu die ausgeblendeten Bohrlehren aus PLA: `Bohrlehre_YWagen` (4,7 g) prüft
 das Lochbild 20 × 20 am Wagen, `Bohrlehre_LM393` Umriss und Lochbild der
 Lichtschranke, `Bohrlehre_Kettenhalter_Y` (5 g) führt den Bohrer am schon
 gedruckten linken Schlitten. `Bohrlehre_Riemenhalter` (8,4 g) und
-`Bohrlehre_Kettenhalter` (25 g), beide im ToolheadZ-Modell, führen den
+`Bohrlehre_Kettenhalter` (19,5 g), beide im ToolheadZ-Modell, führen den
 Bohrer an der Trägerplatte.
 
 ## Stückliste
@@ -586,10 +588,10 @@ Bohrer an der Trägerplatte.
 | 3 + 3 | M5×10 Zylinderkopf + Hammermutter M5 (Nut 6) | Wannenstützen → hintere Nut des Rohrs |
 | 2 + 2 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Laschen der Kettenwanne → Wannenstützen |
 | 2 + 2 + 2 | M3×10 Zylinderkopf + Scheibe DIN 125 + Messing-Einsatz M3 | Endstück 180 → Wanne → Stütze am Festpunkt |
-| 1 | Energiekette, gedruckt: Anfangsstück, 19 Glieder mit Riegel, Endstück 180 | X-Achse |
+| 1 | Energiekette, gedruckt: Anfangsstück, 17 Glieder mit Riegel, Endstück 180 | X-Achse |
 | 1 + 2 | Nutabdeckung Nut 6 (oder Clips), ≈ 187 mm, + Kabelbinder | Litzen in der oberen Nut des Rohrs, am Kabelflügel |
 | — | Schrauben und Einsätze des Kettenhalters | [energiekette.md](energiekette.md#verschraubung) |
-| 1 | Energiekette, gedruckt: Anfangsstück, 18 Glieder mit Riegel, Endstück 180 | Y-Achse |
+| 1 | Energiekette, gedruckt: Anfangsstück, 16 Glieder mit Riegel, Endstück 180 | Y-Achse |
 | 2 + 2 | M3×12 Zylinderkopf + Messing-Einsatz M3 | Kettenhalter Y, von unten durch die Schlittenplatte |
 | 2 + 2 + 2 | M3×8 Zylinderkopf + Scheibe DIN 125 + Messing-Einsatz M3 | Anfangsstück → Kettenhalter Y |
 | 3 + 3 | M5×10 Zylinderkopf + Hammermutter M5 (Nut 6) | Träger Y → untere Seitennut des linken 2040 |
@@ -614,13 +616,9 @@ Bohrer an der Trägerplatte.
   das Portal vorn an die Y-Motorhalter heranfährt (Abschnitt 14).
 * **Endschalter:** Boden des Gabelschlitzes, Lötstifte unter der Platine,
   Schmiernippel am X-Wagen ([endschalter.md](endschalter.md#noch-offen)).
-* **Energiekette:** gerechnet mit R 32, weil sich ein Glied am gedruckten
-  Teil nur um 30° dreht (bis Rev. 19: R 20 aus dem Modell). Um 180°
-  gebogen darf die Schleife außen höchstens 78,6 mm hoch sein
-  ([energiekette.md](energiekette.md#noch-offen)).
-* **Winkel an den 2060:** außen am linken 2040 je 20 mm vor und hinter dem
-  2060 angenommen, bis Z −49. Wanne Y und Träger enden 68 mm davor; die
-  Kabel in der unteren Seitennut müssen um sie herum.
+* **Winkel an den 2060:** 20 mm, in der unteren Seitennut direkt am 2060
+  (bestätigt 2026-10-02), ihre Schenkel nicht gemessen. Wanne Y und Träger
+  enden 57 und 74 mm davor; die Kabel in der Nut gehen außen um sie herum.
 
 ## Parametrik
 

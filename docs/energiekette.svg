@@ -1,300 +1,300 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="1149" viewBox="0 0 1320 1149" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Energiekette X: Wanne, Wannenstützen, Kettenhalter, Kabelweg (Portal.py Rev. 21, ToolheadZ.py Rev. 36)</text>
-<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Gedruckte Kette: Teilung 16, außen 18 × 14, innen 10 × 8,8 mm, Biegeradius 32 mm.</text>
-<clipPath id="vorn"><rect x="250.0" y="92.0" width="870.0" height="243.1"/></clipPath>
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="1082" viewBox="0 0 1320 1082" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Energiekette X: Wanne, Wannenstützen, Kettenhalter, Kabelweg (Portal.py Rev. 22, ToolheadZ.py Rev. 37)</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Gedruckte Kette: Teilung 16, außen 18 × 14, innen 10 × 8,8 mm, Biegeradius 20 mm.</text>
+<clipPath id="vorn"><rect x="250.0" y="92.0" width="870.0" height="258.0"/></clipPath>
 <g clip-path="url(#vorn)">
-<rect x="650.1" y="227.9" width="39.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="815.5" y="227.9" width="24.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="973.0" y="227.9" width="24.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="625.5" y="227.9" width="24.6" height="47.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="310.0" y="275.1" width="750.0" height="30.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<rect x="266.5" y="239.5" width="75.2" height="35.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="266.5" y="232.8" width="75.2" height="6.8" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="1051.4" y="266.1" width="52.1" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="1051.4" y="248.2" width="9.0" height="17.9" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="1015.4" y="262.8" width="35.2" height="12.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="1015.4" y="237.3" width="35.2" height="25.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="1015.4" y="228.3" width="35.2" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="278.3" y="177.3" width="63.4" height="55.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="298.0" y="238.0" width="24.0" height="24.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="1014.6" y="248.5" width="36.0" height="13.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
-<line x1="349.0" y1="300.6" x2="349.0" y2="279.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
-<line x1="349.0" y1="279.6" x2="628.8" y2="279.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
-<polyline points="628.8,279.6 637.8,275.1 637.8,217.4 651.6,217.4" fill="none" stroke="#6d3fb5" stroke-opacity="0.8" stroke-width="12.0" stroke-linejoin="round"/>
-<rect x="628.5" y="262.2" width="18.6" height="1.8" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<rect x="628.5" y="238.2" width="18.6" height="1.8" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<rect x="310.0" y="250.8" width="728.6" height="9.0" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<rect x="647.1" y="223.4" width="363.8" height="4.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="647.1" y="208.4" width="363.8" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.45"/>
-<polygon points="651.6,223.4 711.5,223.4 725.6,221.7 738.9,216.6 750.6,208.6 760.0,197.9 766.6,185.4 770.0,171.6 770.0,157.3 766.6,143.5 760.0,131.0 750.6,120.3 738.9,112.3 725.6,107.2 711.5,105.5 358.2,105.5 358.2,126.9 711.5,126.9 720.5,128.0 729.0,131.2 736.4,136.4 742.4,143.1 746.6,151.2 748.8,159.9 748.8,169.0 746.6,177.7 742.4,185.8 736.4,192.5 729.0,197.7 720.5,200.9 711.5,201.9 651.6,201.9" fill="none" stroke="#3d4552" stroke-width="0.8" stroke-dasharray="4 3"/>
-<rect x="346.2" y="122.4" width="66.0" height="75.0" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
-<polygon points="651.6,223.4 1004.9,223.4 1019.0,221.7 1032.3,216.6 1044.0,208.6 1053.4,197.9 1060.0,185.4 1063.4,171.6 1063.4,157.3 1060.0,143.5 1053.4,131.0 1044.0,120.3 1032.3,112.3 1019.0,107.2 1004.9,105.5 945.0,105.5 945.0,126.9 1004.9,126.9 1013.9,128.0 1022.4,131.2 1029.8,136.4 1035.8,143.1 1040.0,151.2 1042.2,159.9 1042.2,169.0 1040.0,177.7 1035.8,185.8 1029.8,192.5 1022.4,197.7 1013.9,200.9 1004.9,201.9 651.6,201.9" fill="none" stroke="#3d4552" stroke-width="0.8" stroke-dasharray="4 3"/>
-<rect x="933.0" y="122.4" width="66.0" height="75.0" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
-<polygon points="651.6,223.4 858.2,223.4 872.3,221.7 885.6,216.6 897.3,208.6 906.7,197.9 913.3,185.4 916.7,171.6 916.7,157.3 913.3,143.5 906.7,131.0 897.3,120.3 885.6,112.3 872.3,107.2 858.2,105.5 651.6,105.5 651.6,126.9 858.2,126.9 867.2,128.0 875.7,131.2 883.1,136.4 889.1,143.1 893.3,151.2 895.5,159.9 895.5,169.0 893.3,177.7 889.1,185.8 883.1,192.5 875.7,197.7 867.2,200.9 858.2,201.9 651.6,201.9" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8" fill-opacity="0.85"/>
-<rect x="639.6" y="122.4" width="66.0" height="75.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="628.5" y="266.1" width="88.2" height="48.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.5"/>
-<rect x="639.6" y="242.1" width="66.0" height="24.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="639.6" y="117.6" width="66.0" height="271.5" fill="none" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="5 3"/>
-<rect x="639.6" y="72.6" width="117.0" height="45.0" fill="none" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="5 3"/>
-<circle cx="705.6" cy="212.4" r="2.4" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
+<rect x="650.1" y="191.9" width="39.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="815.5" y="191.9" width="24.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="973.0" y="191.9" width="24.0" height="74.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="625.5" y="191.9" width="24.6" height="47.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="310.0" y="239.1" width="750.0" height="30.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="266.5" y="203.5" width="75.2" height="35.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="266.5" y="196.8" width="75.2" height="6.8" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="1051.4" y="230.1" width="52.1" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="1051.4" y="212.2" width="9.0" height="17.9" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="1015.4" y="226.8" width="35.2" height="12.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="1015.4" y="201.3" width="35.2" height="25.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="1015.4" y="192.3" width="35.2" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="278.3" y="141.3" width="63.4" height="55.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="298.0" y="202.0" width="24.0" height="24.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="1014.6" y="212.5" width="36.0" height="13.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
+<line x1="349.0" y1="264.6" x2="349.0" y2="243.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="349.0" y1="243.6" x2="628.8" y2="243.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<polyline points="628.8,243.6 637.8,239.1 637.8,181.4 651.6,181.4" fill="none" stroke="#6d3fb5" stroke-opacity="0.8" stroke-width="12.0" stroke-linejoin="round"/>
+<rect x="628.5" y="226.2" width="18.6" height="1.8" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="628.5" y="202.2" width="18.6" height="1.8" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="310.0" y="214.8" width="728.6" height="9.0" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="647.1" y="187.4" width="363.8" height="4.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="647.1" y="172.4" width="363.8" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.45"/>
+<polygon points="651.6,187.4 715.8,187.4 725.6,186.2 734.8,182.7 743.0,177.1 749.5,169.7 754.1,161.0 756.5,151.4 756.5,141.5 754.1,131.9 749.5,123.2 743.0,115.8 734.8,110.2 725.6,106.7 715.8,105.5 358.2,105.5 358.2,126.9 715.8,126.9 720.5,127.5 724.9,129.2 728.7,131.9 731.8,135.4 734.0,139.5 735.2,144.1 735.2,148.8 734.0,153.4 731.8,157.5 728.7,161.0 724.9,163.7 720.5,165.4 715.8,165.9 651.6,165.9" fill="none" stroke="#3d4552" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="346.2" y="122.4" width="66.0" height="39.0" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<polygon points="651.6,187.4 1009.2,187.4 1019.0,186.2 1028.2,182.7 1036.4,177.1 1042.9,169.7 1047.5,161.0 1049.9,151.4 1049.9,141.5 1047.5,131.9 1042.9,123.2 1036.4,115.8 1028.2,110.2 1019.0,106.7 1009.2,105.5 945.0,105.5 945.0,126.9 1009.2,126.9 1013.9,127.5 1018.3,129.2 1022.1,131.9 1025.2,135.4 1027.4,139.5 1028.6,144.1 1028.6,148.8 1027.4,153.4 1025.2,157.5 1022.1,161.0 1018.3,163.7 1013.9,165.4 1009.2,165.9 651.6,165.9" fill="none" stroke="#3d4552" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="933.0" y="122.4" width="66.0" height="39.0" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<polygon points="651.6,187.4 862.5,187.4 872.3,186.2 881.5,182.7 889.7,177.1 896.2,169.7 900.8,161.0 903.2,151.4 903.2,141.5 900.8,131.9 896.2,123.2 889.7,115.8 881.5,110.2 872.3,106.7 862.5,105.5 651.6,105.5 651.6,126.9 862.5,126.9 867.2,127.5 871.6,129.2 875.4,131.9 878.5,135.4 880.7,139.5 881.9,144.1 881.9,148.8 880.7,153.4 878.5,157.5 875.4,161.0 871.6,163.7 867.2,165.4 862.5,165.9 651.6,165.9" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8" fill-opacity="0.85"/>
+<rect x="639.6" y="122.4" width="66.0" height="39.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="628.5" y="230.1" width="88.2" height="48.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.5"/>
+<rect x="639.6" y="206.1" width="66.0" height="24.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="639.6" y="81.6" width="66.0" height="271.5" fill="none" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="5 3"/>
+<rect x="639.6" y="36.6" width="117.0" height="45.0" fill="none" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="5 3"/>
+<circle cx="705.6" cy="176.4" r="2.4" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
 <circle cx="705.6" cy="116.4" r="2.4" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
 </g>
-<rect x="250.0" y="92.0" width="870.0" height="243.1" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<rect x="250.0" y="92.0" width="870.0" height="258.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="250.0" y="84.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Ansicht von vorn: Toolhead in der Mitte, gestrichelt an beiden Enden des X-Wegs (Trägerplatte davor als Umriss)</text>
-<line x1="645.6" y1="188.4" x2="241.0" y2="91.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="645.6" cy="188.4" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="94.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenhalter (ToolheadZ.py)</text>
-<text x="238.0" y="104.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">mit dem Anfangsstück</text>
-<line x1="663.6" y1="218.9" x2="241.0" y2="126.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="663.6" cy="218.9" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="129.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Festpunkt: Endstück 180,</text>
-<text x="238.0" y="139.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platte unten auf Wanne</text>
-<text x="238.0" y="149.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und Stütze</text>
-<line x1="311.5" y1="200.1" x2="241.0" y2="171.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="311.5" cy="200.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="174.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Motor</text>
-<line x1="627.0" y1="239.1" x2="241.0" y2="196.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="627.0" cy="239.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="199.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelflügel: davor die Litzen,</text>
-<text x="238.0" y="209.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 Binder durch die Schlitze</text>
-<line x1="400.0" y1="279.6" x2="241.0" y2="231.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="400.0" cy="279.6" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="234.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen von der Y-Kette in der</text>
-<text x="238.0" y="244.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">oberen Nut (gestrichelt)</text>
-<line x1="460.0" y1="290.1" x2="241.0" y2="266.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="460.0" cy="290.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="269.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portalrohr 2020</text>
-<line x1="669.6" y1="296.1" x2="241.0" y2="291.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="669.6" cy="296.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="294.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wannenstütze am Festpunkt</text>
-<text x="238.0" y="304.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(breit, 2 Einsätze im Arm)</text>
-<line x1="645.6" y1="305.1" x2="241.0" y2="326.1" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="645.6" cy="305.1" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="329.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Trägerplatte (Umriss),</text>
-<text x="238.0" y="339.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Riemenhalter</text>
-<line x1="1057.9" y1="146.4" x2="1129.0" y2="146.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="1057.9" cy="146.4" r="1.5" fill="#5b6472"/>
-<text x="1132.0" y="149.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am rechten Ende: über</text>
-<text x="1132.0" y="159.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">dem Lagerschlitten</text>
-<line x1="914.2" y1="164.4" x2="1129.0" y2="186.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="914.2" cy="164.4" r="1.5" fill="#5b6472"/>
-<text x="1132.0" y="189.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schleife nach rechts</text>
-<text x="1132.0" y="199.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Toolhead in der Mitte)</text>
-<line x1="965.9" y1="211.4" x2="1129.0" y2="226.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="965.9" cy="211.4" r="1.5" fill="#5b6472"/>
-<text x="1132.0" y="229.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenwanne, 242,5 mm</text>
-<line x1="1030.0" y1="233.1" x2="1129.0" y2="256.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="1030.0" cy="233.1" r="1.5" fill="#5b6472"/>
-<text x="1132.0" y="259.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lagerschlitten,</text>
-<text x="1132.0" y="269.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Spannbock</text>
-<line x1="865.0" y1="212.7" x2="1129.0" y2="296.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="865.0" cy="212.7" r="1.5" fill="#5b6472"/>
-<text x="1132.0" y="299.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Untertrum auf den</text>
-<text x="1132.0" y="309.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Riegeln</text>
-<line x1="985.0" y1="296.1" x2="1129.0" y2="336.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="985.0" cy="296.1" r="1.5" fill="#5b6472"/>
-<text x="1132.0" y="339.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wannenstützen mitte</text>
-<text x="1132.0" y="349.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und rechts</text>
-<line x1="460.0" y1="275.1" x2="460.0" y2="223.4" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="457.0" y1="275.1" x2="463.0" y2="275.1" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="457.0" y1="223.4" x2="463.0" y2="223.4" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="465.0" y="239.1" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wannenboden Z +44,5</text>
-<line x1="565.0" y1="212.4" x2="565.0" y2="116.4" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="562.0" y1="212.4" x2="568.0" y2="212.4" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="645.6" y1="152.4" x2="241.0" y2="106.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="645.6" cy="152.4" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="109.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenhalter (ToolheadZ.py)</text>
+<text x="238.0" y="119.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">mit dem Anfangsstück</text>
+<line x1="311.5" y1="164.1" x2="241.0" y2="141.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="311.5" cy="164.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="144.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Motor</text>
+<line x1="663.6" y1="182.9" x2="241.0" y2="166.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="663.6" cy="182.9" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="169.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Festpunkt: Endstück 180,</text>
+<text x="238.0" y="179.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platte unten auf Wanne</text>
+<text x="238.0" y="189.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und Stütze</text>
+<line x1="627.0" y1="203.1" x2="241.0" y2="211.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="627.0" cy="203.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="214.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelflügel: davor die Litzen,</text>
+<text x="238.0" y="224.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 Binder durch die Schlitze</text>
+<line x1="400.0" y1="243.6" x2="241.0" y2="246.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="400.0" cy="243.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="249.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen von der Y-Kette in der</text>
+<text x="238.0" y="259.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">oberen Nut (gestrichelt)</text>
+<line x1="460.0" y1="254.1" x2="241.0" y2="281.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="460.0" cy="254.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="284.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portalrohr 2020</text>
+<line x1="669.6" y1="260.1" x2="241.0" y2="306.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="669.6" cy="260.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="309.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wannenstütze am Festpunkt</text>
+<text x="238.0" y="319.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(breit, 2 Einsätze im Arm)</text>
+<line x1="645.6" y1="269.1" x2="241.0" y2="341.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="645.6" cy="269.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="344.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Trägerplatte (Umriss),</text>
+<text x="238.0" y="354.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Riemenhalter</text>
+<line x1="1044.2" y1="128.4" x2="1129.0" y2="128.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1044.2" cy="128.4" r="1.5" fill="#5b6472"/>
+<text x="1132.0" y="131.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am rechten Ende: über</text>
+<text x="1132.0" y="141.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">dem Lagerschlitten</text>
+<line x1="900.5" y1="146.4" x2="1129.0" y2="168.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="900.5" cy="146.4" r="1.5" fill="#5b6472"/>
+<text x="1132.0" y="171.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schleife nach rechts</text>
+<text x="1132.0" y="181.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Toolhead in der Mitte)</text>
+<line x1="965.9" y1="175.4" x2="1129.0" y2="208.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="965.9" cy="175.4" r="1.5" fill="#5b6472"/>
+<text x="1132.0" y="211.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenwanne, 242,5 mm</text>
+<line x1="1030.0" y1="197.1" x2="1129.0" y2="238.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1030.0" cy="197.1" r="1.5" fill="#5b6472"/>
+<text x="1132.0" y="241.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lagerschlitten,</text>
+<text x="1132.0" y="251.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Spannbock</text>
+<line x1="865.0" y1="176.7" x2="1129.0" y2="278.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="865.0" cy="176.7" r="1.5" fill="#5b6472"/>
+<text x="1132.0" y="281.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Untertrum auf den</text>
+<text x="1132.0" y="291.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Riegeln</text>
+<line x1="985.0" y1="260.1" x2="1129.0" y2="318.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="985.0" cy="260.1" r="1.5" fill="#5b6472"/>
+<text x="1132.0" y="321.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wannenstützen mitte</text>
+<text x="1132.0" y="331.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und rechts</text>
+<line x1="460.0" y1="239.1" x2="460.0" y2="187.4" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="457.0" y1="239.1" x2="463.0" y2="239.1" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="457.0" y1="187.4" x2="463.0" y2="187.4" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="465.0" y="203.1" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wannenboden Z +44,5</text>
+<line x1="565.0" y1="176.4" x2="565.0" y2="116.4" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="562.0" y1="176.4" x2="568.0" y2="176.4" stroke="#2f5d92" stroke-width="0.8"/>
 <line x1="562.0" y1="116.4" x2="568.0" y2="116.4" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="570.0" y="167.4" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 R = 64 mm</text>
-<line x1="1016.9" y1="228.3" x2="1016.9" y2="223.4" stroke="#b4342f" stroke-width="0.9"/>
-<polygon points="1016.9,228.3 1014.9,223.3 1018.9,223.3" fill="#b4342f"/>
-<polygon points="1016.9,223.4 1018.9,228.4 1014.9,228.4" fill="#b4342f"/>
-<text x="1022.9" y="233.4" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,25 mm</text>
-<clipPath id="quer"><rect x="250.0" y="415.1" width="231.2" height="489.9"/></clipPath>
+<text x="570.0" y="149.4" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 R = 40 mm</text>
+<line x1="1021.2" y1="192.3" x2="1021.2" y2="187.4" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="1021.2,192.3 1019.2,187.3 1023.2,187.3" fill="#b4342f"/>
+<polygon points="1021.2,187.4 1023.2,192.4 1019.2,192.4" fill="#b4342f"/>
+<text x="1027.2" y="197.4" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,25 mm</text>
+<clipPath id="quer"><rect x="250.0" y="430.0" width="231.2" height="408.3"/></clipPath>
 <g clip-path="url(#quer)">
-<rect x="297.6" y="823.5" width="68.0" height="68.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<rect x="365.6" y="832.0" width="34.0" height="51.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<rect x="379.2" y="803.1" width="40.8" height="108.8" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.7"/>
-<rect x="420.0" y="398.1" width="27.2" height="523.9" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="372.4" y="748.7" width="47.6" height="54.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="382.6" y="768.2" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<rect x="339.3" y="768.2" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<polygon points="284.0,884.7 297.6,884.7 297.6,820.1 301.0,823.5 328.2,823.5 328.2,736.8 392.8,736.8 392.8,716.4 284.0,716.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<polygon points="299.0,716.4 409.8,716.4 409.8,672.2 403.0,672.2 403.0,706.2 339.8,706.2 339.8,672.2 333.0,672.2 333.0,706.2 299.0,706.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="340.8" y="657.6" width="61.2" height="48.6" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8"/>
-<rect x="354.4" y="664.4" width="34.0" height="29.9" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
-<rect x="340.8" y="438.9" width="61.2" height="48.6" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8"/>
-<rect x="354.4" y="450.8" width="34.0" height="29.9" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
-<polygon points="420.0,647.4 420.0,477.4 403.0,477.4 403.0,487.6 339.8,487.6 339.8,477.4 335.7,477.4 335.7,514.8 392.8,514.8 392.8,647.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="267.0" y="843.0" width="17.0" height="28.9" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="284.0" y="849.0" width="30.6" height="17.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="303.6" y="696.0" width="18.7" height="10.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="307.8" y="706.2" width="10.2" height="27.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="436.3" y="559.1" width="10.2" height="18.7" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="402.3" y="563.4" width="34.0" height="10.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="297.6" y="756.7" width="68.0" height="68.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="365.6" y="765.2" width="34.0" height="51.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="379.2" y="736.3" width="40.8" height="108.8" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.7"/>
+<rect x="420.0" y="413.0" width="27.2" height="442.3" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="372.4" y="681.9" width="47.6" height="54.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="382.6" y="701.5" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="339.3" y="701.5" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<polygon points="284.0,817.9 297.6,817.9 297.6,753.3 301.0,756.7 328.2,756.7 328.2,670.0 392.8,670.0 392.8,649.6 284.0,649.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="299.0,649.6 409.8,649.6 409.8,605.4 403.0,605.4 403.0,639.4 339.8,639.4 339.8,605.4 333.0,605.4 333.0,639.4 299.0,639.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="340.8" y="590.8" width="61.2" height="48.6" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8"/>
+<rect x="354.4" y="597.6" width="34.0" height="29.9" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
+<rect x="340.8" y="453.8" width="61.2" height="48.6" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8"/>
+<rect x="354.4" y="465.7" width="34.0" height="29.9" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
+<polygon points="420.0,580.6 420.0,492.2 403.0,492.2 403.0,502.4 339.8,502.4 339.8,492.2 335.7,492.2 335.7,529.6 392.8,529.6 392.8,580.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="267.0" y="776.3" width="17.0" height="28.9" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="284.0" y="782.2" width="30.6" height="17.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="303.6" y="629.2" width="18.7" height="10.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="307.8" y="639.4" width="10.2" height="27.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="436.3" y="536.6" width="10.2" height="18.7" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="402.3" y="540.8" width="34.0" height="10.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 </g>
-<rect x="250.0" y="415.1" width="231.2" height="489.9" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
-<text x="250.0" y="407.1" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Querschnitt durch die mittlere Stütze (Blick von links, vorn rechts)</text>
-<line x1="347.6" y1="463.3" x2="241.0" y2="463.3" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="347.6" cy="463.3" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="466.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Obertrum</text>
-<text x="238.0" y="476.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Boden unten)</text>
-<line x1="347.6" y1="681.9" x2="241.0" y2="681.9" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="347.6" cy="681.9" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="684.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Untertrum</text>
-<text x="238.0" y="694.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Boden oben)</text>
-<line x1="312.9" y1="699.4" x2="241.0" y2="723.9" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="312.9" cy="699.4" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="726.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lasche der Wanne,</text>
-<text x="238.0" y="736.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M3 in den Einsatz</text>
-<line x1="342.7" y1="771.6" x2="241.0" y2="771.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="342.7" cy="771.6" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="774.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf des</text>
-<text x="238.0" y="784.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Riemens</text>
-<line x1="312.9" y1="789.5" x2="241.0" y2="813.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="312.9" cy="789.5" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="816.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Block hinter dem</text>
-<text x="238.0" y="826.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf</text>
-<line x1="318.0" y1="857.5" x2="241.0" y2="857.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="318.0" cy="857.5" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="860.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portalrohr 2020</text>
-<line x1="277.2" y1="857.5" x2="241.0" y2="889.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="277.2" cy="857.5" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="892.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5 + Hammermutter</text>
-<text x="238.0" y="902.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">in der hinteren Nut</text>
-<line x1="447.2" y1="438.9" x2="490.2" y2="438.9" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="447.2" cy="438.9" r="1.5" fill="#5b6472"/>
-<text x="493.2" y="441.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Trägerplatte</text>
-<line x1="406.4" y1="480.8" x2="490.2" y2="480.8" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="406.4" cy="480.8" r="1.5" fill="#5b6472"/>
-<text x="493.2" y="483.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenhalter: Auflage,</text>
-<text x="493.2" y="493.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Leisten, Fuß an der Platte</text>
-<line x1="440.4" y1="568.5" x2="490.2" y2="568.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="440.4" cy="568.5" r="1.5" fill="#5b6472"/>
-<text x="493.2" y="571.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M3 von vorn in den</text>
-<text x="493.2" y="581.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Einsatz im Fuß</text>
-<line x1="389.4" y1="719.8" x2="490.2" y2="719.8" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="389.4" cy="719.8" r="1.5" fill="#5b6472"/>
-<text x="493.2" y="722.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arm der Stütze</text>
-<text x="493.2" y="732.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">unter der Wanne</text>
-<line x1="399.6" y1="775.9" x2="490.2" y2="775.9" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="399.6" cy="775.9" r="1.5" fill="#5b6472"/>
-<text x="493.2" y="778.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Riemenhalter</text>
-<line x1="385.0" y1="779.3" x2="490.2" y2="807.9" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="385.0" cy="779.3" r="1.5" fill="#5b6472"/>
-<text x="493.2" y="810.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">gezogenes Trum</text>
-<line x1="416.6" y1="857.5" x2="490.2" y2="857.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="416.6" cy="857.5" r="1.5" fill="#5b6472"/>
-<text x="493.2" y="860.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Schiene</text>
-<line x1="409.8" y1="687.5" x2="420.0" y2="687.5" stroke="#b4342f" stroke-width="0.9"/>
-<polygon points="409.8,687.5 414.8,685.5 414.8,689.5" fill="#b4342f"/>
-<polygon points="420.0,687.5 415.0,689.5 415.0,685.5" fill="#b4342f"/>
-<text x="424.0" y="679.5" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3 mm</text>
-<line x1="382.6" y1="748.7" x2="382.6" y2="736.8" stroke="#b4342f" stroke-width="0.9"/>
-<polygon points="382.6,748.7 380.6,743.7 384.6,743.7" fill="#b4342f"/>
-<polygon points="382.6,736.8 384.6,741.8 380.6,741.8" fill="#b4342f"/>
-<text x="386.6" y="740.8" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,5 mm</text>
-<line x1="328.2" y1="779.3" x2="341.4" y2="779.3" stroke="#b4342f" stroke-width="0.9"/>
-<polygon points="328.2,779.3 333.2,777.3 333.2,781.3" fill="#b4342f"/>
-<polygon points="341.4,779.3 336.4,781.3 336.4,777.3" fill="#b4342f"/>
-<text x="337.4" y="771.3" font-size="8.0" fill="#b4342f" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,9 mm</text>
-<line x1="397.6" y1="657.6" x2="397.6" y2="647.4" stroke="#b4342f" stroke-width="0.9"/>
-<polygon points="397.6,657.6 395.6,652.6 399.6,652.6" fill="#b4342f"/>
-<polygon points="397.6,647.4 399.6,652.4 395.6,652.4" fill="#b4342f"/>
-<text x="401.6" y="651.4" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3 mm</text>
-<line x1="263.6" y1="681.4" x2="263.6" y2="463.8" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="260.6" y1="681.4" x2="266.6" y2="681.4" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="260.6" y1="463.8" x2="266.6" y2="463.8" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="267.6" y="575.6" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 R</text>
-<line x1="340.8" y1="428.8" x2="402.0" y2="428.8" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="340.8" y1="425.8" x2="340.8" y2="431.8" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="402.0" y1="425.8" x2="402.0" y2="431.8" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="371.4" y="423.8" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">18 mm</text>
-<clipPath id="fluegel"><rect x="780.0" y="415.1" width="170.0" height="272.0"/></clipPath>
+<rect x="250.0" y="430.0" width="231.2" height="408.3" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="250.0" y="422.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Querschnitt durch die mittlere Stütze (Blick von links, vorn rechts)</text>
+<line x1="347.6" y1="478.1" x2="241.0" y2="478.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="347.6" cy="478.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="481.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Obertrum</text>
+<text x="238.0" y="491.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Boden unten)</text>
+<line x1="347.6" y1="615.1" x2="241.0" y2="615.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="347.6" cy="615.1" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="618.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Untertrum</text>
+<text x="238.0" y="628.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Boden oben)</text>
+<line x1="312.9" y1="632.6" x2="241.0" y2="657.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="312.9" cy="632.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="660.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lasche der Wanne,</text>
+<text x="238.0" y="670.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M3 in den Einsatz</text>
+<line x1="342.7" y1="704.9" x2="241.0" y2="704.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="342.7" cy="704.9" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="707.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf des</text>
+<text x="238.0" y="717.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Riemens</text>
+<line x1="312.9" y1="722.7" x2="241.0" y2="746.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="312.9" cy="722.7" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="749.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Block hinter dem</text>
+<text x="238.0" y="759.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf</text>
+<line x1="318.0" y1="790.7" x2="241.0" y2="790.7" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="318.0" cy="790.7" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="793.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portalrohr 2020</text>
+<line x1="277.2" y1="790.7" x2="241.0" y2="822.7" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="277.2" cy="790.7" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="825.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5 + Hammermutter</text>
+<text x="238.0" y="835.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">in der hinteren Nut</text>
+<line x1="447.2" y1="453.8" x2="490.2" y2="453.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="447.2" cy="453.8" r="1.5" fill="#5b6472"/>
+<text x="493.2" y="456.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Trägerplatte</text>
+<line x1="406.4" y1="495.6" x2="490.2" y2="495.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="406.4" cy="495.6" r="1.5" fill="#5b6472"/>
+<text x="493.2" y="498.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kettenhalter: Auflage,</text>
+<text x="493.2" y="508.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Leisten, Fuß an der Platte</text>
+<line x1="440.4" y1="545.9" x2="490.2" y2="545.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="440.4" cy="545.9" r="1.5" fill="#5b6472"/>
+<text x="493.2" y="548.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M3 von vorn in den</text>
+<text x="493.2" y="558.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Einsatz im Fuß</text>
+<line x1="389.4" y1="653.0" x2="490.2" y2="653.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="389.4" cy="653.0" r="1.5" fill="#5b6472"/>
+<text x="493.2" y="656.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arm der Stütze</text>
+<text x="493.2" y="666.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">unter der Wanne</text>
+<line x1="399.6" y1="709.1" x2="490.2" y2="709.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="399.6" cy="709.1" r="1.5" fill="#5b6472"/>
+<text x="493.2" y="712.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Riemenhalter</text>
+<line x1="385.0" y1="712.5" x2="490.2" y2="741.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="385.0" cy="712.5" r="1.5" fill="#5b6472"/>
+<text x="493.2" y="744.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">gezogenes Trum</text>
+<line x1="416.6" y1="790.7" x2="490.2" y2="790.7" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="416.6" cy="790.7" r="1.5" fill="#5b6472"/>
+<text x="493.2" y="793.7" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Schiene</text>
+<line x1="409.8" y1="620.7" x2="420.0" y2="620.7" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="409.8,620.7 414.8,618.7 414.8,622.7" fill="#b4342f"/>
+<polygon points="420.0,620.7 415.0,622.7 415.0,618.7" fill="#b4342f"/>
+<text x="424.0" y="612.7" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3 mm</text>
+<line x1="382.6" y1="681.9" x2="382.6" y2="670.0" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="382.6,681.9 380.6,676.9 384.6,676.9" fill="#b4342f"/>
+<polygon points="382.6,670.0 384.6,675.0 380.6,675.0" fill="#b4342f"/>
+<text x="386.6" y="674.0" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,5 mm</text>
+<line x1="328.2" y1="712.5" x2="341.4" y2="712.5" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="328.2,712.5 333.2,710.5 333.2,714.5" fill="#b4342f"/>
+<polygon points="341.4,712.5 336.4,714.5 336.4,710.5" fill="#b4342f"/>
+<text x="337.4" y="704.5" font-size="8.0" fill="#b4342f" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,9 mm</text>
+<line x1="397.6" y1="590.8" x2="397.6" y2="580.6" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="397.6,590.8 395.6,585.8 399.6,585.8" fill="#b4342f"/>
+<polygon points="397.6,580.6 399.6,585.6 395.6,585.6" fill="#b4342f"/>
+<text x="401.6" y="584.6" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3 mm</text>
+<line x1="263.6" y1="614.6" x2="263.6" y2="478.6" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="260.6" y1="614.6" x2="266.6" y2="614.6" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="260.6" y1="478.6" x2="266.6" y2="478.6" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="267.6" y="549.6" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 R</text>
+<line x1="340.8" y1="443.6" x2="402.0" y2="443.6" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="340.8" y1="440.6" x2="340.8" y2="446.6" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="402.0" y1="440.6" x2="402.0" y2="446.6" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="371.4" y="438.6" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">18 mm</text>
+<clipPath id="fluegel"><rect x="780.0" y="430.0" width="170.0" height="272.0"/></clipPath>
 <g clip-path="url(#fluegel)">
-<rect x="814.0" y="605.5" width="68.0" height="68.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<rect x="882.0" y="614.0" width="34.0" height="51.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<rect x="895.6" y="585.1" width="40.8" height="108.8" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.7"/>
-<rect x="936.4" y="398.1" width="27.2" height="306.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="888.8" y="530.8" width="47.6" height="54.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="899.0" y="550.3" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<rect x="855.7" y="550.3" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<rect x="837.5" y="605.5" width="21.1" height="20.4" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
-<polygon points="800.4,666.8 814.0,666.8 814.0,602.1 817.4,605.5 844.6,605.5 844.6,518.9 909.2,518.9 909.2,498.4 800.4,498.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="849.4" y="454.2" width="76.8" height="44.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.35"/>
-<rect x="857.2" y="439.6" width="61.2" height="48.6" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8" fill-opacity="0.5"/>
-<rect x="800.4" y="498.4" width="13.6" height="107.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="839.2" y="606.9" width="17.7" height="17.7" fill="#b9a3e3" stroke="#6d3fb5" stroke-width="0.8"/>
-<polyline points="848.0,615.8 824.2,595.3 824.2,474.6 887.8,474.6" fill="none" stroke="#6d3fb5" stroke-opacity="0.75" stroke-width="20.4" stroke-linejoin="round"/>
-<rect x="797.7" y="576.3" width="39.4" height="4.1" fill="none" stroke="#2b2f36" stroke-width="1.2"/>
-<rect x="797.7" y="521.9" width="39.4" height="4.1" fill="none" stroke="#2b2f36" stroke-width="1.2"/>
-<rect x="909.2" y="398.1" width="27.2" height="31.3" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="814.0" y="620.4" width="68.0" height="68.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="882.0" y="628.9" width="34.0" height="51.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="895.6" y="600.0" width="40.8" height="108.8" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.7"/>
+<rect x="936.4" y="413.0" width="27.2" height="306.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="888.8" y="545.6" width="47.6" height="54.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="899.0" y="565.1" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="855.7" y="565.1" width="4.7" height="20.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="837.5" y="620.4" width="21.1" height="20.4" fill="#ffffff" stroke="#3d4552" stroke-width="0.8"/>
+<polygon points="800.4,681.6 814.0,681.6 814.0,617.0 817.4,620.4 844.6,620.4 844.6,533.7 909.2,533.7 909.2,513.3 800.4,513.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="849.4" y="469.1" width="76.8" height="44.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="857.2" y="454.5" width="61.2" height="48.6" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8" fill-opacity="0.5"/>
+<rect x="800.4" y="513.3" width="13.6" height="107.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="839.2" y="621.8" width="17.7" height="17.7" fill="#b9a3e3" stroke="#6d3fb5" stroke-width="0.8"/>
+<polyline points="848.0,630.6 824.2,610.2 824.2,489.5 887.8,489.5" fill="none" stroke="#6d3fb5" stroke-opacity="0.75" stroke-width="20.4" stroke-linejoin="round"/>
+<rect x="797.7" y="591.2" width="39.4" height="4.1" fill="none" stroke="#2b2f36" stroke-width="1.2"/>
+<rect x="797.7" y="536.8" width="39.4" height="4.1" fill="none" stroke="#2b2f36" stroke-width="1.2"/>
+<rect x="909.2" y="413.0" width="27.2" height="31.3" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
 </g>
-<rect x="780.0" y="415.1" width="170.0" height="272.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
-<text x="780.0" y="407.1" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Kabelweg am Festpunkt: Schnitt durch den Kabelflügel</text>
-<line x1="916.0" y1="428.8" x2="959.0" y2="428.8" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="916.0" cy="428.8" r="1.5" fill="#5b6472"/>
-<text x="962.0" y="431.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fuß des Kettenhalters</text>
-<text x="962.0" y="441.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Toolhead links, gestrichelt)</text>
-<line x1="894.6" y1="474.6" x2="959.0" y2="474.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="894.6" cy="474.6" r="1.5" fill="#5b6472"/>
-<text x="962.0" y="477.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen oben über den Riemen</text>
-<text x="962.0" y="487.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">nach vorn in die Wanne</text>
-<line x1="800.4" y1="508.6" x2="959.0" y2="514.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="800.4" cy="508.6" r="1.5" fill="#5b6472"/>
-<text x="962.0" y="517.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelflügel (Schnitt), dahinter die</text>
-<text x="962.0" y="527.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Stütze, die Wanne, das Endstück 180</text>
-<line x1="824.2" y1="523.9" x2="959.0" y2="554.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="824.2" cy="523.9" r="1.5" fill="#5b6472"/>
-<text x="962.0" y="557.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">je ein Binder um Litzen und</text>
-<text x="962.0" y="567.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Flügel, durch die Schlitze</text>
-<line x1="859.1" y1="553.7" x2="959.0" y2="594.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="859.1" cy="553.7" r="1.5" fill="#5b6472"/>
-<text x="962.0" y="597.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf</text>
-<line x1="848.0" y1="615.8" x2="959.0" y2="624.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="848.0" cy="615.8" r="1.5" fill="#5b6472"/>
-<text x="962.0" y="627.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen in der oberen</text>
-<text x="962.0" y="637.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Nut des Rohrs</text>
-<line x1="933.0" y1="639.5" x2="959.0" y2="664.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="933.0" cy="639.5" r="1.5" fill="#5b6472"/>
-<text x="962.0" y="667.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Schiene</text>
-<line x1="834.4" y1="591.9" x2="857.8" y2="591.9" stroke="#b4342f" stroke-width="0.9"/>
-<polygon points="834.4,591.9 839.4,589.9 839.4,593.9" fill="#b4342f"/>
-<polygon points="857.8,591.9 852.8,593.9 852.8,589.9" fill="#b4342f"/>
-<text x="853.8" y="585.9" font-size="8.0" fill="#b4342f" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">6,9 mm</text>
-<line x1="926.2" y1="530.8" x2="926.2" y2="484.8" stroke="#b4342f" stroke-width="0.9"/>
-<polygon points="926.2,530.8 924.2,525.8 928.2,525.8" fill="#b4342f"/>
-<polygon points="926.2,484.8 928.2,489.8 924.2,489.8" fill="#b4342f"/>
-<text x="930.2" y="498.8" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">13,5 mm</text>
-<line x1="898.0" y1="442.3" x2="909.2" y2="442.3" stroke="#b4342f" stroke-width="0.9"/>
-<polygon points="898.0,442.3 903.0,440.3 903.0,444.3" fill="#b4342f"/>
-<polygon points="909.2,442.3 904.2,444.3 904.2,440.3" fill="#b4342f"/>
-<text x="913.2" y="438.3" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,3 mm</text>
-<text x="24.0" y="943.1" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
-<text x="24.0" y="961.1" font-size="8.5" fill="#5b6472" text-anchor="start">Kette</text>
-<text x="110.0" y="961.1" font-size="8.5" fill="#1c2733" text-anchor="start">19 Glieder = 304 mm zwischen den Gelenken (296,1 gebraucht: halber Hub 195,6 + Bogen 100,5), mit Anfangsstück und Endstück 180 376 mm</text>
-<text x="24.0" y="976.1" font-size="8.5" fill="#5b6472" text-anchor="start">Festpunkt</text>
-<text x="110.0" y="976.1" font-size="8.5" fill="#1c2733" text-anchor="start">Gelenk des Endstücks 180 bei X +13,75 (Mitte des Wegs des bewegten Gelenks, 22 mm rechts der X-Wagenmitte)</text>
-<text x="24.0" y="991.1" font-size="8.5" fill="#5b6472" text-anchor="start">Höhen</text>
-<text x="110.0" y="991.1" font-size="8.5" fill="#1c2733" text-anchor="start">Wannenboden Z +44,5, Untertrum bis +58,8; Obertrum ab +108,8 (= Auflage des Kettenhalters, 92,8 mm über der Oberkante des X-Wagens)</text>
-<text x="24.0" y="1006.1" font-size="8.5" fill="#5b6472" text-anchor="start">Wanne</text>
-<text x="110.0" y="1006.1" font-size="8.5" fill="#1c2733" text-anchor="start">X −25,25 bis +217,25, liegt auf den Armen der Stützen; vorn 3 mm Luft zur Trägerplatte, am Ende 3 mm vor dem Lagerschlitten</text>
-<text x="24.0" y="1021.1" font-size="8.5" fill="#5b6472" text-anchor="start">Kabelweg</text>
-<text x="110.0" y="1021.1" font-size="8.5" fill="#1c2733" text-anchor="start">in der oberen Nut des Rohrs von X −224 bis −37,4, am Kabelflügel hoch (6,9 mm hinter dem Rücklauf, 2 Binder), oben 13,5 mm über dem Riemenhalter nach vorn in die Wanne</text>
-<text x="24.0" y="1036.1" font-size="8.5" fill="#5b6472" text-anchor="start">Schrauben</text>
-<text x="110.0" y="1036.1" font-size="8.5" fill="#1c2733" text-anchor="start">3 × M5 × 10 + Hammermutter (Stützen), 2 × M3 × 8 + Einsatz (Laschen), 2 × M3 × 10 + Scheibe + Einsatz (Endstück 180); Kettenhalter: 2 × M3 × 10 von vorn, 2 × M3 × 8 + Scheibe (Anfangsstück)</text>
-<rect x="24.0" y="1069.1" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<text x="43.0" y="1077.1" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
-<rect x="194.0" y="1069.1" width="14.0" height="9.0" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8"/>
-<text x="213.0" y="1077.1" font-size="8.5" fill="#1c2733" text-anchor="start">Energiekette (gedruckt)</text>
-<rect x="364.0" y="1069.1" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="383.0" y="1077.1" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead</text>
-<rect x="534.0" y="1069.1" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="553.0" y="1077.1" font-size="8.5" fill="#1c2733" text-anchor="start">Portal</text>
-<rect x="24.0" y="1087.1" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
-<text x="43.0" y="1095.1" font-size="8.5" fill="#1c2733" text-anchor="start">Kaufteil</text>
-<rect x="194.0" y="1087.1" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<text x="213.0" y="1095.1" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
-<rect x="364.0" y="1087.1" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<text x="383.0" y="1095.1" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
-<rect x="534.0" y="1087.1" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<text x="553.0" y="1095.1" font-size="8.5" fill="#1c2733" text-anchor="start">Schraube</text>
-<rect x="24.0" y="1105.1" width="14.0" height="9.0" fill="#b9a3e3" stroke="#6d3fb5" stroke-width="0.8"/>
-<text x="43.0" y="1113.1" font-size="8.5" fill="#1c2733" text-anchor="start">Litzen</text>
-<text x="24.0" y="1133.1" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: Kette und Kettenhalter an den Enden des X-Wegs, die Trägerplatte (sie steht vor der Kette).</text></svg>
+<rect x="780.0" y="430.0" width="170.0" height="272.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="780.0" y="422.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Kabelweg am Festpunkt: Schnitt durch den Kabelflügel</text>
+<line x1="916.0" y1="443.6" x2="959.0" y2="443.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="916.0" cy="443.6" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="446.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fuß des Kettenhalters</text>
+<text x="962.0" y="456.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Toolhead links, gestrichelt)</text>
+<line x1="894.6" y1="489.5" x2="959.0" y2="489.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="894.6" cy="489.5" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="492.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen oben über den Riemen</text>
+<text x="962.0" y="502.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">nach vorn in die Wanne</text>
+<line x1="800.4" y1="523.5" x2="959.0" y2="529.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="800.4" cy="523.5" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="532.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelflügel (Schnitt), dahinter die</text>
+<text x="962.0" y="542.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Stütze, die Wanne, das Endstück 180</text>
+<line x1="824.2" y1="538.8" x2="959.0" y2="569.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="824.2" cy="538.8" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="572.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">je ein Binder um Litzen und</text>
+<text x="962.0" y="582.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Flügel, durch die Schlitze</text>
+<line x1="859.1" y1="568.5" x2="959.0" y2="609.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="859.1" cy="568.5" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="612.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf</text>
+<line x1="848.0" y1="630.6" x2="959.0" y2="639.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="848.0" cy="630.6" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="642.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Litzen in der oberen</text>
+<text x="962.0" y="652.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Nut des Rohrs</text>
+<line x1="933.0" y1="654.4" x2="959.0" y2="679.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="933.0" cy="654.4" r="1.5" fill="#5b6472"/>
+<text x="962.0" y="682.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen, Schiene</text>
+<line x1="834.4" y1="606.8" x2="857.8" y2="606.8" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="834.4,606.8 839.4,604.8 839.4,608.8" fill="#b4342f"/>
+<polygon points="857.8,606.8 852.8,608.8 852.8,604.8" fill="#b4342f"/>
+<text x="853.8" y="600.8" font-size="8.0" fill="#b4342f" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">6,9 mm</text>
+<line x1="926.2" y1="545.6" x2="926.2" y2="499.7" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="926.2,545.6 924.2,540.6 928.2,540.6" fill="#b4342f"/>
+<polygon points="926.2,499.7 928.2,504.7 924.2,504.7" fill="#b4342f"/>
+<text x="930.2" y="513.7" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">13,5 mm</text>
+<line x1="898.0" y1="457.2" x2="909.2" y2="457.2" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="898.0,457.2 903.0,455.2 903.0,459.2" fill="#b4342f"/>
+<polygon points="909.2,457.2 904.2,459.2 904.2,455.2" fill="#b4342f"/>
+<text x="913.2" y="453.2" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,3 mm</text>
+<text x="24.0" y="876.3" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
+<text x="24.0" y="894.3" font-size="8.5" fill="#5b6472" text-anchor="start">Kette</text>
+<text x="110.0" y="894.3" font-size="8.5" fill="#1c2733" text-anchor="start">17 Glieder = 272 mm zwischen den Gelenken (258,4 gebraucht: halber Hub 195,6 + Bogen 62,8), mit Anfangsstück und Endstück 180 344 mm</text>
+<text x="24.0" y="909.3" font-size="8.5" fill="#5b6472" text-anchor="start">Festpunkt</text>
+<text x="110.0" y="909.3" font-size="8.5" fill="#1c2733" text-anchor="start">Gelenk des Endstücks 180 bei X +13,75 (Mitte des Wegs des bewegten Gelenks, 22 mm rechts der X-Wagenmitte)</text>
+<text x="24.0" y="924.3" font-size="8.5" fill="#5b6472" text-anchor="start">Höhen</text>
+<text x="110.0" y="924.3" font-size="8.5" fill="#1c2733" text-anchor="start">Wannenboden Z +44,5, Untertrum bis +58,8; Obertrum ab +84,8 (= Auflage des Kettenhalters, 68,8 mm über der Oberkante des X-Wagens)</text>
+<text x="24.0" y="939.3" font-size="8.5" fill="#5b6472" text-anchor="start">Wanne</text>
+<text x="110.0" y="939.3" font-size="8.5" fill="#1c2733" text-anchor="start">X −25,25 bis +217,25, liegt auf den Armen der Stützen; vorn 3 mm Luft zur Trägerplatte, am Ende 3 mm vor dem Lagerschlitten</text>
+<text x="24.0" y="954.3" font-size="8.5" fill="#5b6472" text-anchor="start">Kabelweg</text>
+<text x="110.0" y="954.3" font-size="8.5" fill="#1c2733" text-anchor="start">in der oberen Nut des Rohrs von X −224 bis −37,4, am Kabelflügel hoch (6,9 mm hinter dem Rücklauf, 2 Binder), oben 13,5 mm über dem Riemenhalter nach vorn in die Wanne</text>
+<text x="24.0" y="969.3" font-size="8.5" fill="#5b6472" text-anchor="start">Schrauben</text>
+<text x="110.0" y="969.3" font-size="8.5" fill="#1c2733" text-anchor="start">3 × M5 × 10 + Hammermutter (Stützen), 2 × M3 × 8 + Einsatz (Laschen), 2 × M3 × 10 + Scheibe + Einsatz (Endstück 180); Kettenhalter: 2 × M3 × 10 von vorn, 2 × M3 × 8 + Scheibe (Anfangsstück)</text>
+<rect x="24.0" y="1002.3" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="43.0" y="1010.3" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
+<rect x="194.0" y="1002.3" width="14.0" height="9.0" fill="#8d96a3" stroke="#3d4552" stroke-width="0.8"/>
+<text x="213.0" y="1010.3" font-size="8.5" fill="#1c2733" text-anchor="start">Energiekette (gedruckt)</text>
+<rect x="364.0" y="1002.3" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="383.0" y="1010.3" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead</text>
+<rect x="534.0" y="1002.3" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="553.0" y="1010.3" font-size="8.5" fill="#1c2733" text-anchor="start">Portal</text>
+<rect x="24.0" y="1020.3" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<text x="43.0" y="1028.3" font-size="8.5" fill="#1c2733" text-anchor="start">Kaufteil</text>
+<rect x="194.0" y="1020.3" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="213.0" y="1028.3" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<rect x="364.0" y="1020.3" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<text x="383.0" y="1028.3" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
+<rect x="534.0" y="1020.3" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<text x="553.0" y="1028.3" font-size="8.5" fill="#1c2733" text-anchor="start">Schraube</text>
+<rect x="24.0" y="1038.3" width="14.0" height="9.0" fill="#b9a3e3" stroke="#6d3fb5" stroke-width="0.8"/>
+<text x="43.0" y="1046.3" font-size="8.5" fill="#1c2733" text-anchor="start">Litzen</text>
+<text x="24.0" y="1066.3" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: Kette und Kettenhalter an den Enden des X-Wegs, die Trägerplatte (sie steht vor der Kette).</text></svg>

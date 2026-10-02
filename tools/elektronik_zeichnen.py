@@ -39,8 +39,8 @@ NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
 
 # ---- Ketten ----------------------------------------------------------------
 # Gedruckt (Portal.py, seit Rev. 19, aus der 3MF ausgemessen): aussen
-# 18 x 14, Biegeradius 32 mm (30 Grad je Glied am gedruckten Teil, seit
-# Rev. 20), die Endstuecke je 36 mm hinter dem Gelenk. Beide Ketten liegen
+# 18 x 14, Biegeradius 20 mm (Schleife am gedruckten Teil gemessen, seit
+# Rev. 22), die Endstuecke je 36 mm hinter dem Gelenk. Beide Ketten liegen
 # wie in Portal.py (Y seit Rev. 21: Arbeitsweg plus Reserve nach vorn).
 _PM = bauraum.modul_laden(bauraum.PORTAL, 'portal')
 KETTE_R = _PM.w('kette_r')
@@ -268,12 +268,12 @@ def kabelwege(w, L, TL, K):
     # Schenkeln des Y-Motorhalters
     y_vor = L['quer_y_vorn'][1] + 2.0
     # links geht die Litze an jedem Traeger der Wanne Y kurz aus der Nut,
-    # ueber seine Wand (Portal.py, Rev. 21)
-    z_ueber = L['ytr_wand_z'][1] + 2.5
+    # unter seiner Wand durch (Portal.py, seit Rev. 22)
+    z_unter = L['ytr_wand_z'][0] - 2.5
     umweg = []
     for y0, y1 in sorted(L['ytr_y'].values()):
-        umweg += [(-xa, y0 - 8.0, zn), (-xa, y0, z_ueber),
-                  (-xa, y1, z_ueber), (-xa, y1 + 8.0, zn)]
+        umweg += [(-xa, y0 - 8.0, zn), (-xa, y0, z_unter),
+                  (-xa, y1, z_unter), (-xa, y1 + 8.0, zn)]
 
     def y_motor(s):
         return (umweg if s < 0 else []) + [

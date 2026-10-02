@@ -35,7 +35,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 36
+REVISION = 37
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -394,7 +394,7 @@ MASSE = {
     'kette_b':            (18.0,  'Energiekette: Breite aussen'),
     'kette_h':            (14.0,  'Energiekette: Hoehe der Laschen'),
     'kette_riegel':        (0.3,  'Energiekette: Riegel steht ueber die Laschen'),
-    'kette_r':            (32.0,  'Energiekette: Biegeradius der Gelenkachse'),
+    'kette_r':            (20.0,  'Energiekette: Biegeradius der Gelenkachse'),
     'kette_spiel':         (0.3,  'Energiekette: Spiel je Seite in Wanne und Halter'),
     'endstueck_l':        (36.0,  'Endstueck: Gelenk bis Ende'),
     'endstueck_auge':      (7.0,  'Endstueck: Auge vor dem Gelenk'),
@@ -413,7 +413,7 @@ MASSE = {
     'kh_leiste_h':         (3.0,  'Kettenhalter: Fuehrungsleisten, Hoehe'),
     # Zwischen Schienensockel und Saeulenrippe wie beim Riemenhalter (X),
     # unter dem Sockel des Endschalterhalters
-    'kh_schraube_z':      (85.0,  'Kettenhalter: Schrauben bei Z'),
+    'kh_schraube_z':      (72.0,  'Kettenhalter: Schrauben bei Z'),
     'kh_binder_b':         (4.0,  'Kettenhalter: Schlitz fuer Kabelbinder, laengs'),
     'kh_binder_t':         (2.2,  'Kettenhalter: Schlitz fuer Kabelbinder, quer'),
     'kh_binder_abstand':   (9.0,  'Kettenhalter: Abstand der Binderschlitze'),
@@ -2129,9 +2129,9 @@ def hinweise_bauen(L, zc, fehler):
         '  vorn Ø{:.1f} x {:.1f} ansenken.'.format(w('m3_senkung'),
                                                 w('rh_senkung_t')),
         '',
-        'KETTENHALTER (seit Rev. 35; Rev. 36: R 32): traegt das bewegte',
-        '  Ende der gedruckten X-Energiekette (Wanne und Festpunkt:',
-        '  fusion/Portal, docs/energiekette.md).',
+        'KETTENHALTER (seit Rev. 35; Rev. 37: R 20 nach Messung): traegt',
+        '  das bewegte Ende der gedruckten X-Energiekette (Wanne und',
+        '  Festpunkt: fusion/Portal, docs/energiekette.md).',
         '  Das ANFANGSSTUECK liegt mit der Platte nach unten auf der Auflage,',
         '  Gelenk {:.0f} mm rechts der Wagenmitte (rechte Kante der Saeule),'
         .format(w('xk_gelenk_x')),
@@ -2144,10 +2144,9 @@ def hinweise_bauen(L, zc, fehler):
         '  {:.1f} mm ueber der Oberkante des X-Wagens; der Fuss bleibt'
         .format(L['kh_auflage_z1'] - w('x_wagen_breite') / 2.0),
         '  {:.0f} mm ueber dem Untertrum in der Wanne.'.format(w('luft_bau')),
-        '  VOR DEM DRUCK die Kette bis an die Anschlaege um 180 Grad biegen:',
-        '  aussen hoechstens {:.1f} mm hoch (30 Grad je Glied: 76,4 mm),'
+        '  Schleife: um 180 Grad gebogen aussen 50 mm, 4 Gelenke im Bogen',
+        '  (gemessen 2026-10-02); gerechnet {:.1f} mm, etwas weiter.'
         .format(2.0 * w('kette_r') + w('kette_h') + 2.0 * w('kette_riegel')),
-        '  sonst kette_r in beiden Skripten erhoehen.',
         '  Zugentlastung: die Litzen kommen links aus dem Anfangsstueck,',
         '  dort ein Kabelbinder durch die beiden Schlitze der Auflage.',
         '  Befestigung: 2x M3x{:.0f} von VORN durch die Traegerplatte (Z={:+.0f},'

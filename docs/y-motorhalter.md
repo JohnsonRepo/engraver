@@ -1,6 +1,6 @@
 # Y-Motorhalter — Antrieb der Y-Achse
 
-Erzeugt von `fusion/Portal/Portal.py` (seit Rev. 16, jetzt Rev. 21; Komponenten
+Erzeugt von `fusion/Portal/Portal.py` (seit Rev. 16, jetzt Rev. 22; Komponenten
 `Y-Motorhalter_links` und `Y-Motorhalter_rechts`, zweimal dasselbe
 Druckteil). Bis Portal Rev. 15 stand er im eigenen Skript
 `fusion/YMotorhalter/YMotorhalter.py` (Rev. 5), siehe

@@ -97,7 +97,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 21
+REVISION = 22
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -304,11 +304,13 @@ MASSE = {
     # --- Energiekette X (seit Rev. 19) -------------------------------------
     # Gedruckte Kette (Modell "Energiekette" von lingnau.florian, aus der
     # 3MF ausgemessen am 2026-10-01): Teilung 16, aussen 18 x 14, innen
-    # 10 x 8,8. Am gedruckten Teil laesst sich ein Glied gegen das naechste
-    # hoechstens 30 Grad drehen (Angabe 2026-10-01; im Modell waeren es 47).
-    # Die Gelenkachse biegt sich also mit 16 / (2 sin 15 Grad) = 30,9 mm;
-    # gerechnet wird mit R 32 (28,96 Grad je Glied, 1 Grad Reserve). Bis
-    # Rev. 19 stand hier R 20 aus dem Modell.
+    # 10 x 8,8. Gemessen am gedruckten Teil (2026-10-02): um 180 Grad bis
+    # an die Anschlaege gebogen ist die Schleife aussen 50 mm hoch, 4 Gelenke
+    # knicken im Bogen (je etwa 45 Grad; im Modell schlagen die Glieder bei
+    # 47 Grad an, R = 16 / (2 sin 23,5 Grad) = 20,1). Gerechnet wird mit
+    # R 20: aussen 2 R + 14 + 2 x 0,3 = 54,6 mm, also nie enger, als die
+    # Kette biegt, und hoechstens 5 mm weiter. Rev. 20 und 21 rechneten mit
+    # R 32 (30 Grad je Glied, geschaetzt), Rev. 19 mit R 20 aus dem Modell.
     # Der Riegel steht 0,3 ueber die Laschen. Endstuecke: Platte 2 mm mit
     # zwei Loechern Ø5,5 im Abstand 12, das erste 18 mm hinter dem Gelenk;
     # sie reichen 36 mm hinter das Gelenk, das Auge 7 mm davor. Anfangs-
@@ -327,7 +329,7 @@ MASSE = {
     'kette_b':            (18.0, 'Energiekette: Breite aussen'),
     'kette_h':            (14.0, 'Energiekette: Hoehe der Laschen'),
     'kette_riegel':        (0.3, 'Energiekette: Riegel steht ueber die Laschen'),
-    'kette_r':            (32.0, 'Energiekette: Biegeradius der Gelenkachse'),
+    'kette_r':            (20.0, 'Energiekette: Biegeradius der Gelenkachse'),
     'kette_innen_b':      (10.0, 'Energiekette: innen, Breite'),
     'kette_innen_h':       (8.8, 'Energiekette: innen, Boden bis Riegel'),
     'kette_spiel':         (0.3, 'Energiekette: Spiel je Seite in Wanne und Halter'),
@@ -404,7 +406,7 @@ MASSE = {
     'ywanne_lasche':       (7.7, 'Wanne Y: Lasche zum 2040 hin'),
     'ytr_wand':            (4.0, 'Traeger Y: Wand am 2040'),
     'ytr_arm':             (6.0, 'Traeger Y: Arm unter der Wanne'),
-    'ytr_ueber':           (7.0, 'Traeger Y: Wand reicht so weit ueber die M5'),
+    'ytr_m5_rand':         (6.0, 'Traeger Y: Wand reicht so weit ueber/unter die M5'),
     'ytr_b':              (24.0, 'Traeger Y mitte/vorn: Breite'),
     'ytr_versatz':         (6.0, 'Traeger Y: M5 hinten, Laschenschraube vorn'),
     'ytr_y_mitte':       (-15.0, 'Traeger Y mitte: Y'),
@@ -1190,12 +1192,16 @@ def lage():
     L['ywanne_laschen'] = [(xlm, w(n) + w('ytr_versatz'))
                            for n in ('ytr_y_mitte', 'ytr_y_vorn')]
     # Traeger Y: Wand an der Aussenseite des 2040 (M5 in der unteren
-    # Seitennut), Arm darunter nach aussen unter die Wanne
+    # Seitennut), der Arm nach aussen unter die Wanne. Die Wand reicht von
+    # ytr_m5_rand unter der M5 (der Kopf liegt ganz auf) bis an den Arm; mit
+    # R 20 sitzt der Arm oben, die Wanne liegt hoeher als die Nut.
     xf = -L['aussen_x']
     L['ytr_wand_x'] = (xf - w('ytr_wand'), xf)
     L['ytr_arm_x'] = (L['ywanne_x'][0] - 1.0, xf - w('ytr_wand'))
     L['ytr_arm_z'] = (L['ywanne_z'][0] - w('ytr_arm'), L['ywanne_z'][0])
-    L['ytr_wand_z'] = (L['ytr_arm_z'][0], L['nut_u_z'] + w('ytr_ueber'))
+    zn = L['nut_u_z']
+    L['ytr_wand_z'] = (min(zn - w('ytr_m5_rand'), L['ytr_arm_z'][0]),
+                       max(zn + w('ytr_m5_rand'), L['ytr_arm_z'][1]))
     yl = [y for _, y in L['yk_fest_loecher']]
     hb = w('ytr_b') / 2.0
     L['ytr_y'] = {
@@ -2481,7 +2487,8 @@ def bau_traeger_y(app, design, comp, L, n, fehler):
     Am Festpunkt zwei Einsaetze fuer das Endstueck 180 im Arm, sonst einer
     fuer die Lasche der Wanne.
 
-    Drucklage: Unterseite des Arms aufs Bett, die Wand steht darauf."""
+    Drucklage: die freie Seite des Arms aufs Bett, die Wand steht darauf
+    (seit Rev. 22 sitzt der Arm oben: seine Oberseite liegt auf dem Bett)."""
     y = L['ytr_y'][n]
     k = quader(comp, 'TrY_Wand_' + n, L['ytr_wand_x'], y, L['ytr_wand_z'],
                'neu').bodies.item(0)
@@ -2496,11 +2503,14 @@ def bau_traeger_y(app, design, comp, L, n, fehler):
         pkt = [p for p in L['ywanne_laschen'] if y[0] < p[1] < y[1]]
     bohrung(comp, 'TrY_Einsaetze_' + n, 'z', pkt, w('insert_m3_d'),
             L['ytr_arm_z'][0] - 1.0, L['ytr_arm_z'][1] + 1.0, k)
-    fussfase(comp, k, 'y', L['ytr_arm_z'][0], w('fase_fuss'), fehler,
+    # aufs Bett kommt die Seite des Arms, von der die Wand nicht weggeht
+    unten = L['ytr_wand_z'][0] >= L['ytr_arm_z'][0]
+    bett = L['ytr_arm_z'][0] if unten else L['ytr_arm_z'][1]
+    fussfase(comp, k, 'y', bett, w('fase_fuss'), fehler,
              'Wannentraeger Y ' + n)
     bbox_pruefen(k, 'Wannentraeger Y ' + n,
                  ((L['ytr_arm_x'][0], L['ytr_wand_x'][1]), y,
-                  (L['ytr_arm_z'][0], L['ytr_wand_z'][1])), fehler)
+                  L['ytr_wand_z']), fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
@@ -3332,6 +3342,9 @@ def hinweise_bauen(L, fehler):
         .format(L['xk_bogen_x'][1]),
         '  und laeuft {:.2f} mm ueber den Lagerschlitten.'.format(
             L['xk_unter_z'][0] - L['ls_oben_z'][1]),
+        '  Schleife gemessen (2026-10-02): um 180 Grad gebogen aussen 50 mm,',
+        '  4 Gelenke im Bogen; gerechnet {:.1f} mm, etwas weiter.'.format(
+            2.0 * w('kette_r') + w('kette_h') + 2.0 * w('kette_riegel')),
         '  WANNE: X {:+.2f} bis {:+.2f} ({:.1f} mm), Boden {:.0f}, Waende {:.0f}'
         .format(L['wanne_x'][0], L['wanne_x'][1],
                 L['wanne_x'][1] - L['wanne_x'][0], w('wanne_boden'),
@@ -3385,7 +3398,7 @@ def hinweise_bauen(L, fehler):
         '  2040 (die Nut an der Unterseite ist belegt). Die Wanne an den',
         '  Laschen je M3x{:.0f}. Die Kabel in der Seitennut gehen an jedem'
         .format(L['wanne_schraube']),
-        '  Traeger kurz aus der Nut, ueber seine Wand.',
+        '  Traeger kurz aus der Nut, unter seiner Wand durch.',
         '',
         'ENDSCHALTER (Gabellichtschranken LM393, docs/endschalter.md):',
         '  Im Modell steht das Portal in der Mitte und der Toolhead in der',
@@ -3480,13 +3493,14 @@ def hinweise_bauen(L, fehler):
         .format(L['khy_schraube']),
         '     Hammermutter in die untere Seitennut, Traeger mit M5x{:.0f} ans'
         .format(L['ytr_m5_schraube']),
-        '     2040 (vor der Wanne: sie deckt die Koepfe). Wanne auflegen,',
-        '     Laschen M3x{:.0f}. Kette mit {} Gliedern, Endstueck 180 hinten'
+        '     2040; die Koepfe bleiben von aussen unter der Wanne frei.',
+        '     Wanne auflegen, Laschen M3x{:.0f}. Kette mit {} Gliedern,'
         .format(L['wanne_schraube'], L['yk_glieder']),
-        '     mit 2x M3x{:.0f} + Scheibe, Anfangsstueck auf den Kettenhalter'
+        '     Endstueck 180 hinten mit 2x M3x{:.0f} + Scheibe, Anfangsstueck'
         .format(L['xk_fest_schraube']),
-        '     Y. Litzen einziehen, Kabelbinder an beiden Enden. W13 in der',
-        '     Seitennut an jedem Traeger kurz aus der Nut, ueber seine Wand.',
+        '     auf den Kettenhalter Y. Litzen einziehen, Kabelbinder an beiden',
+        '     Enden. W13 in der Seitennut an jedem Traeger kurz aus der Nut,',
+        '     unter seiner Wand durch.',
         '',
         'DRUCK (PETG, Bambu Lab A1, 4 Wandlinien, >=40 % Infill):',
         '  Schlitten ....... Unterseite aufs Bett, Waende stehen darauf',
@@ -3508,7 +3522,7 @@ def hinweise_bauen(L, fehler):
         '  Kettenhalter Y .. Unterseite (Auflage) aufs Bett',
         '  Kettenwanne Y ... Boden aufs Bett, laengs ({:.0f} mm)'.format(
             L['ywanne_y'][1] - L['ywanne_y'][0]),
-        '  Traeger Y ....... Unterseite des Arms aufs Bett (3 Stueck)',
+        '  Traeger Y ....... Oberseite des Arms aufs Bett (3 Stueck)',
         '  Keine Stuetzen noetig. Rechter Schlitten und rechte Klemmtuerme',
         '  sind gespiegelt — im Slicer NICHT spiegeln, die Koerper so',
         '  exportieren, wie sie im Modell liegen. Die Y-Motorhalter sind',
@@ -3547,16 +3561,9 @@ def hinweise_bauen(L, fehler):
         '    einen Schmiernippel hat (die Platine steht {:.0f} mm vor dem'
         .format(w('hx_luft_wagen')),
         '    Wagenende).',
-        '  Energiekette: je Glied hoechstens 30 Grad (am Teil, geschaetzt),',
-        '    gerechnet mit R {:.0f}. Vor dem Druck des Kettenhalters messen: um'
-        .format(w('kette_r')),
-        '    180 Grad gebogen darf die Schleife aussen hoechstens {:.1f} mm'
-        .format(2.0 * w('kette_r') + w('kette_h') + 2.0 * w('kette_riegel')),
-        '    hoch sein, sonst kette_r in beiden Skripten erhoehen (der',
-        '    Kettenhalter wandert mit nach oben, die Wanne bleibt).',
-        '  Winkel an den Kreuzungen 2040/2060: aussen am 2040 bis 20 mm',
-        '    vom Profil und 20 mm ueber dem 2060 angenommen. Wanne Y und',
-        '    Kette Y bleiben ausserhalb (tools/portal_check.py).',
+        '  Winkel an den Kreuzungen 2040/2060: 20 mm, direkt am 2060 in der',
+        '    unteren Seitennut (bestaetigt 2026-10-02), ihre Schenkel nicht',
+        '    gemessen. Wanne Y und Kette Y bleiben ausserhalb.',
         '',
         'REFERENZ (Komponente Referenz_nicht_drucken): nur zur Ansicht,',
         '  NICHT drucken und beim Export weglassen. Eine Gluehbirne blendet',

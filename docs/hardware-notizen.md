@@ -560,16 +560,18 @@ stehen in [energiekette.md](energiekette.md).
 | Modell | „Energiekette“ von lingnau.florian (CC BY-NC-SA): Kettenglied mit Riegel, Anfangsstück, Endstück, Endstück 180, Drehkonsole | Angabe 2026-10-01, 3MF |
 | Glied | Teilung **16**, außen **18 × 14** (der Riegel steht 0,3 über), innen **10 × 8,8**, 30 lang | aus dem Modell gemessen |
 | Gelenk | Zapfen Ø5,0 im Loch Ø5,4, mittig in der Höhe; rückwärts 0° | aus dem Modell gemessen |
-| Anschlag | **30°** je Gelenk am gedruckten Teil, die ganze Kette biegt sich um 180°. Im Modell stoßen die Glieder erst bei 47° an | Angabe am Teil 2026-10-01 |
-| Biegeradius | bei 30° 30,9 mm auf der Gelenklinie, gerechnet **R 32**; um 180° gebogen außen höchstens **78,6 mm** (bei 30°: 76,4) | gerechnet, Schleife am Teil messen (bis Portal Rev. 19: R 20 aus dem Modell) |
+| Anschlag | im Modell **47°** je Gelenk; am gedruckten Teil knicken im 180°-Bogen **4 Gelenke** (je etwa 45°). Die Angabe 30° vom 2026-10-01 war zu klein | gezählt 2026-10-02 |
+| Schleife | um 180° gebogen außen **50 mm** (Messschieber) | gemessen 2026-10-02 |
+| Biegeradius | bei 47° 20,1 mm auf der Gelenklinie, gerechnet **R 20**: Schleife 54,6 mm, nie enger als gemessen | gerechnet (Portal.py Rev. 22, ToolheadZ.py Rev. 37; Rev. 20/21: R 32) |
 | Riegelseite | nur durch einzelne Streben geschlossen, die Litzen lassen sich jederzeit einlegen und herausnehmen | Angabe 2026-10-01 |
 | Anschlussstücke | 43 lang: 36 hinter dem Gelenk, Auge 7; Platte 2 mm mit 2 × Ø5,5, 18 und 30 mm hinter dem Gelenk | aus dem Modell gemessen |
-| X-Kette | 19 Glieder, 376 mm mit Anfangsstück und Endstück 180 | gerechnet (Portal.py Rev. 20) |
-| Y-Kette | 18 Glieder, 360 mm, gleiche Größe wie X: Arbeitsweg plus 35,6 mm Reserve nach vorn (gewählt: mindestens 26) | gerechnet (Portal.py Rev. 21), Wahl 2026-10-01 |
+| X-Kette | 17 Glieder, 344 mm mit Anfangsstück und Endstück 180 | gerechnet (Portal.py Rev. 22) |
+| Y-Kette | 16 Glieder, 328 mm, gleiche Größe wie X: Arbeitsweg plus 47 mm Reserve nach vorn (gewählt: mindestens 26) | gerechnet (Portal.py Rev. 22), Wahl 2026-10-01 |
+| Linker Y-Schlitten | schon gedruckt: Löcher für den Kettenhalter Y mit der Bohrlehre nachbohren | Angabe 2026-10-02 |
 | Kabelweg zur X-Kette | in der oberen Nut des Portalrohrs, am Festpunkt ein Kabelflügel mit zwei Kabelbindern | Wahl 2026-10-01, Portal.py Rev. 21 |
 | Motorkabel (mitgeliefert) | lose Adern in einem Schlauch; in den Ketten ohne Schlauch | Angabe 2026-10-01 |
 | Untere Nut an der Unterseite des linken 2040 | belegt: die Wanne Y hängt deshalb an der unteren Seitennut außen | Angabe 2026-10-01 |
-| Winkel an den Kreuzungen 2040/2060 | 20 mm, in der unteren Nut der 2040; Lage außen direkt am 2060 angenommen | Angaben 2026-09-27/29 |
+| Winkel an den Kreuzungen 2040/2060 | 20 mm, in der unteren Seitennut der 2040 direkt am 2060; sonst sitzt dort zwischen den 2060 nichts | Angaben 2026-09-27/29, bestätigt 2026-10-02 |
 | gekaufte Ketten | 10 × 20 mm innen, 15 × 27 mm außen, je 1 m | `[v]` vorhanden, werden nicht verwendet |
 
 ## Normteile (aus hardware.md, `[w]`)

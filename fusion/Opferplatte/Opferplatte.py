@@ -1,6 +1,6 @@
 # Opferplatte.py — Fuehrungsfuesse unter dem Gestell und die Opferplatte
 #
-# Vier Druckteile, dazu die Platte und Referenzteile nur zur Ansicht:
+# Fuenf Druckteile, dazu die Platte und Referenzteile nur zur Ansicht:
 #   Fuss_vorn_links/rechts, Fuss_hinten_links/rechts
 #               je ein Fuss unter einem Ende der beiden 2060. Die Fuesse
 #               heben die Maschine so hoch, wie die Opferplatte dick ist:
@@ -12,6 +12,16 @@
 #               Platte und fuehrt sie. Die linken Fuesse tragen den
 #               Anschlag fuer das Plattenende, die rechten eine
 #               Einfuehrschraege: herausgezogen wird die Platte nach rechts.
+#               Der Fuss vorn rechts traegt dazu auf einem Ausleger den
+#               Lagerbock fuer den Riegel.
+#   Riegel      Klappriegel vor dem rechten Plattenende (Rev. 3), damit die
+#               Platte nicht nach rechts herausrutscht. Er dreht sich um
+#               eine M5 laengs X: Ein Stoss gegen die Platte drueckt ihn
+#               laengs der Achse an den Lagerbock und kann ihn nicht
+#               aufklappen. Zu liegt er vor dem Plattenende, offen nach vorn
+#               umgeklappt; in beiden Lagen liegt er auf dem Ausleger, die
+#               Schwerkraft haelt ihn. Der Sechskantkopf sitzt in einer
+#               Tasche im Riegel, die Stoppmutter stellt man von rechts nach.
 #   Opferplatte  Spanplatte 615 x 349 x 25 (vorhanden, Angabe vom
 #               2026-10-02), gemessen 25,3 dick [v]. Sie liegt auf dem
 #               Tisch zwischen den Fuessen,
@@ -26,13 +36,16 @@
 # mit Portal.py und ToolheadZ.py.
 #
 # Konventionen: siehe fusion-python/SKILL.md und references/baugruppen.md.
-# Eine Bohrlehre gibt es nicht: alle Schrauben gehen in Hammermuttern,
-# gebohrt wird nichts.
+# Eine Bohrlehre gibt es nicht: Die Fuesse sind in Hammermuttern
+# geschraubt, die Achse des Riegels verbindet zwei Druckteile durch fertig
+# gedruckte Loecher. Gebohrt wird nichts.
+
+import math
 
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Opferplatte'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -93,17 +106,43 @@ MASSE = {
     'anschlag_h':          (20.0, 'Anschlag: Hoehe ueber dem Tisch'),
     'einfuehr':             (5.0, 'Einfuehrschraege (rechts): 45 Grad, so weit'),
 
+    # --- Riegel vorn rechts (Rev. 3) -----------------------------------------
+    # Klappt um eine M5 laengs X. Lagerbock und Ausleger liegen vor der
+    # Flucht der Fuehrung, also ausserhalb der Bahn, auf der die Platte
+    # herausgezogen wird. Der Ausleger liegt so tief, dass der Riegel zu
+    # wie offen mit riegel_luft Luft ueber ihm liegt.
+    'riegel_spiel':         (1.0, 'Riegel: Luft zum Plattenende (X)'),
+    'riegel_dicke':         (9.0, 'Riegel: Dicke (X)'),
+    'riegel_h':            (15.0, 'Riegel: Hoehe (Z) = Durchmesser der Nabe'),
+    'riegel_ueber':        (17.0, 'Riegel: greift so weit vor das Plattenende (Y)'),
+    'riegel_luft':          (0.5, 'Riegel: Luft ueber dem Ausleger'),
+    'ausleger_luft':        (2.0, 'Ausleger: Abstand zur Flucht der Fuehrung (Y)'),
+    'ausleger_t':           (6.0, 'Ausleger: Dicke auf dem Tisch'),
+    'lager_t':              (7.0, 'Lagerbock: Dicke (X)'),
+    'lager_b':             (20.0, 'Lagerbock: Breite (Y)'),
+    'lager_ueber':          (8.0, 'Lagerbock: reicht so weit ueber die Achse'),
+
     # --- Normteile und Regeln ------------------------------------------------
     'm5_durchgang':         (5.5, 'M5 Durchgang'),
     'm5_scheibe_d':        (10.0, 'M5 Scheibe DIN 125: Durchmesser'),
     'm5_scheibe_h':         (1.0, 'M5 Scheibe DIN 125: Dicke'),
     'm5_kopf_h':            (5.0, 'M5 Zylinderkopf: Hoehe'),
+    # Achse des Riegels: Sechskantschraube, der Kopf sitzt in einer Tasche
+    # im Riegel und dreht sich mit ihm; die Stoppmutter stellt man von
+    # rechts mit dem Maulschluessel nach
+    'm5_sw':                (8.0, 'M5 Sechskant (Kopf ISO 4017, Mutter DIN 985): SW'),
+    'm5_sk_k':              (3.5, 'M5 Sechskantschraube ISO 4017: Kopfhoehe'),
+    'm5_mutter_h':          (5.0, 'M5 Stoppmutter DIN 985: Hoehe'),
+    'sk_spiel':             (0.3, 'Sechskanttasche: Zugabe auf die Schluesselweite'),
+    'ueberstand':           (1.5, 'Schraube: Ueberstand ueber die Stoppmutter'),
     'luft_bau':             (3.0, 'Mindestfreigang'),
     'fase_fuss':            (0.4, 'Fase gegen Elefantenfuss'),
 }
 
 SEITEN = ('vorn', 'hinten')         # welches 2060
 ENDEN = ('links', 'rechts')         # welches Ende
+RIEGEL_AN = ('vorn', 'rechts')      # dieser Fuss traegt den Riegel (lage()
+                                    # rechnet ihn fuer vorn rechts)
 
 
 def w(name):
@@ -203,6 +242,49 @@ def lage():
         g, aus = L['fuehrung_y'][s], L['aus'][s]
         L['einfuehr_pkt'][s] = [(x1 - e - 1.0, g - aus), (x1 + 1.0, g - aus),
                                 (x1 + 1.0, g + aus * (e + 1.0))]
+
+    # ---- Riegel vorn rechts: dreht sich um eine M5 laengs X ----------------
+    #      Lagerbock und Ausleger beginnen ausleger_luft vor der Flucht der
+    #      Fuehrung: Die Bahn, auf der die Platte herausgezogen wird, bleibt
+    #      frei. Die Nabe hat den Durchmesser riegel_h, so liegt die Leiste
+    #      zu (Nase nach hinten) wie offen (nach vorn) gleich hoch ueber dem
+    #      Ausleger.
+    L['riegel_an'] = RIEGEL_AN
+    rx0 = L['platte_x'][1] + w('riegel_spiel')
+    L['riegel_x'] = (rx0, rx0 + w('riegel_dicke'))
+    ai = L['fuehrung_y']['vorn'] + w('ausleger_luft')
+    L['lager_y'] = (ai, ai + w('lager_b'))
+    rh = w('riegel_h') / 2.0
+    yp = ai + w('lager_b') / 2.0
+    zp = L['tisch_z'] + w('ausleger_t') + w('riegel_luft') + rh
+    L['riegel_achse'] = (yp, zp)
+    L['riegel_nase_y'] = L['platte_y'][1] - w('riegel_ueber')
+    L['riegel_l'] = yp - L['riegel_nase_y']          # Achse bis Nase
+    L['riegel_y'] = (L['riegel_nase_y'], yp)         # Leiste, dazu die Nabe
+    L['riegel_z'] = (zp - rh, zp + rh)
+    L['lager_x'] = (L['riegel_x'][1], L['riegel_x'][1] + w('lager_t'))
+    L['lager_z'] = (L['tisch_z'], zp + w('lager_ueber'))
+    L['ausleger_x'] = (x1, L['lager_x'][1])
+    L['ausleger_y'] = (ai, yp + L['riegel_l'] + 1.0)  # offen liegt er darauf
+    L['ausleger_z'] = (L['tisch_z'], L['tisch_z'] + w('ausleger_t'))
+    # Sechskantkopf auf der Plattenseite in einer Tasche, 0,5 mm unter der
+    # Flaeche; hinter dem Lagerbock Scheibe und Stoppmutter. Laenge auf
+    # 5 mm aufgerundet.
+    L['riegel_tasche_t'] = w('m5_sk_k') + 0.5
+    L['riegel_tasche_sw'] = w('m5_sw') + w('sk_spiel')
+    noetig = (w('riegel_dicke') - L['riegel_tasche_t'] + w('lager_t')
+              + w('m5_scheibe_h') + w('m5_mutter_h') + w('ueberstand'))
+    L['riegel_schraube'] = 5.0 * math.ceil(noetig / 5.0)
+
+    # Bauraum je Fuss in X; vorn rechts reichen Ausleger und Lagerbock
+    # nach rechts und vorn ueber den Fuss hinaus
+    L['fuss_bb_x'] = {s + '_' + e: L['fuss_x'][e] for s in SEITEN
+                      for e in ENDEN}
+    n = '_'.join(RIEGEL_AN)
+    L['fuss_bb_x'][n] = (L['fuss_x'][RIEGEL_AN[1]][0], L['ausleger_x'][1])
+    y = L['fuss_bb_y'][n]
+    L['fuss_bb_y'][n] = (min(y[0], L['ausleger_y'][0]),
+                         max(y[1], L['ausleger_y'][1]))
     return L
 
 
@@ -696,6 +778,14 @@ def vieleck(sk, punkte):
     linien.addByTwoPoints(vorher.endSketchPoint, erste.startSketchPoint)
 
 
+def sechseck(cu, cv, sw):
+    """Ecken eines regelmaessigen Sechsecks mit der Schluesselweite sw um
+    (cu, cv), zwei Flanken parallel zu u (wie sechskant in ToolheadZ.py)."""
+    r = sw / math.sqrt(3.0)                      # Umkreisradius
+    return [(cu + r * math.cos(math.radians(i * 60.0)),
+             cv + r * math.sin(math.radians(i * 60.0))) for i in range(6)]
+
+
 def prisma_vieleck(comp, name, achse, punkte, a0, a1, art, ziel=None):
     """Vieleck quer zu `achse` (u, v wie bei prismen), entlang `achse` von a0
     bis a1, symmetrisch um die Mitte extrudiert."""
@@ -712,10 +802,11 @@ def bau_fuss(app, design, comp, L, s, e, fehler):
     | 'rechts'): Block unter dem Profil mit der Feder fuer die untere Nut,
     aussen der Flansch mit 2x M5 in die untere Seitennut, innen bis an die
     Platte (voll oder als Boden mit Fuehrungswand). Links der Anschlag fuer
-    das Plattenende, rechts die Einfuehrschraege.
+    das Plattenende, rechts die Einfuehrschraege. Vorn rechts dazu der
+    Ausleger mit dem Lagerbock fuer den Riegel.
 
-    Drucklage: Unterseite (Tischseite) aufs Bett. Flansch, Wand und
-    Anschlag stehen senkrecht, die Feder liegt oben, die M5-Loecher
+    Drucklage: Unterseite (Tischseite) aufs Bett. Flansch, Wand, Anschlag
+    und Lagerbock stehen senkrecht, die Feder liegt oben, die M5-Loecher
     waagerecht — keine Stuetzen."""
     name = 'Fuss_{}_{}'.format(s, e)
     x = L['fuss_x'][e]
@@ -739,6 +830,17 @@ def bau_fuss(app, design, comp, L, s, e, fehler):
     else:
         prisma_vieleck(comp, 'Einfuehrung_' + name, 'z', L['einfuehr_pkt'][s],
                        L['tisch_z'] - 1.0, L['quer_z'][0] + 1.0, 'weg', k)
+    if (s, e) == RIEGEL_AN:
+        # Ausleger flach auf dem Tisch nach rechts (erst nach der Schraege,
+        # sonst kerbt deren Schnitt ihn an), darauf der Lagerbock mit dem
+        # Loch fuer die Achse des Riegels
+        quader(comp, 'Ausleger_' + name, L['ausleger_x'], L['ausleger_y'],
+               L['ausleger_z'], 'dazu', k)
+        quader(comp, 'Lagerbock_' + name, L['lager_x'], L['lager_y'],
+               L['lager_z'], 'dazu', k)
+        bohrung(comp, 'Achse_' + name, 'x', [L['riegel_achse']],
+                w('m5_durchgang'), L['lager_x'][0] - 1.0,
+                L['lager_x'][1] + 1.0, k)
     # 2x M5 waagerecht durch den Flansch, auf Hoehe der unteren Seitennut
     fy = L['flansch_y'][s]
     bohrung(comp, 'M5_' + name, 'y',
@@ -747,7 +849,36 @@ def bau_fuss(app, design, comp, L, s, e, fehler):
     fussfase(comp, k, 'y', L['tisch_z'], w('fase_fuss'), fehler,
              name.replace('_', ' '))
     bbox_pruefen(k, name.replace('_', ' '),
-                 (x, L['fuss_bb_y'][s + '_' + e], L['flansch_z']), fehler)
+                 (L['fuss_bb_x'][s + '_' + e], L['fuss_bb_y'][s + '_' + e],
+                  L['flansch_z']), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    return k
+
+
+def bau_riegel(app, design, comp, L, fehler):
+    """Klappriegel vor dem rechten Plattenende: Leiste mit runder Nabe um
+    die Achse, M5 laengs X. Der Sechskantkopf sitzt auf der Plattenseite in
+    einer Tasche und dreht sich mit dem Riegel. Gebaut in der Lage 'zu'
+    (Nase nach hinten vor dem Plattenende); offen ist er um 180 Grad nach
+    vorn umgeklappt.
+
+    Drucklage: Seite ohne Tasche (zum Lagerbock) aufs Bett, die Bohrung
+    steht senkrecht — keine Stuetzen."""
+    rx, (yp, zp) = L['riegel_x'], L['riegel_achse']
+    k = quader(comp, 'Leiste_Riegel', rx, L['riegel_y'], L['riegel_z'],
+               'neu').bodies.item(0)
+    k.name = 'Riegel'
+    zylinder(comp, 'Nabe_Riegel', 'x', (yp, zp), w('riegel_h'), rx[0], rx[1],
+             'dazu', k)
+    bohrung(comp, 'Achse_Riegel', 'x', [(yp, zp)], w('m5_durchgang'),
+            rx[0] - 1.0, rx[1] + 1.0, k)
+    prisma_vieleck(comp, 'Kopftasche_Riegel', 'x',
+                   sechseck(yp, zp, L['riegel_tasche_sw']), rx[0] - 1.0,
+                   rx[0] + L['riegel_tasche_t'], 'weg', k)
+    fussfase(comp, k, 'x', rx[1], w('fase_fuss'), fehler, 'Riegel')
+    bbox_pruefen(k, 'Riegel',
+                 (rx, (L['riegel_y'][0], yp + w('riegel_h') / 2.0),
+                  L['riegel_z']), fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
@@ -794,6 +925,7 @@ def hinweise_bauen(L, fehler):
     """Hinweiszeilen des Validierungsberichts. Modulebene, damit der Block
     ohne Fusion getestet werden kann (tools/opferplatte_check.py)."""
     px, py, pz = L['platte_x'], L['platte_y'], L['platte_z']
+    yp, zp = L['riegel_achse']
     h = [
         'BEZUG: Maschinenkoordinaten wie Portal.py (X rechts, Y nach vorn,',
         '  Z = 0 Rohrmitte), Portal in der Mitte seines Wegs.',
@@ -812,8 +944,22 @@ def hinweise_bauen(L, fehler):
         '{:.1f} mm'.format(L['nut_seite_z'], w('platte_spiel')),
         '  Luft je Seite. Links der ANSCHLAG ({:.0f} mm vor das Plattenende),'
         .format(w('anschlag_tief')),
-        '  rechts eine EINFUEHRSCHRAEGE ({:.0f} mm, 45 Grad).'.format(
-            w('einfuehr')),
+        '  rechts eine EINFUEHRSCHRAEGE ({:.0f} mm, 45 Grad). Vorn rechts'
+        .format(w('einfuehr')),
+        '  traegt ein Ausleger bis X {:+.0f} den Lagerbock fuer den Riegel.'
+        .format(L['ausleger_x'][1]),
+        '',
+        'RIEGEL (PETG) vor dem rechten Plattenende: dreht sich um eine M5',
+        '  laengs X (Y {:+.1f}, Z {:+.1f}). Zu greift er {:.0f} mm vor das'
+        .format(yp, zp, w('riegel_ueber')),
+        '  Plattenende, {:.1f} mm Luft. Ein Stoss gegen die Platte drueckt'
+        .format(w('riegel_spiel')),
+        '  ihn laengs der Achse an den Lagerbock: aufklappen kann er so',
+        '  nicht. Offen liegt er um 180 Grad nach vorn umgeklappt auf dem',
+        '  Ausleger, zu liegt er hinten auf dessen Kante; beide Male haelt',
+        '  ihn die Schwerkraft. Zwischen Anschlag und Riegel sind {:.1f} mm:'
+        .format(L['riegel_x'][0] - L['anschlag_x'][1]),
+        '  laenger darf die Platte nicht sein.',
         '',
         'OPFERPLATTE (Spanplatte {:.0f} x {:.0f} x {:.1f}, vorhanden): liegt '
         'auf'.format(w('platte_l'), w('platte_b'), w('platte_dicke')),
@@ -836,15 +982,25 @@ def hinweise_bauen(L, fehler):
         .format(L['m5_schraube']),
         '     Flansch in die Hammermuttern.',
         '  3. Andere Seite ebenso.',
-        '  4. Platte von rechts zwischen die Fuesse schieben, bis sie',
-        '     links am Anschlag steht.',
+        '  4. Riegel: Sechskantschraube M5x{:.0f} (ISO 4017) von links'
+        .format(L['riegel_schraube']),
+        '     (Plattenseite) durch Riegel und Lagerbock, der Kopf in die',
+        '     Tasche; rechts Scheibe + Stoppmutter M5 (DIN 985). Mit SW 8',
+        '     so fest, dass er nicht wackelt, aber von Hand klappt.',
+        '  5. Riegel nach vorn klappen, Platte von rechts zwischen die',
+        '     Fuesse schieben, bis sie links am Anschlag steht, Riegel',
+        '     zurueckklappen. Herausnehmen: Riegel nach vorn, Platte nach',
+        '     rechts ziehen.',
         '',
-        'DRUCK (PETG, Bambu Lab A1): Unterseite (Tischseite) aufs Bett,',
-        '  Flansch, Wand und Anschlag stehen senkrecht, keine Stuetzen.',
-        '  4 Wandlinien, 20 % Infill. Vier verschiedene Teile: links mit',
-        '  Anschlag, rechts mit Schraege, vorn schmal, hinten breit.',
+        'DRUCK (PETG, Bambu Lab A1): Fuesse mit der Unterseite',
+        '  (Tischseite) aufs Bett, Flansch, Wand, Anschlag und Lagerbock',
+        '  stehen senkrecht. Riegel mit der Seite ohne Tasche aufs Bett.',
+        '  Keine Stuetzen, 4 Wandlinien, 20 % Infill. Vier verschiedene',
+        '  Fuesse: links mit Anschlag, rechts mit Schraege, vorn schmal,',
+        '  hinten breit, vorn rechts mit Ausleger.',
         '',
-        'KEINE BOHRLEHRE: alle Schrauben gehen in Hammermuttern.',
+        'KEINE BOHRLEHRE: Die Fuesse gehen in Hammermuttern, die Achse des',
+        '  Riegels ist ein einzelnes gedrucktes Loch je Teil.',
         '',
         'GEMESSEN (2026-10-02): Platte {:.1f} mm dick (Nennmass 25), die'
         .format(w('platte_dicke')),
@@ -893,6 +1049,13 @@ def run(context):
                 o.component.name = 'Fuss_{}_{}'.format(s, e)
                 bau_fuss(app, design, o.component, L, s, e, fehler)
                 o.isGrounded = True
+
+        # Der Riegel steht in der Lage 'zu'; offen ist er um 180 Grad um
+        # seine Achse nach vorn geklappt (tools/opferplatte_zeichnen.py)
+        o = root.occurrences.addNewComponent(einheit)
+        o.component.name = 'Riegel'
+        bau_riegel(app, design, o.component, L, fehler)
+        o.isGrounded = True
 
         o = root.occurrences.addNewComponent(einheit)
         o.component.name = 'Opferplatte'

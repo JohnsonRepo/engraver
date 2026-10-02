@@ -6,10 +6,11 @@ Importiert Opferplatte.py, Portal.py, ToolheadZ.py, NotAus.py und
 Elektronik.py mit gestubbtem adsk-Modul und prueft: Abgleich der
 Rahmenmasse und des Arbeitsfelds, Lage und Hoehe der Platte, Werkstueck-
 hoehe, dass Toolhead und Portal ueber den ganzen Weg ueber Platte und
-Fuessen bleiben, Fuehrung, Anschlag und Einfuehrschraege, Freiraum zu
-Not-Aus, Elektronik, Y-Motoren, Halter Y, Winkeln und Y-Kette, die
-Verschraubung in der Nut, Werkzeugzugang und Druck. Gibt die Stueckliste
-aus.
+Fuessen bleiben, Fuehrung, Anschlag und Einfuehrschraege, den Riegel
+(Ueberdeckung, freie Bahn, Auflage zu und offen, Schwenkkreis, Schraube,
+Festigkeit), Freiraum zu Not-Aus, Elektronik, Y-Motoren, Halter Y,
+Winkeln und Y-Kette, die Verschraubung in der Nut, Werkzeugzugang und
+Druck. Gibt die Stueckliste aus.
 
     python3 tools/opferplatte_check.py
 
@@ -44,6 +45,10 @@ SICHERHEIT = 5.0       # Werkstueckhoehe: Abstand unter dem Toolhead (wie
 SPANPLATTE = 0.65      # g/cm3
 PETG = 1.27
 X_SCHRITTE, Y_SCHRITTE = 41, 25
+F_STOSS = 100.0        # N: kraeftiger Stoss von Hand gegen die Platte
+SIGMA_SCHICHT = 15.0   # MPa: PETG in der Schichtebene (~45), Sicherheit 3
+SIGMA_QUER = 8.0       # MPa: PETG quer zu den Schichten (~25), Sicherheit 3
+PRESSUNG = 10.0        # MPa: Flaechenpressung PETG unter Kopf und Scheibe
 
 
 def engste(a_liste, b_liste):
@@ -83,6 +88,13 @@ def fuss_quader(ow, OL, s, e):
     if e == 'links':
         q.append(Q('Fuss {} Anschlag'.format(n), *OL['anschlag_x'],
                    *OL['anschlag_y'][s], *OL['anschlag_z']))
+    if (s, e) == OL['riegel_an']:
+        # Lagerbock erst ab der Oberseite des Auslegers: keine Ueberlappung,
+        # damit das Volumen stimmt
+        q += [Q('Fuss {} Ausleger'.format(n), *OL['ausleger_x'],
+                *OL['ausleger_y'], *OL['ausleger_z']),
+              Q('Fuss {} Lagerbock'.format(n), *OL['lager_x'],
+                *OL['lager_y'], OL['ausleger_z'][1], OL['lager_z'][1])]
     return q
 
 
@@ -90,10 +102,66 @@ def fuss_volumen(ow, OL, s, e):
     """Volumen eines Fusses (mm3): Quader minus Bohrungen und Schraege."""
     v = sum((q.x[1] - q.x[0]) * (q.y[1] - q.y[0]) * (q.z[1] - q.z[0])
             for q in fuss_quader(ow, OL, s, e))
-    v -= 2 * math.pi * (ow('m5_durchgang') / 2.0) ** 2 * ow('flansch_t')
+    loch = math.pi * (ow('m5_durchgang') / 2.0) ** 2
+    v -= 2 * loch * ow('flansch_t')
     if e == 'rechts':
         v -= ow('einfuehr') ** 2 / 2.0 * (OL['fuss_z'][1] - OL['fuss_z'][0])
+    if (s, e) == OL['riegel_an']:
+        v -= loch * ow('lager_t')
     return v
+
+
+def riegel_masse(ow, OL):
+    """Halbe Hoehe, Laenge Achse-Nase und Radius des Schwenkkreises (mm)."""
+    rh = ow('riegel_h') / 2.0
+    rl = OL['riegel_l']
+    return rh, rl, math.hypot(rl, rh)
+
+
+def riegel_quader(ow, OL):
+    """Riegel zu, offen und sein Schwenkbereich (er klappt ueber oben),
+    dazu Scheibe, Stoppmutter und Schraubenende hinter dem Lagerbock."""
+    (yp, zp), rx = OL['riegel_achse'], OL['riegel_x']
+    rh, rl, rs = riegel_masse(ow, OL)
+    rs_ = ow('m5_scheibe_d') / 2.0
+    x_ende = OL['lager_x'][1] + ow('m5_scheibe_h') + ow('m5_mutter_h') + \
+        riegel_ueberstand(ow, OL)
+    Q = Quader
+    return {'zu': Q('Riegel zu', *rx, OL['riegel_nase_y'], yp + rh,
+                    *OL['riegel_z']),
+            'offen': Q('Riegel offen', *rx, yp - rh, yp + rl,
+                       *OL['riegel_z']),
+            'schwenk': Q('Riegel, Schwenkbereich', *rx, yp - rs, yp + rs,
+                         zp - rh, zp + rs),
+            'mutter': Q('Riegel: Scheibe, Stoppmutter', OL['lager_x'][1],
+                        x_ende, yp - rs_, yp + rs_, zp - rs_, zp + rs_)}
+
+
+def riegel_ueberstand(ow, OL):
+    """So weit steht die Schraube ueber die Stoppmutter (mm)."""
+    unter_kopf = ow('riegel_dicke') - OL['riegel_tasche_t']
+    return (OL['riegel_schraube'] - unter_kopf - ow('lager_t')
+            - ow('m5_scheibe_h') - ow('m5_mutter_h'))
+
+
+def riegel_neigung(ow, OL):
+    """Winkel (rad), um den die Nase des geschlossenen Riegels sinkt, bis
+    seine Unterseite auf der hinteren Kante des Auslegers liegt (im Modell
+    steht er waagerecht, riegel_luft ueber dem Ausleger)."""
+    yp, zp = OL['riegel_achse']
+    rh = ow('riegel_h') / 2.0
+    d = yp - OL['ausleger_y'][0]            # Kante hinter der Achse
+    soll = OL['ausleger_z'][1] - zp         # Oberseite Ausleger, relativ
+    lo, hi = 0.0, math.pi / 4.0
+    for _ in range(60):
+        t = (lo + hi) / 2.0
+        # Punkt der Unterseite ueber der Kante (gedreht um t, Nase runter)
+        dy = (-d - rh * math.sin(t)) / math.cos(t)
+        if dy * math.sin(t) - rh * math.cos(t) > soll:
+            lo = t
+        else:
+            hi = t
+    return (lo + hi) / 2.0
 
 
 def main():
@@ -115,9 +183,11 @@ def main():
     FUESSE = {(s, e): fuss_quader(ow, OL, s, e)
               for s in om.SEITEN for e in om.ENDEN}
     alle_fuesse = [q for v in FUESSE.values() for q in v]
+    RQ = riegel_quader(ow, OL)
+    riegel = [RQ['schwenk'], RQ['mutter']]
     platte = Quader('Opferplatte', *OL['platte_x'], *OL['platte_y'],
                     *OL['platte_z'], 'holz')
-    unten = alle_fuesse + [platte]
+    unten = alle_fuesse + riegel + [platte]
     top = OL['platte_z'][1]
 
     # ------------------------------------------------------------------
@@ -224,7 +294,7 @@ def main():
             d = engste(th_, unten)
             if d[0] < best[0]:
                 best = d + (xw, dy)
-    p.ok('Toolhead <-> Platte und Fuesse ({} / {}, X {:+.0f}, Portal '
+    p.ok('Toolhead <-> Platte, Fuesse, Riegel ({} / {}, X {:+.0f}, Portal '
          '{:+.0f})'.format(best[1], best[2], best[3], best[4]), best[0],
          ow('luft_bau'))
     lang = ('Y-Schiene', 'Rahmen 2040', 'Y-Riemen', 'Y-Ruecklauf')
@@ -235,7 +305,7 @@ def main():
         d = engste([auf(q, dy=dy) for q in portal], unten)
         if d[0] < best[0]:
             best = d + (dy,)
-    p.ok('Portal <-> Platte und Fuesse ({} / {}, Portal {:+.0f})'.format(
+    p.ok('Portal <-> Platte, Fuesse, Riegel ({} / {}, Portal {:+.0f})'.format(
         best[1], best[2], best[3]), best[0], ow('luft_bau'))
     innen_oben = max(q.z[1] for (s, e), v in FUESSE.items() for q in v
                      if q.y[1] <= L['quer_y_vorn'][0] + 0.01
@@ -281,13 +351,24 @@ def main():
     fremd.append(('Wanne und Traeger der Y-Kette',
                   bauraum.y_kette_rahmen(w, L)[0]))
     for text, liste in fremd:
-        d = engste(alle_fuesse + [platte], liste)
-        p.ok('Fuesse und Platte <-> {} ({} / {})'.format(text, d[1], d[2]),
-             d[0], ow('luft_bau'))
+        d = engste(alle_fuesse + riegel + [platte], liste)
+        p.ok('Fuesse, Riegel, Platte <-> {} ({} / {})'.format(
+            text, d[1], d[2]), d[0], ow('luft_bau'))
     fach = portal_check.elektronikfach(w, L)
     d = engste(alle_fuesse, [fach])
     p.ok('Fuesse ausserhalb des Elektronikfachs ({})'.format(d[1]), d[0],
          0.0)
+    # Riegel, Ausleger und Lagerbock gegen das Gestell (die Fuesse selbst
+    # sitzen am 2060 und beruehren es)
+    gestell = portal_check.quer_quader(w, L) + [
+        Quader('2040 ' + n, sx * R - 10.0, sx * R + 10.0, *L['rahmen_y'],
+               L['rahmen_z0'], L['rahmen_z0'] + w('rahmen_h'))
+        for sx, n in ((-1, 'links'), (1, 'rechts'))]
+    aussen = riegel + [q for q in FUESSE[OL['riegel_an']]
+                       if q.name.endswith(('Ausleger', 'Lagerbock'))]
+    d = engste(aussen, gestell)
+    p.ok('Riegel (Schwenkbereich), Ausleger <-> Gestell ({} / {})'.format(
+        d[1], d[2]), d[0], ow('luft_bau'))
 
     # ------------------------------------------------------------------
     p.titel('7) Verschraubung: je Fuss 2 x M5 in Hammermuttern der unteren '
@@ -355,10 +436,85 @@ def main():
            OL['fuss_x']['rechts'][0] - OL['fuss_x']['links'][1])
 
     # ------------------------------------------------------------------
-    p.titel('9) Druck (Bambu Lab A1): Unterseite aufs Bett')
+    p.titel('9) Riegel vorn rechts: klappt um eine M5 laengs X')
+    (yp, zp), rx = OL['riegel_achse'], OL['riegel_x']
+    rh, rl, rs = riegel_masse(ow, OL)
+    nase = OL['riegel_nase_y']
+    p.ok('Riegel greift vor das Plattenende (Platte hinten an der '
+         'Fuehrung)', py[1] - ow('platte_spiel') - nase, 10.0)
+    p.ok('Riegel deckt das Plattenende in der Hoehe', ow('riegel_h'), 10.0)
+    p.ok('Luft Plattenende <-> Riegel (X)', rx[0] - px[1], 0.5)
+    p.info('   Platz zwischen Anschlag und Riegel = laengste Platte',
+           rx[0] - OL['anschlag_x'][1])
+    p.ok('Riegel unter der Plattenoberflaeche', top - OL['riegel_z'][1], 1.0)
+    t = riegel_neigung(ow, OL)
+    p.info('Riegel zu: Nase sinkt, bis er auf der Kante des Auslegers liegt',
+           math.degrees(t), 'Grad')
+    p.ok('   Nase dann noch ueber dem Tisch',
+         zp - rl * math.sin(t) - rh * math.cos(t) - OL['tisch_z'], 2.0)
+    p.ok('Riegel zu: Auflage auf dem Ausleger hinter der Achse',
+         yp - OL['ausleger_y'][0], 5.0)
+    p.ok('Riegel offen: liegt ganz auf dem Ausleger (Y)',
+         OL['ausleger_y'][1] - (yp + rl), 0.5)
+    p.ok('Nabe dreht frei ueber dem Ausleger', ow('riegel_luft'), 0.3)
+    p.info('Schwenkkreis (klappt ueber oben, Gestell siehe 6): Radius', rs)
+    g = OL['fuehrung_y']['vorn']
+    for text, y0 in (('Ausleger', OL['ausleger_y'][0]),
+                     ('Lagerbock', OL['lager_y'][0]),
+                     ('Riegel offen', RQ['offen'].y[0]),
+                     ('Scheibe und Stoppmutter', RQ['mutter'].y[0])):
+        p.ok('Bahn der Platte frei: {} vor der Fuehrung'.format(text),
+             y0 - g, 1.5)
+    p.info('Stoss gegen die Platte (+X) wirkt parallel zur Achse: kein '
+           'Moment, das ihn aufklappt')
+    kontakt = (nase + py[1]) / 2.0          # Mitte der Auflage am Plattenende
+    hebel = OL['lager_y'][0] - kontakt      # ab der Kante des Lagerbocks
+    p.ok('Nase biegt sich bei {:.0f} N Stoss (in der Schichtebene)'.format(
+        F_STOSS), F_STOSS * hebel / (ow('riegel_h') * ow('riegel_dicke') ** 2
+                                     / 6.0), SIGMA_SCHICHT, '<=', 'MPa')
+    p.ok('Lagerbock biegt sich am Ausleger (quer zu den Schichten)',
+         F_STOSS * (zp - OL['ausleger_z'][1])
+         / (ow('lager_b') * ow('lager_t') ** 2 / 6.0), SIGMA_QUER, '<=',
+         'MPa')
+    yb = min(OL['ausleger_y'][1], OL['fuss_y']['vorn'][1]) - \
+        OL['ausleger_y'][0]                 # Anschluss am Fuss
+    ta = ow('ausleger_t')
+    p.ok('Ausleger am Fuss: Biegung und Zug (in der Schichtebene)',
+         F_STOSS * (zp - OL['tisch_z'] - ta / 2.0) / (yb * ta ** 2 / 6.0)
+         + F_STOSS / (yb * ta), SIGMA_SCHICHT, '<=', 'MPa')
+    zug = F_STOSS * hebel / (yp - OL['lager_y'][0])
+    p.info('Schraube: Zug, wenn der Riegel um die Kante des Lagerbocks '
+           'kippt', zug, 'N')
+    loch = math.pi * (ow('m5_durchgang') / 2.0) ** 2
+    p.ok('   Pressung unter dem Sechskantkopf',
+         zug / (math.sqrt(3.0) / 2.0 * ow('m5_sw') ** 2 - loch), PRESSUNG,
+         '<=', 'MPa')
+    p.ok('Schraube M5x{:.0f}: Ueberstand ueber die Stoppmutter'.format(
+        OL['riegel_schraube']), riegel_ueberstand(ow, OL), ow('ueberstand'))
+    p.ok('   Kopf in der Tasche unter der Flaeche zur Platte',
+         OL['riegel_tasche_t'] - ow('m5_sk_k'), 0.3)
+    p.ok('   Boden unter dem Kopf', ow('riegel_dicke') - OL['riegel_tasche_t'],
+         4.0)
+    p.ok('   Wand zwischen Tasche (Ecken) und Nabe',
+         rh - OL['riegel_tasche_sw'] / math.sqrt(3.0), 2.0)
+    p.ok('   Tasche: Zugabe auf SW {:.0f}'.format(ow('m5_sw')),
+         OL['riegel_tasche_sw'] - ow('m5_sw'), 0.2)
+    sr = ow('m5_scheibe_d') / 2.0
+    p.ok('Scheibe ganz auf dem Lagerbock (Y)', ow('lager_b') / 2.0 - sr, 1.0)
+    p.ok('   (oben)', ow('lager_ueber') - sr, 1.0)
+    p.ok('Stoppmutter (Ecke) ueber dem Ausleger',
+         zp - ow('m5_sw') / math.sqrt(3.0) - OL['ausleger_z'][1], 1.0)
+    pt = ((RQ['mutter'].x[0] + RQ['mutter'].x[1]) / 2.0, yp, zp)
+    laenge = bauraum.freier_korridor(pt, 'x', 1.0, 10.0, hindernisse)[0]
+    p.ok('Maulschluessel SW {:.0f} an der Stoppmutter (von rechts)'.format(
+        ow('m5_sw')), 999.0 if laenge == float('inf') else laenge, 40.0)
+
+    # ------------------------------------------------------------------
+    p.titel('10) Druck (Bambu Lab A1)')
     gesamt = 0.0
     for (s, e), q in sorted(FUESSE.items()):
-        bx = OL['fuss_x'][e][1] - OL['fuss_x'][e][0]
+        xb = OL['fuss_bb_x'][s + '_' + e]
+        bx = xb[1] - xb[0]
         yb = OL['fuss_bb_y'][s + '_' + e]
         by = yb[1] - yb[0]
         bz = OL['flansch_z'][1] - OL['flansch_z'][0]
@@ -367,11 +523,21 @@ def main():
         p.ok('Fuss {} {}: {:.0f} x {:.1f} x {:.0f} mm, {:.1f} cm3 ({:.0f} g '
              'voll)'.format(s, e, bx, by, bz, v, v * PETG),
              max(bx, by, bz), BETT, '<=')
-    p.info('Fuesse zusammen', gesamt, 'cm3')
-    p.info('Flansch, Wand, Anschlag senkrecht; Feder oben; M5 waagerecht')
+    p.info('Fuesse: Unterseite aufs Bett. Flansch, Wand, Anschlag und '
+           'Lagerbock senkrecht; Feder oben; M5 waagerecht')
+    sw_a = math.sqrt(3.0) / 2.0 * OL['riegel_tasche_sw'] ** 2
+    d_r, tt = ow('riegel_dicke'), OL['riegel_tasche_t']
+    v = (rl * 2.0 * rh * d_r + math.pi * rh ** 2 / 2.0 * d_r - sw_a * tt
+         - loch * (d_r - tt)) / 1000.0
+    gesamt += v
+    p.ok('Riegel: {:.0f} x {:.1f} x {:.0f} mm, {:.1f} cm3 ({:.0f} g voll)'
+         .format(d_r, rl + rh, 2.0 * rh, v, v * PETG),
+         max(d_r, rl + rh, 2.0 * rh), BETT, '<=')
+    p.info('Riegel: Seite ohne Tasche aufs Bett, Bohrung senkrecht')
+    p.info('Druckteile zusammen', gesamt, 'cm3')
 
     # ------------------------------------------------------------------
-    p.titel('10) Statische Pruefung der Schluessel in Opferplatte.py')
+    p.titel('11) Statische Pruefung der Schluessel in Opferplatte.py')
     quelle = open(OPFERPLATTE, encoding='utf-8').read()
     benutzt = set(re.findall(r"\bw\('([^']+)'\)", quelle))
     fehlt_m = sorted(benutzt - set(om.MASSE))
@@ -386,7 +552,7 @@ def main():
     if unbenutzt:
         p.info('nur fuer die Pruefung: ' + ', '.join(unbenutzt))
 
-    p.titel('11) Validierungsbericht des Fusion-Skripts')
+    p.titel('12) Validierungsbericht des Fusion-Skripts')
     try:
         zeilen = om.hinweise_bauen(OL, [])
         for zeile in zeilen:
@@ -398,12 +564,15 @@ def main():
         p.info('Bericht NICHT renderbar: {}'.format(exc))
         p.ok('Bericht rendert ohne Fehler', 0.0, 1.0, '>=', '')
 
-    p.titel('12) Stueckliste')
+    p.titel('13) Stueckliste')
     for zeile in (
-            'Druck (PETG): Fuss_vorn_links, Fuss_vorn_rechts, '
-            'Fuss_hinten_links, Fuss_hinten_rechts',
+            'Druck (PETG): Fuss_vorn_links, Fuss_vorn_rechts (mit Ausleger), '
+            'Fuss_hinten_links, Fuss_hinten_rechts, Riegel',
             '8 x M5x{:.0f} + 8 Scheiben M5 + 8 Hammermuttern M5 (Nut 6), '
             'untere Seitennut aussen an den 2060'.format(OL['m5_schraube']),
+            '1 x Sechskantschraube M5x{:.0f} (ISO 4017) + 1 Scheibe M5 + 1 '
+            'Stoppmutter M5 (DIN 985): Achse des Riegels'.format(
+                OL['riegel_schraube']),
             'Opferplatte: Spanplatte {:.0f} x {:.0f} x {:.1f} mm '
             '(vorhanden)'.format(ow('platte_l'), ow('platte_b'),
                                  ow('platte_dicke'))):

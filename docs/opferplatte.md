@@ -1,11 +1,11 @@
-# Opferplatte und Führungsfüße
+# Opferplatte, Führungsfüße und Riegel
 
-Erzeugt von `fusion/Opferplatte/Opferplatte.py` (vier Druckteile, Rev. 2).
+Erzeugt von `fusion/Opferplatte/Opferplatte.py` (fünf Druckteile, Rev. 3).
 Geprüft mit `python3 tools/opferplatte_check.py`, Zeichnung in
 [opferplatte.svg](opferplatte.svg) (neu erzeugen mit
 `python3 tools/opferplatte_zeichnen.py`).
 
-![Opferplatte und Führungsfüße](opferplatte.svg)
+![Opferplatte, Führungsfüße und Riegel](opferplatte.svg)
 
 ## Die Platte
 
@@ -53,12 +53,50 @@ außerhalb des Elektronikfachs.
 | Innenteil hinten | 52,35 mm breit: Boden 5 mm auf dem Tisch, an der Platte eine Führungswand 6 mm |
 | Anschlag | an den beiden linken Füßen: 5 mm dick, greift 15 mm vor das Plattenende, 20 mm hoch, also 5,3 mm unter der Oberfläche |
 | Einführschräge | an den beiden rechten Füßen: 5 mm unter 45°, damit die Platte beim Einschieben nicht hängen bleibt |
+| Ausleger | nur am Fuß vorn rechts: 6 mm dick flach auf dem Tisch bis X +337, darauf der Lagerbock für den Riegel (siehe unten) |
 
-Es sind **vier verschiedene Teile**: links mit Anschlag, rechts mit
-Schräge, vorn schmal, hinten breit.
+Es sind **vier verschiedene Füße**: links mit Anschlag, rechts mit
+Schräge, vorn schmal, hinten breit; der vordere rechte trägt dazu den
+Ausleger.
 
-Eine Bohrlehre gibt es nicht: Alle Schrauben gehen in Hammermuttern,
-gebohrt wird nichts.
+Eine Bohrlehre gibt es nicht: Die Füße gehen in Hammermuttern, und die
+Achse des Riegels ist ein einzelnes gedrucktes Loch in jedem der beiden
+Teile. Gebohrt wird nichts.
+
+## Der Riegel
+
+Links hält der Anschlag die Platte. Rechts war sie bisher offen und konnte
+bei einem Stoß herausrutschen. Seit Rev. 3 sitzt deshalb **vor dem
+rechten Plattenende ein Klappriegel**.
+
+Er dreht sich um eine **waagerechte M5 längs X**, also parallel zu der
+Richtung, in der die Platte herausrutschen würde. Ein Stoß gegen die Platte
+drückt ihn deshalb nur längs seiner Achse gegen den Lagerbock, und ein
+Moment, das ihn aufklappen könnte, entsteht dabei nicht. Einen Vorreiber
+mit senkrechter Achse würde die Platte dagegen selbst aufdrehen; ihn hielte
+nur die Reibung.
+
+| | |
+|---|---|
+| zu | die Nase liegt vor dem Plattenende: 17 mm Überdeckung in Y (16 mm, wenn die Platte hinten an der Führung liegt), 15 mm hoch, 1 mm Luft in X |
+| offen | um 180° über oben nach vorn geklappt, liegt auf dem Ausleger |
+| Halt | Beide Lagen hält die Schwerkraft. Geschlossen sinkt die Nase um knapp 3°, bis der Riegel hinten auf der Kante des Auslegers liegt, und bleibt dabei 5 mm über dem Tisch. Offen liegt er auf dem Ausleger. |
+| Riegel | 9 × 37,5 × 15 mm, Nase 30 mm vor der Achse, um die Achse eine halbrunde Nabe Ø 15 |
+| Achse | Y +185,35, Z −140,3 (14 mm über dem Tisch); Oberkante des Riegels 3,8 mm unter der Plattenoberfläche |
+| Lagerbock | 7 mm dick (X +330 bis +337), 20 mm breit, auf dem Ausleger |
+| Schraube | Sechskantschraube M5×20 (ISO 4017). Der Kopf sitzt auf der Plattenseite in einer Sechskanttasche (SW 8,3, 4 mm tief) und dreht sich mit dem Riegel. Rechts kommen Scheibe und Stoppmutter M5 (DIN 985) drauf, die Schraube steht 2 mm über. |
+| Bahn frei | Ausleger und Lagerbock beginnen 2 mm vor der Führung, der offene Riegel 4,5 mm: Die Platte gleitet an allem vorbei |
+| Platz | zwischen Anschlag und Riegel 616 mm: länger darf die Platte nicht sein |
+| Schwenkkreis | Radius 31 mm über oben, bis Z −109; Gestell, Not-Aus und Portal bleiben weit weg |
+
+Bei einem kräftigen Stoß von 100 N biegt sich die Nase mit 5,7 MPa,
+der Lagerbock mit 4,9 MPa (quer zu den Schichten) und der Ausleger am
+Fuß mit 5,6 MPa. Die Schraube bekommt dabei 115 N Zug, weil der Riegel um
+die Kante des Lagerbocks kippen will. Das ist alles weit unter dem, was
+PETG trägt.
+
+Die Stoppmutter stellst du von rechts mit einem 8er Maulschlüssel nach,
+auch bei eingelegter Platte. Der Kopf in der Tasche hält dabei gegen.
 
 ## Höhen
 
@@ -69,6 +107,9 @@ gebohrt wird nichts.
 | −123,8 | Unterkante des Lasers, Z ganz unten, Laser ganz unten im Langloch |
 | −125,3 | tiefster Punkt des Toolheads (Schlittenplatte), Z ganz unten |
 | **−129** | **Oberfläche der Platte** = Unterkante der 2060 = bisher der Tisch |
+| −132,8 | Oberkante des Riegels (zu) |
+| −140,3 | Achse des Riegels |
+| −148,3 | Oberseite des Auslegers |
 | −154,3 | Tisch: Die Maschine steht jetzt 25,3 mm höher |
 
 * **Werkstückhöhe:** 58 mm über der Platte bis 5 mm unter die tiefste feste
@@ -97,21 +138,31 @@ gebohrt wird nichts.
    dann je Fuß 2 × M5×12 mit Scheibe durch den Flansch in die
    Hammermuttern. Der Inbus kommt von außen, nichts steht im Weg.
 3. Die andere Seite ebenso.
-4. Die Platte von rechts zwischen die Füße schieben, bis sie links am
-   Anschlag steht.
+4. Den Riegel an den Lagerbock schrauben: die Sechskantschraube M5×20
+   von links (Plattenseite) durch Riegel und Lagerbock, der Kopf in die
+   Tasche, rechts Scheibe und Stoppmutter. Mit dem 8er Schlüssel so fest
+   anziehen, dass der Riegel nicht wackelt, sich aber von Hand klappen
+   lässt. Das geht auch vorher am losen Fuß.
+5. Den Riegel nach vorn klappen, die Platte von rechts zwischen die Füße
+   schieben, bis sie links am Anschlag steht, und den Riegel
+   zurückklappen.
+
+**Herausnehmen:** Riegel nach vorn klappen, Platte nach rechts ziehen.
 
 ## Druck (PETG, Bambu Lab A1)
 
-Unterseite (Tischseite) aufs Bett. Flansch, Wand und Anschlag stehen
-senkrecht, die Feder liegt oben, die M5-Löcher waagerecht, keine Stützen.
-4 Wandlinien, 20 % Infill.
+Füße mit der Unterseite (Tischseite) aufs Bett: Flansch, Wand, Anschlag
+und Lagerbock stehen senkrecht, die Feder liegt oben, die M5-Löcher
+waagerecht. Der Riegel liegt mit der Seite ohne Tasche auf dem Bett, seine
+Bohrung steht senkrecht. Keine Stützen, 4 Wandlinien, 20 % Infill.
 
 | Teil | Volumen | Masse (voll) | Bauraum |
 |---|---|---|---|
 | Fuß vorn links | 55,0 cm³ | ≈ 70 g | 50 × 52,65 × 44,3 mm |
-| Fuß vorn rechts | 53,2 cm³ | ≈ 68 g | 50 × 37,65 × 44,3 mm |
+| Fuß vorn rechts (mit Ausleger) | 64,3 cm³ | ≈ 82 g | 87 × 43 × 44,3 mm |
 | Fuß hinten links | 59,4 cm³ | ≈ 75 g | 50 × 93,35 × 44,3 mm |
 | Fuß hinten rechts | 57,6 cm³ | ≈ 73 g | 50 × 78,35 × 44,3 mm |
+| Riegel | 4,5 cm³ | ≈ 6 g | 9 × 37,5 × 15 mm |
 
 Die Massen gelten für Vollmaterial; mit 20 % Infill wird es deutlich
 weniger.
@@ -120,16 +171,24 @@ weniger.
 
 | Stück | Teil | wofür |
 |---|---|---|
-| 4 | Fuß (PETG): vorn links, vorn rechts, hinten links, hinten rechts | trägt die Maschine, führt die Platte |
+| 4 | Fuß (PETG): vorn links, vorn rechts mit Ausleger, hinten links, hinten rechts | trägt die Maschine, führt die Platte |
+| 1 | Riegel (PETG) | hält die Platte rechts |
 | 8 | M5×12 Zylinderkopf + Scheibe DIN 125 | Flansch → Hammermutter |
 | 8 | Hammermutter M5 (Nut 6) | untere Seitennut außen an den 2060 |
+| 1 | Sechskantschraube M5×20 (ISO 4017) + Scheibe DIN 125 + Stoppmutter M5 (DIN 985) | Achse des Riegels |
 | 1 | Spanplatte 615 × 349 × 25 mm (gemessen 25,3) | Opferplatte (vorhanden) |
 
 ## Noch offen
 
-Nichts mehr. Geklärt am 2026-10-02: Die Platte ist 25,3 mm dick
-(Nennmaß 25), die Füße sind seit Rev. 2 genau so hoch. Die untere Nut
-und die untere Seitennut an den Enden der 2060 sind frei.
+* **Länge der Platte nachmessen.** Gerechnet ist mit deiner Angabe von
+  615 mm. Zwischen Anschlag und Riegel sind 616 mm, eine längere Platte
+  ließe den Riegel nicht zu. Riegel, Lagerbock und Ausleger richten sich
+  nach `platte_l`. Mit der gemessenen Länge lässt du das Skript neu laufen
+  und druckst den Fuß vorn rechts neu.
+
+Geklärt am 2026-10-02: Die Platte ist 25,3 mm dick (Nennmaß 25), die Füße
+sind seit Rev. 2 genau so hoch. Die untere Nut und die untere Seitennut an
+den Enden der 2060 sind frei.
 
 ## Parametrik
 
@@ -150,3 +209,10 @@ vergleicht die Prüfung mit `Portal.py` und `ToolheadZ.py`.
 | `m5_abstand` | 32 mm | Abstand der beiden M5 je Fuß |
 | `anschlag_t` / `anschlag_tief` / `anschlag_h` | 5 / 15 / 20 mm | Anschlag an den linken Füßen |
 | `einfuehr` | 5 mm | Einführschräge an den rechten Füßen |
+| `riegel_spiel` | 1 mm | Luft zwischen Plattenende und Riegel; der Riegel sitzt `platte_l` + `riegel_spiel` hinter dem Anschlag |
+| `riegel_dicke` / `riegel_h` / `riegel_ueber` | 9 / 15 / 17 mm | Riegel: Dicke in X, Höhe (= Ø der Nabe), Überdeckung des Plattenendes in Y |
+| `riegel_luft` | 0,5 mm | Luft zwischen Nabe und Ausleger; legt die Höhe der Achse fest |
+| `ausleger_luft` / `ausleger_t` | 2 / 6 mm | Ausleger und Lagerbock beginnen so weit vor der Führung; Dicke des Auslegers |
+| `lager_t` / `lager_b` / `lager_ueber` | 7 / 20 / 8 mm | Lagerbock: Dicke, Breite, Höhe über der Achse |
+| `m5_sw` / `m5_sk_k` / `sk_spiel` | 8 / 3,5 / 0,3 mm | Sechskantkopf und Tasche im Riegel |
+| `m5_mutter_h` / `ueberstand` | 5 / 1,5 mm | Stoppmutter; so weit muss die Schraube mindestens überstehen (bestimmt die Länge M5×20) |

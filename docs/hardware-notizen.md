@@ -11,7 +11,7 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 | Ebene | Aufbau |
 |---|---|
 | Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem vorderen Ende der 2040, hinten stehen die 2040 110 mm über), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; an jeder Kreuzung 8 Winkel (20 mm). Seit 2026-10-02 auf 4 gedruckten Führungsfüßen 25,3 mm über dem Tisch ([opferplatte.md](opferplatte.md)) |
-| Opferplatte | **Spanplatte 615 × 349 × 25 mm**, gemessen **25,3 mm** dick (`[v]` Angabe und Messung 2026-10-02), liegt zwischen den Führungsfüßen auf dem Tisch, Oberfläche auf der Unterkante der 2060; wird nach rechts herausgezogen |
+| Opferplatte | **Spanplatte 615 × 349 × 25 mm**, gemessen **25,3 mm** dick (`[v]` Angabe und Messung 2026-10-02), liegt zwischen den Führungsfüßen auf dem Tisch, Oberfläche auf der Unterkante der 2060; wird nach rechts herausgezogen, dort hält sie seit Rev. 3 ein Klappriegel |
 | Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn **je Seite ein NEMA 17** mit dem Ritzel direkt auf der Welle, mittig zur 2040 (Y-Motorhalter in `Portal.py`) |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |

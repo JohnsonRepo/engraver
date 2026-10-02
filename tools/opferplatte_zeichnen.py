@@ -121,7 +121,7 @@ def main():
               '{} × {} × {} mm [v]; die Füße sind so hoch, wie die Platte '
               'dick ist: Ihre Oberfläche liegt, wo bisher der Tisch '
               'war.'.format(de(ow('platte_l'), 0), de(ow('platte_b'), 0),
-                            de(ow('platte_dicke'), 0)), 9, GRAU)]
+                            de(ow('platte_dicke'), 1)), 9, GRAU)]
 
     # ---- Feld 1: von oben, vorn unten ---------------------------------------
     f1 = Feld(250, 100, (-335.0, 350.0), (-272.0, 240.0), 1.0,
@@ -166,7 +166,7 @@ def main():
         (-R, 100.0, '2040 links\n(liegt darüber)'),
         (-150.0, -40.0, 'Opferplatte, Spanplatte\n{} × {} × {} mm'.format(
             de(ow('platte_l'), 0), de(ow('platte_b'), 0),
-            de(ow('platte_dicke'), 0))),
+            de(ow('platte_dicke'), 1))),
         (fx0, 60.0, 'Arbeitsfeld {} × {} mm\n(Strahl, gestrichelt)'.format(
             de(fx1 - fx0, 0), de(fy1 - fy0, 0))),
         ((hl[0] + hl[1]) / 2.0, OL['flansch_y']['vorn'][1],
@@ -228,7 +228,7 @@ def main():
     t += hoch_mass(f2, yh[1] - 3.0, top, tief, '{} mm'.format(
         de(tief - top, 1)), anker='end')
     t += hoch_mass(f2, OL['quer_y']['hinten'][1] + 4.0, tz, top,
-                   '{} mm'.format(de(top - tz, 0)))
+                   '{} mm'.format(de(top - tz, 1)))
 
     # ---- Feld 3: Schnitt durch den vorderen rechten Fuss --------------------
     yv = (py[1] - 16.0, OL['flansch_y']['vorn'][1] + 14.0)
@@ -283,7 +283,7 @@ def main():
     zeilen = [
         ('Platte', 'Spanplatte {} × {} × {} mm [v], ≈ {} kg'.format(
             de(ow('platte_l'), 0), de(ow('platte_b'), 0),
-            de(ow('platte_dicke'), 0),
+            de(ow('platte_dicke'), 1),
             de((px[1] - px[0]) * (py[1] - py[0]) * (pz[1] - pz[0]) * 0.65
                / 1e6, 1))),
         ('', 'X {} bis {}: links am Anschlag, rechts {} mm über dem '
@@ -301,8 +301,8 @@ def main():
         ('', 'Toolhead mit Z ganz unten: {} mm über Platte und '
          'Füßen'.format(de(tief - top, 1))),
         ('Füße', '{} mm lang, {} mm hoch; der Tisch liegt jetzt {} mm '
-         'tiefer'.format(de(ow('fuss_l'), 0), de(OL['fuss_h'], 0),
-                         de(OL['fuss_h'], 0))),
+         'tiefer'.format(de(ow('fuss_l'), 0), de(OL['fuss_h'], 1),
+                         de(OL['fuss_h'], 1))),
         ('Befestigung', 'je Fuß 2 × M5×{} + Scheibe, Hammermuttern in der '
          'unteren Seitennut'.format(de(OL['m5_schraube'], 0))),
         ('Druck', 'PETG, Unterseite aufs Bett, keine Stützen, 4 Teile'),

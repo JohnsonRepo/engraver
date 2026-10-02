@@ -12,8 +12,9 @@
 #               Platte und fuehrt sie. Die linken Fuesse tragen den
 #               Anschlag fuer das Plattenende, die rechten eine
 #               Einfuehrschraege: herausgezogen wird die Platte nach rechts.
-#   Opferplatte  Spanplatte 615 x 349 x 25 [v] (vorhanden, Angabe vom
-#               2026-10-02). Sie liegt auf dem Tisch zwischen den Fuessen,
+#   Opferplatte  Spanplatte 615 x 349 x 25 (vorhanden, Angabe vom
+#               2026-10-02), gemessen 25,3 dick [v]. Sie liegt auf dem
+#               Tisch zwischen den Fuessen,
 #               mittig unter dem Arbeitsfeld, und steht rechts ueber das
 #               Gestell hinaus: dort fasst man sie zum Herausziehen.
 #   Referenz_nicht_drucken  die beiden 2060 und die beiden 2040.
@@ -31,7 +32,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Opferplatte'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -68,11 +69,11 @@ MASSE = {
     'feld_y1':            (164.5, 'Arbeitsfeld: vorn'),
 
     # --- Opferplatte [v] Angabe 2026-10-02 ------------------------------------
-    # Spanplatten streuen in der Dicke um einige Zehntel: gemessen eintragen,
-    # die Fuesse werden genau so hoch.
+    # Nennmass 25, gemessen 25,3 (Rev. 2, 2026-10-02): die Fuesse werden
+    # genau so hoch wie die gemessene Dicke.
     'platte_l':           (615.0, 'Opferplatte: Laenge (X, wird nach rechts gezogen)'),
     'platte_b':           (349.0, 'Opferplatte: Breite (Y)'),
-    'platte_dicke':        (25.0, 'Opferplatte: Dicke = Hoehe der Fuesse'),
+    'platte_dicke':        (25.3, 'Opferplatte: Dicke (gemessen) = Hoehe der Fuesse'),
     'platte_spiel':         (1.0, 'Opferplatte: Luft je Seite zur Fuehrung'),
 
     # --- Fuesse -------------------------------------------------------------
@@ -814,7 +815,7 @@ def hinweise_bauen(L, fehler):
         '  rechts eine EINFUEHRSCHRAEGE ({:.0f} mm, 45 Grad).'.format(
             w('einfuehr')),
         '',
-        'OPFERPLATTE (Spanplatte {:.0f} x {:.0f} x {:.0f}, vorhanden): liegt '
+        'OPFERPLATTE (Spanplatte {:.0f} x {:.0f} x {:.1f}, vorhanden): liegt '
         'auf'.format(w('platte_l'), w('platte_b'), w('platte_dicke')),
         '  dem Tisch zwischen den Fuessen, Y {:+.1f} bis {:+.1f} (mittig'
         .format(py[0], py[1]),
@@ -845,10 +846,10 @@ def hinweise_bauen(L, fehler):
         '',
         'KEINE BOHRLEHRE: alle Schrauben gehen in Hammermuttern.',
         '',
-        'NICHT GEMESSEN [?]: die Dicke der Platte (Spanplatten streuen um',
-        '  einige Zehntel) - gemessen als platte_dicke eintragen, die Fuesse',
-        '  werden genau so hoch; und ob die untere Nut und die untere',
-        '  Seitennut aussen an den Enden der 2060 frei sind.',
+        'GEMESSEN (2026-10-02): Platte {:.1f} mm dick (Nennmass 25), die'
+        .format(w('platte_dicke')),
+        '  Fuesse sind genau so hoch. Untere Nut und untere Seitennut an',
+        '  den Enden der 2060 sind frei.',
     ]
     if fehler:
         h += ['', 'FEHLER / WARNUNGEN:'] + ['  ' + f for f in fehler]

@@ -404,7 +404,7 @@ def main():
             'Fuss_hinten_links, Fuss_hinten_rechts',
             '8 x M5x{:.0f} + 8 Scheiben M5 + 8 Hammermuttern M5 (Nut 6), '
             'untere Seitennut aussen an den 2060'.format(OL['m5_schraube']),
-            'Opferplatte: Spanplatte {:.0f} x {:.0f} x {:.0f} mm '
+            'Opferplatte: Spanplatte {:.0f} x {:.0f} x {:.1f} mm '
             '(vorhanden)'.format(ow('platte_l'), ow('platte_b'),
                                  ow('platte_dicke'))):
         p.info(zeile)

@@ -6,7 +6,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; steht auf 4 gedruckten Führungsfüßen 25 mm über dem Tisch, dazwischen die Opferplatte |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; steht auf 4 gedruckten Führungsfüßen 25,3 mm über dem Tisch, dazwischen die Opferplatte |
 | Y-Achse | 2 Linearführungen MGN12H (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn je Seite ein NEMA 17 mit dem Ritzel direkt auf der Welle, mittig zur 2040 |
 | Portal | Y-Schlitten auf den MGN12H-Wagen, dazwischen ein 2020-V-Slot-Profil (500 mm); Y-Schienen 514 mm Mitte zu Mitte |
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
@@ -163,7 +163,8 @@ in [docs/notaus.md](docs/notaus.md).
 
 ### Opferplatte und Führungsfüße (neu)
 
-Die Opferplatte ist eine Spanplatte 615 × 349 × 25 mm. Sie liegt auf dem
+Die Opferplatte ist eine Spanplatte 615 × 349 × 25 mm (gemessen 25,3 mm
+dick). Sie liegt auf dem
 Tisch zwischen vier gedruckten **Führungsfüßen** unter den Enden der
 beiden 2060. Die Füße sind so hoch, wie die Platte dick ist: Ihre
 Oberfläche liegt dort, wo bisher der Tisch war, und Fokus und
@@ -272,10 +273,11 @@ und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
 **Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 24 mit
-dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 1). Neu ist
-`Opferplatte.py`: vier Führungsfüße, 25 mm hoch, für die Spanplatte
-615 × 349 × 25 mm; die Maschine steht darauf, die Plattenoberfläche liegt
-auf der alten Tischhöhe. Portal Rev. 24 stellt auf den
+dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 2). Neu ist
+`Opferplatte.py`: vier Führungsfüße für die Spanplatte 615 × 349 × 25 mm,
+seit Rev. 2 so hoch wie ihre gemessenen 25,3 mm; die Maschine steht
+darauf, die Plattenoberfläche liegt auf der alten Tischhöhe. Portal Rev. 24
+stellt auf den
 linken Stirnblock einen Anschlag für den X-Motorhalter: Bis dahin hielt
 ihn nur die Reibung unter seinen zwei Schrauben, und bei kräftig
 gespanntem Riemen rutschte er nach innen. Der gedruckte Halter passt

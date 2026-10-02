@@ -4,6 +4,8 @@ Erzeugt von `fusion/Opferplatte/Opferplatte.py` (fünf Druckteile, Rev. 3).
 Geprüft mit `python3 tools/opferplatte_check.py`, Zeichnung in
 [opferplatte.svg](opferplatte.svg) (neu erzeugen mit
 `python3 tools/opferplatte_zeichnen.py`).
+Wie du das Werkstück auf der Platte spannst (Anschlag, Exzenter,
+Niederhalter), steht in [spannmittel.md](spannmittel.md).
 
 ![Opferplatte, Führungsfüße und Riegel](opferplatte.svg)
 

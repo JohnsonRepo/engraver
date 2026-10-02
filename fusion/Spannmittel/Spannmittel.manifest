@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Spannmittel fuer die Opferplatte des Lasers: ein Anschlagwinkel, fest hinten links in der Ecke der Referenzfahrt, dessen Innenecke der Nullpunkt fuer das Werkstueck ist; zwei selbsthemmende Exzenter mit Hebel, die das Werkstueck in die Ecke schieben; Niederhalter (Spanneisen) je Materialstaerke 2 bis 6 mm, die duenne, verzogene Platten am Rand flach halten. Alles so flach, dass der Toolhead darueber faehrt; befestigt mit Spanplattenschrauben 3,0 x 20 Senkkopf. Dazu, nur zur Ansicht, die Opferplatte und ein Beispielwerkstueck (nicht drucken)."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

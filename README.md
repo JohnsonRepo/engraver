@@ -22,6 +22,7 @@ fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb,
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
+fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
@@ -40,6 +41,8 @@ docs/notaus.md                 Not-Aus: Taster, Lage, Gehäuse, Montage, Druck
 docs/notaus.svg                Not-Aus-Gehäuse von vorn, im Schnitt und von oben
 docs/opferplatte.md            Opferplatte, Führungsfüße und Riegel: Lage, Höhen, Montage, Druck
 docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, Schnitte durch Füße, Riegel und Anschlag
+docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzenter, Niederhalter, Höhe unter dem Toolhead
+docs/spannmittel.svg           Ecke der Opferplatte mit Spannmitteln von oben, Schnitte durch Niederhalter und Anschlag, Exzenter
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
@@ -64,6 +67,8 @@ tools/notaus_check.py          Prüfung des Not-Aus-Gehäuses: Lage, Freiraum, S
 tools/notaus_zeichnen.py       erzeugt die Zeichnung des Not-Aus-Gehäuses
 tools/opferplatte_check.py     Prüfung von Opferplatte, Füßen und Riegel: Arbeitsfeld, Höhen, Freiraum, Riegel, Schrauben, Druck
 tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte, Füßen und Riegel
+tools/spannmittel_check.py     Prüfung der Spannmittel: Höhe unter dem Toolhead, Lage, Selbsthemmung, Schrauben, Druck
+tools/spannmittel_zeichnen.py  erzeugt die Zeichnung der Spannmittel
 tools/kette_zeichnen.py        erzeugt die Zeichnung der X-Energiekette
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
@@ -177,6 +182,20 @@ ihn längs der Achse an seinen Lagerbock und kann ihn nicht aufklappen;
 zum Herausnehmen klappt man ihn nach vorn um. Details in
 [docs/opferplatte.md](docs/opferplatte.md).
 
+### Spannmittel (neu)
+
+Ein Laser drückt nicht auf das Werkstück. Gespannt wird, damit es an einer
+bekannten Stelle liegt, nicht verrutscht und dünnes, verzogenes Material
+flach bleibt. Ein **Anschlagwinkel** sitzt fest hinten links auf der
+Opferplatte, seine Innenecke ist der Nullpunkt (`G10 L20 P1 X0 Y0`). Zwei
+selbsthemmende **Exzenter** schieben das Werkstück in die Ecke, und
+**Niederhalter** je Materialstärke (2–6 mm) halten dünne Platten am Rand
+flach. Alles ist so flach, dass der Toolhead darüberfährt: Anschlag und
+Exzenter sind 3 mm hoch, der Niederhalter ragt 2,5 mm über das Werkstück,
+und der Toolhead bleibt mindestens 3,7 mm darüber. Befestigt wird mit
+Spanplattenschrauben 3,0 × 20. Details in
+[docs/spannmittel.md](docs/spannmittel.md).
+
 ### Endschalter X und Y (neu)
 
 Zwei LM393-Gabellichtschranken wie an Z, beide schalten 3 mm vor dem
@@ -225,7 +244,7 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
 Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
-*Portal*, *Elektronik*, *NotAus* oder *Opferplatte*). Jeder Lauf legt ein **neues
+*Portal*, *Elektronik*, *NotAus*, *Opferplatte* oder *Spannmittel*). Jeder Lauf legt ein **neues
 Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
@@ -252,6 +271,8 @@ python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schraube
 python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
 python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
+python3 tools/spannmittel_check.py  # Spannmittel: Höhe unter dem Toolhead, Lage, Exzenter, Schrauben
+python3 tools/spannmittel_zeichnen.py  # docs/spannmittel.svg neu erzeugen
 python3 tools/kette_zeichnen.py     # docs/energiekette.svg und energiekette-y.svg neu erzeugen
 ```
 
@@ -276,8 +297,10 @@ und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
 **Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 24 mit
-dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3). Neu ist
-`Opferplatte.py`: vier Führungsfüße für die Spanplatte 615 × 349 × 25 mm,
+dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
+Spannmittel Rev. 1). Neu ist `Spannmittel.py`: Anschlagwinkel als
+Nullpunkt, Exzenter und Niederhalter für das Werkstück, alles flach genug
+für den Toolhead. Davor kam `Opferplatte.py`: vier Führungsfüße für die Spanplatte 615 × 349 × 25 mm,
 seit Rev. 2 so hoch wie ihre gemessenen 25,3 mm; die Maschine steht
 darauf, die Plattenoberfläche liegt auf der alten Tischhöhe. Rev. 3 hält
 die Platte an der offenen rechten Seite mit einem Klappriegel, den ein

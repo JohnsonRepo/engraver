@@ -328,7 +328,9 @@ harte Kollision, kein weicher Anschlag.
 
 Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
 (1 mm dicker = 1 mm tiefer) — mit dem langen Verfahrweg brauchst du sie für den
-Fokus nicht mehr.
+Fokus nicht mehr. Mit dem [Spannsystem](spannsystem.md#im-bereich-des-toolheads-ist-alles-flach--und-ein-z-softlimit-schützt-es)
+kommt ein Z-Softlimit dazu, das die Schlittenplatte über Opferplatte, Leiste
+und Backe hält; die Langlochstellung je f steht dann dort.
 
 ## Endschalter: Gabellichtschranke
 

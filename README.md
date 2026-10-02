@@ -33,6 +33,8 @@ docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ket
 docs/elektronik-anschluss.svg  Anschlussplan: Netzteil, Wandler, Shield, Motoren, Laser, Endschalter
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
+docs/spannsystem.md            Spannsystem mit Werkstückerkennung: Konzept  ← neu
+docs/spannsystem.svg           Draufsicht aufs Bett, Querschnitt durch den Antrieb links
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
 tools/toolhead_check.py        rechnerische Prüfung der Baugruppe (ohne Fusion)
 tools/portal_check.py          Prüfung des Portals mit dem Toolhead über X- und Z-Weg
@@ -44,6 +46,8 @@ tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum,
 tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
 tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
 tools/geometrie_check.py       Prüfung der Einzelplatte
+tools/spannsystem_check.py     Konzeptprüfung Spannsystem (Platz, Höhen, Weg, Kraft)
+tools/spannsystem_zeichnen.py  erzeugt die Zeichnung des Spannsystems
 ```
 
 ## Teile
@@ -100,6 +104,21 @@ dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
 Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
 [docs/elektronik.md](docs/elektronik.md).
 
+### Spannsystem mit Werkstückerkennung (Konzept)
+
+Fester Anschlag vorn links — eine **Anschlagleiste** am vorderen 2060 und
+ein linker Anschlag, beide Alu — als Nullpunkt jedes Jobs. Eine
+**Spannbacke** drückt die Platte von hinten dagegen; ein eigener NEMA 17
+verfährt sie über einen GT2-Riemen auf einer MGN9 unter dem linken 2040,
+außerhalb der Reichweite des Toolheads. Beim Spannen misst sie die **Tiefe
+der Platte** (26 bis 323 mm): Schritte ab Referenz bis zu dem Punkt, an dem
+die federnde Leiste schaltet. Alles im Bereich des Toolheads ist höchstens
+3,5 mm hoch, ein Z-Softlimit (`$132 ≈ 76`) hält die Schlittenplatte darüber.
+Der fünfte Motor bekommt eine eigene Steuerung (Nano + TMC2209), die über
+`M8`/`M9` und Cycle Start mit GRBL spricht. Breite und Dicke misst später
+ein Taster am Toolhead. Details und offene Fragen in
+[docs/spannsystem.md](docs/spannsystem.md).
+
 ### Toolhead-Grundplatte (überholt)
 
 Die erste Ausführung: nur die Platte, die den Laser am MGN9-Z-Wagen hält, ohne
@@ -133,6 +152,8 @@ python3 tools/y_antrieb_zeichnen.py # docs/portal-y-antrieb.svg neu erzeugen
 python3 tools/elektronik_zeichnen.py # docs/elektronik-platz.svg + Kabellängen
 python3 tools/anschluss_zeichnen.py  # docs/elektronik-anschluss.svg
 python3 tools/geometrie_check.py    # nur die Einzelplatte
+python3 tools/spannsystem_check.py  # Spannsystem: Platz, Höhen, Weg, Kraft
+python3 tools/spannsystem_zeichnen.py # docs/spannsystem.svg
 ```
 
 `toolhead_check.py` importiert das Fusion-Skript mit gestubbtem `adsk`-Modul und
@@ -154,7 +175,8 @@ dem hinteren 2060, in das weder Portal noch Toolhead hineinfahren.
 **Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 33, Portal Rev. 13).
 Elektronikgehäuse Rev. 1 gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)); die Halter für Endschalter und
-Energieketten folgen. Der
+Energieketten folgen. Spannsystem als Konzept gerechnet
+([spannsystem.md](docs/spannsystem.md)), die Teile folgen. Der
 Zugangskonflikt zwischen Laser und Z-Wagen ist gelöst, indem der Laser
 30,75 mm tiefer hängt und über senkrechte Langlöcher eingestellt wird —
 [Laserhöhe](docs/toolhead-z.md#laserhöhe-langloch-statt-rechnen).

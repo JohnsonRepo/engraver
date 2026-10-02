@@ -1,0 +1,235 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1156" height="1252" viewBox="0 0 1156 1252" font-family="Inter, Helvetica, Arial, sans-serif"><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Spannsystem mit Werkstückerkennung — Konzept (Portal.py Rev. 13, ToolheadZ.py Rev. 33)</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, Lagen aus tools/spannsystem_check.py. Der Antrieb ist als Bauraum gezeichnet, die Teile folgen in Fusion. Beispiel: Platte 300 × 200 mm.</text>
+<clipPath id="drauf"><rect x="262.0" y="92.0" width="644.6" height="479.6"/></clipPath>
+<g clip-path="url(#drauf)">
+<rect x="358.8" y="122.8" width="499.4" height="415.8" fill="#f4efe4" stroke="#b3a07c" stroke-width="0.8"/>
+<rect x="381.0" y="164.1" width="430.3" height="353.1" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 4"/>
+<rect x="361.7" y="125.0" width="498.0" height="411.4" fill="none" stroke="#b4342f" stroke-width="0.9" stroke-dasharray="2 3"/>
+<rect x="387.4" y="292.2" width="330.0" height="220.0" fill="#d9ead0" stroke="#4f7d3a" stroke-width="0.8"/>
+<rect x="350.0" y="512.2" width="501.4" height="27.5" fill="#d5dbe3" stroke="#5c6670" stroke-width="0.8"/>
+<rect x="350.0" y="490.2" width="37.4" height="20.3" fill="#d5dbe3" stroke="#5c6670" stroke-width="0.8"/>
+<rect x="833.8" y="512.2" width="19.8" height="27.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="275.2" y="539.7" width="660.0" height="22.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="275.2" y="99.7" width="660.0" height="22.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="284.0" y="121.7" width="22.0" height="27.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="303.8" y="488.8" width="54.6" height="50.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.75"/>
+<rect x="308.2" y="492.1" width="40.7" height="46.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="290.1" y="506.5" width="17.6" height="17.6" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="290.3" y="125.0" width="9.4" height="19.8" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="293.4" y="134.9" width="3.3" height="380.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="352.9" y="137.1" width="5.5" height="22.0" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="358.4" y="140.4" width="147.8" height="16.5" fill="none" stroke="#5c6670" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="311.5" y="267.0" width="22.0" height="43.9" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.55" stroke-dasharray="4 3"/>
+<rect x="290.6" y="272.4" width="67.8" height="22.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.55" stroke-dasharray="4 3"/>
+<rect x="290.6" y="287.8" width="8.8" height="13.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="352.9" y="272.4" width="5.5" height="22.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="358.4" y="275.7" width="147.8" height="16.5" fill="#d5dbe3" stroke="#5c6670" stroke-width="0.8"/>
+<rect x="317.6" y="131.7" width="9.9" height="370.3" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" fill-opacity="0.5" stroke-dasharray="4 3"/>
+<rect x="311.5" y="-59.8" width="22.0" height="660.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
+<rect x="876.9" y="-59.8" width="22.0" height="660.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
+<rect x="364.5" y="478.1" width="33.0" height="13.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.6"/>
+<rect x="361.7" y="491.3" width="67.6" height="6.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.6"/>
+<rect x="361.7" y="497.9" width="38.5" height="38.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.6"/>
+<rect x="364.5" y="125.0" width="33.0" height="13.2" fill="none" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="361.7" y="138.2" width="67.6" height="6.6" fill="none" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="361.7" y="144.8" width="38.5" height="38.5" fill="none" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="4 3"/>
+<circle cx="353.3" cy="533.1" r="4.0" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
+<circle cx="310.4" cy="142.6" r="4.0" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
+<line x1="453.4" y1="292.2" x2="453.4" y2="512.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="450.4" y1="292.2" x2="456.4" y2="292.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="450.4" y1="512.2" x2="456.4" y2="512.2" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="458.4" y="405.2" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">T = 200 mm gemessen</text>
+<line x1="440.2" y1="268.0" x2="440.2" y2="285.6" stroke="#c2621b" stroke-width="1.6"/>
+<polygon points="440.2,285.6 438.2,280.6 442.2,280.6" fill="#c2621b"/>
+<circle cx="387.4" cy="512.2" r="3.5" fill="#2f5d92" stroke="#ffffff" stroke-width="1.2"/>
+</g>
+<rect x="262.0" y="92.0" width="644.6" height="479.6" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="262.0" y="84.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Draufsicht auf das Bett (vorn unten), Backe gespannt</text>
+<line x1="297.2" y1="110.7" x2="253.0" y2="110.7" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="297.2" cy="110.7" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="113.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
+<line x1="310.4" y1="142.6" x2="253.0" y2="142.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="310.4" cy="142.6" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="145.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lichtschranke „Referenz“</text>
+<text x="250.0" y="155.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Backe ganz offen)</text>
+<line x1="322.5" y1="204.2" x2="253.0" y2="204.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="322.5" cy="204.2" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="207.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">linkes 2040 (oben,</text>
+<text x="250.0" y="217.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">gestrichelt)</text>
+<line x1="291.7" y1="270.2" x2="253.0" y2="270.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="291.7" cy="270.2" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="273.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">GT2-Riemen außen</text>
+<text x="250.0" y="283.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">neben dem 2040</text>
+<line x1="295.0" y1="283.4" x2="253.0" y2="304.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="295.0" cy="283.4" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="307.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Backenhalter</text>
+<text x="250.0" y="317.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(unter dem 2040)</text>
+<line x1="322.5" y1="380.2" x2="253.0" y2="380.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="322.5" cy="380.2" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="383.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">MGN9 unter dem 2040,</text>
+<text x="250.0" y="393.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wagen + Backenhalter</text>
+<line x1="314.8" y1="503.1" x2="253.0" y2="503.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="314.8" cy="503.1" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="506.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">NEMA 17 quer unter dem</text>
+<text x="250.0" y="516.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040, Welle nach außen</text>
+<line x1="370.0" y1="512.8" x2="253.0" y2="537.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="370.0" cy="512.8" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="540.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Toolhead vorn links</text>
+<text x="250.0" y="550.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Laser, Schlittenplatte)</text>
+<line x1="297.2" y1="550.7" x2="253.0" y2="571.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="297.2" cy="550.7" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="574.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
+<line x1="353.3" y1="533.1" x2="253.0" y2="595.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="353.3" cy="533.1" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="598.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lichtschranke „Anlage“:</text>
+<text x="250.0" y="608.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Leiste federt 1 mm</text>
+<line x1="539.2" y1="149.2" x2="915.6" y2="149.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="539.2" cy="149.2" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="152.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Backe offen (Parkstellung)</text>
+<line x1="800.3" y1="197.1" x2="915.6" y2="197.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="800.3" cy="197.1" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="200.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arbeitsfläche (Strahl)</text>
+<text x="918.6" y="210.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">391 × 321 mm</text>
+<line x1="854.2" y1="202.0" x2="915.6" y2="231.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="854.2" cy="202.0" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="234.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Reichweite Laser +</text>
+<text x="918.6" y="244.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schlittenplatte (rot)</text>
+<line x1="495.2" y1="284.5" x2="915.6" y2="284.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="495.2" cy="284.5" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="287.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Spannbacke (Alu 15 × 3),</text>
+<text x="918.6" y="297.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">drückt nach vorn</text>
+<line x1="552.4" y1="402.2" x2="915.6" y2="402.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="552.4" cy="402.2" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="405.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Werkstück 300 × 200</text>
+<line x1="383.0" y1="494.6" x2="915.6" y2="494.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="383.0" cy="494.6" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="497.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">linker Anschlag</text>
+<line x1="389.6" y1="510.0" x2="915.6" y2="518.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="389.6" cy="510.0" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="521.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Nullpunkt: Plattenecke</text>
+<line x1="849.2" y1="530.9" x2="915.6" y2="542.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="849.2" cy="530.9" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="545.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Leistenhalter rechts</text>
+<line x1="715.2" y1="526.5" x2="915.6" y2="566.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="715.2" cy="526.5" r="1.5" fill="#5b6472"/>
+<text x="918.6" y="569.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlagleiste (Alu 25 × 3)</text>
+<text x="918.6" y="579.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am vorderen 2060</text>
+<clipPath id="quer"><rect x="262.0" y="651.6" width="387.2" height="248.6"/></clipPath>
+<g clip-path="url(#quer)">
+<rect x="251.0" y="891.4" width="409.2" height="17.6" fill="#f1efe9" stroke="none" stroke-width="0.8"/>
+<line x1="262.0" y1="891.4" x2="649.2" y2="891.4" stroke="#5b6472" stroke-width="1.0"/>
+<rect x="442.4" y="878.2" width="998.8" height="13.2" fill="#f4efe4" stroke="#b3a07c" stroke-width="0.8"/>
+<rect x="499.6" y="871.6" width="160.6" height="6.6" fill="none" stroke="#4f7d3a" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="347.8" y="671.4" width="44.0" height="88.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="356.6" y="653.8" width="26.4" height="17.6" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="359.9" y="759.4" width="19.8" height="14.3" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="341.2" y="797.2" width="81.4" height="93.1" fill="none" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="304.9" y="826.2" width="35.2" height="35.2" fill="none" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="308.2" y="828.2" width="13.2" height="3.1" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="308.2" y="856.2" width="13.2" height="3.1" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="347.8" y="761.6" width="44.0" height="19.8" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="306.0" y="781.4" width="135.6" height="8.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="306.0" y="790.2" width="17.6" height="48.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="430.6" y="790.2" width="11.0" height="86.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="441.6" y="870.5" width="295.6" height="6.6" fill="#d5dbe3" stroke="#5c6670" stroke-width="0.8"/>
+<rect x="453.7" y="783.6" width="66.0" height="82.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.45"/>
+<rect x="448.2" y="783.6" width="135.3" height="82.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.45"/>
+<rect x="448.2" y="783.6" width="77.0" height="72.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.45"/>
+<line x1="431.7" y1="783.6" x2="596.7" y2="783.6" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="2 2"/>
+<line x1="441.6" y1="900.2" x2="441.6" y2="651.6" stroke="#b4342f" stroke-width="0.9" stroke-dasharray="5 3"/>
+</g>
+<rect x="262.0" y="651.6" width="387.2" height="248.6" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="262.0" y="643.6" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Querschnitt links, von vorn: Antrieb unter dem 2040, Toolhead ganz links am Z-Softlimit</text>
+<line x1="363.2" y1="706.6" x2="253.0" y2="706.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="363.2" cy="706.6" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="709.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">linkes 2040 mit</text>
+<text x="250.0" y="719.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Schiene MGN12</text>
+<line x1="369.8" y1="769.3" x2="253.0" y2="769.3" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="369.8" cy="769.3" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="772.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">MGN9-Schiene, darunter</text>
+<text x="250.0" y="782.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">der Wagen</text>
+<line x1="310.4" y1="829.8" x2="253.0" y2="829.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="310.4" cy="829.8" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="832.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Riemen (oben: Klemme)</text>
+<line x1="350.0" y1="877.1" x2="253.0" y2="877.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="350.0" cy="877.1" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="880.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Motor vorn am Ende des</text>
+<text x="250.0" y="890.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wegs (gestrichelt)</text>
+<line x1="319.2" y1="898.0" x2="253.0" y2="913.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="319.2" cy="898.0" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="916.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Tisch</text>
+<line x1="495.2" y1="887.0" x2="253.0" y2="939.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="495.2" cy="887.0" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="942.1" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte 6 mm</text>
+<line x1="441.6" y1="695.6" x2="658.2" y2="695.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="441.6" cy="695.6" r="1.5" fill="#5b6472"/>
+<text x="661.2" y="698.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">bis hier kommt der</text>
+<text x="661.2" y="708.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Toolhead nicht (3 mm)</text>
+<line x1="528.2" y1="783.6" x2="658.2" y2="783.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="528.2" cy="783.6" r="1.5" fill="#5b6472"/>
+<text x="661.2" y="786.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Toolhead darüber</text>
+<text x="661.2" y="796.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">abgeschnitten</text>
+<line x1="432.8" y1="785.8" x2="658.2" y2="819.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="432.8" cy="785.8" r="1.5" fill="#5b6472"/>
+<text x="661.2" y="822.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Halterplatte: fährt über</text>
+<text x="661.2" y="832.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">den Motor hinweg</text>
+<line x1="435.0" y1="838.6" x2="658.2" y2="855.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="435.0" cy="838.6" r="1.5" fill="#5b6472"/>
+<text x="661.2" y="858.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Block mit Feder</text>
+<text x="661.2" y="868.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Spannkraft)</text>
+<line x1="583.2" y1="857.3" x2="658.2" y2="891.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="583.2" cy="857.3" r="1.5" fill="#5b6472"/>
+<text x="661.2" y="894.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Toolhead: Schlittenplatte</text>
+<text x="661.2" y="904.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">am Z-Softlimit</text>
+<line x1="605.2" y1="871.6" x2="658.2" y2="927.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="605.2" cy="871.6" r="1.5" fill="#5b6472"/>
+<text x="661.2" y="930.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Backe 3,5 mm über</text>
+<text x="661.2" y="940.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">der Opferplatte</text>
+<line x1="671.2" y1="874.9" x2="658.2" y2="963.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="671.2" cy="874.9" r="1.5" fill="#5b6472"/>
+<text x="661.2" y="966.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Werkstück 3 mm</text>
+<text x="661.2" y="976.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(vor dem Schnitt)</text>
+<line x1="561.2" y1="870.5" x2="561.2" y2="866.1" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="561.2,870.5 559.2,865.5 563.2,865.5" fill="#b4342f"/>
+<polygon points="561.2,866.1 563.2,871.1 559.2,871.1" fill="#b4342f"/>
+<text x="566.2" y="862.1" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 mm</text>
+<text x="24.0" y="1012.2" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
+<text x="24.0" y="1030.2" font-size="8.5" fill="#5b6472" text-anchor="start">Nullpunkt</text>
+<text x="100.0" y="1030.2" font-size="8.5" fill="#1c2733" text-anchor="start">Plattenecke vorn links: Leiste am vorderen 2060 (Y), linker Anschlag (X) — immer dieselbe Maschinenkoordinate</text>
+<text x="24.0" y="1045.2" font-size="8.5" fill="#5b6472" text-anchor="start">Werkstück</text>
+<text x="100.0" y="1045.2" font-size="8.5" fill="#1c2733" text-anchor="start">erkannt: liegt an (ja/nein) und seine Tiefe T, 26 bis 323 mm; Breite und Dicke nicht — dafür später ein Taster am Toolhead</text>
+<text x="24.0" y="1060.2" font-size="8.5" fill="#5b6472" text-anchor="start">Strahl</text>
+<text x="100.0" y="1060.2" font-size="8.5" fill="#1c2733" text-anchor="start">erreicht ab der Ecke 385 × 316 mm (B × T)</text>
+<text x="24.0" y="1075.2" font-size="8.5" fill="#5b6472" text-anchor="start">Höhe</text>
+<text x="100.0" y="1075.2" font-size="8.5" fill="#1c2733" text-anchor="start">Leiste, Anschlag und Backe höchstens 3,5 mm über der Opferplatte; Z-Softlimit $132 ≈ 76 statt 84: die Schlittenplatte bleibt 2 mm darüber</text>
+<text x="24.0" y="1090.2" font-size="8.5" fill="#5b6472" text-anchor="start">Fokus</text>
+<text x="100.0" y="1090.2" font-size="8.5" fill="#1c2733" text-anchor="start">f von 7 bis 50 mm für 0 … 50 mm Werkstück; Langlochstellung je f in spannsystem.md</text>
+<text x="24.0" y="1105.2" font-size="8.5" fill="#5b6472" text-anchor="start">Kraft</text>
+<text x="100.0" y="1105.2" font-size="8.5" fill="#1c2733" text-anchor="start">Feder der Backe: leicht 5 N, fest 15 N; die Leiste schaltet bei 2 N — der Motor schiebt nur</text>
+<text x="24.0" y="1120.2" font-size="8.5" fill="#5b6472" text-anchor="start">Antrieb</text>
+<text x="100.0" y="1120.2" font-size="8.5" fill="#1c2733" text-anchor="start">NEMA 17, GT2 20 Z, 80 Schritte/mm, 297 mm Weg, Spannen ≈ 10 s; Steuerung: Arduino Nano + TMC2209</text>
+<text x="24.0" y="1135.2" font-size="8.5" fill="#5b6472" text-anchor="start">Leistung</text>
+<text x="100.0" y="1135.2" font-size="8.5" fill="#1c2733" text-anchor="start">≈ 46 W mit Spannmotor, Netzteil dauernd 61 W</text>
+<rect x="24.0" y="1170.2" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="43.0" y="1178.2" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
+<rect x="194.0" y="1170.2" width="14.0" height="9.0" fill="#d5dbe3" stroke="#5c6670" stroke-width="0.8"/>
+<text x="213.0" y="1178.2" font-size="8.5" fill="#1c2733" text-anchor="start">Alu-Flachstange</text>
+<rect x="364.0" y="1170.2" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<text x="383.0" y="1178.2" font-size="8.5" fill="#1c2733" text-anchor="start">Kaufteil</text>
+<rect x="534.0" y="1170.2" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<text x="553.0" y="1178.2" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
+<rect x="24.0" y="1188.2" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="43.0" y="1196.2" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<rect x="194.0" y="1188.2" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="213.0" y="1196.2" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead (tiefe Teile)</text>
+<rect x="364.0" y="1188.2" width="14.0" height="9.0" fill="#f4efe4" stroke="#b3a07c" stroke-width="0.8"/>
+<text x="383.0" y="1196.2" font-size="8.5" fill="#1c2733" text-anchor="start">Opferplatte</text>
+<rect x="534.0" y="1188.2" width="14.0" height="9.0" fill="#d9ead0" stroke="#4f7d3a" stroke-width="0.8"/>
+<text x="553.0" y="1196.2" font-size="8.5" fill="#1c2733" text-anchor="start">Werkstück</text>
+<circle cx="31" cy="1210.7" r="4.5" fill="#b4342f"/>
+<text x="43.0" y="1214.2" font-size="8.5" fill="#1c2733" text-anchor="start">Gabellichtschranke (fest)</text>
+<line x1="194.0" y1="1210.7" x2="210.0" y2="1210.7" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 4"/>
+<text x="215.0" y="1214.2" font-size="8.5" fill="#1c2733" text-anchor="start">Arbeitsfläche (Strahl)</text>
+<line x1="364.0" y1="1210.7" x2="380.0" y2="1210.7" stroke="#b4342f" stroke-width="0.9" stroke-dasharray="2 3"/>
+<text x="385.0" y="1214.2" font-size="8.5" fill="#1c2733" text-anchor="start">Reichweite der tiefen Teile</text>
+<text x="24.0" y="1236.2" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: unter dem 2040 bzw. andere Stellung (Backe offen, Toolhead hinten links).</text></svg>

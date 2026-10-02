@@ -191,6 +191,12 @@ feststehen:
 | `$131≈318` | Y: 321 mm zwischen den 2060, minus Rückzug und Reserve |
 | `$132≈84` | Z: vom Schaltpunkt (8 mm unter der oberen Grenze) bis ganz unten, 85,6 mm |
 
+Mit dem [Spannsystem](spannsystem.md) (Opferplatte, Anschlagleiste,
+Spannbacke) wird `$132 ≈ 76`: Das Z-Softlimit hält die Schlittenplatte 2 mm
+über den flachen Teilen. Der Spannmotor hängt nicht am Shield, sondern an
+einer eigenen kleinen Steuerung, die über CoolEn (A3) und Resume (A2) mit
+GRBL spricht.
+
 Welche Richtung ausgelöst heißt, zeigt GRBL selbst: Mit `?` steht im Status
 `Pn:X` (bzw. Y, Z), solange ein Schalter als ausgelöst gilt. `$5` so setzen,
 dass `Pn` nur beim Unterbrechen erscheint. Wird D0 beim Unterbrechen HIGH

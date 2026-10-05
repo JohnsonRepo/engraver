@@ -94,8 +94,8 @@ den gemeinsamen Werten des Portals ([Parametrik](#parametrik)).
 Damit rechnen `Ref_Riemen` und `portal_check.py` mit den mittigen Ritzeln
 und mit diesem Halter statt mit dem alten. Zwei Dinge zeigen sich dabei,
 siehe [Noch offen](#noch-offen), Punkte 4 und 5: Die Riemenlänge ändert sich
-über den Y-Weg um bis zu 2 mm, und am vorderen Schienenende kommt der
-vordere Klemmturm dem inneren Schenkel nahe.
+über den Y-Weg um bis zu 0,7 mm (bis Portal Rev. 24: 2 mm), und am vorderen
+Schienenende fährt der vordere Klemmturm über den inneren Schenkel.
 
 ## Bezug und Koordinaten
 
@@ -312,23 +312,25 @@ längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
    Platz. Setzt die M5×12 hinten auf, eine Scheibe mehr unter den Kopf.
 4. **Riemenlinie im Portal:** Der Riemen läuft in der rechten Nut hin und
    in der linken zurück (Angabe vom 2026-09-27), mit dem mittigen Ritzel also
-   bei ±6,37 mm. Die Klemmen bleiben, wo Y-Wagen und Klemmtürme in
-   `Portal.py` sie haben, 21,6 mm innen neben der Schienenmitte (Angabe vom
-   2026-09-27). Die Wagen-Trume laufen deshalb schräg von der Klemme in die
-   innere Nut (1,7° bis 19,3°, je nach Stellung), der Rücklauf gerade in der
-   äußeren; das hintere Ritzel sitzt ebenfalls mittig zur 2040 (Angabe).
-   Wo ein Trum durch die Nutöffnung in den Kanal läuft, bleiben dem Riemen
-   0,1 mm je Seite. Weil die Trume schräg laufen, ist der Riemenweg in der
-   Mitte am kürzesten und an den Schienenenden 1,3 bzw. 2,0 mm länger: Ein
-   in der Mitte gespannter Riemen wird dort etwas gedehnt. Seit Portal
-   Rev. 16 rechnet `Portal.py` das so; Zahlen in
+   bei ±6,37 mm. Die Klemmen sitzen seit Portal Rev. 25 14,91 mm innen
+   neben der Schienenmitte, 4,9 mm vor der Seitenfläche (bis Rev. 24 wie
+   bei v8 21,6 mm; am Aufbau lief der Riemen damit neben der Nut). Die
+   Wagen-Trume laufen schräg von der Klemme in die innere Nut (1,0° bis
+   11,4°, je nach Stellung), der Rücklauf gerade in der äußeren; das hintere
+   Ritzel sitzt ebenfalls mittig zur 2040 (Angabe). Wo ein Trum durch die
+   Nutöffnung in den Kanal läuft, bleiben dem Riemen 0,1 mm je Seite. Weil
+   die Trume schräg laufen, ist der Riemenweg in der Mitte am kürzesten und
+   an den Schienenenden 0,4 bzw. 0,7 mm länger: Ein in der Mitte gespannter
+   Riemen wird dort etwas gedehnt. Seit Portal Rev. 16 rechnet `Portal.py`
+   das so; Zahlen in
    [portal-y-schlitten.md](portal-y-schlitten.md#y-riemen-und-klemmtürme).
 5. **Portal-Prüfung:** Seit Portal Rev. 16 rechnet `portal_check.py` den
    Y-Weg vorn gegen diesen Halter. Der Toolhead fährt am vorderen
    Schienenende ab zc = +37 über ihn hinweg, mit dem Softlimit am vorderen
    2060 erreicht er ihn ohnehin nicht. Am Schienenende selbst (nur von Hand)
-   endet der vordere Klemmturm 2,2 mm hinter dem inneren Schenkel, 2,9 mm
-   über ihm und 1 mm weiter innen — berühren kann er ihn nicht
+   endet der vordere Klemmturm 2,2 mm hinter dem inneren Schenkel und
+   4,5 mm über ihm (bis Portal Rev. 24: 2,9 mm darüber und 1 mm weiter
+   innen) — berühren kann er ihn nicht
    ([portal-y-schlitten.md](portal-y-schlitten.md#y-weg-die-2060-und-die-y-motorhalter)).
 6. **Endschalter** gehören nicht zum Halter: Der Y-Endschalter sitzt hinten
    rechts, ohne Auto-Squaring ([endschalter.md](endschalter.md)).

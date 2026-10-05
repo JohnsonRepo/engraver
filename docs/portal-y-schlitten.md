@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 24, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 25, fünfundzwanzig
 gedruckte Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
@@ -26,12 +26,14 @@ gedruckten X-Energiekette mit ihren Stützen und seit Rev. 21 die
 Y-Energiekette mit Kettenhalter, Wanne und Trägern sowie der Kabelflügel am
 Festpunkt der X-Kette ([energiekette.md](energiekette.md)). Seit Rev. 24
 hat der linke Schlitten einen [Anschlag](#anschlag-für-den-motorhalter-seit-rev-24),
-an dem der Motorhalter gegen den Riemenzug anliegt.
+an dem der Motorhalter gegen den Riemenzug anliegt. Seit Rev. 25 stehen die
+Klemmtürme dicht an der 2040, damit der Y-Riemen in die Nut läuft
+([Klemmtürme an der 2040](#klemmtürme-an-der-2040-seit-rev-25)).
 
 | Pos | Teil | Stück | Funktion |
 |---|---|---|---|
 | 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende. Der linke hat seit Rev. 21 zwei Löcher Ø3,4 für den Kettenhalter Y und seit Rev. 24 den Anschlag für den Motorhalter |
-| 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende |
+| 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende. Seit Rev. 25 2 mm neben der 2040, oben mit einem Absatz neben dem Y-Wagen |
 | 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten; dünne Motorplatte, damit die 20-mm-Welle das ganze Ritzel trägt. Liegt seit Rev. 24 innen am Anschlag des linken Schlittens an (der Halter selbst ist unverändert) |
 | 4 | **Spannbock** | 1 | rechts fest auf dem Stirnblock (2 × M3): Anschlag für die Zugschraube |
 | 5 | **Lagerschlitten** | 1 | Rahmen um das Umlenkritzel: oben das Kugellager, unten das Gleitlager der Welle; gleitet auf dem Rohr (Feder in der oberen Nut), die Zugschraube zieht ihn nach außen. Seit Rev. 18, ersetzt Umlenkhalter und Spannklotz |
@@ -117,12 +119,13 @@ alte, höhere Halter.
 
 Am **vorderen Schienenende**, wo die Y-Wagen bündig mit der Schiene stehen,
 endet der vordere Klemmturm 2,2 mm hinter dem inneren Schenkel des
-Y-Motorhalters, 2,9 mm über ihm und 1 mm weiter innen. Höhe und Seite
-ändern sich über den Y-Weg nicht — berühren kann er ihn nie, die Kanten
-bleiben 3,8 mm auseinander. `portal_check.py` misst aber achsweise und sieht
-nur den größten Einzelabstand, 2,9 mm; dort verlangt es deshalb 2 statt
-3 mm. So weit kommt das Portal ohnehin nur von Hand: Im Betrieb endet der
-Y-Weg vorn bei +106 mm (siehe unten), und dort bleiben 99 mm.
+Y-Motorhalters und 4,5 mm über ihm. Seit Rev. 25 steht er direkt über dem
+Schenkel; bis Rev. 24 war er 2,9 mm darüber und 1 mm weiter innen. Höhe und
+Seite ändern sich über den Y-Weg nicht, berühren kann er ihn nie.
+`portal_check.py` misst achsweise und sieht den größten Einzelabstand,
+4,5 mm; verlangt sind dort 2 mm, denn so weit kommt das Portal nur von Hand:
+Im Betrieb endet der Y-Weg vorn bei +106 mm (siehe unten), und dort bleiben
+99 mm.
 
 Den Y-Weg in der Firmware also vorn auf die Grenze des 2060 setzen (die
 Arbeitsfläche endet ohnehin dort), dann erreicht der Toolhead die Halter nie;
@@ -162,7 +165,8 @@ sitzen über den Rohrenden, außerhalb des Wegs.
 **Warum die Schiene versetzt ist:** Der Toolhead ragt rechts 44 mm
 (Mutternwinkel) neben die Wagenmitte, links nur 27,5 mm (Fahnenlasche). Um
 8,25 mm nach links verschoben, steht er an beiden Enden des X-Wegs gleich weit
-vom Y-Riemen weg: **3,4 mm**.
+vom Y-Riemen weg: bis Rev. 24 **3,4 mm**. Seit Rev. 25 läuft der Riemen
+6,7 mm weiter außen, nun sind es 10,1 mm.
 
 **Schienenabstand = Rohrlänge + 2 × 7 mm.** Beim Aufbau zuerst das Portal mit
 beiden Schlitten verschrauben, dann die Y-Schienen parallel dazu ausrichten —
@@ -193,9 +197,13 @@ zum Rahmen.
 
 ## Y-Riemen und Klemmtürme
 
-Die Riemenlinie ist die von `RiemenklemmeSchlitten` v8: **21,6 mm innen**
-neben der Schienenmitte, hochkant, **Zähne zur Schiene**. Die **Höhe** gibt
-die obere Nut des 2040 vor, denn der Riemen läuft nur in ihr: Ihre Öffnung
+Seit Rev. 25 liegt die Riemenmitte **14,91 mm innen** neben der
+Schienenmitte, also **4,9 mm vor der Seitenfläche** der 2040, hochkant,
+**Zähne zur Schiene**. Bis Rev. 24 war es die Linie von
+`RiemenklemmeSchlitten` v8, 21,6 mm innen; am Aufbau lief der Riemen damit
+neben der Nut entlang ([Klemmtürme an der 2040](#klemmtürme-an-der-2040-seit-rev-25)).
+Die **Höhe** gibt die obere Nut des 2040 vor, denn der Riemen läuft nur in
+ihr: Ihre Öffnung
 beginnt **6 mm unter der Oberkante** des Profils, ihre Mitte liegt 10 mm
 darunter. Der Riemen liegt mittig darin, 7 bis 13 mm unter der Profilkante,
 also 20 bis 26 mm unter der Wagenoberseite (Z −42 bis −36). Rücklauf und
@@ -205,7 +213,7 @@ Der Schlitz der Klemmtürme reicht bis 0,5 mm über die Oberkante der Nut —
 höher kann der Riemen nicht laufen. So war es auch bei v8: Dort endete der
 Schlitz 19,0 mm unter der Wagenoberseite, genau an der Oberkante der Nut. Bis
 Rev. 9 endete er 3,4 mm tiefer, deshalb passte der Riemen nicht hinein. Ein
-Turm ist jetzt 32,6 mm lang.
+Turm ist 31 mm hoch (bis Rev. 24: 32,6 mm).
 
 **Riemenführung:** Vorn läuft der Riemen um das Ritzel des Y-Motors (siehe
 [Y-Antrieb vorn](#y-antrieb-vorn)), hinten um das Ritzel auf der
@@ -225,52 +233,59 @@ Rücklauf liegt im Profil und kommt dem Toolhead nie nahe.
 
 **Mit dem mittigen Ritzel (2026-09-27):** Der Riemen läuft in der rechten
 oberen Nut hin und in der linken zurück, das Ritzel sitzt mittig zur 2040 —
-so baut es der [Y-Motorhalter](y-motorhalter.md). Die Klemmen bleiben, wo
-Y-Wagen und Klemmtürme dieses Skripts sie haben (Angabe: so ist es gebaut):
-Wirklinie 21,9 mm innen neben der Schienenmitte, 11,9 mm vor der inneren
-Seitenfläche. Dazwischen laufen die **Wagen-Trume schräg** von der Klemme
-zum Ritzel, dessen Wirklinie 6,4 mm neben der Profilmitte in der inneren Nut
-liegt; der **Rücklauf läuft gerade** in der äußeren Nut. Nachgerechnet
-(Ritzel vorn in der Mitte des Spannwegs; hinten ebenfalls mittig zur 2040
-`[v]`, 11 mm hinter der Stirnseite angenommen). „In der Nutöffnung“ heißt:
-Dort liegt ein Teil des Riemens zwischen Lippe und Seitenfläche. Bis
-Rev. 15 stand hier, wo die Wirklinie allein durch die Lippe läuft; die
-Bereiche waren kürzer.
+so baut es der [Y-Motorhalter](y-motorhalter.md). Die Wirklinie der Klemmen
+liegt seit Rev. 25 15,2 mm innen neben der Schienenmitte, 5,2 mm vor der
+inneren Seitenfläche (bis Rev. 24: 21,9 und 11,9 mm). Von dort laufen die
+**Wagen-Trume schräg** zum Ritzel, dessen Wirklinie 6,4 mm neben der
+Profilmitte in der inneren Nut liegt; der **Rücklauf läuft gerade** in der
+äußeren Nut. Nachgerechnet (Ritzel vorn in der Mitte des Spannwegs; hinten
+ebenfalls mittig zur 2040 `[v]`, 11 mm hinter der Stirnseite angenommen).
+„In der Nutöffnung“ heißt: Dort liegt ein Teil des Riemens zwischen Lippe
+und Seitenfläche. Weiter zur Klemme hin läuft er neben dem Profil, weiter
+zum Profilende hin ganz in der Nut.
 
 | Portal ab Mitte | vorderer Trum | hinterer Trum |
 |---|---|---|
-| +227,3 (vorderes Schienenende) | 66 mm lang, 13,8°, läuft außen an der Nut vorbei direkt ans Ritzel (am Profilende 2,9 mm neben der Seitenfläche) | 498 mm, 1,8°, in der Nutöffnung 138 bis 36 mm vom hinteren Ende |
-| +106 (vordere Grenze, Z unten) | 185 mm, 4,8°, in der Nutöffnung auf den letzten 25 mm vor dem vorderen Ende | 377 mm, 2,4°, 101 bis 24 mm vom hinteren Ende |
-| 0 | 290 mm, 3,1°, auf den letzten 56 mm vor dem vorderen Ende | 271 mm, 3,3°, 70 bis 14 mm vom hinteren Ende |
-| −227,3 (hinteres Schienenende) | 517 mm, 1,7°, 124 bis 18 mm vom vorderen Ende | 48 mm, 19,3°, nur auf den letzten 1,3 mm vor dem hinteren Ende |
+| +227,3 (vorderes Schienenende) | 64 mm lang, 8,0°, erreicht die Nutöffnung auf den letzten 2,4 mm vor dem vorderen Ende (bis Rev. 24: außen an der Nut vorbei) | 498 mm, 1,0°, in der Nutöffnung 250 bis 71 mm vor dem hinteren Ende |
+| +106 (vordere Grenze, Z unten) | 184 mm, 2,8°, auf den letzten 66 mm vor dem vorderen Ende | 377 mm, 1,3°, 186 bis 51 mm vor dem hinteren Ende |
+| 0 | 290 mm, 1,8°, 122 bis 18 mm vor dem vorderen Ende | 271 mm, 1,9°, 131 bis 34 mm vor dem hinteren Ende |
+| −227,3 (hinteres Schienenende) | 517 mm, 1,0°, 241 bis 55 mm vor dem vorderen Ende | 45 mm, 11,4°, auf den letzten 11 mm vor dem hinteren Ende |
+
+Gegenüber Rev. 24 taucht jeder Trum etwa doppelt so früh in die Nut ein, und
+in keiner Stellung läuft er mehr außen an ihr vorbei. `portal_check.py`
+verlangt über den ganzen Y-Weg, dass jeder Trum die Nutöffnung mindestens
+1 mm vor dem Profilende erreicht; am knappsten ist der vordere Trum am
+vorderen Schienenende (2,4 mm), wohin das Portal nur von Hand kommt.
 
 Wo der Trum durch die Nutöffnung in den Kanal läuft, bleiben dem 6 mm
 breiten Riemen in der 6,2 mm weiten Engstelle **0,1 mm je Seite** — Ritzel
 und Klemmen stehen beide auf Nutmitte, er läuft also frei, solange die
-Höhen stimmen. Schleift er an den Nutkanten (Geräusch, Abrieb an den
-Riemenkanten), müssen die Klemmen näher an die Nut. Seit Rev. 16 rechnen
-`Ref_Riemen` und `portal_check.py` (Abschnitt 15, `y_riemen_weg()`) mit den
-mittigen Ritzeln; die Tabelle kommt von dort. Für den Toolhead nimmt die
-Prüfung den Wagen-Trum weiter bei 21,9 mm an, der echte liegt weiter außen:
-die sichere Seite.
+Höhen stimmen. Seit Rev. 16 rechnen `Ref_Riemen` und `portal_check.py`
+(Abschnitt 15, `y_riemen_weg()`) mit den mittigen Ritzeln; die Tabelle kommt
+von dort. Für den Toolhead nimmt die Prüfung den Wagen-Trum auf der ganzen
+Länge bei der Klemme an (14,9 mm), der echte liegt weiter außen: die sichere
+Seite.
 
 **Die Riemenlänge wandert mit.** Weil die Wagen-Trume schräg laufen, ist
-der Riemenweg in der Mitte des Y-Wegs am kürzesten (1276,2 mm) und wird zu
-den Enden hin länger: am vorderen Schienenende um 1,3 mm, am hinteren um
-2,0 mm. Ein in der Mitte gespannter Riemen wird dort also etwas gedehnt,
-die Spannung steigt zu den Enden hin. Liefen die Klemmen auf der Nutlinie
-(6,4 statt 21,9 mm neben der Schienenmitte), bliebe der Weg gleich lang.
+der Riemenweg in der Mitte des Y-Wegs am kürzesten (1275,6 mm) und wird zu
+den Enden hin länger: am vorderen Schienenende um 0,4 mm, am hinteren um
+0,7 mm (bis Rev. 24: 1,3 und 2,0 mm). Ein in der Mitte gespannter Riemen
+wird dort also etwas gedehnt, die Spannung steigt zu den Enden hin. Liefen
+die Klemmen auf der Nutlinie (6,4 statt 15,2 mm neben der Schienenmitte),
+bliebe der Weg gleich lang.
 
 **Zwei gleiche Klemmtürme je Schlitten wie bei v8**, einer je
-Riemenende, an derselben Stelle wie bei v8: 22,5 bis 40,5 mm vor und hinter
-der Wagenmitte. Schnitt A–A der Zeichnung zeigt sie von innen.
+Riemenende, in Y an derselben Stelle wie bei v8: 22,5 bis 40,5 mm vor und
+hinter der Wagenmitte. Schnitt A–A der Zeichnung zeigt sie von innen,
+Schnitt D–D quer.
 
 Jeder Turm ist 18 mm lang, der Schlitz ist unten und an beiden Enden
 offen, 7 Rippen stehen an der Wand zur Schiene. Den Riemen von unten in
-den Schlitz drücken, dann einen **Stift Ø3 × 10 (oder eine M3×10) quer von
-innen** unter ihm durchschieben — er sichert den Riemen von unten. Jeder
-Turm hängt an zwei M3×8 von oben durch die Platte. Die des vorderen liegen
-unter dem Rohr: Er kommt **vor dem Rohr** an die Platte.
+den Schlitz drücken, dann einen **Stift Ø3 × 14 (oder eine M3×14, nicht
+länger) quer von innen** unter ihm durchschieben, bis er innen bündig ist —
+er sichert den Riemen von unten und endet 1,8 mm vor der 2040. Jeder Turm
+hängt an zwei M3×8 von oben durch die Platte. Die des vorderen liegen unter
+dem Rohr: Er kommt **vor dem Rohr** an die Platte.
 
 **Spannen** am Y-Motor: Schrauben lösen, Motor nach vorn ziehen, festziehen
 (Langlöcher ±4 mm im [Y-Motorhalter](y-motorhalter.md#spannen)) — die Türme sind
@@ -288,6 +303,35 @@ gegeneinander ziehen. An einer Ecke die Madenschrauben des Ritzels lösen,
 das Portal von Hand durchschieben, bis es frei läuft, und festziehen (siehe
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik)). Grob geht
 es auch in der Klemme, um einen Zahn (2 mm).
+
+### Klemmtürme an der 2040 (seit Rev. 25)
+
+Am Aufbau stand zwischen den Klemmtürmen und der 2040 viel Luft, und der
+Riemen lief neben der Nut statt in ihr (Foto 2026-10-05). Bis Rev. 24 saßen
+die Türme, wie bei v8, 7,2 mm neben der Seitenfläche, die Riemenmitte
+11,6 mm davor. Am vorderen Schienenende lief der Trum ganz an der Nut
+vorbei, sonst tauchte er erst kurz vor dem Profilende ein.
+
+Seit Rev. 25 steht die Wand mit den Rippen **2 mm neben der Seitenfläche**
+und ist selbst 2 mm dick (vorher 3,5); die Riemenmitte liegt damit 4,9 mm vor
+der Seitenfläche. Näher geht es nicht: Die Zähne zeigen zur 2040, also muss
+die Wand mit den Rippen zwischen Riemen und Profil stehen.
+
+| | |
+|---|---|
+| Luft zur 2040 | **2 mm**. Der Turm fährt mit dem Wagen auf der Schiene, und die sitzt mittig auf der 2040 (etwa 4 mm je Seite, Angabe 2026-10-05). Sitzt sie 0,5 mm aus der Mitte, bleiben 1,5 mm; die Prüfung verlangt 1,5 |
+| Neben dem Y-Wagen | Die Türme stoßen an die Enden des Wagens. Auf seiner Höhe beginnt der Turm deshalb erst **0,5 mm neben ihm**, darunter reicht er mit der Rippenwand bis 2 mm vor die 2040. Unter dem Absatz sitzt eine 45°-Fase, so druckt er ohne Stützen |
+| Über den Winkeln | Unter den Türmen sitzen an den 2060 die 20-mm-Winkel, und beide Türme fahren über die am hinteren 2060. Unter der Stiftbohrung bleiben 1,8 mm (vorher 3,4), der Turm endet **2 mm über den Winkeln**. Bis Rev. 24 waren es 0,4 mm |
+| Querstift | **Ø3 × 14 oder M3×14, nicht länger**: von innen bündig eingesteckt, endet er 1,8 mm vor der 2040. Der Stift trägt nur den Riemen; den Zug nehmen die Rippen |
+| Schrauben | stehen wie bis Rev. 24 (21,49 mm neben der Schienenmitte). Beide Schlitten passen also weiter, innen reicht der Turm dafür bis 2 mm hinter die Einsätze. Ein Turm ist 13,8 × 18 × 31 mm groß (vorher 8,6 × 18 × 32,6) |
+
+**Umbau:** Nur die **vier Klemmtürme** neu drucken, dazu 4 Stifte 14 mm;
+eine M3×14 statt des Stifts lässt sich später am Kopf wieder herausziehen.
+Die hinteren Türme kommen bei aufgelegtem Rohr heraus. Die Schrauben der
+vorderen liegen unter dem Rohr, dafür das Portalrohr abnehmen (je Seite
+2 × M5 hinten, 1 × M5 stirnseitig). Die Riemenenden an derselben Stelle
+wieder einlegen; der Weg wird 0,6 mm kürzer, das gleicht das Spannen am
+Motor aus. Danach beide Seiten abgleichen (oben).
 
 ## Y-Antrieb vorn
 
@@ -483,8 +527,8 @@ Portalteile und beide Riemen. Keine Stelle liegt unter 3 mm:
 | 3,0 mm | Motor ↔ Trägerplatte, am linken Ende des X-Wegs |
 | 3,0 mm | Umlenkritzel ↔ X-Wagen, am rechten Ende, das Ritzel ganz innen (daneben; sein Bord steht 2,75 mm über dem Wagen) |
 | 3,0 mm | Schlittenplatte ↔ X-Wagen, am linken Ende (Klemmturm 3,5 mm) |
-| 3,4 mm | Toolhead ↔ Y-Riemen, an beiden Enden |
 | 3,0 mm | Kettenhalter ↔ X-Motor, am linken Ende; Trägerplatte ↔ Kettenwanne |
+| 10,1 mm | Toolhead ↔ Y-Riemen, an beiden Enden (bis Rev. 24: 3,4 mm) |
 
 Die Energieketten prüfen Abschnitt 17 (X) und 18 (Y, über den ganzen
 Y-Weg) für sich, auch dort liegt keine Stelle unter 3 mm
@@ -545,7 +589,7 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 | Teil | Lage aufs Bett |
 |---|---|
 | Schlitten | Unterseite, die Wände stehen darauf; der linke mit dem Anschlag oben auf dem Stirnblock |
-| Klemmturm (4×) | Oberseite (Plattenseite) unten: Schlitz nach oben offen, Rippen senkrecht |
+| Klemmturm (4×) | Oberseite (Plattenseite) unten: Schlitz nach oben offen, Rippen senkrecht; die Fase unter dem Absatz steigt mit 45° |
 | Motorhalter | Motorplatte (Oberseite) unten |
 | Spannbock | Boden |
 | Lagerschlitten | auf dem Rücken liegend; die Lagersitze liegen dann waagerecht und sind als Träne gezeichnet, der Pfosten wird eine Brücke über 17 mm |
@@ -571,7 +615,7 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 |---|---|---|---|
 | Schlitten links (mit Anschlag) | 42,2 cm³ | ≈ 54 g | 52 × 82 × 32 mm |
 | Schlitten rechts | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
-| Klemmturm (je, 4×) | 4,5 cm³ | ≈ 6 g | 9 × 18 × 33 mm |
+| Klemmturm (je, 4×) | 6,7 cm³ | ≈ 8 g | 14 × 18 × 31 mm |
 | Motorhalter | 31,5 cm³ | ≈ 40 g | 50 × 51 × 28 mm |
 | Spannbock | 5,4 cm³ | ≈ 7 g | 35 × 22 × 18 mm |
 | Lagerschlitten | 10,4 cm³ | ≈ 13 g | 16 × 35 × 33 mm |
@@ -583,7 +627,7 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 | Kettenwanne Y | 27,0 cm³ | ≈ 34 g | 30,7 × 244,2 × 13 mm |
 | Träger Y Festpunkt | 6,8 cm³ | ≈ 9 g | 36,5 × 26 × 19,7 mm |
 | Träger Y mitte, vorn (je) | 6,4 cm³ | ≈ 8 g | 36,5 × 24 × 19,7 mm |
-| **Portal zusammen** (ohne Endschalter) | 322,4 cm³ | **≈ 409 g** | |
+| **Portal zusammen** (ohne Endschalter) | 331,2 cm³ | **≈ 421 g** | |
 | Riemenhalter (Toolhead) | 8,8 cm³ | ≈ 11 g | 44 × 14 × 16 mm |
 | Kettenhalter (Toolhead) | 14,3 cm³ | ≈ 18 g | 44 × 25,2 × 26 mm |
 
@@ -602,7 +646,7 @@ Bohrer an der Trägerplatte.
 | 8 + 8 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Klemmtürme → Platte |
 | 4 + 4 | M5×12 Zylinderkopf + Hammermutter M5 (Nut 6) | Rückwand → Rohr |
 | 2 | M5×25 Zylinderkopf | Stirnblock → Kernbohrung (M5 schneiden) |
-| 4 | Stift Ø3 × 10 oder M3×10 | Querstift im Klemmturm |
+| 4 | Stift Ø3 × 14 oder M3×14 (nicht länger) | Querstift im Klemmturm |
 | 4 | Messing-Einsatz M3 | Stirnblöcke, für die Halter |
 | 4 | M3×8 Zylinderkopf | NEMA 17 → Motorhalter |
 | 2 | M3×35 Zylinderkopf | Motorhalter → Stirnblock |
@@ -648,13 +692,17 @@ Bohrer an der Trägerplatte.
   über der Platte ([y-motorhalter.md](y-motorhalter.md#ritzel-und-motorwelle)).
 * **Hinteres Y-Ritzel:** Achse 11 mm hinter der Stirnseite angenommen.
   Davon hängt nur die Riemenlänge ab (≈ 1276 mm je Seite).
-* **Y-Schienen:** mittig auf den 2040 angenommen. Davon hängt ab, wie weit
-  das Portal vorn an die Y-Motorhalter heranfährt (Abschnitt 14).
+* **Y-Schienen:** mittig auf den 2040, am Aufbau etwa 4 mm je Seite
+  (Angabe 2026-10-05, nicht gemessen). Davon hängen ab, wie weit das Portal
+  vorn an die Y-Motorhalter heranfährt (Abschnitt 14), und die Luft der
+  Klemmtürme zur 2040 (2 mm, gerechnet mit mittiger Schiene).
 * **Endschalter:** Boden des Gabelschlitzes, Lötstifte unter der Platine,
   Schmiernippel am X-Wagen ([endschalter.md](endschalter.md#noch-offen)).
 * **Winkel an den 2060:** 20 mm, in der unteren Seitennut direkt am 2060
   (bestätigt 2026-10-02), ihre Schenkel nicht gemessen. Wanne Y und Träger
   enden 57 und 74 mm davor; die Kabel in der Nut gehen außen um sie herum.
+  Die Klemmtürme fahren 2 mm über sie hinweg, gerechnet mit 20 mm Höhe über
+  dem 2060 (`winkel_h`).
 
 ## Parametrik
 
@@ -669,9 +717,13 @@ vergleicht die Prüfung als Erstes.
 | `y_schienen_abstand` | 514 mm | Schienenabstand; das Rohr endet `R − 250` vor jeder Schienenmitte |
 | `x_schiene_versatz` | 8,25 mm | Versatz der X-Schiene nach links — gleicher Abstand zum Y-Riemen an beiden Enden |
 | `wagen_y` | −60 mm | Lage des Y-Wagens hinter dem Rohr |
-| `y_riemen_linie` | 21,6 mm | Y-Riemen innen neben der Schienenmitte (wie v8) |
+| `y_riemen_linie` | 14,91 mm | Y-Riemen innen neben der Schienenmitte; seit Rev. 25 so, dass der Klemmturm 2 mm vor der 2040 steht (bis Rev. 24: 21,6 wie v8) |
 | `klemm_schlitz` / `klemm_rippe` | 1,6 / 0,8 mm | Klemmschlitz und Rippen, auch im Riemenhalter |
 | `turm_abstand` / `kt_laenge` | 40,5 / 18 mm | Lage der Klemmtürme (Außenkante ab Wagenmitte) und ihre Länge, wie v8 |
+| `kt_wand_profil` / `kt_wand` | 2 / 3,5 mm | Klemmturm: Rippenwand zur 2040 (seit Rev. 25), Wand innen neben dem Schlitz (v8) |
+| `kt_boden` | 1,8 mm | Klemmturm unter der Stiftbohrung; damit fährt er 2 mm über die Winkel an den 2060 (bis Rev. 24: 3,4) |
+| `kt_schraube_u` / `kt_wand_einsatz` | 21,49 / 2 mm | Schrauben der Klemmtürme neben der Schienenmitte, wie bis Rev. 24 (die Schlitten bleiben), und die Wand innen neben den Einsätzen |
+| `kt_wagen_luft` | 0,5 mm | Absatz der Klemmtürme neben dem Y-Wagen und unter ihm |
 | `x_riemen_z0` / `x_riemen_y` | 20,25 / −10 mm | Lage des X-Riemens, auch in ToolheadZ.py |
 | `motor_u` | 7 mm | Motorachse innen neben der Schienenmitte |
 | `motor_welle_l` | 20 mm | Wellenlänge, auf die die Halter ausgelegt sind; legt die Höhe der Motoren fest |
@@ -692,4 +744,5 @@ vergleicht die Prüfung als Erstes.
 | `quer_vorn_zurueck` | 35 mm | vorderes 2060 hinter der Stirnseite der 2040 (Referenz, Y-Weg) |
 | `yh_hinter` | 11 mm `[?]` | hinteres Y-Ritzel hinter der Stirnseite (Referenz, Riemenlänge) |
 | `rahmen_laenge` / `y_schiene_laenge` | 600 / 500 mm | Länge der 2040 und der Y-Schienen (Referenz, Y-Weg) |
-| `quer_laenge` / `quer_abstand` / `quer_h` | 600 / 400 / 60 mm | 2060 quer: Länge, Abstand Mitte zu Mitte, Höhe (Referenz, Y-Weg) |
+| `quer_laenge` / `quer_abstand` / `quer_h` | 600 / 435 / 60 mm | 2060 quer: Länge, Abstand Mitte zu Mitte, Höhe (Referenz, Y-Weg) |
+| `winkel_h` | 20 mm | Winkel an den Kreuzungen 2040/2060, Höhe über dem 2060 (Referenz, für die Prüfung) |

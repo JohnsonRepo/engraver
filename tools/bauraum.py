@@ -396,10 +396,19 @@ def portal_bauraeume(w, L):
               (L['rueck_y0'], L['rueck_y1']), (L['platte_z1'], L['wand_z1'])),
             q('Stirnblock ' + n, xb(s, *L['stirn_u']), L['stirn_y'],
               (L['platte_z1'], L['wand_z1'])),
+            # Klemmtuerme (seit Rev. 25 dicht an der 2040): unten volle
+            # Breite bis unter den Y-Wagen, oben der Absatz neben ihm (die
+            # 45-Grad-Fase dazwischen gehoert ganz zum unteren Quader)
             q('Klemmturm hinten ' + n, xb(s, *L['kt_u']), L['kt_y_hinten'],
-              L['kt_z']),
+              (L['kt_z'][0], L['kt_absatz_z'])),
+            q('Klemmturm hinten ' + n + ' oben',
+              xb(s, L['kt_absatz_u'], L['kt_u'][1]), L['kt_y_hinten'],
+              (L['kt_absatz_z'], L['kt_z'][1])),
             q('Klemmturm vorn ' + n, xb(s, *L['kt_u']), L['kt_y_vorn'],
-              L['kt_z']),
+              (L['kt_z'][0], L['kt_absatz_z'])),
+            q('Klemmturm vorn ' + n + ' oben',
+              xb(s, L['kt_absatz_u'], L['kt_u'][1]), L['kt_y_vorn'],
+              (L['kt_absatz_z'], L['kt_z'][1])),
             # Schieber ueber den ganzen Weg, hinten mit dem Kopf der
             # Druckschraube (ganz entspannt)
             q('Y-Wagen ' + n,
@@ -595,8 +604,10 @@ def portal_bauraeume(w, L):
             ('Portalrohr', 'Stirnblock ' + n),
             ('Platte ' + n, 'Rueckwand ' + n), ('Platte ' + n, 'Stirnblock ' + n),
             ('Rueckwand ' + n, 'Stirnblock ' + n),
-            ('Platte ' + n, 'Klemmturm hinten ' + n),
-            ('Platte ' + n, 'Klemmturm vorn ' + n),
+            ('Platte ' + n, 'Klemmturm hinten ' + n + ' oben'),
+            ('Platte ' + n, 'Klemmturm vorn ' + n + ' oben'),
+            ('Klemmturm hinten ' + n, 'Klemmturm hinten ' + n + ' oben'),
+            ('Klemmturm vorn ' + n, 'Klemmturm vorn ' + n + ' oben'),
             ('Platte ' + n, 'Y-Wagen ' + n),
             ('Klemmturm hinten ' + n, 'Y-Riemen ' + n),
             ('Klemmturm vorn ' + n, 'Y-Riemen ' + n),

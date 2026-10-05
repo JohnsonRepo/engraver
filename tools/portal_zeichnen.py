@@ -3,8 +3,9 @@
 
 Draufsicht auf beide Portalenden mit dem Toolhead am Ende des X-Wegs,
 Schnitt durch die Y-Klemmtuerme (Spanner), Schnitte durch Umlenkung und
-Motorhalter. Alle Masse kommen aus Portal.py und ToolheadZ.py; die
-Zeichnung ist massstaeblich und wandert mit den Parametern.
+Motorhalter, dazu quer durch einen Klemmturm (seit Portal Rev. 25). Alle
+Masse kommen aus Portal.py und ToolheadZ.py; die Zeichnung ist
+massstaeblich und wandert mit den Parametern.
 
     python3 tools/portal_zeichnen.py   ->  docs/portal-y-schlitten.svg
 """
@@ -363,6 +364,78 @@ def schnitt_tuerme(f, w, L):
     for tl in ('hinten', 'vorn'):
         t.append(f.kreis(L['kt_stift_y_' + tl], L['stift_z'],
                          w('klemm_stift_d') / 2 - 0.1, 'stahl'))
+    return t
+
+
+# ---- Schnitt quer durch einen Klemmturm (seit Rev. 25) -------------------
+def profil_quer(f, u0, u1, z0, z1, X, nb=6.2, tiefe=6.0):
+    """Querschnitt der 2040 (hochkant) mit allen sechs Nuten, vereinfacht
+    als gerade Kerben nb breit und tiefe tief (wie profil_schnitt in
+    endschalter_zeichnen.py). u quer, X(u) die Zeichenkoordinate."""
+    h = nb / 2.0
+    um = (u0 + u1) / 2.0
+    p = [(u0, z0), (um - h, z0), (um - h, z0 + tiefe), (um + h, z0 + tiefe),
+         (um + h, z0), (u1, z0)]
+    for zm in (z0 + 10.0, z0 + 30.0):
+        p += [(u1, zm - h), (u1 - tiefe, zm - h), (u1 - tiefe, zm + h),
+              (u1, zm + h)]
+    p += [(u1, z1), (um + h, z1), (um + h, z1 - tiefe), (um - h, z1 - tiefe),
+          (um - h, z1), (u0, z1)]
+    for zm in (z0 + 30.0, z0 + 10.0):
+        p += [(u0, zm + h), (u0 + tiefe, zm + h), (u0 + tiefe, zm - h),
+              (u0, zm - h)]
+    return f.poly([(X(u), z) for u, z in p], 'profil', stroke_width='0.9')
+
+
+def schnitt_turm_quer(f, w, L):
+    """Schnitt quer durch den hinteren Klemmturm am Stift, rechte Seite,
+    Blick nach vorn — die Maschinenmitte liegt rechts. Geschnitten: 2040,
+    Schiene, Platte, Turm mit Absatz und Fase, das Riemenende im Schlitz,
+    der Stift und der Ruecklauf in der aeusseren Nut. Dahinter: Y-Wagen,
+    Rippen und die Winkel am vorderen 2060, ueber die der Turm faehrt."""
+    R = L['R']
+    X = lambda u: R - u
+    t = []
+    hb = w('rahmen_b') / 2.0
+    z0, z1 = L['rahmen_z0'], L['rahmen_z1']
+    # dahinter: Oberkante des vorderen 2060 mit dem Winkel innen
+    t.append(f.rect(X(-40.0), X(50.0), L['quer_z'][1] - 10.0,
+                    L['quer_z'][1], 'hinten'))
+    wh = w('winkel_h')
+    t.append(f.poly([(X(u), z) for u, z in (
+        (hb, z0), (hb + wh, z0), (hb + wh, z0 + 3.0), (hb + 3.0, z0 + wh),
+        (hb, z0 + wh))], 'hinten', stroke_dasharray='3 2'))
+    hw = w('y_wagen_breite') / 2.0
+    t.append(f.rect(X(-hw), X(hw), L['y_wagen_z0'], L['y_wagen_z1'],
+                    'hinten'))
+    t.append(f.rect(X(L['yr_rippe_u0']), X(L['yr_rippe_u1']),
+                    L['kt_z'][0], L['yr_decke_z'], 'hinten', fill='#e8c19c',
+                    stroke='#d9a67c', stroke_width='0.5'))
+    # geschnitten: 2040, Schiene, Platte
+    t.append(profil_quer(f, -hb, hb, z0, z1, X))
+    hs = w('y_schiene_b') / 2.0
+    t.append(f.rect(X(-hs), X(hs), L['y_schiene_z0'], L['y_schiene_z1'],
+                    'fuehrung'))
+    t.append(f.rect(X(L['platte_u'][0]), X(L['platte_u'][1]),
+                    L['platte_z0'], L['platte_z1'], 'neu'))
+    # Turm: Schlitz von unten, oben der Absatz neben dem Wagen mit Fase
+    (u0, u1), (kz0, kz1) = L['kt_u'], L['kt_z']
+    ua, za = L['kt_absatz_u'], L['kt_absatz_z']
+    rg, rw = L['yr_rippe_u0'], L['yr_wand_u']
+    turm = [(u0, kz0), (rg, kz0), (rg, L['yr_decke_z']),
+            (rw, L['yr_decke_z']), (rw, kz0), (u1, kz0), (u1, kz1),
+            (ua, kz1), (ua, za), (u0, za - (ua - u0))]
+    t.append(f.poly([(X(u), z) for u, z in turm], 'neu'))
+    # Riemenende im Schlitz (Zaehne zur 2040), Stift darunter, Ruecklauf
+    d2 = w('riemen_dicke') / 2.0
+    ym = w('y_riemen_linie')
+    t.append(f.rect(X(ym - d2), X(ym + d2), L['yr_z0'], L['yr_z1'],
+                    'riemen'))
+    t.append(f.rect(X(L['yr_rueck_u'] - d2), X(L['yr_rueck_u'] + d2),
+                    L['yr_rueck_z'][0], L['yr_rueck_z'][1], 'riemen'))
+    r = w('klemm_stift_d') / 2.0 - 0.1
+    t.append(f.rect(X(u1 - L['kt_stift_l']), X(u1), L['stift_z'] - r,
+                    L['stift_z'] + r, 'stahl'))
     return t
 
 
@@ -735,12 +808,16 @@ def main():
             de(L['profil_y0'] + w('profil_b') / 2 - w('wagen_y'), 0))),
         ('', 'alle 4 Wagenschrauben bleiben von oben frei'),
         ('Rohr', 'liegt auf der 6-mm-Platte, Höhe wie bisher'),
-        ('Y-Riemen', 'Linie wie v8: {} mm innen, Unterkante {} mm'.format(
-            de(w('y_riemen_linie'), 1), de(L['yr_z0'], 1))),
+        ('Y-Riemen', 'Mitte {} mm innen, {} mm vor der 2040 (Rev. 25),'
+         .format(de(w('y_riemen_linie'), 2),
+                 de(w('y_riemen_linie') - w('rahmen_b') / 2, 1))),
+        ('', 'Unterkante {} mm; {} mm neben dem Toolhead'.format(
+            de(L['yr_z0'], 1), de(luft_yr, 1))),
         ('', 'Rücklauf in der äußeren oberen Nut, Zähne zur Schiene'),
         ('Y-Klemmen', 'zwei Türme wie v8, je {} mm vor und hinter'.format(
             de(w('turm_abstand'), 1))),
-        ('', 'der Wagenmitte; gespannt am Y-Motor'),
+        ('', 'der Wagenmitte, {} mm neben der 2040; gespannt am Y-Motor'
+         .format(de(L['kt_u'][0] - w('rahmen_b') / 2, 1))),
         ('X-Riemen', 'Unterkante {} mm, Schleife ≈ {} mm'.format(
             de(L['xr_z0'], 2), de(riemen_x, 0))),
         ('X-Spanner', 'Lagerschlitten ±{} mm, M3×{} von außen'.format(
@@ -752,8 +829,8 @@ def main():
         ('engste Luft', '{} mm: Motor ↔ Trägerplatte, Umlenkritzel ↔ X-Wagen,'
          .format(de(min(luft_motor, luft_rolle), 1))),
         ('', 'Platte ↔ X-Wagen am Ende des X-Wegs'),
-        ('', '{} mm: Toolhead ↔ Y-Riemen, an beiden Enden'.format(
-            de(luft_yr, 1))),
+        ('', '{} mm: X-Wagen ↔ vorderer Klemmturm, am linken Ende'
+         .format(de(L['portal_y'] - L['kt_y_vorn'][1], 1))),
         ('Prüfung', 'tools/portal_check.py (X- und Z-Weg)'),
     ]
     t.append(text(tx, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))
@@ -761,8 +838,62 @@ def main():
         t.append(text(tx, ty + 10 + i * 15, k, 8.5, GRAU))
         t.append(text(tx + 86, ty + 10 + i * 15, v, 8.5, TEXT))
 
+    # ---- Reihe 4: Schnitt D-D (Klemmturm quer, seit Rev. 25) --------------
+    y4 = max(fe.oy + fe.hoehe + 40, ty + 10 + len(zeilen) * 15) + 70
+    s5 = 6.0
+    fg = Feld(250, y4, (R - 38.0, R + 16.0), (-75.0, -6.0), s5, a_rueck=True)
+    t += fg.ausschnitt('schnitt_kq', schnitt_turm_quer(fg, w, L))
+    t += fg.rahmen('Schnitt D–D: Klemmturm quer, seit Rev. 25 an der 2040')
+    t.append(text(fg.ox, fg.oy + fg.hoehe + 14, 'rechte Seite, durch den '
+                  'Stift des hinteren Turms, Blick nach vorn', 8.0, GRAU))
+    t.append(text(fg.ox, fg.oy + fg.hoehe + 25, 'bis Rev. 24 stand der Turm '
+                  '{} mm neben der 2040, die Riemenmitte {} mm'.format(
+                      de(7.19, 1), de(11.6, 1)), 8.0, GRAU))
+    X = lambda u: R - u
+    hb = w('rahmen_b') / 2.0
+    (u0, u1), kz0 = L['kt_u'], L['kt_z'][0]
+    stift_ende = u1 - L['kt_stift_l']
+    t += fg.spalte([
+        (X(-hb + 3.0), L['rahmen_z0'] + 4.0, '2040 hochkant'),
+        (X(L['yr_rueck_u']), L['yr_rueck_z'][1] - 1.0,
+         'Rücklauf in der\näußeren oberen Nut'),
+        (X(-4.0), (L['y_schiene_z0'] + L['y_schiene_z1']) / 2,
+         'Y-Schiene MGN12'),
+        (X(-9.0), (L['y_wagen_z0'] + L['y_wagen_z1']) / 2,
+         'Y-Wagen (dahinter)'),
+        (X(-16.0), L['platte_z0'] + 3.0, 'Platte des Schlittens'),
+        (X(-13.0), L['quer_z'][1] - 3.0,
+         'vorderes 2060 (dahinter)')],
+        fg.ox - 12, 'end', abstand=24.0)
+    t += fg.spalte([
+        ((X(L['kt_absatz_u']) + X(u0)) / 2, L['kt_absatz_z'] - 1.0,
+         'Absatz {} mm neben dem Wagen,\ndarunter Fase 45° (stützfrei)'
+         .format(de(L['kt_absatz_u'] - w('y_wagen_breite') / 2, 1))),
+        (X((u0 + u1) / 2 + 3.0), -22.0, 'Klemmturm, Schrauben wie bisher'),
+        (X(w('y_riemen_linie')), L['yr_z1'] - 1.0,
+         'Riemenende im Schlitz, Zähne zur 2040;\nMitte {} mm vor der '
+         'Seitenfläche'.format(de(w('y_riemen_linie') - hb, 1))),
+        (X(L['yr_rippe_u0'] + 0.4), L['kt_z'][0] + 2.0,
+         'Rippen (dahinter)'),
+        (X(u1 - 3.0), L['stift_z'],
+         'Querstift Ø3×{}, innen bündig:\nendet {} mm vor der 2040'.format(
+             de(L['kt_stift_l'], 0), de(stift_ende - hb, 1))),
+        (X(hb + 10.0), L['rahmen_z0'] + 8.0,
+         'Winkel {} mm: der Turm fährt\n{} mm darüber'.format(
+             de(w('winkel_h'), 0),
+             de(kz0 - (L['rahmen_z0'] + w('winkel_h')), 1)))],
+        fg.ox + fg.breite + 12, 'start', abstand=24.0)
+    # Luft zur 2040 (ueber der oberen Nut) und ueber dem Winkel
+    zl = (L['rahmen_z1'] + L['nut_oberkante_z']) / 2.0
+    t += fg.luft(X(hb), zl, X(u0), zl, '{} mm'.format(
+        de(u0 - hb, 1)), 'start', 6, 4)
+    uw = u0 + 0.6
+    t += fg.luft(X(uw), L['rahmen_z0'] + w('winkel_h'), X(uw), kz0,
+                 '{} mm'.format(de(kz0 - (L['rahmen_z0'] + w('winkel_h')),
+                                   1)), 'start', 8, 16)
+
     # ---- Legende -----------------------------------------------------------
-    ly = max(fe.oy + fe.hoehe + 40, ty + 10 + len(zeilen) * 15 + 24)
+    ly = max(fg.oy + fg.hoehe + 50, ty + 10 + len(zeilen) * 15 + 24)
     for i, (art, s) in enumerate((('neu', 'neu zu drucken (PETG)'),
                                   ('toolhead', 'Toolhead (vorhanden)'),
                                   ('fuehrung', 'Linearführung'),
@@ -781,7 +912,7 @@ def main():
                   'Schnittebene. Rot: engste Luft. Spanner in der Mitte '
                   'ihres Wegs.', 8.5, GRAU))
     W = int(max(fr_.ox + fr_.breite + 190, fd.ox + fd.breite + 170,
-                tx + 330))
+                tx + 330, fg.ox + fg.breite + 200))
     H = int(ly + 70)
     svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="{0}" height="{1}" '
            'viewBox="0 0 {0} {1}" font-family="Inter, Helvetica, Arial, '

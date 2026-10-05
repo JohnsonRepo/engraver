@@ -72,16 +72,17 @@ Toolhead und war das letzte Teil, das auf eine Messung gewartet hat.
 | Motordaten | **17HE15-1504S**: **1,5 A** je Phase, 2,3 Ω, 4,0 mH, 42 Ncm, Körper 38 mm, Welle Ø5 × 23,5 mm, D-Fläche 20 mm lang, 280 g (gemessen 37 / 23 mm, siehe oben) | `[v]` Typ laut Etikett (2026-09-27), Daten `[w]` Datenblatt Stepperonline |
 | NEMA 17, Welle | ragt **23 mm** heraus (60 − 37), Ø5. Die Halter sind auf **20 mm** ausgelegt (erste Angabe): so trägt die Welle das ganze Ritzel, die 3 mm mehr stehen frei über | `[v]` Angabe am Aufbau |
 | X-Motorhalter am linken Schlitten | rutschte bei kräftig gespanntem X-Riemen nach innen: ihn hielt nur die Reibung unter 2 × M3×35. Seit Portal Rev. 24 liegt er an einem **Anschlag** auf dem Stirnblock an; der gedruckte Halter passt weiter, der linke Schlitten wird neu gedruckt ([portal-y-schlitten.md](portal-y-schlitten.md#anschlag-für-den-motorhalter-seit-rev-24)) | `[v]` Angabe 2026-10-02, Portal.py Rev. 24 |
-| Y-Riemen | **21,6 mm innen** neben der Schienenmitte, Zähne zur Schiene (aus v8); läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. Der Riemen läuft in der rechten Nut hin und in der linken zurück (Angabe 2026-09-27), das Ritzel mittig ([Y-Antrieb](#y-antrieb)); die Klemmen bleiben, wo Y-Wagen und Klemmtürme in `Portal.py` sie haben: **21,6 mm innen**. Der Wagen-Trum läuft damit schräg von der Klemme in die innere Nut zum Ritzel, der Rücklauf gerade in der äußeren Nut | `[v]` Linie aus v8 = Klemmtürme in Portal.py, Höhe Angabe am Aufbau |
+| Y-Riemen | seit Portal Rev. 25 **14,91 mm innen** neben der Schienenmitte, 4,9 mm vor der Seitenfläche der 2040, Zähne zur Schiene; läuft **nur in der oberen Nut** des 2040, mittig: 7 bis 13 mm unter der Profilkante = 20 bis 26 mm unter der Wagenoberseite. Der Riemen läuft in der rechten Nut hin und in der linken zurück (Angabe 2026-09-27), das Ritzel mittig ([Y-Antrieb](#y-antrieb)). Bis Rev. 24 saßen die Klemmen wie bei v8 21,6 mm innen, und der Riemen lief neben der Nut entlang (Foto 2026-10-05); seitdem stehen die Klemmtürme 2 mm neben der 2040 ([portal-y-schlitten.md](portal-y-schlitten.md#klemmtürme-an-der-2040-seit-rev-25)). Der Wagen-Trum läuft schräg von der Klemme in die innere Nut zum Ritzel, der Rücklauf gerade in der äußeren Nut | `[v]` Höhe Angabe am Aufbau, Lage Portal.py Rev. 25 |
+| Y-Schienen auf den 2040 | mittig, **etwa 4 mm je Seite** zwischen Schienen- und Profilkante | `[v]` Angabe 2026-10-05, nicht gemessen |
 | Obere Nut des 2040 | Öffnung beginnt **6 mm unter der Oberkante** (oberer Rand), Mitte 10 mm darunter | `[v]` Angabe am Aufbau |
 | Y-Riemen, Führung | an beiden Enden Ritzel mit senkrechter Achse; der **Rücklauf läuft in der oberen Nut des 2040** (9,5 mm neben der Schienenmitte), die Zähne zeigen zur Schiene = Innenseite der Schleife; die Klemme hängt auf Höhe der oberen Nutreihe | `[v]` Angabe am Aufbau, v8 passte |
 | Y-Antrieb | Die Y-Riemen liegen spiegelbildlich, die Antriebe vorn drehen **gegenläufig** → **ein Motor je Ecke** statt eines Motors in der Mitte. Das Ritzel sitzt **direkt auf der Motorwelle**, **mittig zur 2040**, im Y-Motorhalter (seit Portal Rev. 16 in `Portal.py`, vorher eigenes Skript `YMotorhalter.py`; [Y-Antrieb](#y-antrieb)). Der Halter aus Portal Rev. 12/13 (Achse 27,5 mm vor der Stirnseite, 15,55 mm innen, M5 in der oberen Nut) ist gedruckt und am Aufbau verworfen. Eckwelle Ø5 mit Lagern und unteres Ritzel entfallen | `[v]` Aufbau, Halter gerechnet |
 | Alte Eckwelle vorn | Ø5 Edelstahl, oben Kugellager, unten Gleitlager, zwei 20-Z-Ritzel; Achse **11 mm vor der Stirnseite** des 2040. Dort passt kein Motor: er ragte 10 mm unter das Ende des 2040 | `[v]` Angabe am Aufbau |
 | Y-Umlenkung hinten | Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager; quer **mittig zur 2040**, der Rücklauf läuft also gerade in der äußeren Nut | `[v]` Angabe am Aufbau (mittig: 2026-09-27); Lage 11 mm hinter der Stirnseite angenommen `[?]` (nur Riemenlänge) |
-| Y-Riemen, Länge | offen, je Seite **≈ 1276 mm** von Klemme zu Klemme (Portal in der Mitte; an den Schienenenden bis 2 mm mehr, weil die Wagen-Trume schräg laufen) | gerechnet (Portal.py Rev. 16, mittige Ritzel), hängt an der Lage des hinteren Ritzels |
+| Y-Riemen, Länge | offen, je Seite **≈ 1276 mm** von Klemme zu Klemme (Portal in der Mitte; an den Schienenenden bis 0,7 mm mehr, weil die Wagen-Trume schräg laufen; bis Portal Rev. 24 bis 2 mm) | gerechnet (Portal.py Rev. 25, mittige Ritzel), hängt an der Lage des hinteren Ritzels |
 | Vorderes 2060 | **35 mm** hinter der Stirnseite der 2040 | `[v]` Angabe am Aufbau |
 | Hinteres 2060 | die 2040 stehen hinten **110 mm** darüber hinaus (beide Seiten) → **435 mm** Mitte zu Mitte hinter dem vorderen (bis Portal Rev. 13: 400 `[?]`) | `[v]` Angabe am Aufbau 2026-09-27 |
-| Winkel 2040 ↔ 2060 | **8 je Kreuzung**, **20 mm** groß; zwei davon greifen in die **obere Nut des 2060** und die **untere Nut der 2040** — die oberen Nuten der 2040 bleiben frei für den Riemen. Ob einer davon vor dem vorderen 2060 an der Seitenfläche sitzt (dort liegt der Y-Motorhalter), ist offen | `[v]` Angabe am Aufbau 2026-09-27, Größe 2026-09-29 |
+| Winkel 2040 ↔ 2060 | **8 je Kreuzung**, **20 mm** groß; zwei davon greifen in die **obere Nut des 2060** und die **untere Nut der 2040** — die oberen Nuten der 2040 bleiben frei für den Riemen. Ob einer davon vor dem vorderen 2060 an der Seitenfläche sitzt (dort liegt der Y-Motorhalter), ist offen. Über die an den Innenseiten fahren die Klemmtürme mit 2 mm Luft (Portal Rev. 25) | `[v]` Angabe am Aufbau 2026-09-27, Größe 2026-09-29 |
 | Abstand der Y-Schienen | **514 mm** Mitte zu Mitte = Rohr 500 + 2 × 7 mm; ergibt sich beim Aufbau aus dem verschraubten Portal | gesetzt (Portal.py), Rechnung siehe unten |
 | Kernbohrung 2020 V-Slot | Ø4,2 — für die Stirnschraube **M5 schneiden, ≥ 15 mm tief** | `[w]` |
 | Hammermuttern | M5, Nut 6, in der hinteren Nut des Portalrohrs | `[w]` |
@@ -99,8 +100,10 @@ gleich. Das gilt, solange der Rahmen unter den Schienen nicht weiter nach
 innen ragt als der Riemen (22 mm neben der Schienenmitte).
 
 Umgesetzt in `fusion/Portal/Portal.py`: 514 mm, X-Schiene 8,25 mm nach links
-versetzt. `portal_check.py` misst an beiden Enden 3,4 mm zwischen Toolhead und
-Y-Riemen, über den ganzen Z-Weg. Details in
+versetzt. `portal_check.py` maß an beiden Enden 3,4 mm zwischen Toolhead und
+Y-Riemen, über den ganzen Z-Weg. Seit Portal Rev. 25 läuft der Riemen 6,7 mm
+weiter außen, nun sind es 10,1 mm; am nächsten kommt der Toolhead dort Motor,
+Umlenkung und Schlittenplatte (3 mm). Details in
 [portal-y-schlitten.md](portal-y-schlitten.md).
 
 ## Diodenlaser

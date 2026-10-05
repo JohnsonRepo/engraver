@@ -125,7 +125,9 @@ def main():
         ('Y-Wagen rechts', 'fuehrung'), ('Platte rechts', 'druck'),
         ('Stirnblock rechts', 'druck'), ('Rueckwand rechts', 'druck'),
         ('Klemmturm hinten rechts', 'druck'),
-        ('Klemmturm vorn rechts', 'druck'), ('Portalrohr', 'profil'))]
+        ('Klemmturm hinten rechts oben', 'druck'),
+        ('Klemmturm vorn rechts', 'druck'),
+        ('Klemmturm vorn rechts oben', 'druck'), ('Portalrohr', 'profil'))]
     fyr = EL['fy_y']
     oz, uz = EL['fy_backe_o_z'], EL['fy_backe_u_z']
     y_neu = [
@@ -271,7 +273,10 @@ def main():
         ('Portalrohr', 'profil'), ('X-Schiene', 'fuehrung'),
         ('Stirnblock links', 'druck'), ('Rueckwand links', 'druck'),
         ('Platte links', 'druck'), ('Y-Wagen links', 'fuehrung'),
-        ('Klemmturm vorn links', 'druck'), ('Klemmturm hinten links', 'druck'),
+        ('Klemmturm vorn links', 'druck'),
+        ('Klemmturm vorn links oben', 'druck'),
+        ('Klemmturm hinten links', 'druck'),
+        ('Klemmturm hinten links oben', 'druck'),
         ('Motorhalter Saeule hinten', 'druck'),
         ('Motorhalter Saeule aussen', 'druck'), ('Motorplatte', 'druck'),
         ('X-Motor', 'kauf'), ('X-Ritzel', 'kauf'))]

@@ -103,7 +103,8 @@ gespiegelt. Sie tragen das Portalrohr von unten und verschrauben es hinten
 (Rückwand, 2 × M5 in Hammermuttern) und an der Stirn (M5 in die
 Kernbohrung) — die Vorderseite bleibt frei für die X-Schiene. Unter jeder
 Platte hängen **zwei gleiche Klemmtürme wie bei v8** mit Rippen und
-Querstift, einer je Riemenende.
+Querstift, einer je Riemenende — seit Rev. 25 2 mm neben der 2040, damit
+der Y-Riemen in die Nut läuft.
 Links steht der **X-Motor** über dem Rohrende — so tief, dass seine
 20-mm-Welle das ganze Ritzel trägt —, rechts die **Umlenkung**: ein Ritzel
 wie am Motor auf einer Welle in Kugel- und Gleitlager, beide in einem
@@ -296,9 +297,15 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 24 mit
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 25 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
-Spannmittel Rev. 1). Neu ist `Spannmittel.py`: Anschlagwinkel als
+Spannmittel Rev. 1). Neu ist Portal Rev. 25: Die Y-Klemmtürme stehen 2 mm
+neben der 2040 statt 7,2 mm, die Riemenmitte 4,9 statt 11,6 mm vor der
+Seitenfläche. So taucht der Riemen etwa doppelt so früh in die obere Nut
+ein und läuft in keiner Stellung mehr außen an ihr vorbei. Neu gedruckt
+werden nur die vier Klemmtürme (Querstift jetzt Ø3 × 14), die Schlitten
+passen weiter ([portal-y-schlitten.md](docs/portal-y-schlitten.md#klemmtürme-an-der-2040-seit-rev-25)).
+Davor kam `Spannmittel.py`: Anschlagwinkel als
 Nullpunkt, Exzenter und Niederhalter für das Werkstück, alles flach genug
 für den Toolhead. Davor kam `Opferplatte.py`: vier Führungsfüße für die Spanplatte 615 × 349 × 25 mm,
 seit Rev. 2 so hoch wie ihre gemessenen 25,3 mm; die Maschine steht

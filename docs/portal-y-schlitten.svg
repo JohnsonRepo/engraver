@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1188" height="1503" viewBox="0 0 1188 1503" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1188" height="2037" viewBox="0 0 1188 2037" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/>
 <text x="24.0" y="28.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Portal — Y-Schlitten, X-Antrieb und Spanner</text>
-<text x="24.0" y="45.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich aus Portal.py Rev. 24 und ToolheadZ.py Rev. 38. Toolhead am Ende des X-Wegs, Z-Schlitten ganz unten. Y-Schienen 514 mm Mitte zu Mitte, Rohr 500 mm.</text>
+<text x="24.0" y="45.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich aus Portal.py Rev. 25 und ToolheadZ.py Rev. 38. Toolhead am Ende des X-Wegs, Z-Schlitten ganz unten. Y-Schienen 514 mm Mitte zu Mitte, Rohr 500 mm.</text>
 <clipPath id="drauf_linkes"><rect x="230.0" y="92.0" width="285.6" height="499.8"/></clipPath>
 <g clip-path="url(#drauf_linkes)">
 <rect x="296.3" y="79.2" width="51.0" height="525.3" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.35"/>
 <rect x="306.5" y="79.2" width="30.6" height="525.3" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.35"/>
 <rect x="287.4" y="166.7" width="68.9" height="115.8" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.35"/>
-<rect x="365.6" y="121.3" width="21.9" height="45.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.3"/>
-<rect x="365.6" y="282.0" width="21.9" height="45.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.3"/>
-<line x1="376.9" y1="79.2" x2="376.9" y2="164.7" stroke="#2b2f36" stroke-width="2.0" stroke-dasharray="7 3"/>
-<line x1="376.9" y1="284.5" x2="376.9" y2="604.5" stroke="#2b2f36" stroke-width="2.0" stroke-dasharray="7 3"/>
+<rect x="352.4" y="121.3" width="35.2" height="45.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.3"/>
+<rect x="352.4" y="282.0" width="35.2" height="45.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.3"/>
+<line x1="359.8" y1="79.2" x2="359.8" y2="164.7" stroke="#2b2f36" stroke-width="2.0" stroke-dasharray="7 3"/>
+<line x1="359.8" y1="284.5" x2="359.8" y2="604.5" stroke="#2b2f36" stroke-width="2.0" stroke-dasharray="7 3"/>
 <line x1="306.4" y1="79.2" x2="306.4" y2="604.5" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="2 3"/>
 <rect x="265.7" y="120.0" width="132.6" height="209.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="339.6" y="260.3" width="58.6" height="25.5" fill="#efbf91" stroke="#c2621b" stroke-width="0.8"/>
@@ -22,10 +22,10 @@
 <circle cx="376.6" cy="155.8" r="8.3" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
 <circle cx="376.6" cy="296.6" r="8.3" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
 <circle cx="376.6" cy="316.4" r="8.3" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="365.6" y="121.3" width="21.9" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
-<rect x="365.6" y="282.0" width="21.9" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
-<line x1="376.9" y1="120.0" x2="376.9" y2="164.7" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="7 3"/>
-<line x1="376.9" y1="284.5" x2="376.9" y2="329.1" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="7 3"/>
+<rect x="352.4" y="121.3" width="35.2" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="352.4" y="282.0" width="35.2" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<line x1="359.8" y1="120.0" x2="359.8" y2="164.7" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="7 3"/>
+<line x1="359.8" y1="284.5" x2="359.8" y2="329.1" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="7 3"/>
 <line x1="306.4" y1="120.0" x2="306.4" y2="329.1" stroke="#2b2f36" stroke-width="1.0" stroke-dasharray="2 3"/>
 <rect x="339.6" y="285.8" width="1275.0" height="51.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
 <rect x="382.4" y="336.8" width="1147.5" height="25.5" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
@@ -43,7 +43,7 @@
 <circle cx="274.6" cy="273.0" r="7.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <circle cx="274.6" cy="289.6" r="7.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="291.7" y="305.3" width="20.4" height="23.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="3 2"/>
-<rect x="365.6" y="282.0" width="21.9" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="3 2"/>
+<rect x="352.4" y="282.0" width="35.2" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="3 2"/>
 </g>
 <rect x="230.0" y="92.0" width="285.6" height="499.8" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="230.0" y="84.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Draufsicht linkes Portalende</text>
@@ -52,10 +52,10 @@
 <rect x="719.9" y="79.2" width="51.0" height="525.3" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.35"/>
 <rect x="730.1" y="79.2" width="30.6" height="525.3" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.35"/>
 <rect x="711.0" y="166.7" width="68.9" height="115.8" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.35"/>
-<rect x="679.6" y="121.3" width="21.9" height="45.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.3"/>
-<rect x="679.6" y="282.0" width="21.9" height="45.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.3"/>
-<line x1="690.3" y1="79.2" x2="690.3" y2="164.7" stroke="#2b2f36" stroke-width="2.0" stroke-dasharray="7 3"/>
-<line x1="690.3" y1="284.5" x2="690.3" y2="604.5" stroke="#2b2f36" stroke-width="2.0" stroke-dasharray="7 3"/>
+<rect x="679.6" y="121.3" width="35.2" height="45.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.3"/>
+<rect x="679.6" y="282.0" width="35.2" height="45.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.3"/>
+<line x1="707.4" y1="79.2" x2="707.4" y2="164.7" stroke="#2b2f36" stroke-width="2.0" stroke-dasharray="7 3"/>
+<line x1="707.4" y1="284.5" x2="707.4" y2="604.5" stroke="#2b2f36" stroke-width="2.0" stroke-dasharray="7 3"/>
 <line x1="760.8" y1="79.2" x2="760.8" y2="604.5" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="2 3"/>
 <rect x="668.9" y="120.0" width="132.6" height="209.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="668.9" y="260.3" width="58.7" height="25.5" fill="#efbf91" stroke="#c2621b" stroke-width="0.8"/>
@@ -68,10 +68,10 @@
 <circle cx="690.6" cy="155.8" r="8.3" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
 <circle cx="690.6" cy="296.6" r="8.3" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
 <circle cx="690.6" cy="316.4" r="8.3" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="679.6" y="121.3" width="21.9" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
-<rect x="679.6" y="282.0" width="21.9" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
-<line x1="690.3" y1="120.0" x2="690.3" y2="164.7" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="7 3"/>
-<line x1="690.3" y1="284.5" x2="690.3" y2="329.1" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="7 3"/>
+<rect x="679.6" y="121.3" width="35.2" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="679.6" y="282.0" width="35.2" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<line x1="707.4" y1="120.0" x2="707.4" y2="164.7" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="7 3"/>
+<line x1="707.4" y1="284.5" x2="707.4" y2="329.1" stroke="#2b2f36" stroke-width="1.2" stroke-dasharray="7 3"/>
 <line x1="760.8" y1="120.0" x2="760.8" y2="329.1" stroke="#2b2f36" stroke-width="1.0" stroke-dasharray="2 3"/>
 <rect x="-547.5" y="285.8" width="1275.0" height="51.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
 <rect x="-504.7" y="336.8" width="1147.5" height="25.5" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
@@ -93,12 +93,12 @@
 <circle cx="681.0" cy="335.9" r="6.4" fill="#ffffff" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="728.2" y="290.6" width="7.6" height="14.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <line x1="728.2" y1="297.6" x2="677.2" y2="297.6" stroke="#4a4f57" stroke-width="1.6" stroke-dasharray="3 2"/>
-<rect x="679.6" y="282.0" width="21.9" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="3 2"/>
+<rect x="679.6" y="282.0" width="35.2" height="45.9" fill="none" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="3 2"/>
 </g>
 <rect x="551.6" y="92.0" width="285.6" height="499.8" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="551.6" y="84.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Draufsicht rechtes Portalende</text>
-<line x1="376.9" y1="107.3" x2="221.0" y2="107.3" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="376.9" cy="107.3" r="1.5" fill="#5b6472"/>
+<line x1="359.8" y1="107.3" x2="221.0" y2="107.3" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="359.8" cy="107.3" r="1.5" fill="#5b6472"/>
 <text x="218.0" y="110.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Riemen (zwei Enden)</text>
 <line x1="370.2" y1="144.3" x2="221.0" y2="144.3" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="370.2" cy="144.3" r="1.5" fill="#5b6472"/>
@@ -143,8 +143,8 @@
 <circle cx="482.8" cy="505.1" r="1.5" fill="#5b6472"/>
 <text x="218.0" y="526.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Toolhead am linken</text>
 <text x="218.0" y="536.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Ende des X-Wegs (Umriss)</text>
-<line x1="690.3" y1="107.3" x2="846.2" y2="107.3" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="690.3" cy="107.3" r="1.5" fill="#5b6472"/>
+<line x1="707.4" y1="107.3" x2="846.2" y2="107.3" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="707.4" cy="107.3" r="1.5" fill="#5b6472"/>
 <text x="849.2" y="110.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Riemen</text>
 <line x1="696.9" y1="144.3" x2="846.2" y2="144.3" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="696.9" cy="144.3" r="1.5" fill="#5b6472"/>
@@ -189,23 +189,23 @@
 <rect x="102.9" y="763.4" width="319.8" height="23.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="317.4" y="685.4" width="39.0" height="78.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="356.4" y="685.4" width="78.0" height="78.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<rect x="104.8" y="858.9" width="70.2" height="55.0" fill="#f1d9c2" stroke="#d9a67c" stroke-width="0.8"/>
-<rect x="114.6" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="122.4" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="130.2" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="138.0" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="145.8" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="153.6" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="161.4" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="104.8" y="858.9" width="70.2" height="48.8" fill="#f1d9c2" stroke="#d9a67c" stroke-width="0.8"/>
+<rect x="114.6" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="122.4" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="130.2" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="138.0" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="145.8" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="153.6" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="161.4" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
 <rect x="104.8" y="786.8" width="70.2" height="72.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="350.6" y="858.9" width="70.2" height="55.0" fill="#f1d9c2" stroke="#d9a67c" stroke-width="0.8"/>
-<rect x="360.3" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="368.1" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="375.9" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="383.7" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="391.5" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="399.3" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
-<rect x="407.1" y="858.9" width="3.9" height="55.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="350.6" y="858.9" width="70.2" height="48.8" fill="#f1d9c2" stroke="#d9a67c" stroke-width="0.8"/>
+<rect x="360.3" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="368.1" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="375.9" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="383.7" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="391.5" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="399.3" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<rect x="407.1" y="858.9" width="3.9" height="48.8" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
 <rect x="350.6" y="786.8" width="70.2" height="72.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="40.5" y="864.8" width="130.6" height="23.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8" fill-opacity="0.9"/>
 <rect x="354.4" y="864.8" width="130.6" height="23.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8" fill-opacity="0.9"/>
@@ -243,7 +243,7 @@
 <text x="477.6" y="925.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(dahinter), greifen in die Zähne</text>
 <line x1="385.6" y1="894.4" x2="474.6" y2="946.3" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="385.6" cy="894.4" r="1.5" fill="#5b6472"/>
-<text x="477.6" y="949.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Querstift Ø3×10 unter dem Riemen</text>
+<text x="477.6" y="949.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Querstift Ø3×14 unter dem Riemen</text>
 <text x="477.6" y="959.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(in jedem Turm)</text>
 <line x1="81.5" y1="868.7" x2="81.5" y2="755.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="81.5" cy="868.7" r="1.4" fill="#5b6472"/>
@@ -408,43 +408,112 @@
 <text x="524.6" y="1106.6" font-size="8.5" fill="#5b6472" text-anchor="start">Rohr</text>
 <text x="610.6" y="1106.6" font-size="8.5" fill="#1c2733" text-anchor="start">liegt auf der 6-mm-Platte, Höhe wie bisher</text>
 <text x="524.6" y="1121.6" font-size="8.5" fill="#5b6472" text-anchor="start">Y-Riemen</text>
-<text x="610.6" y="1121.6" font-size="8.5" fill="#1c2733" text-anchor="start">Linie wie v8: 21,6 mm innen, Unterkante −42 mm</text>
+<text x="610.6" y="1121.6" font-size="8.5" fill="#1c2733" text-anchor="start">Mitte 14,91 mm innen, 4,9 mm vor der 2040 (Rev. 25),</text>
 <text x="524.6" y="1136.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="610.6" y="1136.6" font-size="8.5" fill="#1c2733" text-anchor="start">Rücklauf in der äußeren oberen Nut, Zähne zur Schiene</text>
-<text x="524.6" y="1151.6" font-size="8.5" fill="#5b6472" text-anchor="start">Y-Klemmen</text>
-<text x="610.6" y="1151.6" font-size="8.5" fill="#1c2733" text-anchor="start">zwei Türme wie v8, je 40,5 mm vor und hinter</text>
-<text x="524.6" y="1166.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="610.6" y="1166.6" font-size="8.5" fill="#1c2733" text-anchor="start">der Wagenmitte; gespannt am Y-Motor</text>
-<text x="524.6" y="1181.6" font-size="8.5" fill="#5b6472" text-anchor="start">X-Riemen</text>
-<text x="610.6" y="1181.6" font-size="8.5" fill="#1c2733" text-anchor="start">Unterkante 20,25 mm, Schleife ≈ 1003 mm</text>
-<text x="524.6" y="1196.6" font-size="8.5" fill="#5b6472" text-anchor="start">X-Spanner</text>
-<text x="610.6" y="1196.6" font-size="8.5" fill="#1c2733" text-anchor="start">Lagerschlitten ±4 mm, M3×20 von außen</text>
-<text x="524.6" y="1211.6" font-size="8.5" fill="#5b6472" text-anchor="start">X-Motor</text>
-<text x="610.6" y="1211.6" font-size="8.5" fill="#1c2733" text-anchor="start">Ritzel ganz auf der Welle schon ab 20 mm (gemessen 23):</text>
-<text x="524.6" y="1226.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="610.6" y="1226.6" font-size="8.5" fill="#1c2733" text-anchor="start">Platte 4,5 mm, Nabe 1 mm in der Bundbohrung</text>
-<text x="524.6" y="1241.6" font-size="8.5" fill="#5b6472" text-anchor="start">engste Luft</text>
-<text x="610.6" y="1241.6" font-size="8.5" fill="#1c2733" text-anchor="start">3 mm: Motor ↔ Trägerplatte, Umlenkritzel ↔ X-Wagen,</text>
-<text x="524.6" y="1256.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="610.6" y="1256.6" font-size="8.5" fill="#1c2733" text-anchor="start">Platte ↔ X-Wagen am Ende des X-Wegs</text>
+<text x="610.6" y="1136.6" font-size="8.5" fill="#1c2733" text-anchor="start">Unterkante −42 mm; 10,1 mm neben dem Toolhead</text>
+<text x="524.6" y="1151.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="610.6" y="1151.6" font-size="8.5" fill="#1c2733" text-anchor="start">Rücklauf in der äußeren oberen Nut, Zähne zur Schiene</text>
+<text x="524.6" y="1166.6" font-size="8.5" fill="#5b6472" text-anchor="start">Y-Klemmen</text>
+<text x="610.6" y="1166.6" font-size="8.5" fill="#1c2733" text-anchor="start">zwei Türme wie v8, je 40,5 mm vor und hinter</text>
+<text x="524.6" y="1181.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="610.6" y="1181.6" font-size="8.5" fill="#1c2733" text-anchor="start">der Wagenmitte, 2 mm neben der 2040; gespannt am Y-Motor</text>
+<text x="524.6" y="1196.6" font-size="8.5" fill="#5b6472" text-anchor="start">X-Riemen</text>
+<text x="610.6" y="1196.6" font-size="8.5" fill="#1c2733" text-anchor="start">Unterkante 20,25 mm, Schleife ≈ 1003 mm</text>
+<text x="524.6" y="1211.6" font-size="8.5" fill="#5b6472" text-anchor="start">X-Spanner</text>
+<text x="610.6" y="1211.6" font-size="8.5" fill="#1c2733" text-anchor="start">Lagerschlitten ±4 mm, M3×20 von außen</text>
+<text x="524.6" y="1226.6" font-size="8.5" fill="#5b6472" text-anchor="start">X-Motor</text>
+<text x="610.6" y="1226.6" font-size="8.5" fill="#1c2733" text-anchor="start">Ritzel ganz auf der Welle schon ab 20 mm (gemessen 23):</text>
+<text x="524.6" y="1241.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="610.6" y="1241.6" font-size="8.5" fill="#1c2733" text-anchor="start">Platte 4,5 mm, Nabe 1 mm in der Bundbohrung</text>
+<text x="524.6" y="1256.6" font-size="8.5" fill="#5b6472" text-anchor="start">engste Luft</text>
+<text x="610.6" y="1256.6" font-size="8.5" fill="#1c2733" text-anchor="start">3 mm: Motor ↔ Trägerplatte, Umlenkritzel ↔ X-Wagen,</text>
 <text x="524.6" y="1271.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="610.6" y="1271.6" font-size="8.5" fill="#1c2733" text-anchor="start">3,4 mm: Toolhead ↔ Y-Riemen, an beiden Enden</text>
-<text x="524.6" y="1286.6" font-size="8.5" fill="#5b6472" text-anchor="start">Prüfung</text>
-<text x="610.6" y="1286.6" font-size="8.5" fill="#1c2733" text-anchor="start">tools/portal_check.py (X- und Z-Weg)</text>
-<rect x="24.0" y="1433.6" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<text x="43.0" y="1441.6" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
-<rect x="214.0" y="1433.6" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="233.0" y="1441.6" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead (vorhanden)</text>
-<rect x="404.0" y="1433.6" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<text x="423.0" y="1441.6" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
-<rect x="594.0" y="1433.6" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<text x="613.0" y="1441.6" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
-<rect x="24.0" y="1451.6" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
-<text x="43.0" y="1459.6" font-size="8.5" fill="#1c2733" text-anchor="start">Motor, Ritzel</text>
-<rect x="214.0" y="1451.6" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<text x="233.0" y="1459.6" font-size="8.5" fill="#1c2733" text-anchor="start">Stahl</text>
-<rect x="404.0" y="1451.6" width="14.0" height="9.0" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8"/>
-<text x="423.0" y="1459.6" font-size="8.5" fill="#1c2733" text-anchor="start">hinter der Schnittebene</text>
-<line x1="594.0" y1="1456.1" x2="610.0" y2="1456.1" stroke="#2b2f36" stroke-width="2.2"/>
-<text x="615.0" y="1459.6" font-size="8.5" fill="#1c2733" text-anchor="start">GT2-Riemen</text>
-<text x="24.0" y="1483.6" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: liegt darunter bzw. vor der Schnittebene. Rot: engste Luft. Spanner in der Mitte ihres Wegs.</text></svg>
+<text x="610.6" y="1271.6" font-size="8.5" fill="#1c2733" text-anchor="start">Platte ↔ X-Wagen am Ende des X-Wegs</text>
+<text x="524.6" y="1286.6" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="610.6" y="1286.6" font-size="8.5" fill="#1c2733" text-anchor="start">3,5 mm: X-Wagen ↔ vorderer Klemmturm, am linken Ende</text>
+<text x="524.6" y="1301.6" font-size="8.5" fill="#5b6472" text-anchor="start">Prüfung</text>
+<text x="610.6" y="1301.6" font-size="8.5" fill="#1c2733" text-anchor="start">tools/portal_check.py (X- und Z-Weg)</text>
+<clipPath id="schnitt_kq"><rect x="250.0" y="1503.6" width="324.0" height="414.0"/></clipPath>
+<g clip-path="url(#schnitt_kq)">
+<rect x="106.0" y="1881.6" width="540.0" height="60.0" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8"/>
+<polygon points="406.0,1881.6 526.0,1881.6 526.0,1863.6 424.0,1761.6 406.0,1761.6" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8" stroke-dasharray="3 2"/>
+<rect x="265.0" y="1563.6" width="162.0" height="60.0" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8"/>
+<rect x="430.0" y="1674.6" width="4.8" height="75.0" fill="#e8c19c" stroke="#d9a67c" stroke-width="0.5"/>
+<polygon points="286.0,1881.6 327.4,1881.6 327.4,1845.6 364.6,1845.6 364.6,1881.6 406.0,1881.6 406.0,1840.2 370.0,1840.2 370.0,1803.0 406.0,1803.0 406.0,1720.2 370.0,1720.2 370.0,1683.0 406.0,1683.0 406.0,1641.6 364.6,1641.6 364.6,1677.6 327.4,1677.6 327.4,1641.6 286.0,1641.6 286.0,1683.0 322.0,1683.0 322.0,1720.2 286.0,1720.2 286.0,1803.0 322.0,1803.0 322.0,1840.2 286.0,1840.2" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.9"/>
+<rect x="310.0" y="1593.6" width="72.0" height="48.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="214.0" y="1527.6" width="312.0" height="36.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="418.0,1749.6 430.0,1749.6 430.0,1674.6 439.6,1674.6 439.6,1749.6 500.7,1749.6 500.7,1563.6 430.0,1563.6 430.0,1626.6 418.0,1638.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="431.3" y="1683.6" width="8.3" height="36.0" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="305.6" y="1683.6" width="8.3" height="36.0" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="416.7" y="1720.2" width="84.0" height="18.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+</g>
+<rect x="250.0" y="1503.6" width="324.0" height="414.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="250.0" y="1495.6" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt D–D: Klemmturm quer, seit Rev. 25 an der 2040</text>
+<text x="250.0" y="1931.6" font-size="8.0" fill="#5b6472" text-anchor="start">rechte Seite, durch den Stift des hinteren Turms, Blick nach vorn</text>
+<text x="250.0" y="1942.6" font-size="8.0" fill="#5b6472" text-anchor="start">bis Rev. 24 stand der Turm 7,2 mm neben der 2040, die Riemenmitte 11,6 mm</text>
+<line x1="250.0" y1="1545.6" x2="241.0" y2="1545.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="250.0" cy="1545.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1548.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platte des Schlittens</text>
+<line x1="292.0" y1="1593.6" x2="241.0" y2="1593.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="292.0" cy="1593.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1596.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Wagen (dahinter)</text>
+<line x1="322.0" y1="1617.6" x2="241.0" y2="1617.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="322.0" cy="1617.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1620.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Schiene MGN12</text>
+<line x1="309.7" y1="1689.6" x2="241.0" y2="1689.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="309.7" cy="1689.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1692.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf in der</text>
+<text x="238.0" y="1702.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">äußeren oberen Nut</text>
+<line x1="304.0" y1="1857.6" x2="241.0" y2="1857.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="304.0" cy="1857.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1860.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040 hochkant</text>
+<line x1="268.0" y1="1899.6" x2="241.0" y2="1899.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="268.0" cy="1899.6" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="1902.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060 (dahinter)</text>
+<line x1="477.4" y1="1599.6" x2="583.0" y2="1599.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="477.4" cy="1599.6" r="1.5" fill="#5b6472"/>
+<text x="586.0" y="1602.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Klemmturm, Schrauben wie bisher</text>
+<line x1="424.0" y1="1632.6" x2="583.0" y2="1632.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="424.0" cy="1632.6" r="1.5" fill="#5b6472"/>
+<text x="586.0" y="1635.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Absatz 0,5 mm neben dem Wagen,</text>
+<text x="586.0" y="1645.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">darunter Fase 45° (stützfrei)</text>
+<line x1="435.5" y1="1689.6" x2="583.0" y2="1689.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="435.5" cy="1689.6" r="1.5" fill="#5b6472"/>
+<text x="586.0" y="1692.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Riemenende im Schlitz, Zähne zur 2040;</text>
+<text x="586.0" y="1702.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Mitte 4,9 mm vor der Seitenfläche</text>
+<line x1="482.7" y1="1729.2" x2="583.0" y2="1729.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="482.7" cy="1729.2" r="1.5" fill="#5b6472"/>
+<text x="586.0" y="1732.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Querstift Ø3×14, innen bündig:</text>
+<text x="586.0" y="1742.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">endet 1,8 mm vor der 2040</text>
+<line x1="432.4" y1="1737.6" x2="583.0" y2="1763.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="432.4" cy="1737.6" r="1.5" fill="#5b6472"/>
+<text x="586.0" y="1766.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rippen (dahinter)</text>
+<line x1="466.0" y1="1833.6" x2="583.0" y2="1833.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="466.0" cy="1833.6" r="1.5" fill="#5b6472"/>
+<text x="586.0" y="1836.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Winkel 20 mm: der Turm fährt</text>
+<text x="586.0" y="1846.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 mm darüber</text>
+<line x1="406.0" y1="1659.6" x2="418.0" y2="1659.6" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="406.0,1659.6 411.0,1657.6 411.0,1661.6" fill="#b4342f"/>
+<polygon points="418.0,1659.6 413.0,1661.6 413.0,1657.6" fill="#b4342f"/>
+<text x="424.0" y="1663.6" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 mm</text>
+<line x1="421.6" y1="1761.6" x2="421.6" y2="1749.6" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="421.6,1761.6 419.6,1756.6 423.6,1756.6" fill="#b4342f"/>
+<polygon points="421.6,1749.6 423.6,1754.6 419.6,1754.6" fill="#b4342f"/>
+<text x="429.6" y="1765.6" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 mm</text>
+<rect x="24.0" y="1967.6" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="43.0" y="1975.6" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
+<rect x="214.0" y="1967.6" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="233.0" y="1975.6" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead (vorhanden)</text>
+<rect x="404.0" y="1967.6" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<text x="423.0" y="1975.6" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
+<rect x="594.0" y="1967.6" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="613.0" y="1975.6" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<rect x="24.0" y="1985.6" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<text x="43.0" y="1993.6" font-size="8.5" fill="#1c2733" text-anchor="start">Motor, Ritzel</text>
+<rect x="214.0" y="1985.6" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<text x="233.0" y="1993.6" font-size="8.5" fill="#1c2733" text-anchor="start">Stahl</text>
+<rect x="404.0" y="1985.6" width="14.0" height="9.0" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8"/>
+<text x="423.0" y="1993.6" font-size="8.5" fill="#1c2733" text-anchor="start">hinter der Schnittebene</text>
+<line x1="594.0" y1="1990.1" x2="610.0" y2="1990.1" stroke="#2b2f36" stroke-width="2.2"/>
+<text x="615.0" y="1993.6" font-size="8.5" fill="#1c2733" text-anchor="start">GT2-Riemen</text>
+<text x="24.0" y="2017.6" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: liegt darunter bzw. vor der Schnittebene. Rot: engste Luft. Spanner in der Mitte ihres Wegs.</text></svg>

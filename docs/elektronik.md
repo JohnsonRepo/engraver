@@ -31,7 +31,7 @@ zwischen Tisch und 2040, fährt nichts hin:
 |---|---|
 | Fach | **488 × 104 × 55 mm** (Breite × Tiefe × Höhe) |
 | Lage | zwischen den Innenseiten der 2040, von 3 mm hinter dem 2060 bis 3 mm vor ihr hinteres Ende, von 2 mm über dem Tisch bis 3 mm unter die 2040 |
-| engste Stelle | **23 mm**: der hintere linke Klemmturm des Y-Schlittens über dem Fach, wenn das Portal am hinteren Schienenende steht |
+| engste Stelle | **25 mm**: der hintere linke Klemmturm des Y-Schlittens über dem Fach, wenn das Portal am hinteren Schienenende steht (bis Portal Rev. 24: 23 mm) |
 | höher geht es | in der Mitte (\|X\| ≤ 225 mm) gleich hinter dem 2060 bis 10 mm über die Oberkante der 2040 (108 mm über dem Fachboden) |
 
 Nach hinten begrenzt das **Schienenende** den Y-Weg, nicht das 2060: Dort

@@ -497,7 +497,8 @@ def seitenansicht(f, w, L, TL, K):
     # Portal an der hinteren Grenze, Z unten
     dh = -K['d_hinten']
     for n in ('Platte links', 'Portalrohr', 'Y-Wagen links',
-              'Klemmturm hinten links', 'Klemmturm vorn links',
+              'Klemmturm hinten links', 'Klemmturm hinten links oben',
+              'Klemmturm vorn links', 'Klemmturm vorn links oben',
               'Stirnblock links'):
         q = P[n]
         art = 'profil' if n == 'Portalrohr' else (

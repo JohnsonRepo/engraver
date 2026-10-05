@@ -260,12 +260,12 @@ def main():
          (w('ls_ruecken') - w('insert_m3_d')) / 2.0, 1.5)
 
     # ------------------------------------------------------------------
-    p.titel('6) Y-Riemen und Klemmtuerme (wie v8)')
+    p.titel('6) Y-Riemen und Klemmtuerme (wie v8, seit Rev. 25 an der 2040)')
     p.info('Riemen Unterkante', L['yr_z0'])
     luft = w('klemm_schlitz') - w('riemen_dicke')
     p.ok('Klemmschlitz nimmt den Riemen auf (Luft)', luft, 0.1)
     p.ok('Rippen greifen zwischen die Zaehne', w('klemm_rippe') - luft, 0.5)
-    p.ok('Riemenmitte auf der Linie von v8',
+    p.ok('Riemenmitte auf der Linie (y_riemen_linie)',
          -abs((L['yr_wand_u'] - w('riemen_dicke') / 2)
               - w('y_riemen_linie')), -0.01)
     p.info('Rippen je Klemmturm', len(L['kt_rippen_y_vorn']), 'Stk')
@@ -282,26 +282,58 @@ def main():
          L['platte_y1'] - L['kt_y_vorn'][1], 0.0)
     p.ok('Klemmturm hinten auf der Platte',
          L['kt_y_hinten'][0] - L['platte_y0'], 0.0)
-    p.ok('Klemmtuerme neben dem Y-Wagen',
-         L['kt_u'][0] - w('y_wagen_breite') / 2, 0.8)
+    # Seit Rev. 25 steht der Turm dicht an der 2040. Er faehrt mit dem Wagen
+    # auf der Schiene, und die sitzt am Aufbau mittig auf dem Profil (etwa
+    # 4 mm je Seite): Auch 0,5 mm aus der Mitte bleiben 1,5 mm Luft.
     p.ok('Klemmtuerme neben dem Rahmen (2040)',
-         L['kt_u'][0] - w('rahmen_b') / 2, 3.0)
+         L['kt_u'][0] - w('rahmen_b') / 2, 1.5)
+    # Die Tuerme stossen an die Enden des Y-Wagens (beide fest an der
+    # Platte): ueber seiner Unterkante weicht der Turm mit dem Absatz neben
+    # ihn zurueck, darunter reicht er unter ihn
+    p.ok('Klemmtuerme: Absatz neben dem Y-Wagen',
+         L['kt_absatz_u'] - w('y_wagen_breite') / 2, 0.5)
+    p.ok('Klemmtuerme: unter dem Absatz unter dem Y-Wagen',
+         L['y_wagen_z0'] - L['kt_absatz_z'], 0.5)
+    p.ok('Klemmtuerme: unter dem Y-Wagen neben der Schiene',
+         L['kt_u'][0] - w('y_schiene_b') / 2, 3.0)
     p.ok('Klemmtuerme unter der Platte', L['platte_u'][1] - L['kt_u'][1], 0.0)
-    # Querschnitt wie v8: Schlitz mit Rippen, Querstift unter dem Riemen
-    p.ok('Klemmturm: Wand neben dem Schlitz (zur Schiene)',
-         L['yr_rippe_u0'] - L['kt_u'][0], 3.0)
+    # Unter den Tuermen sitzen an den 2060 die Winkel (bis winkel_h ueber
+    # dem 2060); beide Tuerme fahren ueber die am hinteren 2060
+    p.ok('Klemmtuerme ueber den Winkeln an den 2060',
+         L['kt_z'][0] - (L['rahmen_z0'] + w('winkel_h')), 1.5)
+    # Querschnitt wie v8: Schlitz mit Rippen, Querstift unter dem Riemen.
+    # Die Rippenwand zur 2040 ist seit Rev. 25 duenner: Den Riemenzug
+    # nehmen die Rippen laengs auf, auseinander halten beide Waende unten
+    # der Stift und oben der volle Turm.
+    p.ok('Klemmturm: Rippenwand (zur 2040)',
+         L['yr_rippe_u0'] - L['kt_u'][0], 2.0)
     p.ok('Klemmturm: Wand neben dem Schlitz (innen)',
          L['kt_u'][1] - L['yr_wand_u'], 3.0)
     p.ok('Klemmturm: Stift traegt den Riemen (Oberkante = Unterkante Riemen)',
          -abs(L['stift_z'] + w('klemm_stift_d') / 2 - L['yr_z0']), -0.01)
+    # Der Stift traegt nur den Riemen, den Zug nehmen die Rippen
     p.ok('Klemmturm: Boden unter der Stiftbohrung',
-         (L['stift_z'] - w('klemm_stift_d') / 2) - L['kt_z'][0], 3.0)
-    p.ok('Klemmturm: Stift reicht durch beide Waende',
-         L['kt_stift_l'] - (L['kt_u'][1] - L['kt_u'][0]), 0.5)
+         (L['stift_z'] - w('klemm_stift_d') / 2) - L['kt_z'][0], 1.5)
+    # Von innen buendig eingesteckt: durch beide Waende, vor der 2040
+    stift_raus = L['kt_stift_l'] - (L['kt_u'][1] - L['kt_u'][0])
+    p.ok('Klemmturm: Stift ({:.0f} mm) reicht durch beide Waende'.format(
+        L['kt_stift_l']), stift_raus, 0.0)
+    p.ok('Klemmturm: Stift endet vor der 2040',
+         (L['kt_u'][0] - w('rahmen_b') / 2) - stift_raus, 1.0)
     p.ok('Klemmturm: Einsaetze ueber der Schlitzdecke',
          (L['kt_z'][1] - w('insert_m3_t')) - L['yr_decke_z'], 3.0)
+    p.ok('Klemmturm: Einsaetze ueber dem Absatz',
+         (L['kt_z'][1] - w('insert_m3_t')) - L['kt_absatz_z'], 0.0)
+    p.info('Klemmturm: Schrauben neben der Schienenmitte (wie Rev. 24)',
+           w('kt_schraube_u'))
+    p.ok('Klemmturm: Schrauben aus kt_schraube_u',
+         -max(abs(u - w('kt_schraube_u'))
+              for u, _ in L['kt_schrauben_hinten'] + L['kt_schrauben_vorn']),
+         -0.01)
     p.ok('Klemmturm: Einsatz, Wand seitlich',
-         (L['kt_u'][1] - L['kt_u'][0] - w('insert_m3_d')) / 2, 1.5)
+         min(w('kt_schraube_u') - w('insert_m3_d') / 2
+             - max(L['kt_u'][0], L['kt_absatz_u']),
+             L['kt_u'][1] - w('kt_schraube_u') - w('insert_m3_d') / 2), 1.5)
     for t in ('hinten', 'vorn'):
         ty = L['kt_y_' + t]
         ys = [y for _, y in L['kt_schrauben_' + t]]
@@ -539,7 +571,8 @@ def main():
         korridor('Rueckwand-Schrauben {} (von hinten)'.format(n),
                  [(x(u), L['rueck_y0'], L['kern_z'])
                   for u in L['rueck_schrauben_u']], 'y', -1,
-                 ohne_wand + ('Portalrohr', 'Klemmturm hinten ' + n)
+                 ohne_wand + ('Portalrohr', 'Klemmturm hinten ' + n,
+                              'Klemmturm hinten ' + n + ' oben')
                  + halter,
                  r=2.5)
         ohne_block = tuple(t for t in schlitten if t != 'Stirnblock ' + n)
@@ -551,7 +584,9 @@ def main():
             korridor('Querstift Klemmturm {} {} (von innen)'.format(t, n),
                      [(x(L['kt_u'][1]), L['kt_stift_y_' + t], L['stift_z'])],
                      'x', -s, schlitten + ('Klemmturm hinten ' + n,
+                                           'Klemmturm hinten ' + n + ' oben',
                                            'Klemmturm vorn ' + n,
+                                           'Klemmturm vorn ' + n + ' oben',
                                            'Y-Wagen ' + n, 'Y-Schiene ' + n,
                                            'Rahmen 2040 ' + n), r=2.0)
         korridor('Halterschrauben {} (von oben)'.format(n),
@@ -832,9 +867,9 @@ def main():
 
     # Im Betrieb begrenzt das Softlimit das Portal vorn (3 mm vor dem 2060,
     # Z unten); das Schienenende selbst erreicht es nur von Hand. Dort
-    # endet der vordere Klemmturm hinter dem inneren Schenkel des Halters,
-    # ueber ihm und daneben — in allen drei Achsen getrennt (die Kanten
-    # 3,8 mm auseinander), achsweise gemessen aber knapper als luft_bau.
+    # endet der vordere Klemmturm hinter dem inneren Schenkel des Halters
+    # und ueber ihm (seit Rev. 25 steht er nicht mehr daneben, sondern
+    # 4,5 mm darueber und 2,2 mm dahinter).
     d_b = luft_portal(d_vorn)
     p.ok('Portal an der vorderen Grenze frei ueber den Y-Motorhaltern '
          '({} / {})'.format(d_b[1], d_b[2]), d_b[0], w('luft_bau'))
@@ -930,6 +965,16 @@ def main():
             t = g[teil]
             p.info('   Trum {}: {:.0f} mm, {:.1f} Grad, {}'.format(
                 teil, t['trum'], t['schraeg'], nut_durchgang(w, L, t, teil)))
+    # Am Aufbau lief der Riemen bis Rev. 24 neben der Nut, am vorderen
+    # Schienenende ganz an ihr vorbei: Seit Rev. 25 erreicht jeder Trum in
+    # jeder Stellung die Oeffnung, bevor das Profil endet
+    erreicht = min((nut_bereich(w, L, g[teil], teil)[1]
+                    if nut_bereich(w, L, g[teil], teil)[0] is not None
+                    else -nut_bereich(w, L, g[teil], teil)[1], dy, teil)
+                   for dy, g in wege for teil in ('vorn', 'hinten'))
+    p.ok('Trume der Wagen erreichen die Nut vor dem Profilende (knappste: '
+         'Trum {}, Portal {:+.0f})'.format(erreicht[2], erreicht[1]),
+         erreicht[0], 1.0)
     steil = max(max(g['vorn']['schraeg'], g['hinten']['schraeg'])
                 for _, g in wege)
     p.info('Trume der Wagen: steilster Winkel ueber den ganzen Y-Weg', steil,
@@ -1443,12 +1488,14 @@ def y_weg_riemen(pm, L, dy):
     return pm.y_riemen_weg(L, dy)
 
 
-def nut_durchgang(w, L, t, teil):
+def nut_bereich(w, L, t, teil):
     """Wo der Trum t der Wagenseite (aus y_riemen_weg) durch die Oeffnung
     der inneren oberen Nut laeuft: der Bereich, in dem ein Teil des Riemens
     zwischen Lippe und Seitenflaeche der 2040 liegt, als Abstand vom
-    Profilende. Die Wirklinie ist gerade; Zahnspitzen und Ruecken liegen
-    senkrecht zum Trum riemen_innen bzw. riemen_aussen daneben."""
+    Profilende (nah, fern). Die Wirklinie ist gerade; Zahnspitzen und
+    Ruecken liegen senkrecht zum Trum riemen_innen bzw. riemen_aussen
+    daneben. Laeuft der Trum aussen an der Nut vorbei: (None, Abstand der
+    Zahnspitzen am Profilende von der Seitenflaeche)."""
     (uk, yk), (tu, tv) = t['klemme'], t['tangente']
     c = math.cos(math.radians(t['schraeg']))
     innen, aussen = L['riemen_innen'] / c, L['riemen_aussen'] / c
@@ -1464,10 +1511,17 @@ def nut_durchgang(w, L, t, teil):
     lo, hi = max(ya, min(yk, tv), y0), min(yb, max(yk, tv), y1)
     if lo >= hi:
         u_ende = uk + (tu - uk) * (ende - yk) / (tv - yk)
-        return ('aussen an der Nut vorbei (Zahnspitzen am Profilende '
-                '{:.1f} mm neben der Seitenflaeche)'.format(
-                    u_ende - innen - flaeche))
+        return None, u_ende - innen - flaeche
     a, b = sorted((abs(ende - lo), abs(ende - hi)))
+    return a, b
+
+
+def nut_durchgang(w, L, t, teil):
+    """nut_bereich als Text fuer den Bericht."""
+    a, b = nut_bereich(w, L, t, teil)
+    if a is None:
+        return ('aussen an der Nut vorbei (Zahnspitzen am Profilende '
+                '{:.1f} mm neben der Seitenflaeche)'.format(b))
     return 'in der Nutoeffnung {:.1f} bis {:.1f} mm vom Profilende'.format(
         b, a)
 

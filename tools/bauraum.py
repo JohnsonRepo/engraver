@@ -396,16 +396,18 @@ def portal_bauraeume(w, L):
               (L['rueck_y0'], L['rueck_y1']), (L['platte_z1'], L['wand_z1'])),
             q('Stirnblock ' + n, xb(s, *L['stirn_u']), L['stirn_y'],
               (L['platte_z1'], L['wand_z1'])),
-            # Klemmtuerme (seit Rev. 25 dicht an der 2040): unten volle
-            # Breite bis unter den Y-Wagen, oben der Absatz neben ihm (die
-            # 45-Grad-Fase dazwischen gehoert ganz zum unteren Quader)
-            q('Klemmturm hinten ' + n, xb(s, *L['kt_u']), L['kt_y_hinten'],
-              (L['kt_z'][0], L['kt_absatz_z'])),
+            # Klemmtuerme (seit Rev. 25 dicht an der 2040): unten bis unter
+            # den Y-Wagen, seit Rev. 27 innen nur bis kt_u_unten; oben der
+            # Absatz neben ihm mit dem Block um die Einsaetze (Hals und Fase
+            # darunter gehoeren ganz zum oberen, die 45-Grad-Fase zur 2040
+            # ganz zum unteren Quader)
+            q('Klemmturm hinten ' + n, xb(s, L['kt_u'][0], L['kt_u_unten']),
+              L['kt_y_hinten'], (L['kt_z'][0], L['kt_absatz_z'])),
             q('Klemmturm hinten ' + n + ' oben',
               xb(s, L['kt_absatz_u'], L['kt_u'][1]), L['kt_y_hinten'],
               (L['kt_absatz_z'], L['kt_z'][1])),
-            q('Klemmturm vorn ' + n, xb(s, *L['kt_u']), L['kt_y_vorn'],
-              (L['kt_z'][0], L['kt_absatz_z'])),
+            q('Klemmturm vorn ' + n, xb(s, L['kt_u'][0], L['kt_u_unten']),
+              L['kt_y_vorn'], (L['kt_z'][0], L['kt_absatz_z'])),
             q('Klemmturm vorn ' + n + ' oben',
               xb(s, L['kt_absatz_u'], L['kt_u'][1]), L['kt_y_vorn'],
               (L['kt_absatz_z'], L['kt_z'][1])),

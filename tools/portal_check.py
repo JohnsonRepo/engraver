@@ -318,25 +318,44 @@ def main():
     # der Stift und oben der volle Turm.
     p.ok('Klemmturm: Rippenwand (zur 2040)',
          L['yr_rippe_u0'] - L['kt_u'][0], 2.0)
-    p.ok('Klemmturm: Wand neben dem Schlitz (innen)',
-         L['kt_u'][1] - L['yr_wand_u'], 3.0)
+    # Seit Rev. 27 ist der Turm nur oben, im Block um die Einsaetze, so
+    # breit; darunter (Riemen, Stift) reicht die Wand bis kt_u_unten
+    p.ok('Klemmturm: Wand neben dem Schlitz (innen, unter dem Block)',
+         round(L['kt_u_unten'] - L['yr_wand_u'], 3), w('kt_wand'))
+    p.ok('Klemmturm: Block um die Einsaetze bis ueber den Schlitz',
+         L['kt_block_z'] - L['yr_decke_z'], 3.0)
+    p.ok('Klemmturm: Boden unter den Einsaetzen',
+         round((L['kt_z'][1] - w('insert_m3_t')) - L['kt_block_z'], 3), 1.0)
+    p.ok('Klemmturm: Hals am Absatz (zwischen Wagen und Innenseite)',
+         L['kt_u_unten'] - L['kt_absatz_u'], 4.0)
+    # Der Riemenzug (ein Trum je Turm) biegt den schmalen Teil am Hals quer
+    # zu den Schichten; die Fase unter dem Block fuehrt ihn dorthin, wo der
+    # Hals am schmalsten ist
+    hals_z = L['kt_block_z'] - w('kt_stufe_fase')
+    hals = L['kt_u_unten'] - L['kt_absatz_u']
+    sig = (VORSPANNUNG_MAX * (hals_z - (L['yr_z0'] + L['yr_z1']) / 2.0)
+           / (hals * w('kt_laenge') ** 2 / 6.0))
+    p.ok('Klemmturm: Biegung am Hals ({:.0f} N, Schichten), Sicherheit'
+         .format(VORSPANNUNG_MAX), PETG_SCHICHT / sig, 4.0, '>=', 'x')
     p.ok('Klemmturm: Stift traegt den Riemen (Oberkante = Unterkante Riemen)',
          -abs(L['stift_z'] + w('klemm_stift_d') / 2 - L['yr_z0']), -0.01)
     # Der Stift traegt nur den Riemen, den Zug nehmen die Rippen
     p.ok('Klemmturm: Boden unter der Stiftbohrung',
          (L['stift_z'] - w('klemm_stift_d') / 2) - L['kt_z'][0], 1.5)
-    # Von innen buendig eingesteckt, unter dem ganzen Schlitz durch bis in
-    # die Rippenwand. Seit Rev. 26 ein Sackloch: Die Wand davor haelt den
-    # Stift, er kann nicht zur 2040 hinauswandern.
-    p.ok('Klemmturm: Stift ({:.0f} mm) innen buendig'.format(
-        L['kt_stift_l']),
-         -abs(L['kt_u'][1] - L['kt_stift_l'] - L['kt_stift_ende_u']), -0.01)
+    # Von innen eingesteckt, unter dem ganzen Schlitz durch bis in die
+    # Rippenwand. Seit Rev. 26 ein Sackloch: Die Wand davor haelt den
+    # Stift, er kann nicht zur 2040 hinauswandern. Seit Rev. 27 steckt er im
+    # schmalen Teil: innen buendig, sonst hoechstens 1 mm versenkt.
+    versenkt = L['kt_u_unten'] - L['kt_stift_ende_u'] - L['kt_stift_l']
+    p.ok('Klemmturm: Stift ({:.0f} mm) innen nicht vorstehend'.format(
+        L['kt_stift_l']), round(versenkt, 3), 0.0)
+    p.ok('   und hoechstens 1 mm versenkt', versenkt, 1.0, '<=')
     p.ok('Klemmturm: Stift liegt unter dem ganzen Schlitz',
-         round(L['yr_rippe_u0'] - L['kt_stift_ende_u'], 3), 0.0)
+         round(L['yr_rippe_u0'] - L['kt_stift_ende_u'], 3), 0.5)
     p.ok('Klemmturm: Sackloch, Wand vor dem Stift zur 2040',
-         L['kt_stift_ende_u'] - L['kt_u'][0], 1.0)
+         round(L['kt_stift_ende_u'] - L['kt_u'][0], 3), 1.0)
     p.ok('Klemmturm: Stift endet vor der 2040, am Aufbau',
-         L['kt_stift_ende_u'] - L['profil_aufbau_u'], 2.0)
+         round(L['kt_stift_ende_u'] - L['profil_aufbau_u'], 3), 2.0)
     p.ok('Klemmturm: Einsaetze ueber der Schlitzdecke',
          (L['kt_z'][1] - w('insert_m3_t')) - L['yr_decke_z'], 3.0)
     p.ok('Klemmturm: Einsaetze ueber dem Absatz',
@@ -599,7 +618,8 @@ def main():
         # Querstift im Klemmturm: von innen (zur Maschinenmitte) quer rein
         for t in ('hinten', 'vorn'):
             korridor('Querstift Klemmturm {} {} (von innen)'.format(t, n),
-                     [(x(L['kt_u'][1]), L['kt_stift_y_' + t], L['stift_z'])],
+                     [(x(L['kt_u_unten']), L['kt_stift_y_' + t],
+                       L['stift_z'])],
                      'x', -s, schlitten + ('Klemmturm hinten ' + n,
                                            'Klemmturm hinten ' + n + ' oben',
                                            'Klemmturm vorn ' + n,

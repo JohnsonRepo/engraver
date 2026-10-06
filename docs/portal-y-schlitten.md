@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 26, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 27, fünfundzwanzig
 gedruckte Teile).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
 `fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
@@ -30,12 +30,14 @@ an dem der Motorhalter gegen den Riemenzug anliegt. Seit Rev. 25 stehen die
 Klemmtürme dicht an der 2040, damit der Y-Riemen in die Nut läuft
 ([Klemmtürme an der 2040](#klemmtürme-an-der-2040-seit-rev-25)), seit
 Rev. 26 am Aufbau 1 mm daneben
-([1 mm neben der 2040](#1-mm-neben-der-2040-seit-rev-26)).
+([1 mm neben der 2040](#1-mm-neben-der-2040-seit-rev-26)). Seit Rev. 27
+sind sie unter den Einsätzen schmal
+([Schmaler unter den Einsätzen](#schmaler-unter-den-einsätzen-seit-rev-27)).
 
 | Pos | Teil | Stück | Funktion |
 |---|---|---|---|
 | 1 | **Schlitten** | 2 (gespiegelt) | Platte auf dem Y-Wagen. Das Rohr liegt oben auf, eine **Rückwand** hält es hinten, ein **Stirnblock** am Rohrende. Der linke hat seit Rev. 21 zwei Löcher Ø3,4 für den Kettenhalter Y und seit Rev. 24 den Anschlag für den Motorhalter |
-| 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende. Seit Rev. 25 dicht an der 2040, oben mit einem Absatz neben dem Y-Wagen; seit Rev. 26 am Aufbau 1 mm daneben, der Querstift steckt in einem Sackloch |
+| 2 | **Klemmturm** | 4 (2 je Seite, gespiegelt) | vorn und hinten gleich, wie die Türme aus v8: Schlitz mit Rippen, Querstift unter dem Riemen, je ein Riemenende. Seit Rev. 25 dicht an der 2040, oben mit einem Absatz neben dem Y-Wagen; seit Rev. 26 am Aufbau 1 mm daneben, der Querstift steckt in einem Sackloch; seit Rev. 27 nur oben um die Einsätze breit, darunter 5,4 mm Wand innen neben dem Schlitz |
 | 3 | **Motorhalter** | 1 | X-Motor (NEMA 17) stehend über dem linken Rohrende, Welle nach unten; dünne Motorplatte, damit die 20-mm-Welle das ganze Ritzel trägt. Liegt seit Rev. 24 innen am Anschlag des linken Schlittens an (der Halter selbst ist unverändert) |
 | 4 | **Spannbock** | 1 | rechts fest auf dem Stirnblock (2 × M3): Anschlag für die Zugschraube |
 | 5 | **Lagerschlitten** | 1 | Rahmen um das Umlenkritzel: oben das Kugellager, unten das Gleitlager der Welle; gleitet auf dem Rohr (Feder in der oberen Nut), die Zugschraube zieht ihn nach außen. Seit Rev. 18, ersetzt Umlenkhalter und Spannklotz |
@@ -295,10 +297,11 @@ Schnitt D–D quer.
 
 Jeder Turm ist 18 mm lang, der Schlitz ist unten und an beiden Enden
 offen, 7 Rippen stehen an der Wand zur Schiene. Den Riemen von unten in
-den Schlitz drücken, dann einen **Stift Ø3 × 14 (oder eine M3×14) quer von
+den Schlitz drücken, dann einen **Stift Ø3 × 8 (oder eine M3×8) quer von
 innen** unter ihm durchschieben, bis er im Sackloch anstößt — dann ist er
-innen bündig. Er sichert den Riemen von unten; vor ihm bleiben 1,8 mm Wand
-zur 2040, hinauswandern kann er also nicht (seit Rev. 26). Jeder Turm
+innen bündig. Er sichert den Riemen von unten; vor ihm bleibt 1 mm Wand zur
+2040, hinauswandern kann er also nicht (Sackloch seit Rev. 26, 8 mm seit
+Rev. 27). Jeder Turm
 hängt an zwei M3×8 von oben durch die Platte. Die des vorderen liegen unter
 dem Rohr: Er kommt **vor dem Rohr** an die Platte.
 
@@ -339,8 +342,8 @@ zwischen Riemen und Profil stehen.
 | Luft zur 2040 | seit Rev. 26 am Aufbau **1 mm**. Rev. 25 rechnete 2 mm mit der Schiene mittig auf der 2040; gemessen waren es 3,0 |
 | Neben dem Y-Wagen | Die Türme stoßen an die Enden des Wagens. Auf seiner Höhe beginnt der Turm deshalb erst **0,5 mm neben ihm**, darunter reicht er mit der Rippenwand bis an die 2040 (am Aufbau 1 mm davor). Unter dem Absatz sitzt eine 45°-Fase, so druckt er ohne Stützen |
 | Über den Winkeln | Unter den Türmen sitzen an den 2060 die 20-mm-Winkel, und beide Türme fahren über die am hinteren 2060. Unter der Stiftbohrung bleiben 1,8 mm (vorher 3,4), der Turm endet **2 mm über den Winkeln**. Bis Rev. 24 waren es 0,4 mm |
-| Querstift | **Ø3 × 14 oder M3×14**: von innen eingesteckt, bis er im Sackloch anstößt (seit Rev. 26; in Rev. 25 ging die Bohrung durch, der Stift endete 1,8 mm vor der 2040). Vor ihm bleiben 1,8 mm Wand. Der Stift trägt nur den Riemen; den Zug nehmen die Rippen |
-| Schrauben | stehen wie bis Rev. 24 (21,49 mm neben der Schienenmitte). Beide Schlitten passen also weiter, innen reicht der Turm dafür bis 2 mm hinter die Einsätze. Ein Turm ist 15,8 × 18 × 31 mm groß (Rev. 25: 13,8 × 18 × 31, bis Rev. 24: 8,6 × 18 × 32,6) |
+| Querstift | seit Rev. 27 **Ø3 × 8 oder M3×8** (bis Rev. 26: 14 mm): von innen eingesteckt, bis er im Sackloch anstößt (seit Rev. 26; in Rev. 25 ging die Bohrung durch, der Stift endete 1,8 mm vor der 2040). Vor ihm bleibt 1 mm Wand. Der Stift trägt nur den Riemen; den Zug nehmen die Rippen |
+| Schrauben | stehen wie bis Rev. 24 (21,49 mm neben der Schienenmitte). Beide Schlitten passen also weiter, innen reicht der Turm dafür bis 2 mm hinter die Einsätze — seit Rev. 27 nur noch im Block um sie. Die Hülle eines Turms ist 15,8 × 18 × 31 mm groß (Rev. 25: 13,8 × 18 × 31, bis Rev. 24: 8,6 × 18 × 32,6) |
 
 Umbau: siehe [1 mm neben der 2040](#1-mm-neben-der-2040-seit-rev-26).
 
@@ -365,8 +368,8 @@ Schnitt D–D zeigt die 2040 so, wie sie am Aufbau zum Turm steht.
 |---|---|
 | Luft zur 2040 | am Aufbau **1,0 mm** (Rev. 25: 3,0 gemessen) |
 | Riemenmitte | 3,9 mm vor der Seitenfläche (Rev. 25: 5,9). Der vordere Trum taucht am vorderen Schienenende 6,6 mm vor dem Profilende in die Nut, jeder andere früher |
-| Querstift | dieselben **Ø3 × 14 oder M3×14**. Die Bohrung ist ein Sackloch: von innen einstecken, bis er anstößt, dann ist er innen bündig. Vor ihm bleiben 1,8 mm Wand — bei 1 mm Luft darf er nicht zur 2040 hinauswandern |
-| Turm | 15,8 × 18 × 31 mm (Rev. 25: 13,8), Schrauben, Absatz und Höhe wie in Rev. 25 |
+| Querstift | in Rev. 26 dieselben Ø3 × 14 oder M3×14, seit Rev. 27 **Ø3 × 8 oder M3×8**. Die Bohrung ist ein Sackloch: von innen einstecken, bis er anstößt, dann ist er innen bündig. Vor ihm bleibt Wand zur 2040 (Rev. 26: 1,8 mm, seit Rev. 27: 1 mm) — bei 1 mm Luft darf er nicht zur 2040 hinauswandern |
+| Turm | Hülle 15,8 × 18 × 31 mm (Rev. 25: 13,8), Schrauben, Absatz und Höhe wie in Rev. 25; seit Rev. 27 unter den Einsätzen schmal ([unten](#schmaler-unter-den-einsätzen-seit-rev-27)) |
 | Toolhead ↔ Y-Riemen | 12,1 mm an beiden Enden des X-Wegs (Rev. 25: 10,1) |
 
 **Vor dem Druck prüfen:** Die 3,0 mm sind an einer Stelle gemessen. Mit den
@@ -377,17 +380,41 @@ Klemmt er irgendwo, die kleinste Luft messen, `kt_luft_mehr` = kleinste
 Luft − 2,0 setzen und das Skript neu laufen lassen; dann bleibt auch dort
 1 mm. Sind beide Seiten verschieden, gilt die kleinere.
 
-**Umbau:** Nur die **vier Klemmtürme** neu drucken, die Stifte (14 mm)
-bleiben; eine M3×14 statt des Stifts lässt sich später am Kopf wieder
-herausziehen. Die hinteren Türme kommen bei aufgelegtem Rohr heraus. Die
-Schrauben der vorderen liegen unter dem Rohr, dafür das Portalrohr abnehmen
-(je Seite 2 × M5 hinten, 1 × M5 stirnseitig). Beim Festziehen eine
+**Umbau:** Nur die **vier Klemmtürme** neu drucken, dazu 4 Stifte Ø3 × 8
+oder M3×8 (seit Rev. 27; bis Rev. 26: 14 mm). Eine M3×8 statt des Stifts
+lässt sich später am Kopf wieder herausziehen. Die hinteren Türme kommen
+bei aufgelegtem Rohr heraus. Die Schrauben der vorderen liegen unter dem
+Rohr, dafür das Portalrohr abnehmen (je Seite 2 × M5 hinten, 1 × M5
+stirnseitig). Beim Festziehen eine
 1-mm-Lehre (Fühlerlehre, Blechstreifen) zwischen Turm und 2040 legen und den
 Turm leicht dagegen drücken — die Schrauben haben in der Platte etwas Spiel.
 Die Riemenenden an derselben Stelle wieder einlegen; der Weg wird 0,1 mm
 kürzer (von Rev. 24 aus 0,8 mm), das gleicht das Spannen am Motor aus.
 Danach beide Seiten abgleichen (oben) und das Portal einmal von Hand über
 den ganzen Y-Weg schieben: Nirgends darf ein Turm an der 2040 streifen.
+
+### Schmaler unter den Einsätzen (seit Rev. 27)
+
+Bis Rev. 26 reichte der Turm über seine ganze Höhe 12,2 mm innen neben den
+Riemen, gebraucht werden dort etwa 5 mm (Angabe 2026-10-06). So breit war
+er nur wegen der zwei Gewindeeinsätze: Die Schrauben zur Platte stehen
+21,49 mm neben der Schienenmitte, damit die gedruckten Schlitten passen,
+und um jeden Einsatz braucht es 2 mm Wand.
+
+Seit Rev. 27 ist der Turm nur noch oben, in einem **Block um die
+Einsätze**, so breit: von der Platte bis 1,5 mm unter ihre Sacklöcher,
+8,5 mm hoch. Darunter, auf Höhe von Riemen und Stift, ist die Wand innen
+neben dem Schlitz **5,4 mm** dick. Riemenlinie, Rippen, Schlitz, die 1 mm
+Luft zur 2040 und die Schrauben bleiben, wie sie sind.
+
+| | |
+|---|---|
+| Wand innen neben dem Riemen | 5,4 mm (bis Rev. 26: 12,2). 5,4 statt 5, damit ein Stift oder eine M3×8 innen bündig sitzt und vor ihm 1 mm Wand zur 2040 bleibt |
+| Querstift | **Ø3 × 8 oder M3×8** (bis Rev. 26: 14 mm). M3×8 sind dieselben Schrauben, die die Türme an der Platte halten |
+| Block | 8,5 mm hoch, innen bis 25,8 mm neben der Schienenmitte wie bisher; 1,5 mm Boden unter den Einsätzen, in der Ecke darunter eine Fase 1,5 mm |
+| Hals | zwischen Y-Wagen und Innenseite 5 mm breit. Biegt ein kräftig überspannter Riemen (60 N) ihn quer zu den Schichten, bleibt 6,9-fache Sicherheit |
+| Druck | wie bisher Plattenseite aufs Bett: Der schmale Teil steht auf dem Block, Stützen braucht es nicht |
+| Material | 4,6 statt 7,3 cm³ je Turm, rund 37 % weniger |
 
 ## Y-Antrieb vorn
 
@@ -645,7 +672,7 @@ Senkungen, die Schraubenlängen und die Druckbarkeit.
 | Teil | Lage aufs Bett |
 |---|---|
 | Schlitten | Unterseite, die Wände stehen darauf; der linke mit dem Anschlag oben auf dem Stirnblock |
-| Klemmturm (4×) | Oberseite (Plattenseite) unten: Schlitz nach oben offen, Rippen senkrecht; die Fase unter dem Absatz steigt mit 45° |
+| Klemmturm (4×) | Oberseite (Plattenseite) unten: Schlitz nach oben offen, Rippen senkrecht; die Fase unter dem Absatz steigt mit 45°, der schmale Teil steht auf dem Block um die Einsätze |
 | Motorhalter | Motorplatte (Oberseite) unten |
 | Spannbock | Boden |
 | Lagerschlitten | auf dem Rücken liegend; die Lagersitze liegen dann waagerecht und sind als Träne gezeichnet, der Pfosten wird eine Brücke über 17 mm |
@@ -671,7 +698,7 @@ gerechnet — maßgeblich ist der erste Fusion-Lauf):
 |---|---|---|---|
 | Schlitten links (mit Anschlag) | 42,2 cm³ | ≈ 54 g | 52 × 82 × 32 mm |
 | Schlitten rechts | 41,9 cm³ | ≈ 53 g | 52 × 82 × 26 mm |
-| Klemmturm (je, 4×) | 7,3 cm³ | ≈ 9 g | 16 × 18 × 31 mm |
+| Klemmturm (je, 4×) | 4,6 cm³ | ≈ 6 g | 16 × 18 × 31 mm |
 | Motorhalter | 31,5 cm³ | ≈ 40 g | 50 × 51 × 28 mm |
 | Spannbock | 5,4 cm³ | ≈ 7 g | 35 × 22 × 18 mm |
 | Lagerschlitten | 10,4 cm³ | ≈ 13 g | 16 × 35 × 33 mm |
@@ -702,7 +729,7 @@ Bohrer an der Trägerplatte.
 | 8 + 8 | M3×8 Zylinderkopf + Messing-Einsatz M3 | Klemmtürme → Platte |
 | 4 + 4 | M5×12 Zylinderkopf + Hammermutter M5 (Nut 6) | Rückwand → Rohr |
 | 2 | M5×25 Zylinderkopf | Stirnblock → Kernbohrung (M5 schneiden) |
-| 4 | Stift Ø3 × 14 oder M3×14 | Querstift im Klemmturm (Sackloch) |
+| 4 | Stift Ø3 × 8 oder M3×8 | Querstift im Klemmturm (Sackloch) |
 | 4 | Messing-Einsatz M3 | Stirnblöcke, für die Halter |
 | 4 | M3×8 Zylinderkopf | NEMA 17 → Motorhalter |
 | 2 | M3×35 Zylinderkopf | Motorhalter → Stirnblock |
@@ -782,7 +809,9 @@ vergleicht die Prüfung als Erstes.
 | `kt_luft_mehr` | 1 mm | so viel mehr Luft als im Modell war am Aufbau (Rev. 25: 3,0 gemessen, 2,0 gerechnet). Neu gemessen: gemessene Luft − Luft im Modell (seit Rev. 26: 0) |
 | `klemm_schlitz` / `klemm_rippe` | 1,6 / 0,8 mm | Klemmschlitz und Rippen, auch im Riemenhalter |
 | `turm_abstand` / `kt_laenge` | 40,5 / 18 mm | Lage der Klemmtürme (Außenkante ab Wagenmitte) und ihre Länge, wie v8 |
-| `kt_wand_profil` / `kt_wand` | 2 / 3,5 mm | Klemmturm: Rippenwand zur 2040 (seit Rev. 25), Wand innen neben dem Schlitz (v8). Der Querstift ist die kürzeste gerade Länge unter dem ganzen Schlitz (14 mm), im Sackloch |
+| `kt_wand_profil` / `kt_wand` | 2 / 5 mm | Klemmturm: Rippenwand zur 2040 (seit Rev. 25), Wand innen neben dem Schlitz mindestens (seit Rev. 27; v8: 3,5). Unter dem Block wird sie 5,4, damit der Stift bündig sitzt |
+| `kt_stift_l` / `kt_stift_haut` | 8 / 1 mm | Querstift Ø3 × 8 oder M3×8 und die Wand vor seinem Ende zur 2040 (Sackloch); daraus folgt, wo der schmale Teil innen endet (seit Rev. 27) |
+| `kt_einsatz_boden` / `kt_stufe_fase` | 1,5 / 1,5 mm | Boden unter den Einsätzen, darunter wird der Turm schmal, und die Fase in der Ecke darunter (seit Rev. 27) |
 | `kt_boden` | 1,8 mm | Klemmturm unter der Stiftbohrung; damit fährt er 2 mm über die Winkel an den 2060 (bis Rev. 24: 3,4) |
 | `kt_schraube_u` / `kt_wand_einsatz` | 21,49 / 2 mm | Schrauben der Klemmtürme neben der Schienenmitte, wie bis Rev. 24 (die Schlitten bleiben), und die Wand innen neben den Einsätzen |
 | `kt_wagen_luft` | 0,5 mm | Absatz der Klemmtürme neben dem Y-Wagen und unter ihm |

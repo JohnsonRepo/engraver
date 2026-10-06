@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1188" height="2037" viewBox="0 0 1188 2037" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/>
 <text x="24.0" y="28.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Portal — Y-Schlitten, X-Antrieb und Spanner</text>
-<text x="24.0" y="45.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich aus Portal.py Rev. 26 und ToolheadZ.py Rev. 38. Toolhead am Ende des X-Wegs, Z-Schlitten ganz unten. Y-Schienen 514 mm Mitte zu Mitte, Rohr 500 mm.</text>
+<text x="24.0" y="45.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich aus Portal.py Rev. 27 und ToolheadZ.py Rev. 38. Toolhead am Ende des X-Wegs, Z-Schlitten ganz unten. Y-Schienen 514 mm Mitte zu Mitte, Rohr 500 mm.</text>
 <clipPath id="drauf_linkes"><rect x="230.0" y="92.0" width="285.6" height="499.8"/></clipPath>
 <g clip-path="url(#drauf_linkes)">
 <rect x="296.3" y="79.2" width="51.0" height="525.3" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.35"/>
@@ -243,7 +243,7 @@
 <text x="477.6" y="925.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(dahinter), greifen in die Zähne</text>
 <line x1="385.6" y1="894.4" x2="474.6" y2="946.3" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="385.6" cy="894.4" r="1.5" fill="#5b6472"/>
-<text x="477.6" y="949.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Querstift Ø3×14 unter dem Riemen</text>
+<text x="477.6" y="949.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Querstift Ø3×8 unter dem Riemen</text>
 <text x="477.6" y="959.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(in jedem Turm)</text>
 <line x1="81.5" y1="868.7" x2="81.5" y2="755.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="81.5" cy="868.7" r="1.4" fill="#5b6472"/>
@@ -442,13 +442,14 @@
 <polygon points="280.0,1881.6 321.4,1881.6 321.4,1845.6 358.6,1845.6 358.6,1881.6 400.0,1881.6 400.0,1840.2 364.0,1840.2 364.0,1803.0 400.0,1803.0 400.0,1720.2 364.0,1720.2 364.0,1683.0 400.0,1683.0 400.0,1641.6 358.6,1641.6 358.6,1677.6 321.4,1677.6 321.4,1641.6 280.0,1641.6 280.0,1683.0 316.0,1683.0 316.0,1720.2 280.0,1720.2 280.0,1803.0 316.0,1803.0 316.0,1840.2 280.0,1840.2" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.9"/>
 <rect x="310.0" y="1593.6" width="72.0" height="48.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
 <rect x="214.0" y="1527.6" width="312.0" height="36.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<polygon points="406.0,1749.6 418.0,1749.6 418.0,1674.6 427.6,1674.6 427.6,1749.6 500.7,1749.6 500.7,1563.6 430.0,1563.6 430.0,1626.6 406.0,1650.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="406.0,1749.6 418.0,1749.6 418.0,1674.6 427.6,1674.6 427.6,1749.6 460.0,1749.6 460.0,1623.6 469.0,1614.6 500.7,1614.6 500.7,1563.6 430.0,1563.6 430.0,1626.6 406.0,1650.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="419.3" y="1683.6" width="8.3" height="36.0" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
 <rect x="299.6" y="1683.6" width="8.3" height="36.0" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<rect x="416.7" y="1720.2" width="84.0" height="18.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="412.0" y="1720.2" width="48.0" height="18.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="461.1" y="1563.6" width="27.6" height="42.0" fill="none" stroke="#a9b6c8" stroke-width="0.8" stroke-dasharray="3 2"/>
 </g>
 <rect x="250.0" y="1503.6" width="324.0" height="414.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
-<text x="250.0" y="1495.6" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt D–D: Klemmturm quer, seit Rev. 26 am Aufbau 1 mm neben der 2040</text>
+<text x="250.0" y="1495.6" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt D–D: Klemmturm quer (Rev. 27), am Aufbau 1 mm neben der 2040</text>
 <text x="250.0" y="1931.6" font-size="8.0" fill="#5b6472" text-anchor="start">rechte Seite, durch den Stift des hinteren Turms, Blick nach vorn; die 2040 so, wie sie am Aufbau zum Turm steht</text>
 <text x="250.0" y="1942.6" font-size="8.0" fill="#5b6472" text-anchor="start">mit Rev. 25 gemessen 3,0 statt der gerechneten 2,0 mm; im Modell (Schiene mittig) liegt der Turm an der 2040 an</text>
 <line x1="250.0" y1="1545.6" x2="241.0" y2="1545.6" stroke="#5b6472" stroke-width="0.6"/>
@@ -472,19 +473,20 @@
 <text x="238.0" y="1902.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060 (dahinter)</text>
 <line x1="471.4" y1="1599.6" x2="583.0" y2="1599.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="471.4" cy="1599.6" r="1.5" fill="#5b6472"/>
-<text x="586.0" y="1602.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Klemmturm, Schrauben wie bisher</text>
-<line x1="418.0" y1="1632.6" x2="583.0" y2="1632.6" stroke="#5b6472" stroke-width="0.6"/>
+<text x="586.0" y="1602.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Block um die Einsätze,</text>
+<text x="586.0" y="1612.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schrauben wie bisher</text>
+<line x1="418.0" y1="1632.6" x2="583.0" y2="1633.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="418.0" cy="1632.6" r="1.5" fill="#5b6472"/>
-<text x="586.0" y="1635.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Absatz 0,5 mm neben dem Wagen,</text>
-<text x="586.0" y="1645.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">darunter Fase 45° (stützfrei)</text>
+<text x="586.0" y="1636.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Absatz 0,5 mm neben dem Wagen,</text>
+<text x="586.0" y="1646.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">darunter Fase 45° (stützfrei)</text>
 <line x1="423.5" y1="1689.6" x2="583.0" y2="1689.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="423.5" cy="1689.6" r="1.5" fill="#5b6472"/>
 <text x="586.0" y="1692.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Riemenende im Schlitz, Zähne zur 2040;</text>
 <text x="586.0" y="1702.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Mitte 3,9 mm vor der Seitenfläche</text>
-<line x1="482.7" y1="1729.2" x2="583.0" y2="1729.2" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="482.7" cy="1729.2" r="1.5" fill="#5b6472"/>
-<text x="586.0" y="1732.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Querstift Ø3×14 im Sackloch, innen</text>
-<text x="586.0" y="1742.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">bündig; 1,8 mm Wand zur 2040</text>
+<line x1="448.0" y1="1729.2" x2="583.0" y2="1729.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="448.0" cy="1729.2" r="1.5" fill="#5b6472"/>
+<text x="586.0" y="1732.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Querstift Ø3×8 oder M3×8 im Sackloch,</text>
+<text x="586.0" y="1742.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">innen bündig; 1 mm Wand zur 2040</text>
 <line x1="420.4" y1="1737.6" x2="583.0" y2="1763.2" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="420.4" cy="1737.6" r="1.5" fill="#5b6472"/>
 <text x="586.0" y="1766.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rippen (dahinter)</text>
@@ -496,6 +498,10 @@
 <polygon points="400.0,1659.6 405.0,1657.6 405.0,1661.6" fill="#b4342f"/>
 <polygon points="406.0,1659.6 401.0,1661.6 401.0,1657.6" fill="#b4342f"/>
 <text x="412.0" y="1663.6" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">1 mm</text>
+<line x1="427.6" y1="1701.6" x2="460.0" y2="1701.6" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="427.6,1701.6 432.6,1699.6 432.6,1703.6" fill="#b4342f"/>
+<polygon points="460.0,1701.6 455.0,1703.6 455.0,1699.6" fill="#b4342f"/>
+<text x="466.0" y="1704.6" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5,4 mm</text>
 <line x1="409.6" y1="1761.6" x2="409.6" y2="1749.6" stroke="#b4342f" stroke-width="0.9"/>
 <polygon points="409.6,1761.6 407.6,1756.6 411.6,1756.6" fill="#b4342f"/>
 <polygon points="409.6,1749.6 411.6,1754.6 407.6,1754.6" fill="#b4342f"/>

@@ -422,12 +422,15 @@ def schnitt_turm_quer(f, w, L):
                     'fuehrung'))
     t.append(f.rect(X(L['platte_u'][0]), X(L['platte_u'][1]),
                     L['platte_z0'], L['platte_z1'], 'neu'))
-    # Turm: Schlitz von unten, oben der Absatz neben dem Wagen mit Fase
+    # Turm: Schlitz von unten, oben der Absatz neben dem Wagen mit Fase;
+    # innen seit Rev. 27 nur oben der Block um die Einsaetze
     (u0, u1), (kz0, kz1) = L['kt_u'], L['kt_z']
     ua, za = L['kt_absatz_u'], L['kt_absatz_z']
     rg, rw = L['yr_rippe_u0'], L['yr_wand_u']
+    uu, zb, fa = L['kt_u_unten'], L['kt_block_z'], w('kt_stufe_fase')
     turm = [(u0, kz0), (rg, kz0), (rg, L['yr_decke_z']),
-            (rw, L['yr_decke_z']), (rw, kz0), (u1, kz0), (u1, kz1),
+            (rw, L['yr_decke_z']), (rw, kz0), (uu, kz0), (uu, zb - fa),
+            (uu + fa, zb), (u1, zb), (u1, kz1),
             (ua, kz1), (ua, za), (u0, za - (ua - u0))]
     t.append(f.poly([(X(u), z) for u, z in turm], 'neu'))
     # Riemenende im Schlitz (Zaehne zur 2040), Stift darunter, Ruecklauf
@@ -438,8 +441,13 @@ def schnitt_turm_quer(f, w, L):
     t.append(f.rect(X(L['yr_rueck_u'] - e - d2), X(L['yr_rueck_u'] - e + d2),
                     L['yr_rueck_z'][0], L['yr_rueck_z'][1], 'riemen'))
     r = w('klemm_stift_d') / 2.0 - 0.1
-    t.append(f.rect(X(L['kt_stift_ende_u']), X(u1), L['stift_z'] - r,
+    t.append(f.rect(X(L['kt_stift_ende_u']), X(uu), L['stift_z'] - r,
                     L['stift_z'] + r, 'stahl'))
+    # die Einsaetze im Block (dahinter, gestrichelt)
+    for uk in sorted({u_ for u_, _ in L['kt_schrauben_hinten']}):
+        h = w('insert_m3_d') / 2.0
+        t.append(f.rect(X(uk - h), X(uk + h), kz1 - w('insert_m3_t'), kz1,
+                        'hinten', fill='none', stroke_dasharray='3 2'))
     return t
 
 
@@ -847,7 +855,7 @@ def main():
     s5 = 6.0
     fg = Feld(250, y4, (R - 38.0, R + 16.0), (-75.0, -6.0), s5, a_rueck=True)
     t += fg.ausschnitt('schnitt_kq', schnitt_turm_quer(fg, w, L))
-    t += fg.rahmen('Schnitt D–D: Klemmturm quer, seit Rev. 26 am Aufbau '
+    t += fg.rahmen('Schnitt D–D: Klemmturm quer (Rev. 27), am Aufbau '
                    '{} mm neben der 2040'.format(
                        de(L['kt_u'][0] - L['profil_aufbau_u'], 0)))
     t.append(text(fg.ox, fg.oy + fg.hoehe + 14, 'rechte Seite, durch den '
@@ -877,16 +885,17 @@ def main():
         ((X(L['kt_absatz_u']) + X(u0)) / 2, L['kt_absatz_z'] - 1.0,
          'Absatz {} mm neben dem Wagen,\ndarunter Fase 45° (stützfrei)'
          .format(de(L['kt_absatz_u'] - w('y_wagen_breite') / 2, 1))),
-        (X((u0 + u1) / 2 + 3.0), -22.0, 'Klemmturm, Schrauben wie bisher'),
+        (X((u0 + u1) / 2 + 3.0), -22.0,
+         'Block um die Einsätze,\nSchrauben wie bisher'),
         (X(L['y_riemen_linie']), L['yr_z1'] - 1.0,
          'Riemenende im Schlitz, Zähne zur 2040;\nMitte {} mm vor der '
          'Seitenfläche'.format(de(L['y_riemen_linie'] - fl, 1))),
         (X(L['yr_rippe_u0'] + 0.4), L['kt_z'][0] + 2.0,
          'Rippen (dahinter)'),
-        (X(u1 - 3.0), L['stift_z'],
-         'Querstift Ø3×{} im Sackloch, innen\nbündig; {} mm Wand zur 2040'
-         .format(de(L['kt_stift_l'], 0),
-                 de(L['kt_stift_ende_u'] - u0, 1))),
+        (X(L['kt_u_unten'] - 2.0), L['stift_z'],
+         'Querstift Ø3×{0} oder M3×{0} im Sackloch,\ninnen bündig; {1} mm '
+         'Wand zur 2040'.format(de(L['kt_stift_l'], 0),
+                                de(L['kt_stift_ende_u'] - u0, 1))),
         (X(hb - e + 10.0), L['rahmen_z0'] + 8.0,
          'Winkel {} mm: der Turm fährt\n{} mm darüber'.format(
              de(w('winkel_h'), 0),
@@ -896,6 +905,11 @@ def main():
     zl = (L['rahmen_z1'] + L['nut_oberkante_z']) / 2.0
     t += fg.luft(X(fl), zl, X(u0), zl, '{} mm'.format(
         de(u0 - fl, 1)), 'start', 6, 4)
+    # Wand innen neben dem Schlitz (seit Rev. 27 schmal), auf Riemenhoehe
+    zr = (L['yr_z0'] + L['yr_z1']) / 2.0
+    t += fg.luft(X(L['yr_wand_u']), zr, X(L['kt_u_unten']), zr,
+                 '{} mm'.format(de(L['kt_u_unten'] - L['yr_wand_u'], 1)),
+                 'start', 6, 3)
     uw = u0 + 0.6
     t += fg.luft(X(uw), L['rahmen_z0'] + w('winkel_h'), X(uw), kz0,
                  '{} mm'.format(de(kz0 - (L['rahmen_z0'] + w('winkel_h')),

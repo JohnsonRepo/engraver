@@ -312,11 +312,12 @@ längs ohnehin aus. Eine Lehre hätte hier nichts zu prüfen.
    Platz. Setzt die M5×12 hinten auf, eine Scheibe mehr unter den Kopf.
 4. **Riemenlinie im Portal:** Der Riemen läuft in der rechten Nut hin und
    in der linken zurück (Angabe vom 2026-09-27), mit dem mittigen Ritzel also
-   bei ±6,37 mm. Die Klemmen sitzen seit Portal Rev. 26 12,91 mm innen
-   neben der Schienenmitte, am Aufbau 3,9 mm vor der Seitenfläche (Rev. 25:
-   14,91 und am Aufbau 5,9 mm; bis Rev. 24 wie bei v8 21,6 mm, am Aufbau
-   lief der Riemen damit neben der Nut). Die Wagen-Trume laufen schräg von
-   der Klemme in die innere Nut (0,9° bis 10,2°, je nach Stellung), der
+   bei ±6,37 mm. Die Klemmen sitzen seit Portal Rev. 28 13,91 mm innen
+   neben der Schienenmitte, 3,9 bis 4,9 mm vor der Seitenfläche (Rev. 26/27:
+   12,91, die Türme streiften; Rev. 25: 14,91 und 4,9 bis 5,9 mm; bis
+   Rev. 24 wie bei v8 21,6 mm, am Aufbau lief der Riemen damit neben der
+   Nut). Die Wagen-Trume laufen schräg von der Klemme in die innere Nut
+   (0,9° bis 10,2°, je nach Stellung), der
    Rücklauf gerade in der äußeren; das hintere
    Ritzel sitzt ebenfalls mittig zur 2040 (Angabe). Wo ein Trum durch die
    Nutöffnung in den Kanal läuft, bleiben dem Riemen 0,1 mm je Seite. Weil

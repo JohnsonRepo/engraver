@@ -15,9 +15,11 @@
 #                              in v8, einer je Riemenende: Schlitz mit
 #                              Rippen, Querstift unter dem Riemen. Gespannt
 #                              wird am Y-Motor (Langloecher). Seit Rev. 25
-#                              2 mm neben der 2040 (bis Rev. 24: 7,2), damit
-#                              der Riemen in die Nut laeuft; die Schrauben
-#                              zur Platte sitzen wie bisher.
+#                              dicht an der 2040 (bis Rev. 24: 7,2 mm),
+#                              damit der Riemen in die Nut laeuft; seit
+#                              Rev. 26 am Aufbau 1 mm daneben (gemessen mit
+#                              Rev. 25: 3,0 statt 2,0). Die Schrauben zur
+#                              Platte sitzen wie bisher.
 #   Motorhalter                X-Motor (NEMA 17) stehend ueber dem linken
 #                              Rohrende, Welle nach unten. Duenne Motor-
 #                              platte, die Ritzelnabe taucht in ihre Bund-
@@ -103,7 +105,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 25
+REVISION = 26
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -127,8 +129,8 @@ MASSE = {
     # 514 war der kleinste Abstand, bei dem die ganze X-Schiene nutzbar
     # bleibt: am Ende des X-Wegs fuhr der Toolhead unten 3,35 mm am
     # Y-Riemen vorbei (docs/hardware-notizen.md). Seit Rev. 25 laeuft der
-    # Riemen 6,7 mm weiter aussen, es sind 10 mm. Das 500er-Rohr endet
-    # 7 mm vor jeder Schienenmitte.
+    # Riemen weiter aussen, seit Rev. 26 sind es 12 mm (am Aufbau
+    # mindestens 11). Das 500er-Rohr endet 7 mm vor jeder Schienenmitte.
     'y_schienen_abstand': (514.0, 'Y-Schienen: Abstand Mitte zu Mitte'),
     # Lochbild aus RiemenklemmeSchlitten v8 (.3mf), der auf dem Wagen sitzt [v]
     'y_wagen_loch':        (20.0, 'MGN12H: Lochbild 20 x 20'),
@@ -143,17 +145,17 @@ MASSE = {
     'rahmen_h':            (40.0, 'Rahmen 2040 hochkant: Hoehe'),
 
     # --- Y-Riemen -----------------------------------------------------------
-    # Linie seit Rev. 25: Mitte 14,91 mm innen neben der Schienenmitte, also
-    # 4,9 mm vor der Seitenflaeche der 2040 — so weit innen, wie es der
-    # Klemmturm 2 mm neben dem Profil zulaesst (Rippenwand 2, Schlitz 1,6).
-    # Bis Rev. 24 lag sie wie in RiemenklemmeSchlitten v8 bei 21,6, und am
-    # Aufbau lief der Riemen neben der Nut statt in ihr (Foto 2026-10-05).
+    # Die Linie folgt seit Rev. 26 aus der Lage der Klemmtuerme (lage(),
+    # y_riemen_linie): so weit innen, wie es der Turm mit kt_luft_profil
+    # neben der 2040 zulaesst (Rippenwand 2, Schlitz 1,6). Rev. 25 rechnete
+    # 14,91 mm innen neben der Schienenmitte; bis Rev. 24 lag sie wie in
+    # RiemenklemmeSchlitten v8 bei 21,6, und am Aufbau lief der Riemen neben
+    # der Nut statt in ihr (Foto 2026-10-05).
     # Hochkant, Zaehne zur Schiene. Hoehe [v]: der Riemen
     # laeuft nur in der oberen Nut des 2040 — deren Oeffnung beginnt 6 mm
     # unter der Oberkante des Profils, ihre Mitte liegt 10 mm darunter. Der
     # Riemen liegt mittig darin, 7 bis 13 mm unter der Profilkante; der
     # Wagen steht 13 mm ueber ihr. Ruecklauf und Klemme auf gleicher Hoehe.
-    'y_riemen_linie':     (14.91, 'Y-Riemen: Mitte neben der Schienenmitte (Rev. 25)'),
     'y_riemen_tiefe':      (26.0, 'Y-Riemen: Unterkante unter der Wagenoberseite'),
 
     # --- GT2 (hardware.md) -------------------------------------------------
@@ -270,11 +272,19 @@ MASSE = {
     # --- Y-Klemmtuerme (wie v8, seit Rev. 25 dicht an der 2040) -------------
     # Zwei gleiche Tuerme je Schlitten wie in v8, symmetrisch zur Wagenmitte,
     # einer je Riemenende. Gespannt wird an den Ritzeln der Y-Enden.
-    # Seit Rev. 25 steht die Rippenwand 2 mm neben der Seitenflaeche der
-    # 2040: Der Turm faehrt auf der Schiene, und die sitzt am Aufbau mittig
-    # auf dem Profil (etwa 4 mm je Seite). Die Schrauben zur Platte bleiben,
-    # wo sie bis Rev. 24 waren, die gedruckten Schlitten passen also; innen
-    # reicht der Turm dafuer bis 2 mm hinter die Einsaetze.
+    # Seit Rev. 25 steht die Rippenwand dicht neben der Seitenflaeche der
+    # 2040. Die Schrauben zur Platte bleiben, wo sie bis Rev. 24 waren, die
+    # gedruckten Schlitten passen also; innen reicht der Turm dafuer bis
+    # 2 mm hinter die Einsaetze.
+    # Rev. 25 rechnete 2 mm Luft mit der Schiene mittig auf dem Profil; am
+    # Aufbau waren es 3,0 (gemessen 2026-10-06). Ob die Schiene 1 mm aus
+    # der Mitte sitzt oder Platte und Turm um das Spiel ihrer Schrauben, ist
+    # fuer den Turm gleich: kt_luft_mehr nimmt den Unterschied auf. Seit
+    # Rev. 26 steht der Turm am Aufbau kt_luft_profil neben der 2040; im
+    # Modell, das die Schiene mittig rechnet, liegt er deshalb an ihr an.
+    # Neu gemessen: kt_luft_mehr = gemessene Luft - Luft im Modell.
+    'kt_luft_profil':       (1.0, 'Klemmturm: Luft zur 2040 am Aufbau (Rev. 26)'),
+    'kt_luft_mehr':         (1.0, 'Klemmturm: am Aufbau mehr Luft als im Modell (Rev. 25: 3,0 statt 2,0)'),
     'turm_abstand':        (40.5, 'Y-Klemmtuerme: Aussenkante ab Wagenmitte (v8)'),
     'kt_laenge':           (18.0, 'Klemmturm: Laenge (v8)'),
     'kt_wand':              (3.5, 'Klemmturm: Wand neben dem Schlitz, innen (v8)'),
@@ -653,9 +663,16 @@ def lage():
     # ---- Y-Riemen -----------------------------------------------------------
     L['yr_z0'] = L['y_wagen_z1'] - w('y_riemen_tiefe')   # Unterkante
     L['yr_z1'] = L['yr_z0'] + w('riemen_breite')
+    # Linie seit Rev. 26 aus der Lage des Klemmturms: Seitenflaeche der 2040,
+    # wie sie am Aufbau zum Turm steht, + Luft + Rippenwand + Schlitz bis
+    # zur glatten Wand, dort liegt der Ruecken des Riemens
+    L['profil_aufbau_u'] = w('rahmen_b') / 2.0 - w('kt_luft_mehr')
+    L['y_riemen_linie'] = (L['profil_aufbau_u'] + w('kt_luft_profil')
+                           + w('kt_wand_profil') + w('klemm_schlitz')
+                           - w('riemen_dicke') / 2.0)
     # Klemmschlitz: glatte Wand am Riemenruecken (von der Schiene weg), die
     # Rippen an der Seite zur Schiene; die Riemenmitte bleibt auf der Linie.
-    L['yr_wand_u'] = w('y_riemen_linie') + w('riemen_dicke') / 2.0
+    L['yr_wand_u'] = L['y_riemen_linie'] + w('riemen_dicke') / 2.0
     L['yr_rippe_u0'] = L['yr_wand_u'] - w('klemm_schlitz')      # Rippengrund
     L['yr_rippe_u1'] = L['yr_rippe_u0'] + w('klemm_rippe')      # Spitze
     L['yr_mitte_u'] = L['yr_wand_u'] - w('klemm_schlitz') / 2.0
@@ -693,7 +710,9 @@ def lage():
     # unten und an beiden Enden offen, Querstift Ø3 unter dem Riemen.
     # Dazwischen laeuft kein Riemen. Gespannt wird an den Ritzeln der Y-Enden.
     # Seit Rev. 25 duenne Rippenwand zur 2040; innen reicht der Turm bis
-    # hinter die Einsaetze der Schrauben, die wie bis Rev. 24 stehen.
+    # hinter die Einsaetze der Schrauben, die wie bis Rev. 24 stehen. Seit
+    # Rev. 26 steht die Rippenwand am Aufbau kt_luft_profil vor der 2040
+    # (y_riemen_linie oben), im Modell liegt sie an.
     L['stift_z'] = L['yr_z0'] - w('klemm_stift_d') / 2.0
     L['kt_u'] = (L['yr_rippe_u0'] - w('kt_wand_profil'),
                  max(L['yr_wand_u'] + w('kt_wand'),
@@ -724,11 +743,13 @@ def lage():
               L['rueck_y1'] + w('m3_senkung') / 2.0 + 1.0)
     y_v = L['kt_y_vorn'][1] - w('insert_m3_d') / 2.0 - 2.2
     L['kt_schrauben_vorn'] = [(km, y_h), (km, y_v)]
-    # Querstift durch beide Waende, von innen buendig eingesteckt: gerade
-    # Laenge, die hoechstens 1 mm vor der Seitenflaeche der 2040 endet
-    # (portal_check.py prueft, dass er durch die Rippenwand reicht)
-    L['kt_stift_l'] = 2.0 * int((L['kt_u'][1] - w('rahmen_b') / 2.0 - 1.0)
-                                / 2.0)
+    # Querstift von innen buendig eingesteckt: die kuerzeste gerade Laenge,
+    # die unter dem ganzen Schlitz liegt. Seit Rev. 26 endet er in einem
+    # Sackloch in der Rippenwand — so kann er nie zur 2040 hinauswandern
+    # (portal_check.py prueft die Wand davor).
+    L['kt_stift_l'] = 2.0 * math.ceil((L['kt_u'][1] - L['yr_rippe_u0'])
+                                      / 2.0 - 1e-6)
+    L['kt_stift_ende_u'] = L['kt_u'][1] - L['kt_stift_l']
     # Rippen: Teilung 2, rippenfreier Rand an den Turmenden wie v8
     def rippen(y0, y1):
         n = int((y1 - y0 - w('klemm_rippe_b')) / w('riemen_teilung')) + 1
@@ -747,7 +768,7 @@ def lage():
     # der Riemenmitte zum Ruecken hin.
     steg = w('riemen_dicke') - w('riemen_zahn_h')
     L['yr_wirk_versatz'] = w('riemen_dicke') / 2.0 - (steg - w('riemen_pld'))
-    L['yr_wirk_u'] = w('y_riemen_linie') + L['yr_wirk_versatz']  # Klemme
+    L['yr_wirk_u'] = L['y_riemen_linie'] + L['yr_wirk_versatz']  # Klemme
     # Ruecklauf: Riemenmitte in der aeusseren oberen Nut (u < 0)
     L['yr_rueck_u'] = -w('ritzel_teilkreis') / 2.0 + L['yr_wirk_versatz']
     L['rahmen_flanke_u'] = w('rahmen_b') / 2.0
@@ -2129,9 +2150,11 @@ def bau_klemmturm(app, design, comp, L, s, t, fehler):
     senkrechter Schlitz auf der Riemenlinie, unten und an beiden Enden
     offen, Rippen an der Wand zur Schiene (dorthin zeigen die Zaehne),
     Querstift Ø3 unter dem Riemen. Riemenende von unten in den Schlitz
-    druecken, dann den Stift von innen quer durchschieben — er traegt den
-    Riemen. Befestigt mit zwei M3 von oben durch die Platte. Seit Rev. 25
-    2 mm neben der 2040, oben mit einem Absatz neben dem Y-Wagen.
+    druecken, dann den Stift von innen quer durchschieben, bis er im
+    Sackloch anstoesst — er traegt den Riemen. Befestigt mit zwei M3 von
+    oben durch die Platte. Seit Rev. 25 dicht an der 2040, oben mit einem
+    Absatz neben dem Y-Wagen; seit Rev. 26 am Aufbau 1 mm daneben, die
+    Stiftbohrung endet vor der Seite zur 2040.
 
     Drucklage: Oberseite (Plattenseite) aufs Bett. Der Schlitz oeffnet nach
     oben, die Rippen stehen senkrecht, die Stiftbohrung liegt waagerecht,
@@ -2165,8 +2188,9 @@ def bau_klemmturm(app, design, comp, L, s, t, fehler):
            [(xr[0], y, xr[1], y + w('klemm_rippe_b'))
             for y in L['kt_rippen_y_' + t]],
            L['kt_z'][0], L['yr_decke_z'], k)
-    # Querstift unter dem Riemen, von innen durch beide Waende
-    a0, a1 = xb(L, s, L['kt_u'][0] - 1.0, L['kt_u'][1] + 1.0)
+    # Querstift unter dem Riemen, von innen unter dem ganzen Schlitz durch
+    # bis in die Rippenwand: Sackloch, die Seite zur 2040 bleibt zu
+    a0, a1 = xb(L, s, L['kt_stift_ende_u'], L['kt_u'][1] + 1.0)
     bohrung(comp, 'Stift_' + name, 'x',
             [(L['kt_stift_y_' + t], L['stift_z'])], w('klemm_stift_d'),
             a0, a1, k)
@@ -3285,14 +3309,16 @@ def hinweise_bauen(L, fehler):
         .format(L['kern_schraube'], L['kern_gewinde'] + 2.0),
         '  Die Vorderseite des Rohrs bleibt frei fuer die X-Schiene.',
         '',
-        'Y-RIEMEN (Hoehe am Aufbau gemessen, Linie seit Rev. 25 naeher an',
-        '  der 2040): Mitte {:.2f} mm innen neben der Schienenmitte, {:.1f} mm'
-        .format(w('y_riemen_linie'), w('y_riemen_linie') - w('rahmen_b') / 2),
-        '  vor der Seitenflaeche der 2040 (bis Rev. 24: 11,6), hochkant,',
-        '  Zaehne zur Schiene, Unterkante Z={:+.1f} ({:.1f} mm unter der'
+        'Y-RIEMEN (Hoehe am Aufbau gemessen, Linie seit Rev. 26 aus der',
+        '  Lage der Klemmtuerme): Mitte {:.2f} mm innen neben der Schienen-'
+        .format(L['y_riemen_linie']),
+        '  mitte, am Aufbau {:.1f} mm vor der Seitenflaeche der 2040 (mit den'
+        .format(L['y_riemen_linie'] - L['profil_aufbau_u']),
+        '  Tuermen aus Rev. 25: 5,9), hochkant, Zaehne zur Schiene,',
+        '  Unterkante Z={:+.1f} ({:.1f} mm unter der Wagenoberseite): mittig'
         .format(L['yr_z0'], w('y_riemen_tiefe')),
-        '  Wagenoberseite): mittig in der oberen Nut des 2040. Der Schlitz der',
-        '  Klemmtuerme reicht bis {:.1f} mm ueber die Oberkante der Nut.'
+        '  in der oberen Nut des 2040. Der Schlitz der Klemmtuerme reicht bis',
+        '  {:.1f} mm ueber die Oberkante der Nut.'
         .format(w('kt_decke')),
         '  Beide Ritzel sitzen mittig zur 2040: die Trume der Wagen laufen',
         '  schraeg von der Klemme in die innere obere Nut ({:.1f} Grad vorn,'
@@ -3305,21 +3331,28 @@ def hinweise_bauen(L, fehler):
         '  Rippen beider Klemmen.',
         '  Zwei gleiche Klemmtuerme je Schlitten wie v8, {:.1f} mm vor und'
         .format(w('turm_abstand')),
-        '  hinter der Wagenmitte (Aussenkante), einer je Riemenende. Seit',
-        '  Rev. 25 stehen sie {:.1f} mm neben der 2040, oben mit einem Absatz'
-        .format(L['kt_u'][0] - w('rahmen_b') / 2),
-        '  neben dem Y-Wagen; die Schrauben sitzen wie bisher. Riemen von',
-        '  unten in den Schlitz druecken, Stift Ø3x{0:.0f} (oder M3x{0:.0f}, NICHT'
+        '  hinter der Wagenmitte (Aussenkante), einer je Riemenende, oben mit',
+        '  einem Absatz neben dem Y-Wagen; die Schrauben sitzen wie bisher.',
+        '  Am Aufbau stehen sie seit Rev. 26 {:.1f} mm neben der 2040 (mit'
+        .format(L['kt_u'][0] - L['profil_aufbau_u']),
+        '  Rev. 25 gemessen: 3,0 statt der gerechneten 2,0). Im Modell, das',
+        '  die Schiene mittig rechnet, liegen sie an ihr an: kt_luft_mehr',
+        '  = {:.1f} mm ist der gemessene Unterschied.'
+        .format(w('kt_luft_mehr')),
+        '  Vor dem Druck die Luft der Rev.-25-Tuerme ueber den ganzen Y-Weg',
+        '  an beiden Seiten pruefen, z.B. mit einem 3-mm-Bohrer als Lehre.',
+        '  Ist sie irgendwo kleiner: kt_luft_mehr = kleinste Luft - 2,0.',
+        '  Riemen von unten in den Schlitz druecken, Stift Ø3x{0:.0f} (oder'
         .format(L['kt_stift_l']),
-        '  laenger) quer von innen unter ihm durchschieben, bis er innen',
-        '  buendig ist; dann endet er {:.1f} mm vor der 2040. Gespannt wird'
-        .format(L['kt_u'][0] - w('rahmen_b') / 2
-                - (L['kt_stift_l'] - (L['kt_u'][1] - L['kt_u'][0]))),
-        '  am Y-Motor (Langloecher, siehe Y-ANTRIEB).',
-        '  Umbau von Rev. 24: nur die vier Tuerme neu drucken, die Stifte',
-        '  {:.0f} mm lang; fuer die vorderen das Portalrohr abnehmen (ihre'
+        '  M3x{:.0f}) quer von innen unter ihm durchschieben, bis er im'
         .format(L['kt_stift_l']),
-        '  Schrauben liegen unter dem Rohr).',
+        '  Sackloch anstoesst: innen buendig, zur 2040 bleiben {:.1f} mm Wand.'
+        .format(L['kt_stift_ende_u'] - L['kt_u'][0]),
+        '  Gespannt wird am Y-Motor (Langloecher, siehe Y-ANTRIEB).',
+        '  Umbau von Rev. 25: nur die vier Tuerme neu drucken, die Stifte',
+        '  ({:.0f} mm) bleiben; fuer die vorderen das Portalrohr abnehmen'
+        .format(L['kt_stift_l']),
+        '  (ihre Schrauben liegen unter dem Rohr).',
         '  Klemmschlitz {:.1f} mm, Rippen {:.1f} mm: laesst sich der Riemen'
         .format(w('klemm_schlitz'), w('klemm_rippe')),
         '  nicht eindruecken, klemm_schlitz um 0,1 erhoehen; rutscht er,',

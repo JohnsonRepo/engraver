@@ -207,8 +207,8 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
     enden = ((f.b[0] - 5, L['kt_y_hinten'][1] - 1.0),
              (L['kt_y_vorn'][0] + 1.0, f.b[1] + 5))
     for y0, y1 in enden:
-        t.append(f.linie(xu(w('y_riemen_linie')), y0,
-                         xu(w('y_riemen_linie')), y1, RIEMEN, 2.0, '7 3'))
+        t.append(f.linie(xu(L['y_riemen_linie']), y0,
+                         xu(L['y_riemen_linie']), y1, RIEMEN, 2.0, '7 3'))
     t.append(f.linie(xu(L['yr_rueck_u']), f.b[0] - 5, xu(L['yr_rueck_u']),
                      f.b[1] + 5, RIEMEN, 1.2, '2 3'))
     # Schlitten
@@ -227,8 +227,8 @@ def draufsicht(f, s, w, L, tw, TL, feste_th):
                         fill='none', stroke_dasharray='4 3'))
     for y0, y1 in enden:
         y0, y1 = max(y0, L['platte_y0']), min(y1, L['platte_y1'])
-        t.append(f.linie(xu(w('y_riemen_linie')), y0,
-                         xu(w('y_riemen_linie')), y1, RIEMEN, 1.2, '7 3'))
+        t.append(f.linie(xu(L['y_riemen_linie']), y0,
+                         xu(L['y_riemen_linie']), y1, RIEMEN, 1.2, '7 3'))
     t.append(f.linie(xu(L['yr_rueck_u']), L['platte_y0'],
                      xu(L['yr_rueck_u']), L['platte_y1'], RIEMEN, 1.0,
                      '2 3'))
@@ -391,18 +391,22 @@ def schnitt_turm_quer(f, w, L):
     """Schnitt quer durch den hinteren Klemmturm am Stift, rechte Seite,
     Blick nach vorn — die Maschinenmitte liegt rechts. Geschnitten: 2040,
     Schiene, Platte, Turm mit Absatz und Fase, das Riemenende im Schlitz,
-    der Stift und der Ruecklauf in der aeusseren Nut. Dahinter: Y-Wagen,
-    Rippen und die Winkel am vorderen 2060, ueber die der Turm faehrt."""
+    der Stift im Sackloch und der Ruecklauf in der aeusseren Nut.
+    Dahinter: Y-Wagen, Rippen und die Winkel am vorderen 2060, ueber die
+    der Turm faehrt. Seit Rev. 26 steht der Rahmen so, wie er am Aufbau
+    zum Turm steht: kt_luft_mehr weiter aussen als im Modell, das die
+    Schiene mittig rechnet. Mit ihm ruecken Winkel und Ruecklauf."""
     R = L['R']
     X = lambda u: R - u
     t = []
     hb = w('rahmen_b') / 2.0
+    e = w('kt_luft_mehr')                  # Rahmen am Aufbau weiter aussen
     z0, z1 = L['rahmen_z0'], L['rahmen_z1']
     # dahinter: Oberkante des vorderen 2060 mit dem Winkel innen
     t.append(f.rect(X(-40.0), X(50.0), L['quer_z'][1] - 10.0,
                     L['quer_z'][1], 'hinten'))
     wh = w('winkel_h')
-    t.append(f.poly([(X(u), z) for u, z in (
+    t.append(f.poly([(X(u - e), z) for u, z in (
         (hb, z0), (hb + wh, z0), (hb + wh, z0 + 3.0), (hb + 3.0, z0 + wh),
         (hb, z0 + wh))], 'hinten', stroke_dasharray='3 2'))
     hw = w('y_wagen_breite') / 2.0
@@ -411,8 +415,8 @@ def schnitt_turm_quer(f, w, L):
     t.append(f.rect(X(L['yr_rippe_u0']), X(L['yr_rippe_u1']),
                     L['kt_z'][0], L['yr_decke_z'], 'hinten', fill='#e8c19c',
                     stroke='#d9a67c', stroke_width='0.5'))
-    # geschnitten: 2040, Schiene, Platte
-    t.append(profil_quer(f, -hb, hb, z0, z1, X))
+    # geschnitten: 2040 (am Aufbau), Schiene, Platte
+    t.append(profil_quer(f, -hb - e, hb - e, z0, z1, X))
     hs = w('y_schiene_b') / 2.0
     t.append(f.rect(X(-hs), X(hs), L['y_schiene_z0'], L['y_schiene_z1'],
                     'fuehrung'))
@@ -428,13 +432,13 @@ def schnitt_turm_quer(f, w, L):
     t.append(f.poly([(X(u), z) for u, z in turm], 'neu'))
     # Riemenende im Schlitz (Zaehne zur 2040), Stift darunter, Ruecklauf
     d2 = w('riemen_dicke') / 2.0
-    ym = w('y_riemen_linie')
+    ym = L['y_riemen_linie']
     t.append(f.rect(X(ym - d2), X(ym + d2), L['yr_z0'], L['yr_z1'],
                     'riemen'))
-    t.append(f.rect(X(L['yr_rueck_u'] - d2), X(L['yr_rueck_u'] + d2),
+    t.append(f.rect(X(L['yr_rueck_u'] - e - d2), X(L['yr_rueck_u'] - e + d2),
                     L['yr_rueck_z'][0], L['yr_rueck_z'][1], 'riemen'))
     r = w('klemm_stift_d') / 2.0 - 0.1
-    t.append(f.rect(X(u1 - L['kt_stift_l']), X(u1), L['stift_z'] - r,
+    t.append(f.rect(X(L['kt_stift_ende_u']), X(u1), L['stift_z'] - r,
                     L['stift_z'] + r, 'stahl'))
     return t
 
@@ -621,7 +625,7 @@ def main():
         (xu(19, -1), L['kt_stift_y_hinten'], 'Klemmturm hinten\n'
          '(unter der Platte)'),
         (xu(19, -1), -21.5, 'Klemmturm vorn\n(unter dem Motorhalter)'),
-        (xu(w('y_riemen_linie'), -1), L['platte_y0'] - 5,
+        (xu(L['y_riemen_linie'], -1), L['platte_y0'] - 5,
          'Y-Riemen (zwei Enden)'),
         (xu(L['yr_rueck_u'], -1), -80, 'Y-Rücklauf in der äußeren\n'
          'oberen Nut des 2040'),
@@ -642,7 +646,7 @@ def main():
         (xu(-10, 1), -70, 'Y-Wagen MGN12H'),
         (xu(19, 1), L['kt_stift_y_hinten'], 'Klemmturm hinten'),
         (xu(19, 1), -21.5, 'Klemmturm vorn'),
-        (xu(w('y_riemen_linie'), 1), L['platte_y0'] - 5, 'Y-Riemen'),
+        (xu(L['y_riemen_linie'], 1), L['platte_y0'] - 5, 'Y-Riemen'),
         (xu(-10, 1), L['sb_y'][0] + 4.0, 'Spannbock (2× M3 von oben)'),
         # der Stirnblock schaut vor dem Spannbock heraus
         (xu((L['stirn_u'][0] + L['stirn_u'][1]) / 2, 1),
@@ -796,7 +800,7 @@ def main():
     # Fahnenlasche links neben dem Y-Riemen (rechts gleich weit, siehe
     # x_schiene_versatz)
     luft_yr = (L['xw_min'] + TL['ls_lasche_x0']
-               - (-R + w('y_riemen_linie') + w('riemen_dicke') / 2))
+               - (-R + L['y_riemen_linie'] + w('riemen_dicke') / 2))
     tx, ty = fe.ox + fe.breite + 260, y3 + 6
     zeilen = [
         ('X-Weg', '{} mm (Schiene {} − Wagen {})'.format(
@@ -808,16 +812,16 @@ def main():
             de(L['profil_y0'] + w('profil_b') / 2 - w('wagen_y'), 0))),
         ('', 'alle 4 Wagenschrauben bleiben von oben frei'),
         ('Rohr', 'liegt auf der 6-mm-Platte, Höhe wie bisher'),
-        ('Y-Riemen', 'Mitte {} mm innen, {} mm vor der 2040 (Rev. 25),'
-         .format(de(w('y_riemen_linie'), 2),
-                 de(w('y_riemen_linie') - w('rahmen_b') / 2, 1))),
+        ('Y-Riemen', 'Mitte {} mm innen, am Aufbau {} mm vor der 2040,'
+         .format(de(L['y_riemen_linie'], 2),
+                 de(L['y_riemen_linie'] - L['profil_aufbau_u'], 1))),
         ('', 'Unterkante {} mm; {} mm neben dem Toolhead'.format(
             de(L['yr_z0'], 1), de(luft_yr, 1))),
         ('', 'Rücklauf in der äußeren oberen Nut, Zähne zur Schiene'),
         ('Y-Klemmen', 'zwei Türme wie v8, je {} mm vor und hinter'.format(
             de(w('turm_abstand'), 1))),
-        ('', 'der Wagenmitte, {} mm neben der 2040; gespannt am Y-Motor'
-         .format(de(L['kt_u'][0] - w('rahmen_b') / 2, 1))),
+        ('', 'der Wagenmitte, am Aufbau {} mm neben der 2040 (Rev. 26)'
+         .format(de(L['kt_u'][0] - L['profil_aufbau_u'], 1))),
         ('X-Riemen', 'Unterkante {} mm, Schleife ≈ {} mm'.format(
             de(L['xr_z0'], 2), de(riemen_x, 0))),
         ('X-Spanner', 'Lagerschlitten ±{} mm, M3×{} von außen'.format(
@@ -838,24 +842,28 @@ def main():
         t.append(text(tx, ty + 10 + i * 15, k, 8.5, GRAU))
         t.append(text(tx + 86, ty + 10 + i * 15, v, 8.5, TEXT))
 
-    # ---- Reihe 4: Schnitt D-D (Klemmturm quer, seit Rev. 25) --------------
+    # ---- Reihe 4: Schnitt D-D (Klemmturm quer, seit Rev. 25, Rev. 26) -----
     y4 = max(fe.oy + fe.hoehe + 40, ty + 10 + len(zeilen) * 15) + 70
     s5 = 6.0
     fg = Feld(250, y4, (R - 38.0, R + 16.0), (-75.0, -6.0), s5, a_rueck=True)
     t += fg.ausschnitt('schnitt_kq', schnitt_turm_quer(fg, w, L))
-    t += fg.rahmen('Schnitt D–D: Klemmturm quer, seit Rev. 25 an der 2040')
+    t += fg.rahmen('Schnitt D–D: Klemmturm quer, seit Rev. 26 am Aufbau '
+                   '{} mm neben der 2040'.format(
+                       de(L['kt_u'][0] - L['profil_aufbau_u'], 0)))
     t.append(text(fg.ox, fg.oy + fg.hoehe + 14, 'rechte Seite, durch den '
-                  'Stift des hinteren Turms, Blick nach vorn', 8.0, GRAU))
-    t.append(text(fg.ox, fg.oy + fg.hoehe + 25, 'bis Rev. 24 stand der Turm '
-                  '{} mm neben der 2040, die Riemenmitte {} mm'.format(
-                      de(7.19, 1), de(11.6, 1)), 8.0, GRAU))
+                  'Stift des hinteren Turms, Blick nach vorn; die 2040 so, '
+                  'wie sie am Aufbau zum Turm steht', 8.0, GRAU))
+    t.append(text(fg.ox, fg.oy + fg.hoehe + 25, 'mit Rev. 25 gemessen 3,0 '
+                  'statt der gerechneten 2,0 mm; im Modell (Schiene mittig) '
+                  'liegt der Turm an der 2040 an', 8.0, GRAU))
     X = lambda u: R - u
     hb = w('rahmen_b') / 2.0
+    fl = L['profil_aufbau_u']               # Seitenflaeche am Aufbau
+    e = w('kt_luft_mehr')
     (u0, u1), kz0 = L['kt_u'], L['kt_z'][0]
-    stift_ende = u1 - L['kt_stift_l']
     t += fg.spalte([
-        (X(-hb + 3.0), L['rahmen_z0'] + 4.0, '2040 hochkant'),
-        (X(L['yr_rueck_u']), L['yr_rueck_z'][1] - 1.0,
+        (X(-hb - e + 3.0), L['rahmen_z0'] + 4.0, '2040 hochkant'),
+        (X(L['yr_rueck_u'] - e), L['yr_rueck_z'][1] - 1.0,
          'Rücklauf in der\näußeren oberen Nut'),
         (X(-4.0), (L['y_schiene_z0'] + L['y_schiene_z1']) / 2,
          'Y-Schiene MGN12'),
@@ -870,23 +878,24 @@ def main():
          'Absatz {} mm neben dem Wagen,\ndarunter Fase 45° (stützfrei)'
          .format(de(L['kt_absatz_u'] - w('y_wagen_breite') / 2, 1))),
         (X((u0 + u1) / 2 + 3.0), -22.0, 'Klemmturm, Schrauben wie bisher'),
-        (X(w('y_riemen_linie')), L['yr_z1'] - 1.0,
+        (X(L['y_riemen_linie']), L['yr_z1'] - 1.0,
          'Riemenende im Schlitz, Zähne zur 2040;\nMitte {} mm vor der '
-         'Seitenfläche'.format(de(w('y_riemen_linie') - hb, 1))),
+         'Seitenfläche'.format(de(L['y_riemen_linie'] - fl, 1))),
         (X(L['yr_rippe_u0'] + 0.4), L['kt_z'][0] + 2.0,
          'Rippen (dahinter)'),
         (X(u1 - 3.0), L['stift_z'],
-         'Querstift Ø3×{}, innen bündig:\nendet {} mm vor der 2040'.format(
-             de(L['kt_stift_l'], 0), de(stift_ende - hb, 1))),
-        (X(hb + 10.0), L['rahmen_z0'] + 8.0,
+         'Querstift Ø3×{} im Sackloch, innen\nbündig; {} mm Wand zur 2040'
+         .format(de(L['kt_stift_l'], 0),
+                 de(L['kt_stift_ende_u'] - u0, 1))),
+        (X(hb - e + 10.0), L['rahmen_z0'] + 8.0,
          'Winkel {} mm: der Turm fährt\n{} mm darüber'.format(
              de(w('winkel_h'), 0),
              de(kz0 - (L['rahmen_z0'] + w('winkel_h')), 1)))],
         fg.ox + fg.breite + 12, 'start', abstand=24.0)
     # Luft zur 2040 (ueber der oberen Nut) und ueber dem Winkel
     zl = (L['rahmen_z1'] + L['nut_oberkante_z']) / 2.0
-    t += fg.luft(X(hb), zl, X(u0), zl, '{} mm'.format(
-        de(u0 - hb, 1)), 'start', 6, 4)
+    t += fg.luft(X(fl), zl, X(u0), zl, '{} mm'.format(
+        de(u0 - fl, 1)), 'start', 6, 4)
     uw = u0 + 0.6
     t += fg.luft(X(uw), L['rahmen_z0'] + w('winkel_h'), X(uw), kz0,
                  '{} mm'.format(de(kz0 - (L['rahmen_z0'] + w('winkel_h')),

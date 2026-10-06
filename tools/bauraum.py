@@ -423,8 +423,8 @@ def portal_bauraeume(w, L):
               xb(s, -w('rahmen_b') / 2, w('rahmen_b') / 2), (-lang, lang),
               (L['rahmen_z0'], L['rahmen_z1']), 'kaufteil'),
             q('Y-Riemen ' + n,
-              xb(s, w('y_riemen_linie') - w('riemen_dicke') / 2,
-                 w('y_riemen_linie') + w('riemen_dicke') / 2),
+              xb(s, L['y_riemen_linie'] - w('riemen_dicke') / 2,
+                 L['y_riemen_linie'] + w('riemen_dicke') / 2),
               (-lang, lang), (L['yr_z0'], L['yr_z1']), 'riemen'),
             # Ruecklauf: in der oberen Nut des 2040, auf der Schienenseite
             q('Y-Ruecklauf ' + n,
@@ -611,6 +611,11 @@ def portal_bauraeume(w, L):
             ('Platte ' + n, 'Y-Wagen ' + n),
             ('Klemmturm hinten ' + n, 'Y-Riemen ' + n),
             ('Klemmturm vorn ' + n, 'Y-Riemen ' + n),
+            # Seit Rev. 26 liegen die Tuerme im Modell an der 2040 an, das
+            # die Schiene mittig rechnet; am Aufbau bleibt kt_luft_profil
+            # (portal_check.py, Abschnitt 6, mit kt_luft_mehr)
+            ('Klemmturm hinten ' + n, 'Rahmen 2040 ' + n),
+            ('Klemmturm vorn ' + n, 'Rahmen 2040 ' + n),
             ('Y-Wagen ' + n, 'Y-Schiene ' + n),
             ('Y-Schiene ' + n, 'Rahmen 2040 ' + n),
             ('Y-Ruecklauf ' + n, 'Rahmen 2040 ' + n),   # laeuft in der Nut

@@ -267,7 +267,7 @@ def main():
     p.ok('Rippen greifen zwischen die Zaehne', w('klemm_rippe') - luft, 0.5)
     p.ok('Riemenmitte auf der Linie (y_riemen_linie)',
          -abs((L['yr_wand_u'] - w('riemen_dicke') / 2)
-              - w('y_riemen_linie')), -0.01)
+              - L['y_riemen_linie']), -0.01)
     p.info('Rippen je Klemmturm', len(L['kt_rippen_y_vorn']), 'Stk')
     # Zwei gleiche Tuerme wie in v8, symmetrisch zur Wagenmitte
     p.ok('Tuerme symmetrisch zur Wagenmitte (wie v8)',
@@ -283,10 +283,21 @@ def main():
     p.ok('Klemmturm hinten auf der Platte',
          L['kt_y_hinten'][0] - L['platte_y0'], 0.0)
     # Seit Rev. 25 steht der Turm dicht an der 2040. Er faehrt mit dem Wagen
-    # auf der Schiene, und die sitzt am Aufbau mittig auf dem Profil (etwa
-    # 4 mm je Seite): Auch 0,5 mm aus der Mitte bleiben 1,5 mm Luft.
-    p.ok('Klemmtuerme neben dem Rahmen (2040)',
-         L['kt_u'][0] - w('rahmen_b') / 2, 1.5)
+    # auf der Schiene; Rev. 25 rechnete sie mittig auf dem Profil (2 mm
+    # Luft), am Aufbau waren es 3,0. Seit Rev. 26 steht er deshalb am
+    # Aufbau kt_luft_profil daneben und liegt im Modell an der 2040 an.
+    luft_modell = L['kt_u'][0] - w('rahmen_b') / 2
+    luft_aufbau = L['kt_u'][0] - L['profil_aufbau_u']
+    p.info('Klemmtuerme: Luft zur 2040 im Modell (Schiene mittig)',
+           luft_modell)
+    p.info('   am Aufbau mehr (kt_luft_mehr, gemessen mit Rev. 25)',
+           w('kt_luft_mehr'))
+    p.ok('Klemmtuerme im Modell nicht in der 2040', round(luft_modell, 3),
+         0.0)
+    p.ok('Klemmtuerme neben der 2040, am Aufbau', round(luft_aufbau, 3),
+         1.0)
+    p.ok('Luft am Aufbau = kt_luft_profil',
+         -abs(luft_aufbau - w('kt_luft_profil')), -0.01)
     # Die Tuerme stossen an die Enden des Y-Wagens (beide fest an der
     # Platte): ueber seiner Unterkante weicht der Turm mit dem Absatz neben
     # ihn zurueck, darunter reicht er unter ihn
@@ -314,12 +325,18 @@ def main():
     # Der Stift traegt nur den Riemen, den Zug nehmen die Rippen
     p.ok('Klemmturm: Boden unter der Stiftbohrung',
          (L['stift_z'] - w('klemm_stift_d') / 2) - L['kt_z'][0], 1.5)
-    # Von innen buendig eingesteckt: durch beide Waende, vor der 2040
-    stift_raus = L['kt_stift_l'] - (L['kt_u'][1] - L['kt_u'][0])
-    p.ok('Klemmturm: Stift ({:.0f} mm) reicht durch beide Waende'.format(
-        L['kt_stift_l']), stift_raus, 0.0)
-    p.ok('Klemmturm: Stift endet vor der 2040',
-         (L['kt_u'][0] - w('rahmen_b') / 2) - stift_raus, 1.0)
+    # Von innen buendig eingesteckt, unter dem ganzen Schlitz durch bis in
+    # die Rippenwand. Seit Rev. 26 ein Sackloch: Die Wand davor haelt den
+    # Stift, er kann nicht zur 2040 hinauswandern.
+    p.ok('Klemmturm: Stift ({:.0f} mm) innen buendig'.format(
+        L['kt_stift_l']),
+         -abs(L['kt_u'][1] - L['kt_stift_l'] - L['kt_stift_ende_u']), -0.01)
+    p.ok('Klemmturm: Stift liegt unter dem ganzen Schlitz',
+         round(L['yr_rippe_u0'] - L['kt_stift_ende_u'], 3), 0.0)
+    p.ok('Klemmturm: Sackloch, Wand vor dem Stift zur 2040',
+         L['kt_stift_ende_u'] - L['kt_u'][0], 1.0)
+    p.ok('Klemmturm: Stift endet vor der 2040, am Aufbau',
+         L['kt_stift_ende_u'] - L['profil_aufbau_u'], 2.0)
     p.ok('Klemmturm: Einsaetze ueber der Schlitzdecke',
          (L['kt_z'][1] - w('insert_m3_t')) - L['yr_decke_z'], 3.0)
     p.ok('Klemmturm: Einsaetze ueber dem Absatz',
@@ -944,6 +961,12 @@ def main():
     # Mitte ist er am kuerzesten.
     stellungen = [-d_schiene + 2.0 * d_schiene * i / 40.0 for i in range(41)]
     wege = [(dy, y_weg_riemen(pm, L, dy)) for dy in stellungen]
+    # Am Aufbau steht der Turm kt_luft_mehr weiter von der 2040 weg als im
+    # Modell (gemessen mit Rev. 25). Zur 2040 und zu den Ritzeln, die mittig
+    # auf ihr sitzen, liegt die Klemme also um so viel weiter innen.
+    L_aufbau = dict(L)
+    L_aufbau['yr_wirk_u'] = L['yr_wirk_u'] + w('kt_luft_mehr')
+    wege_aufbau = [(dy, y_weg_riemen(pm, L_aufbau, dy)) for dy in stellungen]
     lang = max(wege, key=lambda e: e[1]['laenge'])
     kurz = min(wege, key=lambda e: e[1]['laenge'])
     p.info('Y-Riemen je Seite, Klemme zu Klemme (Wirklinie, Portal Mitte)',
@@ -955,26 +978,32 @@ def main():
     p.info('   am laengsten bei Portal {:+.0f} (Riemen dort gedehnt)'.format(
         lang[0]), lang[1]['laenge'] - kurz[1]['laenge'])
     # Wo ein Trum durch die Oeffnung der inneren oberen Nut in den Kanal
-    # laeuft, muss der Riemen mit seiner Breite durch die Engstelle
+    # laeuft, muss der Riemen mit seiner Breite durch die Engstelle. Die
+    # Tabelle zeigt den Riemen am Aufbau (Klemme kt_luft_mehr weiter innen).
     for dy, text in ((d_schiene, 'vorderes Schienenende'),
                      (d_vorn, 'vordere Grenze, Z unten'), (0.0, 'Mitte'),
                      (-d_schiene, 'hinteres Schienenende')):
-        g = y_weg_riemen(pm, L, dy)
-        p.info('Portal {:+.1f} ({}):'.format(dy, text))
+        g = y_weg_riemen(pm, L_aufbau, dy)
+        p.info('Portal {:+.1f} ({}), am Aufbau:'.format(dy, text))
         for teil in ('vorn', 'hinten'):
             t = g[teil]
             p.info('   Trum {}: {:.0f} mm, {:.1f} Grad, {}'.format(
                 teil, t['trum'], t['schraeg'], nut_durchgang(w, L, t, teil)))
     # Am Aufbau lief der Riemen bis Rev. 24 neben der Nut, am vorderen
-    # Schienenende ganz an ihr vorbei: Seit Rev. 25 erreicht jeder Trum in
-    # jeder Stellung die Oeffnung, bevor das Profil endet
-    erreicht = min((nut_bereich(w, L, g[teil], teil)[1]
+    # Schienenende ganz an ihr vorbei; mit den Tuermen aus Rev. 25 und der
+    # gemessenen Luft (3,0 statt 2,0) dort wieder knapp. Seit Rev. 26
+    # erreicht jeder Trum in jeder Stellung die Oeffnung, bevor das Profil
+    # endet — im Modell und am Aufbau.
+    def knappste(wege_):
+        return min((nut_bereich(w, L, g[teil], teil)[1]
                     if nut_bereich(w, L, g[teil], teil)[0] is not None
                     else -nut_bereich(w, L, g[teil], teil)[1], dy, teil)
-                   for dy, g in wege for teil in ('vorn', 'hinten'))
-    p.ok('Trume der Wagen erreichen die Nut vor dem Profilende (knappste: '
-         'Trum {}, Portal {:+.0f})'.format(erreicht[2], erreicht[1]),
-         erreicht[0], 1.0)
+                   for dy, g in wege_ for teil in ('vorn', 'hinten'))
+    for wege_, wo in ((wege, 'Modell'), (wege_aufbau, 'Aufbau')):
+        erreicht = knappste(wege_)
+        p.ok('Trume erreichen die Nut vor dem Profilende, {} (knappste: '
+             'Trum {}, Portal {:+.0f})'.format(wo, erreicht[2], erreicht[1]),
+             erreicht[0], 1.0)
     steil = max(max(g['vorn']['schraeg'], g['hinten']['schraeg'])
                 for _, g in wege)
     p.info('Trume der Wagen: steilster Winkel ueber den ganzen Y-Weg', steil,

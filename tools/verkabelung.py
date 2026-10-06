@@ -415,7 +415,9 @@ def grbl(Q):
          'hinten, Z+ nach oben ([Motoren](#f-motoren-und-drehrichtung))'),
         ('$5', '1 `[w]`', 'Lichtschranken melden „unterbrochen“ mit HIGH; '
          'im Test prüfen ([Lichtschranken](#d-uno-grbl-und-lichtschranken))'),
-        ('$20', '1', 'Softlimits an'),
+        ('$20', '1', 'Softlimits an: schützen beide Enden, auch die '
+         'Motorseite von Y, aber nur nach `$H` ([warum](endschalter.md'
+         '#softlimits-statt-zweitem-y-schalter))'),
         ('$21', '0', 'Hardlimits aus, bis die Schalter nie falsch auslösen'),
         ('$22', '1', 'Referenzfahrt an: erst Z, dann X und Y'),
         ('$23', '1', 'X referenziert nach links (minus), Y nach hinten und '

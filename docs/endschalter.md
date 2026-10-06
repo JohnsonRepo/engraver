@@ -1,7 +1,7 @@
 # Endschalter X und Y — Halter und Schaltfahnen
 
 Die fünf Druckteile und die ausgeblendete Bohrlehre der Lichtschranke
-erzeugt `fusion/Portal/Portal.py` (seit Rev. 15, jetzt Rev. 25) als eigene Komponenten der
+erzeugt `fusion/Portal/Portal.py` (seit Rev. 15, jetzt Rev. 26) als eigene Komponenten der
 Portal-Baugruppe, neben Schlitten, Klemmtürmen und Antrieben. Bis Portal
 Rev. 14 standen sie im eigenen Skript `Endschalter.py`; Maße und Lagen sind
 dieselben. Geprüft mit `python3 tools/endschalter_check.py`, Skizze in
@@ -241,6 +241,52 @@ Aus den Schaltpunkten, gerechnet in `tools/endschalter_check.py`; die
 | `$27=1` | 1 mm Rückzug vom Schalter |
 | `$130=385` | X: vom Schaltpunkt bis ans rechte Schienenende 388,2 mm, minus 1 mm Rückzug und 2 mm Reserve. Mit 387 stünde der Wagen rechts bündig am Schienenende |
 | `$131=327` | Y: 333 mm zwischen Schienenende und vorderem 2060, minus 3 mm Schaltabstand, 1 mm Rückzug und 2 mm Reserve |
+
+### Softlimits statt zweitem Y-Schalter
+
+Y hat nur hinten eine Lichtschranke, vorn auf der Motorseite sitzt keine.
+Ein zweiter Schalter ist dort nicht nötig: Mit `$20=1` prüft GRBL jedes Ziel
+gegen den Weg aus `$131`, bevor es dorthin fährt. Liegt ein Ziel eines
+Auftrags vorn hinter der Grenze, hält GRBL vorher an (ALARM:2, die Position
+bleibt richtig); ein Jog bekommt `error:15` und fährt gar nicht. Das schützt
+vorn genauso wie hinten; die Lichtschranke braucht GRBL nur für die
+Referenzfahrt.
+
+Hinter der Grenze ist vorn wenig Platz: Mit Z unten stößt der Toolhead nach
+gut 6 mm an das vordere 2060, nach 11 mm verlässt der Strahl die
+Opferplatte. Mit Z oben fährt er über das 2060 hinweg, und erst rund 125 mm
+weiter laufen die Y-Wagen vorn von den Schienen. Dort hält sie nichts auf.
+
+**Die Softlimits stimmen nur nach `$H`.** Nach dem Einschalten kennt GRBL die
+Position nicht. Mit `$X` statt `$H` nimmt es die aktuelle Stellung als
+hinteren Schaltpunkt und erlaubt von dort 327 mm nach vorn. Steht das Portal
+in der Mitte, reicht das bis weit über das vordere 2060 hinaus, nach hinten
+gibt es dann gar keinen Weg. Gefährdet ist also die Motorseite. Dasselbe
+passiert nach Schrittverlusten, etwa nach einem Anschlag oder bei zu hoher
+Beschleunigung. Deshalb:
+
+* Nach jedem Einschalten, nach dem Not-Aus und nach einem Hardlimit
+  (ALARM:1) zuerst `$H`.
+* `$X` nur nach ALARM:2 (Softlimit, die Position stimmt noch) und für die
+  ersten Tests vor der Referenzfahrt
+  ([verkabelung.md, F](verkabelung.md#f-motoren-und-drehrichtung)), die Hand
+  am Not-Aus.
+* In LightBurn in den Geräteeinstellungen „Auto-home on startup“
+  einschalten.
+* Ist das Portal irgendwo angeschlagen oder hat es Schritte verloren: neu
+  referenzieren, bevor es weitergeht.
+
+**Kein zweites LM393 an D10.** Y+ und Y− sind beim CNC-Shield derselbe
+Eingang. Melden die Module „unterbrochen“ mit HIGH (`$5=1`, Prüfung D in
+[verkabelung.md](verkabelung.md#d-uno-grbl-und-lichtschranken)), ergeben
+zwei an einem Eingang ein UND: Die Leitung meldet erst, wenn beide
+unterbrochen sind, also nie. Beide Schranken wären tot, und `$H` schöbe die
+Wagen hinten über das Schienenende. Soll vorn doch einmal ein Schalter hin,
+dann ein Mikroschalter als **Öffner in Reihe** in die Signalader von W10:
+Öffnet er, zieht der Pull-up von GRBL die Leitung auf HIGH, und GRBL meldet
+„ausgelöst“; ein Kabelbruch tut dasselbe. Dazu `$21=1`. Dann müssen Aufträge
+hinten und links 1 mm vor dem Rand des Arbeitsfelds bleiben, denn dort
+liegen die Schaltpunkte.
 
 ## Kabel
 

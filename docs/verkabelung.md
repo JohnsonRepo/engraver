@@ -429,7 +429,8 @@ In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
 1. Bei ausgeschaltetem Strom W12–W15 anstecken.
 2. USB an, dann 24 V. Die Motoren halten, von Hand drehen sie schwer.
 3. Jede Achse ein paar Millimeter langsam fahren, z. B. `$J=G91 X5 F500`
-   (steht GRBL in ALARM, erst `$X`).
+   (steht GRBL in ALARM, erst `$X`). Nach `$X` gelten die Softlimits ab der
+   aktuellen Stellung, nicht ab den Schaltern: nur wenige Millimeter fahren.
    **X+ fährt nach rechts, Y+ nach hinten, Z+ nach oben.** Sonst das Bit
    der Achse in `$3` setzen (X = 1, Y = 2, Z = 4, zusammenzählen).
 4. **Y:** Beide Seiten müssen das Portal in dieselbe Richtung ziehen.
@@ -445,6 +446,12 @@ In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
   Lichtschranke anhalten und darf nirgends anschlagen.
 * Den Schaltpunkt von X und Y stellst du wie in
   [endschalter.md](endschalter.md#schaltpunkt-einstellen) ein.
+* Ab jetzt nach jedem Einschalten, nach dem Not-Aus und nach einem
+  Hardlimit zuerst `$H`; `$X` nur nach ALARM:2. Vorn auf der Motorseite hat
+  Y keinen Schalter, dort schützen allein die Softlimits, und die stimmen
+  nur nach der Referenzfahrt
+  ([endschalter.md](endschalter.md#softlimits-statt-zweitem-y-schalter)).
+  In LightBurn „Auto-home on startup“ einschalten.
 
 ### H. Laser
 
@@ -473,7 +480,7 @@ In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
 |---|---|---|
 | `$3` | nach dem Test | Drehrichtung: X+ nach rechts, Y+ nach hinten, Z+ nach oben ([Motoren](#f-motoren-und-drehrichtung)) |
 | `$5` | 1 `[w]` | Lichtschranken melden „unterbrochen“ mit HIGH; im Test prüfen ([Lichtschranken](#d-uno-grbl-und-lichtschranken)) |
-| `$20` | 1 | Softlimits an |
+| `$20` | 1 | Softlimits an: schützen beide Enden, auch die Motorseite von Y, aber nur nach `$H` ([warum](endschalter.md#softlimits-statt-zweitem-y-schalter)) |
 | `$21` | 0 | Hardlimits aus, bis die Schalter nie falsch auslösen |
 | `$22` | 1 | Referenzfahrt an: erst Z, dann X und Y |
 | `$23` | 1 | X referenziert nach links (minus), Y nach hinten und Z nach oben (plus) |
@@ -534,6 +541,7 @@ Standardwert von GRBL.
 1. **Motorfarben** `[w]`: die übliche Belegung von Stepperonline. Beim
    Anschließen mit dem Ohmmeter prüfen.
 2. **Lichtschranken** `[w]`: Reihenfolge der Stifte am Modul und ob D0 beim
-   Unterbrechen HIGH wird. Das zeigt Prüfung D.
+   Unterbrechen HIGH wird. Das zeigt Prüfung D. Bei HIGH darf an D10 kein
+   zweites Modul dazu ([endschalter.md](endschalter.md#softlimits-statt-zweitem-y-schalter)).
 3. **Wandler:** Schraubklemmen oder Lötpunkte, und ob IN− und OUT−
    verbunden sind. Beides zeigt ein Blick auf das Modul.

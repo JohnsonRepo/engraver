@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1093" height="1479" viewBox="0 0 1093 1479" font-family="Inter, Helvetica, Arial, sans-serif"><defs ><pattern id="schraffur" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#fbeee2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#e8a871" stroke-width="1.4"/></pattern></defs>
-<text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Platz für die Elektronik (Elektronik.py Rev. 2, Portal.py Rev. 25, ToolheadZ.py Rev. 38)</text>
+<text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Platz für die Elektronik (Elektronik.py Rev. 2, Portal.py Rev. 26, ToolheadZ.py Rev. 38)</text>
 <text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Ketten gedruckt, beide mit Wanne, Festpunkt und Kettenhalter wie in Portal.py. Das Netzteil (24 V / 3 A) steht außerhalb.</text>
 <clipPath id="drauf"><rect x="262.0" y="92.0" width="581.4" height="599.4"/></clipPath>
 <g clip-path="url(#drauf)">

@@ -2,7 +2,7 @@
 <rect width="100%" height="100%" fill="#ffffff"/>
 <text x="18.0" y="24.0" font-size="13" fill="#1c2733" text-anchor="start" font-weight="600">Y-Motorhalter am Ende der 2040 — je Seite einer, dasselbe Teil links und rechts</text>
 <text x="18.0" y="40.0" font-size="8.5" fill="#5b6472" text-anchor="start">Der Y-Riemen läuft in den oberen Nuten beider Seitenflächen und um das Ritzel direkt auf der Motorwelle. Der Halter sitzt mit 4 × M5 in den unteren Nuten.</text>
-<text x="18.0" y="53.0" font-size="8.5" fill="#5b6472" text-anchor="start">Aus Portal.py Rev. 25 · Y = 0 Stirnseite, Z = 0 Unterkante, X = 0 Mitte der 2040 · Maße in mm</text>
+<text x="18.0" y="53.0" font-size="8.5" fill="#5b6472" text-anchor="start">Aus Portal.py Rev. 26 · Y = 0 Stirnseite, Z = 0 Unterkante, X = 0 Mitte der 2040 · Maße in mm</text>
 <text x="64.0" y="86.0" font-size="10" fill="#2f5d92" text-anchor="start" font-weight="600">Draufsicht</text>
 <text x="64.0" y="99.0" font-size="8" fill="#5b6472" text-anchor="start">Motor in der Mitte des Spannwegs; verdeckt gestrichelt</text>
 <clipPath id="drauf"><rect x="64.0" y="106.0" width="424.8" height="230.4"/></clipPath>

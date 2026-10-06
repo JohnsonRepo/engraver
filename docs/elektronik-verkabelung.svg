@@ -1,0 +1,1007 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="2046" viewBox="0 0 1240 2046" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1240" height="2046" fill="#ffffff"/><text x="24.0" y="38.0" font-size="19" fill="#1c2733" text-anchor="start" font-weight="600">Verkabelung Schritt für Schritt — jede Ader von Klemme zu Klemme</text>
+<text x="24.0" y="60.0" font-size="11.5" fill="#5b6472" text-anchor="start">Leitungen W1–W17 wie in verkabelung.md, Farben wie in der Anschlussliste. Schematisch, nicht maßstäblich; Wago-Plätze in der Reihenfolge der Tabelle „Klemmen“.</text>
+<text x="24.0" y="77.0" font-size="11.5" fill="#5b6472" text-anchor="start">Alles stromlos verdrahten, nichts unter Spannung an- oder abstecken. Einschalten: erst USB, dann 24 V.</text>
+<polyline points="24.0,98.0 46.0,98.0" fill="none" stroke="#e03131" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="52.0" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">rot</text>
+<polyline points="88.2,98.0 110.2,98.0" fill="none" stroke="#212529" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="116.2" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">schwarz</text>
+<polyline points="176.5,98.0 198.5,98.0" fill="none" stroke="#868e96" stroke-width="4.800000000000001" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="176.5,98.0 198.5,98.0" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="204.5" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">weiß</text>
+<polyline points="246.7,98.0 268.7,98.0" fill="none" stroke="#b08900" stroke-width="4.800000000000001" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="246.7,98.0 268.7,98.0" fill="none" stroke="#fcc419" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="274.7" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">gelb</text>
+<polyline points="316.9,98.0 338.9,98.0" fill="none" stroke="#2f9e44" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="344.9" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">grün</text>
+<polyline points="387.1,98.0 409.1,98.0" fill="none" stroke="#1c7ed6" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="415.1" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">blau</text>
+<polyline points="457.3,98.0 479.3,98.0" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<text x="485.3" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">Kabelweg</text>
+<rect x="551.7" y="91.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="563.7" y="102.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W7</text>
+<text x="581.7" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">Leitung</text>
+<circle cx="650.0" cy="98.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="650.0" y="102.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<text x="664.0" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">Schritt</text>
+<rect x="724.4" y="91.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="733.4" y="102.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">C</text>
+<text x="750.4" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">Prüfung</text>
+<polygon points="810.8,105.0 819.2,90.0 827.8,105.0" fill="#ffd43b" stroke="#b08900" stroke-width="1" stroke-linejoin="round"/>
+<text x="819.2" y="103.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">!</text>
+<text x="833.8" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">Achtung</text>
+<g transform="translate(24.0,118.0)"><rect x="0.0" y="0.0" width="1192.0" height="480.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<text x="16.0" y="28.0" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">Übersicht — welche Leitung wohin</text>
+<text x="16.0" y="46.0" font-size="11" fill="#5b6472" text-anchor="start">Draufsicht, schematisch: hinten oben, vorn unten. Maßstäblich: elektronik-platz.svg</text>
+<rect x="174.0" y="161.2" width="312.0" height="10.4" rx="2" fill="#e9ecef" stroke="#868e96" stroke-width="1.0"/>
+<rect x="174.0" y="387.4" width="312.0" height="10.4" rx="2" fill="#e9ecef" stroke="#868e96" stroke-width="1.0"/>
+<rect x="191.2" y="104.0" width="10.4" height="312.0" rx="2" fill="#e9ecef" stroke="#868e96" stroke-width="1.0"/>
+<rect x="458.4" y="104.0" width="10.4" height="312.0" rx="2" fill="#e9ecef" stroke="#868e96" stroke-width="1.0"/>
+<rect x="223.4" y="110.2" width="83.2" height="45.8" rx="3" fill="#fdf6ee" stroke="#c2621b" stroke-width="1.4"/>
+<text x="265.0" y="135.2" font-size="11" fill="#c2621b" text-anchor="middle" font-weight="600">Gehäuse</text>
+<rect x="180.8" y="240.2" width="7.3" height="82.2" rx="3" fill="#ced4da" stroke="#495057" stroke-width="1.0"/>
+<rect x="330.0" y="263.1" width="111.8" height="7.3" rx="3" fill="#ced4da" stroke="#495057" stroke-width="1.0"/>
+<rect x="200.0" y="270.4" width="260.0" height="10.4" rx="2" fill="#e9ecef" stroke="#868e96" stroke-width="1.0"/>
+<rect x="180.8" y="260.0" width="31.2" height="36.4" rx="2" fill="#dbe4ef" stroke="#6b84a3" stroke-width="1.0"/>
+<rect x="448.0" y="260.0" width="31.2" height="36.4" rx="2" fill="#dbe4ef" stroke="#6b84a3" stroke-width="1.0"/>
+<rect x="317.0" y="280.8" width="26.0" height="31.2" rx="2" fill="#dbe4ef" stroke="#2f5d92" stroke-width="1.0"/>
+<rect x="213.0" y="257.9" width="21.8" height="21.8" rx="2" fill="#ced4da" stroke="#495057" stroke-width="1.0"/>
+<rect x="185.4" y="419.1" width="21.8" height="21.8" rx="2" fill="#ced4da" stroke="#495057" stroke-width="1.0"/>
+<rect x="452.7" y="419.1" width="21.8" height="21.8" rx="2" fill="#ced4da" stroke="#495057" stroke-width="1.0"/>
+<rect x="408.0" y="402.5" width="31.2" height="16.6" rx="3" fill="#fff4f4" stroke="#c62828" stroke-width="1.2"/>
+<circle cx="423.6" cy="410.8" r="5.5" fill="#e03131" stroke="none" stroke-width="1.0"/>
+<circle cx="241.6" cy="287.0" r="4.5" fill="#b4342f" stroke="none" stroke-width="1.0"/>
+<circle cx="316.0" cy="297.4" r="4.5" fill="#b4342f" stroke="none" stroke-width="1.0"/>
+<circle cx="478.2" cy="124.8" r="4.5" fill="#b4342f" stroke="none" stroke-width="1.0"/>
+<polyline points="223.4,133.1 174.0,133.1 174.0,430.0 185.4,430.0" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<polyline points="174.0,240.2 180.8,240.2" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<polyline points="212.0,266.2 330.0,266.2" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<polyline points="223.9,266.2 223.9,257.9" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<polyline points="241.6,266.2 241.6,284.4" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<polyline points="336.2,270.4 336.2,280.8" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<polyline points="272.8,156.0 272.8,158.6 478.2,158.6 478.2,430.0 474.6,430.0" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<polyline points="478.2,124.8 478.2,158.6" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<polyline points="478.2,400.4 439.2,400.4 439.2,405.6" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
+<rect x="241.0" y="58.0" width="100.0" height="24.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="249.0" y="74.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Steckernetzteil</text>
+<rect x="110.0" y="58.0" width="64.0" height="24.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="134.0" y="74.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">PC</text>
+<polyline points="291.0,82.0 291.0,110.2" fill="none" stroke="#c62828" stroke-width="2.0" stroke-linejoin="round"/>
+<polyline points="174.0,70.0 233.8,70.0 233.8,110.2" fill="none" stroke="#495057" stroke-width="2.0" stroke-linejoin="round"/>
+<rect x="239.8" y="85.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="255.3" y="96.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
+<text x="164.0" y="131.6" font-size="10.5" fill="#5b6472" text-anchor="end">links raus, unter dem</text>
+<text x="164.0" y="144.6" font-size="10.5" fill="#5b6472" text-anchor="end">2040 durch, untere Nut</text>
+<text x="164.0" y="260.0" font-size="10.5" fill="#5b6472" text-anchor="end">Y-Kette:</text>
+<text x="164.0" y="273.0" font-size="10.5" fill="#1c2733" text-anchor="end">W7 W9 W11 W12 W15</text>
+<text x="386.2" y="259.0" font-size="10" fill="#5b6472" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Kette: W7 W11 W15</text>
+<rect x="148.4" y="421.6" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="163.9" y="433.1" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W13</text>
+<text x="142.4" y="432.6" font-size="10.5" fill="#1c2733" text-anchor="end">Y-Motor links</text>
+<rect x="213.0" y="240.7" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="228.5" y="252.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W12</text>
+<text x="250.0" y="251.7" font-size="10.5" fill="#1c2733" text-anchor="start">X-Motor</text>
+<polyline points="238.5,287.0 170.0,287.0" fill="none" stroke="#5b6472" stroke-width="0.8" stroke-linejoin="round"/>
+<rect x="140.0" y="280.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="152.0" y="291.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W9</text>
+<text x="134.0" y="291.0" font-size="10.5" fill="#1c2733" text-anchor="end">Lichtschranke X</text>
+<rect x="283.0" y="314.5" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="295.0" y="326.0" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W7</text>
+<rect x="311.0" y="314.5" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="326.5" y="326.0" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W11</text>
+<rect x="346.0" y="314.5" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="361.5" y="326.0" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W15</text>
+<text x="330.0" y="337.0" font-size="9.5" fill="#5b6472" text-anchor="middle">Toolhead: Laser, Lichtschranke Z, Z-Motor</text>
+<rect x="492.2" y="117.8" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="507.7" y="129.3" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W10</text>
+<text x="529.2" y="128.8" font-size="10.5" fill="#1c2733" text-anchor="start">Lichtschranke Y</text>
+<text x="492.2" y="182.0" font-size="10.5" fill="#5b6472" text-anchor="start">vorn raus, Kanal,</text>
+<text x="492.2" y="195.0" font-size="10.5" fill="#5b6472" text-anchor="start">Rückseite hinteres 2060,</text>
+<text x="492.2" y="208.0" font-size="10.5" fill="#5b6472" text-anchor="start">untere Nut rechts</text>
+<rect x="492.2" y="411.2" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="507.7" y="422.7" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W14</text>
+<text x="529.2" y="422.2" font-size="10.5" fill="#1c2733" text-anchor="start">Y-Motor rechts</text>
+<rect x="376.0" y="404.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="388.0" y="415.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W2</text>
+<text x="370.0" y="415.0" font-size="10.5" fill="#1c2733" text-anchor="end">Not-Aus</text>
+<text x="676.0" y="76.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Leitungen aus dem Gehäuse</text>
+<text x="718.0" y="96.0" font-size="10.5" fill="#5b6472" text-anchor="start">Leitung</text>
+<text x="830.0" y="96.0" font-size="10.5" fill="#5b6472" text-anchor="start">Litze</text>
+<text x="1006.0" y="96.0" font-size="10.5" fill="#5b6472" text-anchor="start">Länge</text>
+<text x="1114.0" y="96.0" font-size="10.5" fill="#5b6472" text-anchor="start">Kette</text>
+<polyline points="676.0,103.0 1176.0,103.0" fill="none" stroke="#d0d7de" stroke-width="1" stroke-linejoin="round"/>
+<rect x="676.0" y="111.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="688.0" y="122.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W2</text>
+<text x="718.0" y="122.0" font-size="11" fill="#1c2733" text-anchor="start">Not-Aus-Kreis</text>
+<text x="830.0" y="122.0" font-size="10.5" fill="#1c2733" text-anchor="start">2 × 0,75 mm²</text>
+<text x="1006.0" y="122.0" font-size="10.5" fill="#1c2733" text-anchor="start">1,01 → 1,5 m</text>
+<text x="1114.0" y="122.0" font-size="10.5" fill="#5b6472" text-anchor="start">—</text>
+<rect x="676.0" y="132.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="688.0" y="143.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W7</text>
+<text x="718.0" y="143.0" font-size="11" fill="#1c2733" text-anchor="start">Laser</text>
+<text x="830.0" y="143.0" font-size="10.5" fill="#1c2733" text-anchor="start">3 Silikonlitzen 0,34 mm²</text>
+<text x="1006.0" y="143.0" font-size="10.5" fill="#1c2733" text-anchor="start">1,57 → 2 m</text>
+<text x="1114.0" y="143.0" font-size="10.5" fill="#5b6472" text-anchor="start">Y + X</text>
+<rect x="676.0" y="153.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="688.0" y="164.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W9</text>
+<text x="718.0" y="164.0" font-size="11" fill="#1c2733" text-anchor="start">Lichtschranke X</text>
+<text x="830.0" y="164.0" font-size="10.5" fill="#1c2733" text-anchor="start">3 Silikonlitzen 0,25 mm²</text>
+<text x="1006.0" y="164.0" font-size="10.5" fill="#1c2733" text-anchor="start">0,83 → 1 m</text>
+<text x="1114.0" y="164.0" font-size="10.5" fill="#5b6472" text-anchor="start">Y</text>
+<rect x="676.0" y="174.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="691.5" y="185.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W10</text>
+<text x="718.0" y="185.0" font-size="11" fill="#1c2733" text-anchor="start">Lichtschranke Y</text>
+<text x="830.0" y="185.0" font-size="10.5" fill="#1c2733" text-anchor="start">3 × 0,25 mm²</text>
+<text x="1006.0" y="185.0" font-size="10.5" fill="#1c2733" text-anchor="start">0,49 → 1 m</text>
+<text x="1114.0" y="185.0" font-size="10.5" fill="#5b6472" text-anchor="start">—</text>
+<rect x="676.0" y="195.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="691.5" y="206.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W11</text>
+<text x="718.0" y="206.0" font-size="11" fill="#1c2733" text-anchor="start">Lichtschranke Z</text>
+<text x="830.0" y="206.0" font-size="10.5" fill="#1c2733" text-anchor="start">3 Silikonlitzen 0,25 mm²</text>
+<text x="1006.0" y="206.0" font-size="10.5" fill="#1c2733" text-anchor="start">1,45 → 2 m</text>
+<text x="1114.0" y="206.0" font-size="10.5" fill="#5b6472" text-anchor="start">Y + X</text>
+<rect x="676.0" y="216.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="691.5" y="227.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W12</text>
+<text x="718.0" y="227.0" font-size="11" fill="#1c2733" text-anchor="start">X-Motor</text>
+<text x="830.0" y="227.0" font-size="10.5" fill="#1c2733" text-anchor="start">4 × 0,2 mm²</text>
+<text x="1006.0" y="227.0" font-size="10.5" fill="#1c2733" text-anchor="start">0,81 m, mitgeliefert</text>
+<text x="1114.0" y="227.0" font-size="10.5" fill="#5b6472" text-anchor="start">Y</text>
+<rect x="676.0" y="237.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="691.5" y="248.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W13</text>
+<text x="718.0" y="248.0" font-size="11" fill="#1c2733" text-anchor="start">Y-Motor links</text>
+<text x="830.0" y="248.0" font-size="10.5" fill="#1c2733" text-anchor="start">4 × 0,2 mm²</text>
+<text x="1006.0" y="248.0" font-size="10.5" fill="#1c2733" text-anchor="start">0,71 m, mitgeliefert</text>
+<text x="1114.0" y="248.0" font-size="10.5" fill="#5b6472" text-anchor="start">—</text>
+<rect x="676.0" y="258.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="691.5" y="269.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W14</text>
+<text x="718.0" y="269.0" font-size="11" fill="#1c2733" text-anchor="start">Y-Motor rechts</text>
+<text x="830.0" y="269.0" font-size="10.5" fill="#1c2733" text-anchor="start">4 × 0,2 mm²</text>
+<text x="1006.0" y="269.0" font-size="10.5" fill="#1c2733" text-anchor="start">0,98 → 1,5 m</text>
+<text x="1114.0" y="269.0" font-size="10.5" fill="#5b6472" text-anchor="start">—</text>
+<rect x="676.0" y="279.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="691.5" y="290.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W15</text>
+<text x="718.0" y="290.0" font-size="11" fill="#1c2733" text-anchor="start">Z-Motor</text>
+<text x="830.0" y="290.0" font-size="10.5" fill="#1c2733" text-anchor="start">4 × 0,2 mm²</text>
+<text x="1006.0" y="290.0" font-size="10.5" fill="#1c2733" text-anchor="start">1,54 → 2 m</text>
+<text x="1114.0" y="290.0" font-size="10.5" fill="#5b6472" text-anchor="start">Y + X</text>
+<rect x="676.0" y="300.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="691.5" y="311.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
+<text x="718.0" y="311.0" font-size="11" fill="#1c2733" text-anchor="start">USB</text>
+<text x="830.0" y="311.0" font-size="10.5" fill="#1c2733" text-anchor="start">USB-Kabel A–B</text>
+<text x="1006.0" y="311.0" font-size="10.5" fill="#1c2733" text-anchor="start">—</text>
+<text x="1114.0" y="311.0" font-size="10.5" fill="#5b6472" text-anchor="start">—</text>
+<text x="676.0" y="338.0" font-size="10.5" fill="#5b6472" text-anchor="start">Im Gehäuse: W1, W3–W6, W8, W16.</text>
+<text x="676.0" y="352.0" font-size="10.5" fill="#5b6472" text-anchor="start">In den Ketten nur Einzellitzen, keine Mantelleitung; Motorkabel</text>
+<text x="676.0" y="366.0" font-size="10.5" fill="#5b6472" text-anchor="start">ohne Schlauch. „Länge“: Weg → kaufen (+15 %, aufgerundet).</text></g>
+<g transform="translate(24.0,614.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">Vorbereiten</text>
+<text x="574.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">vor dem Verdrahten, stromlos</text>
+<text x="16.0" y="62.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Mikroschritt-Jumper</text>
+<text x="16.0" y="77.0" font-size="10.5" fill="#5b6472" text-anchor="start">unter jedem Treiber: X, Y, Z und A</text>
+<rect x="16.0" y="84.0" width="132.0" height="60.0" rx="4" fill="#eef4fb" stroke="#9bb7d4" stroke-width="1"/>
+<rect x="31.5" y="95.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="31.5" y="119.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="29.0" y="93.0" width="14.0" height="38.0" rx="3" fill="#212529" stroke="#000000" stroke-width="0.8"/>
+<text x="36.0" y="162.0" font-size="11" fill="#1c2733" text-anchor="middle" font-weight="600">MS1</text>
+<text x="36.0" y="175.0" font-size="10" fill="#5b6472" text-anchor="middle">(M0)</text>
+<text x="36.0" y="190.0" font-size="10.5" fill="#1c2733" text-anchor="middle">stecken</text>
+<rect x="77.5" y="95.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="77.5" y="119.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="75.0" y="93.0" width="14.0" height="38.0" rx="3" fill="#212529" stroke="#000000" stroke-width="0.8"/>
+<text x="82.0" y="162.0" font-size="11" fill="#1c2733" text-anchor="middle" font-weight="600">MS2</text>
+<text x="82.0" y="175.0" font-size="10" fill="#5b6472" text-anchor="middle">(M1)</text>
+<text x="82.0" y="190.0" font-size="10.5" fill="#1c2733" text-anchor="middle">stecken</text>
+<rect x="123.5" y="95.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="123.5" y="119.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<text x="128.0" y="162.0" font-size="11" fill="#1c2733" text-anchor="middle" font-weight="600">MS3</text>
+<text x="128.0" y="175.0" font-size="10" fill="#5b6472" text-anchor="middle">(M2)</text>
+<text x="128.0" y="190.0" font-size="10.5" fill="#b4342f" text-anchor="middle" font-weight="600">frei</text>
+<text x="166.0" y="112.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">= 1/16 Schritt</text>
+<text x="166.0" y="128.0" font-size="10.5" fill="#5b6472" text-anchor="start">TMC2209 ohne UART,</text>
+<text x="166.0" y="142.0" font-size="10.5" fill="#5b6472" text-anchor="start">intern auf 1/256</text>
+<text x="166.0" y="156.0" font-size="10.5" fill="#5b6472" text-anchor="start">interpoliert</text>
+<text x="16.0" y="222.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Treiber richtig herum stecken</text>
+<rect x="22.0" y="234.0" width="124.0" height="56.0" rx="3" fill="#eef4fb" stroke="#9bb7d4" stroke-width="1"/>
+<rect x="44.0" y="240.0" width="94.0" height="44.0" rx="2" fill="#2b2f36" stroke="#000000" stroke-width="0.8"/>
+<polyline points="66.0,246.0 66.0,278.0" fill="none" stroke="#868e96" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="75.0,246.0 75.0,278.0" fill="none" stroke="#868e96" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="84.0,246.0 84.0,278.0" fill="none" stroke="#868e96" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="93.0,246.0 93.0,278.0" fill="none" stroke="#868e96" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="102.0,246.0 102.0,278.0" fill="none" stroke="#868e96" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="111.0,246.0 111.0,278.0" fill="none" stroke="#868e96" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="120.0,246.0 120.0,278.0" fill="none" stroke="#868e96" stroke-width="2.2" stroke-linejoin="round"/>
+<circle cx="51.0" cy="247.0" r="3.4" fill="#fa5252" stroke="none" stroke-width="1.0"/>
+<text x="26.0" y="251.0" font-size="9.5" fill="#2f5d92" text-anchor="start" font-weight="600">EN</text>
+<text x="58.0" y="251.0" font-size="8.5" fill="#f8f9fa" text-anchor="start" font-weight="600">EN</text>
+<text x="162.0" y="248.0" font-size="10.5" fill="#5b6472" text-anchor="start">EN-Pin des Treibers</text>
+<text x="162.0" y="261.5" font-size="10.5" fill="#5b6472" text-anchor="start">an den EN-Aufdruck.</text>
+<text x="162.0" y="275.0" font-size="10.5" fill="#5b6472" text-anchor="start">Strom erst in</text>
+<text x="162.0" y="288.5" font-size="10.5" fill="#5b6472" text-anchor="start">Prüfung E (Vref).</text>
+<text x="16.0" y="312.0" font-size="10.5" fill="#5b6472" text-anchor="start">Vref 1,37 V an allen vier: höchstens 1,05 A</text>
+<text x="16.0" y="325.5" font-size="10.5" fill="#5b6472" text-anchor="start">bei jedem üblichen Messwiderstand.</text>
+<text x="310.0" y="62.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">A klont Y: zwei Jumper</text>
+<text x="310.0" y="77.0" font-size="10.5" fill="#5b6472" text-anchor="start">neben dem A-Treiber (zweiter Y-Motor)</text>
+<rect x="360.0" y="88.0" width="214.0" height="70.0" rx="4" fill="#eef4fb" stroke="#9bb7d4" stroke-width="1"/>
+<text x="384.0" y="100.0" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">X</text>
+<text x="428.0" y="100.0" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">Y</text>
+<text x="472.0" y="100.0" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">Z</text>
+<text x="530.0" y="100.0" font-size="10.5" fill="#b4342f" text-anchor="middle" font-weight="600">D12/D13</text>
+<text x="310.0" y="114.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">A.STEP</text>
+<rect x="371.5" y="105.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="387.5" y="105.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="415.5" y="105.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="431.5" y="105.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="413.0" y="103.0" width="30.0" height="14.0" rx="3" fill="#212529" stroke="#000000" stroke-width="0.8"/>
+<rect x="459.5" y="105.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="475.5" y="105.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="517.5" y="105.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="533.5" y="105.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<polyline points="515.0,102.0 545.0,118.0" fill="none" stroke="#b4342f" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="515.0,118.0 545.0,102.0" fill="none" stroke="#b4342f" stroke-width="2" stroke-linejoin="round"/>
+<text x="310.0" y="144.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">A.DIR</text>
+<rect x="371.5" y="135.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="387.5" y="135.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="415.5" y="135.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="431.5" y="135.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="413.0" y="133.0" width="30.0" height="14.0" rx="3" fill="#212529" stroke="#000000" stroke-width="0.8"/>
+<rect x="459.5" y="135.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="475.5" y="135.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="517.5" y="135.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<rect x="533.5" y="135.5" width="9.0" height="9.0" rx="1" fill="#adb5bd" stroke="#495057" stroke-width="0.8"/>
+<polyline points="515.0,132.0 545.0,148.0" fill="none" stroke="#b4342f" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="515.0,148.0 545.0,132.0" fill="none" stroke="#b4342f" stroke-width="2" stroke-linejoin="round"/>
+<text x="310.0" y="176.0" font-size="10.5" fill="#5b6472" text-anchor="start">Gesteckt: A.STEP ↔ Y.STEP, A.DIR ↔ Y.DIR.</text>
+<polygon points="310.0,203.0 318.5,188.0 327.0,203.0" fill="#ffd43b" stroke="#b08900" stroke-width="1" stroke-linejoin="round"/>
+<text x="318.5" y="201.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">!</text>
+<text x="333.0" y="200.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Nie auf D12/D13: D12 ist bei</text>
+<text x="333.0" y="213.5" font-size="10.5" fill="#1c2733" text-anchor="start">GRBL 1.1 der Z-Endschalter.</text>
+<polygon points="310.0,239.0 318.5,224.0 327.0,239.0" fill="#ffd43b" stroke="#b08900" stroke-width="1" stroke-linejoin="round"/>
+<text x="318.5" y="237.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">!</text>
+<text x="333.0" y="236.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">EN/GND offen lassen:</text>
+<text x="333.0" y="249.5" font-size="10.5" fill="#1c2733" text-anchor="start">GRBL schaltet die Treiber über D8.</text>
+<text x="310.0" y="274.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Wago-Klemmen, von links:</text>
+<rect x="310.0" y="282.0" width="80.0" height="18.0" rx="3" fill="#eef1f4" stroke="#8e44ad" stroke-width="1.6"/>
+<rect x="316.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="323.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="330.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="337.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="344.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="351.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="358.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="365.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="372.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="379.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<text x="350.0" y="314.0" font-size="10.5" fill="#8e44ad" text-anchor="middle" font-weight="600">+5 V</text>
+<rect x="402.0" y="282.0" width="80.0" height="18.0" rx="3" fill="#eef1f4" stroke="#1f2328" stroke-width="1.6"/>
+<rect x="408.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="415.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="422.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="429.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="436.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="443.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="450.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="457.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="464.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="471.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<text x="442.0" y="314.0" font-size="10.5" fill="#1f2328" text-anchor="middle" font-weight="600">GND</text>
+<rect x="494.0" y="282.0" width="45.0" height="18.0" rx="3" fill="#eef1f4" stroke="#c62828" stroke-width="1.6"/>
+<rect x="500.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="507.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="514.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="521.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<rect x="528.0" y="286.0" width="4.0" height="10.0" rx="1" fill="#f08c00" stroke="#c46a00" stroke-width="0.6"/>
+<text x="516.5" y="314.0" font-size="10.5" fill="#c62828" text-anchor="middle" font-weight="600">+24 V</text>
+<text x="310.0" y="330.0" font-size="10" fill="#5b6472" text-anchor="start">W-Nummer an beide Enden jeder Leitung.</text></g>
+<g transform="translate(628.0,614.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">24 V: Buchse, Schalter, Not-Aus</text>
+<rect x="490.0" y="17.0" width="84.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="532.0" y="28.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">Prüfung A, B</text>
+<text x="484.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W1, W2 · dann</text>
+<polyline points="116.0,44.0 116.0,140.0" fill="none" stroke="#c2621b" stroke-width="1.4" stroke-dasharray="6 4" stroke-linejoin="round"/>
+<text x="110.0" y="56.0" font-size="10" fill="#5b6472" text-anchor="end">außen</text>
+<text x="122.0" y="56.0" font-size="10" fill="#c2621b" text-anchor="start">im Gehäuse (Rückwand)</text>
+<rect x="14.0" y="66.0" width="88.0" height="62.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="23.0" y="85.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Netzteil</text>
+<text x="23.0" y="100.0" font-size="11.0" fill="#5b6472" text-anchor="start">24 V / 3 A</text>
+<polyline points="102.0,97.0 114.0,97.0" fill="none" stroke="#495057" stroke-width="5" stroke-linejoin="round"/>
+<rect x="110.0" y="91.0" width="14.0" height="12.0" rx="2" fill="#868e96" stroke="#495057" stroke-width="0.8"/>
+<rect x="126.0" y="66.0" width="76.0" height="62.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="135.0" y="85.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Buchse</text>
+<text x="135.0" y="100.0" font-size="11.0" fill="#5b6472" text-anchor="start">5,5 × 2,1</text>
+<text x="194.0" y="84.0" font-size="12" fill="#c62828" text-anchor="end" font-weight="600">+</text>
+<text x="194.0" y="120.0" font-size="12" fill="#1f2328" text-anchor="end" font-weight="600">−</text>
+<rect x="234.0" y="66.0" width="72.0" height="40.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="243.0" y="85.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Schalter</text>
+<text x="243.0" y="100.0" font-size="11.0" fill="#5b6472" text-anchor="start">EIN/AUS</text>
+<text x="228.0" y="96.0" font-size="10" fill="#5b6472" text-anchor="end">1</text>
+<text x="312.0" y="96.0" font-size="10" fill="#5b6472" text-anchor="start">2</text>
+<rect x="336.0" y="44.0" width="238.0" height="132.0" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="1.0" stroke-dasharray="5 3"/>
+<text x="566.0" y="58.0" font-size="10" fill="#c62828" text-anchor="end">vorn am vorderen 2060</text>
+<rect x="352.0" y="62.0" width="118.0" height="58.0" rx="5" fill="#fff4f4" stroke="#c62828" stroke-width="1.0"/>
+<text x="361.0" y="81.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Not-Aus</text>
+<text x="361.0" y="96.0" font-size="11.0" fill="#5b6472" text-anchor="start">Wechsler</text>
+<circle cx="442.0" cy="86.0" r="10.0" fill="#ffd43b" stroke="#b08900" stroke-width="1.0"/>
+<circle cx="442.0" cy="86.0" r="6.5" fill="#e03131" stroke="none" stroke-width="1.0"/>
+<text x="477.0" y="84.0" font-size="10" fill="#5b6472" text-anchor="start">NO frei</text>
+<rect x="203.0" y="250.0" width="220.0" height="34.0" rx="4" fill="#eef1f4" stroke="#1f2328" stroke-width="1.6"/>
+<rect x="206.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="214.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<rect x="209.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="228.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="236.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="231.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="250.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="258.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<rect x="253.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="272.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="280.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<rect x="275.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="294.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="302.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<rect x="297.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="316.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="324.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">6</text>
+<rect x="319.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="338.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="346.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">7</text>
+<rect x="341.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="360.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="368.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">8</text>
+<rect x="363.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="382.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="390.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">9</text>
+<rect x="385.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="404.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="412.0" y="272.5" font-size="8.5" fill="#ffffff" text-anchor="middle" font-weight="600">10</text>
+<rect x="407.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="429.0" y="250.0" width="110.0" height="34.0" rx="4" fill="#eef1f4" stroke="#c62828" stroke-width="1.6"/>
+<rect x="432.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="440.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<rect x="435.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="454.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="462.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="457.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="476.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="484.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<rect x="479.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="498.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="506.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<rect x="501.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="520.0" y="257.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="528.0" y="272.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<rect x="523.5" y="251.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<text x="316.0" y="243.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">Wago GND</text>
+<text x="500.0" y="243.0" font-size="11" fill="#c62828" text-anchor="middle" font-weight="600">Wago +24 V</text>
+<polyline points="202.0,80.0 234.0,80.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="202.0,114.0 214.0,114.0 214.0,250.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="306.0,80.0 352.0,80.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="440.0,120.0 440.0,250.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="202.0" cy="80.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="202.0" cy="114.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="234.0" cy="80.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="306.0" cy="80.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="352.0" cy="80.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="440.0" cy="120.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="470.0" cy="80.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<text x="346.0" y="74.0" font-size="10" fill="#1c2733" text-anchor="end" font-weight="600">C</text>
+<text x="447.0" y="134.0" font-size="10" fill="#1c2733" text-anchor="start" font-weight="600">NC</text>
+<rect x="202.0" y="185.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="214.0" y="196.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W1</text>
+<rect x="470.0" y="139.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="482.0" y="150.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W2</text>
+<text x="506.0" y="150.0" font-size="10" fill="#5b6472" text-anchor="start">2 × 0,75 mm²</text>
+<text x="470.0" y="165.0" font-size="10" fill="#5b6472" text-anchor="start">1,01 → 1,5 m</text>
+<text x="14.0" y="154.0" font-size="10.5" fill="#5b6472" text-anchor="start">Mittelstift +24 V, Hülse GND:</text>
+<text x="14.0" y="167.5" font-size="10.5" fill="#5b6472" text-anchor="start">mit dem Netzteil messen.</text>
+<text x="14.0" y="181.0" font-size="10.5" fill="#5b6472" text-anchor="start">Not-Aus: C–NC geschlossen,</text>
+<text x="14.0" y="194.5" font-size="10.5" fill="#5b6472" text-anchor="start">gedrückt offen. NO bleibt frei,</text>
+<text x="14.0" y="208.0" font-size="10.5" fill="#5b6472" text-anchor="start">dort läge beim Drücken +24 V.</text>
+<text x="14.0" y="221.5" font-size="10.5" fill="#5b6472" text-anchor="start">Alles löten, Schrumpfschlauch.</text>
+<text x="14.0" y="306.0" font-size="10" fill="#5b6472" text-anchor="start">Wago GND, übrige Plätze: 2–4: Schritt 3 · 5–7: Schritt 4 · 8: Schritt 7 · 9, 10 frei</text>
+<text x="14.0" y="320.0" font-size="10" fill="#5b6472" text-anchor="start">Wago +24 V, übrige Plätze: 2–4: Schritt 3 · 5: Schritt 7</text></g>
+<g transform="translate(24.0,970.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">Shield, Wandler, Lüfter</text>
+<rect x="508.0" y="17.0" width="66.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="541.0" y="28.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">Prüfung C</text>
+<text x="502.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W3–W5 · dann</text>
+<rect x="217.0" y="50.0" width="130.0" height="38.0" rx="4" fill="#eef1f4" stroke="#c62828" stroke-width="1.6"/>
+<rect x="222.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="230.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<rect x="225.5" y="81.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="248.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="256.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="251.5" y="81.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="274.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="282.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<rect x="277.5" y="81.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="300.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="308.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<rect x="303.5" y="81.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="326.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="334.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<rect x="329.5" y="81.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="148.0" y="270.0" width="240.0" height="38.0" rx="4" fill="#eef1f4" stroke="#1f2328" stroke-width="1.6"/>
+<rect x="152.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="160.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<rect x="155.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="176.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="184.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="179.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="200.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="208.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<rect x="203.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="224.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="232.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<rect x="227.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="248.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="256.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<rect x="251.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="272.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="280.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">6</text>
+<rect x="275.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="296.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="304.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">7</text>
+<rect x="299.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="320.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="328.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">8</text>
+<rect x="323.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="344.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="352.0" y="296.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">9</text>
+<rect x="347.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="368.0" y="281.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="376.0" y="296.5" font-size="8.5" fill="#ffffff" text-anchor="middle" font-weight="600">10</text>
+<rect x="371.5" y="271.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<text x="356.0" y="72.0" font-size="12" fill="#c62828" text-anchor="start" font-weight="600">Wago +24 V</text>
+<text x="396.0" y="296.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="600">Wago GND</text>
+<rect x="24.0" y="140.0" width="152.0" height="92.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
+<text x="32.0" y="162.0" font-size="11" fill="#c62828" text-anchor="start" font-weight="600">+</text>
+<text x="32.0" y="218.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="600">−</text>
+<text x="64.0" y="162.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">CNC Shield V3</text>
+<text x="64.0" y="180.0" font-size="11" fill="#5b6472" text-anchor="start">Schraubklemme</text>
+<text x="64.0" y="195.0" font-size="11" fill="#5b6472" text-anchor="start">(12–36 V)</text>
+<rect x="216.0" y="140.0" width="152.0" height="92.0" rx="5" fill="#fff7ec" stroke="#e67700" stroke-width="1.0"/>
+<text x="224.0" y="162.0" font-size="11" fill="#c62828" text-anchor="start" font-weight="600">IN+</text>
+<text x="224.0" y="218.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="600">IN−</text>
+<text x="256.0" y="162.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Wandler</text>
+<text x="256.0" y="180.0" font-size="11" fill="#5b6472" text-anchor="start">24 → 12 V, 5 A</text>
+<text x="256.0" y="195.0" font-size="11" fill="#5b6472" text-anchor="start">OUT: Schritt 5</text>
+<rect x="416.0" y="140.0" width="152.0" height="92.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="424.0" y="162.0" font-size="11" fill="#c62828" text-anchor="start" font-weight="600">+</text>
+<text x="424.0" y="218.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="600">−</text>
+<text x="456.0" y="162.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Lüfter</text>
+<text x="456.0" y="180.0" font-size="11" fill="#5b6472" text-anchor="start">24 V, im Deckel</text>
+<text x="456.0" y="195.0" font-size="11" fill="#5b6472" text-anchor="start">bläst auf die Treiber</text>
+<polyline points="256.0,88.0 256.0,112.0 12.0,112.0 12.0,158.0 24.0,158.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="282.0,88.0 282.0,126.0 204.0,126.0 204.0,158.0 216.0,158.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="308.0,88.0 308.0,126.0 404.0,126.0 404.0,158.0 416.0,158.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="184.0,270.0 184.0,248.0 12.0,248.0 12.0,214.0 24.0,214.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="208.0,270.0 208.0,214.0 216.0,214.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="232.0,270.0 232.0,240.0 404.0,240.0 404.0,214.0 416.0,214.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="24.0" cy="158.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="24.0" cy="214.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="216.0" cy="158.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="216.0" cy="214.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="416.0" cy="158.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="416.0" cy="214.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<polyline points="230.0,88.0 230.0,100.0 196.0,100.0" fill="none" stroke="#e03131" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="196.0" cy="100.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="178.0" cy="100.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="178.0" y="104.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="140.0" y="94.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="152.0" y="105.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W2</text>
+<polyline points="334.0,88.0 334.0,100.0 440.0,100.0" fill="none" stroke="#e03131" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="440.0" cy="100.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="458.0" cy="100.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="458.0" y="104.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">7</text>
+<rect x="472.0" y="94.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="487.5" y="105.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W16</text>
+<polyline points="160.0,270.0 160.0,262.0 126.0,262.0" fill="none" stroke="#212529" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="126.0" cy="262.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="108.0" cy="262.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="108.0" y="266.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="70.0" y="256.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="82.0" y="267.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W1</text>
+<text x="396.0" y="312.0" font-size="9.5" fill="#5b6472" text-anchor="start">1: Schritt 2 · 5–7: Schritt 4</text>
+<text x="396.0" y="324.0" font-size="9.5" fill="#5b6472" text-anchor="start">8: Schritt 7 · 9, 10 frei</text>
+<polygon points="14.0,61.0 22.5,46.0 31.0,61.0" fill="#ffd43b" stroke="#b08900" stroke-width="1" stroke-linejoin="round"/>
+<text x="22.5" y="59.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">!</text>
+<text x="37.0" y="58.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Shield-Klemme: Polung</text>
+<text x="37.0" y="71.5" font-size="10.5" fill="#1c2733" text-anchor="start">neben der Klemme, nicht</text>
+<text x="37.0" y="85.0" font-size="10.5" fill="#1c2733" text-anchor="start">vertauschen.</text>
+<text x="452.0" y="48.0" font-size="10" fill="#5b6472" text-anchor="start">Schraubklemmen mit Ader-</text>
+<text x="452.0" y="60.5" font-size="10" fill="#5b6472" text-anchor="start">endhülse, die Wago ohne;</text>
+<text x="452.0" y="73.0" font-size="10" fill="#5b6472" text-anchor="start">11 mm abisolieren.</text>
+<text x="426.0" y="244.0" font-size="9.5" fill="#5b6472" text-anchor="start">Wandler: IN− und OUT−</text>
+<text x="426.0" y="256.0" font-size="9.5" fill="#5b6472" text-anchor="start">verbunden? (Schritt 3 der</text>
+<text x="426.0" y="268.0" font-size="9.5" fill="#5b6472" text-anchor="start">Anleitung, Masse)</text></g>
+<g transform="translate(628.0,970.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">5 V und Lichtschranken</text>
+<rect x="508.0" y="17.0" width="66.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="541.0" y="28.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">Prüfung D</text>
+<text x="502.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W6, W9–W11 · dann</text>
+<rect x="14.0" y="44.0" width="560.0" height="56.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
+<text x="24.0" y="62.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">CNC Shield V3</text>
+<text x="564.0" y="62.0" font-size="10.5" fill="#b4342f" text-anchor="end" font-weight="600">Z+ / Z− (D11) = Laser: hier nichts</text>
+<text x="24.0" y="78.0" font-size="10" fill="#5b6472" text-anchor="start">X+/X− beide D9, Y+/Y− beide D10 · am Modul: VCC rot, GND schwarz, D0 gelb, A0 frei</text>
+<rect x="22.0" y="118.0" width="38.0" height="160.0" rx="4" fill="#eef1f4" stroke="#8e44ad" stroke-width="1.6"/>
+<rect x="27.0" y="121.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="129.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<rect x="53.0" y="121.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="137.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="145.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="53.0" y="137.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="153.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="161.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<rect x="53.0" y="153.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="169.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="177.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<rect x="53.0" y="169.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="185.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="193.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<rect x="53.0" y="185.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="201.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="209.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">6</text>
+<rect x="53.0" y="201.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="217.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="225.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">7</text>
+<rect x="53.0" y="217.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="233.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="241.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">8</text>
+<rect x="53.0" y="233.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="249.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="257.5" font-size="9.5" fill="#ffffff" text-anchor="middle" font-weight="600">9</text>
+<rect x="53.0" y="249.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="27.0" y="265.0" width="22.0" height="10.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="38.0" y="273.5" font-size="8.0" fill="#ffffff" text-anchor="middle" font-weight="600">10</text>
+<rect x="53.0" y="265.5" width="6.0" height="9.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="114.0" y="274.0" width="240.0" height="36.0" rx="4" fill="#eef1f4" stroke="#1f2328" stroke-width="1.6"/>
+<rect x="118.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="126.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<rect x="121.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="142.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="150.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="145.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="166.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="174.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<rect x="169.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="190.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="198.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<rect x="193.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="214.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="222.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<rect x="217.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="238.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="246.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">6</text>
+<rect x="241.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="262.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="270.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">7</text>
+<rect x="265.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="286.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="294.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">8</text>
+<rect x="289.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="310.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="318.0" y="298.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">9</text>
+<rect x="313.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="334.0" y="283.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="342.0" y="298.5" font-size="8.5" fill="#ffffff" text-anchor="middle" font-weight="600">10</text>
+<rect x="337.5" y="275.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<text x="41.0" y="294.0" font-size="10.5" fill="#8e44ad" text-anchor="middle" font-weight="600">Wago +5 V</text>
+<text x="41.0" y="307.0" font-size="9.5" fill="#5b6472" text-anchor="middle">5–10 frei</text>
+<text x="362.0" y="292.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="600">Wago GND</text>
+<text x="362.0" y="306.0" font-size="9.5" fill="#5b6472" text-anchor="start">1: Schritt 2 · 2–4: Schritt 3</text>
+<text x="362.0" y="318.0" font-size="9.5" fill="#5b6472" text-anchor="start">8: Schritt 7 · 9, 10 frei</text>
+<polyline points="90.0,100.0 90.0,126.0 60.0,126.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="90.0" y="92.0" font-size="10" fill="#1c2733" text-anchor="middle" font-weight="600">5V</text>
+<circle cx="90.0" cy="100.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="116.0" y="146.0" width="136.0" height="64.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="196.0" y="160.0" font-size="9.5" fill="#5b6472" text-anchor="middle">D0</text>
+<text x="184.0" y="204.0" font-size="9.5" fill="#5b6472" text-anchor="middle">GND</text>
+<text x="122.0" y="182.0" font-size="9.5" fill="#5b6472" text-anchor="start">VCC</text>
+<text x="156.0" y="188.0" font-size="15" fill="#2f5d92" text-anchor="start" font-weight="600">X</text>
+<text x="170.0" y="187.0" font-size="10" fill="#5b6472" text-anchor="start">Lichtschranke</text>
+<text x="196.0" y="92.0" font-size="10" fill="#2f5d92" text-anchor="middle" font-weight="600">X− (D9)</text>
+<polyline points="196.0,146.0 196.0,100.0" fill="none" stroke="#b08900" stroke-width="4.6" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="196.0,146.0 196.0,100.0" fill="none" stroke="#fcc419" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="184.0" y="117.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="196.0" y="128.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W9</text>
+<text x="214.0" y="128.0" font-size="10" fill="#5b6472" text-anchor="start">0,83 → 1 m</text>
+<polyline points="184.0,210.0 184.0,252.0 222.0,252.0 222.0,274.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="116.0,178.0 100.0,178.0 100.0,142.0 60.0,142.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="196.0" cy="100.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="196.0" cy="146.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="184.0" cy="210.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="116.0" cy="178.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="268.0" y="146.0" width="136.0" height="64.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="348.0" y="160.0" font-size="9.5" fill="#5b6472" text-anchor="middle">D0</text>
+<text x="336.0" y="204.0" font-size="9.5" fill="#5b6472" text-anchor="middle">GND</text>
+<text x="274.0" y="182.0" font-size="9.5" fill="#5b6472" text-anchor="start">VCC</text>
+<text x="308.0" y="188.0" font-size="15" fill="#2f5d92" text-anchor="start" font-weight="600">Y</text>
+<text x="322.0" y="187.0" font-size="10" fill="#5b6472" text-anchor="start">Lichtschranke</text>
+<text x="348.0" y="92.0" font-size="10" fill="#2f5d92" text-anchor="middle" font-weight="600">Y+ (D10)</text>
+<polyline points="348.0,146.0 348.0,100.0" fill="none" stroke="#b08900" stroke-width="4.6" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="348.0,146.0 348.0,100.0" fill="none" stroke="#fcc419" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="332.5" y="117.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="348.0" y="128.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W10</text>
+<text x="369.5" y="128.0" font-size="10" fill="#5b6472" text-anchor="start">0,49 → 1 m</text>
+<polyline points="336.0,210.0 336.0,244.0 246.0,244.0 246.0,274.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="184.0" cy="226.0" r="4.5" fill="#ffffff" stroke="none" stroke-width="1.0"/>
+<path d="M 268.0 178.0 L 260.0 178.0 L 260.0 226.0 L 190.0 226.0 A 6 6 0 0 0 178.0 226.0 L 84.0 226.0 L 84.0 158.0 L 60.0 158.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="348.0" cy="100.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="348.0" cy="146.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="336.0" cy="210.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="268.0" cy="178.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="420.0" y="146.0" width="136.0" height="64.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="500.0" y="160.0" font-size="9.5" fill="#5b6472" text-anchor="middle">D0</text>
+<text x="488.0" y="204.0" font-size="9.5" fill="#5b6472" text-anchor="middle">GND</text>
+<text x="550.0" y="182.0" font-size="9.5" fill="#5b6472" text-anchor="end">VCC</text>
+<text x="434.0" y="188.0" font-size="15" fill="#2f5d92" text-anchor="start" font-weight="600">Z</text>
+<text x="448.0" y="187.0" font-size="10" fill="#5b6472" text-anchor="start">Lichtschranke</text>
+<text x="500.0" y="92.0" font-size="10" fill="#2f5d92" text-anchor="middle" font-weight="600">SpnEn (D12)</text>
+<polyline points="500.0,146.0 500.0,100.0" fill="none" stroke="#b08900" stroke-width="4.6" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="500.0,146.0 500.0,100.0" fill="none" stroke="#fcc419" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="484.5" y="117.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="500.0" y="128.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W11</text>
+<text x="521.5" y="128.0" font-size="10" fill="#5b6472" text-anchor="start">1,45 → 2 m</text>
+<polyline points="488.0,210.0 488.0,260.0 270.0,260.0 270.0,274.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="556.0,178.0 570.0,178.0 570.0,330.0 72.0,330.0 72.0,174.0 60.0,174.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="500.0" cy="100.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="500.0" cy="146.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="488.0" cy="210.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="556.0" cy="178.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/></g>
+<g transform="translate(24.0,1326.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">Laser</text>
+<rect x="508.0" y="17.0" width="66.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="541.0" y="28.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">Prüfung H</text>
+<text x="502.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W7, W8 · Stecker erst bei</text>
+<rect x="14.0" y="46.0" width="184.0" height="96.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
+<text x="23.0" y="65.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">CNC Shield V3</text>
+<text x="23.0" y="80.0" font-size="11.0" fill="#5b6472" text-anchor="start">Z+ und Z− sind beide</text>
+<text x="23.0" y="95.0" font-size="11.0" fill="#5b6472" text-anchor="start">D11, die Laser-PWM.</text>
+<text x="190.0" y="82.0" font-size="10.5" fill="#2f5d92" text-anchor="end" font-weight="600">Z+</text>
+<text x="122.0" y="134.0" font-size="9.5" fill="#5b6472" text-anchor="middle">Z− S</text>
+<text x="162.0" y="134.0" font-size="9.5" fill="#5b6472" text-anchor="middle">GND</text>
+<rect x="14.0" y="184.0" width="184.0" height="90.0" rx="5" fill="#fff7ec" stroke="#e67700" stroke-width="1.0"/>
+<text x="23.0" y="203.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Abwärtswandler</text>
+<text x="23.0" y="218.0" font-size="11.0" fill="#5b6472" text-anchor="start">IN aus Schritt 3</text>
+<text x="23.0" y="233.0" font-size="11.0" fill="#5b6472" text-anchor="start">OUT auf 12,0 V (C)</text>
+<text x="190.0" y="210.0" font-size="10.5" fill="#1f2328" text-anchor="end" font-weight="600">OUT−</text>
+<text x="190.0" y="250.0" font-size="10.5" fill="#c62828" text-anchor="end" font-weight="600">OUT+</text>
+<polyline points="122.0,142.0 122.0,160.0 162.0,160.0 162.0,142.0" fill="none" stroke="#495057" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="129.0" y="155.0" width="26.0" height="10.0" rx="1.5" fill="#ffffff" stroke="#495057" stroke-width="1.4"/>
+<circle cx="122.0" cy="142.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="162.0" cy="142.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="88.0" y="154.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="100.0" y="165.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W8</text>
+<text x="82.0" y="165.0" font-size="10" fill="#5b6472" text-anchor="end">10 kΩ</text>
+<rect x="272.0" y="138.0" width="126.0" height="52.0" rx="12" fill="#e9ecef" stroke="#868e96" stroke-width="1.2"/>
+<polyline points="198.0,246.0 252.0,246.0 252.0,178.0 406.0,178.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="198.0,206.0 228.0,206.0 228.0,164.0 406.0,164.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="198.0,78.0 240.0,78.0 240.0,150.0 406.0,150.0" fill="none" stroke="#868e96" stroke-width="4.6" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="198.0,78.0 240.0,78.0 240.0,150.0 406.0,150.0" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="398.0" y="138.0" width="16.0" height="52.0" rx="2" fill="#f8f9fa" stroke="#495057" stroke-width="1.0"/>
+<circle cx="406.0" cy="150.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="406.0" cy="164.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="406.0" cy="178.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="198.0" cy="78.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="198.0" cy="206.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="198.0" cy="246.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="272.0" y="119.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="284.0" y="130.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W7</text>
+<text x="304.0" y="130.0" font-size="10" fill="#5b6472" text-anchor="start">3 Silikonlitzen 0,34 mm²</text>
+<text x="272.0" y="206.0" font-size="10" fill="#5b6472" text-anchor="start">1,57 → 2 m, Kette Y + X</text>
+<rect x="430.0" y="62.0" width="144.0" height="196.0" rx="5" fill="#eef6ff" stroke="#1864ab" stroke-width="1.0"/>
+<text x="439.0" y="82.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Laser</text>
+<text x="439.0" y="97.0" font-size="11.0" fill="#5b6472" text-anchor="start">LASER TREE 4 W</text>
+<text x="439.0" y="112.0" font-size="11.0" fill="#5b6472" text-anchor="start">12 V · 1,6 A</text>
+<text x="438.0" y="154.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">PWM</text>
+<text x="438.0" y="168.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">GND</text>
+<text x="438.0" y="182.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">+12 V</text>
+<rect x="500.0" y="128.0" width="56.0" height="74.0" rx="3" fill="#495057" stroke="#212529" stroke-width="1"/>
+<polyline points="506.0,136.0 550.0,136.0" fill="none" stroke="#adb5bd" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="506.0,147.0 550.0,147.0" fill="none" stroke="#adb5bd" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="506.0,158.0 550.0,158.0" fill="none" stroke="#adb5bd" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="506.0,169.0 550.0,169.0" fill="none" stroke="#adb5bd" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="506.0,180.0 550.0,180.0" fill="none" stroke="#adb5bd" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="506.0,191.0 550.0,191.0" fill="none" stroke="#adb5bd" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="516,202 540,202 534,214 522,214" fill="#868e96"/>
+<polyline points="528.0,216.0 528.0,240.0" fill="none" stroke="#4dabf7" stroke-width="3" stroke-linejoin="round"/>
+<text x="438.0" y="232.0" font-size="9.5" fill="#5b6472" text-anchor="start">XH, von links:</text>
+<text x="438.0" y="244.5" font-size="9.5" fill="#5b6472" text-anchor="start">PWM · GND · +12 V</text>
+<polygon points="214.0,289.0 222.5,274.0 231.0,289.0" fill="#ffd43b" stroke="#b08900" stroke-width="1" stroke-linejoin="round"/>
+<text x="222.5" y="287.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">!</text>
+<text x="237.0" y="286.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Stecker erst bei Prüfung H aufstecken,</text>
+<text x="237.0" y="299.5" font-size="10.5" fill="#1c2733" text-anchor="start">vorher die Reihenfolge am Aufdruck der</text>
+<text x="237.0" y="313.0" font-size="10.5" fill="#1c2733" text-anchor="start">Laserbuchse prüfen: vertauscht bekäme</text>
+<text x="237.0" y="326.5" font-size="10.5" fill="#1c2733" text-anchor="start">der PWM-Eingang 12 V.</text>
+<text x="14.0" y="296.0" font-size="10" fill="#5b6472" text-anchor="start">W8 hält den Laser aus,</text>
+<text x="14.0" y="309.0" font-size="10" fill="#5b6472" text-anchor="start">solange der Uno startet</text>
+<text x="14.0" y="322.0" font-size="10" fill="#5b6472" text-anchor="start">oder ohne USB ist.</text></g>
+<g transform="translate(628.0,1326.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">6</text>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">Motoren</text>
+<rect x="556.0" y="17.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="565.0" y="28.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">F</text>
+<text x="550.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">dann</text>
+<rect x="453.8" y="17.0" width="66.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="486.8" y="28.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">Prüfung E</text>
+<text x="447.8" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W12–W15 · vorher</text>
+<rect x="14.0" y="46.0" width="172.0" height="238.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
+<text x="24.0" y="66.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">CNC Shield V3</text>
+<text x="26.0" y="108.0" font-size="17" fill="#2f5d92" text-anchor="start" font-weight="600">X</text>
+<text x="46.0" y="107.0" font-size="10.5" fill="#5b6472" text-anchor="start">Treiber X</text>
+<text x="178.0" y="89.5" font-size="9.5" fill="#5b6472" text-anchor="end">2B</text>
+<text x="178.0" y="100.5" font-size="9.5" fill="#5b6472" text-anchor="end">2A</text>
+<text x="178.0" y="111.5" font-size="9.5" fill="#5b6472" text-anchor="end">1A</text>
+<text x="178.0" y="122.5" font-size="9.5" fill="#5b6472" text-anchor="end">1B</text>
+<rect x="392.0" y="80.0" width="182.0" height="46.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<polyline points="186.0,86.0 392.0,86.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,97.0 392.0,97.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,108.0 392.0,108.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,119.0 392.0,119.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="398.0" y="89.5" font-size="9.5" fill="#5b6472" text-anchor="start">A+</text>
+<text x="398.0" y="100.5" font-size="9.5" fill="#5b6472" text-anchor="start">A−</text>
+<text x="398.0" y="111.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
+<text x="398.0" y="122.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="422.0" y="97.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">X-Motor</text>
+<text x="568.0" y="97.0" font-size="9.5" fill="#5b6472" text-anchor="end">Kette Y</text>
+<rect x="422.0" y="104.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="437.5" y="115.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W12</text>
+<text x="459.0" y="115.0" font-size="10" fill="#5b6472" text-anchor="start">0,81 m, mitgeliefert</text>
+<circle cx="186.0" cy="86.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="86.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="97.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="97.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="108.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="108.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="119.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="119.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<text x="26.0" y="160.0" font-size="17" fill="#2f5d92" text-anchor="start" font-weight="600">Y</text>
+<text x="46.0" y="159.0" font-size="10.5" fill="#5b6472" text-anchor="start">Treiber Y</text>
+<text x="178.0" y="141.5" font-size="9.5" fill="#5b6472" text-anchor="end">2B</text>
+<text x="178.0" y="152.5" font-size="9.5" fill="#5b6472" text-anchor="end">2A</text>
+<text x="178.0" y="163.5" font-size="9.5" fill="#5b6472" text-anchor="end">1A</text>
+<text x="178.0" y="174.5" font-size="9.5" fill="#5b6472" text-anchor="end">1B</text>
+<rect x="392.0" y="132.0" width="182.0" height="46.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<polyline points="186.0,138.0 392.0,138.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,149.0 392.0,149.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,160.0 392.0,160.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,171.0 392.0,171.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="398.0" y="141.5" font-size="9.5" fill="#5b6472" text-anchor="start">A+</text>
+<text x="398.0" y="152.5" font-size="9.5" fill="#5b6472" text-anchor="start">A−</text>
+<text x="398.0" y="163.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
+<text x="398.0" y="174.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="422.0" y="149.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Y-Motor links</text>
+<rect x="422.0" y="156.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="437.5" y="167.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W13</text>
+<text x="459.0" y="167.0" font-size="10" fill="#5b6472" text-anchor="start">0,71 m, mitgeliefert</text>
+<circle cx="186.0" cy="138.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="138.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="149.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="149.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="160.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="160.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="171.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="171.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<text x="26.0" y="212.0" font-size="17" fill="#2f5d92" text-anchor="start" font-weight="600">Z</text>
+<text x="46.0" y="211.0" font-size="10.5" fill="#5b6472" text-anchor="start">Treiber Z</text>
+<text x="178.0" y="193.5" font-size="9.5" fill="#5b6472" text-anchor="end">2B</text>
+<text x="178.0" y="204.5" font-size="9.5" fill="#5b6472" text-anchor="end">2A</text>
+<text x="178.0" y="215.5" font-size="9.5" fill="#5b6472" text-anchor="end">1A</text>
+<text x="178.0" y="226.5" font-size="9.5" fill="#5b6472" text-anchor="end">1B</text>
+<rect x="392.0" y="184.0" width="182.0" height="46.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<polyline points="186.0,190.0 392.0,190.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,201.0 392.0,201.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,212.0 392.0,212.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,223.0 392.0,223.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="398.0" y="193.5" font-size="9.5" fill="#5b6472" text-anchor="start">A+</text>
+<text x="398.0" y="204.5" font-size="9.5" fill="#5b6472" text-anchor="start">A−</text>
+<text x="398.0" y="215.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
+<text x="398.0" y="226.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="422.0" y="201.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Z-Motor</text>
+<text x="568.0" y="201.0" font-size="9.5" fill="#5b6472" text-anchor="end">Kette Y + X</text>
+<rect x="422.0" y="208.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="437.5" y="219.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W15</text>
+<text x="459.0" y="219.0" font-size="10" fill="#5b6472" text-anchor="start">1,54 → 2 m</text>
+<circle cx="186.0" cy="190.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="190.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="201.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="201.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="212.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="212.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="223.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="223.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<text x="26.0" y="264.0" font-size="17" fill="#2f5d92" text-anchor="start" font-weight="600">A</text>
+<text x="46.0" y="263.0" font-size="10.5" fill="#5b6472" text-anchor="start">Treiber A</text>
+<text x="46.0" y="276.0" font-size="10" fill="#5b6472" text-anchor="start">klont Y (Schritt 1)</text>
+<text x="178.0" y="245.5" font-size="9.5" fill="#5b6472" text-anchor="end">2B</text>
+<text x="178.0" y="256.5" font-size="9.5" fill="#5b6472" text-anchor="end">2A</text>
+<text x="178.0" y="267.5" font-size="9.5" fill="#5b6472" text-anchor="end">1A</text>
+<text x="178.0" y="278.5" font-size="9.5" fill="#5b6472" text-anchor="end">1B</text>
+<rect x="392.0" y="236.0" width="182.0" height="46.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<polyline points="186.0,242.0 262.0,242.0 292.0,253.0 392.0,253.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,253.0 262.0,253.0 292.0,242.0 392.0,242.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,264.0 392.0,264.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,275.0 392.0,275.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="398.0" y="245.5" font-size="9.5" fill="#5b6472" text-anchor="start">A+</text>
+<text x="398.0" y="256.5" font-size="9.5" fill="#5b6472" text-anchor="start">A−</text>
+<text x="398.0" y="267.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
+<text x="398.0" y="278.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="422.0" y="253.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Y-Motor rechts</text>
+<rect x="422.0" y="260.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="437.5" y="271.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W14</text>
+<text x="459.0" y="271.0" font-size="10" fill="#5b6472" text-anchor="start">0,98 → 1,5 m</text>
+<circle cx="186.0" cy="242.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="242.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="253.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="253.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="264.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="264.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="186.0" cy="275.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="275.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<polygon points="196.0,305.0 204.5,290.0 213.0,305.0" fill="#ffd43b" stroke="#b08900" stroke-width="1" stroke-linejoin="round"/>
+<text x="204.5" y="303.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">!</text>
+<text x="219.0" y="302.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Spule A getauscht: dreht gegen den linken</text>
+<text x="219.0" y="315.5" font-size="10.5" fill="#1c2733" text-anchor="start">(oder den Stecker um 180° drehen)</text>
+<text x="289.0" y="95.0" font-size="10" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Spule A</text>
+<text x="289.0" y="117.0" font-size="10" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Spule B</text>
+<text x="14.0" y="300.0" font-size="10" fill="#5b6472" text-anchor="start">Spule finden: 2–3 Ω zwischen</text>
+<text x="14.0" y="313.0" font-size="10" fill="#5b6472" text-anchor="start">ihren Adern. In den Ketten nur</text>
+<text x="14.0" y="326.0" font-size="10" fill="#5b6472" text-anchor="start">lose Adern (W12, W15).</text></g>
+<g transform="translate(24.0,1682.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">7</text>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">24-V-Wächter</text>
+<rect x="508.0" y="17.0" width="66.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="541.0" y="28.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">Prüfung I</text>
+<text x="502.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W16 · geprüft in</text>
+<rect x="49.0" y="50.0" width="110.0" height="34.0" rx="4" fill="#eef1f4" stroke="#c62828" stroke-width="1.6"/>
+<rect x="52.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="60.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<rect x="55.5" y="77.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="74.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="82.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="77.5" y="77.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="96.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="104.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<rect x="99.5" y="77.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="118.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="126.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<rect x="121.5" y="77.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="140.0" y="55.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="148.0" y="70.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<rect x="143.5" y="77.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="49.0" y="280.0" width="220.0" height="34.0" rx="4" fill="#eef1f4" stroke="#1f2328" stroke-width="1.6"/>
+<rect x="52.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="60.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<rect x="55.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="74.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="82.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<rect x="77.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="96.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="104.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">3</text>
+<rect x="99.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="118.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="126.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">4</text>
+<rect x="121.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="140.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="148.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">5</text>
+<rect x="143.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="162.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="170.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">6</text>
+<rect x="165.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="184.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="192.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">7</text>
+<rect x="187.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="206.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="214.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">8</text>
+<rect x="209.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="228.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="236.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">9</text>
+<rect x="231.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<rect x="250.0" y="287.0" width="16.0" height="22.0" rx="2" fill="#f08c00" stroke="#c46a00" stroke-width="0.8"/>
+<text x="258.0" y="302.5" font-size="8.5" fill="#ffffff" text-anchor="middle" font-weight="600">10</text>
+<rect x="253.5" y="281.0" width="9.0" height="6.0" rx="1.5" fill="#495057" stroke="#495057" stroke-width="0.5"/>
+<text x="170.0" y="70.0" font-size="11" fill="#c62828" text-anchor="start" font-weight="600">Wago +24 V</text>
+<text x="280.0" y="302.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="600">Wago GND</text>
+<polyline points="148.0,84.0 148.0,110.0" fill="none" stroke="#e03131" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="148.0,146.0 148.0,170.0 330.0,170.0" fill="none" stroke="#495057" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="143.0" y="112.0" width="10.0" height="32.0" rx="1.5" fill="#ffffff" stroke="#495057" stroke-width="1.4"/>
+<polyline points="148.0,170.0 148.0,190.0 184.0,190.0" fill="none" stroke="#495057" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="148.0,190.0 148.0,198.0" fill="none" stroke="#495057" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="143.0" y="198.0" width="10.0" height="32.0" rx="1.5" fill="#ffffff" stroke="#495057" stroke-width="1.4"/>
+<polyline points="184.0,190.0 184.0,211.0" fill="none" stroke="#495057" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="176.0,211.0 192.0,211.0" fill="none" stroke="#495057" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="176.0,217.0 192.0,217.0" fill="none" stroke="#495057" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="184.0,217.0 184.0,238.0" fill="none" stroke="#495057" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="148.0,230.0 148.0,238.0 214.0,238.0 214.0,280.0" fill="none" stroke="#212529" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="148.0" cy="170.0" r="3.2" fill="#495057" stroke="none" stroke-width="1.0"/>
+<circle cx="148.0" cy="190.0" r="3.2" fill="#495057" stroke="none" stroke-width="1.0"/>
+<circle cx="184.0" cy="238.0" r="3.2" fill="#495057" stroke="none" stroke-width="1.0"/>
+<text x="160.0" y="124.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">R1 22 kΩ</text>
+<text x="200.0" y="210.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">R2 4,7 kΩ</text>
+<text x="200.0" y="224.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">∥ 100 nF</text>
+<rect x="160.0" y="141.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="175.5" y="152.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W16</text>
+<rect x="330.0" y="140.0" width="244.0" height="60.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
+<text x="339.0" y="159.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">CNC Shield V3</text>
+<text x="339.0" y="174.0" font-size="11.0" fill="#5b6472" text-anchor="start">Abort (A0)</text>
+<circle cx="330.0" cy="170.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<text x="330.0" y="222.0" font-size="10.5" fill="#1c2733" text-anchor="start">Mit 24 V liegen an A0 4,1–4,5 V: HIGH.</text>
+<text x="330.0" y="236.0" font-size="10.5" fill="#1c2733" text-anchor="start">Ohne 24 V (Not-Aus, Schalter, Netzteil)</text>
+<text x="330.0" y="250.0" font-size="10.5" fill="#1c2733" text-anchor="start">unter 1 V: GRBL bricht ab, ALARM, Pn:R.</text>
+<polygon points="330.0,287.0 338.5,272.0 347.0,287.0" fill="#ffd43b" stroke="#b08900" stroke-width="1" stroke-linejoin="round"/>
+<text x="338.5" y="285.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">!</text>
+<text x="353.0" y="284.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Nie den NO-Kontakt des Not-Aus an</text>
+<text x="353.0" y="297.5" font-size="10.5" fill="#1c2733" text-anchor="start">A0: dort läge beim Drücken +24 V.</text>
+<text x="14.0" y="326.0" font-size="10" fill="#5b6472" text-anchor="start">Widerstände anlöten, Schrumpfschlauch, Dupont 1-polig auf Abort.</text></g>
+<g transform="translate(628.0,1682.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
+<circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">8</text>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">USB</text>
+<text x="574.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W17</text>
+<rect x="14.0" y="50.0" width="150.0" height="48.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
+<text x="23.0" y="69.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Uno</text>
+<text x="23.0" y="84.0" font-size="11.0" fill="#5b6472" text-anchor="start">USB-B</text>
+<rect x="300.0" y="50.0" width="110.0" height="48.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="309.0" y="69.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">PC</text>
+<text x="309.0" y="84.0" font-size="11.0" fill="#5b6472" text-anchor="start">LightBurn o. ä.</text>
+<polyline points="164.0,74.0 300.0,74.0" fill="none" stroke="#868e96" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="164.0" cy="74.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="300.0" cy="74.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="216.5" y="59.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="232.0" y="70.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
+<text x="14.0" y="118.0" font-size="10.5" fill="#5b6472" text-anchor="start">Versorgt den Uno und damit die 5 V der Lichtschranken.</text>
+<text x="14.0" y="146.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Einschalten</text>
+<circle cx="22.0" cy="166.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="170.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<text x="34.0" y="170.0" font-size="11" fill="#1c2733" text-anchor="start">USB</text>
+<circle cx="116.0" cy="166.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="116.0" y="170.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<text x="128.0" y="170.0" font-size="11" fill="#1c2733" text-anchor="start">Schalter EIN: 24 V</text>
+<polyline points="64.0,166.0 100.0,166.0" fill="none" stroke="#5b6472" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="100,166 94,163 94,169" fill="#5b6472"/>
+<text x="260.0" y="170.0" font-size="10.5" fill="#5b6472" text-anchor="start">ausschalten umgekehrt</text>
+<text x="14.0" y="204.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Inbetriebnahme, Prüfungen der Anleitung</text>
+<rect x="14.0" y="215.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="226.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">A</text>
+<text x="40.0" y="226.0" font-size="10.5" fill="#1c2733" text-anchor="start">Ohne Strom</text>
+<text x="288.0" y="226.0" font-size="10" fill="#5b6472" text-anchor="end">nach 2</text>
+<rect x="14.0" y="234.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="245.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">B</text>
+<text x="40.0" y="245.0" font-size="10.5" fill="#1c2733" text-anchor="start">24 V ohne Verbraucher</text>
+<text x="288.0" y="245.0" font-size="10" fill="#5b6472" text-anchor="end">nach 2</text>
+<rect x="14.0" y="253.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="264.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">C</text>
+<text x="40.0" y="264.0" font-size="10.5" fill="#1c2733" text-anchor="start">Wandler auf 12,0 V</text>
+<text x="288.0" y="264.0" font-size="10" fill="#5b6472" text-anchor="end">nach 3</text>
+<rect x="14.0" y="272.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="283.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">D</text>
+<text x="40.0" y="283.0" font-size="10.5" fill="#1c2733" text-anchor="start">Uno, GRBL und Lichtschranken</text>
+<text x="288.0" y="283.0" font-size="10" fill="#5b6472" text-anchor="end">nach 4</text>
+<rect x="14.0" y="291.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">E</text>
+<text x="40.0" y="302.0" font-size="10.5" fill="#1c2733" text-anchor="start">Treiber und Vref</text>
+<text x="288.0" y="302.0" font-size="10" fill="#5b6472" text-anchor="end">vor 6</text>
+<rect x="300.0" y="215.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="226.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">F</text>
+<text x="326.0" y="226.0" font-size="10.5" fill="#1c2733" text-anchor="start">Motoren und Drehrichtung</text>
+<text x="574.0" y="226.0" font-size="10" fill="#5b6472" text-anchor="end">nach 6</text>
+<rect x="300.0" y="234.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="245.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">G</text>
+<text x="326.0" y="245.0" font-size="10.5" fill="#1c2733" text-anchor="start">Referenzfahrt</text>
+<rect x="300.0" y="253.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="264.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">H</text>
+<text x="326.0" y="264.0" font-size="10.5" fill="#1c2733" text-anchor="start">Laser</text>
+<rect x="300.0" y="272.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="283.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">I</text>
+<text x="326.0" y="283.0" font-size="10.5" fill="#1c2733" text-anchor="start">Not-Aus</text></g></svg>

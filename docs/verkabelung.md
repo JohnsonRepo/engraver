@@ -7,8 +7,10 @@ Tabellen hier.
 
 Die Kabelliste steht einmal in `tools/verkabelung.py`. Daraus entstehen die
 Tabellen dieser Anleitung (`python3 tools/verkabelung.py`, schreibt nur
-zwischen den Markierungen) und der Anschlussplan
-(`python3 tools/anschluss_zeichnen.py`). `python3 tools/elektronik_check.py`
+zwischen den Markierungen), der Anschlussplan
+(`python3 tools/anschluss_zeichnen.py`) und das Bild zu
+[Schritt für Schritt](#schritt-für-schritt)
+(`python3 tools/verkabelung_zeichnen.py`). `python3 tools/elektronik_check.py`
 prüft in Abschnitt 15 die Netze (kein Kurzschluss, der Not-Aus trennt alle
 24 V), Signale und Pins, Kontakte, Klemmen und Längen und ob die Tabellen
 hier aktuell sind. Wo Gehäuse, Kabelwege und Ketten liegen, steht
@@ -207,6 +209,16 @@ Anschließen mit dem Ohmmeter prüfen
 
 Zuerst alles im Gehäuse, dann nach außen zur Maschine. Die Prüfungen der
 [Inbetriebnahme](#inbetriebnahme) gehören jeweils dazwischen.
+
+![Verkabelung Schritt für Schritt](elektronik-verkabelung.svg)
+
+Das Bild zeigt jeden der acht Schritte für sich: jede Ader von Klemme zu
+Klemme in ihrer Farbe aus der [Anschlussliste](#anschlussliste), die
+Wago-Plätze in der Reihenfolge der Tabelle
+[Klemmen](#klemmen-wago-und-shield), und welche Prüfung danach kommt. Oben
+die Leitungen, die das Gehäuse verlassen, mit ihren Wegen. Das Bild entsteht
+aus derselben Kabelliste und bricht ab, wenn eine Ader fehlt, doppelt oder
+im falschen Schritt gezeichnet ist.
 
 ### 1. Vorbereiten
 

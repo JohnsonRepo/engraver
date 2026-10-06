@@ -210,7 +210,7 @@ def kabelwege(w, L, TL, K):
         'X-Endschalter': (laenge(zur_kette) + ky + laenge(x_es), None),
         'Z-Motor': (laenge(zur_kette) + ky + laenge(zur_x) + kx
                     + laenge(z_motor), None),
-        'Laser (24 V + PWM)': (laenge(zur_kette) + ky + laenge(zur_x) + kx
+        'Laser (12 V + PWM)': (laenge(zur_kette) + ky + laenge(zur_x) + kx
                                + laenge(laser), None),
         'Z-Endschalter': (laenge(zur_kette) + ky + laenge(zur_x) + kx
                           + laenge(z_es), None),
@@ -221,6 +221,22 @@ def kabelwege(w, L, TL, K):
 def kauflaenge(mm):
     m = mm * (1.0 + RESERVE) / 1000.0
     return next((k for k in KAUFLAENGEN if k >= m - 1e-9), KAUFLAENGEN[-1])
+
+
+def module():
+    """ToolheadZ.py, Portal.py und Elektronik.py, mit gestubbtem adsk."""
+    return (bauraum.modul_laden(),
+            bauraum.modul_laden(bauraum.PORTAL, 'portal'),
+            bauraum.modul_laden(ELEKTRONIK, 'elektronik'))
+
+
+def kabel():
+    """{Name: (Weg mm, Kauflaenge m)} — fuer den Verkabelungsplan
+    (tools/verkabelung_zeichnen.py), damit beide Zeichnungen dieselben
+    Laengen zeigen."""
+    th, pm, em = module()
+    K = konzept(pm.w, pm.lage(), th.w, th.lage(), em.w, em.lage())
+    return {n: (mm, kauflaenge(mm)) for n, (mm, _) in K['kabel'].items()}
 
 
 def linienzug(f, punkte, farbe=KABEL, breite=1.6, strich='5 3'):
@@ -400,11 +416,9 @@ def seitenansicht(f, w, L, TL, K):
 
 
 def main():
-    th = bauraum.modul_laden()
+    th, pm, em = module()
     tw, TL = th.w, th.lage()
-    pm = bauraum.modul_laden(bauraum.PORTAL, 'portal')
     w, L = pm.w, pm.lage()
-    em = bauraum.modul_laden(ELEKTRONIK, 'elektronik')
     K = konzept(w, L, tw, TL, em.w, em.lage())
     K['strahl_y'] = TL['strahl_y']
     K['z_frei'] = -16.0 - w('luft_bau')         # unter dem X-Wagen
@@ -537,7 +551,7 @@ def main():
              de(K['kx_hub'], 0), de(K['kx_laenge'], 0), de(KETTE_R, 0))),
     ]
     for n in ('Y-Motor links', 'Y-Motor rechts', 'X-Motor', 'Z-Motor',
-              'Laser (24 V + PWM)', 'X-Endschalter', 'Y-Endschalter',
+              'Laser (12 V + PWM)', 'X-Endschalter', 'Y-Endschalter',
               'Z-Endschalter'):
         mm = kab[n][0]
         zeilen.append(('Kabel' if n == 'Y-Motor links' else '',

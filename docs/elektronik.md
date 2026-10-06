@@ -6,7 +6,9 @@ gerechnet: `python3 tools/portal_check.py`, Abschnitt 16. Das
 geprüft mit `python3 tools/elektronik_check.py`. Die Zeichnung erzeugt
 `python3 tools/elektronik_zeichnen.py`; sie gibt auch die Kabellängen aus;
 den [Anschlussplan](#anschlussplan) erzeugt
-`python3 tools/anschluss_zeichnen.py`. **Stand:** Gehäuse gezeichnet
+`python3 tools/anschluss_zeichnen.py`, den
+[Verkabelungsplan](#verkabelungsplan) — jede Ader, Schritt für Schritt —
+`python3 tools/verkabelung_zeichnen.py`. **Stand:** Gehäuse gezeichnet
 (Elektronik.py Rev. 1); die Halter für Endschalter und Ketten folgen
 ([offen](#was-noch-fehlt)). Pinbelegung, Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
@@ -275,6 +277,60 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
   [hardware-notizen.md](hardware-notizen.md#pins-grbl-11-gegen-den-aufdruck).
   Nichts unter Spannung an- oder abstecken, vor allem keine Motoren.
 
+## Verkabelungsplan
+
+![Verkabelungsplan](elektronik-verkabelung.svg)
+
+Derselbe Inhalt wie der Anschlussplan, aber zum Nachbauen: oben die Kabel
+K1–K11 und ihre Wege durch Kanal und Ketten, darunter sechs Schritte in der
+Reihenfolge, in der verdrahtet wird. Jeder Schritt zeigt jede Ader von
+Klemme zu Klemme und ist kreuzungsfrei gezeichnet — die einzige Kreuzung ist
+die getauschte Spule am Y-Motor rechts, und die ist Absicht. Die
+Linienfarbe zeigt die Funktion, nicht die Aderfarbe. Die Kabellängen kommen
+aus `tools/elektronik_zeichnen.py`, so stehen in beiden Zeichnungen
+dieselben Zahlen.
+
+**Wago-Plätze:** In jeder Klemme kommt die Einspeisung auf Platz 5, die
+Verbraucher auf 1–3, Platz 4 bleibt Reserve. Die Klemmen selbst sind nicht
+nummeriert — von einem Ende abzählen und dabei bleiben.
+
+| Platz | Wago +24 V | Wago GND | Wago +5 V |
+|---|---|---|---|
+| 1 | Shield-Klemme + | Shield-Klemme − | VCC X-Endschalter |
+| 2 | Wandler IN+ | Wandler IN− | VCC Y-Endschalter |
+| 3 | Lüfter + | Lüfter − | VCC Z-Endschalter |
+| 4 | frei | frei — bei getrennten Massen des Wandlers OUT− | frei |
+| 5 | vom Not-Aus | von der Buchse − | vom 5-V-Stift des Shields |
+
+**Reihenfolge:**
+
+1. **Shield vorbereiten**, stromlos: unter jedem Treiber MS1 und MS2
+   stecken, MS3 frei; zwei Jumper A.STEP–Y.STEP und A.DIR–Y.DIR, **nie
+   D12/D13** — D12 ist bei GRBL 1.1 der Z-Endschalter. Treiber mit dem
+   EN-Pin zum EN-Aufdruck.
+2. **Strom-Eingang:** Buchse + → Schalter → Not-Aus (K2, vorn) → Wago +24 V;
+   Buchse − → Wago GND. Polung am Netzteil-Symbol prüfen.
+3. **24 V verteilen:** Shield-Klemme, Wandler-Eingang, Lüfter. Polung an der
+   Shield-Klemme prüfen.
+4. **Motoren** (K3–K6): Spulenpaare mit dem Multimeter suchen (wenige Ω),
+   jedes Paar nebeneinander; am Y-Motor rechts 1A und 1B tauschen.
+5. **Endschalter** (K7–K9): D0 an X+ (D9), Y+ (D10) und SpnEn (D12), GND
+   an den Stift daneben, VCC an die Wago +5 V. Z+/Z− (D11) bleibt für den
+   Laser.
+6. **Laser zuletzt** (K10): den Wandler ohne Laser auf 12,0 V stellen,
+   ausschalten, dann anstecken.
+
+**Vor dem ersten Einschalten:** Sichtprüfung (rot an +, keine abstehenden
+Litzen, Wago-Hebel zu); nur mit dem Netzteil an der Shield-Klemme 24 V
+messen, + an +; dann USB, mit `?` die Lichtschranken prüfen (`Pn:` nur bei
+unterbrochener Gabel, sonst `$5`); die Y-Motoren testen, bevor das Portal an
+beiden Riemen hängt; Not-Aus drücken — die Motoren lassen sich dann von Hand
+drehen.
+
+In die Wago 221 passen feindrähtige Adern ab 0,14 mm² `[w]`; Abisolierlänge
+11 mm. Dünnere Litzen (manche Lüfter- und Dupont-Kabel) an ein Stück
+0,5-mm²-Litze anlöten.
+
 ## Einkaufsliste (Vorschlag)
 
 | Menge | Teil | wofür |
@@ -288,6 +344,9 @@ nichts geerdet und keine Netzklemme abgedeckt werden.
 | 2 | Energiekette 10 × 15 mm innen, R18, 1 m | Y und X |
 | 1 + 1 | Motorkabel 1,5 m und 2 m, Stecker passend zum Motor (meist JST-PH 6-polig) auf Dupont 4-polig | Y-Motor rechts, Z-Motor |
 | 2 m + 1 | 3-adrige Schleppkettenlitze + XH2.54-Stecker 3-polig mit Crimpkontakten | Laser |
+| 1 + 1 + 1,5 m | 3-adrige Schleppkettenlitze | Endschalter X, Y, Z (K7–K9) |
+| 1,5 m | 2-adrige Leitung, je ≥ 0,5 mm² | Not-Aus (K2) |
+| je 1 m | Litze 0,5 mm², rot und schwarz | Adern im Gehäuse |
 | 3 | Wago 221-415 | vorhanden |
 | 4 + 4 | M5×12 + Hammermutter M5 (Nut 6) | Gehäuse → Rückseite des 2060 |
 | 4 + 4 | M3×8 + Messing-Einsatz M3 Ø5 | Deckel |

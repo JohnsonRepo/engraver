@@ -281,7 +281,7 @@
 <text x="24.0" y="1287.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1287.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Motor: Weg ≈ 1,38 m → 2 m kaufen</text>
 <text x="24.0" y="1302.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (24 V + PWM): Weg ≈ 1,38 m → 2 m kaufen</text>
+<text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (12 V + PWM): Weg ≈ 1,38 m → 2 m kaufen</text>
 <text x="24.0" y="1317.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,68 m → 1 m kaufen</text>
 <text x="24.0" y="1332.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>

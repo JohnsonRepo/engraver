@@ -393,9 +393,10 @@ def schnitt_turm_quer(f, w, L):
     Schiene, Platte, Turm mit Absatz und Fase, das Riemenende im Schlitz,
     der Stift im Sackloch und der Ruecklauf in der aeusseren Nut.
     Dahinter: Y-Wagen, Rippen und die Winkel am vorderen 2060, ueber die
-    der Turm faehrt. Seit Rev. 26 steht der Rahmen so, wie er am Aufbau
-    zum Turm steht: kt_luft_mehr weiter aussen als im Modell, das die
-    Schiene mittig rechnet. Mit ihm ruecken Winkel und Ruecklauf."""
+    der Turm faehrt. Der Rahmen steht so, wie er an der engsten Stelle am
+    Aufbau zum Turm steht: kt_luft_mehr weiter aussen als im Modell, das
+    die Schiene mittig rechnet (seit Rev. 28: 0). Mit ihm ruecken Winkel
+    und Ruecklauf."""
     R = L['R']
     X = lambda u: R - u
     t = []
@@ -820,16 +821,20 @@ def main():
             de(L['profil_y0'] + w('profil_b') / 2 - w('wagen_y'), 0))),
         ('', 'alle 4 Wagenschrauben bleiben von oben frei'),
         ('Rohr', 'liegt auf der 6-mm-Platte, Höhe wie bisher'),
-        ('Y-Riemen', 'Mitte {} mm innen, am Aufbau {} mm vor der 2040,'
+        ('Y-Riemen', 'Mitte {} mm innen, am Aufbau {} bis {} mm vor der 2040,'
          .format(de(L['y_riemen_linie'], 2),
-                 de(L['y_riemen_linie'] - L['profil_aufbau_u'], 1))),
+                 de(L['y_riemen_linie'] - L['profil_aufbau_u'], 1),
+                 de(L['y_riemen_linie'] - L['profil_aufbau_u']
+                    + w('kt_luft_streuung'), 1))),
         ('', 'Unterkante {} mm; {} mm neben dem Toolhead'.format(
             de(L['yr_z0'], 1), de(luft_yr, 1))),
         ('', 'Rücklauf in der äußeren oberen Nut, Zähne zur Schiene'),
         ('Y-Klemmen', 'zwei Türme wie v8, je {} mm vor und hinter'.format(
             de(w('turm_abstand'), 1))),
-        ('', 'der Wagenmitte, am Aufbau {} mm neben der 2040 (Rev. 26)'
-         .format(de(L['kt_u'][0] - L['profil_aufbau_u'], 1))),
+        ('', 'der Wagenmitte, {} bis {} mm neben der 2040 (Rev. 28)'
+         .format(de(L['kt_u'][0] - L['profil_aufbau_u'], 1),
+                 de(L['kt_u'][0] - L['profil_aufbau_u']
+                    + w('kt_luft_streuung'), 1))),
         ('X-Riemen', 'Unterkante {} mm, Schleife ≈ {} mm'.format(
             de(L['xr_z0'], 2), de(riemen_x, 0))),
         ('X-Spanner', 'Lagerschlitten ±{} mm, M3×{} von außen'.format(
@@ -850,20 +855,21 @@ def main():
         t.append(text(tx, ty + 10 + i * 15, k, 8.5, GRAU))
         t.append(text(tx + 86, ty + 10 + i * 15, v, 8.5, TEXT))
 
-    # ---- Reihe 4: Schnitt D-D (Klemmturm quer, seit Rev. 25, Rev. 26) -----
+    # ---- Reihe 4: Schnitt D-D (Klemmturm quer, seit Rev. 25) --------------
     y4 = max(fe.oy + fe.hoehe + 40, ty + 10 + len(zeilen) * 15) + 70
     s5 = 6.0
     fg = Feld(250, y4, (R - 38.0, R + 16.0), (-75.0, -6.0), s5, a_rueck=True)
     t += fg.ausschnitt('schnitt_kq', schnitt_turm_quer(fg, w, L))
-    t += fg.rahmen('Schnitt D–D: Klemmturm quer (Rev. 27), am Aufbau '
-                   '{} mm neben der 2040'.format(
+    t += fg.rahmen('Schnitt D–D: Klemmturm quer (Rev. 28), an der engsten '
+                   'Stelle {} mm neben der 2040'.format(
                        de(L['kt_u'][0] - L['profil_aufbau_u'], 0)))
     t.append(text(fg.ox, fg.oy + fg.hoehe + 14, 'rechte Seite, durch den '
                   'Stift des hinteren Turms, Blick nach vorn; die 2040 so, '
-                  'wie sie am Aufbau zum Turm steht', 8.0, GRAU))
-    t.append(text(fg.ox, fg.oy + fg.hoehe + 25, 'mit Rev. 25 gemessen 3,0 '
-                  'statt der gerechneten 2,0 mm; im Modell (Schiene mittig) '
-                  'liegt der Turm an der 2040 an', 8.0, GRAU))
+                  'wie sie an der engsten Stelle zum Turm steht', 8.0, GRAU))
+    t.append(text(fg.ox, fg.oy + fg.hoehe + 25, 'an der weitesten Stelle '
+                  '{} mm mehr (Rev. 25: 3,0 statt 2,0 gemessen); Rev. 26/27 '
+                  'streiften an der engsten'.format(
+                      de(w('kt_luft_streuung'), 0)), 8.0, GRAU))
     X = lambda u: R - u
     hb = w('rahmen_b') / 2.0
     fl = L['profil_aufbau_u']               # Seitenflaeche am Aufbau

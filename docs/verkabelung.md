@@ -297,6 +297,12 @@ Dann [Prüfung D](#d-uno-grbl-und-lichtschranken).
 
 ### 6. Motoren (W12–W15)
 
+![Motoren anschließen](motoren-anschluss.svg)
+
+Der Motorstecker sitzt rechts neben jedem Treiber, die Stifte von oben
+2B · 2A · 1A · 1B. Den Achsbuchstaben zeigt das Kästchen darunter
+(`python3 tools/motoren_zeichnen.py`).
+
 1. **Spulen finden:** Zwischen den zwei Adern einer Spule zeigt das
    Ohmmeter wenige Ohm (etwa 2–3 Ω), zwischen Adern verschiedener Spulen
    nichts.

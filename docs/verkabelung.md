@@ -78,8 +78,9 @@ begrenzt den Strom selbst.
 „Länge“ ist der Weg wie in [elektronik-platz.svg](elektronik-platz.svg)
 gezeichnet, „kaufen“ dieser Weg plus 15 % und aufgerundet. Was übrig ist,
 bleibt als Schlaufe beim Gehäuse. Die Motorfarben sind die übliche Belegung
-von Stepperonline `[w]`: A+ schwarz, A− grün, B+ rot, B− blau. Vor dem
-Anschließen mit dem Ohmmeter prüfen
+von Stepperonline `[w]`: A+ schwarz, A− grün, B+ rot, B− blau. Am Stecker ab
+Werk liegen sie schwarz · grün · blau · rot `[v]` (außen schwarz und rot),
+also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 ([Motoren](#6-motoren-w12w15)).
 
 ## Anschlussliste
@@ -112,13 +113,13 @@ Anschließen mit dem Ohmmeter prüfen
 |  | GND | schwarz | Wago GND | Lichtschranke Z, GND |
 |  | Signal | gelb | Shield SpnEn (D12) | Lichtschranke Z, D0 |
 | W12 | Spule A | schwarz · grün | Shield Motor X, 2B · 2A | X-Motor, Spule A: A+ · A− |
-|  | Spule B | rot · blau | Shield Motor X, 1A · 1B | X-Motor, Spule B: B+ · B− |
+|  | Spule B | blau · rot | Shield Motor X, 1A · 1B | X-Motor, Spule B: B− · B+ |
 | W13 | Spule A | schwarz · grün | Shield Motor Y, 2B · 2A | Y-Motor links, Spule A: A+ · A− |
-|  | Spule B | rot · blau | Shield Motor Y, 1A · 1B | Y-Motor links, Spule B: B+ · B− |
+|  | Spule B | blau · rot | Shield Motor Y, 1A · 1B | Y-Motor links, Spule B: B− · B+ |
 | W14 | Spule A, getauscht | grün · schwarz | Shield Motor A, 2B · 2A | Y-Motor rechts, Spule A: A− · A+ |
-|  | Spule B | rot · blau | Shield Motor A, 1A · 1B | Y-Motor rechts, Spule B: B+ · B− |
+|  | Spule B | blau · rot | Shield Motor A, 1A · 1B | Y-Motor rechts, Spule B: B− · B+ |
 | W15 | Spule A | schwarz · grün | Shield Motor Z, 2B · 2A | Z-Motor, Spule A: A+ · A− |
-|  | Spule B | rot · blau | Shield Motor Z, 1A · 1B | Z-Motor, Spule B: B+ · B− |
+|  | Spule B | blau · rot | Shield Motor Z, 1A · 1B | Z-Motor, Spule B: B− · B+ |
 | W16 | R1 22 kΩ | — | Wago +24 V | Shield Abort (A0) |
 |  | R2 4,7 kΩ ∥ 100 nF | — | Shield Abort (A0) | Wago GND |
 | W17 | USB | — | Uno, USB-B | PC |
@@ -311,6 +312,8 @@ Reset-Taster oben links). Das Bild erzeugt
 2. **Am Shield** gehört jede Spule auf ein Stiftpaar: **2B · 2A** und
    **1A · 1B**, wie neben jedem Treiber aufgedruckt. Welche Spule auf
    welchem Paar liegt und wie herum, bestimmt nur die Drehrichtung.
+   Der Stecker ab Werk (schwarz · grün · blau · rot) passt so, wie er ist:
+   **Schwarz oben an 2B**, dann grün an 2A, blau an 1A, rot an 1B.
 3. X-Motor → **X**, Y-Motor links → **Y**, Z-Motor → **Z**, Y-Motor rechts →
    **A**.
 4. **Y-Motor rechts mit getauschter Spule:** Beide Y-Motoren bekommen
@@ -558,8 +561,9 @@ Standardwert von GRBL.
 
 ## Noch offen
 
-1. **Motorfarben** `[w]`: die übliche Belegung von Stepperonline. Beim
-   Anschließen mit dem Ohmmeter prüfen.
+1. **Motorfarben** `[w]`: die übliche Belegung von Stepperonline. Die
+   Reihenfolge am Stecker ist abgelesen `[v]`, welche Farbe zu welcher
+   Spule gehört, zeigt das Ohmmeter beim Anschließen.
 2. **Lichtschranken** `[w]`: Reihenfolge der Stifte am Modul und ob D0 beim
    Unterbrechen HIGH wird. Das zeigt Prüfung D. Bei HIGH darf an D10 kein
    zweites Modul dazu ([endschalter.md](endschalter.md#softlimits-statt-zweitem-y-schalter)).

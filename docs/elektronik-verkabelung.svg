@@ -746,12 +746,12 @@
 <rect x="392.0" y="80.0" width="182.0" height="46.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
 <polyline points="186.0,86.0 392.0,86.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="186.0,97.0 392.0,97.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="186.0,108.0 392.0,108.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="186.0,119.0 392.0,119.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,108.0 392.0,108.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,119.0 392.0,119.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="398.0" y="89.5" font-size="9.5" fill="#5b6472" text-anchor="start">A+</text>
 <text x="398.0" y="100.5" font-size="9.5" fill="#5b6472" text-anchor="start">A−</text>
-<text x="398.0" y="111.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
-<text x="398.0" y="122.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="398.0" y="111.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="398.0" y="122.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
 <text x="422.0" y="97.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">X-Motor</text>
 <text x="568.0" y="97.0" font-size="9.5" fill="#5b6472" text-anchor="end">Kette Y</text>
 <rect x="422.0" y="104.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
@@ -774,12 +774,12 @@
 <rect x="392.0" y="132.0" width="182.0" height="46.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
 <polyline points="186.0,138.0 392.0,138.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="186.0,149.0 392.0,149.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="186.0,160.0 392.0,160.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="186.0,171.0 392.0,171.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,160.0 392.0,160.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,171.0 392.0,171.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="398.0" y="141.5" font-size="9.5" fill="#5b6472" text-anchor="start">A+</text>
 <text x="398.0" y="152.5" font-size="9.5" fill="#5b6472" text-anchor="start">A−</text>
-<text x="398.0" y="163.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
-<text x="398.0" y="174.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="398.0" y="163.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="398.0" y="174.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
 <text x="422.0" y="149.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Y-Motor links</text>
 <rect x="422.0" y="156.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="437.5" y="167.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W13</text>
@@ -801,12 +801,12 @@
 <rect x="392.0" y="184.0" width="182.0" height="46.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
 <polyline points="186.0,190.0 392.0,190.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="186.0,201.0 392.0,201.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="186.0,212.0 392.0,212.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="186.0,223.0 392.0,223.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,212.0 392.0,212.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,223.0 392.0,223.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="398.0" y="193.5" font-size="9.5" fill="#5b6472" text-anchor="start">A+</text>
 <text x="398.0" y="204.5" font-size="9.5" fill="#5b6472" text-anchor="start">A−</text>
-<text x="398.0" y="215.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
-<text x="398.0" y="226.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="398.0" y="215.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="398.0" y="226.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
 <text x="422.0" y="201.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Z-Motor</text>
 <text x="568.0" y="201.0" font-size="9.5" fill="#5b6472" text-anchor="end">Kette Y + X</text>
 <rect x="422.0" y="208.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
@@ -830,12 +830,12 @@
 <rect x="392.0" y="236.0" width="182.0" height="46.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
 <polyline points="186.0,242.0 262.0,242.0 292.0,253.0 392.0,253.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="186.0,253.0 262.0,253.0 292.0,242.0 392.0,242.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="186.0,264.0 392.0,264.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="186.0,275.0 392.0,275.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,264.0 392.0,264.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="186.0,275.0 392.0,275.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="398.0" y="245.5" font-size="9.5" fill="#5b6472" text-anchor="start">A+</text>
 <text x="398.0" y="256.5" font-size="9.5" fill="#5b6472" text-anchor="start">A−</text>
-<text x="398.0" y="267.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
-<text x="398.0" y="278.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="398.0" y="267.5" font-size="9.5" fill="#5b6472" text-anchor="start">B−</text>
+<text x="398.0" y="278.5" font-size="9.5" fill="#5b6472" text-anchor="start">B+</text>
 <text x="422.0" y="253.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Y-Motor rechts</text>
 <rect x="422.0" y="260.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="437.5" y="271.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W14</text>

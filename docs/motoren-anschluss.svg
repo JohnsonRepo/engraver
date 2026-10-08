@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="732" viewBox="0 0 1000 732" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1000" height="732" fill="#ffffff"/><text x="24.0" y="36.0" font-size="19" fill="#1c2733" text-anchor="start" font-weight="600">Motoren anschließen — CNC Shield V3, StepperOnline NEMA 17</text>
 <text x="24.0" y="58.0" font-size="11.5" fill="#5b6472" text-anchor="start">Shield von oben wie im Gehäuse. Farben der Motorkabel wie in der Anschlussliste (verkabelung.md, W12–W15).</text>
-<text x="24.0" y="76.0" font-size="11.5" fill="#5b6472" text-anchor="start">Nur stromlos stecken. Vorher mit dem Ohmmeter: schwarz–grün und rot–blau je 2–3 Ω, zwischen den Paaren offen.</text>
-<text x="24.0" y="94.0" font-size="11.5" fill="#5b6472" text-anchor="start">Wichtig ist das Paar am Stift: Innerhalb eines Paars bestimmt die Reihenfolge nur die Drehrichtung (Prüfung F, $3).</text>
+<text x="24.0" y="76.0" font-size="11.5" fill="#5b6472" text-anchor="start">Der Stecker ab Werk (schwarz · grün · blau · rot) passt, wie er ist: Schwarz oben an 2B. Nur an A Schwarz und Grün tauschen.</text>
+<text x="24.0" y="94.0" font-size="11.5" fill="#5b6472" text-anchor="start">Nur stromlos stecken. Vorher mit dem Ohmmeter: schwarz–grün und blau–rot je 2–3 Ω, zwischen den Paaren offen.</text>
 <g transform="translate(24.0,112.0)"><rect x="0.0" y="0.0" width="470.0" height="600.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
 <circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
 <text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
@@ -60,8 +60,8 @@
 <rect x="241.5" y="116.0" width="10.0" height="75.0" rx="1.5" fill="#212529" stroke="#000000" stroke-width="0.8"/>
 <circle cx="246.5" cy="125.4" r="3.0" fill="#212529" stroke="#ffffff" stroke-width="1.0"/>
 <circle cx="246.5" cy="144.1" r="3.0" fill="#2f9e44" stroke="#ffffff" stroke-width="1.0"/>
-<circle cx="246.5" cy="162.9" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
-<circle cx="246.5" cy="181.6" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="162.9" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="181.6" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
 <rect x="239.5" y="196.0" width="14.0" height="14.0" rx="1" fill="#ffffff" stroke="#c92a2a" stroke-width="1.0"/>
 <text x="246.5" y="207.0" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="600">X</text>
 <text x="255.5" y="128.4" font-size="7.5" fill="#1c2733" text-anchor="start" font-weight="600">2B</text>
@@ -90,8 +90,8 @@
 <rect x="384.0" y="116.0" width="10.0" height="75.0" rx="1.5" fill="#212529" stroke="#000000" stroke-width="0.8"/>
 <circle cx="389.0" cy="125.4" r="3.0" fill="#212529" stroke="#ffffff" stroke-width="1.0"/>
 <circle cx="389.0" cy="144.1" r="3.0" fill="#2f9e44" stroke="#ffffff" stroke-width="1.0"/>
-<circle cx="389.0" cy="162.9" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
-<circle cx="389.0" cy="181.6" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="162.9" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="181.6" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
 <rect x="382.0" y="196.0" width="14.0" height="14.0" rx="1" fill="#ffffff" stroke="#c92a2a" stroke-width="1.0"/>
 <text x="389.0" y="207.0" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="600">Y</text>
 <rect x="125.0" y="253.5" width="112.5" height="145.0" rx="2" fill="#2b2f36" stroke="#000000" stroke-width="0.8"/>
@@ -116,8 +116,8 @@
 <rect x="241.5" y="289.8" width="10.0" height="72.5" rx="1.5" fill="#212529" stroke="#000000" stroke-width="0.8"/>
 <circle cx="246.5" cy="298.8" r="3.0" fill="#212529" stroke="#ffffff" stroke-width="1.0"/>
 <circle cx="246.5" cy="316.9" r="3.0" fill="#2f9e44" stroke="#ffffff" stroke-width="1.0"/>
-<circle cx="246.5" cy="335.1" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
-<circle cx="246.5" cy="353.2" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="335.1" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="353.2" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
 <rect x="239.5" y="367.2" width="14.0" height="14.0" rx="1" fill="#ffffff" stroke="#c92a2a" stroke-width="1.0"/>
 <text x="246.5" y="378.2" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="600">Z</text>
 <rect x="277.5" y="253.5" width="102.5" height="145.0" rx="2" fill="#2b2f36" stroke="#000000" stroke-width="0.8"/>
@@ -142,8 +142,8 @@
 <rect x="384.0" y="289.8" width="10.0" height="72.5" rx="1.5" fill="#212529" stroke="#000000" stroke-width="0.8"/>
 <circle cx="389.0" cy="298.8" r="3.0" fill="#2f9e44" stroke="#ffffff" stroke-width="1.0"/>
 <circle cx="389.0" cy="316.9" r="3.0" fill="#212529" stroke="#ffffff" stroke-width="1.0"/>
-<circle cx="389.0" cy="335.1" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
-<circle cx="389.0" cy="353.2" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="335.1" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="353.2" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
 <rect x="382.0" y="367.2" width="14.0" height="14.0" rx="1" fill="#ffffff" stroke="#c92a2a" stroke-width="1.0"/>
 <text x="389.0" y="378.2" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="600">A</text>
 <text x="20.0" y="443.5" font-size="10.5" fill="#1c2733" text-anchor="start">Motorstecker: rechts neben jedem Treiber, die vier Stifte von</text>
@@ -169,8 +169,8 @@
 <text x="85.0" y="131.5" font-size="10" fill="#1c2733" text-anchor="end" font-weight="600">1B</text>
 <polyline points="126.0,74.0 270.0,74.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="126.0,92.0 270.0,92.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="126.0,110.0 270.0,110.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="126.0,128.0 270.0,128.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="126.0,110.0 270.0,110.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="126.0,128.0 270.0,128.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="96.0" cy="74.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
 <circle cx="96.0" cy="92.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
 <circle cx="96.0" cy="110.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
@@ -200,8 +200,8 @@
 <text x="85.0" y="265.5" font-size="10" fill="#1c2733" text-anchor="end" font-weight="600">1B</text>
 <polyline points="126.0,208.0 270.0,208.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="126.0,226.0 270.0,226.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="126.0,244.0 270.0,244.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="126.0,262.0 270.0,262.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="126.0,244.0 270.0,244.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="126.0,262.0 270.0,262.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="96.0" cy="208.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
 <circle cx="96.0" cy="226.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
 <circle cx="96.0" cy="244.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
@@ -229,8 +229,8 @@
 <text x="85.0" y="399.5" font-size="10" fill="#1c2733" text-anchor="end" font-weight="600">1B</text>
 <polyline points="126.0,342.0 270.0,342.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="126.0,360.0 270.0,360.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="126.0,378.0 270.0,378.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="126.0,396.0 270.0,396.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="126.0,378.0 270.0,378.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="126.0,396.0 270.0,396.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="96.0" cy="342.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
 <circle cx="96.0" cy="360.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
 <circle cx="96.0" cy="378.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
@@ -260,8 +260,8 @@
 <text x="85.0" y="533.5" font-size="10" fill="#1c2733" text-anchor="end" font-weight="600">1B</text>
 <polyline points="126.0,476.0 150.0,476.0 176.0,494.0 270.0,494.0" fill="none" stroke="#2f9e44" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="126.0,494.0 150.0,494.0 176.0,476.0 270.0,476.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="126.0,512.0 270.0,512.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="126.0,530.0 270.0,530.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="126.0,512.0 270.0,512.0" fill="none" stroke="#1c7ed6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="126.0,530.0 270.0,530.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="96.0" cy="476.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
 <circle cx="96.0" cy="494.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>
 <circle cx="96.0" cy="512.0" r="2.4" fill="#fcc419" stroke="none" stroke-width="1.0"/>

@@ -93,10 +93,13 @@ for _s in ('X', 'Y', 'Z', 'A'):
         'Shield Motor {}, 2B · 2A'.format(_s), 'Dupont')
     ANSCHLUSS['Shield {} 1A·1B'.format(_s)] = (
         'Shield Motor {}, 1A · 1B'.format(_s), 'Dupont')
+# Stecker ab Werk [v]: außen schwarz und rot, innen grün und blau, also
+# A+ · A− · B− · B+. Mit Schwarz an 2B passt er ohne Umstecken.
+MOTOR_STECKER = ('A+', 'A−', 'B−', 'B+')
 for _m in ('X-Motor', 'Y-Motor links', 'Y-Motor rechts', 'Z-Motor'):
     ANSCHLUSS[_m + ' A'] = (_m + ', Spule A: A+ · A−', 'PH')
     ANSCHLUSS[_m + ' A getauscht'] = (_m + ', Spule A: A− · A+', 'PH')
-    ANSCHLUSS[_m + ' B'] = (_m + ', Spule B: B+ · B−', 'PH')
+    ANSCHLUSS[_m + ' B'] = (_m + ', Spule B: B− · B+', 'PH')
 
 # Klemmleisten im Verteiler (Bestand [v], Plaetze nach Datenblatt [w])
 WAGO = (('Wago +24 V', '221-415', 5), ('Wago GND', '221-420', 10),
@@ -207,7 +210,7 @@ def leitungen():
                  'hinter dem Motorhalter hoch zum Motor',
              adern=[('Spule A', 'schwarz · grün', 'Shield X 2B·2A',
                      'X-Motor A'),
-                    ('Spule B', 'rot · blau', 'Shield X 1A·1B',
+                    ('Spule B', 'blau · rot', 'Shield X 1A·1B',
                      'X-Motor B')]),
         dict(nr='W13', name='Y-Motor links', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor links', strom=ez.MOTOR_I,
@@ -217,7 +220,7 @@ def leitungen():
                  'Wand durch',
              adern=[('Spule A', 'schwarz · grün', 'Shield Y 2B·2A',
                      'Y-Motor links A'),
-                    ('Spule B', 'rot · blau', 'Shield Y 1A·1B',
+                    ('Spule B', 'blau · rot', 'Shield Y 1A·1B',
                      'Y-Motor links B')]),
         dict(nr='W14', name='Y-Motor rechts', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor rechts', strom=ez.MOTOR_I,
@@ -227,7 +230,7 @@ def leitungen():
              hinweis='Spule A getauscht: dreht gegen den linken',
              adern=[('Spule A, getauscht', 'grün · schwarz',
                      'Shield A 2B·2A', 'Y-Motor rechts A getauscht'),
-                    ('Spule B', 'rot · blau', 'Shield A 1A·1B',
+                    ('Spule B', 'blau · rot', 'Shield A 1A·1B',
                      'Y-Motor rechts B')]),
         dict(nr='W15', name='Z-Motor', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Z-Motor', strom=ez.MOTOR_I,
@@ -236,7 +239,7 @@ def leitungen():
              weg='wie W7 bis zur Trägerplatte, dann zum Motor oben',
              adern=[('Spule A', 'schwarz · grün', 'Shield Z 2B·2A',
                      'Z-Motor A'),
-                    ('Spule B', 'rot · blau', 'Shield Z 1A·1B',
+                    ('Spule B', 'blau · rot', 'Shield Z 1A·1B',
                      'Z-Motor B')]),
         dict(nr='W16', name='24-V-Wächter an Abort', art='Widerstand',
              mm2=None, weg='im Kasten',

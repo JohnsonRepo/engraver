@@ -159,10 +159,12 @@ def achsen(Q):
         t.append(text(xs + 18, g + 75, 'Dupont', 8.5, GRAU, 'middle'))
         for p, s in zip(pins, STIFTE):
             t.append(text(xs - 11, p + 3.5, s, 10, TEXT, 'end', fett=True))
-        # Adern: Spule A auf 2B · 2A, Spule B auf 1A · 1B
-        enden_a = re.search(r': (.+)$', vk.ANSCHLUSS[aa][0]).group(1)
-        enden = [e.strip() for e in enden_a.split('·')] + ['B+', 'B−']
-        ordnung = ['A+', 'A−', 'B+', 'B−']
+        # Adern: Spule A auf 2B · 2A, Spule B auf 1A · 1B; am Motor die
+        # Stifte in der Reihenfolge des Steckers ab Werk
+        enden = [e.strip() for a in (aa, ab)
+                 for e in re.search(r': (.+)$', vk.ANSCHLUSS[a][0])
+                 .group(1).split('·')]
+        ordnung = list(vk.MOTOR_STECKER)
         for k, (p, f) in enumerate(zip(pins, vz.farben(ca) + vz.farben(cb))):
             ziel = pins[ordnung.index(enden[k])]
             if ziel == p:
@@ -207,12 +209,12 @@ def main():
          text(24, 58, 'Shield von oben wie im Gehäuse. Farben der Motorkabel '
               'wie in der Anschlussliste (verkabelung.md, W12–W15).', 11.5,
               GRAU),
-         text(24, 76, 'Nur stromlos stecken. Vorher mit dem Ohmmeter: '
-              'schwarz–grün und rot–blau je 2–3 Ω, zwischen den Paaren '
-              'offen.', 11.5, GRAU),
-         text(24, 94, 'Wichtig ist das Paar am Stift: Innerhalb eines Paars '
-              'bestimmt die Reihenfolge nur die Drehrichtung (Prüfung F, '
-              '$3).', 11.5, GRAU)]
+         text(24, 76, 'Der Stecker ab Werk (schwarz · grün · blau · rot) '
+              'passt, wie er ist: Schwarz oben an 2B. Nur an A Schwarz und '
+              'Grün tauschen.', 11.5, GRAU),
+         text(24, 94, 'Nur stromlos stecken. Vorher mit dem Ohmmeter: '
+              'schwarz–grün und blau–rot je 2–3 Ω, zwischen den Paaren '
+              'offen.', 11.5, GRAU)]
     t.append(vz.gruppe(24, 112, shield()))
     t.append(vz.gruppe(506, 112, achsen(Q)))
     svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="{0}" height="{1}" '

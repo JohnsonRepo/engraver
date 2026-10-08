@@ -845,8 +845,9 @@ def schritt_motoren():
             [s.strip() for s in motor_b.split('·')]
         fa, fb = farben(fa), farben(fb)
         # Shield-Stift k geht an den Motorstift mit demselben Namen in
-        # der Reihenfolge A+ A− B+ B−; getauscht kreuzen sich die Adern
-        ordnung = ['A+', 'A−', 'B+', 'B−']
+        # der Reihenfolge des Steckers ab Werk; getauscht kreuzen sich die
+        # Adern
+        ordnung = list(vk.MOTOR_STECKER)
         for k, (p, f) in enumerate(zip(pins, fa + fb)):
             ziel = pins[ordnung.index(enden[k])]
             if ziel == p:

@@ -38,6 +38,31 @@ BETT = 250.0                  # Bambu Lab A1: 256, mit Rand
 BUCHSE_KOERPER_D = 11.0       # Einbaubuchse M8: Mutter und Loetfahnen
 BUCHSE_KOERPER_T = 15.0       # ... so tief hinter der Wand
 SCHALTER_KOERPER = (21.0, 15.0, 20.0)   # KCD1: breit, hoch, tief
+# Der Kasten ist mit Rev. 2 gedruckt (Angabe 2026-10-08): Seit Rev. 3 wird
+# nur noch der Deckel neu gedruckt, alles am Kasten muss so bleiben.
+GEDRUCKT = {
+    'geh_x': (-205.0, -44.66), 'geh_y': (-356.58, -266.0),
+    'geh_z': (-127.0, -83.5), 'innen_x': (-202.5, -47.16),
+    'innen_y': (-354.08, -268.5), 'boden_z': -124.5,
+    'dome': [(-207.0, -344.58), (-207.0, -278.0), (-42.66, -344.58),
+             (-42.66, -278.0)],
+    'kabel_z0': -103.5, 'kabel_links_y': -311.29, 'kabel_vorn_x': -124.83,
+    'lueftung_z': (-110.5, -88.5), 'fenster_x': (-199.5, -151.5),
+    'fenster_z': (-118.9, -104.9),
+    'uno_loecher': [(-195.96, -333.11), (-147.7, -331.84),
+                    (-190.88, -281.04), (-162.94, -281.04)],
+    'm5': [(-217.0, -119.0), (-217.0, -79.0), (-32.66, -119.0),
+           (-32.66, -79.0)],
+    'platte_x': (-226.0, -23.66), 'platte_y': (-255.0, -250.0),
+    'platte_z': (-127.0, -72.0),
+}
+
+
+def flach(v):
+    """Zahlen eines Werts aus lage() als flache Liste."""
+    if isinstance(v, (list, tuple)):
+        return [x for e in v for x in flach(e)]
+    return [float(v)]
 
 
 def elektronik_quader(ew, EL):
@@ -50,7 +75,7 @@ def elektronik_quader(ew, EL):
            *EL['platte_z']),
          Q('Kanalboden', *EL['geh_x'], EL['geh_y'][1], EL['platte_y'][0],
            EL['geh_z'][0], EL['boden_z']),
-         Q('Deckel', *EL['deckel_x'], *EL['geh_y'], *EL['deckel_z']),
+         Q('Deckel', *EL['deckel_x'], *EL['geh_y'], *EL['haube_z']),
          Q('Luefter', fm[0] - h, fm[0] + h, fm[1] - h, fm[1] + h,
            *EL['luefter_z'])]
     r = ew('dom_d') / 2.0
@@ -110,8 +135,13 @@ def main():
     p.info('       Tiefe', gy[1] - gy[0])
     p.info('       Hoehe (ohne Deckel)', gz[1] - gz[0])
     y_tr = portal_check.hohe_zone_y(w, TL, d_schiene)
+    for k, soll in sorted(GEDRUCKT.items()):
+        ist = flach(EL[k])
+        p.ok('Kasten wie gedruckt (Rev. 2): {}'.format(k),
+             max(abs(a - b) for a, b in zip(ist, flach(soll))), 0.01, '<=')
+    ueber = ('Luefter', 'Deckel')     # duerfen in der Mitte hoeher
     for q in teile:
-        if q.name == 'Luefter':
+        if q.name in ueber:
             continue
         d = min(q.x[0] - fach.x[0], fach.x[1] - q.x[1], q.y[0] - fach.y[0],
                 fach.y[1] - q.y[1] + (ew('platte_dicke') + 3.0
@@ -119,12 +149,13 @@ def main():
                                                     'M5-Kopf') else 0.0),
                 q.z[0] - fach.z[0], fach.z[1] - q.z[1])
         p.ok('{} im Fach'.format(q.name), d, 0.0)
-    lf = next(q for q in teile if q.name == 'Luefter')
-    p.info('Luefter ragt ueber das Fach hinaus bis Z', lf.z[1])
-    p.ok('   dafuer steht er in der Mitte (|X| <= 225)',
-         225.0 - max(abs(lf.x[0]), abs(lf.x[1])), 0.0)
-    p.ok('   und weit genug hinter dem 2060 (ab Y {:.1f})'.format(y_tr),
-         y_tr - lf.y[1], 0.0)
+    for n in ueber:
+        lf = next(q for q in teile if q.name == n)
+        p.info('{} ragt ueber das Fach hinaus bis Z'.format(n), lf.z[1])
+        p.ok('   dafuer steht er in der Mitte (|X| <= 225)',
+             225.0 - max(abs(lf.x[0]), abs(lf.x[1])), 0.0)
+        p.ok('   und weit genug hinter dem 2060 (ab Y {:.1f})'.format(y_tr),
+             y_tr - lf.y[1], 0.0)
     p.info('Kasten hinter der Rueckseite des 2060', ew('quer_y1') - gy[1])
 
     # ------------------------------------------------------------------
@@ -233,8 +264,8 @@ def main():
          8.0 - ew('uno_pcb'), 5.0)
     p.ok('Stapel bis unter den Deckel (Luft ueber den Kuehlkoerpern)',
          EL['deckel_z'][0] - EL['stapel_z1'], 5.0)
-    p.ok('Deckellippe ueber dem Stapel', (EL['deckel_z'][0] - ew('lippe_h'))
-         - EL['stapel_z1'], 2.0)
+    p.ok('Deckellippe ueber dem Stapel', EL['lippe_z'][0] - EL['stapel_z1'],
+         2.0)
     fm, lh = EL['luefter_mitte'], ew('luefter') / 2.0
     p.ok('Luefter ueber dem Fach des Uno (links)', fm[0] - lh - ix[0], 0.0)
     p.ok('Luefter ueber dem Fach des Uno (rechts)',
@@ -255,7 +286,7 @@ def main():
     breite = sum(x[1] - x[0] for _, _, x, _, _ in EL['wago'])
     p.ok('Wago 221-420 + 221-420 + 221-415 nebeneinander ({:.1f} mm)'
          .format(breite), ew('wago_b') - breite, 0.0)
-    unter_lippe = EL['deckel_z'][0] - ew('lippe_h')
+    unter_lippe = EL['lippe_z'][0]
     for name, typ, _, y, z in EL['wago']:
         p.ok('Wago {} ({}) im Platz laengs Y'.format(name, typ),
              ew('wago_t') - (y[1] - y[0]), 1.0)
@@ -313,8 +344,30 @@ def main():
          2.0)
     p.ok('Dom endet innen an der Wand (ragt nicht hinein)',
          -(EL['dome'][0][0] + ew('dom_d') / 2.0 - ix[0]), 0.0)
+    hoch = ew('deckel_aufbau') > 0
     p.ok('Deckelschraube M3x8: Gewinde im Einsatz',
-         8.0 - ew('deckel_dicke'), 4.0)
+         8.0 - (ew('haube_boden') if hoch else ew('deckel_dicke')), 4.0)
+    if hoch:
+        p.info('Haube: Platte so viel hoeher als Rev. 2', ew('deckel_aufbau'))
+        p.ok('Haube: Lippe sitzt wie bei Rev. 2 innen am Kasten',
+             abs(EL['lippe_z'][1] - gz[1]), 0.0, '<=')
+        p.ok('Haube: Saeule, Wand um den Kanal',
+             (ew('haube_dom_d') - ew('haube_kanal_d')) / 2.0, 2.0)
+        p.ok('Haube: Kanal, Luft um den M3-Kopf (Ø5,5)',
+             (ew('haube_kanal_d') - 5.5) / 2.0, 0.4)
+        p.ok('Haube: Saeule steht ganz auf Dom und Wand des Kastens',
+             ew('dom_d') / 2.0 + ew('dom_raus') + ew('geh_wand')
+             - ew('haube_dom_d') / 2.0, 0.0)
+        p.ok('Haube: Saeule ragt innen hoechstens so weit hinein',
+             ew('haube_dom_d') / 2.0 - ew('dom_raus') - ew('geh_wand'), 1.5,
+             '<=')
+        p.ok('Haube: Ring traegt die Lippe auf ganzer Breite',
+             ew('lippe_b'), 1.0)
+        p.ok('Haube: Inbus 2,5 bis auf den Kopf (Kanaltiefe)',
+             EL['deckel_z'][1] - (EL['haube_z'][0] + ew('haube_boden')),
+             100.0, '<=')
+        p.ok('Haube: Hoehe beim Druck', EL['deckel_z'][1] - EL['lippe_z'][0],
+             BETT, '<=')
     p.ok('Einsatz kuerzer als der Dom', gz[1] - gz[0] - ew('insert_m3_t'),
          10.0)
     yd = sorted(y for _, y in EL['dome'])
@@ -343,7 +396,8 @@ def main():
     # ------------------------------------------------------------------
     p.titel('10) Stueckliste Elektronikgehaeuse')
     for zeile in (
-            '1x Gehaeuse, 1x Deckel (PETG); Bohrlehre_Uno (PLA, zum Pruefen)',
+            '1x Gehaeuse (Rev. 2, gedruckt), 1x Deckel als Haube (PETG, '
+            'Rev. 3); Bohrlehre_Uno (PLA, zum Pruefen)',
             '4x M5x{:.0f} Zylinderkopf + 4x Hammermutter M5 Nut 6 '
             '(Platte -> Rueckseite hinteres 2060)'.format(EL['m5_schraube']),
             '4x M3x8 (Uno -> Stehbolzen, schneidet sein Gewinde selbst)',

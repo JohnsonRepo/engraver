@@ -10,8 +10,10 @@
 #                Montageplatte mit 4 x M5 in Hammermuttern der Rueckseite
 #                des hinteren 2060; zwischen Platte und Kasten laeuft ein
 #                Kabelkanal.
-#   Deckel       mit dem 24-V-Luefter (40 x 40 x 10) ueber den Treibern,
-#                4 x M3 in Gewindeeinsaetze der Eckdome.
+#   Deckel       seit Rev. 3 eine Haube: Waende auf denen des Kastens heben
+#                die Platte mit dem 24-V-Luefter (40 x 40 x 10) um
+#                deckel_aufbau an. Lippe und 4 x M3 in die Gewindeeinsaetze
+#                der Eckdome wie bisher — der gedruckte Kasten bleibt.
 #   Bohrlehren   ausgeblendet: Lochbild des Uno zum Anhalten, bevor das
 #                Gehaeuse gedruckt wird.
 #   Referenz_nicht_drucken  nur zur Ansicht: hinteres 2060, Enden der 2040,
@@ -19,9 +21,9 @@
 #                Wago-Klemmen.
 #
 # Das Gehaeuse steht im Fach hinter dem hinteren 2060, unter den 2040
-# (docs/elektronik.md). Dorthin faehrt nichts; nur der Luefter ragt ueber
-# das Fach hinaus, er steht aber weit genug hinter dem 2060 — Pruefung:
-# tools/elektronik_check.py.
+# (docs/elektronik.md). Dorthin faehrt nichts; nur Haube und Luefter ragen
+# ueber das Fach hinaus, sie stehen aber in der Mitte und weit genug hinter
+# dem 2060 — Pruefung: tools/elektronik_check.py.
 #
 # Koordinaten = Maschinenkoordinaten wie in Portal.py, Portal in der Mitte
 # seines Wegs: Y nach vorn, Z senkrecht, Z = 0 in der Mitte des Portalrohrs,
@@ -35,7 +37,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Elektronik'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -138,6 +140,16 @@ MASSE = {
     'luefter_loch':        (32.0, 'Luefter: Lochabstand'),
     'luefter_d':           (38.0, 'Luefter: Oeffnung im Deckel'),
     'gitter_b':             (2.0, 'Deckel: Steg in der Luefteroeffnung'),
+    # Rev. 3: Der flache Deckel liess ueber dem Shield zu wenig Platz. Der
+    # Kasten ist schon gedruckt und bleibt (Masse wie Rev. 2); nur der
+    # Deckel wird neu gedruckt: eine Haube mit eigenen Waenden, die Platte
+    # mit dem Luefter liegt deckel_aufbau hoeher. 0 gaebe den flachen
+    # Deckel von Rev. 2.
+    'deckel_aufbau':       (25.0, 'Deckel: Haube, so viel hoeher als der flache Deckel'),
+    'haube_dom_d':         (11.0, 'Haube: Saeule ueber den Domen'),
+    'haube_kanal_d':        (6.5, 'Haube: Kanal fuer Kopf und Inbus der M3'),
+    'haube_boden':          (3.0, 'Haube: Boden unter dem Kopf der Deckelschraube'),
+    'haube_ring':           (2.0, 'Haube: Ring innen am Fuss, traegt die Lippe'),
     # Normteile und Regeln
     'm3_durchgang':         (3.4, 'M3 Durchgang'),
     'm5_durchgang':         (5.5, 'M5 Durchgang'),
@@ -198,7 +210,12 @@ def lage():
     L['uno_z1'] = L['uno_z0'] + w('uno_pcb')
     L['stapel_z1'] = L['uno_z0'] + w('stapel_h')
     L['geh_z'] = (z0, L['stapel_z1'] + w('luft_luefter'))
-    L['deckel_z'] = (L['geh_z'][1], L['geh_z'][1] + w('deckel_dicke'))
+    # Deckel (Rev. 3 als Haube): Platte deckel_aufbau ueber dem Kasten,
+    # die Lippe wie bisher innen an den Waenden des Kastens
+    zp = L['geh_z'][1] + w('deckel_aufbau')
+    L['deckel_z'] = (zp, zp + w('deckel_dicke'))
+    L['haube_z'] = (L['geh_z'][1], L['deckel_z'][1])
+    L['lippe_z'] = (L['geh_z'][1] - w('lippe_h'), L['geh_z'][1])
     L['luefter_z'] = (L['deckel_z'][1], L['deckel_z'][1] + w('luefter_h'))
     L['platte_x'] = (L['geh_x'][0] - w('ohr_b'), L['geh_x'][1] + w('ohr_b'))
     L['platte_z'] = (z0, L['fach_z'][1])
@@ -269,7 +286,9 @@ def lage():
     xd = (L['geh_x'][0] - w('dom_raus'), L['geh_x'][1] + w('dom_raus'))
     yd = (L['geh_y'][0] + w('dom_ende'), L['geh_y'][1] - w('dom_ende'))
     L['dome'] = [(x, y) for x in xd for y in yd]
-    L['deckel_x'] = (xd[0] - w('dom_d') / 2.0, xd[1] + w('dom_d') / 2.0)
+    rd = (max(w('dom_d'), w('haube_dom_d')) if w('deckel_aufbau') > 0
+          else w('dom_d')) / 2.0
+    L['deckel_x'] = (xd[0] - rd, xd[1] + rd)
     # Montage: M5 in der unteren und oberen Nut der Rueckseite des 2060
     xo = (L['geh_x'][0] - w('ohr_loch'), L['geh_x'][1] + w('ohr_loch'))
     L['m5'] = [(x, z) for x in xo for z in (L['quer_nut_z'][0],
@@ -866,25 +885,48 @@ def bau_gehaeuse(app, design, comp, L, fehler):
 
 
 def bau_deckel(app, design, comp, L, fehler):
-    """Deckel mit dem 24-V-Luefter ueber den Treibern. Eine Lippe innen an
-    den Waenden richtet ihn aus, 4 x M3 in die Dome halten ihn. Der Luefter
-    sitzt oben auf dem Deckel und blaest durch die Oeffnung nach unten; zwei
-    Stege halten Kabel aus den Fluegeln.
+    """Deckel mit dem 24-V-Luefter ueber den Treibern, seit Rev. 3 als
+    Haube. Der Kasten ist gedruckt und bleibt: Die Haube setzt mit derselben
+    Lippe innen an seinen Waenden auf und haelt mit denselben 4 x M3x8 in
+    den Einsaetzen der Dome. Ihre Waende stehen auf denen des Kastens und
+    heben die Platte um deckel_aufbau an; ein Ring innen am Fuss traegt die
+    Lippe. Ueber den Domen stehen Saeulen mit einem Kanal, durch den Kopf
+    und Inbus bis auf den Boden ueber dem Dom reichen. Der Luefter sitzt
+    oben auf der Platte und blaest durch die Oeffnung nach unten; zwei Stege
+    halten Kabel aus den Fluegeln.
 
-    Drucklage: Oberseite aufs Bett, die Lippe waechst nach oben."""
-    dz = L['deckel_z']
+    Drucklage: Oberseite aufs Bett, Waende, Saeulen und Lippe wachsen nach
+    oben; die Boeden ueber den Domen sind kurze Bruecken ueber den Kanal."""
+    dz, hz, lz = L['deckel_z'], L['haube_z'], L['lippe_z']
     k = quader(comp, 'Deckelplatte', L['deckel_x'], L['geh_y'], dz,
                'neu').bodies.item(0)
     k.name = 'Deckel'
     sp, lb = w('lippe_spiel'), w('lippe_b')
     ix = (L['innen_x'][0] + sp, L['innen_x'][1] - sp)
     iy = (L['innen_y'][0] + sp, L['innen_y'][1] - sp)
-    z_l = (dz[0] - w('lippe_h'), dz[0])
-    quader(comp, 'Lippe', ix, iy, z_l, 'dazu', k)
+    hoch = dz[0] - hz[0] > 1e-6
+    if hoch:
+        quader(comp, 'Haube_Waende', L['geh_x'], L['geh_y'], (hz[0], dz[0]),
+               'dazu', k)
+        quader(comp, 'Haube_innen', L['innen_x'], L['innen_y'],
+               (hz[0] - 1.0, dz[0]), 'weg', k)
+        # Ring innen am Fuss: verbindet die Lippe mit den Waenden
+        zr = (hz[0], hz[0] + w('haube_ring'))
+        quader(comp, 'Haube_Ring', L['innen_x'], L['innen_y'], zr, 'dazu', k)
+        quader(comp, 'Haube_Ring_innen', (ix[0] + lb, ix[1] - lb),
+               (iy[0] + lb, iy[1] - lb), (zr[0] - 1.0, zr[1] + 1.0), 'weg',
+               k)
+        for i, (x, y) in enumerate(L['dome']):
+            zylinder(comp, 'Saeule_{}'.format(i + 1), 'z', (x, y),
+                     w('haube_dom_d'), hz[0], dz[0], 'dazu', k)
+    quader(comp, 'Lippe', ix, iy, lz, 'dazu', k)
     quader(comp, 'Lippe_innen', (ix[0] + lb, ix[1] - lb),
-           (iy[0] + lb, iy[1] - lb), (z_l[0] - 1.0, dz[0]), 'weg', k)
+           (iy[0] + lb, iy[1] - lb), (lz[0] - 1.0, lz[1]), 'weg', k)
     bohrung(comp, 'Deckel_Schrauben', 'z', L['dome'], w('m3_durchgang'),
-            z_l[0] - 1.0, dz[1] + 1.0, k)
+            lz[0] - 1.0, dz[1] + 1.0, k)
+    if hoch:
+        bohrung(comp, 'Kanaele', 'z', L['dome'], w('haube_kanal_d'),
+                hz[0] + w('haube_boden'), dz[1] + 1.0, k)
     fm = L['luefter_mitte']
     bohrung(comp, 'Luefter_Oeffnung', 'z', [fm], w('luefter_d'), dz[0] - 1.0,
             dz[1] + 1.0, k)
@@ -896,7 +938,7 @@ def bau_deckel(app, design, comp, L, fehler):
     bohrung(comp, 'Luefter_Schrauben', 'z', L['luefter_loecher'],
             w('m3_durchgang'), dz[0] - 1.0, dz[1] + 1.0, k)
     fussfase(comp, k, 'y', dz[1], w('fase_fuss'), fehler, 'Deckel')
-    bbox_pruefen(k, 'Deckel', (L['deckel_x'], L['geh_y'], (z_l[0], dz[1])),
+    bbox_pruefen(k, 'Deckel', (L['deckel_x'], L['geh_y'], (lz[0], dz[1])),
                  fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
@@ -994,9 +1036,9 @@ def hinweise_bauen(L, fehler):
         '  ({:.0f} x {:.0f} x {:.0f} mm), {:.0f} mm hinter dem 2060.'.format(
             gx[1] - gx[0], gy[1] - gy[0], gz[1] - gz[0],
             w('quer_y1') - gy[1]),
-        '  Nur der Luefter ragt ueber das Fach hinaus (bis Z {:+.1f}); dort'
+        '  Haube und Luefter ragen ueber das Fach hinaus (bis Z {:+.1f});'
         .format(L['luefter_z'][1]),
-        '  ist in der Mitte frei — Pruefung: tools/elektronik_check.py.',
+        '  dort ist in der Mitte frei — Pruefung: tools/elektronik_check.py.',
         '',
         'MONTAGE: Platte an die Rueckseite des hinteren 2060, 4 x M5x{:.0f} in'
         .format(L['m5_schraube']),
@@ -1006,9 +1048,12 @@ def hinweise_bauen(L, fehler):
         'UNO: Buchsenkante nach hinten, 4 x M3x8 selbstschneidend in die',
         '  Stehbolzen (Kernloch {:.1f}). USB durch das Fenster hinten.'.format(
             w('uno_schraube_d')),
-        'DECKEL: 4 x M3x8 in Gewindeeinsaetze der Dome (Einpressbohrung',
-        '  {:.1f}). Luefter 24 V oben auf dem Deckel ueber der Mitte des Uno'
-        .format(w('insert_m3_d')),
+        'DECKEL (Rev. 3): Haube, die Platte {:.0f} mm hoeher als beim flachen'
+        .format(w('deckel_aufbau')),
+        '  Deckel. Passt auf den gedruckten Kasten (Rev. 2): Lippe innen,',
+        '  4 x M3x8 durch die Kanaele der Saeulen in die Gewindeeinsaetze',
+        '  der Dome (Inbus 2,5 von oben). Luefter 24 V oben auf der Haube',
+        '  ueber der Mitte des Uno',
         '  (X {:+.1f}, Y {:+.1f}), 4 x M3x16 mit Mutter; er blaest nach unten.'
         .format(fm[0], fm[1]),
         'EINGANG hinten rechts: Einbaubuchse 5,5 x 2,1 mit M8-Gewinde',
@@ -1031,12 +1076,15 @@ def hinweise_bauen(L, fehler):
         '',
         'DRUCK (PETG, Bambu Lab A1): Gehaeuse auf dem Boden, Deckel mit der',
         '  Oberseite nach unten. Keine Stuetzen; das USB-Fenster ist oben',
-        '  eine {:.0f}-mm-Bruecke.'.format(
+        '  eine {:.0f}-mm-Bruecke. Zum schon gedruckten Kasten nur den'.format(
             L['fenster_x'][1] - L['fenster_x'][0]),
+        '  Deckel drucken.',
         '',
         'GEMESSEN [v] (Rev. 2): Hoehe von Uno + Shield + Treibern mit',
-        '  Kuehlkoerper {:.0f} mm (Deckel {:.0f} mm darueber), Lochbild des Uno'
+        '  Kuehlkoerper {:.0f} mm (Kasten {:.0f} mm darueber, die Platte der'
         .format(w('stapel_h'), w('luft_luefter')),
+        '  Haube {:.0f} mm), Lochbild des Uno'.format(
+            L['deckel_z'][0] - L['stapel_z1']),
         '  (stimmt mit der Bohrlehre_Uno), Wandler {:.0f} x {:.0f} x {:.0f}.'
         .format(w('wandler_l'), w('wandler_b'), w('wandler_h')),
         'NICHT GEMESSEN [w]: Buchse (M8), Schalter (KCD1), Wago-Klemmen',

@@ -10,7 +10,8 @@ die [Draufsicht auf das Gehäuse](#gehäuse-elektronikpy)
 `python3 tools/elektronik_box_zeichnen.py`, den
 [Anschlussplan](#anschlussplan)
 `python3 tools/anschluss_zeichnen.py`. **Stand:** Gehäuse gezeichnet
-(Elektronik.py Rev. 2, mit den Angaben vom Aufbau vom 2026-09-27:
+und gedruckt, der Deckel seit Rev. 3 eine höhere Haube (Elektronik.py
+Rev. 3, der Kasten wie Rev. 2, mit den Angaben vom Aufbau vom 2026-09-27:
 Stapelhöhe, Wandler 12 V / 5 A, Wago-Bestand, 110 mm Überstand der 2040
 hinten, Laseranschluss); die Endschalter sind gebaut
 ([endschalter.md](endschalter.md)). Die Energieketten sind gedruckt, beide
@@ -68,11 +69,13 @@ nichts, die Maschine steht weiter nur auf den 2060.
 | Teil | Druck (PETG) | Masse (voll) | Bauraum |
 |---|---|---|---|
 | Gehäuse mit Montageplatte | auf dem Boden stehend | 148 cm³ ≈ 188 g | 202 × 107 × 55 mm |
-| Deckel | Oberseite nach unten | 37 cm³ ≈ 47 g | 173 × 91 × 5,5 mm |
+| Deckel als Haube (Rev. 3) | Oberseite nach unten | 75 cm³ ≈ 96 g | 175 × 91 × 30,5 mm |
 | Bohrlehre_Uno (PLA, ausgeblendet) | flach | 7 cm³ ≈ 9 g | 53 × 69 × 2 mm |
 
-Die Massen sind aus den Schritten des Skripts nachgerechnet (Voxel,
-0,2 mm); maßgeblich ist der erste Lauf in Fusion. Keine Stützen,
+Die Massen sind aus den Schritten des Skripts nachgerechnet (Raster,
+0,2 mm); maßgeblich ist der erste Lauf in Fusion. Der Kasten ist mit
+Rev. 2 gedruckt. Seit Rev. 3 wird nur der Deckel neu gedruckt
+([Haube](#deckel-als-haube-rev-3)). Keine Stützen,
 4 Wandlinien, ≥ 30 % Infill. Die Oberkante des USB-Fensters ist eine
 48-mm-Brücke.
 
@@ -90,15 +93,37 @@ drei **Wago-Klemmen** nebeneinander (Klebeband), von links: **+5 V**
 (221-420, neben dem Uno), **GND** (221-420), **+24 V** (221-415, beim
 Schalter); zusammen 89,8 mm auf 92 mm Platz. Kabelausschnitte oben offen:
 links zur Y-Kette und zum linken Y-Motor, vorn in den Kanal.
-Lüftungsschlitze rechts oben. Der Deckel sitzt mit einer Lippe innen an den
-Wänden und 4 × M3 in Domen außen an den Seitenwänden; der **Lüfter** steht
+Lüftungsschlitze rechts oben. Der Deckel ist seit Rev. 3 eine **Haube**:
+Er sitzt mit einer Lippe innen an den Wänden und 4 × M3 in Domen außen an
+den Seitenwänden, seine Platte liegt aber 25 mm höher. Der **Lüfter** steht
 obenauf über der Mitte des Uno und bläst auf die Treiber.
 
-**Warum es passt:** Kasten und Deckel bleiben im Fach. Nur der Lüfter ragt
-1 mm darüber hinaus, 43 mm hinter dem 2060 und in der Mitte — dort ist bis
-unter den X-Wagen Platz. `tools/elektronik_check.py` fährt Portal und
-Toolhead über den ganzen Weg dagegen: engste Stelle 22,7 mm (Montageplatte
-↔ Trägerplatte, Portal am hinteren Schienenende).
+**Warum es passt:** Der Kasten bleibt im Fach. Haube und Lüfter ragen
+darüber hinaus, bis 26 mm über die Oberkante des Fachs. Sie stehen aber
+16 mm hinter dem 2060 und in der Mitte, dort fährt nichts so tief
+herunter. `tools/elektronik_check.py` fährt Portal und Toolhead über den
+ganzen Weg dagegen. Die engste Stelle ist 22,7 mm (Montageplatte ↔
+Trägerplatte, Portal am hinteren Schienenende). Die Haube bleibt 25,5 mm
+vom hinteren linken Klemmturm weg.
+
+### Deckel als Haube (Rev. 3)
+
+Der flache Deckel von Rev. 2 lag 8 mm über den Kühlkörpern, das war zu
+flach (Angabe 2026-10-08). Der Kasten ist schon gedruckt und
+bleibt, wie er ist. `elektronik_check.py` prüft das Maß für Maß gegen
+Rev. 2. Neu gedruckt wird nur der Deckel:
+
+| | |
+|---|---|
+| Wände | 2,5 mm, stehen auf den Wänden des Kastens und heben die Platte um **25 mm** (`deckel_aufbau`). Unter der Platte sind es jetzt **33 mm** bis zu den Kühlkörpern statt 8 |
+| Lippe | wie bisher innen an den Wänden des Kastens, 3 mm tief, 0,3 mm Spiel. Ein Ring innen am Fuß der Haube trägt sie |
+| Schrauben | dieselben **4 × M3×8** in die Einsätze der Dome. Über jedem Dom steht eine Säule (Ø11) mit einem Kanal (Ø6,5) von oben, unten bleibt ein 3 mm Boden. Kopf und Inbus 2,5 gehen durch den Kanal bis auf diesen Boden, die Schraube greift 5 mm in den Einsatz |
+| Lüfter | oben auf der Platte über der Mitte des Uno, wie bisher 4 × M3×16 mit Mutter |
+| Druck | Oberseite aufs Bett, 30,5 mm hoch, keine Stützen. Die Böden über den Domen sind kurze Brücken über den Kanal |
+
+Höher ginge es bis etwa **65 mm** (`deckel_aufbau`), dann käme das
+Portalrohr am hinteren Schienenende bis auf 3 mm an die Haube. Mit
+`deckel_aufbau = 0` baut das Skript wieder den flachen Deckel.
 
 **Montage:**
 
@@ -118,13 +143,15 @@ Toolhead über den ganzen Weg dagegen: engste Stelle 22,7 mm (Montageplatte
    Kasten vorbei.
 8. Kabel links durch den Ausschnitt; die für rechts vorn in den Kanal und
    darin nach rechts.
-9. Lüfter mit 4 × M3×16 und Muttern auf den Deckel, **blasend nach unten**
-   (Pfeil am Lüfterrahmen), Kabel durch die Öffnung. Deckel aufsetzen,
-   4 × M3×8.
+9. Lüfter mit 4 × M3×16 und Muttern auf die Haube, **blasend nach unten**
+   (Pfeil am Lüfterrahmen), Kabel durch die Öffnung. Haube aufsetzen, die
+   Lippe innen an den Wänden, 4 × M3×8 von oben durch die Kanäle der
+   Säulen. Dafür einen langen Inbus 2,5 nehmen, der Kanal ist 25 mm tief.
 
 **Gemessen `[v]` (2026-09-27):** die Höhe von Uno, Shield und Treibern mit
 Kühlkörper, **28 mm** ab Unterseite Uno (bis Rev. 1 mit 34 mm angenommen) —
-der Deckel liegt 8 mm darüber, der Kasten ist dadurch 6 mm niedriger; das
+der Kasten endet 8 mm darüber und ist dadurch 6 mm niedriger (die Platte
+der Haube liegt seit Rev. 3 33 mm darüber); das
 Lochbild des Uno stimmt mit der Bohrlehre; der Wandler, 43 × 24 × 20 mm.
 
 **Nicht gemessen `[w]`:** die Einbaubuchse (Loch 8,2 für M8), der Schalter
@@ -137,7 +164,9 @@ die größere Händlerangabe).
 |---|---|---|
 | `geh_x0` | −205 mm | linke Außenkante des Kastens |
 | `geh_abstand` | 11 mm | Kabelkanal zwischen Montageplatte und Kasten |
-| `stapel_h` / `luft_luefter` | 28 `[v]` / 8 mm | Höhe Uno + Shield + Treiber, Luft bis zum Deckel — bestimmen die Kastenhöhe |
+| `stapel_h` / `luft_luefter` | 28 `[v]` / 8 mm | Höhe Uno + Shield + Treiber, Luft bis zur Oberkante des Kastens — bestimmen die Kastenhöhe (gedruckt, nicht mehr ändern) |
+| `deckel_aufbau` | 25 mm | Haube: so viel höher liegt die Platte mit dem Lüfter; bis etwa 65 mm möglich, 0 = flacher Deckel |
+| `haube_dom_d` / `haube_kanal_d` / `haube_boden` | 11 / 6,5 / 3 mm | Säulen über den Domen, Kanal für Kopf und Inbus, Boden unter dem Kopf |
 | `vert_b` | 94 mm | Breite des Verteilers (3 Wago nebeneinander) |
 | `wandler_l` / `_b` / `_h` | 43 / 24 / 20 mm `[v]` | Wandler; `wandler_binder` 15 mm: Kabelbinder neben seiner Mitte |
 | `buchse_d` | 8,2 mm | Loch der Einbaubuchse |

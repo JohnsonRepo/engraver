@@ -360,7 +360,7 @@ def main():
          'des Uno, 4 × M3×16 mit Mutter; bläst auf die Treiber'.format(
              de(ew('luefter'), 0), de(ew('luefter_h'), 0))),
         ('Höhen', 'über der Unterkante: Boden innen {}, Uno unten {}, '
-         'Treiber oben {}, Kasten {}, Deckel {}, Lüfter {} mm'.format(
+         'Treiber oben {}, Kasten {}, Haube {}, Lüfter {} mm'.format(
              de(EL['boden_z'] - z0), de(EL['uno_z0'] - z0),
              de(EL['stapel_z1'] - z0), de(gz[1] - z0),
              de(EL['deckel_z'][1] - z0), de(EL['luefter_z'][1] - z0))),

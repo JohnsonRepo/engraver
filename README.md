@@ -19,7 +19,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
 fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y, Wanne der X-Energiekette
-fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
+fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel als Haube mit Lüfter (Rev. 3)  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
 fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an den 2040  ← neu
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
@@ -151,7 +151,8 @@ Stehbolzen, USB nach hinten; rechts der **Abwärtswandler 24 → 12 V** für den
 Laser (43 × 24 × 20 mm) und drei **Wago-Klemmen** (221-415 für +24 V,
 2 × 221-420 für GND und +5 V); hinten **Einbaubuchse** (Hohlstecker
 5,5 × 2,1) und **Schalter**. Der **Deckel** trägt den 24-V-Lüfter über den
-Treibern. Eine Montageplatte hängt es mit 4 × M5 an die Rückseite des 2060,
+Treibern. Seit Rev. 3 ist er eine Haube, deren Platte 25 mm höher liegt.
+Sie passt auf den schon gedruckten Kasten, nur sie wird neu gedruckt. Eine Montageplatte hängt es mit 4 × M5 an die Rückseite des 2060,
 dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
 Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
 [docs/elektronik.md](docs/elektronik.md).
@@ -377,7 +378,8 @@ Rev. 14 legt das
 hintere 2060 nach der Messung 435 mm hinter das vordere (die 2040 stehen
 hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
 Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
-Wandler, Wago) gezeichnet und geprüft
+Wandler, Wago) gezeichnet, geprüft und gedruckt, seit Rev. 3 mit einer
+höheren Haube als Deckel
 ([elektronik.md](docs/elektronik.md)). Die Endschalter X und Y baut seit
 Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),

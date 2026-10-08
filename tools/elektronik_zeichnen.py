@@ -125,7 +125,7 @@ def konzept(w, L, tw, TL, ew, EL):
     K['platte'] = Quader('Montageplatte', *EL['platte_x'], *EL['platte_y'],
                          *EL['platte_z'])
     K['deckel'] = Quader('Deckel', *EL['deckel_x'], *EL['geh_y'],
-                         *EL['deckel_z'])
+                         *EL['haube_z'])
     fm, h = EL['luefter_mitte'], ew('luefter') / 2.0
     K['luefter'] = Quader('Luefter', fm[0] - h, fm[0] + h, fm[1] - h,
                           fm[1] + h, *EL['luefter_z'])

@@ -68,7 +68,7 @@ begrenzt den Strom selbst.
 | W10 | **Lichtschranke Y** | 3 × 0,25 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach hinten | 0,49 m | **1 m** | — |
 | W11 | **Lichtschranke Z** | 3 Silikonlitzen 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,45 m | **2 m** | Y + X |
 | W12 | **X-Motor** — in der Kette nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040, Y-Kette, hinter dem Motorhalter hoch zum Motor | 0,81 m | mitgeliefert (1 m) | Y |
-| W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn; an den drei Trägern der Wanne Y kurz aus der Nut, unter ihrer Wand durch | 0,71 m | mitgeliefert (1 m) | — |
+| W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn; in den Kabelhaltern unter den Wänden der drei Träger der Wanne Y durch | 0,71 m | mitgeliefert (1 m) | — |
 | W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,98 m | **1,5 m**, fertig | — |
 | W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,54 m | **2 m**, fertig | Y + X |
 | W16 | **24-V-Wächter an Abort** — fehlen die 24 V (Not-Aus, Schalter, Netzteil), bricht GRBL ab | Widerstand | im Kasten | — | — | — |
@@ -366,8 +366,8 @@ Die Wege zeigt [elektronik-platz.svg](elektronik-platz.svg), beschrieben
 sind sie in [elektronik.md](elektronik.md#kabel).
 
 * **Links aus dem Gehäuse** unter dem linken 2040 durch in dessen untere
-  Außennut: W13 nach vorn zum linken Y-Motor, an jedem der drei Träger der
-  Wanne Y kurz aus der Nut und über seine Wand; W7, W9, W11, W12 und W15
+  Außennut: W13 nach vorn zum linken Y-Motor, an den drei Trägern der
+  Wanne Y in den Kabelhaltern unter ihrer Wand durch; W7, W9, W11, W12 und W15
   bis hinter die Wanne Y, dort aus der Nut und von hinten in das Endstück
   180 der Y-Kette (zwei Kabelbinder durch die Schlitze im Wannenboden).
 * **Vorn aus dem Gehäuse** in den Kanal, darin nach rechts, an der
@@ -390,7 +390,9 @@ In den Ketten: Die Adern liegen lose nebeneinander, nicht verdrillt, auch
 die der Motorkabel, ohne Schlauch. Am Kettenhalter des Toolheads hält sie
 ein Kabelbinder durch die zwei Schlitze neben dem Anfangsstück. Keine Löt-
 oder Steckstelle in der Kette.
-In den Nuten halten Nutabdeckungen oder Clips die Kabel.
+An den 2040 liegen die Kabel in neun [Kabelhaltern](kabelhalter.md) unter
+der unteren Außennut, in der oberen Nut des Rohrs halten Nutabdeckungen
+oder Clips sie.
 
 ## Inbetriebnahme
 

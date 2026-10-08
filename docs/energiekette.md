@@ -606,11 +606,12 @@ von außen unter der Wanne, auch wenn sie schon liegt. Die Laschenschrauben
 und das Endstück 180 schraubst du von oben; steht das Portal in der Mitte,
 ist darüber frei (bis zum Motorhalter 49 mm).
 
-**Kabel in der Seitennut.** In der unteren Seitennut läuft W13 zum linken
-Y-Motor nach vorn. An jedem Träger kommt es kurz aus der Nut und geht
-**unter der Wand durch**: Oben sitzen Arm und Wanne, vor der Wand der
-M5-Kopf. Die Wand endet 4 mm über der Unterkante des 2040, darunter ist
-frei. Die Litzen zur Y-Kette verlassen die Nut schon hinter der Wanne: Sie
+**Kabel in der Seitennut.** An der unteren Seitennut läuft W13 zum linken
+Y-Motor nach vorn. An jedem Träger geht es **unter der Wand durch**: Oben
+sitzen Arm und Wanne, vor der Wand der M5-Kopf. Die Wand endet 4 mm über
+der Unterkante des 2040, darunter ist frei. Die
+[Kabelhalter](kabelhalter.md) halten es 1 mm tiefer, es läuft dort also
+gerade durch. Die Litzen zur Y-Kette verlassen die Nut schon hinter der Wanne: Sie
 gehen hinten über den Wannenboden in das Endstück 180, ein Kabelbinder
 durch die zwei Schlitze hält sie.
 
@@ -672,8 +673,9 @@ M3 Ø5, 3 × M5×10, 3 Hammermuttern M5 und 2 Kabelbinder.
    Platte nach unten zwischen die Leisten des Kettenhalters Y,
    2 × M3×8 + Scheibe von oben.
 9. **Litzen** von der offenen Seite einlegen. Je ein Kabelbinder am
-   Kettenhalter Y und hinten in der Wanne Y. W13 in der Seitennut an jedem
-   Träger unter der Wand durchführen.
+   Kettenhalter Y und hinten in der Wanne Y. W13 liegt in den
+   [Kabelhaltern](kabelhalter.md) und geht so unter den Wänden der Träger
+   durch.
 10. **Von Hand durchfahren:** Das Portal langsam vom hinteren Schienenende
     bis vorn schieben. Die Kette darf nirgends streifen. Hinten bleibt der
     Untertrum in der Wanne, vorn bleibt Reserve.

@@ -214,12 +214,15 @@ sie nach [verkabelung.md](verkabelung.md#4-5-v-und-lichtschranken-w6-w9w11).
 
 ## Kabel
 
-**Fest verlegt** in den Nuten, mit Nutabdeckungen oder Clips gehalten:
+**Fest verlegt** an den Nuten: an den 2040 in den
+[Kabelhaltern](kabelhalter.md) unter der unteren Außennut (links fünf,
+rechts vier), in der oberen Nut des Portalrohrs mit Nutabdeckungen oder
+Clips:
 
-* links aus dem Gehäuse, unter dem linken 2040 durch in die **untere Nut
+* links aus dem Gehäuse, unter dem linken 2040 durch an die **untere Nut
   außen am linken 2040** — dort entlang zum linken Y-Motor (an den drei
-  Trägern der Wanne Y kurz aus der Nut, über ihre Wand) und bis hinter die
-  Wanne Y, dort hinein zum Festpunkt der Y-Kette;
+  Trägern der Wanne Y in den Kabelhaltern unter ihrer Wand durch) und bis
+  hinter die Wanne Y, dort hinein zum Festpunkt der Y-Kette;
 * auf dem linken Y-Schlitten vom Kettenhalter Y hinter Stirnblock und
   Rückwand nach innen, in die **obere Nut des Portalrohrs** und darin zum
   Kabelflügel am Festpunkt der X-Kette; das fährt alles mit dem Portal;

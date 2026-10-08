@@ -21,6 +21,7 @@ fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← a
 fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y, Wanne der X-Energiekette
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel mit Lüfter  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
+fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an den 2040  ← neu
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
 fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
@@ -41,6 +42,8 @@ docs/endschalter.md            Endschalter X und Y: Halter, Fahnen, Montage, Ein
 docs/endschalter.svg           Endschalter: Y von hinten und von außen, X von vorn und von oben, Klammer X
 docs/notaus.md                 Not-Aus: Taster, Lage, Gehäuse, Montage, Druck
 docs/notaus.svg                Not-Aus-Gehäuse von vorn, im Schnitt und von oben
+docs/kabelhalter.md            Kabelhalter: Rinne, Kabel, Plätze links und rechts, Montage, Druck
+docs/kabelhalter.svg           Kabelhalter im Schnitt am 2040 und seine Plätze
 docs/opferplatte.md            Opferplatte, Führungsfüße und Riegel: Lage, Höhen, Montage, Druck
 docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, Schnitte durch Füße, Riegel und Anschlag
 docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzenter, Niederhalter, Höhe unter dem Toolhead
@@ -69,6 +72,8 @@ tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im 
 tools/endschalter_zeichnen.py  erzeugt die Zeichnung der Endschalter
 tools/notaus_check.py          Prüfung des Not-Aus-Gehäuses: Lage, Freiraum, Schrauben, Taster, Druck
 tools/notaus_zeichnen.py       erzeugt die Zeichnung des Not-Aus-Gehäuses
+tools/kabelhalter_check.py     Prüfung der Kabelhalter: Schraube, Rinne und Kabel, Plätze, Freiraum, Druck; schreibt die Plätze in docs/kabelhalter.md
+tools/kabelhalter_zeichnen.py  erzeugt die Zeichnung der Kabelhalter
 tools/opferplatte_check.py     Prüfung von Opferplatte, Füßen und Riegel: Arbeitsfeld, Höhen, Freiraum, Riegel, Schrauben, Druck
 tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte, Füßen und Riegel
 tools/spannmittel_check.py     Prüfung der Spannmittel: Höhe unter dem Toolhead, Lage, Selbsthemmung, Schrauben, Druck
@@ -173,6 +178,17 @@ mittleren Nut und längs verschiebbar. Das Gehäuse ist hinten offen,
 45°-Rippen tragen die Laschen, und es druckt ohne Stützen. Dass die 24 V
 fehlen, meldet ein Spannungsteiler an Abort, und GRBL bricht ab. Details
 in [docs/notaus.md](docs/notaus.md).
+
+### Kabelhalter (neu)
+
+Die fest verlegten Kabel passen nicht in die untere Seitennut der 2040.
+Neun gedruckte Halter, links fünf und rechts vier, hängen deshalb mit je
+einer M5×10 in einer Hammermutter an der Nut. Eine Feder in der Nutöffnung
+richtet sie aus. Darunter liegt eine offene Rinne (13 × 12 mm) mit Lippe,
+in die die Kabel von oben fallen. Sie liegt 1 mm unter den Wänden der
+Träger Y, die Kabel laufen dort also gerade durch. Links und rechts ist es
+derselbe Halter, gedruckt liegend und ohne Stützen. Plätze und Kabel stehen
+in [docs/kabelhalter.md](docs/kabelhalter.md).
 
 ### Opferplatte und Führungsfüße (neu)
 
@@ -279,6 +295,8 @@ python3 tools/endschalter_check.py  # Endschalter: Schaltpunkte, Freigänge, Sch
 python3 tools/endschalter_zeichnen.py  # docs/endschalter.svg neu erzeugen
 python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schrauben, Druck
 python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
+python3 tools/kabelhalter_check.py  # Kabelhalter: Schraube, Rinne, Plätze, Freiraum (--doku: Tabelle neu)
+python3 tools/kabelhalter_zeichnen.py  # docs/kabelhalter.svg neu erzeugen
 python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
 python3 tools/spannmittel_check.py  # Spannmittel: Höhe unter dem Toolhead, Lage, Exzenter, Schrauben
@@ -363,7 +381,8 @@ Wandler, Wago) gezeichnet und geprüft
 ([elektronik.md](docs/elektronik.md)). Die Endschalter X und Y baut seit
 Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),
-Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)). Die
+Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)),
+Kabelhalter Rev. 1 mit `kabelhalter_check.py` ([kabelhalter.md](docs/kabelhalter.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)). Der

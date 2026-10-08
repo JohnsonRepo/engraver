@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Kabelhalter fuer die untere Seitennut aussen an den 2040: Anlage mit Feder in der Nutoeffnung und 1 x M5x10 in einer Hammermutter, darunter eine offene Rinne mit Lippe (13 x 12 mm) fuer die Kabel, Fenster fuer einen Kabelbinder. Liegend ohne Stuetzen druckbar, links und rechts derselbe Halter. Dazu nur zur Ansicht: Stueck 2040, Hammermutter und Schraube (nicht drucken)."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

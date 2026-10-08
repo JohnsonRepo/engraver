@@ -215,9 +215,9 @@ def leitungen():
         dict(nr='W13', name='Y-Motor links', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor links', strom=ez.MOTOR_I,
              fertig=True, mitgeliefert=1.0,
-             weg='links raus, untere Nut außen am linken 2040 nach vorn; an '
-                 'den drei Trägern der Wanne Y kurz aus der Nut, unter ihrer '
-                 'Wand durch',
+             weg='links raus, untere Nut außen am linken 2040 nach vorn; in '
+                 'den Kabelhaltern unter den Wänden der drei Träger der Wanne '
+                 'Y durch',
              adern=[('Spule A', 'schwarz · grün', 'Shield Y 2B·2A',
                      'Y-Motor links A'),
                     ('Spule B', 'blau · rot', 'Shield Y 1A·1B',

@@ -330,8 +330,10 @@ def main():
          kw('nut_lippe') - kw('feder_t'), 0.2)
     p.ok('Feder schmaler als die Nutoeffnung, je Seite',
          (kw('nut_b') - kw('feder_b')) / 2.0, 0.1)
-    p.ok('Feder neben der Traene, laengs (je Seite)',
-         kw('kh_b') / 2.0 - kw('m5_durchgang') / 2.0 * math.sqrt(2.0), 3.0)
+    p.ok('Feder endet vor der Traene',
+         KL['feder_luecke'] - kw('m5_durchgang') / 2.0 * math.sqrt(2.0), 0.3)
+    p.ok('Feder neben der Schraube, laengs (je Seite)',
+         kw('kh_b') / 2.0 - KL['feder_luecke'], 3.0)
     p.ok('Kopf auf der Anlage: Rand laengs',
          (kw('kh_b') - kw('m5_kopf_d')) / 2.0, 1.5)
     p.ok('Kopf auf der Anlage: Rand oben',

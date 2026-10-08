@@ -25,6 +25,7 @@ fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an d
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
 fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
+stl/                           druckfertige STL ohne Fusion: Haube des Elektronik-Gehäuses, Kabelhalter
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
 docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
@@ -74,6 +75,7 @@ tools/notaus_check.py          Prüfung des Not-Aus-Gehäuses: Lage, Freiraum, S
 tools/notaus_zeichnen.py       erzeugt die Zeichnung des Not-Aus-Gehäuses
 tools/kabelhalter_check.py     Prüfung der Kabelhalter: Schraube, Rinne und Kabel, Plätze, Freiraum, Druck; schreibt die Plätze in docs/kabelhalter.md
 tools/kabelhalter_zeichnen.py  erzeugt die Zeichnung der Kabelhalter
+tools/stl_export.py            schreibt stl/ aus denselben Maßen wie die Fusion-Skripte (braucht manifold3d)
 tools/opferplatte_check.py     Prüfung von Opferplatte, Füßen und Riegel: Arbeitsfeld, Höhen, Freiraum, Riegel, Schrauben, Druck
 tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte, Füßen und Riegel
 tools/spannmittel_check.py     Prüfung der Spannmittel: Höhe unter dem Toolhead, Lage, Selbsthemmung, Schrauben, Druck
@@ -298,6 +300,7 @@ python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schraube
 python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
 python3 tools/kabelhalter_check.py  # Kabelhalter: Schraube, Rinne, Plätze, Freiraum (--doku: Tabelle neu)
 python3 tools/kabelhalter_zeichnen.py  # docs/kabelhalter.svg neu erzeugen
+pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Haube und Kabelhalter in Drucklage
 python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
 python3 tools/spannmittel_check.py  # Spannmittel: Höhe unter dem Toolhead, Lage, Exzenter, Schrauben
@@ -384,7 +387,7 @@ höheren Haube als Deckel
 Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),
 Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)),
-Kabelhalter Rev. 1 mit `kabelhalter_check.py` ([kabelhalter.md](docs/kabelhalter.md)). Die
+Kabelhalter Rev. 2 mit `kabelhalter_check.py` ([kabelhalter.md](docs/kabelhalter.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)). Der

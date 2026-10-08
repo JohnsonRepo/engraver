@@ -119,7 +119,7 @@ Rev. 2. Neu gedruckt wird nur der Deckel:
 | Lippe | wie bisher innen an den Wänden des Kastens, 3 mm tief, 0,3 mm Spiel. Ein Ring innen am Fuß der Haube trägt sie |
 | Schrauben | dieselben **4 × M3×8** in die Einsätze der Dome. Über jedem Dom steht eine Säule (Ø11) mit einem Kanal (Ø6,5) von oben, unten bleibt ein 3 mm Boden. Kopf und Inbus 2,5 gehen durch den Kanal bis auf diesen Boden, die Schraube greift 5 mm in den Einsatz |
 | Lüfter | oben auf der Platte über der Mitte des Uno, wie bisher 4 × M3×16 mit Mutter |
-| Druck | Oberseite aufs Bett, 30,5 mm hoch, keine Stützen. Die Böden über den Domen sind kurze Brücken über den Kanal |
+| Druck | Oberseite aufs Bett, 30,5 mm hoch, keine Stützen. Die Böden über den Domen sind kurze Brücken über den Kanal. Fertig in Drucklage: [`stl/Elektronik_Deckel_r3.stl`](../stl/Elektronik_Deckel_r3.stl) (`python3 tools/stl_export.py`, braucht `pip install manifold3d`) |
 
 Höher ginge es bis etwa **65 mm** (`deckel_aufbau`), dann käme das
 Portalrohr am hinteren Schienenende bis auf 3 mm an die Haube. Mit

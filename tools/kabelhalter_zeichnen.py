@@ -140,7 +140,7 @@ def schnitt(A):
     t += zeiger(p(-kw('feder_t') / 2.0, 2.7), p(0, 4.0)[1],
                 ['Feder {} × {}'.format(kc.de(kw('feder_b'), 1),
                                         kc.de(kw('feder_t'), 1)),
-                 'in der Nutöffnung'])
+                 'neben der Schraube'])
     t += zeiger(p(-1.0, -1.2), p(0, -1.6)[1],
                 ['M5×{} ohne'.format(kc.de(kw('m5_l'))), 'Scheibe'])
     t.append(text(*p(innen / 2.0, oben - 2.6), '2040', 11, GRAU, 'middle',

@@ -1,6 +1,6 @@
 # Kabelhalter — untere Seitennut außen an den 2040
 
-Erzeugt von `fusion/Kabelhalter/Kabelhalter.py` (ein Druckteil, Rev. 1).
+Erzeugt von `fusion/Kabelhalter/Kabelhalter.py` (ein Druckteil, Rev. 2).
 Geprüft mit `python3 tools/kabelhalter_check.py`, Skizze in
 [kabelhalter.svg](kabelhalter.svg) (neu erzeugen mit
 `python3 tools/kabelhalter_zeichnen.py`). Welche Kabel dort laufen, steht
@@ -25,7 +25,7 @@ in einer Rinne, die an der Nut hängt.
 | | |
 |---|---|
 | Anlage | 4,5 mm dick an der Seitenfläche, von 7 mm über der Nutmitte bis unter die Rinne |
-| Feder | 5,8 × 1,5 mm in der Nutöffnung, links und rechts neben der Schraube. Sie richtet den Halter aus und hält ihn gerade |
+| Feder | 5,8 × 1,5 mm in der Nutöffnung, je 3,6 mm lang links und rechts neben der Schraube; um die Schraube ist sie frei (seit Rev. 2). Sie richtet den Halter aus und hält ihn gerade |
 | Schraube | **1 × M5×10 ohne Scheibe** in eine Hammermutter M5 (Nut 6): 3,7 mm im Stein, die Spitze bleibt 0,5 mm vor dem Nutgrund |
 | Rinne | lichte **13 × 12 mm**, oben 10 mm offen, Oberkante 7 mm unter der Nutmitte (3 mm über der Unterkante der 2040). Boden und Außenwand 2,5 mm |
 | Lippe | oben an der Außenwand, 3 mm nach innen: Die Kabel fallen von oben hinein und rutschen nicht nach außen heraus |
@@ -110,6 +110,9 @@ liegt 2,75 mm darunter.
   der Schicht und brechen nicht an einer Lagengrenze. Das Loch für die M5
   ist eine Träne mit der Spitze nach oben.
 * Neun Stück, am besten zehn mit einem Reserveteil.
+* **STL:** [`stl/Kabelhalter_r2.stl`](../stl/Kabelhalter_r2.stl), schon in
+  Drucklage. Sie entsteht ohne Fusion aus denselben Maßen:
+  `pip install manifold3d`, dann `python3 tools/stl_export.py`.
 
 ## Stückliste
 

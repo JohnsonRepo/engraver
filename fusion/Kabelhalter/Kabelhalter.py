@@ -32,7 +32,7 @@ import adsk.core, adsk.fusion, traceback
 import math
 
 SKRIPT_NAME = 'Kabelhalter'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -58,6 +58,8 @@ MASSE = {
 
     # --- Halter ---------------------------------------------------------------
     # Rev. 1: erster Stand.
+    # Rev. 2: Feder um die Schraube ganz weg (Rev. 1 liess neben der Traene
+    #         nur 0,15 mm duenne Stege stehen).
     'kh_y':              (-173.0, 'Modell: Mitte des gezeigten Halters (Maschine Y)'),
     'kh_b':                (16.0, 'Halter: Breite laengs der Nut'),
     # M5x10 ohne Scheibe: 4,5 Anlage, dann 5,5 in der Nut — 3,7 im Stein,
@@ -66,6 +68,7 @@ MASSE = {
     'anlage_oben':          (7.0, 'Anlage: reicht so weit ueber die Nutmitte'),
     'feder_b':              (5.8, 'Feder in der Nutoeffnung: Breite'),
     'feder_t':              (1.5, 'Feder: Tiefe (kuerzer als die Lippe der Nut)'),
+    'feder_luft':           (0.5, 'Feder: endet so weit vor der Traene'),
     # Rinne: Oberkante 7 unter der Nutmitte = 3 ueber der Unterkante der
     # 2040, also unter den Traegerwaenden der Wanne Y (enden 4 darueber)
     'kanal_oben':           (7.0, 'Rinne: Oberkante so weit unter der Nutmitte'),
@@ -143,6 +146,10 @@ def lage():
     L['kanal_flaeche'] = flaeche(L['kanal'])
 
     # M5 in die Hammermutter: Kopf aussen auf der Anlage
+    # Feder nur neben der Schraube: um die Traene (Spitze r * Wurzel 2)
+    # herum frei, laengs je Seite
+    L['feder_luecke'] = (w('m5_durchgang') / 2.0 * math.sqrt(2.0)
+                         + w('feder_luft'))
     L['m5_spitze'] = w('m5_l') - t      # so tief in der Nut, ab der Flaeche
     L['m5_eingriff'] = (min(L['m5_spitze'], w('nut_lippe')
                             + w('nutenstein_h')) - w('nut_lippe'))
@@ -697,6 +704,9 @@ def bau_halter(app, design, comp, L, fehler):
     ym = sum(L['y']) / 2.0
     traene(comp, 'M5_KH', (ym, zn), w('m5_durchgang'),
            fx - w('anlage_t') - 1.0, fx + w('feder_t') + 1.0, k)
+    fl, fb = L['feder_luecke'], w('feder_b') / 2.0 + 1.0
+    quader(comp, 'Feder_frei_KH', (fx, fx + w('feder_t') + 1.0),
+           (ym - fl, ym + fl), (zn - fb, zn + fb), 'weg', k)
     ba, hb = L['binder_a'], w('binder_b') / 2.0
     prismen(comp, 'Binder_KH', 'z', [(fx - ba[1], ym - hb, fx - ba[0],
                                       ym + hb)],

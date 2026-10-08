@@ -2,8 +2,10 @@
 """Motoren anschliessen: welcher Stift am Shield an welche Ader.
 
 Links das CNC Shield V3 von oben, so wie es im Gehaeuse liegt (Reset-Taster
-oben links, Schraubklemme unten links): wo die Motorstecker sitzen, wo der
-Achsbuchstabe steht, welche Jumper A zum Klon von Y machen. Rechts je
+oben links, Schraubklemme unten links): die Motorstecker rechts neben den
+Treibern X (oben links), Y (oben rechts), Z (unten links) und A (unten
+rechts) mit ihren Aderfarben, und die Jumper, die A zum Klon von Y machen.
+Rechts je
 Achse die vier Stifte 2B · 2A · 1A · 1B mit den Adern der StepperOnline-
 Motorkabel und dem Motor, der daran gehoert. Zuordnung, Farben, Nummern
 und Laengen kommen aus tools/verkabelung.py (W12-W15), wie im Schritt
@@ -98,11 +100,12 @@ def shield():
                fett=True),
           text(xd + 11, yr - 11, 'DIR', 8, PLATINE[1], 'middle', fett=True)]
     # Treiber und ihre Motorstecker, rechts daneben in den Reihen 3-6
-    plaetze = {'oben links': (440, 650, 665, 950),
-               'oben rechts': (745, 650, 950, 950),
-               'unten links': (440, 1000, 665, 1290),
-               'unten rechts': (745, 1000, 950, 1290)}
-    for name, (px0, py0, px1, py1) in plaetze.items():
+    # Steckplaetze am Shield abgelesen (Foto 2026-10-08) [v]
+    plaetze = {'X': (440, 650, 665, 950), 'Y': (745, 650, 950, 950),
+               'Z': (440, 1000, 665, 1290), 'A': (745, 1000, 950, 1290)}
+    adern = {a: vz.farben(lt['adern'][0][1]) + vz.farben(lt['adern'][1][1])
+             for a, lt in motoren()}
+    for achse, (px0, py0, px1, py1) in plaetze.items():
         a, b = P(px0, py0), P(px1, py1)
         bt, ht = b[0] - a[0], b[1] - a[1]
         t += treiber(a[0], a[1], bt, ht)
@@ -110,15 +113,14 @@ def shield():
         ya, yb = a[1] + ht * 2 / 8, a[1] + ht * 6 / 8
         t.append(vz.rechteck(hx, ya, 10, yb - ya, '#212529', '#000000', 0.8,
                              rx=1.5))
-        for k in range(4):
-            t.append(vz.kreis(hx + 5, a[1] + ht * (k + 2.5) / 8, 1.9,
-                              '#fcc419'))
-        bu = name == 'oben links'
+        for k, f in enumerate(adern[achse]):
+            t.append(vz.kreis(hx + 5, a[1] + ht * (k + 2.5) / 8, 3.0,
+                              vz.ADERFARBE[f], '#ffffff', 1.0))
         t += [vz.rechteck(hx - 2, yb + 5, 14, 14, '#ffffff', PLATINE[1], 1.0,
                           rx=1),
-              text(hx + 5, yb + 16, 'X' if bu else '?', 10,
-                   PLATINE[1] if bu else GRAU, 'middle', fett=True)]
-        if bu:
+              text(hx + 5, yb + 16, achse, 10, PLATINE[1], 'middle',
+                   fett=True)]
+        if achse == 'X':
             for k, s_ in enumerate(STIFTE):
                 t.append(text(hx + 14, a[1] + ht * (k + 2.5) / 8 + 3, s_,
                               7.5, TEXT, fett=True))
@@ -126,9 +128,9 @@ def shield():
     t += vz.zeilen(20, y1 + 30, [
         'Motorstecker: rechts neben jedem Treiber, die vier Stifte von',
         'oben nach unten 2B · 2A · 1A · 1B.',
-        'Achsbuchstabe: im Kästchen unter dem Stecker. Oben links steht',
-        'X (auf dem Foto zu sehen); die übrigen drei sind vom Treiber',
-        'verdeckt — vor dem Stecken ablesen, nicht raten.',
+        'Achsbuchstabe im Kästchen unter dem Stecker: X oben links,',
+        'Y oben rechts, Z unten links, A unten rechts. Die Punkte am',
+        'Stecker zeigen die Aderfarben (rechts im Einzelnen).',
         'A klont Y: je ein Jumper in der Reihe Y, für STEP und DIR,',
         'sonst keiner — auf D12/D13 läge der Z-Endschalter.',
         'Treiber: Poti oben rechts wie auf dem Foto, EN zum EN-Aufdruck.'],

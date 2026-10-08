@@ -58,10 +58,10 @@
 <circle cx="134.0" cy="219.1" r="1.8" fill="#adb5bd" stroke="none" stroke-width="1.0"/>
 <circle cx="228.5" cy="219.1" r="1.8" fill="#adb5bd" stroke="none" stroke-width="1.0"/>
 <rect x="241.5" y="116.0" width="10.0" height="75.0" rx="1.5" fill="#212529" stroke="#000000" stroke-width="0.8"/>
-<circle cx="246.5" cy="125.4" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="246.5" cy="144.1" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="246.5" cy="162.9" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="246.5" cy="181.6" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
+<circle cx="246.5" cy="125.4" r="3.0" fill="#212529" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="144.1" r="3.0" fill="#2f9e44" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="162.9" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="181.6" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
 <rect x="239.5" y="196.0" width="14.0" height="14.0" rx="1" fill="#ffffff" stroke="#c92a2a" stroke-width="1.0"/>
 <text x="246.5" y="207.0" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="600">X</text>
 <text x="255.5" y="128.4" font-size="7.5" fill="#1c2733" text-anchor="start" font-weight="600">2B</text>
@@ -88,12 +88,12 @@
 <circle cx="285.7" cy="219.1" r="1.8" fill="#adb5bd" stroke="none" stroke-width="1.0"/>
 <circle cx="371.8" cy="219.1" r="1.8" fill="#adb5bd" stroke="none" stroke-width="1.0"/>
 <rect x="384.0" y="116.0" width="10.0" height="75.0" rx="1.5" fill="#212529" stroke="#000000" stroke-width="0.8"/>
-<circle cx="389.0" cy="125.4" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="389.0" cy="144.1" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="389.0" cy="162.9" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="389.0" cy="181.6" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
+<circle cx="389.0" cy="125.4" r="3.0" fill="#212529" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="144.1" r="3.0" fill="#2f9e44" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="162.9" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="181.6" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
 <rect x="382.0" y="196.0" width="14.0" height="14.0" rx="1" fill="#ffffff" stroke="#c92a2a" stroke-width="1.0"/>
-<text x="389.0" y="207.0" font-size="10" fill="#5b6472" text-anchor="middle" font-weight="600">?</text>
+<text x="389.0" y="207.0" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="600">Y</text>
 <rect x="125.0" y="253.5" width="112.5" height="145.0" rx="2" fill="#2b2f36" stroke="#000000" stroke-width="0.8"/>
 <rect x="152.0" y="305.7" width="58.5" height="63.8" rx="1" fill="#d8c48a" stroke="#b59a4c" stroke-width="0.6"/>
 <circle cx="206.0" cy="270.9" r="7.9" fill="#e9ecef" stroke="#868e96" stroke-width="0.8"/>
@@ -114,12 +114,12 @@
 <circle cx="134.0" cy="389.4" r="1.8" fill="#adb5bd" stroke="none" stroke-width="1.0"/>
 <circle cx="228.5" cy="389.4" r="1.8" fill="#adb5bd" stroke="none" stroke-width="1.0"/>
 <rect x="241.5" y="289.8" width="10.0" height="72.5" rx="1.5" fill="#212529" stroke="#000000" stroke-width="0.8"/>
-<circle cx="246.5" cy="298.8" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="246.5" cy="316.9" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="246.5" cy="335.1" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="246.5" cy="353.2" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
+<circle cx="246.5" cy="298.8" r="3.0" fill="#212529" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="316.9" r="3.0" fill="#2f9e44" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="335.1" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="246.5" cy="353.2" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
 <rect x="239.5" y="367.2" width="14.0" height="14.0" rx="1" fill="#ffffff" stroke="#c92a2a" stroke-width="1.0"/>
-<text x="246.5" y="378.2" font-size="10" fill="#5b6472" text-anchor="middle" font-weight="600">?</text>
+<text x="246.5" y="378.2" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="600">Z</text>
 <rect x="277.5" y="253.5" width="102.5" height="145.0" rx="2" fill="#2b2f36" stroke="#000000" stroke-width="0.8"/>
 <rect x="302.1" y="305.7" width="53.3" height="63.8" rx="1" fill="#d8c48a" stroke="#b59a4c" stroke-width="0.6"/>
 <circle cx="351.3" cy="270.9" r="7.2" fill="#e9ecef" stroke="#868e96" stroke-width="0.8"/>
@@ -140,17 +140,17 @@
 <circle cx="285.7" cy="389.4" r="1.8" fill="#adb5bd" stroke="none" stroke-width="1.0"/>
 <circle cx="371.8" cy="389.4" r="1.8" fill="#adb5bd" stroke="none" stroke-width="1.0"/>
 <rect x="384.0" y="289.8" width="10.0" height="72.5" rx="1.5" fill="#212529" stroke="#000000" stroke-width="0.8"/>
-<circle cx="389.0" cy="298.8" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="389.0" cy="316.9" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="389.0" cy="335.1" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
-<circle cx="389.0" cy="353.2" r="1.9" fill="#fcc419" stroke="none" stroke-width="1.0"/>
+<circle cx="389.0" cy="298.8" r="3.0" fill="#2f9e44" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="316.9" r="3.0" fill="#212529" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="335.1" r="3.0" fill="#e03131" stroke="#ffffff" stroke-width="1.0"/>
+<circle cx="389.0" cy="353.2" r="3.0" fill="#1c7ed6" stroke="#ffffff" stroke-width="1.0"/>
 <rect x="382.0" y="367.2" width="14.0" height="14.0" rx="1" fill="#ffffff" stroke="#c92a2a" stroke-width="1.0"/>
-<text x="389.0" y="378.2" font-size="10" fill="#5b6472" text-anchor="middle" font-weight="600">?</text>
+<text x="389.0" y="378.2" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="600">A</text>
 <text x="20.0" y="443.5" font-size="10.5" fill="#1c2733" text-anchor="start">Motorstecker: rechts neben jedem Treiber, die vier Stifte von</text>
 <text x="20.0" y="457.5" font-size="10.5" fill="#1c2733" text-anchor="start">oben nach unten 2B · 2A · 1A · 1B.</text>
-<text x="20.0" y="471.5" font-size="10.5" fill="#1c2733" text-anchor="start">Achsbuchstabe: im Kästchen unter dem Stecker. Oben links steht</text>
-<text x="20.0" y="485.5" font-size="10.5" fill="#1c2733" text-anchor="start">X (auf dem Foto zu sehen); die übrigen drei sind vom Treiber</text>
-<text x="20.0" y="499.5" font-size="10.5" fill="#1c2733" text-anchor="start">verdeckt — vor dem Stecken ablesen, nicht raten.</text>
+<text x="20.0" y="471.5" font-size="10.5" fill="#1c2733" text-anchor="start">Achsbuchstabe im Kästchen unter dem Stecker: X oben links,</text>
+<text x="20.0" y="485.5" font-size="10.5" fill="#1c2733" text-anchor="start">Y oben rechts, Z unten links, A unten rechts. Die Punkte am</text>
+<text x="20.0" y="499.5" font-size="10.5" fill="#1c2733" text-anchor="start">Stecker zeigen die Aderfarben (rechts im Einzelnen).</text>
 <text x="20.0" y="513.5" font-size="10.5" fill="#1c2733" text-anchor="start">A klont Y: je ein Jumper in der Reihe Y, für STEP und DIR,</text>
 <text x="20.0" y="527.5" font-size="10.5" fill="#1c2733" text-anchor="start">sonst keiner — auf D12/D13 läge der Z-Endschalter.</text>
 <text x="20.0" y="541.5" font-size="10.5" fill="#1c2733" text-anchor="start">Treiber: Poti oben rechts wie auf dem Foto, EN zum EN-Aufdruck.</text></g>

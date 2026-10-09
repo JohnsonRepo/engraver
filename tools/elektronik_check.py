@@ -37,9 +37,11 @@ BETT = 250.0                  # Bambu Lab A1: 256, mit Rand
 # Einbaumasse der Kaufteile hinter der Rueckwand [w]
 BUCHSE_KOERPER_D = 11.0       # Einbaubuchse M8: Mutter und Loetfahnen
 BUCHSE_KOERPER_T = 15.0       # ... so tief hinter der Wand
-SCHALTER_KOERPER = (21.0, 15.0, 20.0)   # KCD1: breit, hoch, tief
-# Der Kasten ist mit Rev. 2 gedruckt (Angabe 2026-10-08): Seit Rev. 3 wird
-# nur noch der Deckel neu gedruckt, alles am Kasten muss so bleiben.
+SCHALTER_KOERPER = (20.0, 20.0, 20.0)   # rund: Ø wie das Loch, tief [?]
+SCHALTER_BLENDE_T = 3.0       # Blende vor der Wand [?]
+# Der Kasten war mit Rev. 2 gedruckt (Angabe 2026-10-08), die Haube aus
+# Rev. 3 passt auf ihn. Seit Rev. 4 wird er wegen des runden Schalters neu
+# gedruckt (Angabe 2026-10-09); alles andere muss bleiben, wie es war.
 GEDRUCKT = {
     'geh_x': (-205.0, -44.66), 'geh_y': (-356.58, -266.0),
     'geh_z': (-127.0, -83.5), 'innen_x': (-202.5, -47.16),
@@ -137,7 +139,7 @@ def main():
     y_tr = portal_check.hohe_zone_y(w, TL, d_schiene)
     for k, soll in sorted(GEDRUCKT.items()):
         ist = flach(EL[k])
-        p.ok('Kasten wie gedruckt (Rev. 2): {}'.format(k),
+        p.ok('Kasten wie Rev. 2 (ausser dem Schalterloch): {}'.format(k),
              max(abs(a - b) for a, b in zip(ist, flach(soll))), 0.01, '<=')
     ueber = ('Luefter', 'Deckel')     # duerfen in der Mitte hoeher
     for q in teile:
@@ -301,22 +303,31 @@ def main():
     p.ok('Wandler unter der Deckellippe', unter_lippe - wz[1], 5.0)
     bx, ez = EL['buchse_x'], EL['eingang_z']
     sx = EL['schalter_x']
-    sb, sh, sr = ew('schalter_b') / 2.0, ew('schalter_h') / 2.0, \
-        ew('schalter_rand')
+    sr = ew('schalter_rand')
+    rs, rb = ew('schalter_d') / 2.0, ew('schalter_blende_d') / 2.0
     p.ok('Buchse ueber dem Boden', ez - ew('buchse_d') / 2.0 - EL['boden_z'],
          3.0)
     p.ok('Buchse unter der Oberkante', gz[1] - (ez + ew('buchse_d') / 2.0),
          10.0)
     p.ok('Buchse rechts neben dem USB-Fenster',
          bx - ew('buchse_d') / 2.0 - EL['fenster_x'][1], 5.0)
-    p.ok('Schalterrand ueber dem Boden', ez - sh - sr - EL['boden_z'], 1.0)
-    p.ok('Schalterrand unter der Oberkante', gz[1] - (ez + sh + sr), 3.0)
+    p.ok('Schalterrand ueber dem Boden', ez - rs - sr - EL['boden_z'], 1.0)
+    p.ok('Schalterrand unter der Oberkante', gz[1] - (ez + rs + sr), 3.0)
     p.ok('Schalter rechts neben der Buchse (Koerper)',
          (sx - SCHALTER_KOERPER[0] / 2.0) - (bx + BUCHSE_KOERPER_D / 2.0),
          3.0)
+    p.ok('Schalter: Blende neben dem Bund der Buchse (aussen)',
+         (sx - rb) - (bx + BUCHSE_KOERPER_D / 2.0), 3.0)
+    p.ok('Schalter: Blende ueber der Unterkante des Kastens',
+         ez - rb - gz[0], 2.0)
+    p.ok('Schalter: Blende deckt das Loch (Kreis)', rb - rs, 0.5)
+    p.ok('Schalter: Blende deckt die flache Kappe oben',
+         rb - (rs + ew('schalter_kappe')), 0.3)
+    p.ok('Schalter: Kappe unter der Spitze der Traene (Flanken 45 Grad)',
+         rs * (2.0 ** 0.5 - 1.0) - ew('schalter_kappe'), 1.0)
     p.ok('Schalterrand innerhalb der Rueckwand (rechts)',
-         ix[1] - (sx + sb + sr), 2.0)
-    p.ok('Wand am Schalter (KCD1: 0,8 bis 2 mm) [w]',
+         ix[1] - (sx + rs + sr), 2.0)
+    p.ok('Wand am Schalter (Rastnasen, 1 bis 2 mm) [w]',
          ew('schalter_wand'), 2.0, '<=')
     tiefe = max(SCHALTER_KOERPER[2], BUCHSE_KOERPER_T)
     p.ok('Buchse und Schalter reichen nicht bis zum Wandler',
@@ -406,8 +417,8 @@ def main():
             '1x Luefter 40 x 40 x 10, 24 V',
             '1x Einbaubuchse 5,5 x 2,1 mm mit M8-Gewinde (Loch {:.1f})'
             .format(ew('buchse_d')),
-            '1x Wippschalter KCD1, Ausschnitt {:.1f} x {:.1f}'.format(
-                ew('schalter_b'), ew('schalter_h')),
+            '1x Wippschalter rund, Blende Ø{:.1f}, Loch Ø{:.1f}'.format(
+                ew('schalter_blende_d'), ew('schalter_d')),
             '1x Abwaertswandler 24 -> 12 V / {:.0f} A, '
             '{:.0f} x {:.0f} x {:.0f} (vorhanden); 2x Kabelbinder'.format(
                 leistung.WANDLER_A, ew('wandler_l'), ew('wandler_b'),

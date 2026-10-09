@@ -25,7 +25,7 @@ fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an d
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
 fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
-stl/                           druckfertige STL ohne Fusion: Haube des Elektronik-Gehäuses, Kabelhalter
+stl/                           druckfertige STL ohne Fusion: Kasten und Haube des Elektronik-Gehäuses, Kabelhalter
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
 docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
@@ -152,9 +152,9 @@ weder Portal noch Toolhead. Links der **Arduino Uno mit CNC Shield V3** auf
 Stehbolzen, USB nach hinten; rechts der **Abwärtswandler 24 → 12 V** für den
 Laser (43 × 24 × 20 mm) und drei **Wago-Klemmen** (221-415 für +24 V,
 2 × 221-420 für GND und +5 V); hinten **Einbaubuchse** (Hohlstecker
-5,5 × 2,1) und **Schalter**. Der **Deckel** trägt den 24-V-Lüfter über den
-Treibern. Seit Rev. 3 ist er eine Haube, deren Platte 25 mm höher liegt.
-Sie passt auf den schon gedruckten Kasten, nur sie wird neu gedruckt. Eine Montageplatte hängt es mit 4 × M5 an die Rückseite des 2060,
+5,5 × 2,1) und runder **Schalter** (Blende Ø22,5, seit Rev. 4). Der
+**Deckel** trägt den 24-V-Lüfter über den Treibern. Seit Rev. 3 ist er
+eine Haube, deren Platte 25 mm höher liegt. Eine Montageplatte hängt es mit 4 × M5 an die Rückseite des 2060,
 dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
 Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
 [docs/elektronik.md](docs/elektronik.md).
@@ -300,7 +300,7 @@ python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schraube
 python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
 python3 tools/kabelhalter_check.py  # Kabelhalter: Schraube, Rinne, Plätze, Freiraum (--doku: Tabelle neu)
 python3 tools/kabelhalter_zeichnen.py  # docs/kabelhalter.svg neu erzeugen
-pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Haube und Kabelhalter in Drucklage
+pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Kasten, Haube und Kabelhalter in Drucklage
 python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
 python3 tools/spannmittel_check.py  # Spannmittel: Höhe unter dem Toolhead, Lage, Exzenter, Schrauben
@@ -385,7 +385,7 @@ hintere 2060 nach der Messung 435 mm hinter das vordere (die 2040 stehen
 hinten 110 mm über); nach hinten begrenzt jetzt das Schienenende den Y-Weg.
 Elektronikgehäuse Rev. 2 mit den am Aufbau gemessenen Werten (Stapelhöhe,
 Wandler, Wago) gezeichnet, geprüft und gedruckt, seit Rev. 3 mit einer
-höheren Haube als Deckel
+höheren Haube als Deckel, seit Rev. 4 mit rundem Schalterloch
 ([elektronik.md](docs/elektronik.md)). Die Endschalter X und Y baut seit
 Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),

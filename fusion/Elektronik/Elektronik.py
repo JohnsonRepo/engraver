@@ -5,7 +5,8 @@
 #                daneben Platz fuer drei Wago-Klemmen (221-415, 2 x 221-420)
 #                und den Abwaertswandler 24 -> 12 V / 5 A, 43 x 24 x 20
 #                (Kabelbinder). Hinten Fenster fuer USB, Einbaubuchse fuer den
-#                Hohlstecker 5,5 x 2,1 und Wippschalter; Kabelausschnitte
+#                Hohlstecker 5,5 x 2,1 und runden Wippschalter;
+#                Kabelausschnitte
 #                links und vorn, Lueftungsschlitze rechts. Vorn eine
 #                Montageplatte mit 4 x M5 in Hammermuttern der Rueckseite
 #                des hinteren 2060; zwischen Platte und Kasten laeuft ein
@@ -37,7 +38,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Elektronik'
-REVISION = 3
+REVISION = 4
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -93,10 +94,15 @@ MASSE = {
     'uno_schraube_d':       (2.8, 'Uno: Kernloch fuer M3 selbstschneidend'),
     'vert_b':              (94.0, 'Verteiler: Innenbreite (3 Wago nebeneinander)'),
     'buchse_d':             (8.2, 'Einbaubuchse 5,5 x 2,1, Gewinde M8'),
-    'schalter_b':          (19.2, 'Wippschalter KCD1: Ausschnitt breit'),
-    'schalter_h':          (12.9, 'Wippschalter KCD1: Ausschnitt hoch'),
-    'schalter_wand':        (1.6, 'Wippschalter: Wand am Ausschnitt'),
-    'schalter_rand':        (3.0, 'Wippschalter: verduennter Rand um den Ausschnitt'),
+    # Rev. 4: Der Wippschalter ist rund, die Blende aussen 22,5 mm [v]
+    # (Angabe 2026-10-09; bis Rev. 3 ein eckiger KCD1, 19,2 x 12,9). Das
+    # Einbauloch ist nicht gemessen [?], bei dieser Blende ueblich 20 mm.
+    # Der Kasten wird dafuer neu gedruckt, sonst bleibt er wie Rev. 2.
+    'schalter_d':          (20.2, 'Wippschalter rund: Einbauloch [?]'),
+    'schalter_blende_d':   (22.5, 'Wippschalter rund: Blende aussen [v]'),
+    'schalter_kappe':       (0.6, 'Schalterloch: oben flach, so weit ueber dem Kreis'),
+    'schalter_wand':        (1.6, 'Wippschalter: Wand am Loch (Rastnasen)'),
+    'schalter_rand':        (3.0, 'Wippschalter: verduennter Rand um das Loch'),
     'eingang_z':           (16.0, 'Buchse und Schalter: Mitte ueber dem Boden'),
     'kabel_links_b':       (36.0, 'Kabelausschnitt links: Breite'),
     'kabel_vorn_b':        (30.0, 'Kabelausschnitt vorn: Breite'),
@@ -141,8 +147,8 @@ MASSE = {
     'luefter_d':           (38.0, 'Luefter: Oeffnung im Deckel'),
     'gitter_b':             (2.0, 'Deckel: Steg in der Luefteroeffnung'),
     # Rev. 3: Der flache Deckel liess ueber dem Shield zu wenig Platz. Der
-    # Kasten ist schon gedruckt und bleibt (Masse wie Rev. 2); nur der
-    # Deckel wird neu gedruckt: eine Haube mit eigenen Waenden, die Platte
+    # Kasten war schon gedruckt und blieb (Masse wie Rev. 2, seit Rev. 4
+    # nur mit rundem Schalterloch); der Deckel wird neu gedruckt: eine Haube mit eigenen Waenden, die Platte
     # mit dem Luefter liegt deckel_aufbau hoeher. 0 gaebe den flachen
     # Deckel von Rev. 2.
     'deckel_aufbau':       (25.0, 'Deckel: Haube, so viel hoeher als der flache Deckel'),
@@ -793,6 +799,42 @@ def bau_profil(comp, name, laengs, bereich, quer, z):
 
 
 # --- Bauteile ------------------------------------------------------------------
+def schalterloch_punkte(mitte):
+    """Umriss des Lochs fuer den runden Wippschalter in (X, Z): unten und
+    an den Seiten ein Kreis, oben eine Traene mit 45-Grad-Flanken, die
+    schalter_kappe ueber dem Kreis flach endet — die Wand steht beim Druck
+    senkrecht, so haengt oben nichts ueber. Die Blende deckt die Kappe.
+    Liefert (Bogen: Start, Mitte, Ende; Kappe: links, rechts)."""
+    x, z = mitte
+    r = w('schalter_d') / 2.0
+    s = r / 2.0 ** 0.5
+    h = r + w('schalter_kappe')            # Hoehe der flachen Kappe
+    b = r * 2.0 ** 0.5 - h                 # halbe Breite der Kappe
+    return ((x + s, z + s), (x, z - r), (x - s, z + s)), \
+        ((x - b, z + h), (x + b, z + h))
+
+
+def schalterloch(comp, name, mitte, a0, a1, ziel):
+    """Loch fuer den runden Wippschalter durch die Rueckwand (entlang Y
+    von a0 bis a1), Umriss aus schalterloch_punkte()."""
+    m = (a0 + a1) / 2.0
+    sk = skizze(comp, _ebene(comp, 'y', m, 'E_{}_Y{:.1f}'.format(
+        comp.name, m)), 'Sk_' + name)
+    (p0, pm, p1), (kl, kr) = schalterloch_punkte(mitte)
+    bogen = sk.sketchCurves.sketchArcs.addByThreePoints(
+        punkt(sk, *p0), punkt(sk, *pm), punkt(sk, *p1))
+    linien = sk.sketchCurves.sketchLines
+    # Bogen von rechts unten herum nach links; die Enden an die Kappe
+    a, e = bogen.startSketchPoint, bogen.endSketchPoint
+    if abs(a.geometry.x - punkt(sk, *p1).x) < 1e-6 and \
+            abs(a.geometry.y - punkt(sk, *p1).y) < 1e-6:
+        a, e = e, a                       # a liegt jetzt rechts, e links
+    l1 = linien.addByTwoPoints(e, punkt(sk, *kl))
+    l2 = linien.addByTwoPoints(l1.endSketchPoint, punkt(sk, *kr))
+    linien.addByTwoPoints(l2.endSketchPoint, a)
+    tasche(comp, groesstes_profil(sk), abs(a1 - a0), ziel)
+
+
 def bau_gehaeuse(app, design, comp, L, fehler):
     """Kasten fuer Uno mit CNC Shield, daneben der Verteiler (Wago-Klemmen,
     Abwaertswandler). Die Montageplatte liegt an der Rueckseite des hinteren
@@ -842,14 +884,11 @@ def bau_gehaeuse(app, design, comp, L, fehler):
               L['fenster_z'][1])], ya, yi, 'weg', k)
     bohrung(comp, 'Buchse', 'y', [(L['buchse_x'], L['eingang_z'])],
             w('buchse_d'), ya, yi, k)
-    sb, sh, sr = w('schalter_b') / 2.0, w('schalter_h') / 2.0, \
-        w('schalter_rand')
-    xs_, zs_ = L['schalter_x'], L['eingang_z']
-    prismen(comp, 'Schalter', 'y', [(xs_ - sb, zs_ - sh, xs_ + sb, zs_ + sh)],
-            ya, yi, 'weg', k)
-    prismen(comp, 'Schalter_Rand', 'y',
-            [(xs_ - sb - sr, zs_ - sh - sr, xs_ + sb + sr, zs_ + sh + sr)],
-            gy[0] + w('schalter_wand'), yi, 'weg', k)
+    sm = (L['schalter_x'], L['eingang_z'])
+    schalterloch(comp, 'Schalter', sm, ya, yi, k)
+    bohrung(comp, 'Schalter_Rand', 'y', [sm],
+            w('schalter_d') + 2.0 * w('schalter_rand'),
+            gy[0] + w('schalter_wand'), yi, k)
     # Kabelausschnitte von oben: links zur Y-Kette und zum linken Y-Motor,
     # vorn in den Kanal (rechter Y-Motor, Y-Endschalter, Not-Aus)
     b = w('kabel_links_b') / 2.0
@@ -1057,8 +1096,8 @@ def hinweise_bauen(L, fehler):
         '  (X {:+.1f}, Y {:+.1f}), 4 x M3x16 mit Mutter; er blaest nach unten.'
         .format(fm[0], fm[1]),
         'EINGANG hinten rechts: Einbaubuchse 5,5 x 2,1 mit M8-Gewinde',
-        '  (Loch {:.1f}) und Wippschalter KCD1 (Ausschnitt {:.1f} x {:.1f},'
-        .format(w('buchse_d'), w('schalter_b'), w('schalter_h')),
+        '  (Loch {:.1f}) und runder Wippschalter (Loch {:.1f}, Blende {:.1f},'
+        .format(w('buchse_d'), w('schalter_d'), w('schalter_blende_d')),
         '  Wand dort {:.1f} mm, damit die Rastnasen greifen).'.format(
             w('schalter_wand')),
         'VERTEILER: hinten Buchse und Schalter, davor der Wandler 24 -> 12 V /',
@@ -1087,7 +1126,7 @@ def hinweise_bauen(L, fehler):
             L['deckel_z'][0] - L['stapel_z1']),
         '  (stimmt mit der Bohrlehre_Uno), Wandler {:.0f} x {:.0f} x {:.0f}.'
         .format(w('wandler_l'), w('wandler_b'), w('wandler_h')),
-        'NICHT GEMESSEN [w]: Buchse (M8), Schalter (KCD1), Wago-Klemmen',
+        'NICHT GEMESSEN [w]: Buchse (M8), Einbauloch des Schalters, Wago',
         '  (Datenblatt), Luefter.',
     ]
     if fehler:

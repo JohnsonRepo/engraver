@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""STL-Dateien zum Drucken, ohne Fusion: Haube des Elektronik-Gehaeuses
-(fusion/Elektronik, Rev. 3) und Kabelhalter (fusion/Kabelhalter).
+"""STL-Dateien zum Drucken, ohne Fusion: Kasten und Haube des Elektronik-
+Gehaeuses (fusion/Elektronik) und Kabelhalter (fusion/Kabelhalter).
 
 Die Geometrie entsteht aus denselben Massen wie in Fusion — lage() der
 Skripte wird mit gestubbtem adsk-Modul importiert — und wird hier mit
 manifold3d (Boolesche Operationen auf Dreiecksnetzen) nachgebaut, Schritt
-fuer Schritt wie bau_deckel() bzw. bau_halter(). Massgeblich bleibt das
+fuer Schritt wie bau_gehaeuse(), bau_deckel() und bau_halter(). Massgeblich
+bleibt das
 Fusion-Modell; die Pruefung am Ende vergleicht Bauraum und Volumen.
 
-Beide Teile liegen schon in Drucklage, die Auflage bei z = 0, mit der Fase
+Alle Teile liegen schon in Drucklage, die Auflage bei z = 0, mit der Fase
 gegen den Elefantenfuss (0,4 mm, in vier Stufen):
+  Kasten      auf dem Boden, Waende und Montageplatte senkrecht
   Haube       Oberseite aufs Bett, Waende und Lippe nach oben
   Kabelhalter Querschnitt flach, die 16 mm Breite nach oben, die Spitze der
               Traene oben
@@ -55,6 +57,22 @@ def zylinder_z(mitte, d, z):
                                                      z[0]])
 
 
+def zylinder_y(mitte, d, y):
+    """Zylinder Ø d entlang Y, mitte = (x, z), y = (von, bis)."""
+    return prisma_y([(mitte[0] + d / 2.0 * math.cos(t),
+                      mitte[1] + d / 2.0 * math.sin(t))
+                     for t in (2.0 * math.pi * i / segmente(d)
+                               for i in range(segmente(d)))], y)
+
+
+def prisma_y(punkte_xz, y):
+    """Vieleck in (X, Z) entlang Y von y[0] bis y[1]. Gedreht, nicht
+    gespiegelt: lokal (u, v, w) -> (X, Y, Z) = (u, y0 + w, -v)."""
+    q = vieleck([(x, -z) for x, z in punkte_xz])
+    return Manifold.extrude(q, y[1] - y[0]).transform(
+        [[1, 0, 0, 0], [0, 0, 1, y[0]], [0, -1, 0, 0]])
+
+
 def vieleck(punkte):
     """CrossSection aus einem Linienzug, gegen den Uhrzeigersinn."""
     s = sum(a0 * b1 - a1 * b0 for (a0, b0), (a1, b1)
@@ -83,6 +101,70 @@ def fussfase(teil, fase):
             schnitt.offset(-d, JoinType.Miter, 2.0), h).translate(
                 [0, 0, i * h]))
     return vereinen(lagen)
+
+
+# ---- Kasten des Elektronik-Gehaeuses ----------------------------------------
+def gehaeuse(em):
+    """Wie bau_gehaeuse() in Elektronik.py, in Maschinenkoordinaten; danach
+    nur verschoben: der Boden liegt auf dem Bett."""
+    w, L = em.w, em.lage()
+    wa = w('geh_wand')
+    gx, gy, gz = L['geh_x'], L['geh_y'], L['geh_z']
+    dazu = [quader(gx, gy, gz)
+            - quader(L['innen_x'], L['innen_y'], (L['boden_z'], gz[1] + 1.0)),
+            quader(gx, (gy[1], L['platte_y'][0]), (gz[0], L['boden_z'])),
+            quader(L['platte_x'], L['platte_y'], L['platte_z'])]
+    dazu += [quader((x0, x1), (gy[1] - 0.5, L['platte_y'][0] + 0.5),
+                    (gz[0], L['rippe_z1'])) for x0, x1 in L['rippen_x']]
+    dazu += [zylinder_z(m, w('dom_d'), gz) for m in L['dome']]
+    dazu += [zylinder_z(m, w('uno_steg_d'), (L['boden_z'] - 0.5,
+                                             L['uno_z0']))
+             for m in L['uno_loecher']]
+    k = vereinen(dazu)
+    ya, yi = gy[0] - 1.0, gy[0] + wa + 1.0
+    sm = (L['schalter_x'], L['eingang_z'])
+    (p0, _, _), (kl, kr) = em.schalterloch_punkte(sm)
+    rs = w('schalter_d') / 2.0
+    n = segmente(w('schalter_d'))
+    bogen = [(sm[0] + rs * math.cos(t), sm[1] + rs * math.sin(t))
+             for t in (math.radians(45.0 - 270.0 * i / n)
+                       for i in range(n + 1))]
+    rt, rb = w('binder_t') / 2.0, w('binder_b') / 2.0
+    b_l, b_v, b_lue = (w('kabel_links_b') / 2.0, w('kabel_vorn_b') / 2.0,
+                       w('lueftung_b') / 2.0)
+    weg = [zylinder_z(m, w('insert_m3_d'), (gz[1] - w('insert_m3_t'),
+                                            gz[1] + 1.0))
+           for m in L['dome']]
+    weg += [zylinder_z(m, w('uno_schraube_d'), (gz[0] + 1.0,
+                                                L['uno_z0'] + 1.0))
+            for m in L['uno_loecher']]
+    weg += [quader(L['fenster_x'], (ya, yi), L['fenster_z']),
+            zylinder_y((L['buchse_x'], L['eingang_z']), w('buchse_d'),
+                       (ya, yi)),
+            prisma_y(bogen + [kl, kr], (ya, yi)),
+            zylinder_y(sm, w('schalter_d') + 2.0 * w('schalter_rand'),
+                       (gy[0] + w('schalter_wand'), yi)),
+            quader((gx[0] - 1.0, gx[0] + wa + 1.0),
+                   (L['kabel_links_y'] - b_l, L['kabel_links_y'] + b_l),
+                   (L['kabel_z0'], gz[1] + 1.0)),
+            quader((L['kabel_vorn_x'] - b_v, L['kabel_vorn_x'] + b_v),
+                   (gy[1] - wa - 1.0, gy[1] + 1.0),
+                   (L['kabel_z0'], gz[1] + 1.0))]
+    weg += [quader((gx[1] - wa - 1.0, gx[1] + 1.0), (y - b_lue, y + b_lue),
+                   L['lueftung_z']) for y in L['lueftung_y']]
+    weg += [quader((x - rb, x + rb), (y - rt, y + rt),
+                   (gz[0] - 1.0, L['boden_z'] + 1.0))
+            for x, y in L['binder']]
+    weg += [zylinder_y(m, w('m5_durchgang'),
+                       (L['platte_y'][0] - 1.0, L['platte_y'][1] + 1.0))
+            for m in L['m5']]
+    assert abs(p0[0] - bogen[0][0]) < 1e-9 and abs(p0[1] - bogen[0][1]) < 1e-9
+    k = k - vereinen(weg)
+    x0, y0 = L['platte_x'][0], gy[0]
+    k = k.translate([-x0, -y0, -gz[0]])
+    soll = (L['platte_x'][1] - x0, L['platte_y'][1] - y0,
+            max(gz[1], L['platte_z'][1]) - gz[0])
+    return fussfase(k, w('fase_fuss')), soll
 
 
 # ---- Haube des Elektronik-Gehaeuses ----------------------------------------
@@ -195,6 +277,8 @@ def main():
     os.makedirs(ZIEL, exist_ok=True)
     fehler = 0
     for name, (teil, soll), material in (
+            ('Elektronik_Gehaeuse_r{}'.format(em.REVISION), gehaeuse(em),
+             'PETG'),
             ('Elektronik_Deckel_r{}'.format(em.REVISION), haube(em), 'PETG'),
             ('Kabelhalter_r{}'.format(km.REVISION), kabelhalter(km),
              'PETG')):

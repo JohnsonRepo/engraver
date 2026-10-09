@@ -54,7 +54,7 @@ brauchen 107 mm ab der Rückseite des 2060 und enden 3,4 mm vor dem Ende der
 |---|---|---|
 | Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Gehäuse](#gehäuse-elektronikpy) links, 24-V-Lüfter im Deckel über den Treibern; USB nach hinten | gezeichnet |
 | Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Gehäuse kommt nur seine 24-V-Leitung | vorhanden |
-| 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und Wippschalter KCD1 | gezeichnet |
+| 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5) | gezeichnet |
 | Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
 | Not-Aus | vorn am vorderen 2060 im eigenen Gehäuse ([notaus.md](notaus.md)); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, Gehäuse gezeichnet |
 
@@ -68,14 +68,18 @@ nichts, die Maschine steht weiter nur auf den 2060.
 
 | Teil | Druck (PETG) | Masse (voll) | Bauraum |
 |---|---|---|---|
-| Gehäuse mit Montageplatte | auf dem Boden stehend | 148 cm³ ≈ 188 g | 202 × 107 × 55 mm |
+| Gehäuse mit Montageplatte (Rev. 4) | auf dem Boden stehend | 150 cm³ ≈ 190 g | 202 × 107 × 55 mm |
 | Deckel als Haube (Rev. 3) | Oberseite nach unten | 75 cm³ ≈ 96 g | 175 × 91 × 30,5 mm |
 | Bohrlehre_Uno (PLA, ausgeblendet) | flach | 7 cm³ ≈ 9 g | 53 × 69 × 2 mm |
 
 Die Massen sind aus den Schritten des Skripts nachgerechnet (Raster,
-0,2 mm); maßgeblich ist der erste Lauf in Fusion. Der Kasten ist mit
-Rev. 2 gedruckt. Seit Rev. 3 wird nur der Deckel neu gedruckt
-([Haube](#deckel-als-haube-rev-3)). Keine Stützen,
+0,2 mm); maßgeblich ist der erste Lauf in Fusion. Der Kasten war mit
+Rev. 2 gedruckt. Rev. 3 hat den Deckel zur [Haube](#deckel-als-haube-rev-3)
+gemacht. Rev. 4 gibt dem Kasten ein rundes Loch für den Schalter, dafür
+wird er neu gedruckt; sonst ist er gleich geblieben, die Haube passt.
+Fertige STL in Drucklage: [`stl/Elektronik_Gehaeuse_r4.stl`](../stl/Elektronik_Gehaeuse_r4.stl)
+und [`stl/Elektronik_Deckel_r4.stl`](../stl/Elektronik_Deckel_r4.stl)
+(`python3 tools/stl_export.py`, braucht `pip install manifold3d`). Keine Stützen,
 4 Wandlinien, ≥ 30 % Infill. Die Oberkante des USB-Fensters ist eine
 48-mm-Brücke.
 
@@ -109,9 +113,9 @@ vom hinteren linken Klemmturm weg.
 ### Deckel als Haube (Rev. 3)
 
 Der flache Deckel von Rev. 2 lag 8 mm über den Kühlkörpern, das war zu
-flach (Angabe 2026-10-08). Der Kasten ist schon gedruckt und
-bleibt, wie er ist. `elektronik_check.py` prüft das Maß für Maß gegen
-Rev. 2. Neu gedruckt wird nur der Deckel:
+flach (Angabe 2026-10-08). Der Kasten war schon gedruckt und blieb, wie
+er war. `elektronik_check.py` prüft das Maß für Maß gegen Rev. 2, bis auf
+das Schalterloch aus Rev. 4. Neu gedruckt wurde nur der Deckel:
 
 | | |
 |---|---|
@@ -119,7 +123,7 @@ Rev. 2. Neu gedruckt wird nur der Deckel:
 | Lippe | wie bisher innen an den Wänden des Kastens, 3 mm tief, 0,3 mm Spiel. Ein Ring innen am Fuß der Haube trägt sie |
 | Schrauben | dieselben **4 × M3×8** in die Einsätze der Dome. Über jedem Dom steht eine Säule (Ø11) mit einem Kanal (Ø6,5) von oben, unten bleibt ein 3 mm Boden. Kopf und Inbus 2,5 gehen durch den Kanal bis auf diesen Boden, die Schraube greift 5 mm in den Einsatz |
 | Lüfter | oben auf der Platte über der Mitte des Uno, wie bisher 4 × M3×16 mit Mutter |
-| Druck | Oberseite aufs Bett, 30,5 mm hoch, keine Stützen. Die Böden über den Domen sind kurze Brücken über den Kanal. Fertig in Drucklage: [`stl/Elektronik_Deckel_r3.stl`](../stl/Elektronik_Deckel_r3.stl) (`python3 tools/stl_export.py`, braucht `pip install manifold3d`) |
+| Druck | Oberseite aufs Bett, 30,5 mm hoch, keine Stützen. Die Böden über den Domen sind kurze Brücken über den Kanal. Fertig in Drucklage: [`stl/Elektronik_Deckel_r4.stl`](../stl/Elektronik_Deckel_r4.stl), seit Rev. 3 unverändert |
 
 Höher ginge es bis etwa **65 mm** (`deckel_aufbau`), dann käme das
 Portalrohr am hinteren Schienenende bis auf 3 mm an die Haube. Mit
@@ -154,8 +158,16 @@ der Kasten endet 8 mm darüber und ist dadurch 6 mm niedriger (die Platte
 der Haube liegt seit Rev. 3 33 mm darüber); das
 Lochbild des Uno stimmt mit der Bohrlehre; der Wandler, 43 × 24 × 20 mm.
 
-**Nicht gemessen `[w]`:** die Einbaubuchse (Loch 8,2 für M8), der Schalter
-KCD1 (Ausschnitt 19,2 × 12,9, Wand dort 1,6 mm für die Rastnasen) und die
+**Schalter (Rev. 4):** rund, die Blende außen **22,5 mm** `[v]` (Angabe
+2026-10-09; bis Rev. 3 war ein eckiger KCD1 mit 19,2 × 12,9 angenommen).
+Das Einbauloch ist **Ø20,2** angenommen `[?]`, bei dieser Blende üblich
+20 mm. Die Wand ist um das Loch innen auf 1,6 mm verdünnt, damit die
+Rastnasen greifen. Oben endet das Loch mit zwei 45°-Flanken 0,6 mm über
+dem Kreis flach. So druckt es in der senkrechten Wand ohne Überhang, und
+die Blende deckt die Kappe. Miss vor dem Druck den Körper des Schalters:
+Ist er dicker als 20 mm, `schalter_d` anpassen.
+
+**Nicht gemessen `[w]`:** die Einbaubuchse (Loch 8,2 für M8) und die
 Wago-Klemmen nach Datenblatt: 221-415 30,2 × 18,8 × 8,6 mm, 221-420
 (10 Leiter, zwei Reihen) 29,8 × 18,3 × 15,8 mm (Breite × Tiefe × Höhe, je
 die größere Händlerangabe).
@@ -170,7 +182,7 @@ die größere Händlerangabe).
 | `vert_b` | 94 mm | Breite des Verteilers (3 Wago nebeneinander) |
 | `wandler_l` / `_b` / `_h` | 43 / 24 / 20 mm `[v]` | Wandler; `wandler_binder` 15 mm: Kabelbinder neben seiner Mitte |
 | `buchse_d` | 8,2 mm | Loch der Einbaubuchse |
-| `schalter_b` / `schalter_h` / `schalter_wand` | 19,2 / 12,9 / 1,6 mm | Ausschnitt und Wand am Schalter |
+| `schalter_d` / `schalter_blende_d` / `schalter_wand` | 20,2 `[?]` / 22,5 `[v]` / 1,6 mm | runder Wippschalter: Einbauloch, Blende außen, Wand am Loch; `schalter_kappe` 0,6 mm: flache Kappe oben |
 | `uno_schraube_d` | 2,8 mm | Kernloch in den Stehbolzen |
 
 ## Leistung: Reichen 72 W?
@@ -354,7 +366,7 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
 |---|---|---|
 | 1 | Abwärtswandler 24 → 12 V / 5 A, 43 × 24 × 20 mm | vorhanden |
 | 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Gehäuse: Loch 8,2) | 24-V-Eingang |
-| 1 | Wippschalter KCD1 (Ausschnitt 19,2 × 12,9 mm), ≥ 3 A | EIN/AUS |
+| 1 | Wippschalter rund (Blende Ø22,5, Einbauloch Ø20), ≥ 3 A | EIN/AUS |
 | 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
 | 2 | Energiekette, gedruckt: Anfangsstück und Endstück 180, 17 Glieder für X, 16 für Y (gleiche Größe) | X und Y; Wannen, Stützen, Träger und Halter: [energiekette.md](energiekette.md#verschraubung) |
 | 1 + 2 | Wago 221-415 (+24 V), 221-420 (GND, +5 V); 221-413 Reserve | vorhanden |

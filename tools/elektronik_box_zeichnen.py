@@ -39,7 +39,7 @@ Y_BEREICH = (-382.0, -216.0)     # Maschinen-Y, vorn (zur Maschine) unten
 # tools/elektronik_check.py (nicht gemessen); dazu nur fuers Bild [?]:
 BUCHSE_MUTTER = 2.0              # Einbaubuchse: Mutter innen, dick
 BUCHSE_BUND = (10.0, 2.0)        # ... Bund aussen: breit, dick
-SCHALTER_RAHMEN = 3.0            # KCD1: Rahmen aussen, tief
+SCHALTER_RAHMEN = 3.0            # runder Schalter: Blende aussen, tief
 BINDER_B = 3.6                   # Kabelbinder: Breite
 
 BODEN = '#fdf1e6'                # Boden und Kanal, tiefer als die Waende
@@ -132,7 +132,7 @@ def draufsicht(f, ew, EL):
     fx = EL['fenster_x']
     t.append(verdeckt(f, fx[0], fx[1], gy[0], iy[0]))
     for x, h in ((EL['buchse_x'], ew('buchse_d') / 2.0),
-                 (EL['schalter_x'], ew('schalter_b') / 2.0)):
+                 (EL['schalter_x'], ew('schalter_d') / 2.0)):
         t.append(verdeckt(f, x - h, x + h, gy[0], iy[0]))
     h = ew('lueftung_b') / 2.0
     for y in EL['lueftung_y']:
@@ -175,8 +175,9 @@ def draufsicht(f, ew, EL):
     cx, cy = mitte_px(f, x, x, y0, y0 + SCHALTER_KOERPER[2])
     schrift.append(text(cx, cy - 1, 'Schalter', 8.0, TEXT, 'middle',
                         fett=True))
-    schrift.append(text(cx, cy + 9, 'KCD1', 7.5, GRAU, 'middle'))
-    t.append(f.rect(x - h, x + h, gy[0] - SCHALTER_RAHMEN, gy[0], 'kauf'))
+    schrift.append(text(cx, cy + 9, 'rund', 7.5, GRAU, 'middle'))
+    hb = ew('schalter_blende_d') / 2.0
+    t.append(f.rect(x - hb, x + hb, gy[0] - SCHALTER_RAHMEN, gy[0], 'kauf'))
     wx, wy = EL['wandler_x'], EL['wandler_koerper_y']
     t.append(f.rect(*wx, *wy, 'wandler'))
     ya, yb = EL['binder'][0][1], EL['binder'][1][1]

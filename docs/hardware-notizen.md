@@ -457,9 +457,12 @@ eigene Achse, sondern eine elektrische Kopie von Y.
 
 ### Pins: GRBL 1.1 gegen den Aufdruck
 
-Der Aufdruck des Shields stammt aus GRBL 0.9. In GRBL 1.1 braucht die
-Laserleistung den Hardware-PWM an D11, dafür ist der Z-Endschalter auf D12
-gewandert:
+Der Aufdruck des Shields stammt aus GRBL 0.8: Damals war D11 der
+Z-Endschalter und D12 „Spindel an“. Seit GRBL 0.9 sind die beiden
+getauscht. Die Laserleistung braucht einen Hardware-PWM, und D11 ist der
+einzige, den GRBL frei hat: Zwei der drei Timer des Uno erzeugen die
+Schritte, der dritte hat seine Ausgänge an D3 (Schritt Y) und D11. Die
+Leiterbahnen des Shields sind geblieben, nur ihre Bedeutung nicht:
 
 | Aufdruck | Uno-Pin | GRBL 1.1 |
 |---|---|---|

@@ -38,7 +38,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Elektronik'
-REVISION = 4
+REVISION = 5
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -95,10 +95,13 @@ MASSE = {
     'vert_b':              (94.0, 'Verteiler: Innenbreite (3 Wago nebeneinander)'),
     'buchse_d':             (8.2, 'Einbaubuchse 5,5 x 2,1, Gewinde M8'),
     # Rev. 4: Der Wippschalter ist rund, die Blende aussen 22,5 mm [v]
-    # (Angabe 2026-10-09; bis Rev. 3 ein eckiger KCD1, 19,2 x 12,9). Das
-    # Einbauloch ist nicht gemessen [?], bei dieser Blende ueblich 20 mm.
-    # Der Kasten wird dafuer neu gedruckt, sonst bleibt er wie Rev. 2.
-    'schalter_d':          (20.2, 'Wippschalter rund: Einbauloch [?]'),
+    # (Angabe 2026-10-09; bis Rev. 3 ein eckiger KCD1, 19,2 x 12,9). Der
+    # Kasten wird dafuer neu gedruckt, sonst bleibt er wie Rev. 2.
+    # Rev. 5: Koerper gemessen, 20,0 mm [v] (Angabe 2026-10-09); das Loch
+    # bekommt 0,4 Montagespiel (Rev. 4: 20,2 angenommen). In der senkrechten
+    # Wand druckt es eher etwas enger.
+    'schalter_koerper_d':  (20.0, 'Wippschalter rund: Koerper [v]'),
+    'schalter_d':          (20.4, 'Wippschalter rund: Einbauloch (Koerper + 0,4)'),
     'schalter_blende_d':   (22.5, 'Wippschalter rund: Blende aussen [v]'),
     'schalter_kappe':       (0.6, 'Schalterloch: oben flach, so weit ueber dem Kreis'),
     'schalter_wand':        (1.6, 'Wippschalter: Wand am Loch (Rastnasen)'),

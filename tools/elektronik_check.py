@@ -37,7 +37,7 @@ BETT = 250.0                  # Bambu Lab A1: 256, mit Rand
 # Einbaumasse der Kaufteile hinter der Rueckwand [w]
 BUCHSE_KOERPER_D = 11.0       # Einbaubuchse M8: Mutter und Loetfahnen
 BUCHSE_KOERPER_T = 15.0       # ... so tief hinter der Wand
-SCHALTER_KOERPER = (20.0, 20.0, 20.0)   # rund: Ø wie das Loch, tief [?]
+SCHALTER_KOERPER = (20.0, 20.0, 20.0)   # rund: Ø 20 [v], tief [?]
 SCHALTER_BLENDE_T = 3.0       # Blende vor der Wand [?]
 # Der Kasten war mit Rev. 2 gedruckt (Angabe 2026-10-08), die Haube aus
 # Rev. 3 passt auf ihn. Seit Rev. 4 wird er wegen des runden Schalters neu
@@ -320,6 +320,11 @@ def main():
          (sx - rb) - (bx + BUCHSE_KOERPER_D / 2.0), 3.0)
     p.ok('Schalter: Blende ueber der Unterkante des Kastens',
          ez - rb - gz[0], 2.0)
+    p.ok('Schalter: Koerper wie gemessen [v]',
+         abs(SCHALTER_KOERPER[0] - ew('schalter_koerper_d')), 0.0, '<=')
+    p.ok('Schalter: Spiel im Loch (diametral, Koerper {:.1f})'.format(
+        ew('schalter_koerper_d')), ew('schalter_d')
+        - ew('schalter_koerper_d'), 0.3)
     p.ok('Schalter: Blende deckt das Loch (Kreis)', rb - rs, 0.5)
     p.ok('Schalter: Blende deckt die flache Kappe oben',
          rb - (rs + ew('schalter_kappe')), 0.3)

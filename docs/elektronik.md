@@ -103,7 +103,7 @@ darüber hinaus, bis 26 mm über die Oberkante des Fachs. Sie stehen aber
 16 mm hinter dem 2060 und in der Mitte, dort fährt nichts so tief
 herunter. `tools/elektronik_check.py` fährt Portal und Toolhead über den
 ganzen Weg dagegen. Die engste Stelle ist 22,7 mm (Montageplatte ↔
-Trägerplatte, Portal am hinteren Schienenende). Die Haube bleibt 25,5 mm
+Trägerplatte, Portal am hinteren Schienenende). Die Haube bleibt 24,5 mm
 vom hinteren linken Klemmturm weg.
 
 ### Deckel als Haube (Rev. 3)

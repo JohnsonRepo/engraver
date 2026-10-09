@@ -613,11 +613,6 @@ def portal_bauraeume(w, L):
             ('Platte ' + n, 'Y-Wagen ' + n),
             ('Klemmturm hinten ' + n, 'Y-Riemen ' + n),
             ('Klemmturm vorn ' + n, 'Y-Riemen ' + n),
-            # Seit Rev. 26 liegen die Tuerme im Modell an der 2040 an, das
-            # die Schiene mittig rechnet; am Aufbau bleibt kt_luft_profil
-            # (portal_check.py, Abschnitt 6, mit kt_luft_mehr)
-            ('Klemmturm hinten ' + n, 'Rahmen 2040 ' + n),
-            ('Klemmturm vorn ' + n, 'Rahmen 2040 ' + n),
             ('Y-Wagen ' + n, 'Y-Schiene ' + n),
             ('Y-Schiene ' + n, 'Rahmen 2040 ' + n),
             ('Y-Ruecklauf ' + n, 'Rahmen 2040 ' + n),   # laeuft in der Nut

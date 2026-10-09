@@ -115,8 +115,8 @@ gespiegelt. Sie tragen das Portalrohr von unten und verschrauben es hinten
 Kernbohrung) — die Vorderseite bleibt frei für die X-Schiene. Unter jeder
 Platte hängen **zwei gleiche Klemmtürme wie bei v8** mit Rippen und
 Querstift, einer je Riemenende — seit Rev. 25 dicht an der 2040, damit
-der Y-Riemen in die Nut läuft, seit Rev. 26 am Aufbau 1 mm daneben, seit
-Rev. 27 unter den Gewindeeinsätzen schmal.
+der Y-Riemen in die Nut läuft, seit Rev. 27 unter den Gewindeeinsätzen
+schmal, seit Rev. 28 an der engsten Stelle 1 mm neben der 2040.
 Links steht der **X-Motor** über dem Rohrende — so tief, dass seine
 20-mm-Welle das ganze Ritzel trägt —, rechts die **Umlenkung**: ein Ritzel
 wie am Motor auf einer Welle in Kugel- und Gleitlager, beide in einem
@@ -328,22 +328,25 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 27 mit
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 28 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
-Spannmittel Rev. 1). Neu ist Portal Rev. 27: Die Klemmtürme sind nur noch
-oben, im Block um die Gewindeeinsätze, so breit wie bisher; darunter ist
-die Wand innen neben dem Riemen 5,4 statt 12,2 mm dick. Riemen, 1 mm Luft
-zur 2040 und die Schrauben zur Platte bleiben, der Querstift wird ein
-Ø3 × 8 oder M3×8, ein Turm braucht 37 % weniger Material
-([portal-y-schlitten.md](docs/portal-y-schlitten.md#schmaler-unter-den-einsätzen-seit-rev-27)).
-Davor kam Portal Rev. 26: Mit den Klemmtürmen aus
-Rev. 25 waren am Aufbau 3,0 statt der gerechneten 2 mm Luft zur 2040. Die
-Türme rückten 2 mm näher heran, am Aufbau bleibt 1 mm; der gemessene
-Unterschied steht als `kt_luft_mehr` im Skript. Die Riemenmitte liegt jetzt
-3,9 statt 5,9 mm vor der Seitenfläche, der vordere Trum taucht auch am
-vorderen Schienenende sicher in die Nut. Der Querstift steckt seitdem in
-einem Sackloch und kann nicht zur 2040 hinauswandern
+Spannmittel Rev. 1). Neu ist Portal Rev. 28: Die Klemmtürme aus Rev. 26/27
+streiften an der engsten Stelle an der 2040. Rev. 26 hatte die an einer
+Stelle gemessenen 3,0 statt 2 mm Luft für den ganzen Weg angenommen. Jetzt
+stehen die Türme an der engsten Stelle 1 mm neben der 2040, an der
+weitesten 2 mm (`kt_luft_mehr` 0, `kt_luft_streuung` 1 mm). Die
+Riemenmitte liegt 3,9 bis 4,9 mm vor der Seitenfläche, der vordere Trum
+taucht auch an der weitesten Stelle in die Nut. Nur die vier Klemmtürme
+neu drucken, die Stifte bleiben
 ([portal-y-schlitten.md](docs/portal-y-schlitten.md#1-mm-neben-der-2040-seit-rev-26)).
+Davor kam Portal Rev. 27: Die Klemmtürme sind nur noch oben, im Block um
+die Gewindeeinsätze, so breit wie bisher; darunter ist die Wand innen neben
+dem Riemen 5,4 statt 12,2 mm dick. Der Querstift wurde ein Ø3 × 8 oder
+M3×8, ein Turm braucht gut ein Drittel weniger Material
+([portal-y-schlitten.md](docs/portal-y-schlitten.md#schmaler-unter-den-einsätzen-seit-rev-27)).
+Davor kam Portal Rev. 26: Die Klemmtürme rückten 2 mm an die 2040 heran,
+der Querstift steckt seitdem in einem Sackloch und kann nicht zur 2040
+hinauswandern.
 Davor kam Portal Rev. 25: Die Y-Klemmtürme rückten von 7,2 mm an die 2040
 heran, damit der Riemen in die obere Nut läuft.
 Davor kam `Spannmittel.py`: Anschlagwinkel als

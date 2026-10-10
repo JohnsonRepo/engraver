@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Zeichnung des Pi-Halters: links die Ansicht von hinten (so, wie man ihn
-an der Maschine sieht und anschraubt; X waechst dort nach links), rechts
-der Schnitt durch den Pi mit dem hinteren 2060. Masse aus
+an der Maschine sieht und anschraubt; X waechst dort nach links, die Haube
+gestrichelt), rechts der Schnitt durch den Pi mit dem hinteren 2060 und der
+Haube. Masse aus
 fusion/PiHalter/PiHalter.py, Kasten und Rahmen aus Elektronik.py und
 Portal.py, das Kabelbuendel wie in tools/pihalter_check.py.
 
@@ -21,6 +22,7 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'pihalter.svg')
 
 FARBE.update({
+    'haube':   ('#ffe3c2', '#d9480f'),
     'platine': ('#cfe6d2', '#2b8a3e'),
     'kabel':   ('#e5dbff', '#7048e8'),
     'nut':     ('#ffffff', '#8c939e'),
@@ -70,6 +72,15 @@ def von_hinten(f, hw, HL, EL, kb):
     # M5-Koepfe
     for x, z in HL['m5']:
         t.append(f.kreis(x, z, hw('m5_kopf_d') / 2.0, 'stahl'))
+    # Dome mit Einsatz; die Haube gestrichelt mit ihren Lueftungsschlitzen
+    for x, z in HL['dome']:
+        t.append(f.kreis(x, z, hw('dom_d') / 2.0, 'neu'))
+        t.append(f.kreis(x, z, hw('insert_m3_d') / 2.0, 'messing'))
+    t.append(f.rect(*HL['haube_x'], *HL['haube_z'], 'haube', fill='none',
+                    stroke_dasharray='7 4', stroke_width='1.6'))
+    for u0, v0, u1, v1 in HL['lueftung']:
+        t.append(f.rect(u0, u1, v0, v1, 'haube', fill_opacity='0.5',
+                        stroke_dasharray='3 2'))
     return t
 
 
@@ -102,6 +113,25 @@ def schnitt(f, hw, HL, kb):
     sx, sy, sz = HL['stecker']['USB']
     t.append(f.rect(*sy, *sz, 'kauf', stroke_dasharray='3 2',
                     fill_opacity='0.5'))
+    # Haube: Rueckwand (mit dem Lueftungsschlitz ueber dem Pi) und Dach;
+    # dahinter der Dom unter dem Pi mit Einsatz und M3x8
+    hy, hz = HL['haube_y'], HL['haube_z']
+    iy0, iz1 = HL['haube_innen'][1][0], HL['haube_innen'][2][1]
+    xs = sum(HL['pi_x']) / 2.0
+    sl = [(v0, v1) for u0, v0, u1, v1 in HL['lueftung'] if u0 <= xs <= u1]
+    for z0w, z1w in ([(hz[0], sl[0][0]), (sl[0][1], hz[1])] if sl
+                     else [hz]):
+        t.append(f.rect(hy[0], iy0, z0w, z1w, 'haube'))
+    t.append(f.rect(iy0, hy[1], iz1, hz[1], 'haube'))
+    xd, zd = HL['dome'][-1]
+    rd, ri = hw('dom_d') / 2.0, hw('insert_m3_d') / 2.0
+    t.append(f.rect(*HL['dom_y'], zd - rd, zd + rd, 'neu',
+                    stroke_dasharray='4 3', fill_opacity='0.5'))
+    t.append(f.rect(*HL['einsatz_y'], zd - ri, zd + ri, 'messing'))
+    kr = hw('m3_kopf_d') / 2.0
+    t.append(f.rect(*HL['m3_kopf_y'], zd - kr, zd + kr, 'stahl'))
+    t.append(f.rect(HL['m3_kopf_y'][1], HL['m3_kopf_y'][1] + hw('m3_l'),
+                    zd - 1.5, zd + 1.5, 'stahl'))
     # M5 mit Hammermutter in der oberen Nut
     zn, rk = HL['nut_z'], hw('m5_kopf_d') / 2.0
     t.append(f.rect(*HL['kopf_y'], zn - rk, zn + rk, 'stahl'))
@@ -119,16 +149,17 @@ def main():
     hw, HL = hm.w, hm.lage()
     kb = pc.kabelbuendel(L, EL)
     (x0, x1), (z0, z1) = HL['x'], HL['z']
-    t = [text(24, 30, 'Pi-Halter (PiHalter.py Rev. {}) — Pi Zero 2 W und '
-              '5-V-Wandler an der Rückseite des hinteren 2060'.format(
+    t = [text(24, 30, 'Pi-Halter mit Haube (PiHalter.py Rev. {}) — Pi Zero '
+              '2 W und 5-V-Wandler an der Rückseite des hinteren 2060'.format(
                   hm.REVISION), 14, TEXT, fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Rechts '
               'neben dem Elektronik-Kasten, 2 × M5×12 in der oberen Nut; '
-              'Pi und Wandler ganz über dem 2060.', 9, GRAU)]
+              'Pi und Wandler ganz über dem 2060. Die Haube ist von hinten '
+              'gestrichelt gezeichnet.', 9, GRAU)]
 
     # ---- Ansicht von hinten ------------------------------------------------
     s = 3.2
-    fa = Feld(150, 92, (-62.0, 172.0), (-131.0, -14.0), s, a_rueck=True)
+    fa = Feld(150, 92, (-62.0, 188.0), (-131.0, -14.0), s, a_rueck=True)
     t += fa.ausschnitt('hinten', von_hinten(fa, hw, HL, EL, kb))
     t += fa.rahmen('Von hinten gesehen (X wächst nach links)')
     wx, wz = HL['wandler_x'], HL['wandler_z']
@@ -152,7 +183,11 @@ def main():
          'USB-A-Stecker am\nWandler (W19)'),
         (EL['platte_x'][1] - 6.0, EL['platte_z'][0] + 10.0,
          'Montageplatte und\nKasten (davor)'),
-        (HL['m5'][0][0], HL['m5'][0][1], 'M5×12')],
+        (HL['m5'][0][0], HL['m5'][0][1], 'M5×12'),
+        (HL['dome'][1][0] + 3.0, HL['dome'][1][1], 'Dom mit Einsatz M3\n'
+         'für die Haube'),
+        (sum(HL['lueftung'][1][::2]) / 2.0, HL['lueftung'][1][3],
+         'Haube (gestrichelt),\nLüftungsschlitze oben')],
         fa.ox + fa.breite + 12, 'start', abstand=26.0)
     t += quer_mass(fa, x0, x1, z1, '{} mm'.format(de(x1 - x0, 0)), -6)
     t += fa.mass(x1 + 6.0, z0, z1, '{} mm'.format(de(z1 - z0, 0)), 4)
@@ -162,7 +197,7 @@ def main():
 
     # ---- Schnitt durch den Pi ----------------------------------------------
     s2 = 3.2
-    fb = Feld(fa.ox + fa.breite + 270, 92, (-288.0, -224.0), (-131.0, -14.0),
+    fb = Feld(fa.ox + fa.breite + 270, 92, (-292.0, -224.0), (-131.0, -14.0),
               s2)
     t += fb.ausschnitt('schnitt', schnitt(fb, hw, HL, kb))
     t += fb.rahmen('Schnitt durch den Pi (vorn rechts)')
@@ -175,7 +210,13 @@ def main():
          HL['stecker']['USB'][2][0] + 3.0, 'Stecker hängt\nnach unten'),
         (HL['wandler_y'][0] + 2.0, HL['wandler_z'][1] - 3.0,
          'Wandler (dahinter)'),
-        (sum(kb.y) / 2.0, kb.z[0] + 2.0, 'Kabelbündel W2, W10,\nW14, W18')],
+        (sum(kb.y) / 2.0, kb.z[0] + 2.0, 'Kabelbündel W2, W10,\nW14, W18'),
+        (HL['haube_y'][0] + 1.0, (HL['haube_z'][0] + HL['dome'][-1][1]) / 2.0,
+         'Haube {} mm,\nunten offen'.format(de(hw('haube_wand'), 0))),
+        (HL['haube_y'][0] + 1.0, HL['lueftung'][0][3] - 1.5,
+         'Lüftungsschlitz'),
+        (HL['m3_kopf_y'][0] + 1.0, HL['dome'][-1][1],
+         'M3×{} in den Dom\n(dahinter)'.format(de(hw('m3_l'), 0)))],
         fb.ox - 12, 'end', abstand=26.0)
     t += fb.spalte([
         (y1 + 10.0, -74.0, 'hinteres 2060'),
@@ -189,8 +230,15 @@ def main():
     ty = fa.oy + fa.hoehe + 44
     zeilen = [
         ('Platte', '{} × {} × {} mm, PETG; die Seite am 2060 aufs Bett, '
-         'Stehbolzen nach oben, keine Stützen'.format(
-             de(x1 - x0, 0), de(z1 - z0, 0), de(hw('platte_dicke'), 0))),
+         'Stehbolzen und Dome nach oben, keine Stützen'.format(
+             de(x1 - x0, 0), de(z1 - z0, 1), de(hw('platte_dicke'), 0))),
+        ('Haube', '{} × {} × {} mm, PETG, Rückwand aufs Bett; Wände {} mm '
+         'auf der Platte, unten offen, {} Lüftungsschlitze oben; 3 × M3×{} '
+         'in Messing-Einsätze M3 Ø5 in den Domen'.format(
+             de(x1 - x0, 0), de(z1 - z0, 1),
+             de(HL['haube_y'][1] - HL['haube_y'][0], 0),
+             de(hw('haube_wand'), 0), len(HL['lueftung']),
+             de(hw('m3_l'), 0))),
         ('Lage', 'X {} bis {} (Maschinenkoordinaten), {} mm rechts neben '
          'der Montageplatte des Kastens'.format(
              de(x0, 0), de(x1, 0), de(x0 - EL['platte_x'][1], 1))),

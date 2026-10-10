@@ -264,8 +264,8 @@ def leitungen():
         dict(nr='W18', name='24 V für den Pi', art='Leitung 2-adrig',
              mm2=ez.LITZE_24V, kabel='Pi 24 V', strom=3.0,
              weg='an der Buchse gelötet, vorn raus, Kanal, an der Rückseite '
-                 'des hinteren 2060 unter dem Pi-Halter durch, dahinter hoch '
-                 'zum 5-V-Wandler',
+                 'des hinteren 2060 unter dem Pi-Halter durch, von unten in '
+                 'die Haube und an ihrer linken Wand hoch zum 5-V-Wandler',
              hinweis='vor Schalter und Not-Aus: Pi und Uno bleiben an',
              adern=[('+24 V', 'rot', 'Buchse +', '5V-Wandler IN+'),
                     ('GND', 'schwarz', 'Buchse −', '5V-Wandler IN−')]),

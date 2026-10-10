@@ -370,12 +370,12 @@
 <text x="604.0" y="948.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W17</text>
 <text x="640.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">USB zum Pi</text>
 <text x="780.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">USB-Kabel Micro-B–B (OTG)</text>
-<text x="964.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,43 → 0,5 m</text>
+<text x="964.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,44 → 1 m</text>
 <text x="1056.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="604.0" y="962.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W18</text>
 <text x="640.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">24 V für den Pi</text>
 <text x="780.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">2 × 0,75 mm² (AWG 18)</text>
-<text x="964.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,27 → 0,5 m</text>
+<text x="964.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,28 → 0,5 m</text>
 <text x="1056.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="604.0" y="976.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W19</text>
 <text x="640.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">5 V für den Pi</text>

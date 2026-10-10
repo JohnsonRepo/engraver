@@ -78,8 +78,8 @@ begrenzt den Strom selbst.
 | W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,98 m | **1,5 m**, fertig | — |
 | W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,54 m | **2 m**, fertig | Y + X |
 | W16 | **24-V-Wächter an Abort** — fehlen die 24 V hinter Schalter und Not-Aus, bricht GRBL ab | Widerstand | im Kasten | — | — | — |
-| W17 | **USB zum Pi** — Micro-B in die Buchse „USB“ des Pi, nicht in „PWR IN“ | USB-Kabel Micro-B–B (OTG) | hinten aus dem USB-Fenster, hinter dem Kasten nach rechts, an seiner rechten Wand nach vorn zum Pi-Halter | 0,43 m | **0,5 m**, fertig | — |
-| W18 | **24 V für den Pi** — vor Schalter und Not-Aus: Pi und Uno bleiben an | 2 × 0,75 mm² (AWG 18) | an der Buchse gelötet, vorn raus, Kanal, an der Rückseite des hinteren 2060 unter dem Pi-Halter durch, dahinter hoch zum 5-V-Wandler | 0,27 m | **0,5 m** | — |
+| W17 | **USB zum Pi** — Micro-B in die Buchse „USB“ des Pi, nicht in „PWR IN“ | USB-Kabel Micro-B–B (OTG) | hinten aus dem USB-Fenster, hinter dem Kasten nach rechts, an seiner rechten Wand nach vorn zum Pi-Halter | 0,44 m | **1 m**, fertig | — |
+| W18 | **24 V für den Pi** — vor Schalter und Not-Aus: Pi und Uno bleiben an | 2 × 0,75 mm² (AWG 18) | an der Buchse gelötet, vorn raus, Kanal, an der Rückseite des hinteren 2060 unter dem Pi-Halter durch, von unten in die Haube und an ihrer linken Wand hoch zum 5-V-Wandler | 0,28 m | **0,5 m** | — |
 | W19 | **5 V für den Pi** — Stromadern mindestens AWG 24, sonst meldet der Pi Unterspannung | USB-Kabel A–Micro-B | am Pi-Halter: vom USB-Ausgang des Wandlers in „PWR IN“ | 0,07 m | **0,25 m**, fertig | — |
 <!-- /tabelle:leitungen -->
 
@@ -189,7 +189,7 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 | 3 m | Silikonlitze 0,25 mm² (AWG 24), schwarz | W9 1 m · W11 2 m |
 | 3 m | Silikonlitze 0,25 mm² (AWG 24), gelb | W9 1 m · W11 2 m |
 | 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker zum Motor, Dupont 4-polig zum Shield; für W15 lose Adern ohne Mantel (läuft durch beide Ketten) | W14, W15 (W12, W13: die mitgelieferten 1-m-Kabel) |
-| 1 | USB-Kabel Micro-B–B (OTG), 0,5 m | W17 (USB zum Pi) |
+| 1 | USB-Kabel Micro-B–B (OTG), 1 m | W17 (USB zum Pi) |
 | 1 | USB-Kabel A–Micro-B, 0,25 m | W19 (5 V für den Pi) |
 | 17 + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, Lichtschranken, W8, W16 |
 | 6 · 1 · 3 | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, Pull-down, Lichtschranken |
@@ -376,23 +376,27 @@ Kontakt und meldet mehr als nur den Not-Aus.
 
 Der Pi steuert die Maschine ohne PC: Aufträge aus LightBurn liegen als
 Datei auf ihm und starten im Browser ([pi.md](pi.md)). Er sitzt mit seinem
-5-V-Wandler auf dem [Pi-Halter](pi.md#halter) rechts neben dem Kasten.
+5-V-Wandler auf dem [Pi-Halter](pi.md#halter) rechts neben dem Kasten, unter
+einer [Haube](pi.md#haube).
 
-1. **Pi-Halter** an die Rückseite des hinteren 2060, rechts neben die
+1. **Pi-Halter** (die drei Messing-Einsätze für die Haube vorher
+   einschmelzen) an die Rückseite des hinteren 2060, rechts neben die
    Montageplatte des Kastens: 2 Hammermuttern in die obere Nut, 2 × M5×12.
    Den Pi mit 4 × M2.5×6 auf die Stehbolzen, Bauteile nach hinten, Buchsen
    nach unten. Den 5-V-Wandler links daneben, Eingang zum Kasten, USB-Buchse
    zum Pi, mit 2 Kabelbindern durch die Schlitze über und unter ihm.
 2. **W18** hängt schon an der Buchse (Schritt 2), also vor Schalter und
    Not-Aus. Vorn aus dem Kasten, im Kanal nach rechts, an der Rückseite des
-   2060 unter dem Pi-Halter durch und dahinter hoch: rot an **IN+**, schwarz
-   an **IN−** des 5-V-Wandlers, mit Aderendhülsen.
+   2060 unter dem Pi-Halter durch, von unten in die Haube und links neben
+   dem Wandler hoch: rot an **IN+**, schwarz an **IN−** des 5-V-Wandlers,
+   mit Aderendhülsen.
 3. Netzteil einstecken, Schalter aus lassen: Am USB-Ausgang des Wandlers
    liegen **5,0–5,2 V**. Erst dann weiter.
 4. **W19:** das kurze USB-Kabel vom Wandler in **PWR IN** des Pi.
 5. **W17:** das OTG-Kabel von der Buchse **USB** des Pi (die mittlere, nicht
-   PWR IN) nach unten, unter dem Wandler nach links, rechts am Kasten
-   vorbei nach hinten und hinter ihm ins USB-Fenster des Uno.
+   PWR IN) nach unten aus der Haube, nach links, rechts am Kasten vorbei
+   nach hinten und hinter ihm ins USB-Fenster des Uno.
+6. **Haube** aufsetzen, 3 × M3×8 in die Einsätze.
 
 Für GRBL aufspielen und die ersten Prüfungen darf statt des Pi der Mac am
 USB des Uno hängen. Dann [Prüfung J](#j-pi-und-cncjs).
@@ -412,7 +416,8 @@ sind sie in [elektronik.md](elektronik.md#kabel).
   untere Außennut: W14 und W2 nach vorn, W10 nach hinten zum Halter Y. W2
   verlässt die Nut vor dem 2060, läuft in dessen oberer Nut vorn nach
   links und rechts oben ins Gehäuse des Not-Aus. W18 geht mit bis unter
-  den Pi-Halter und dahinter hoch zum 5-V-Wandler.
+  den Pi-Halter, von unten in seine Haube und an ihrer linken Wand hoch zum
+  5-V-Wandler.
 * **Hinten aus dem Gehäuse** nur W17: aus dem USB-Fenster hinter dem
   Kasten nach rechts, an seiner rechten Wand nach vorn zum Pi. Der Pi-Halter
   sitzt über den Kabeln der mittleren Nut, die laufen unter ihm durch.

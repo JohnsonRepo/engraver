@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """STL-Dateien zum Drucken, ohne Fusion: Kasten und Haube des Elektronik-
-Gehaeuses (fusion/Elektronik), Kabelhalter (fusion/Kabelhalter) und
-Pi-Halter (fusion/PiHalter).
+Gehaeuses (fusion/Elektronik), Kabelhalter (fusion/Kabelhalter), Pi-Halter
+und seine Haube (fusion/PiHalter).
 
 Die Geometrie entsteht aus denselben Massen wie in Fusion — lage() der
 Skripte wird mit gestubbtem adsk-Modul importiert — und wird hier mit
@@ -16,11 +16,12 @@ gegen den Elefantenfuss (0,4 mm, in vier Stufen):
   Haube       Oberseite aufs Bett, Waende und Lippe nach oben
   Kabelhalter Querschnitt flach, die 16 mm Breite nach oben, die Spitze der
               Traene oben
-  Pi-Halter   die Seite am 2060 aufs Bett, Stehbolzen nach oben
+  Pi-Halter   die Seite am 2060 aufs Bett, Stehbolzen und Dome nach oben
+  Pi-Haube    Rueckwand aufs Bett, Waende nach oben
 
     pip install manifold3d
     python3 tools/stl_export.py        ->  stl/*.stl
-    python3 tools/stl_export.py PiHalter   ->  nur stl/PiHalter_r*.stl
+    python3 tools/stl_export.py PiHalter   ->  nur stl/PiHalter*_r*.stl
 """
 
 import math
@@ -252,23 +253,50 @@ def kabelhalter(km):
 def pihalter(hm):
     """Wie bau_halter() in PiHalter.py, in Maschinenkoordinaten; danach so
     gedreht, dass die Seite am 2060 (Y = quer_y1) auf dem Bett liegt und
-    die Stehbolzen nach oben zeigen: (X, Y, Z) -> (X - x0, Z - z0, y1 - Y)."""
+    Stehbolzen und Dome nach oben zeigen: (X, Y, Z) -> (X - x0, Z - z0,
+    y1 - Y)."""
     w, L = hm.w, hm.lage()
     (x0, x1), (y0, y1), (z0, z1) = L['x'], L['platte_y'], L['z']
     teile = [quader(L['x'], L['platte_y'], L['z'])]
     teile += [zylinder_y(m, w('steg_d'), (L['steg_y'][0], y0 + 0.5))
               for m in L['pi_loecher']]
+    teile += [zylinder_y(m, w('dom_d'), (L['dom_y'][0], y0 + 0.5))
+              for m in L['dome']]
     k = vereinen(teile)
     weg = [zylinder_y(m, w('m25_kern'), (L['kernloch_y'][0] - 0.5,
                                          L['kernloch_y'][1]))
            for m in L['pi_loecher']]
+    weg += [zylinder_y(m, w('insert_m3_d'), (L['einsatz_y'][0] - 0.5,
+                                             L['einsatz_y'][1]))
+            for m in L['dome']]
     weg += [zylinder_y(m, w('m5_durchgang'), (y0 - 1.0, y1 + 1.0))
             for m in L['m5']]
     weg += [quader((u0, u1), (y0 - 1.0, y1 + 1.0), (v0, v1))
             for u0, v0, u1, v1 in L['binder_rechtecke']]
     k = k - vereinen(weg)
     k = k.transform([[1, 0, 0, -x0], [0, 0, 1, -z0], [0, -1, 0, y1]])
-    soll = (x1 - x0, z1 - z0, y1 - L['steg_y'][0])
+    soll = (x1 - x0, z1 - z0, y1 - min(L['steg_y'][0], L['dom_y'][0]))
+    return fussfase(k, w('fase_fuss')), soll
+
+
+def pihaube(hm):
+    """Wie bau_haube() in PiHalter.py: Rueckwand, Seitenwaende und Dach,
+    vorn und unten offen, M3-Loecher und Lueftungsschlitze in der
+    Rueckwand. Gedreht, dass die Rueckwand auf dem Bett liegt:
+    (X, Y, Z) -> (X - x0, z1 - Z, Y - y_hinten)."""
+    w, L = hm.w, hm.lage()
+    hx, hy, hz = L['haube_x'], L['haube_y'], L['haube_z']
+    ix, iy, iz = L['haube_innen']
+    k = quader(hx, hy, hz) - quader(ix, (iy[0], iy[1] + 1.0),
+                                    (iz[0] - 1.0, iz[1]))
+    weg = [zylinder_y(m, w('m3_durchgang'), (hy[0] - 1.0, iy[0] + 1.0))
+           for m in L['dome']]
+    weg += [quader((u0, u1), (hy[0] - 1.0, iy[0] + 1.0), (v0, v1))
+            for u0, v0, u1, v1 in L['lueftung']]
+    k = k - vereinen(weg)
+    k = k.transform([[1, 0, 0, -hx[0]], [0, 0, -1, hz[1]],
+                     [0, 1, 0, -hy[0]]])
+    soll = (hx[1] - hx[0], hz[1] - hz[0], hy[1] - hy[0])
     return fussfase(k, w('fase_fuss')), soll
 
 
@@ -311,7 +339,8 @@ def main(nur=()):
               lambda: gehaeuse(em)),
              ('Elektronik_Deckel_r{}'.format(em.REVISION), lambda: haube(em)),
              ('Kabelhalter_r{}'.format(km.REVISION), lambda: kabelhalter(km)),
-             ('PiHalter_r{}'.format(hm.REVISION), lambda: pihalter(hm)))
+             ('PiHalter_r{}'.format(hm.REVISION), lambda: pihalter(hm)),
+             ('PiHalter_Haube_r{}'.format(hm.REVISION), lambda: pihaube(hm)))
     for name, bauen in teile:
         if nur and not name.startswith(tuple(nur)):
             continue

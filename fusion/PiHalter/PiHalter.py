@@ -1,7 +1,7 @@
 # PiHalter.py — Halter fuer den Raspberry Pi Zero 2 W und seinen 5-V-Wandler
 # an der Rueckseite des hinteren 2060
 #
-# Ein Druckteil, dazu Referenzteile nur zur Ansicht:
+# Zwei Druckteile, dazu Referenzteile nur zur Ansicht:
 #   Pi-Halter   Platte, 5 mm dick, rechts neben der Montageplatte des
 #               Elektronik-Kastens an der Rueckseite des hinteren 2060, mit
 #               2 x M5x12 in Hammermuttern der oberen Nut (wie die
@@ -12,13 +12,22 @@
 #               Kabelbindern. Vor der
 #               Antenne des Pi liegt so kein Aluminium. Die Kabel in der
 #               mittleren Nut des 2060 (W2, W10, W14, W18) laufen unter der
-#               Platte durch.
+#               Platte durch. Drei Dome tragen die Gewindeeinsaetze fuer
+#               die Haube.
+#   Haube       seit Rev. 3, wie beim Elektronik-Kasten: deckt Pi und Wandler
+#               nach hinten, oben und zu den Seiten ab. Ihre Waende stehen
+#               auf der Platte, unten ist sie offen (Kabel, Zuluft), oben in
+#               der Rueckwand sitzen Lueftungsschlitze. 3 x M3x8 in die
+#               Einsaetze der Dome. PETG daempft das WLAN kaum.
 #   Referenz_nicht_drucken  Stueck hinteres 2060, Pi (Platine und Bauteile
 #               als Huelle), die beiden Micro-USB-Stecker, der Wandler
 #               (63 x 30 mm, bis 20 mm hoch), Schrauben und Hammermuttern.
 #
-# Drucklage: die Seite am 2060 aufs Bett, die Stehbolzen nach oben; keine
-# Stuetzen.
+# Drucklage: Halter mit der Seite am 2060 aufs Bett, Stehbolzen und Dome
+# nach oben; Haube mit der Rueckwand aufs Bett. Keine Stuetzen.
+#
+# Bohrlehren gibt es bewusst nicht: Haube und Halter haengen an denselben
+# Variablen, die M5 gehen in Hammermuttern.
 #
 # Koordinaten = Maschinenkoordinaten wie Portal.py: X nach rechts, Y nach
 # vorn, Z senkrecht, Z = 0 in der Mitte des Portalrohrs. Im Fusion-Modell
@@ -31,7 +40,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'PiHalter'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -57,10 +66,15 @@ MASSE = {
     # (endet bei X -23,66), damit das USB-Kabel zum Uno kurz bleibt.
     # Rev. 2: Der Wandler ist 63 statt hoechstens 60 mm lang [v]; die Platte
     #         wird 3 mm breiter, der Pi rueckt 3 mm nach rechts.
+    # Rev. 3: Haube. Die Platte wird 12 mm breiter: links laeuft W18 innen
+    #         an der Haubenwand zum Eingang des Wandlers hoch (wandler_rand
+    #         4 -> 14), rechts bleibt die SD-Karte frei (pi_rand 6 -> 8).
+    #         Oben 3 mm hoeher (rand_oben 3 -> 6) fuer den oberen Dom und den
+    #         Kabelbinder unter dem Dach der Haube.
     'ph_x0':              (-18.0, 'Platte: linke Kante (X)'),
     'platte_dicke':         (5.0, 'Platte: Dicke (liegt an der Rueckseite des 2060)'),
     'unter_nut':            (6.0, 'Platte: reicht so weit unter die Mitte der oberen Nut'),
-    'rand_oben':            (3.0, 'Platte: reicht so weit ueber Pi und oberen Schlitz'),
+    'rand_oben':            (6.0, 'Platte: reicht so weit ueber Pi und oberen Schlitz'),
     'm5_rand':             (12.0, 'M5: so weit von den Enden der Platte'),
 
     # --- Raspberry Pi Zero 2 W [w] (Massblatt der Zero-Reihe) ----------------
@@ -74,7 +88,7 @@ MASSE = {
     'pi_hdmi':             (12.4, 'Pi: Mini-HDMI, Mitte ab der Kante mit der SD-Karte'),
     'pi_usb':              (41.4, 'Pi: Micro-USB "USB" (Daten), Mitte ab der SD-Kante'),
     'pi_pwr':              (54.0, 'Pi: Micro-USB "PWR IN", Mitte ab der SD-Kante'),
-    'pi_rand':              (6.0, 'Pi: so weit von der rechten Kante der Platte'),
+    'pi_rand':              (8.0, 'Pi: so weit von der rechten Kante der Platte'),
     # Der USB-A-Stecker steckt rechts im Wandler und zeigt zum Pi; mit
     # Knickschutz ist er 35 bis 40 mm lang, erst dahinter biegt das Kabel
     # nach unten ab [w]
@@ -108,12 +122,35 @@ MASSE = {
     'wandler_l':           (63.0, '5-V-Wandler: Laenge (X) [v]'),
     'wandler_b':           (30.0, '5-V-Wandler: Breite, hier hoch (Z) [v]'),
     'wandler_h':           (20.0, '5-V-Wandler: hoechstens so dick (Y) [v]'),
-    'wandler_rand':         (4.0, 'Wandler: so weit von der linken Plattenkante'),
+    'wandler_rand':        (14.0, 'Wandler: so weit von der linken Plattenkante (W18)'),
     'binder_b':             (5.0, 'Kabelbinder-Schlitz: Laenge (X)'),
     'binder_t':             (2.2, 'Kabelbinder-Schlitz: Breite (Z)'),
     'binder_luft':          (2.0, 'Schlitze: so weit ueber und unter dem Wandler'),
     'binder_ueber':         (3.0, 'unterer Schlitz: so weit ueber dem 2060'),
     'binder_abstand':      (20.0, 'die beiden Kabelbinder: Abstand (X)'),
+
+    # --- Haube (Rev. 3) -------------------------------------------------------
+    # Wie beim Elektronik-Kasten: 3 x M3x8 in Messing-Einsaetzen M3 (aussen
+    # D 5) in Domen auf der Platte. Die Waende stehen auf der Platte, die
+    # Dome enden dom_kurz vor der Rueckwand: Die Schrauben ziehen die Haube
+    # fest an. Frei stehende Dome, deshalb 1 mm dicker als im Kasten.
+    'haube_wand':           (2.0, 'Haube: Wandstaerke (Seiten, oben, hinten)'),
+    'haube_tiefe':         (26.0, 'Haube: innen, von der Platte bis zur Rueckwand'),
+    'dom_d':               (10.0, 'Dom fuer den Gewindeeinsatz: Durchmesser'),
+    'dom_kurz':             (0.3, 'Dom endet so weit vor der Rueckwand der Haube'),
+    'dom_unten':            (8.0, 'untere Dome: Mitte so weit ueber der Unterkante'),
+    'insert_m3_d':          (4.6, 'Gewindeeinsatz M3: Einpressbohrung'),
+    'insert_m3_t':          (7.0, 'Gewindeeinsatz M3: Sacklochtiefe'),
+    'm3_l':                 (8.0, 'Schraube M3x8 (Haube -> Dom)'),
+    'm3_durchgang':         (3.4, 'M3 Durchgang'),
+    'm3_kopf_d':            (5.5, 'M3 Zylinderkopf: Durchmesser'),
+    'm3_kopf_h':            (3.0, 'M3 Zylinderkopf: Hoehe'),
+    # Lueftung: unten offen (Zuluft), Schlitze oben in der Rueckwand ueber
+    # Pi und Wandler, dort steigt die warme Luft hin
+    'lueftung_b':           (3.0, 'Lueftungsschlitz: Hoehe (Z)'),
+    'lueftung_l':          (20.0, 'Lueftungsschlitz: Laenge (X)'),
+    'lueftung_teilung':    (26.0, 'Lueftungsschlitze: Abstand (X)'),
+    'binder_kopf':          (4.5, 'Kopf des Kabelbinders hinten auf dem Wandler [w]'),
 
     # --- Normteile und Regeln ------------------------------------------------
     'm5_l':                (12.0, 'Schraube M5x12 (wie die Montageplatte des Kastens)'),
@@ -213,6 +250,37 @@ def lage():
     L['m5_spitze'] = w('m5_l') - w('platte_dicke')     # in der Nut ab Flaeche
     L['m5_eingriff'] = L['m5_spitze'] - 1.8            # Lippe 1,8 [w]
     L['kopf_y'] = (y0 - w('m5_kopf_h'), y0)
+
+    # Haube: im Umriss der Platte, Waende auf ihr, unten offen
+    t = w('haube_wand')
+    yi = y0 - w('haube_tiefe')                         # Rueckwand innen
+    z0, z1 = L['z']
+    L['haube_x'], L['haube_y'], L['haube_z'] = (x0, x1), (yi - t, y0), (z0, z1)
+    L['haube_innen'] = ((x0 + t, x1 - t), (yi, y0), (z0, z1 - t))
+    # Dome: oben zwischen Wandler und Pi ueber dem USB-A-Stecker, unten
+    # unter dem Wandler und zwischen Stecker USB und rechter M5
+    zo = (L['stecker_a'][2][1] + z1 - t) / 2.0
+    zu = z0 + w('dom_unten')
+    xu = (L['stecker']['USB'][0][1] + L['m5'][1][0]
+          - w('m5_kopf_d') / 2.0) / 2.0
+    L['dome'] = [((L['wandler_x'][1] + px0) / 2.0, zo),
+                 (sum(L['wandler_x']) / 2.0, zu), (xu, zu)]
+    L['dom_y'] = (yi + w('dom_kurz'), y0)
+    L['einsatz_y'] = (L['dom_y'][0], L['dom_y'][0] + w('insert_m3_t'))
+    L['m3_kopf_y'] = (yi - t - w('m3_kopf_h'), yi - t)
+    # M3x8 im Einsatz, solange die Haube noch dom_kurz vor dem Dom steht
+    L['m3_eingriff'] = w('m3_l') - t - w('dom_kurz')
+    # Lueftungsschlitze oben in der Rueckwand, 1 mm unter dem Dach innen,
+    # gleichmaessig ueber die Breite; der vor der oberen Schraube faellt weg
+    b, l, a = w('lueftung_b'), w('lueftung_l'), w('lueftung_teilung')
+    s0, s1 = x0 + t + 3.0, x1 - t - 3.0
+    n = int((s1 - s0 - l) // a) + 1
+    xa = s0 + (s1 - s0 - (n - 1) * a - l) / 2.0 + l / 2.0
+    zl1 = z1 - t - 1.0
+    frei = w('dom_d') / 2.0 + l / 2.0 + 2.0
+    L['lueftung'] = [(xa + i * a - l / 2.0, zl1 - b, xa + i * a + l / 2.0,
+                      zl1) for i in range(n)
+                     if abs(xa + i * a - L['dome'][0][0]) >= frei]
     return L
 
 
@@ -696,7 +764,8 @@ def bau_profil(comp, name, laengs, bereich, quer, z):
 
 def bau_halter(app, design, comp, L, fehler):
     """Platte an der Rueckseite des 2060, nach hinten (-Y) die vier
-    Stehbolzen fuer den Pi mit Kernloch; durch die Platte die beiden M5 und
+    Stehbolzen fuer den Pi mit Kernloch und die drei Dome fuer die Haube mit
+    der Bohrung fuer den Gewindeeinsatz; durch die Platte die beiden M5 und
     die vier Schlitze fuer die Kabelbinder am Wandler. Fase am Fuss auf der
     Seite am 2060 (beim Druck auf dem Bett)."""
     y0, y1 = L['platte_y']
@@ -708,13 +777,39 @@ def bau_halter(app, design, comp, L, fehler):
                  L['steg_y'][0], y0 + 0.5, 'dazu', k)
     bohrung(comp, 'M25_PH', 'y', L['pi_loecher'], w('m25_kern'),
             L['kernloch_y'][0] - 0.5, L['kernloch_y'][1], k)
+    for i, (x, z) in enumerate(L['dome']):
+        zylinder(comp, 'Dom{}_PH'.format(i + 1), 'y', (x, z), w('dom_d'),
+                 L['dom_y'][0], y0 + 0.5, 'dazu', k)
+    bohrung(comp, 'Einsatz_PH', 'y', L['dome'], w('insert_m3_d'),
+            L['einsatz_y'][0] - 0.5, L['einsatz_y'][1], k)
     bohrung(comp, 'M5_PH', 'y', L['m5'], w('m5_durchgang'), y0 - 1.0,
             y1 + 1.0, k)
     prismen(comp, 'Binder_PH', 'y', L['binder_rechtecke'], y0 - 1.0,
             y1 + 1.0, 'weg', k)
     fussfase(comp, k, 'z', y1, w('fase_fuss'), fehler, 'Pi-Halter')
-    bbox_pruefen(k, 'Pi-Halter', (L['x'], (L['steg_y'][0], y1), L['z']),
-                 fehler)
+    bbox_pruefen(k, 'Pi-Halter', (L['x'], (min(L['steg_y'][0], L['dom_y'][0]),
+                                           y1), L['z']), fehler)
+    material_zuweisen(app, design, k, 'PETG', fehler)
+    return k
+
+
+def bau_haube(app, design, comp, L, fehler):
+    """Haube ueber Pi und Wandler: Rueckwand, Seitenwaende und Dach, vorn
+    zur Platte und unten offen. Durch die Rueckwand die drei M3 zu den
+    Domen und oben die Lueftungsschlitze. Fase am Fuss an der Rueckwand
+    (beim Druck auf dem Bett)."""
+    hx, hy, hz = L['haube_x'], L['haube_y'], L['haube_z']
+    ix, iy, iz = L['haube_innen']
+    k = quader(comp, 'Haube_PH', hx, hy, hz, 'neu').bodies.item(0)
+    k.name = 'Haube'
+    quader(comp, 'Haube_innen_PH', ix, (iy[0], iy[1] + 1.0),
+           (iz[0] - 1.0, iz[1]), 'weg', k)
+    bohrung(comp, 'M3_Haube', 'y', L['dome'], w('m3_durchgang'),
+            hy[0] - 1.0, iy[0] + 1.0, k)
+    prismen(comp, 'Lueftung_Haube', 'y', L['lueftung'], hy[0] - 1.0,
+            iy[0] + 1.0, 'weg', k)
+    fussfase(comp, k, 'z', hy[0], w('fase_fuss'), fehler, 'Haube')
+    bbox_pruefen(k, 'Haube', (hx, hy, hz), fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
@@ -722,7 +817,8 @@ def bau_halter(app, design, comp, L, fehler):
 def bau_referenz(app, design, comp, L, fehler):
     """Stueck hinteres 2060, Pi als Platine und Huelle der Bauteile, die
     zwei Micro-USB-Stecker, der Wandler als groesster Quader, der passt,
-    Schrauben und Hammermuttern — nur zur Ansicht, NICHT drucken."""
+    Schrauben, Hammermuttern und die Koepfe der Haubenschrauben — nur zur
+    Ansicht, NICHT drucken."""
     y0, y1 = L['platte_y']
 
     def sicher(name, mat, bauen, *args):
@@ -770,6 +866,10 @@ def bau_referenz(app, design, comp, L, fehler):
                'Hammermutter_{}'.format(i + 1), (x - hl, x + hl),
                (y1 + w('nut_t') + 0.1, y1 + w('nut_kammer_t') - 0.1),
                (z - hq, z + hq), 'neu')
+    for i, (x, z) in enumerate(L['dome']):
+        sicher('M3x8_Kopf_{}'.format(i + 1), 'Steel', zylinder, comp,
+               'M3x8_Kopf_{}'.format(i + 1), 'y', (x, z), w('m3_kopf_d'),
+               L['m3_kopf_y'][0], L['m3_kopf_y'][1], 'neu')
 
 
 def hinweise_bauen(L, fehler):
@@ -808,12 +908,20 @@ def hinweise_bauen(L, fehler):
         .format(w('wandler_l'), w('wandler_b'), w('wandler_h')),
         '  (X {:+.1f}..{:+.1f}, Z {:+.1f}..{:+.1f}).'.format(
             wx[0], wx[1], wz[0], wz[1]),
-        'KABEL: W18 (24 V) vom Kasten unter der Platte zum Eingang des',
-        '  Wandlers, W19 vom USB-Ausgang in PWR, W17 von USB um den Kasten',
-        '  zum Uno (docs/verkabelung.md).',
+        'KABEL: W18 (24 V) vom Kasten unter der Platte und innen an der',
+        '  linken Wand der Haube zum Eingang des Wandlers, W19 vom USB-Ausgang',
+        '  in PWR, W17 von USB um den Kasten zum Uno (docs/verkabelung.md).',
+        'HAUBE: Waende auf der Platte, unten offen (Kabel, Zuluft), oben in',
+        '  der Rueckwand {} Lueftungsschlitze. 3 x M3x{:.0f} in Messing-'
+        .format(len(L['lueftung']), w('m3_l')),
+        '  Einsaetze M3 (D 5) in den Domen; die Einsaetze vor der Montage',
+        '  einschmelzen. Erst Pi, Wandler und Kabel fertig, M5 fest, dann die',
+        '  Haube. Zur SD-Karte die Haube abnehmen.',
         '',
-        'DRUCK (PETG, Bambu Lab A1): die Seite am 2060 aufs Bett, Stehbolzen',
-        '  nach oben; keine Stuetzen. 4 Wandlinien, 30 % Infill.',
+        'DRUCK (PETG, Bambu Lab A1): Halter mit der Seite am 2060 aufs Bett,',
+        '  Stehbolzen und Dome nach oben; Haube mit der Rueckwand aufs Bett.',
+        '  Keine Stuetzen. 4 Wandlinien, 30 % Infill; kein Filament mit',
+        '  Kohlefaser oder Metall (WLAN).',
         '',
         'NICHT GEMESSEN [w]: Lochbild und Buchsen des Pi nach dem Massblatt',
         '  der Zero-Reihe; Platinendicke und Bauteilhoehe [?]. Den Pi vor dem',
@@ -852,13 +960,14 @@ def run(context):
 
         L = lage()
 
-        # Baugruppe nur, um Druckteil und Referenz zu trennen: alle
+        # Baugruppe nur, um die Druckteile und die Referenz zu trennen: alle
         # Komponenten am globalen Ursprung, nichts bewegt sich, alles fixiert.
         einheit = adsk.core.Matrix3D.create()
-        o = root.occurrences.addNewComponent(einheit)
-        o.component.name = 'Pi-Halter'
-        bau_halter(app, design, o.component, L, fehler)
-        o.isGrounded = True
+        for name, bauen in (('Pi-Halter', bau_halter), ('Haube', bau_haube)):
+            o = root.occurrences.addNewComponent(einheit)
+            o.component.name = name
+            bauen(app, design, o.component, L, fehler)
+            o.isGrounded = True
 
         ref = root.occurrences.addNewComponent(einheit)
         ref.component.name = 'Referenz_nicht_drucken'

@@ -222,6 +222,8 @@ def konzept(w, L, tw, TL, ew, EL):
                      PH['pcb_y'][1], *PH['pi_z'])
     K['wandler5'] = Quader('5-V-Wandler', *PH['wandler_x'],
                            *PH['wandler_y'], *PH['wandler_z'])
+    K['pihaube'] = Quader('Pi-Haube', *PH['haube_x'], *PH['haube_y'],
+                          *PH['haube_z'])
     K['kabel'] = kabelwege(w, L, TL, K)
     return K
 
@@ -367,12 +369,13 @@ def kabelwege(w, L, TL, K):
                        (na_x, na_y, na_z)]
     # Pi (PiHalter.py). 24 V: an den Loetfahnen der Buchse, im Kasten nach
     # vorn, durch den Kanal nach rechts, an der Flaeche des 2060 unter dem
-    # Halter durch und dahinter hoch zum Eingang links am Wandler
+    # Halter durch, von unten in die Haube und zwischen ihrer linken Wand
+    # und dem Wandler, hinter dem Kopf der M5, hoch zu seinem Eingang
     PH = K['PH']
     zw = sum(PH['wandler_z']) / 2.0
     yw = sum(PH['wandler_y']) / 2.0
-    xw = PH['wandler_x'][0] - 3.0
-    y_hinter = PH['platte_y'][0] - 3.0
+    xw = (PH['haube_innen'][0][0] + PH['wandler_x'][0]) / 2.0
+    y_hinter = PH['kopf_y'][0] - 3.0
     pi24 = [(EL['buchse_x'], EL['innen_y'][0] + 6.0, EL['eingang_z']),
             rechts[0], rechts[1], rechts[2], rechts[3],
             (xw, y_2060, z_2060), (xw, y_hinter, z_2060), (xw, y_hinter, zw),
@@ -522,10 +525,12 @@ def draufsicht(f, w, L, K):
         q = K[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
     # Pi-Halter (PiHalter.py) rechts neben dem Kasten, dahinter Wandler und
-    # Pi
+    # Pi unter der Haube (gestrichelt)
     for n, art, mehr in (('pihalter', 'neu', {}),
                          ('wandler5', 'kauf', {'stroke_dasharray': '4 3'}),
-                         ('pi', 'kauf', {})):
+                         ('pi', 'kauf', {}),
+                         ('pihaube', 'neu', {'fill': 'none',
+                                             'stroke_dasharray': '6 3'})):
         q = K[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
     # feste Kabelwege, dazu der Weg mit dem Portal von der Y- zur X-Kette
@@ -566,7 +571,9 @@ def seitenansicht(f, w, L, TL, K):
                          ('uno', 'druck', {'fill_opacity': '0.7'}),
                          ('luefter', 'kauf', {}),
                          ('wandler5', 'kauf', {'stroke_dasharray': '4 3'}),
-                         ('pi', 'kauf', {}), ('pihalter', 'neu', {})):
+                         ('pi', 'kauf', {}), ('pihalter', 'neu', {}),
+                         ('pihaube', 'neu', {'fill': 'none',
+                                             'stroke_dasharray': '6 3'})):
         q = K[n]
         t.append(f.rect(q.y[0], q.y[1], q.z[0], q.z[1], art, **mehr))
     # Portal an der hinteren Grenze, Z unten

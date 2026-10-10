@@ -8,7 +8,9 @@ Browser: am iPad, am iPhone oder am Mac. Der Pi schickt die Datei selbst
 über USB an den Uno. Bricht das WLAN ab, läuft der Auftrag deshalb weiter.
 
 Der Pi sitzt mit seinem 5-V-Wandler auf einem gedruckten
-[Halter](#halter) rechts neben dem Elektronik-Kasten. Er hängt **vor
+[Halter](#halter) rechts neben dem Elektronik-Kasten, unter einer
+[Haube](#haube) wie die Elektronik: Von außen sieht man keine Platine. Er
+hängt **vor
 Schalter und Not-Aus** am Netzteil: Pi und Uno laufen, solange das Netzteil
 steckt. Not-Aus und Schalter trennen nur Motoren, Laser und Lüfter, und der
 [24-V-Wächter](verkabelung.md#7-24-v-wächter-w16) meldet das wie bisher an
@@ -33,11 +35,12 @@ und ist keine Sicherheitsfunktion. Der Not-Aus bleibt in Reichweite.
 | 1 | microSD-Karte 16–32 GB | Raspberry Pi OS Lite |
 | 1 | Abwärtswandler 24 → 5 V, ≥ 3 A, Eingang bis mindestens 28 V; 63 × 30 mm, höchstens 20 mm hoch, Schraubklemmen und USB-A-Buchse an den schmalen Seiten `[v]` | 5 V für Pi und Uno |
 | 1 | USB-Kabel A → Micro-B, 0,25 m, Stromadern mindestens AWG 24 | W19 |
-| 1 | OTG-Kabel Micro-B → USB-B, 0,5 m | W17 |
+| 1 | OTG-Kabel Micro-B → USB-B, 1 m | W17 |
 | 0,5 m | Leitung 2 × 0,75 mm², rot/schwarz (wie W2) | W18 |
-| 1 | Pi-Halter, PETG: [`stl/PiHalter_r2.stl`](../stl/PiHalter_r2.stl) | Halter |
+| 1 + 1 | Pi-Halter und Haube, PETG: [`stl/PiHalter_r3.stl`](../stl/PiHalter_r3.stl), [`stl/PiHalter_Haube_r3.stl`](../stl/PiHalter_Haube_r3.stl) | Halter |
 | 2 + 2 | M5×12 Zylinderkopf + Hammermutter M5 Nut 6 | Halter → obere Nut des 2060 |
 | 4 | M2.5×6 Zylinderkopf | Pi → Stehbolzen |
+| 3 + 3 | M3×8 Zylinderkopf + Messing-Einsatz M3 Ø5 (wie am Deckel des Kastens) | Haube → Dome |
 | 2 | Kabelbinder 2,5 × 100 | Wandler |
 
 Ein OTG-Kabel verbindet im Micro-B-Stecker den ID-Stift mit Masse; dann
@@ -46,13 +49,13 @@ an Druckern.
 
 ## Halter
 
-Eine Platte, 178 × 60 × 5 mm, liegt wie die Montageplatte des Kastens an
-der Rückseite des hinteren 2060, 5,7 mm rechts neben ihr. Zwei M5×12 halten
-sie in Hammermuttern der **oberen Nut**. Unten reicht sie 6 mm unter die
-Mitte dieser Nut. Die Kabel in der mittleren Nut (W2, W10, W14, W18) laufen
-8 mm darunter frei durch.
+Eine Platte, 190 × 63,4 × 5 mm, liegt wie die Montageplatte des Kastens
+an der Rückseite des hinteren 2060, 5,7 mm rechts neben ihr. Zwei M5×12
+halten sie in Hammermuttern der **oberen Nut**. Unten reicht sie 6 mm unter
+die Mitte dieser Nut. Die Kabel in der mittleren Nut (W2, W10, W14, W18)
+laufen 8 mm darunter frei durch.
 
-Oben steht die Platte 44 mm über das 2060 hinaus. Dort sitzen:
+Oben steht die Platte 47 mm über das 2060 hinaus. Dort sitzen:
 
 * **rechts der Pi** auf vier Stehbolzen (5 mm hoch, Lochbild 58 × 23 mm
   `[w]`), Bauteile nach hinten, Buchsen nach unten, die SD-Karte rechts
@@ -61,33 +64,62 @@ Oben steht die Platte 44 mm über das 2060 hinaus. Dort sitzen:
 * **links der 5-V-Wandler**, Eingang zur Kastenseite, USB-A-Buchse zum Pi.
   Zwei Kabelbinder laufen senkrecht über seine Rückseite, durch Schlitze
   über und unter ihm. Beide Enden mit Eingang und Buchse bleiben frei. Der
-  Wandler ist 63 × 30 mm und höchstens 20 mm hoch `[v]`.
+  Wandler ist 63 × 30 mm und höchstens 20 mm hoch `[v]`. Links von ihm
+  bleiben in der Haube 12 mm: Dort kommt W18 von unten zu den
+  Schraubklemmen, mit Aderendhülsen und Bogen nach unten.
 * dazwischen **40 mm** für den USB-A-Stecker, bevor das Kabel nach unten
   zum Pi abbiegt.
+* **drei Dome** mit Messing-Einsätzen M3 für die Haube: einer oben zwischen
+  Wandler und Pi, zwei unten.
+
+### Haube
+
+Die Haube deckt Pi und Wandler nach hinten, oben und zu den Seiten ab, wie
+die Haube auf dem Elektronik-Kasten. Ihre Wände sind 2 mm dick und stehen
+auf der Platte, im selben Umriss. 3 × M3×8 halten sie in den Einsätzen der
+Dome. Die Dome enden 0,3 mm vor der Rückwand, so ziehen die Schrauben die
+Haube fest auf die Platte.
+
+* **Unten offen:** Dort kommen die Kabel heraus, und dort strömt kühle Luft
+  nach.
+* **Lüftung:** 6 Schlitze 20 × 3 mm oben in der Rückwand. Die warme Luft
+  steigt dorthin. Die Schlitze liegen über Pi und Wandler, durch sie sieht
+  man keine Platine.
+* **Wärme:** Hinter dem Pi bleiben 15 mm frei. Da passt ein kleiner
+  Kühlkörper auf den Prozessor, falls der Pi zu warm wird
+  ([Fehlersuche](#fehlersuche)).
+* **WLAN:** PETG dämpft das WLAN kaum. Kein Filament mit Kohlefaser oder
+  Metall nehmen.
+* **SD-Karte:** Zum Wechseln die Haube abnehmen.
 
 | | |
 |---|---|
-| Lage | X −18 bis +160 (Maschinenkoordinaten wie `Portal.py`), Z −85 bis −24,6 |
-| Freiraum | 8,6 mm zum X-Wagen mit dem Portal am hinteren Schienenende (die engste Stelle über den ganzen Weg), 5,7 mm zur Montageplatte des Kastens, 8 mm über den Kabeln |
-| Schrauben | 2 × M5×12 wie die Montageplatte: 5,2 mm im Stein, 0,5 mm vor dem Nutgrund. Inbus von hinten |
+| Lage | X −18 bis +172 (Maschinenkoordinaten wie `Portal.py`), Z −85 bis −21,6; die Haube reicht 28 mm nach hinten |
+| Freiraum | 6,7 mm zum X-Wagen mit dem Portal am hinteren Schienenende (die engste Stelle über den ganzen Weg; bis Rev. 2 waren es 8,6 mm, die Platte ist seit Rev. 3 oben 3 mm höher), 5,7 mm zur Montageplatte des Kastens, 8 mm über den Kabeln |
+| Schrauben | 2 × M5×12 wie die Montageplatte: 5,2 mm im Stein, 0,5 mm vor dem Nutgrund. Inbus von hinten, bevor die Haube draufkommt |
 | Pi | 4 × M2.5×6 selbstschneidend in Kernlöcher Ø 2,2; die Schraube greift 4,4 bis 5 mm |
-| Druck | PETG, die Seite am 2060 aufs Bett, Stehbolzen nach oben, keine Stützen; 10 mm hoch, ≈ 68 g voll |
+| Haube | 3 × M3×8 in Messing-Einsätzen M3 Ø5 (Bohrung 4,6, 7 mm tief), 5,7 mm im Gewinde. Inbus von hinten |
+| Druck | PETG, keine Stützen. Halter: die Seite am 2060 aufs Bett, Stehbolzen und Dome nach oben, 31 mm hoch, ≈ 84 g voll. Haube: Rückwand aufs Bett, 28 mm hoch, ≈ 50 g |
 
 `python3 tools/pihalter_check.py` prüft das alles gegen Portal, Toolhead,
-Kasten, Haube, Rahmen und Kabel. `python3 tools/pihalter_zeichnen.py` zeichnet
+Kasten, Rahmen und Kabel, dazu die Haube: innen frei, Dome, Schrauben,
+Lüftung. `python3 tools/pihalter_zeichnen.py` zeichnet
 [`pihalter.svg`](pihalter.svg), `python3 tools/stl_export.py PiHalter`
-schreibt die STL.
+schreibt beide STL.
 
 **Montage:**
 
 1. Den Pi vor dem Druck auf die Zeichnung legen: Lochbild und Buchsen sind
    nach dem Maßblatt der Zero-Reihe gezeichnet `[w]`.
-2. Pi mit 4 × M2.5×6 auf die Stehbolzen, Buchsen nach unten.
-3. Wandler links aufsetzen, Eingang nach links, die zwei Kabelbinder durch
-   die Schlitze und um ihn herum.
-4. 2 Hammermuttern in die obere Nut der Rückseite des hinteren 2060, rechts
+2. Die drei Messing-Einsätze M3 mit dem Lötkolben bündig in die Dome
+   einschmelzen.
+3. Pi mit 4 × M2.5×6 auf die Stehbolzen, Buchsen nach unten.
+4. Wandler links aufsetzen, Eingang nach links, die zwei Kabelbinder durch
+   die Schlitze und um ihn herum, die Köpfe hinten auf den Wandler.
+5. 2 Hammermuttern in die obere Nut der Rückseite des hinteren 2060, rechts
    neben der Montageplatte des Kastens. Halter ansetzen, 2 × M5×12.
-5. Verdrahten wie in [verkabelung.md, Schritt 8](verkabelung.md#8-pi-w17w19).
+6. Verdrahten wie in [verkabelung.md, Schritt 8](verkabelung.md#8-pi-w17w19).
+7. Haube aufsetzen, 3 × M3×8.
 
 ## Strom
 
@@ -224,6 +256,7 @@ Kante nicht.
 | ALARM:2 oder `error:15` beim Rahmen | Datei nicht auf den Nullpunkt bezogen | Nullpunkt prüfen, in LightBurn „Absolute Coords“ und Ursprung hinten links |
 | Rahmen fährt nach 0, 0 | 3D-Ansicht aus oder keine Datei geladen | Datei laden, 3D-Ansicht an |
 | Befehl „Pi herunterfahren“ tut nichts | sudo fragt nach dem Passwort | `pi/einrichten.sh` noch einmal laufen lassen (legt `/etc/sudoers.d/cncjs` an) |
+| CNCjs wird träge, `vcgencmd measure_temp` zeigt um 80 °C | Pi zu warm unter der Haube, ab 80 °C drosselt er | Lüftungsschlitze frei halten, einen kleinen Kühlkörper auf den Prozessor kleben |
 
 ## Noch offen
 

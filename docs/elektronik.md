@@ -21,7 +21,7 @@ Anschlussliste, Klemmen, Schritt für Schritt und Inbetriebnahme — steht in
 [verkabelung.md](verkabelung.md). Pinbelegung, Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik). Ohne PC
 bedient wird die Maschine über einen Pi mit CNCjs ([pi.md](pi.md)), auf
-einem eigenen Halter rechts neben dem Gehäuse.
+einem eigenen Halter mit Haube rechts neben dem Gehäuse.
 
 ![Platz für die Elektronik](elektronik-platz.svg)
 
@@ -59,7 +59,7 @@ brauchen 107 mm ab der Rückseite des 2060 und enden 3,4 mm vor dem Ende der
 | 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5) | gezeichnet |
 | Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
 | Not-Aus | vorn am vorderen 2060 im eigenen Gehäuse ([notaus.md](notaus.md)); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, Gehäuse gezeichnet |
-| Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | auf dem [Pi-Halter](pi.md#halter) rechts neben dem Gehäuse, obere Nut des hinteren 2060; hängt vor Schalter und Not-Aus an der Buchse und versorgt über USB den Uno | Halter gezeichnet |
+| Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | auf dem [Pi-Halter](pi.md#halter) rechts neben dem Gehäuse, obere Nut des hinteren 2060, unter einer [Haube](pi.md#haube); hängt vor Schalter und Not-Aus an der Buchse und versorgt über USB den Uno | Halter und Haube gezeichnet |
 
 Das Gehäuse hängt an der **Rückseite des hinteren 2060** (untere und obere
 Nut) mit 4 × M5 in Hammermuttern, wie die übrigen Halter — der Tisch trägt
@@ -379,7 +379,7 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
 | 4 | M3×8 | Uno → Stehbolzen |
 | 4 + 4 | M3×16 + M3-Mutter | Lüfter → Deckel |
 | 2 | Kabelbinder, doppelseitiges Klebeband | Wandler, Wago |
-| 1 | Pi Zero 2 W, 5-V-Wandler, USB-Kabel, Pi-Halter und Schrauben | ohne PC: [pi.md](pi.md#teile) |
+| 1 | Pi Zero 2 W, 5-V-Wandler, USB-Kabel, Pi-Halter mit Haube, Schrauben und Einsätze | ohne PC: [pi.md](pi.md#teile) |
 
 ## Was noch fehlt
 

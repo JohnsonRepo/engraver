@@ -143,7 +143,8 @@ Portalrohr am hinteren Schienenende bis auf 3 mm an die Haube. Mit
    den Schrauben.
 4. Shield aufstecken, Treiber (EN-Pin zum EN-Aufdruck), Jumper.
 5. Einbaubuchse (Mutter innen) und Schalter (rastet ein) hinten einsetzen.
-6. Wandler mit 2 Kabelbindern, Wago-Klemmen mit Klebeband; verdrahten nach
+6. Wandler mit 2 Kabelbindern 2,5 × 200 (die Schlaufe um Boden und Wandler
+   ist 105 mm lang), Wago-Klemmen mit Klebeband; verdrahten nach
    [verkabelung.md](verkabelung.md#schritt-für-schritt). Den Wandler
    **ohne Laser** auf 12,0 V stellen.
 7. 4 Hammermuttern in die untere und obere Nut der Rückseite des hinteren
@@ -414,7 +415,7 @@ Zu den Teilen:
 | 4 + 4 | M3×8 + Messing-Einsatz M3 Ø5 | Deckel |
 | 4 | M3×8 | Uno → Stehbolzen |
 | 4 + 4 | M3×16 + M3-Mutter | Lüfter → Deckel |
-| 2 | Kabelbinder, doppelseitiges Klebeband | Wandler, Wago |
+| 2 | Kabelbinder 2,5 × 200 (2,5 × 100 ist zu kurz), doppelseitiges Klebeband | Wandler, Wago |
 | 1 | Pi Zero 2 W, 5-V-Wandler, USB-Kabel, Pi-Halter mit Haube, Schrauben und Einsätze | ohne PC: [pi.md](pi.md#teile) |
 
 ## Was noch fehlt

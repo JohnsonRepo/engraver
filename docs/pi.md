@@ -41,7 +41,7 @@ und ist keine Sicherheitsfunktion. Der Not-Aus bleibt in Reichweite.
 | 2 + 2 | M5×12 Zylinderkopf + Hammermutter M5 Nut 6 | Halter → obere Nut des 2060 |
 | 4 | M2.5×6 Zylinderkopf | Pi → Stehbolzen |
 | 3 + 3 | M3×8 Zylinderkopf + Messing-Einsatz M3 Ø5 (wie am Deckel des Kastens) | Haube → Dome |
-| 2 | Kabelbinder 2,5 × 100 | Wandler |
+| 2 | Kabelbinder 2,5 × 200 (2,5 × 100 ist zu kurz) | Wandler |
 
 Ein OTG-Kabel verbindet im Micro-B-Stecker den ID-Stift mit Masse; dann
 arbeitet der Pi an dieser Buchse als Host. Solche Kabel gibt es für Handys
@@ -62,8 +62,9 @@ Oben steht die Platte 47 mm über das 2060 hinaus. Dort sitzen:
   (von hinten gesehen links). Der Pi liegt ganz über der Oberkante des 2060,
   5 mm darüber. Vor seiner Antenne ist kein Aluminium.
 * **links der 5-V-Wandler**, Eingang zur Kastenseite, USB-A-Buchse zum Pi.
-  Zwei Kabelbinder laufen senkrecht über seine Rückseite, durch Schlitze
-  über und unter ihm. Beide Enden mit Eingang und Buchse bleiben frei. Der
+  Er hat keine Befestigungslöcher: Zwei Kabelbinder laufen senkrecht über
+  seine Rückseite, durch Schlitze über und unter ihm, und ziehen ihn an die
+  Platte. Beide Enden mit Eingang und Buchse bleiben frei. Der
   Wandler ist 63 × 30 mm und höchstens 20 mm hoch `[v]`. Links von ihm
   bleiben in der Haube 12 mm: Dort kommt W18 von unten zu den
   Schraubklemmen, mit Aderendhülsen und Bogen nach unten.
@@ -114,8 +115,15 @@ schreibt beide STL.
 2. Die drei Messing-Einsätze M3 mit dem Lötkolben bündig in die Dome
    einschmelzen.
 3. Pi mit 4 × M2.5×6 auf die Stehbolzen, Buchsen nach unten.
-4. Wandler links aufsetzen, Eingang nach links, die zwei Kabelbinder durch
-   die Schlitze und um ihn herum, die Köpfe hinten auf den Wandler.
+4. Wandler links auf die Platte legen, Eingang nach links. Je einen
+   Kabelbinder 2,5 × 200 von hinten durch den oberen Schlitz, auf der Seite
+   zum 2060 hinunter, durch den unteren Schlitz zurück und über den Wandler.
+   Die Schlaufe wird bis 118 mm lang, ein Binder 2,5 × 100 schließt nur
+   etwa 75 mm. Die Köpfe hinten auf den Wandler, am besten neben das
+   höchste Bauteil. Von Hand festziehen, bis nichts mehr wackelt, nicht mit
+   der Zange nachziehen. Die Enden bündig abschneiden, sonst stoßen sie an
+   die Haube. Unter den Wandler muss nichts: Er liegt mit den Lötstellen auf
+   dem PETG, das isoliert.
 5. 2 Hammermuttern in die obere Nut der Rückseite des hinteren 2060, rechts
    neben der Montageplatte des Kastens. Halter ansetzen, 2 × M5×12.
 6. Verdrahten wie in [verkabelung.md, Schritt 8](verkabelung.md#8-pi-w17w19).

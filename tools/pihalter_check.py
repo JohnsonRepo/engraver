@@ -16,6 +16,7 @@ Dome, Schrauben, Lueftung) und den Druck. Gibt die Stueckliste aus.
 Exit-Code 0 = alle Pruefungen bestanden.
 """
 
+import math
 import os
 import re
 import sys
@@ -277,6 +278,14 @@ def main():
          2.0)
     p.ok('Wandler ueber den M5-Koepfen (Inbus frei)',
          wz[0] - (HL['nut_z'] + rk), 1.0)
+    # Schlaufe: auf der Seite am 2060 von Schlitz zu Schlitz, zweimal durch
+    # die Platte und hinten ueber den Wandler
+    ec = elektronik_check
+    schlaufe = ec.binder_schlaufe(
+        max(HL['binder_z']) - min(HL['binder_z']) - bt, hw('platte_dicke'),
+        wz[1] - wz[0], wy[1] - wy[0], (hw('binder_luft'),) * 2)
+    p.ok('Kabelbinder {}: Schlaufe um Platte und Wandler'.format(ec.BINDER),
+         schlaufe, math.pi * ec.BINDER_BUENDEL_D, '<=')
 
     # ------------------------------------------------------------------
     p.titel('8) Haube: innen frei, Dome, Schrauben, Lueftung')
@@ -378,7 +387,8 @@ def main():
             'obere Nut der Rueckseite hinteres 2060)'.format(hw('m5_l')),
             '4x M2.5x{:.0f} Zylinderkopf (Pi -> Stehbolzen, schneidet sein '
             'Gewinde selbst)'.format(hw('m25_l')),
-            '2x Kabelbinder 2,5 x 100 (Wandler)',
+            '2x Kabelbinder {} (Wandler; 2,5 x 100 ist zu kurz)'.format(
+                ec.BINDER),
             '3x M3x{:.0f} Zylinderkopf + 3x Messing-Einsatz M3 Ø5 (Haube -> '
             'Dome)'.format(hw('m3_l')),
             'Raspberry Pi Zero 2 W, microSD 16-32 GB',

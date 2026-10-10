@@ -19,6 +19,7 @@ Exit-Code 0 = alle Pruefungen bestanden.
 """
 
 import itertools
+import math
 import os
 import re
 import sys
@@ -39,6 +40,12 @@ BUCHSE_KOERPER_D = 11.0       # Einbaubuchse M8: Mutter und Loetfahnen
 BUCHSE_KOERPER_T = 15.0       # ... so tief hinter der Wand
 SCHALTER_KOERPER = (20.0, 20.0, 20.0)   # rund: Ø wie das Loch, tief [?]
 SCHALTER_BLENDE_T = 3.0       # Blende vor der Wand [?]
+# Kabelbinder an den Wandlern (hier und am Pi-Halter): 2,5 x 200, Buendel
+# bis D 50 [w] (Haendlerangaben 50 bis 55), das Band 1,1 dick [w]. Ein
+# 2,5 x 100 schafft nur D 24, also 75 mm Umfang: zu kurz fuer beide.
+BINDER = '2,5 x 200'
+BINDER_BUENDEL_D = 50.0
+BINDER_DICKE = 1.1
 # Der Kasten war mit Rev. 2 gedruckt (Angabe 2026-10-08), die Haube aus
 # Rev. 3 passt auf ihn. Seit Rev. 4 wird er wegen des runden Schalters neu
 # gedruckt (Angabe 2026-10-09); alles andere muss bleiben, wie es war.
@@ -65,6 +72,19 @@ def flach(v):
     if isinstance(v, (list, tuple)):
         return [x for e in v for x in flach(e)]
     return [float(v)]
+
+
+def binder_schlaufe(innen, wand, breite, hoehe, seitlich):
+    """Laenge eines Kabelbinders um Wand und Wandler (mm): auf der anderen
+    Seite der Wand von Schlitz zu Schlitz (innen: zwischen den inneren
+    Kanten der Schlitze), zweimal durch die Wand, schraeg von den Schlitzen
+    auf die Kanten des Wandlers (seitlich: die beiden Abstaende) und quer
+    ueber ihn. Unter dem Binder ist er ueberall so hoch wie sein hoechstes
+    Bauteil — laenger wird die Schlaufe nicht. Dazu pi x Banddicke fuer
+    die Mittellinie des Bandes."""
+    return (innen + 2.0 * wand + breite
+            + sum(math.hypot(hoehe, a) for a in seitlich)
+            + math.pi * BINDER_DICKE)
 
 
 def elektronik_quader(ew, EL):
@@ -344,6 +364,13 @@ def main():
                      abs(x - sx) - SCHALTER_KOERPER[0] / 2.0)
                  - ew('binder_b') / 2.0, 1.0)
             p.ok('   vor der Rueckwand', y - rt - iy[0], 1.0)
+    ys = sorted(set(y for _, y in EL['binder']))
+    kb = EL['wandler_koerper_y']
+    p.ok('Kabelbinder {}: Schlaufe um Boden und Wandler'.format(BINDER),
+         binder_schlaufe(ys[1] - ys[0] - 2.0 * rt, EL['boden_z'] - gz[0],
+                         kb[1] - kb[0], ew('wandler_h'),
+                         (kb[0] - (ys[0] + rt), (ys[1] - rt) - kb[1])),
+         math.pi * BINDER_BUENDEL_D, '<=')
     p.ok('Wago-Klemmen vor den Binderschlitzen',
          EL['wago_y'][0] - (max(y for _, y in EL['binder']) + rt), 1.0)
     p.ok('Wago-Klemmen: Platz vorn fuer die Draehte',
@@ -420,9 +447,9 @@ def main():
             '1x Wippschalter rund, Blende Ø{:.1f}, Loch Ø{:.1f}'.format(
                 ew('schalter_blende_d'), ew('schalter_d')),
             '1x Abwaertswandler 24 -> 12 V / {:.0f} A, '
-            '{:.0f} x {:.0f} x {:.0f} (vorhanden); 2x Kabelbinder'.format(
+            '{:.0f} x {:.0f} x {:.0f} (vorhanden); 2x Kabelbinder {}'.format(
                 leistung.WANDLER_A, ew('wandler_l'), ew('wandler_b'),
-                ew('wandler_h')),
+                ew('wandler_h'), BINDER),
             'Wago (vorhanden): 1x 221-415 (+24 V), 2x 221-420 (GND, +5 V), '
             '1x 221-413 Reserve; doppelseitiges Klebeband'):
         p.info(zeile)

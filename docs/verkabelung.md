@@ -379,12 +379,13 @@ Datei auf ihm und starten im Browser ([pi.md](pi.md)). Er sitzt mit seinem
 5-V-Wandler auf dem [Pi-Halter](pi.md#halter) rechts neben dem Kasten, unter
 einer [Haube](pi.md#haube).
 
-1. **Pi-Halter** (die drei Messing-Einsätze für die Haube vorher
-   einschmelzen) an die Rückseite des hinteren 2060, rechts neben die
-   Montageplatte des Kastens: 2 Hammermuttern in die obere Nut, 2 × M5×12.
-   Den Pi mit 4 × M2.5×6 auf die Stehbolzen, Bauteile nach hinten, Buchsen
-   nach unten. Den 5-V-Wandler links daneben, Eingang zum Kasten, USB-Buchse
-   zum Pi, mit 2 Kabelbindern durch die Schlitze über und unter ihm.
+1. **Pi-Halter** bestücken, solange er lose ist: die drei Messing-Einsätze
+   für die Haube einschmelzen. Den Pi mit 4 × M2.5×6 auf die Stehbolzen,
+   Bauteile nach hinten, Buchsen nach unten. Den 5-V-Wandler links daneben,
+   Eingang zum Kasten, USB-Buchse zum Pi, mit 2 Kabelbindern 2,5 × 200 durch
+   die Schlitze über und unter ihm ([pi.md, Montage](pi.md#halter)). Dann
+   an die Rückseite des hinteren 2060, rechts neben die Montageplatte des
+   Kastens: 2 Hammermuttern in die obere Nut, 2 × M5×12.
 2. **W18** hängt schon an der Buchse (Schritt 2), also vor Schalter und
    Not-Aus. Vorn aus dem Kasten, im Kanal nach rechts, an der Rückseite des
    2060 unter dem Pi-Halter durch, von unten in die Haube und links neben

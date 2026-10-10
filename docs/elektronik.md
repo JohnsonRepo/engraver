@@ -56,8 +56,8 @@ brauchen 107 mm ab der Rückseite des 2060 und enden 3,4 mm vor dem Ende der
 |---|---|---|
 | Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Gehäuse](#gehäuse-elektronikpy) links, 24-V-Lüfter im Deckel über den Treibern; USB nach hinten zum Pi | gezeichnet |
 | Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Gehäuse kommt nur seine 24-V-Leitung | vorhanden |
-| 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5) | gezeichnet |
-| Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
+| 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5); an der Buchse zweigt vor dem Schalter W18 zum Pi ab | gezeichnet |
+| Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420, vom 5-V-Stift des Uno), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
 | Not-Aus | vorn am vorderen 2060 im eigenen Gehäuse ([notaus.md](notaus.md)); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, Gehäuse gezeichnet |
 | Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | auf dem [Pi-Halter](pi.md#halter) rechts neben dem Gehäuse, obere Nut des hinteren 2060, unter einer [Haube](pi.md#haube); hängt vor Schalter und Not-Aus an der Buchse und versorgt über USB den Uno | Halter und Haube gezeichnet |
 
@@ -90,8 +90,9 @@ und [`stl/Elektronik_Deckel_r4.stl`](../stl/Elektronik_Deckel_r4.stl)
 Montageplatte liegt am 2060 an und trägt den Kasten über den Kanalboden und
 drei niedrige Rippen; der Spalt dazwischen (11 mm) ist der **Kabelkanal**
 nach rechts. Links im Kasten der Uno auf vier Stehbolzen, die Buchsenkante
-hinten am **USB-Fenster**. Rechts der Verteiler: hinten **Einbaubuchse** und
-**Schalter**, davor der **Wandler** (12 V / 5 A, 43 × 24 × 20 mm) quer,
+hinten am **USB-Fenster**, dort steckt W17 vom Pi. Rechts der Verteiler:
+hinten **Einbaubuchse** und **Schalter**, davor der **Wandler** (12 V / 5 A,
+43 × 24 × 20 mm) quer,
 mittig vor dem Schalter, mit zwei Kabelbindern 15 mm neben seiner Mitte —
 sie laufen durch Schlitze im Boden, zwischen Buchse und Schalter bzw.
 rechts am Schalter vorbei, und liegen 4 mm innerhalb seiner Enden. Links
@@ -273,7 +274,14 @@ Clips:
 * vorn aus dem Gehäuse in den Kabelkanal, darin nach rechts, dann an der
   **Rückseite des hinteren 2060** (mittlere Nut) zum rechten 2040 und in
   dessen unterer Nut außen nach vorn zum rechten Y-Motor bzw. nach hinten
-  zum Y-Endschalter; das Kabel zum Not-Aus ebenso nach vorn.
+  zum Y-Endschalter; das Kabel zum Not-Aus ebenso nach vorn. W18 (24 V zum
+  Pi) verlässt die Nut unter dem [Pi-Halter](pi.md#halter) und läuft von
+  unten in seine Haube zum 5-V-Wandler.
+* hinten aus dem Gehäuse nur das USB-Kabel W17: aus dem USB-Fenster hinter
+  dem Kasten nach rechts, an seiner rechten Wand nach vorn und von unten in
+  die Haube des Pi-Halters. W19 (5 V vom Wandler in den Pi) bleibt am
+  Pi-Halter: aus dem USB-A-Stecker nach unten und in einem Bogen von unten
+  in PWR IN.
 * Vorn belegt der [Y-Motorhalter](y-motorhalter.md) die letzten 30 mm der
   unteren Nuten beider Seitenflächen (Nutensteine), dahinter sitzen am
   vorderen 2060 die Winkel, die die 2040 halten. Das Motorkabel verlässt die
@@ -324,6 +332,8 @@ in `tools/elektronik_check.py` (Abschnitt 14), jeweils am längsten Weg:
 | Leitung | Strom | Litze | warum |
 |---|---|---|---|
 | 24 V: Buchse → Schalter → Not-Aus → Wago +24 V, Buchse − → Wago GND, Wago → Shield und Wandler | bis 3 A (Netzteil) | **0,75 mm² (AWG 18)**, rot und schwarz | belastbar 6 A (VDE 0298-4, flexible Leitung); 0,5 mm² hätte genau die 3 A. Not-Aus 1,5 m hin und zurück: 0,21 V bei 3 A |
+| 24 V zum Pi (W18): Buchse → 5-V-Wandler | 0,19 A, bei einem Kurzschluss im Wandler bis 3 A | **2 × 0,75 mm²**, rot und schwarz | wie die 24-V-Leitung, weil sie vor Schalter und Not-Aus hängt: Das Netzteil begrenzt erst bei 3 A. 0,5 m: 0,004 V |
+| 5 V und USB (W19, W17) | W19 0,76 A (alles an 5 V), W17 0,15 A (Uno, Treiberlogik, Lichtschranken) | fertige USB-Kabel; W19 mit Stromadern AWG 24 | W19 0,25 m: 0,03 V mit AWG 24, 0,08 V mit dünnen AWG 28, am Pi bleiben 4,92 V; unter ≈ 4,63 V meldet er Unterspannung `[w]`. W17 1 m: 0,07 V mit AWG 28 |
 | Laser: +12 V, GND, PWM | 1,8 A | **3 × 0,34 mm² (AWG 22)** | dicker passt nicht in den XH-Kontakt am Laser; 2 m: 0,37 V = 3 % von 12 V |
 | Motoren | 1,05 A je Spule | **4 × AWG 24 (0,2 mm²)** | dicker passt nicht in den PH-Kontakt am Motor; Z-Motor, 2 m: 0,35 Ω = 15 % der Wicklung. Fertige Motorkabel mit AWG 26 gehen auch (24 %) |
 | Endschalter: 5 V, GND, Signal | ≈ 20 mA | **3 × 0,25 mm² (AWG 24)** | 0,14 mm² ist das Minimum der Wago (AWG 26 hat nur 0,13); in den Dupont-Kontakt passen bis 0,34 |
@@ -351,6 +361,28 @@ und Shield, die Reihenfolge beim Anschließen und die Inbetriebnahme mit
 Tests stehen in [verkabelung.md](verkabelung.md). Plan und Tabellen
 entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
 
+Die 24 V teilen sich an der Einbaubuchse in zwei Zweige:
+
+```
+Netzteil ── Buchse ─┬─ W1 ── Schalter ── W2 ── Not-Aus ── W2 ── Wago +24 V: Shield, Wandler 12 V, Lüfter
+                    └─ W18 ── 5-V-Wandler ── W19 ── Pi ── W17 (USB) ── Uno ── Wago +5 V: Lichtschranken
+```
+
+* **Zweig mit Schalter und Not-Aus:** Shield (Motoren), Abwärtswandler
+  12 V (Laser) und Lüfter. Fehlen hier die 24 V, meldet der 24-V-Wächter
+  (W16) das an GRBL, und GRBL bricht ab.
+* **Zweig zum Pi:** W18 ist an der Buchse angelötet, **vor** Schalter und
+  Not-Aus. Der 5-V-Wandler auf dem [Pi-Halter](pi.md#halter) gibt über W19
+  5 V in **PWR IN** des Pi. Über W17 an der Buchse **USB** bekommt der Uno
+  Daten und 5 V. Über seinen 5-V-Stift versorgt der Uno die Wago +5 V und
+  damit die Lichtschranken. Pi und Uno laufen also, sobald das Netzteil
+  steckt. Einschalten heißt: Netzteil einstecken, dann den Schalter
+  ([pi.md, Strom](pi.md#strom)).
+* **Masse:** Buchse − an die Wago GND, dazu IN− des 5-V-Wandlers (W18) und
+  über USB der Pi. Pi, Uno und Shield haben so dieselbe Masse.
+
+Zu den Teilen:
+
 * **Abwärtswandler:** vorhanden, **12 V / 5 A**, 43 × 24 × 20 mm `[v]`.
   Der Laser zieht höchstens 1,8 A, der Wandler ist damit zu 36 % belastet —
   reichlich Luft.
@@ -361,7 +393,11 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
   auf den Modulen nicht zu finden — deshalb **mit 1,37 V anfangen**: Das
   gibt bei jedem der drei höchstens 1,05 A. Rechnung und Vorgehen in
   [hardware-notizen.md](hardware-notizen.md#treiber-und-versorgung).
-* **Sicherung:** braucht es nicht, das Netzteil begrenzt den Strom selbst.
+* **5-V-Wandler:** 24 → 5 V, 63 × 30 mm `[v]`, mindestens 3 A, Eingang
+  mit Schraubklemmen, Ausgang USB-A. Er liefert höchstens 0,76 A und ist
+  damit zu einem Viertel belastet.
+* **Sicherung:** braucht es nicht, auch nicht im Zweig zum Pi. Das Netzteil
+  begrenzt den Strom selbst.
 
 ## Einkaufsliste (Vorschlag)
 

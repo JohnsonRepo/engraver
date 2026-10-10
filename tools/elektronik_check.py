@@ -490,6 +490,14 @@ def main():
     p.ok('Signale {} mm2: halten in der Wago (feindraehtig)'.format(
         leistung.LITZE_SIGNAL), leistung.LITZE_SIGNAL, leistung.WAGO_MIN,
          '>=', 'mm2')
+    p.info('Pi: W18 {} mm2, {:.1f} m, Strom im Betrieb'.format(
+        leistung.LITZE_24V, li['pi24_m']), li['pi24_a'], 'A')
+    p.ok('Pi: W19 {:.2f} m, AWG 28: 5 V am Pi bei 5,0 V vom Wandler'.format(
+        li['pi5_m']), 5.0 - li['pi5_u'][28],
+         leistung.PI_UNTERSPANNUNG + 0.2, '>=', 'V')
+    p.info('   mit AWG 24: Spannungsfall', li['pi5_u'][24], 'V')
+    p.ok('Uno: W17 {:.1f} m, AWG 28: Spannungsfall'.format(li['usb_m']),
+         li['usb_u'][28], 0.2, '<=', 'V')
 
     # ------------------------------------------------------------------
     # die Endschalter stehen seit Rev. 15 in Portal.py

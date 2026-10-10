@@ -80,6 +80,10 @@ TREIBER_LOGIK_MA = 5.0  # je TMC2209, VIO
 PI_MA = 600.0           # Pi Zero 2 W unter Last, mit WLAN [w]
 PI_WANDLER_A = 3.0      # Abwaertswandler 24 -> 5 V: mindestens so viel
 PI_WANDLER_ETA = 0.85   # sein Wirkungsgrad [w]
+# Fertige USB-Kabel (W17, W19): Querschnitt der Stromadern; billige Kabel
+# haben nur AWG 28. Unter etwa 4,63 V meldet der Pi Unterspannung [w].
+AWG_MM2 = {24: 0.205, 28: 0.081}
+PI_UNTERSPANNUNG = 4.63  # V
 
 # Litzen: Kupfer, feindraehtig, in den Ketten hochflexibel. Der Querschnitt
 # folgt aus Strom und Laenge und aus dem, was die Kontakte nehmen [w]:
@@ -264,19 +268,34 @@ def litzen(K):
     """Folgen der Querschnitte an den laengsten Wegen (Kauflaengen):
     Spannungsfall am Laser, Widerstand im Z-Motorkabel, Not-Aus bei vollem
     Netzteilstrom — dessen Kabel laeuft zum Gehaeuse vorn am vorderen 2060
-    und zurueck."""
+    und zurueck. Dazu der Zweig zum Pi: W18 mit 24 V, W19 mit 5 V fuer
+    alles am Pi, W17 mit dem Strom des Uno (AWG 24 und das duenne AWG 28)."""
     kab = K['kabel']
     netz_a = NETZTEIL_W / 24.0
     m_laser = kauflaenge(kab['Laser (12 V + PWM)'][0])
     m_motor = kauflaenge(kab['Z-Motor'][0])
     m_not = kauflaenge(kab['Not-Aus'][0])
+    m_pi24 = kauflaenge(kab['Pi 24 V'][0])
+    m_pi5 = kauflaenge(kab['Pi 5 V'][0])
+    m_usb = kauflaenge(kab['USB Pi–Uno'][0])
+    pi24_a = leistung()['pi'] / 24.0
+    pi5_a = fuenf_volt_ma() / 1000.0
+    usb_a = (UNO_MA + 4 * TREIBER_LOGIK_MA + 3 * LS_MA) / 1000.0
     return {'netz_a': netz_a,
             'laser_m': m_laser,
             'laser_u': spannungsfall(LITZE_LASER, m_laser, LASER_A),
             'motor_m': m_motor,
             'motor_r': spannungsfall(LITZE_MOTOR, m_motor, 1.0),
             'not_m': m_not,
-            'not_u': spannungsfall(LITZE_24V, m_not, netz_a)}
+            'not_u': spannungsfall(LITZE_24V, m_not, netz_a),
+            'pi24_m': m_pi24, 'pi24_a': pi24_a,
+            'pi24_u': spannungsfall(LITZE_24V, m_pi24, pi24_a),
+            'pi5_m': m_pi5, 'pi5_a': pi5_a,
+            'pi5_u': {awg: spannungsfall(mm2, m_pi5, pi5_a)
+                      for awg, mm2 in AWG_MM2.items()},
+            'usb_m': m_usb, 'usb_a': usb_a,
+            'usb_u': {awg: spannungsfall(mm2, m_usb, usb_a)
+                      for awg, mm2 in AWG_MM2.items()}}
 
 
 def laenge(punkte):
@@ -838,6 +857,12 @@ def main():
     print('  Litze Motor {} mm2, {} m: {:.2f} Ohm = {:.0f} % der Wicklung'
           .format(LITZE_MOTOR, li['motor_m'], li['motor_r'],
                   100.0 * li['motor_r'] / MOTOR_R))
+    print('  Pi: W18 {} mm2, {} m: {:.2f} A, {:.3f} V; W19 {} m: {:.2f} A, '
+          '{:.2f} V (AWG 24) bis {:.2f} V (AWG 28); W17 {} m: {:.2f} A, '
+          '{:.2f} V (AWG 28)'.format(
+              LITZE_24V, li['pi24_m'], li['pi24_a'], li['pi24_u'],
+              li['pi5_m'], li['pi5_a'], li['pi5_u'][24], li['pi5_u'][28],
+              li['usb_m'], li['usb_a'], li['usb_u'][28]))
 
 
 if __name__ == '__main__':

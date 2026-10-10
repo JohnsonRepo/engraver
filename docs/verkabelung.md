@@ -1,7 +1,7 @@
 # Verkabelung — Strom, Motoren, Lichtschranken, Laser
 
 Die ganze Verdrahtung, vom Steckernetzteil bis zum Laser, Schritt für
-Schritt. Jede Leitung hat eine Nummer (W1 … W17). Sie steht an beiden Enden
+Schritt. Jede Leitung hat eine Nummer (W1 … W19). Sie steht an beiden Enden
 auf dem Kabel, im [Anschlussplan](elektronik-anschluss.svg) und in den
 Tabellen hier.
 
@@ -11,9 +11,10 @@ zwischen den Markierungen), der Anschlussplan
 (`python3 tools/anschluss_zeichnen.py`) und das Bild zu
 [Schritt für Schritt](#schritt-für-schritt)
 (`python3 tools/verkabelung_zeichnen.py`). `python3 tools/elektronik_check.py`
-prüft in Abschnitt 15 die Netze (kein Kurzschluss, der Not-Aus trennt alle
-24 V), Signale und Pins, Kontakte, Klemmen und Längen und ob die Tabellen
-hier aktuell sind. Wo Gehäuse, Kabelwege und Ketten liegen, steht
+prüft in Abschnitt 15 die Netze (kein Kurzschluss, der Not-Aus trennt die
+24 V von Shield, Wandler und Lüfter, der Pi hängt davor), Signale und Pins,
+Kontakte, Klemmen und Längen und ob die Tabellen hier aktuell sind. Wo
+Gehäuse, Kabelwege und Ketten liegen, steht
 in [elektronik.md](elektronik.md). Pins, Treiber und Jumper im Einzelnen
 stehen in [hardware-notizen.md](hardware-notizen.md#elektronik).
 
@@ -26,8 +27,11 @@ stehen in [hardware-notizen.md](hardware-notizen.md#elektronik).
 2. **Die 24 V messen, bevor das Shield dran ist.** Verpolt sind die
    Treiber hin.
 3. **Den Wandler ohne Laser auf 12,0 V stellen.**
-4. **Einschalten: erst USB, dann 24 V. Ausschalten umgekehrt.** Dann läuft
-   GRBL schon und hält den Laser aus, wenn er Strom bekommt.
+4. **Einschalten: erst das Netzteil einstecken, dann den Schalter.** Der
+   [Pi](pi.md) hängt vor dem Schalter: Pi und Uno starten zuerst, dann läuft
+   GRBL schon und hält den Laser aus, wenn er Strom bekommt. Ausschalten
+   umgekehrt, den Pi vor dem Ausstecken herunterfahren. Hängt statt des Pi
+   der Mac am Uno: erst USB, dann 24 V.
 5. **Beim ersten Lasertest eine Schutzbrille für 450 nm tragen**, auch bei
    wenig Leistung.
 6. **Jede Leitung an beiden Enden mit ihrer W-Nummer beschriften.**
@@ -39,8 +43,9 @@ Drei Spannungen, eine gemeinsame Masse:
 | Spannung | kommt von | versorgt | geschaltet |
 |---|---|---|---|
 | **+24 V** | Steckernetzteil 24 V / 3 A über Einbaubuchse, Schalter und Not-Aus | Shield (vier Treiber), Wandler, Lüfter | Schalter und Not-Aus |
+| **+24 V vor dem Schalter** | Einbaubuchse, W18 | nur den 5-V-Wandler des Pi | nicht: an, solange das Netzteil steckt |
 | **+12 V** | Wandler 24 → 12 V | nur den Laser | mit den 24 V |
-| **+5 V** | Uno über USB, Stift 5V am Shield | die drei Lichtschranken | USB |
+| **+5 V** | 5-V-Wandler → Pi → USB (W17) → Uno, Stift 5V am Shield | Pi, Uno, die drei Lichtschranken | nicht: wie der 5-V-Wandler |
 | **GND** | alles verbunden, Stern an der Wago GND | | |
 
 Signale: Die Lichtschranken X, Y und Z melden an D9, D10 und D12. Der Laser
@@ -71,8 +76,10 @@ begrenzt den Strom selbst.
 | W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn; in den Kabelhaltern unter den Wänden der drei Träger der Wanne Y durch | 0,71 m | mitgeliefert (1 m) | — |
 | W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,98 m | **1,5 m**, fertig | — |
 | W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,54 m | **2 m**, fertig | Y + X |
-| W16 | **24-V-Wächter an Abort** — fehlen die 24 V (Not-Aus, Schalter, Netzteil), bricht GRBL ab | Widerstand | im Kasten | — | — | — |
-| W17 | **USB** | USB-Kabel A–B | hinten raus zum PC | — | vorhanden | — |
+| W16 | **24-V-Wächter an Abort** — fehlen die 24 V hinter Schalter und Not-Aus, bricht GRBL ab | Widerstand | im Kasten | — | — | — |
+| W17 | **USB zum Pi** — Micro-B in die Buchse „USB“ des Pi, nicht in „PWR IN“ | USB-Kabel Micro-B–B (OTG) | hinten aus dem USB-Fenster, hinter dem Kasten nach rechts, an seiner rechten Wand nach vorn zum Pi-Halter | 0,43 m | **0,5 m**, fertig | — |
+| W18 | **24 V für den Pi** — vor Schalter und Not-Aus: Pi und Uno bleiben an | 2 × 0,75 mm² (AWG 18) | an der Buchse gelötet, vorn raus, Kanal, an der Rückseite des hinteren 2060 unter dem Pi-Halter durch, dahinter hoch zum 5-V-Wandler | 0,27 m | **0,5 m** | — |
+| W19 | **5 V für den Pi** — Stromadern mindestens AWG 24, sonst meldet der Pi Unterspannung | USB-Kabel A–Micro-B | am Pi-Halter: vom USB-Ausgang des Wandlers in „PWR IN“ | 0,07 m | **0,25 m**, fertig | — |
 <!-- /tabelle:leitungen -->
 
 „Länge“ ist der Weg wie in [elektronik-platz.svg](elektronik-platz.svg)
@@ -122,7 +129,10 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 |  | Spule B | blau · rot | Shield Motor Z, 1A · 1B | Z-Motor, Spule B: B− · B+ |
 | W16 | R1 22 kΩ | — | Wago +24 V | Shield Abort (A0) |
 |  | R2 4,7 kΩ ∥ 100 nF | — | Shield Abort (A0) | Wago GND |
-| W17 | USB | — | Uno, USB-B | PC |
+| W17 | USB | — | Uno, USB-B | Pi, Micro-USB „USB“ |
+| W18 | +24 V | rot | Einbaubuchse, Mittelstift (+) | 5-V-Wandler IN+ |
+|  | GND | schwarz | Einbaubuchse, Hülse (−) | 5-V-Wandler IN− |
+| W19 | 5 V | — | 5-V-Wandler, USB-A | Pi, Micro-USB „PWR IN“ |
 <!-- /tabelle:anschluesse -->
 
 ## Klemmen: Wago und Shield
@@ -169,7 +179,7 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 |---|---|---|
 | 0,5 m | Einzelader 0,75 mm² (AWG 18), rot | W1 0,15 m · W3 0,15 m · W4 0,15 m |
 | 0,5 m | Einzelader 0,75 mm² (AWG 18), schwarz | W1 0,15 m · W3 0,15 m · W4 0,15 m |
-| 1,5 m | 2 × 0,75 mm² (AWG 18) | W2 1,5 m |
+| 2 m | 2 × 0,75 mm² (AWG 18) | W2 1,5 m · W18 0,5 m |
 | 1,5 m | 3 × 0,25 mm² (AWG 24) | W6 0,15 m · W10 1 m |
 | 2 m | Silikonlitze 0,34 mm² (AWG 22), rot | W7 2 m |
 | 2 m | Silikonlitze 0,34 mm² (AWG 22), schwarz | W7 2 m |
@@ -178,11 +188,13 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 | 3 m | Silikonlitze 0,25 mm² (AWG 24), schwarz | W9 1 m · W11 2 m |
 | 3 m | Silikonlitze 0,25 mm² (AWG 24), gelb | W9 1 m · W11 2 m |
 | 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker zum Motor, Dupont 4-polig zum Shield; für W15 lose Adern ohne Mantel (läuft durch beide Ketten) | W14, W15 (W12, W13: die mitgelieferten 1-m-Kabel) |
+| 1 | USB-Kabel Micro-B–B (OTG), 0,5 m | W17 (USB zum Pi) |
+| 1 | USB-Kabel A–Micro-B, 0,25 m | W19 (5 V für den Pi) |
 | 17 + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, Lichtschranken, W8, W16 |
 | 6 · 1 · 3 | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, Pull-down, Lichtschranken |
 | 1 + 3 | XH2.54-Gehäuse 3-polig + Crimpkontakte | Laser |
 | 2 | Aderendhülse 0,34 mm² | Schraubklemmen |
-| 4 | Aderendhülse 0,75 mm² | Schraubklemmen |
+| 6 | Aderendhülse 0,75 mm² | Schraubklemmen |
 | 1 | Widerstand 10 kΩ, ¼ W | W8 |
 | 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator 100 nF | W16 |
 | — | Not-Aus-Pilztaster 16 mm, Wechsler C/NO/NC, 3 A / 250 V (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |
@@ -238,6 +250,8 @@ im falschen Schritt gezeichnet ist.
    (Schaltkontakt), bleibt sie frei.
 2. **W1:** rot von der Mittelfahne an Kontakt 1 des Schalters, schwarz von
    der Hülse an die **Wago GND**. Anlöten, Schrumpfschlauch darüber.
+   **W18** für den Pi gleich mit anlöten: rot an die Mittelfahne, schwarz
+   an die Hülse ([Schritt 8](#8-pi-w17w19)).
 3. **W2** zum Not-Aus nach vorn. Er hat einen **Wechsler** mit drei
    Lötfahnen, C, NO und NC `[v]` (Bild). Ader 1 kommt von Kontakt 2 des
    Schalters an **C**, Ader 2 geht von **NC** zurück an die **Wago
@@ -330,9 +344,10 @@ Reset-Taster oben links). Das Bild erzeugt
 ### 7. 24-V-Wächter (W16)
 
 Der Not-Aus trennt die 24 V. Motoren und Laser sind dann stromlos, der Uno
-läuft aber über USB weiter, und GRBL arbeitet den Auftrag weiter ab. Wird
-der Not-Aus wieder entriegelt, bekommen Motoren und Laser mitten im Auftrag
-wieder Strom, und der Laser brennt mit der Leistung, die gerade gilt.
+läuft aber weiter, über USB vom Pi versorgt, und GRBL arbeitet den Auftrag
+weiter ab. Wird der Not-Aus wieder entriegelt, bekommen Motoren und Laser
+mitten im Auftrag wieder Strom, und der Laser brennt mit der Leistung, die
+gerade gilt.
 
 Dagegen hilft der **24-V-Wächter**, ein Spannungsteiler an **Abort** (A0):
 
@@ -342,7 +357,8 @@ Dagegen hilft der **24-V-Wächter**, ein Spannungsteiler an **Abort** (A0):
 Mit 24 V liegen an A0 4,1 bis 4,5 V, also HIGH. Fehlen die 24 V, zieht R2
 den Eingang auf unter 1 V. GRBL bricht dann sofort ab, schaltet den Laser
 aus und meldet ALARM; im Status steht `Pn:R`, solange die 24 V fehlen. Das
-gilt für den Not-Aus, für den Schalter und für ein abgezogenes Netzteil.
+gilt für den Not-Aus und für den Schalter. Zieht man das Netzteil, gehen Pi
+und Uno mit aus.
 Der Kondensator filtert Störungen aus der 24-V-Leitung.
 
 Bauen: An jedes Ende eine kurze Litze 0,25 mm² anlöten, die Verbindung
@@ -355,10 +371,30 @@ Warum nicht der zweite Kontakt des Not-Aus: Er ist ein Wechsler, an NO läge
 beim Drücken C, also +24 V. Das zerstört den Uno. Der Wächter braucht keinen
 Kontakt und meldet mehr als nur den Not-Aus.
 
-### 8. USB (W17)
+### 8. Pi (W17–W19)
 
-Uno an den PC. Das USB-Kabel versorgt den Uno und damit die 5 V der
-Lichtschranken.
+Der Pi steuert die Maschine ohne PC: Aufträge aus LightBurn liegen als
+Datei auf ihm und starten im Browser ([pi.md](pi.md)). Er sitzt mit seinem
+5-V-Wandler auf dem [Pi-Halter](pi.md#halter) rechts neben dem Kasten.
+
+1. **Pi-Halter** an die Rückseite des hinteren 2060, rechts neben die
+   Montageplatte des Kastens: 2 Hammermuttern in die obere Nut, 2 × M5×12.
+   Den Pi mit 4 × M2.5×6 auf die Stehbolzen, Bauteile nach hinten, Buchsen
+   nach unten. Den 5-V-Wandler links daneben, Eingang zum Kasten, USB-Buchse
+   zum Pi, mit 2 Kabelbindern durch die Schlitze über und unter ihm.
+2. **W18** hängt schon an der Buchse (Schritt 2), also vor Schalter und
+   Not-Aus. Vorn aus dem Kasten, im Kanal nach rechts, an der Rückseite des
+   2060 unter dem Pi-Halter durch und dahinter hoch: rot an **IN+**, schwarz
+   an **IN−** des 5-V-Wandlers, mit Aderendhülsen.
+3. Netzteil einstecken, Schalter aus lassen: Am USB-Ausgang des Wandlers
+   liegen **5,0–5,2 V**. Erst dann weiter.
+4. **W19:** das kurze USB-Kabel vom Wandler in **PWR IN** des Pi.
+5. **W17:** das OTG-Kabel von der Buchse **USB** des Pi (die mittlere, nicht
+   PWR IN) nach unten, unter dem Wandler nach links, rechts am Kasten
+   vorbei nach hinten und hinter ihm ins USB-Fenster des Uno.
+
+Für GRBL aufspielen und die ersten Prüfungen darf statt des Pi der Mac am
+USB des Uno hängen. Dann [Prüfung J](#j-pi-und-cncjs).
 
 ## Kabelwege und Ketten
 
@@ -374,7 +410,11 @@ sind sie in [elektronik.md](elektronik.md#kabel).
   Rückseite des hinteren 2060 (mittlere Nut) zum rechten 2040 und in dessen
   untere Außennut: W14 und W2 nach vorn, W10 nach hinten zum Halter Y. W2
   verlässt die Nut vor dem 2060, läuft in dessen oberer Nut vorn nach
-  links und rechts oben ins Gehäuse des Not-Aus.
+  links und rechts oben ins Gehäuse des Not-Aus. W18 geht mit bis unter
+  den Pi-Halter und dahinter hoch zum 5-V-Wandler.
+* **Hinten aus dem Gehäuse** nur W17: aus dem USB-Fenster hinter dem
+  Kasten nach rechts, an seiner rechten Wand nach vorn zum Pi. Der Pi-Halter
+  sitzt über den Kabeln der mittleren Nut, die laufen unter ihm durch.
 * **Y-Kette:** W7, W9, W11, W12, W15. Sie kommen hinten aus dem
   Anfangsstück auf dem Kettenhalter Y (ein Kabelbinder). W12 läuft hinter
   dem Motorhalter hoch zum X-Motor, W9 über das Rohr nach vorn zum Halter X.
@@ -396,7 +436,10 @@ oder Clips sie.
 
 ## Inbetriebnahme
 
-In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
+In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht. Bis I
+hängt der Uno am Mac (USB, Konsole in LightBurn oder der Arduino-IDE),
+„USB an“ heißt: Kabel vom Mac stecken. Der Pi läuft dabei schon mit, sobald
+das Netzteil steckt, und stört nicht. J bindet ihn ein.
 
 ### A. Ohne Strom
 
@@ -476,7 +519,8 @@ In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
   Y keinen Schalter, dort schützen allein die Softlimits, und die stimmen
   nur nach der Referenzfahrt
   ([endschalter.md](endschalter.md#softlimits-statt-zweitem-y-schalter)).
-  In LightBurn „Auto-home on startup“ einschalten.
+  In LightBurn „Auto-home on startup“ einschalten; in CNCjs nach dem
+  Verbinden „Homing“ drücken, nicht „Unlock“.
 
 ### H. Laser
 
@@ -487,8 +531,8 @@ In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
 4. Mit 1 % Leistung eine kurze Linie: `G91`, `M3 S10`, `G1 X10 F600`, `M5`,
    `G90`. In LightBurn geht dasselbe mit „Fire“ bei 1 %.
 5. Nach `M5` und im Stillstand ist der Laser aus.
-6. **Ohne USB** die 24 V einschalten: Der Laser muss aus bleiben. Das prüft
-   den Pull-down (W8).
+6. **Ohne USB** (weder Mac noch Pi am Uno) die 24 V einschalten: Der
+   Laser muss aus bleiben. Das prüft den Pull-down (W8).
 
 ### I. Not-Aus
 
@@ -497,6 +541,26 @@ In dieser Reihenfolge. Jede Stufe prüft, was die nächste braucht.
 * Den Pilz drehen, bis er herausspringt. `Pn:R` verschwindet. Dann mit `$H`
   neu referenzieren.
 * Schalter aus: auch dann steht `Pn:R` im Status, das ist richtig.
+
+### J. Pi und CNCjs
+
+1. Den Pi einrichten wie in [pi.md](pi.md#einrichten): Karte beschreiben,
+   `sh pi/einrichten.sh`, neu starten.
+2. Alles aus. Das Kabel vom Mac am Uno abziehen und dafür W17 in den Uno
+   stecken. Sein anderes Ende steckt seit Schritt 8 in der Buchse **USB**
+   des Pi.
+3. Netzteil einstecken, Schalter aus lassen. Nach etwa einer Minute ist
+   CNCjs unter `http://laser.local:8000` erreichbar. Verbinden: Port
+   `/dev/ttyACM0` (Nachbau mit CH340: `/dev/ttyUSB0`), 115200 Baud,
+   Controller Grbl. In der Konsole meldet sich GRBL mit `Grbl 1.1h`.
+4. Schalter an, **Homing**: wie bei G halten alle drei Achsen an ihren
+   Lichtschranken.
+5. Not-Aus drücken: CNCjs zeigt ALARM und `Pn:R`, Pi und Verbindung
+   bleiben. Entriegeln, Homing.
+6. Ein kleiner Auftrag aus LightBurn mit 1 % Leistung, als Datei geladen,
+   erst mit dem Makro **Rahmen**, dann gestartet (Schutzbrille).
+7. Schalter aus, in CNCjs **Pi herunterfahren**, dann erst das Netzteil
+   ziehen.
 
 ## GRBL-Einstellungen
 
@@ -537,11 +601,15 @@ Standardwert von GRBL.
 | Motor dreht falsch herum | Richtung | Bit in `$3`; bei Y gegen A: an A eine Spule tauschen |
 | Motoren verlieren Schritte oder werden über 70 °C heiß | Strom zu klein oder zu groß | Vref nach [hardware-notizen.md](hardware-notizen.md#treiber-und-versorgung) |
 | Laser brennt nicht | Lasermodus aus, PWM falsch gesteckt, keine 12 V | `$32=1`, `$30=1000`; PWM auf Z+; 12 V am Stecker messen |
-| Laser blitzt beim Einschalten kurz auf | Pull-down fehlt, 24 V vor USB | W8 stecken; erst USB, dann 24 V |
+| Laser blitzt beim Einschalten kurz auf | Pull-down fehlt, 24 V vor USB | W8 stecken; erst Netzteil (Pi, Uno), dann Schalter |
 | Netzteil schaltet ab | Kurzschluss oder Überlast | 24-V-Leitungen prüfen; Vref nicht über 1,05 A |
-| `Pn:R` im Status, GRBL bricht ab | keine 24 V: Not-Aus gedrückt, Schalter aus, Netzteil ab; oder R1 von W16 lose | Not-Aus entriegeln, 24 V einschalten; an Abort gegen GND messen: mit 24 V 4–4,5 V |
+| `Pn:R` im Status, GRBL bricht ab | keine 24 V hinter dem Schalter: Not-Aus gedrückt, Schalter aus; oder R1 von W16 lose | Not-Aus entriegeln, 24 V einschalten; an Abort gegen GND messen: mit 24 V 4–4,5 V |
 | GRBL bricht mitten im Auftrag ab, `Pn:R` blitzt kurz | die 24 V brechen ein (Stecker, Netzteil überlastet) | Hohlstecker und Netzteil prüfen; Vref nicht über 1,05 A |
 | Uno verliert die Verbindung | USB | kürzeres oder besseres USB-Kabel |
+| CNCjs nicht erreichbar | Pi startet noch, WLAN falsch, Dienst aus | eine Minute warten; `ping laser.local`; auf dem Pi `systemctl status cncjs` ([pi.md](pi.md#fehlersuche)) |
+| CNCjs findet keinen Port | W17 in PWR IN statt USB, Kabel ohne OTG | Micro-B in die Buchse USB; OTG-Kabel; auf dem Pi `ls /dev/ttyACM* /dev/ttyUSB*` |
+| Pi startet neu, Blitz-Symbol, Unterspannung | W19 zu dünn oder lang, 5-V-Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A, am Ausgang 5,0–5,2 V |
+| Pi bleibt dunkel | W18 verpolt oder lose, Netzteil ab | an IN+ gegen IN− 24 V messen |
 
 ## Geändert gegen den alten Anschlussplan
 
@@ -560,6 +628,9 @@ Standardwert von GRBL.
   gestrichen.
 * **GRBL:** `$130=385` und `$132=82`, beide mit 1 mm Rückzug und 2 mm
   Reserve wie Y. Vorher standen dort ≈ 387 und ≈ 84.
+* **Pi statt PC** (2026-10-10): W17 geht zum Pi, neu sind W18 (24 V vor
+  Schalter und Not-Aus zum 5-V-Wandler) und W19 (5 V in den Pi). Damit
+  gilt die Einschaltreihenfolge „Netzteil, dann Schalter“ von selbst.
 
 ## Noch offen
 

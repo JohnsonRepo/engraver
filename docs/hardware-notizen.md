@@ -508,24 +508,26 @@ gewandert:
   24 V, Uno an USB, Motoren dürfen ab sein), mit einem isolierten
   Schraubendreher drehen. Werden die Motoren über 70 °C heiß, zurück; laufen
   sie kalt und verlieren Schritte, höchstens bis 1,2 A (R100: 1,57 V,
-  R110: 1,70 V, R150: 2,22 V) — das Netzteil trägt das noch (≈ 55 W statt
-  49 W). Alle vier gleich einstellen, Y und A auf jeden Fall.
+  R110: 1,70 V, R150: 2,22 V) — das Netzteil trägt das noch (≈ 59 W statt
+  53 W). Alle vier gleich einstellen, Y und A auf jeden Fall.
 * Treiber richtig herum stecken (EN-Pin zum EN-Aufdruck) und Motoren nie unter
   Spannung ab- oder anstecken — beides kostet den Treiber.
 * Netzteil 24 V für die Motoren (TMC2209 abs. max 29 V, siehe oben). Der Laser
   nach seinem Typenschild; ist er ein 12-V-Modul, bekommt er einen eigenen
   12-V-Zweig. **Vorhanden: Steckernetzteil GIDEALED 24 V / 3 A (72 W)**
-  `[v]` Angabe. Motoren ≈ 23 W, Lüfter ≈ 2 W, Laser mit Wandler ≈ 24 W —
-  zusammen ≈ 49 W, dauernd gehen 61 W. Bilanz in
+  `[v]` Angabe. Motoren ≈ 23 W, Lüfter ≈ 2 W, Laser mit Wandler ≈ 24 W,
+  [Pi](pi.md) mit Uno und Lichtschranken über seinen 5-V-Wandler ≈ 4 W —
+  zusammen ≈ 53 W, dauernd gehen 61 W. Bilanz in
   [elektronik.md](elektronik.md#leistung-reichen-72-w).
 
 ### Grenzen des Uno
 
 8-Bit-GRBL schafft etwa 30 kHz Schrittrate — bei 80 Schritten/mm 375 mm/s,
 mehr als ein Diodenlaser braucht. Der Engpass ist die serielle Übertragung:
-Graustufenbilder schnell zu rastern kann stocken. Für Linien und Füllungen
-reicht es; wer später schneller rastern will, wechselt auf ein 32-Bit-Board
-(ESP32 mit FluidNC o. ä.) — die Mechanik bleibt gleich.
+Graustufenbilder schnell zu rastern kann stocken. Daran ändert der
+[Pi](pi.md) nichts, er schickt die Datei über dieselbe serielle Leitung. Für
+Linien und Füllungen reicht es; wer später schneller rastern will, wechselt
+auf ein 32-Bit-Board (ESP32 mit FluidNC o. ä.) — die Mechanik bleibt gleich.
 
 ## Y-Antrieb
 

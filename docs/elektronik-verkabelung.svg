@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1240" height="2046" viewBox="0 0 1240 2046" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1240" height="2046" fill="#ffffff"/><text x="24.0" y="38.0" font-size="19" fill="#1c2733" text-anchor="start" font-weight="600">Verkabelung Schritt für Schritt — jede Ader von Klemme zu Klemme</text>
-<text x="24.0" y="60.0" font-size="11.5" fill="#5b6472" text-anchor="start">Leitungen W1–W17 wie in verkabelung.md, Farben wie in der Anschlussliste. Schematisch, nicht maßstäblich; Wago-Plätze in der Reihenfolge der Tabelle „Klemmen“.</text>
-<text x="24.0" y="77.0" font-size="11.5" fill="#5b6472" text-anchor="start">Alles stromlos verdrahten, nichts unter Spannung an- oder abstecken. Einschalten: erst USB, dann 24 V.</text>
+<text x="24.0" y="60.0" font-size="11.5" fill="#5b6472" text-anchor="start">Leitungen W1–W19 wie in verkabelung.md, Farben wie in der Anschlussliste. Schematisch, nicht maßstäblich; Wago-Plätze in der Reihenfolge der Tabelle „Klemmen“.</text>
+<text x="24.0" y="77.0" font-size="11.5" fill="#5b6472" text-anchor="start">Alles stromlos verdrahten, nichts unter Spannung an- oder abstecken. Einschalten: erst Netzteil (Pi und Uno starten), dann Schalter EIN.</text>
 <polyline points="24.0,98.0 46.0,98.0" fill="none" stroke="#e03131" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="52.0" y="102.0" font-size="11" fill="#1c2733" text-anchor="start">rot</text>
 <polyline points="88.2,98.0 110.2,98.0" fill="none" stroke="#212529" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
@@ -63,12 +63,12 @@
 <polyline points="478.2,400.4 439.2,400.4 439.2,405.6" fill="none" stroke="#6d3fb5" stroke-width="2.0" stroke-dasharray="6 3" stroke-linejoin="round"/>
 <rect x="241.0" y="58.0" width="100.0" height="24.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
 <text x="249.0" y="74.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Steckernetzteil</text>
-<rect x="110.0" y="58.0" width="64.0" height="24.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
-<text x="134.0" y="74.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">PC</text>
 <polyline points="291.0,82.0 291.0,110.2" fill="none" stroke="#c62828" stroke-width="2.0" stroke-linejoin="round"/>
-<polyline points="174.0,70.0 233.8,70.0 233.8,110.2" fill="none" stroke="#495057" stroke-width="2.0" stroke-linejoin="round"/>
-<rect x="239.8" y="85.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
-<text x="255.3" y="96.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
+<rect x="320.6" y="150.8" width="91.0" height="10.4" rx="2" fill="#fff4e6" stroke="#d9480f" stroke-width="1.2"/>
+<text x="366.4" y="160.0" font-size="10" fill="#d9480f" text-anchor="middle" font-weight="600">Pi</text>
+<polyline points="387.2,150.8 387.2,147.7 310.2,147.7 310.2,106.1 246.8,106.1 246.8,110.2" fill="none" stroke="#495057" stroke-width="2.0" stroke-linejoin="round"/>
+<rect x="316.2" y="113.8" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="331.7" y="125.3" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
 <text x="164.0" y="131.6" font-size="10.5" fill="#5b6472" text-anchor="end">links raus, unter dem</text>
 <text x="164.0" y="144.6" font-size="10.5" fill="#5b6472" text-anchor="end">2040 durch, untere Nut</text>
 <text x="164.0" y="260.0" font-size="10.5" fill="#5b6472" text-anchor="end">Y-Kette:</text>
@@ -103,6 +103,9 @@
 <rect x="376.0" y="404.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="388.0" y="415.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W2</text>
 <text x="370.0" y="415.0" font-size="10.5" fill="#1c2733" text-anchor="end">Not-Aus</text>
+<rect x="340.4" y="130.4" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="355.9" y="141.9" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W18</text>
+<text x="380.4" y="141.4" font-size="10.5" fill="#1c2733" text-anchor="start">Pi-Halter</text>
 <text x="676.0" y="76.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Leitungen aus dem Gehäuse</text>
 <text x="718.0" y="96.0" font-size="10.5" fill="#5b6472" text-anchor="start">Leitung</text>
 <text x="830.0" y="96.0" font-size="10.5" fill="#5b6472" text-anchor="start">Litze</text>
@@ -165,13 +168,19 @@
 <text x="1114.0" y="290.0" font-size="10.5" fill="#5b6472" text-anchor="start">Y + X</text>
 <rect x="676.0" y="300.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="691.5" y="311.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
-<text x="718.0" y="311.0" font-size="11" fill="#1c2733" text-anchor="start">USB</text>
-<text x="830.0" y="311.0" font-size="10.5" fill="#1c2733" text-anchor="start">USB-Kabel A–B</text>
-<text x="1006.0" y="311.0" font-size="10.5" fill="#1c2733" text-anchor="start">—</text>
+<text x="718.0" y="311.0" font-size="11" fill="#1c2733" text-anchor="start">USB zum Pi</text>
+<text x="830.0" y="311.0" font-size="10.5" fill="#1c2733" text-anchor="start">USB-Kabel Micro-B–B (OTG)</text>
+<text x="1006.0" y="311.0" font-size="10.5" fill="#1c2733" text-anchor="start">0,43 → 0,5 m</text>
 <text x="1114.0" y="311.0" font-size="10.5" fill="#5b6472" text-anchor="start">—</text>
-<text x="676.0" y="338.0" font-size="10.5" fill="#5b6472" text-anchor="start">Im Gehäuse: W1, W3–W6, W8, W16.</text>
-<text x="676.0" y="352.0" font-size="10.5" fill="#5b6472" text-anchor="start">In den Ketten nur Einzellitzen, keine Mantelleitung; Motorkabel</text>
-<text x="676.0" y="366.0" font-size="10.5" fill="#5b6472" text-anchor="start">ohne Schlauch. „Länge“: Weg → kaufen (+15 %, aufgerundet).</text></g>
+<rect x="676.0" y="321.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="691.5" y="332.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W18</text>
+<text x="718.0" y="332.0" font-size="11" fill="#1c2733" text-anchor="start">24 V für den Pi</text>
+<text x="830.0" y="332.0" font-size="10.5" fill="#1c2733" text-anchor="start">2 × 0,75 mm²</text>
+<text x="1006.0" y="332.0" font-size="10.5" fill="#1c2733" text-anchor="start">0,27 → 0,5 m</text>
+<text x="1114.0" y="332.0" font-size="10.5" fill="#5b6472" text-anchor="start">—</text>
+<text x="676.0" y="359.0" font-size="10.5" fill="#5b6472" text-anchor="start">Im Gehäuse: W1, W3–W6, W8, W16. Am Pi-Halter: W19.</text>
+<text x="676.0" y="373.0" font-size="10.5" fill="#5b6472" text-anchor="start">In den Ketten nur Einzellitzen, keine Mantelleitung; Motorkabel</text>
+<text x="676.0" y="387.0" font-size="10.5" fill="#5b6472" text-anchor="start">ohne Schlauch. „Länge“: Weg → kaufen (+15 %, aufgerundet).</text></g>
 <g transform="translate(24.0,614.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
 <circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
 <text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
@@ -947,61 +956,92 @@
 <g transform="translate(628.0,1682.0)"><rect x="0.0" y="0.0" width="588.0" height="340.0" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.0"/>
 <circle cx="22.0" cy="23.0" r="13.0" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
 <text x="22.0" y="28.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600">8</text>
-<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">USB</text>
-<text x="574.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W17</text>
-<rect x="14.0" y="50.0" width="150.0" height="48.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
-<text x="23.0" y="69.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Uno</text>
-<text x="23.0" y="84.0" font-size="11.0" fill="#5b6472" text-anchor="start">USB-B</text>
-<rect x="300.0" y="50.0" width="110.0" height="48.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
-<text x="309.0" y="69.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">PC</text>
-<text x="309.0" y="84.0" font-size="11.0" fill="#5b6472" text-anchor="start">LightBurn o. ä.</text>
-<polyline points="164.0,74.0 300.0,74.0" fill="none" stroke="#868e96" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
-<circle cx="164.0" cy="74.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
-<circle cx="300.0" cy="74.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
-<rect x="216.5" y="59.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
-<text x="232.0" y="70.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
-<text x="14.0" y="118.0" font-size="10.5" fill="#5b6472" text-anchor="start">Versorgt den Uno und damit die 5 V der Lichtschranken.</text>
-<text x="14.0" y="146.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Einschalten</text>
-<circle cx="22.0" cy="166.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
-<text x="22.0" y="170.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
-<text x="34.0" y="170.0" font-size="11" fill="#1c2733" text-anchor="start">USB</text>
-<circle cx="116.0" cy="166.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
-<text x="116.0" y="170.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
-<text x="128.0" y="170.0" font-size="11" fill="#1c2733" text-anchor="start">Schalter EIN: 24 V</text>
-<polyline points="64.0,166.0 100.0,166.0" fill="none" stroke="#5b6472" stroke-width="1.4" stroke-linejoin="round"/>
-<polygon points="100,166 94,163 94,169" fill="#5b6472"/>
-<text x="260.0" y="170.0" font-size="10.5" fill="#5b6472" text-anchor="start">ausschalten umgekehrt</text>
-<text x="14.0" y="204.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Inbetriebnahme, Prüfungen der Anleitung</text>
-<rect x="14.0" y="215.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="23.0" y="226.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">A</text>
-<text x="40.0" y="226.0" font-size="10.5" fill="#1c2733" text-anchor="start">Ohne Strom</text>
-<text x="288.0" y="226.0" font-size="10" fill="#5b6472" text-anchor="end">nach 2</text>
-<rect x="14.0" y="234.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="23.0" y="245.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">B</text>
-<text x="40.0" y="245.0" font-size="10.5" fill="#1c2733" text-anchor="start">24 V ohne Verbraucher</text>
-<text x="288.0" y="245.0" font-size="10" fill="#5b6472" text-anchor="end">nach 2</text>
-<rect x="14.0" y="253.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="23.0" y="264.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">C</text>
-<text x="40.0" y="264.0" font-size="10.5" fill="#1c2733" text-anchor="start">Wandler auf 12,0 V</text>
-<text x="288.0" y="264.0" font-size="10" fill="#5b6472" text-anchor="end">nach 3</text>
-<rect x="14.0" y="272.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="23.0" y="283.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">D</text>
-<text x="40.0" y="283.0" font-size="10.5" fill="#1c2733" text-anchor="start">Uno, GRBL und Lichtschranken</text>
-<text x="288.0" y="283.0" font-size="10" fill="#5b6472" text-anchor="end">nach 4</text>
-<rect x="14.0" y="291.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="23.0" y="302.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">E</text>
-<text x="40.0" y="302.0" font-size="10.5" fill="#1c2733" text-anchor="start">Treiber und Vref</text>
-<text x="288.0" y="302.0" font-size="10" fill="#5b6472" text-anchor="end">vor 6</text>
-<rect x="300.0" y="215.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="309.0" y="226.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">F</text>
-<text x="326.0" y="226.0" font-size="10.5" fill="#1c2733" text-anchor="start">Motoren und Drehrichtung</text>
-<text x="574.0" y="226.0" font-size="10" fill="#5b6472" text-anchor="end">nach 6</text>
-<rect x="300.0" y="234.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="309.0" y="245.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">G</text>
-<text x="326.0" y="245.0" font-size="10.5" fill="#1c2733" text-anchor="start">Referenzfahrt</text>
-<rect x="300.0" y="253.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="309.0" y="264.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">H</text>
-<text x="326.0" y="264.0" font-size="10.5" fill="#1c2733" text-anchor="start">Laser</text>
-<rect x="300.0" y="272.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
-<text x="309.0" y="283.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">I</text>
-<text x="326.0" y="283.0" font-size="10.5" fill="#1c2733" text-anchor="start">Not-Aus</text></g></svg>
+<text x="44.0" y="28.5" font-size="14.5" fill="#1c2733" text-anchor="start" font-weight="600">Pi</text>
+<rect x="508.0" y="17.0" width="66.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="541.0" y="28.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">Prüfung J</text>
+<text x="502.0" y="28.0" font-size="11" fill="#5b6472" text-anchor="end">W17–W19 · dann</text>
+<rect x="14.0" y="46.0" width="92.0" height="58.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
+<text x="23.0" y="65.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Buchse</text>
+<text x="23.0" y="80.0" font-size="11.0" fill="#5b6472" text-anchor="start">Lötfahnen</text>
+<text x="98.0" y="66.0" font-size="12" fill="#c62828" text-anchor="end" font-weight="600">+</text>
+<text x="98.0" y="96.0" font-size="12" fill="#1f2328" text-anchor="end" font-weight="600">−</text>
+<rect x="190.0" y="46.0" width="118.0" height="58.0" rx="5" fill="#f8f0fc" stroke="#8e44ad" stroke-width="1.0"/>
+<text x="199.0" y="65.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">5-V-Wandler</text>
+<text x="199.0" y="80.0" font-size="11.0" fill="#5b6472" text-anchor="start">24 → 5 V, ≥ 3 A</text>
+<text x="198.0" y="96.0" font-size="10" fill="#5b6472" text-anchor="start">IN</text>
+<polyline points="106.0,62.0 190.0,62.0" fill="none" stroke="#e03131" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="106.0" cy="62.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="190.0" cy="62.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<polyline points="106.0,92.0 190.0,92.0" fill="none" stroke="#212529" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="106.0" cy="92.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="190.0" cy="92.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="132.5" y="70.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="148.0" y="81.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W18</text>
+<rect x="392.0" y="46.0" width="182.0" height="58.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
+<text x="401.0" y="65.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Pi Zero 2 W</text>
+<text x="401.0" y="80.0" font-size="11.0" fill="#5b6472" text-anchor="start">PWR IN · USB (unten)</text>
+<polyline points="308.0,75.0 392.0,75.0" fill="none" stroke="#868e96" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="308.0" cy="75.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="392.0" cy="75.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="334.5" y="60.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="350.0" y="71.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W19</text>
+<rect x="392.0" y="132.0" width="182.0" height="40.0" rx="5" fill="#eef4fb" stroke="#2f5d92" stroke-width="1.0"/>
+<text x="401.0" y="151.0" font-size="12.0" fill="#1c2733" text-anchor="start" font-weight="600">Uno</text>
+<text x="401.0" y="166.0" font-size="11.0" fill="#5b6472" text-anchor="start">USB-B, hinten im Fenster</text>
+<polyline points="483.0,104.0 483.0,132.0" fill="none" stroke="#868e96" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="483.0" cy="104.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<circle cx="483.0" cy="132.0" r="3.3" fill="#ffffff" stroke="#1c2733" stroke-width="1.2"/>
+<rect x="493.0" y="112.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="508.5" y="123.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
+<text x="14.0" y="128.0" font-size="10.5" fill="#5b6472" text-anchor="start">Vor Schalter und Not-Aus: Pi und Uno</text>
+<text x="14.0" y="141.5" font-size="10.5" fill="#5b6472" text-anchor="start">laufen weiter, der Wächter W16 meldet.</text>
+<text x="14.0" y="155.0" font-size="10.5" fill="#5b6472" text-anchor="start">W17 in „USB“, W19 in „PWR IN“.</text>
+<text x="14.0" y="190.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Einschalten</text>
+<circle cx="22.0" cy="206.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="22.0" y="210.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">1</text>
+<text x="34.0" y="210.0" font-size="11" fill="#1c2733" text-anchor="start">Netzteil: Pi und Uno starten</text>
+<circle cx="270.0" cy="206.0" r="8.5" fill="#2f5d92" stroke="none" stroke-width="1.0"/>
+<text x="270.0" y="210.0" font-size="10.5" fill="#ffffff" text-anchor="middle" font-weight="600">2</text>
+<text x="282.0" y="210.0" font-size="11" fill="#1c2733" text-anchor="start">Schalter EIN: 24 V</text>
+<polyline points="212.0,206.0 254.0,206.0" fill="none" stroke="#5b6472" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="254,206 248,203 248,209" fill="#5b6472"/>
+<text x="420.0" y="210.0" font-size="10.5" fill="#5b6472" text-anchor="start">aus: umgekehrt, den Pi</text>
+<text x="420.0" y="223.0" font-size="10.5" fill="#5b6472" text-anchor="start">vorher herunterfahren</text>
+<text x="14.0" y="246.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Inbetriebnahme, Prüfungen der Anleitung</text>
+<rect x="14.0" y="255.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="266.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">A</text>
+<text x="40.0" y="266.0" font-size="10.5" fill="#1c2733" text-anchor="start">Ohne Strom</text>
+<text x="288.0" y="266.0" font-size="10" fill="#5b6472" text-anchor="end">nach 2</text>
+<rect x="14.0" y="270.5" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="282.0" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">B</text>
+<text x="40.0" y="281.5" font-size="10.5" fill="#1c2733" text-anchor="start">24 V ohne Verbraucher</text>
+<text x="288.0" y="281.5" font-size="10" fill="#5b6472" text-anchor="end">nach 2</text>
+<rect x="14.0" y="286.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="297.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">C</text>
+<text x="40.0" y="297.0" font-size="10.5" fill="#1c2733" text-anchor="start">Wandler auf 12,0 V</text>
+<text x="288.0" y="297.0" font-size="10" fill="#5b6472" text-anchor="end">nach 3</text>
+<rect x="14.0" y="301.5" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="313.0" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">D</text>
+<text x="40.0" y="312.5" font-size="10.5" fill="#1c2733" text-anchor="start">Uno, GRBL und Lichtschranken</text>
+<text x="288.0" y="312.5" font-size="10" fill="#5b6472" text-anchor="end">nach 4</text>
+<rect x="14.0" y="317.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="23.0" y="328.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">E</text>
+<text x="40.0" y="328.0" font-size="10.5" fill="#1c2733" text-anchor="start">Treiber und Vref</text>
+<text x="288.0" y="328.0" font-size="10" fill="#5b6472" text-anchor="end">vor 6</text>
+<rect x="300.0" y="255.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="266.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">F</text>
+<text x="326.0" y="266.0" font-size="10.5" fill="#1c2733" text-anchor="start">Motoren und Drehrichtung</text>
+<text x="574.0" y="266.0" font-size="10" fill="#5b6472" text-anchor="end">nach 6</text>
+<rect x="300.0" y="270.5" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="282.0" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">G</text>
+<text x="326.0" y="281.5" font-size="10.5" fill="#1c2733" text-anchor="start">Referenzfahrt</text>
+<rect x="300.0" y="286.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="297.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">H</text>
+<text x="326.0" y="297.0" font-size="10.5" fill="#1c2733" text-anchor="start">Laser</text>
+<rect x="300.0" y="301.5" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="313.0" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">I</text>
+<text x="326.0" y="312.5" font-size="10.5" fill="#1c2733" text-anchor="start">Not-Aus</text>
+<rect x="300.0" y="317.0" width="18.0" height="15.0" rx="7.5" fill="#0b7285" stroke="#0b7285" stroke-width="1.0"/>
+<text x="309.0" y="328.5" font-size="10.0" fill="#ffffff" text-anchor="middle" font-weight="600">J</text>
+<text x="326.0" y="328.0" font-size="10.5" fill="#1c2733" text-anchor="start">Pi und CNCjs</text>
+<text x="574.0" y="328.0" font-size="10" fill="#5b6472" text-anchor="end">nach 8</text></g></svg>

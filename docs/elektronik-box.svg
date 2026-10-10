@@ -213,7 +213,7 @@
 <text x="24.0" y="789.0" font-size="8.5" fill="#5b6472" text-anchor="start">Kabel</text>
 <text x="110.0" y="789.0" font-size="8.5" fill="#1c2733" text-anchor="start">links raus: über die Y-Kette X-, Z-Motor, Laser, Endschalter X und Z, dazu der linke Y-Motor; vorn in den Kanal: rechter Y-Motor, Y-Endschalter,</text>
 <text x="24.0" y="804.0" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="804.0" font-size="8.5" fill="#1c2733" text-anchor="start">Not-Aus; hinten hinein: 24 V vom Steckernetzteil und USB</text>
+<text x="110.0" y="804.0" font-size="8.5" fill="#1c2733" text-anchor="start">Not-Aus, 24 V zum Pi; hinten hinein: 24 V vom Steckernetzteil und USB vom Pi</text>
 <rect x="24.0" y="839.0" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <text x="43.0" y="847.0" font-size="8.5" fill="#1c2733" text-anchor="start">Gehäuse (PETG)</text>
 <rect x="214.0" y="839.0" width="14.0" height="9.0" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>

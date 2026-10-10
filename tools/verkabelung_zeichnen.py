@@ -3,7 +3,8 @@
 
 Das Bild zur Anleitung docs/verkabelung.md. Oben eine schematische
 Draufsicht mit den Leitungen, die das Gehaeuse verlassen, und ihren Wegen
-durch Kanal und Energieketten; darunter die acht Schritte der Anleitung,
+durch Kanal und Energieketten bis zum Pi-Halter; darunter die acht
+Schritte der Anleitung,
 jeder fuer sich gezeichnet, mit den Aderfarben der Anschlussliste. Zwei
 Kreuzungen gibt es: eine bei den Lichtschranken, die sich nicht vermeiden
 laesst (drei Lichtschranken an drei Klemmen ergeben einen K3,3), und die
@@ -138,7 +139,7 @@ def laenge_text(lt, K):
         return ''
     if lt.get('mitgeliefert') and kauf <= lt['mitgeliefert']:
         return '{} m, mitgeliefert'.format(de(weg, 2))
-    return '{} → {} m'.format(de(weg, 2), de(kauf, 1))
+    return '{} → {} m'.format(de(weg, 2), de(kauf, 2))
 
 
 def litze_kurz(lt):
@@ -933,38 +934,64 @@ def schritt_waechter():
     return feld(7, [('t', 'W16 · geprüft in'), ('p', 'Prüfung I')], t)
 
 
-# ---- 8. USB und Inbetriebnahme -------------------------------------------
+# ---- 8. Pi und Inbetriebnahme --------------------------------------------
 
-def schritt_usb():
-    t = kasten(14, 50, 150, 48, ['Uno', 'USB-B'], *SHIELD)
-    t += kasten(300, 50, 110, 48, ['PC', 'LightBurn o. ä.'])
-    f, _ = ader('W17', 0, 'Uno USB', 'PC')
-    t += draht([(164, 74), (300, 74)], '#868e96', 5)
-    t += klemme(164, 74) + klemme(300, 74) + marke(232, 70, 'W17',
-                                                    'middle')
-    t.append(text(14, 118, 'Versorgt den Uno und damit die 5 V der '
-                  'Lichtschranken.', 10.5, GRAU))
+def schritt_pi():
+    usb = '#868e96'
+    # W18: an die Loetfahnen der Buchse (vor dem Schalter), zum 5-V-Wandler
+    t = kasten(14, 46, 92, 58, ['Buchse', 'Lötfahnen'])
+    t += [text(98, 66, '+', 12, P24, 'end', fett=True),
+          text(98, 96, '−', 12, MASSE, 'end', fett=True)]
+    t += kasten(190, 46, 118, 58, ['5-V-Wandler', '24 → 5 V, ≥ {} A'.format(
+        de(ez.PI_WANDLER_A, 0))], '#f8f0fc', P5)
+    t += [text(198, 66 + 30, 'IN', 10, GRAU)]
+    for i, (a, b, y) in enumerate((('Buchse +', '5V-Wandler IN+', 62),
+                                   ('Buchse −', '5V-Wandler IN−', 92))):
+        _, f = ader('W18', i, a, b)
+        t += draht([(106, y), (190, y)], f)
+        t += klemme(106, y) + klemme(190, y)
+    t += marke(148, 81, 'W18', 'middle')
+    # W19: USB-A rechts am Wandler in PWR IN des Pi
+    t += kasten(392, 46, 182, 58, ['Pi Zero 2 W', 'PWR IN · USB (unten)'],
+                *SHIELD)
+    ader('W19', 0, '5V-Wandler USB', 'Pi PWR')
+    t += draht([(308, 75), (392, 75)], usb, 5)
+    t += klemme(308, 75) + klemme(392, 75)
+    t += marke(350, 71, 'W19', 'middle')
+    # W17: USB des Pi zum Uno
+    t += kasten(392, 132, 182, 40, ['Uno', 'USB-B, hinten im Fenster'],
+                *SHIELD)
+    ader('W17', 0, 'Pi USB', 'Uno USB')
+    t += draht([(483, 104), (483, 132)], usb, 5)
+    t += klemme(483, 104) + klemme(483, 132)
+    t += marke(493, 123, 'W17')
+    t += zeilen(14, 128, ['Vor Schalter und Not-Aus: Pi und Uno',
+                          'laufen weiter, der Wächter W16 meldet.',
+                          'W17 in „USB“, W19 in „PWR IN“.'], 10.5, GRAU,
+                13.5)
     # Einschaltreihenfolge
-    t.append(text(14, 146, 'Einschalten', 12, TEXT, fett=True))
-    for k, (s, x) in enumerate((('USB', 14), ('Schalter EIN: 24 V', 108))):
-        t += schrittmarke(x + 8, 166, k + 1)
-        t.append(text(x + 20, 170, s, 11, TEXT))
-    t += [linie([(64, 166), (100, 166)], GRAU, 1.4),
-          el('polygon', {'points': '100,166 94,163 94,169',
+    t.append(text(14, 190, 'Einschalten', 12, TEXT, fett=True))
+    for k, (s_, x) in enumerate((('Netzteil: Pi und Uno starten', 14),
+                                 ('Schalter EIN: 24 V', 262))):
+        t += schrittmarke(x + 8, 206, k + 1)
+        t.append(text(x + 20, 210, s_, 11, TEXT))
+    t += [linie([(212, 206), (254, 206)], GRAU, 1.4),
+          el('polygon', {'points': '254,206 248,203 248,209',
                          'fill': GRAU}),
-          text(260, 170, 'ausschalten umgekehrt', 10.5, GRAU)]
+          text(420, 210, 'aus: umgekehrt, den Pi', 10.5, GRAU),
+          text(420, 223, 'vorher herunterfahren', 10.5, GRAU)]
     # Inbetriebnahme
-    t.append(text(14, 204, 'Inbetriebnahme, Prüfungen der Anleitung', 12,
+    t.append(text(14, 246, 'Inbetriebnahme, Prüfungen der Anleitung', 12,
                   TEXT, fett=True))
     wann = {'A': 'nach 2', 'B': 'nach 2', 'C': 'nach 3', 'D': 'nach 4',
-            'E': 'vor 6', 'F': 'nach 6'}
+            'E': 'vor 6', 'F': 'nach 6', 'J': 'nach 8'}
     for i, (b, titel) in enumerate(PRUEFUNGEN):
-        x, y = (14, 226 + 19 * i) if i < 5 else (300, 226 + 19 * (i - 5))
+        x, y = (14, 266 + 15.5 * i) if i < 5 else (300, 266 + 15.5 * (i - 5))
         t += pruefung(x, y, b)
         t.append(text(x + 26, y, titel, 10.5, TEXT))
         if b in wann:
             t.append(text(x + 274, y, wann[b], 10, GRAU, 'end'))
-    return feld(8, [('t', 'W17')], t)
+    return feld(8, [('t', 'W17–W19 · dann'), ('p', 'Prüfung J')], t)
 
 
 # ---- Uebersicht: Leitungen aus dem Gehaeuse ------------------------------
@@ -1022,14 +1049,18 @@ def uebersicht():
                  (X(278), Y(627))], **weg),
           linie([(xr, Y(40)), (xr, yk)], **weg),
           linie([(xr, Y(570)), (X(210), Y(570)), (X(210), Y(580))], **weg)]
-    # Netzteil und PC hinter dem Gehaeuse
+    # Netzteil hinter dem Gehaeuse; Pi-Halter rechts neben dem Kasten an
+    # der Rueckseite des hinteren 2060 (PiHalter.py), das USB-Kabel W17 um
+    # den Kasten herum ins Fenster hinten
     t += kasten(X(-75) - 50, 58, 100, 24, ['Steckernetzteil'], gr=10.5,
                 dy=16, dx=8)
-    t += kasten(X(-300) - 64, 58, 64, 24, ['PC'], gr=10.5, dy=16, dx=24)
-    t += [linie([(X(-75), 82), (X(-75), Y(12))], P24, 2.0),
-          linie([(X(-300), 70), (X(-185), 70), (X(-185), Y(12))],
+    t += [linie([(X(-75), 82), (X(-75), Y(12))], P24, 2.0)]
+    t += [quader(-18, 157, 90, 110, '#fff4e6', '#d9480f', 1.2, rx=2),
+          text(X(70), Y(100) + 4, 'Pi', 10, '#d9480f', 'middle', fett=True)]
+    t += [linie([(X(110), Y(90)), (X(110), Y(84)), (X(-38), Y(84)),
+                 (X(-38), Y(4)), (X(-160), Y(4)), (X(-160), Y(12))],
                 '#495057', 2.0)]
-    t += marke(X(-185) + 6, 96, 'W17')
+    t += marke(X(-38) + 6, Y(40), 'W17')
 
     def schild(x, y, nr, s, anker='start'):
         """Leitungsnummer und Name an einem Geraet."""
@@ -1064,6 +1095,8 @@ def uebersicht():
           text(xr + 14, Y(150) + 26, 'untere Nut rechts', 10.5, GRAU)]
     t += schild(xr + 14, Y(612), 'W14', 'Y-Motor rechts')
     t += schild(X(150) - 8, Y(598), 'W2', 'Not-Aus', 'end')
+    t += marke(X(20), Y(72), 'W18') + [
+        text(X(20) + 40, Y(72), 'Pi-Halter', 10.5, TEXT)]
 
     # Kabelliste der Leitungen, die das Gehaeuse verlassen
     kx0 = 676
@@ -1072,8 +1105,8 @@ def uebersicht():
     for x, s in zip(sp[1:], ('Leitung', 'Litze', 'Länge', 'Kette')):
         t.append(text(x, 96, s, 10.5, GRAU))
     t.append(linie([(kx0, 103), (W - 2 * RX - 16, 103)], '#d0d7de', 1))
-    aussen = [lt for lt in LTS if not lt['weg'].startswith(('im Kasten',
-                                                            'auf dem'))]
+    aussen = [lt for lt in LTS if not lt['weg'].startswith(
+        ('im Kasten', 'auf dem', 'am Pi-Halter'))]
     for i, lt in enumerate(aussen):
         y = 122 + 21 * i
         t += marke(kx0, y, lt['nr'])
@@ -1081,10 +1114,13 @@ def uebersicht():
               text(sp[2], y, litze_kurz(lt), 10.5, TEXT),
               text(sp[3], y, laenge_text(lt, Q['K']) or '—', 10.5, TEXT),
               text(sp[4], y, lt.get('kette', '') or '—', 10.5, GRAU)]
-    innen = [lt['nr'] for lt in LTS if lt not in aussen]
+    innen = [lt['nr'] for lt in LTS
+             if lt['weg'].startswith(('im Kasten', 'auf dem'))]
+    halter = [lt['nr'] for lt in LTS if lt['weg'].startswith('am Pi-Halter')]
     y = 122 + 21 * len(aussen) + 6
     t += zeilen(kx0, y, [
-        'Im Gehäuse: {}.'.format(nrn_text(innen)),
+        'Im Gehäuse: {}. Am Pi-Halter: {}.'.format(nrn_text(innen),
+                                                   nrn_text(halter)),
         'In den Ketten nur Einzellitzen, keine Mantelleitung; Motorkabel',
         'ohne Schlauch. „Länge“: Weg → kaufen (+{} %, aufgerundet).'.format(
             de(ez.RESERVE * 100, 0))], 10.5, GRAU)
@@ -1128,15 +1164,15 @@ def main():
               'Wago-Plätze in der Reihenfolge der Tabelle „Klemmen“.'.format(
                   len(LTS)), 11.5, GRAU),
          text(RX, 77, 'Alles stromlos verdrahten, nichts unter Spannung '
-              'an- oder abstecken. Einschalten: erst USB, dann 24 V.', 11.5,
-              GRAU)]
+              'an- oder abstecken. Einschalten: erst Netzteil (Pi und Uno '
+              'starten), dann Schalter EIN.', 11.5, GRAU)]
     t += legende(102)
     y = 118
     t.append(gruppe(RX, y, uebersicht()))
     y += UEB_H + LUECKE
     felder = (schritt_vorbereiten, schritt_24v, schritt_verteilen,
               schritt_lichtschranken, schritt_laser, schritt_motoren,
-              schritt_waechter, schritt_usb)
+              schritt_waechter, schritt_pi)
     for i, fn in enumerate(felder):
         _SCHRITT[0] = i + 1
         x = RX + (i % 2) * (PB + LUECKE)

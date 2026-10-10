@@ -213,7 +213,7 @@ def draufsicht(f, ew, EL):
     t += pfeilzug(f, [(fm[0] + 22.0, fm[1]), (ix[1] - 8.0, fm[1]),
                       (ix[1] - 0.5, ys)], LUFT, 1.4, '6 3')
     # Kabel: links unter dem 2040 durch nach aussen, vorn in den Kanal und
-    # darin nach rechts, hinten 24 V und USB hinein
+    # darin nach rechts (auch die 24 V zum Pi), hinten 24 V und USB hinein
     t += pfeilzug(f, [(ux[0] + 6.0, yc), (-R + rb / 2.0 + 3.0, yc)], KABEL)
     ykan = (gy[1] + py[0]) / 2.0
     t += pfeilzug(f, [(xv, iy[1] - 5.0), (xv, ykan),
@@ -368,7 +368,8 @@ def main():
         ('Kabel', 'links raus: über die Y-Kette X-, Z-Motor, Laser, '
          'Endschalter X und Z, dazu der linke Y-Motor; vorn in den Kanal: '
          'rechter Y-Motor, Y-Endschalter,'),
-        ('', 'Not-Aus; hinten hinein: 24 V vom Steckernetzteil und USB'),
+        ('', 'Not-Aus, 24 V zum Pi; hinten hinein: 24 V vom Steckernetzteil '
+         'und USB vom Pi'),
     ]
     ty = f.oy + f.hoehe + 50
     t.append(text(24, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))

@@ -1,0 +1,14 @@
+# CNCjs als Dienst: startet mit dem Pi, Weboberflaeche auf Port 8000.
+# Vorlage fuer pi/einrichten.sh, das die @...@ ersetzt.
+[Unit]
+Description=CNCjs (Engraver)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=@BENUTZER@
+ExecStart=@CNCJS@ --port 8000 --config @HOME@/.cncrc
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

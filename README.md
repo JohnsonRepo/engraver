@@ -12,7 +12,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
 | Z-Achse | Toolhead am MGN15H-Wagen: eigene MGN9-Führung, NEMA 17 über Tr8×2-Spindel |
 | Werkzeug | Diodenlaser am Z-Schlitten |
-| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209 (vorhanden), GRBL 1.1, A-Achse klont Y |
+| Steuerung | Arduino Uno R3 + CNC Shield V3 + 4 × TMC2209 (vorhanden), GRBL 1.1, A-Achse klont Y; ohne PC über einen Raspberry Pi Zero 2 W mit CNCjs |
 
 ## Inhalt
 
@@ -22,10 +22,12 @@ fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb,
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel als Haube mit Lüfter (Rev. 3)  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
 fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an den 2040  ← neu
+fusion/PiHalter/               Halter für Pi Zero 2 W und 5-V-Wandler an der Rückseite des hinteren 2060  ← neu
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
 fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
-stl/                           druckfertige STL ohne Fusion: Kasten und Haube des Elektronik-Gehäuses, Kabelhalter
+stl/                           druckfertige STL ohne Fusion: Kasten und Haube des Elektronik-Gehäuses, Kabelhalter, Pi-Halter
+pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
 docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
@@ -34,7 +36,7 @@ docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, 
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
 docs/elektronik.md             Platz, Gehäuse, Leistung, Endschalter, Kabel, Anschlussplan
 docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
-docs/elektronik-anschluss.svg  Anschlussplan mit Kabelnummern W1–W17 und Kabelliste
+docs/elektronik-anschluss.svg  Anschlussplan mit Kabelnummern W1–W19 und Kabelliste
 docs/elektronik-verkabelung.svg  Verkabelung Schritt für Schritt: jede Ader von Klemme zu Klemme
 docs/motoren-anschluss.svg     Motoren anschließen: Steckplätze am Shield, Adern je Achse
 docs/verkabelung.md            Verkabelung: Kabelliste, Anschlussliste, Klemmen, Schritt für Schritt, Inbetriebnahme, GRBL
@@ -45,6 +47,8 @@ docs/notaus.md                 Not-Aus: Taster, Lage, Gehäuse, Montage, Druck
 docs/notaus.svg                Not-Aus-Gehäuse von vorn, im Schnitt und von oben
 docs/kabelhalter.md            Kabelhalter: Rinne, Kabel, Plätze links und rechts, Montage, Druck
 docs/kabelhalter.svg           Kabelhalter im Schnitt am 2040 und seine Plätze
+docs/pi.md                     Pi: Maschine ohne PC über CNCjs — Teile, Halter, Strom, Einrichten, LightBurn, Ablauf, Fehlersuche
+docs/pihalter.svg              Pi-Halter von hinten und im Schnitt am 2060
 docs/opferplatte.md            Opferplatte, Führungsfüße und Riegel: Lage, Höhen, Montage, Druck
 docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, Schnitte durch Füße, Riegel und Anschlag
 docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzenter, Niederhalter, Höhe unter dem Toolhead
@@ -75,6 +79,8 @@ tools/notaus_check.py          Prüfung des Not-Aus-Gehäuses: Lage, Freiraum, S
 tools/notaus_zeichnen.py       erzeugt die Zeichnung des Not-Aus-Gehäuses
 tools/kabelhalter_check.py     Prüfung der Kabelhalter: Schraube, Rinne und Kabel, Plätze, Freiraum, Druck; schreibt die Plätze in docs/kabelhalter.md
 tools/kabelhalter_zeichnen.py  erzeugt die Zeichnung der Kabelhalter
+tools/pihalter_check.py        Prüfung des Pi-Halters: Lage, Freiraum zu Portal, Kasten und Kabeln, Schrauben, Pi, Wandler, Druck
+tools/pihalter_zeichnen.py     erzeugt die Zeichnung des Pi-Halters
 tools/stl_export.py            schreibt stl/ aus denselben Maßen wie die Fusion-Skripte (braucht manifold3d)
 tools/opferplatte_check.py     Prüfung von Opferplatte, Füßen und Riegel: Arbeitsfeld, Höhen, Freiraum, Riegel, Schrauben, Druck
 tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte, Füßen und Riegel
@@ -149,7 +155,7 @@ eigene Skript `YMotorhalter.py`); den alten Halter des Portals, Achse
 
 Gehäuse im Fach hinter dem hinteren 2060, unter den 2040 — dorthin fährt
 weder Portal noch Toolhead. Links der **Arduino Uno mit CNC Shield V3** auf
-Stehbolzen, USB nach hinten; rechts der **Abwärtswandler 24 → 12 V** für den
+Stehbolzen, USB nach hinten zum Pi; rechts der **Abwärtswandler 24 → 12 V** für den
 Laser (43 × 24 × 20 mm) und drei **Wago-Klemmen** (221-415 für +24 V,
 2 × 221-420 für GND und +5 V); hinten **Einbaubuchse** (Hohlstecker
 5,5 × 2,1) und runder **Schalter** (Blende Ø22,5, seit Rev. 4). Der
@@ -161,7 +167,7 @@ Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
 
 ### Verkabelung (neu)
 
-Alle 17 Leitungen vom Steckernetzteil bis zum Laser mit Nummer, Adern,
+Alle 19 Leitungen vom Steckernetzteil bis zum Laser und zum Pi mit Nummer, Adern,
 Farben, Querschnitt, Weg und Kauflänge; Belegung der Wago-Klemmen und des
 Shields; Material, Reihenfolge beim Anschließen und eine Inbetriebnahme in
 Stufen (24 V, Wandler, GRBL und Lichtschranken, Vref, Motoren,
@@ -171,6 +177,22 @@ Abort, Masse der Lichtschranken über die Wago. Dazu ein Bild, das jeden
 der acht Schritte für sich zeigt, jede Ader von Klemme zu Klemme in ihrer
 Farbe ([elektronik-verkabelung.svg](docs/elektronik-verkabelung.svg)).
 Details in [docs/verkabelung.md](docs/verkabelung.md).
+
+### Pi und Pi-Halter (neu)
+
+Ein **Raspberry Pi Zero 2 W** mit [CNCjs](https://cnc.js.org/) ersetzt den
+PC am USB des Uno. LightBurn auf dem Mac speichert Aufträge als G-Code-Datei,
+gestartet werden sie im Browser am iPad, iPhone oder Mac. Der Pi schickt die
+Datei selbst an den Uno, ein Abbruch des WLAN hält den Auftrag nicht an.
+Er hängt mit einem **5-V-Wandler** vor Schalter und Not-Aus an der Buchse
+(W18, W19) und versorgt über USB den Uno (W17). Not-Aus und Schalter
+trennen weiter Motoren, Laser und Lüfter, der 24-V-Wächter meldet es an
+GRBL. Pi und Wandler sitzen auf einem gedruckten **Pi-Halter** rechts neben
+dem Elektronikgehäuse, mit 2 × M5 in der oberen Nut des hinteren 2060.
+Der Pi liegt ganz über dem 2060, vor seiner Antenne ist kein Aluminium.
+Die Software in [`pi/`](pi) richtet ein Skript ein (CNCjs 1.11.5 als
+Dienst, Makros für Rahmen und Laserpunkt, Herunterfahren aus dem Browser).
+Details in [docs/pi.md](docs/pi.md).
 
 ### Not-Aus (neu)
 
@@ -271,7 +293,7 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
 Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
-*Portal*, *Elektronik*, *NotAus*, *Opferplatte* oder *Spannmittel*). Jeder Lauf legt ein **neues
+*Portal*, *Elektronik*, *NotAus*, *Kabelhalter*, *PiHalter*, *Opferplatte* oder *Spannmittel*). Jeder Lauf legt ein **neues
 Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
@@ -300,7 +322,9 @@ python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schraube
 python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
 python3 tools/kabelhalter_check.py  # Kabelhalter: Schraube, Rinne, Plätze, Freiraum (--doku: Tabelle neu)
 python3 tools/kabelhalter_zeichnen.py  # docs/kabelhalter.svg neu erzeugen
-pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Kasten, Haube und Kabelhalter in Drucklage
+python3 tools/pihalter_check.py     # Pi-Halter: Lage, Freiraum, Schrauben, Pi, Wandler, Druck
+python3 tools/pihalter_zeichnen.py  # docs/pihalter.svg neu erzeugen
+pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Kasten, Haube, Kabelhalter und Pi-Halter in Drucklage (mit Namen, z. B. PiHalter: nur diese)
 python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
 python3 tools/spannmittel_check.py  # Spannmittel: Höhe unter dem Toolhead, Lage, Exzenter, Schrauben
@@ -390,7 +414,8 @@ höheren Haube als Deckel, seit Rev. 4 mit rundem Schalterloch
 Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),
 Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)),
-Kabelhalter Rev. 2 mit `kabelhalter_check.py` ([kabelhalter.md](docs/kabelhalter.md)). Die
+Kabelhalter Rev. 2 mit `kabelhalter_check.py` ([kabelhalter.md](docs/kabelhalter.md)),
+Pi-Halter Rev. 1 mit `pihalter_check.py` ([pi.md](docs/pi.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)). Der

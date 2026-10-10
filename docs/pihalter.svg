@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1543" height="611" viewBox="0 0 1543 611" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1543" height="611" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Pi-Halter (PiHalter.py Rev. 1) — Pi Zero 2 W und 5-V-Wandler an der Rückseite des hinteren 2060</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Rechts neben dem Elektronik-Kasten, 2 × M5×12 in der oberen Nut; Pi und Wandler ganz über dem 2060.</text>
+<clipPath id="hinten"><rect x="150.0" y="92.0" width="748.8" height="374.4"/></clipPath>
+<g clip-path="url(#hinten)">
+<line x1="898.8" y1="460.0" x2="150.0" y2="460.0" stroke="#5b6472" stroke-width="1.0"/>
+<rect x="150.0" y="268.0" width="748.8" height="192.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="150.0" y="418.1" width="748.8" height="19.8" fill="#ffffff" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="150.0" y="354.1" width="748.8" height="19.8" fill="#ffffff" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="150.0" y="290.1" width="748.8" height="19.8" fill="#ffffff" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="150.0" y="344.8" width="626.1" height="38.4" fill="#e5dbff" stroke="#7048e8" stroke-width="0.8"/>
+<rect x="776.1" y="277.6" width="122.7" height="176.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="843.3" y="226.4" width="55.5" height="227.2" fill="#eef2f7" stroke="#a9b6c8" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="198.0" y="125.9" width="560.0" height="193.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="673.2" y="251.4" width="16.0" height="7.0" fill="#ffffff" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="673.2" y="135.5" width="16.0" height="7.0" fill="#ffffff" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="609.2" y="251.4" width="16.0" height="7.0" fill="#ffffff" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="609.2" y="135.5" width="16.0" height="7.0" fill="#ffffff" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="553.2" y="149.0" width="192.0" height="96.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.6"/>
+<rect x="431.6" y="171.4" width="121.6" height="51.2" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="3 2" fill-opacity="0.4"/>
+<rect x="217.2" y="156.0" width="208.0" height="96.0" fill="#cfe6d2" stroke="#2b8a3e" stroke-width="0.8"/>
+<circle cx="414.0" cy="240.8" r="7.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="414.0" cy="167.2" r="7.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="228.4" cy="240.8" r="7.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="228.4" cy="167.2" r="7.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="372.4" y="252.0" width="35.2" height="76.8" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="3 2" fill-opacity="0.5"/>
+<rect x="332.1" y="252.0" width="35.2" height="76.8" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="3 2" fill-opacity="0.5"/>
+<text x="256.9" y="245.0" font-size="6.5" fill="#1c2733" text-anchor="middle">HDMI</text>
+<text x="390.0" y="245.0" font-size="6.5" fill="#1c2733" text-anchor="middle">PWR</text>
+<text x="349.7" y="245.0" font-size="6.5" fill="#1c2733" text-anchor="middle">USB</text>
+<text x="225.2" y="206.0" font-size="6.5" fill="#1c2733" text-anchor="middle">SD</text>
+<circle cx="719.6" cy="300.0" r="13.6" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="236.4" cy="300.0" r="13.6" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+</g>
+<rect x="150.0" y="92.0" width="748.8" height="374.4" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="150.0" y="84.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Von hinten gesehen (X wächst nach links)</text>
+<line x1="226.8" y1="165.6" x2="141.0" y2="165.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="226.8" cy="165.6" r="1.5" fill="#5b6472"/>
+<text x="138.0" y="168.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">SD-Karte zeigt hierher</text>
+<line x1="329.2" y1="175.2" x2="141.0" y2="191.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="329.2" cy="175.2" r="1.5" fill="#5b6472"/>
+<text x="138.0" y="194.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pi Zero 2 W, Bauteile</text>
+<text x="138.0" y="204.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">nach hinten, 4 × M2.5×6</text>
+<line x1="236.4" y1="300.0" x2="141.0" y2="300.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="236.4" cy="300.0" r="1.5" fill="#5b6472"/>
+<text x="138.0" y="303.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5×12 in die obere Nut</text>
+<line x1="349.7" y1="316.0" x2="141.0" y2="326.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="349.7" cy="316.0" r="1.5" fill="#5b6472"/>
+<text x="138.0" y="329.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Stecker in USB (W17)</text>
+<text x="138.0" y="339.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und PWR IN (W19)</text>
+<line x1="214.0" y1="354.4" x2="141.0" y2="362.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="214.0" cy="354.4" r="1.5" fill="#5b6472"/>
+<text x="138.0" y="365.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabel in der mittleren Nut</text>
+<line x1="214.0" y1="434.4" x2="141.0" y2="434.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="214.0" cy="434.4" r="1.5" fill="#5b6472"/>
+<text x="138.0" y="437.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
+<line x1="681.2" y1="139.0" x2="907.8" y2="139.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="681.2" cy="139.0" r="1.5" fill="#5b6472"/>
+<text x="910.8" y="142.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schlitze für die</text>
+<text x="910.8" y="152.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelbinder</text>
+<line x1="649.2" y1="161.8" x2="907.8" y2="175.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="649.2" cy="161.8" r="1.5" fill="#5b6472"/>
+<text x="910.8" y="178.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5-V-Wandler: Platz</text>
+<text x="910.8" y="188.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">60 × 30 mm, Eingang links</text>
+<line x1="492.4" y1="197.0" x2="907.8" y2="211.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="492.4" cy="197.0" r="1.5" fill="#5b6472"/>
+<text x="910.8" y="214.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">USB-A-Stecker am</text>
+<text x="910.8" y="224.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wandler (W19)</text>
+<line x1="719.6" y1="300.0" x2="907.8" y2="300.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="719.6" cy="300.0" r="1.5" fill="#5b6472"/>
+<text x="910.8" y="303.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5×12</text>
+<line x1="795.3" y1="421.6" x2="907.8" y2="421.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="795.3" cy="421.6" r="1.5" fill="#5b6472"/>
+<text x="910.8" y="424.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Montageplatte und</text>
+<text x="910.8" y="434.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kasten (davor)</text>
+<line x1="758.0" y1="125.9" x2="198.0" y2="125.9" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="758.0" y1="122.9" x2="758.0" y2="128.9" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="198.0" y1="122.9" x2="198.0" y2="128.9" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="478.0" y="119.9" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">175 mm</text>
+<line x1="178.8" y1="319.2" x2="178.8" y2="125.9" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="175.8" y1="319.2" x2="181.8" y2="319.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="175.8" y1="125.9" x2="181.8" y2="125.9" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="182.8" y="225.6" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">60 mm</text>
+<line x1="399.6" y1="268.0" x2="399.6" y2="252.0" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="399.6,268.0 397.6,263.0 401.6,263.0" fill="#b4342f"/>
+<polygon points="399.6,252.0 401.6,257.0 397.6,257.0" fill="#b4342f"/>
+<text x="404.6" y="256.0" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5 mm über dem 2060</text>
+<clipPath id="schnitt"><rect x="1168.8" y="92.0" width="204.8" height="374.4"/></clipPath>
+<g clip-path="url(#schnitt)">
+<line x1="1168.8" y1="460.0" x2="1373.6" y2="460.0" stroke="#5b6472" stroke-width="1.0"/>
+<rect x="1290.4" y="268.0" width="64.0" height="192.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="1290.4" y="418.1" width="6.4" height="19.8" fill="#ffffff" stroke="none" stroke-width="0.8"/>
+<rect x="1296.8" y="415.2" width="11.2" height="25.6" fill="#ffffff" stroke="none" stroke-width="0.8"/>
+<rect x="1290.4" y="354.1" width="6.4" height="19.8" fill="#ffffff" stroke="none" stroke-width="0.8"/>
+<rect x="1296.8" y="351.2" width="11.2" height="25.6" fill="#ffffff" stroke="none" stroke-width="0.8"/>
+<rect x="1290.4" y="290.1" width="6.4" height="19.8" fill="#ffffff" stroke="none" stroke-width="0.8"/>
+<rect x="1296.8" y="287.2" width="11.2" height="25.6" fill="#ffffff" stroke="none" stroke-width="0.8"/>
+<rect x="1264.8" y="344.8" width="25.6" height="38.4" fill="#e5dbff" stroke="#7048e8" stroke-width="0.8"/>
+<rect x="1210.4" y="149.0" width="64.0" height="96.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3" fill-opacity="0.35"/>
+<rect x="1274.4" y="125.9" width="16.0" height="193.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1258.4" y="231.2" width="16.0" height="19.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1258.4" y="157.6" width="16.0" height="19.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1253.9" y="156.0" width="4.5" height="96.0" fill="#cfe6d2" stroke="#2b8a3e" stroke-width="0.8"/>
+<rect x="1241.1" y="159.2" width="12.8" height="89.6" fill="#cfe6d2" stroke="#2b8a3e" stroke-width="0.8" fill-opacity="0.45"/>
+<rect x="1237.4" y="252.0" width="24.0" height="76.8" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="3 2" fill-opacity="0.5"/>
+<rect x="1258.4" y="286.4" width="16.0" height="27.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="1274.4" y="292.0" width="38.4" height="16.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="1297.1" y="287.5" width="10.6" height="25.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+</g>
+<rect x="1168.8" y="92.0" width="204.8" height="374.4" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="1168.8" y="84.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt durch den Pi (vorn rechts)</text>
+<line x1="1268.0" y1="138.7" x2="1159.8" y2="138.7" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1268.0" cy="138.7" r="1.5" fill="#5b6472"/>
+<text x="1156.8" y="141.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platte 5 mm</text>
+<line x1="1216.8" y1="158.6" x2="1159.8" y2="164.7" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1216.8" cy="158.6" r="1.5" fill="#5b6472"/>
+<text x="1156.8" y="167.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wandler (dahinter)</text>
+<line x1="1253.9" y1="204.0" x2="1159.8" y2="204.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1253.9" cy="204.0" r="1.5" fill="#5b6472"/>
+<text x="1156.8" y="207.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pi auf Stehbolzen</text>
+<text x="1156.8" y="217.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5 mm</text>
+<line x1="1249.4" y1="319.2" x2="1159.8" y2="319.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1249.4" cy="319.2" r="1.5" fill="#5b6472"/>
+<text x="1156.8" y="322.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Stecker hängt</text>
+<text x="1156.8" y="332.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">nach unten</text>
+<line x1="1277.6" y1="376.8" x2="1159.8" y2="376.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1277.6" cy="376.8" r="1.5" fill="#5b6472"/>
+<text x="1156.8" y="379.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelbündel W2, W10,</text>
+<text x="1156.8" y="389.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">W14, W18</text>
+<line x1="1322.4" y1="284.0" x2="1382.6" y2="284.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1322.4" cy="284.0" r="1.5" fill="#5b6472"/>
+<text x="1385.6" y="287.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
+<line x1="1300.0" y1="290.4" x2="1382.6" y2="310.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1300.0" cy="290.4" r="1.5" fill="#5b6472"/>
+<text x="1385.6" y="313.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Hammermutter in</text>
+<text x="1385.6" y="323.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">der oberen Nut</text>
+<line x1="1284.0" y1="344.8" x2="1284.0" y2="319.2" stroke="#b4342f" stroke-width="0.9"/>
+<polygon points="1284.0,344.8 1282.0,339.8 1286.0,339.8" fill="#b4342f"/>
+<polygon points="1284.0,319.2 1286.0,324.2 1282.0,324.2" fill="#b4342f"/>
+<text x="1279.0" y="331.2" font-size="8.0" fill="#b4342f" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">8 mm</text>
+<text x="24.0" y="502.4" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
+<text x="24.0" y="520.4" font-size="8.5" fill="#5b6472" text-anchor="start">Platte</text>
+<text x="100.0" y="520.4" font-size="8.5" fill="#1c2733" text-anchor="start">175 × 60 × 5 mm, PETG; die Seite am 2060 aufs Bett, Stehbolzen nach oben, keine Stützen</text>
+<text x="24.0" y="535.4" font-size="8.5" fill="#5b6472" text-anchor="start">Lage</text>
+<text x="100.0" y="535.4" font-size="8.5" fill="#1c2733" text-anchor="start">X −18 bis 157 (Maschinenkoordinaten), 5,7 mm rechts neben der Montageplatte des Kastens</text>
+<text x="24.0" y="550.4" font-size="8.5" fill="#5b6472" text-anchor="start">Montage</text>
+<text x="100.0" y="550.4" font-size="8.5" fill="#1c2733" text-anchor="start">2 Hammermuttern M5 in die obere Nut der Rückseite des 2060, 2 × M5×12 bei X −6 und 145</text>
+<text x="24.0" y="565.4" font-size="8.5" fill="#5b6472" text-anchor="start">Pi</text>
+<text x="100.0" y="565.4" font-size="8.5" fill="#1c2733" text-anchor="start">Lochbild 58 × 23 mm, 4 × M2.5×6 selbstschneidend (Kernloch 2,2); Buchsen unten, von hinten gesehen von links: HDMI, USB, PWR IN</text>
+<text x="24.0" y="580.4" font-size="8.5" fill="#5b6472" text-anchor="start">Wandler</text>
+<text x="100.0" y="580.4" font-size="8.5" fill="#1c2733" text-anchor="start">bis 60 × 30 × 20 mm, Eingang zur Kastenseite, USB-A zum Pi; 2 Kabelbinder senkrecht über seine Rückseite</text></svg>

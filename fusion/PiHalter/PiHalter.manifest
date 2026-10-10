@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Halter fuer den Raspberry Pi Zero 2 W und seinen Abwaertswandler 24 -> 5 V an der Rueckseite des hinteren 2060, rechts neben der Montageplatte des Elektronik-Kastens: Platte mit 2 x M5x12 in Hammermuttern der oberen Nut, oben ueber dem 2060 der Pi auf vier Stehbolzen (M2.5, Buchsen nach unten) und der Wandler unter zwei senkrechten Kabelbindern, dazwischen Platz fuer den USB-A-Stecker. Die Seite am 2060 aufs Bett, ohne Stuetzen druckbar. Dazu nur zur Ansicht: Stueck 2060, Pi, Stecker, Wandler, Schrauben und Hammermuttern (nicht drucken)."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

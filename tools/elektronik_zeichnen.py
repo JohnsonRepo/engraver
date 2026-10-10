@@ -36,6 +36,8 @@ ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                           'fusion', 'Elektronik', 'Elektronik.py')
 NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                       'fusion', 'NotAus', 'NotAus.py')
+PIHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                        'fusion', 'PiHalter', 'PiHalter.py')
 
 # ---- Ketten ----------------------------------------------------------------
 # Gedruckt (Portal.py, seit Rev. 19, aus der 3MF ausgemessen): aussen
@@ -46,7 +48,7 @@ _PM = bauraum.modul_laden(bauraum.PORTAL, 'portal')
 KETTE_R = _PM.w('kette_r')
 KETTE_ENDEN = 2.0 * _PM.w('endstueck_l')
 RESERVE = 0.15                   # Kabel: Boegen, Zugentlastung, Stecker
-KAUFLAENGEN = (0.5, 1.0, 1.5, 2.0, 2.5, 3.0)   # m
+KAUFLAENGEN = (0.25, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0)   # m
 
 # Leistung: Steckernetzteil GIDEALED 24 V / 3 A. Die Motoren: je 2 Phasen
 # x I^2 x R plus Treiber, mit dem Strom, der am Vref-Poti eingestellt wird
@@ -68,6 +70,16 @@ LUEFTER_W = 2.0
 LASER_V, LASER_A = 12.0, 1.8     # obere Grenze der Angabe
 WANDLER_A = 5.0                  # Abwaertswandler 24 -> 12 V, 5 A [v]
 WANDLER_ETA = 0.9                # sein Wirkungsgrad [w]
+# 5 V: Der Pi (docs/pi.md) haengt mit seinem Abwaertswandler 24 -> 5 V vor
+# Schalter und Not-Aus an der Buchse und versorgt ueber USB den Uno, der
+# Uno ueber seinen 5-V-Stift die Lichtschranken [w].
+USB_MA = 500.0          # Polyfuse am USB-Eingang des Uno
+LS_MA = 25.0            # je Lichtschranke: IR-Diode, Komparator, zwei LEDs
+UNO_MA = 60.0           # Uno mit USB-Wandler
+TREIBER_LOGIK_MA = 5.0  # je TMC2209, VIO
+PI_MA = 600.0           # Pi Zero 2 W unter Last, mit WLAN [w]
+PI_WANDLER_A = 3.0      # Abwaertswandler 24 -> 5 V: mindestens so viel
+PI_WANDLER_ETA = 0.85   # sein Wirkungsgrad [w]
 
 # Litzen: Kupfer, feindraehtig, in den Ketten hochflexibel. Der Querschnitt
 # folgt aus Strom und Laenge und aus dem, was die Kontakte nehmen [w]:
@@ -200,21 +212,38 @@ def konzept(w, L, tw, TL, ew, EL):
                          NA['lasche_x'][1][1], *NA['geh_y'], *NA['geh_z'])
     K['notaus_kabel'] = (NA['geh_x'][1], NA['kabel'][0], NA['kabel'][1])
     K['notaus_nut_z'] = NA['nuten_z'][0]
+    # Pi-Halter (PiHalter.py): rechts neben der Montageplatte an der
+    # Rueckseite des hinteren 2060; Pi und 5-V-Wandler ueber dem 2060
+    PH = bauraum.modul_laden(PIHALTER, 'pihalter').lage()
+    K['PH'] = PH
+    K['pihalter'] = Quader('Pi-Halter', *PH['x'], *PH['platte_y'],
+                           *PH['z'])
+    K['pi'] = Quader('Pi', *PH['pi_x'], PH['bauteile_y'][0],
+                     PH['pcb_y'][1], *PH['pi_z'])
+    K['wandler5'] = Quader('5-V-Wandler', *PH['wandler_x'],
+                           *PH['wandler_y'], *PH['wandler_z'])
     K['kabel'] = kabelwege(w, L, TL, K)
     return K
 
 
+def fuenf_volt_ma():
+    """Strom aus dem 5-V-Wandler des Pi in mA: der Pi selbst und ueber USB
+    der Uno mit Treiberlogik und den drei Lichtschranken."""
+    return PI_MA + UNO_MA + 4 * TREIBER_LOGIK_MA + 3 * LS_MA
+
+
 def leistung():
-    """Leistungsbilanz am 24-V-Netzteil in W: Motoren, Luefter und der
-    Laser samt Wandlerverlust, gegen das, was das Netzteil dauernd
-    liefert."""
+    """Leistungsbilanz am 24-V-Netzteil in W: Motoren, Luefter, der Laser
+    samt Wandlerverlust und der Pi mit Uno und Lichtschranken ueber den
+    5-V-Wandler, gegen das, was das Netzteil dauernd liefert."""
     motoren = MOTOREN * (2.0 * MOTOR_I ** 2 * MOTOR_R + TREIBER_W)
     laser = LASER_V * LASER_A / WANDLER_ETA
+    pi = fuenf_volt_ma() / 1000.0 * 5.0 / PI_WANDLER_ETA
     dauer = NETZTEIL_W * DAUERLAST
-    summe = motoren + LUEFTER_W + laser
+    summe = motoren + LUEFTER_W + laser + pi
     return {'motoren': motoren, 'luefter': LUEFTER_W, 'laser': laser,
-            'summe': summe, 'dauer': dauer, 'reserve': dauer - summe,
-            'strom': summe / 24.0}
+            'pi': pi, 'summe': summe, 'dauer': dauer,
+            'reserve': dauer - summe, 'strom': summe / 24.0}
 
 
 def vref(i_eff, r_sense):
@@ -336,6 +365,40 @@ def kabelwege(w, L, TL, K):
     notaus = rechts + [(xa, y_vor, zn), (xa, y_vor, z_nut),
                        (na_x + 3.0, y_vor, z_nut), (na_x + 3.0, na_y, na_z),
                        (na_x, na_y, na_z)]
+    # Pi (PiHalter.py). 24 V: an den Loetfahnen der Buchse, im Kasten nach
+    # vorn, durch den Kanal nach rechts, an der Flaeche des 2060 unter dem
+    # Halter durch und dahinter hoch zum Eingang links am Wandler
+    PH = K['PH']
+    zw = sum(PH['wandler_z']) / 2.0
+    yw = sum(PH['wandler_y']) / 2.0
+    xw = PH['wandler_x'][0] - 3.0
+    y_hinter = PH['platte_y'][0] - 3.0
+    pi24 = [(EL['buchse_x'], EL['innen_y'][0] + 6.0, EL['eingang_z']),
+            rechts[0], rechts[1], rechts[2], rechts[3],
+            (xw, y_2060, z_2060), (xw, y_hinter, z_2060), (xw, y_hinter, zw),
+            (PH['wandler_x'][0], yw, zw)]
+    # 5 V: aus dem USB-A-Stecker rechts im Wandler (zeigt zum Pi) nach
+    # unten und von unten in PWR
+    ps, sa = PH['stecker']['PWR'], PH['stecker_a']
+    sx, sy = sum(ps[0]) / 2.0, sum(ps[1]) / 2.0
+    ya, za = sum(sa[1]) / 2.0, sum(sa[2]) / 2.0
+    pi5 = [(sa[0][1], ya, za), (sa[0][1] + 5.0, ya, za - 5.0),
+           (sa[0][1] + 5.0, ya, ps[2][0] - 8.0),
+           (sx, sy, ps[2][0] - 8.0), (sx, sy, ps[2][0])]
+    # USB: aus dem Stecker in "USB" nach unten und hinten, nach links bis
+    # neben den Kasten, an seiner rechten Wand nach hinten, hinter ihm nach
+    # links und von hinten in die USB-B-Buchse des Uno (Mitte 38,1 mm von
+    # der Kante unter der Hohlbuchse [w]); der Stecker steht 30 mm ueber
+    us = PH['stecker']['USB']
+    ux, uy = sum(us[0]) / 2.0, sum(us[1]) / 2.0
+    y_usb = PH['wandler_y'][0] - 5.0
+    z_usb = us[2][0] - 7.0
+    x_b = EL['uno_x'][0] + 38.1
+    z_b = EL['uno_z1'] + 5.5
+    y_b = st.y[0] - 30.0
+    usb = [(ux, uy, us[2][0]), (ux, y_usb, z_usb), (st.x[1] + 5.0, y_usb,
+                                                    z_usb),
+           (st.x[1] + 5.0, y_b, z_usb), (x_b, y_b, z_b), (x_b, st.y[0], z_b)]
     wege = {
         'Not-Aus': (laenge(notaus), notaus),
         'Y-Motor links': (laenge(raus + y_motor(-1)), raus + y_motor(-1)),
@@ -350,6 +413,9 @@ def kabelwege(w, L, TL, K):
                                + laenge(laser), None),
         'Z-Endschalter': (laenge(zur_kette) + ky + laenge(zur_x) + kx
                           + laenge(z_es), None),
+        'Pi 24 V': (laenge(pi24), pi24),
+        'Pi 5 V': (laenge(pi5), pi5),
+        'USB Pi–Uno': (laenge(usb), usb),
     }
     return wege
 
@@ -455,9 +521,16 @@ def draufsicht(f, w, L, K):
                          ('luefter', 'kauf', {'fill_opacity': '0.85'})):
         q = K[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
+    # Pi-Halter (PiHalter.py) rechts neben dem Kasten, dahinter Wandler und
+    # Pi
+    for n, art, mehr in (('pihalter', 'neu', {}),
+                         ('wandler5', 'kauf', {'stroke_dasharray': '4 3'}),
+                         ('pi', 'kauf', {})):
+        q = K[n]
+        t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
     # feste Kabelwege, dazu der Weg mit dem Portal von der Y- zur X-Kette
     for n in ('Y-Motor links', 'Y-Motor rechts', 'Y-Endschalter', 'X-Motor',
-              'Not-Aus'):
+              'Not-Aus', 'Pi 24 V', 'USB Pi–Uno'):
         weg = K['kabel'][n][1]
         t.append(linienzug(f, [(p[0], p[1]) for p in weg]))
     t.append(linienzug(f, [(p[0], p[1]) for p in K['weg_portal'][1:]]))
@@ -491,7 +564,9 @@ def seitenansicht(f, w, L, TL, K):
     for n, art, mehr in (('platte', 'neu', {}), ('steuerung', 'neu', {}),
                          ('deckel', 'neu', {}),
                          ('uno', 'druck', {'fill_opacity': '0.7'}),
-                         ('luefter', 'kauf', {})):
+                         ('luefter', 'kauf', {}),
+                         ('wandler5', 'kauf', {'stroke_dasharray': '4 3'}),
+                         ('pi', 'kauf', {}), ('pihalter', 'neu', {})):
         q = K[n]
         t.append(f.rect(q.y[0], q.y[1], q.z[0], q.z[1], art, **mehr))
     # Portal an der hinteren Grenze, Z unten
@@ -536,6 +611,7 @@ def main():
     pm = bauraum.modul_laden(bauraum.PORTAL, 'portal')
     w, L = pm.w, pm.lage()
     em = bauraum.modul_laden(ELEKTRONIK, 'elektronik')
+    hm = bauraum.modul_laden(PIHALTER, 'pihalter')
     K = konzept(w, L, tw, TL, em.w, em.lage())
     K['strahl_y'] = TL['strahl_y']
     K['z_frei'] = -16.0 - w('luft_bau')         # unter dem X-Wagen
@@ -547,9 +623,9 @@ def main():
             '<line x1="0" y1="0" x2="0" y2="7" stroke="#e8a871" '
             'stroke-width="1.4"/></pattern>'),
          text(24, 30, 'Platz für die Elektronik (Elektronik.py Rev. {}, '
-              'Portal.py Rev. {}, ToolheadZ.py Rev. {})'.format(
-                  em.REVISION, pm.REVISION, th.REVISION), 14, TEXT,
-              fett=True),
+              'PiHalter.py Rev. {}, Portal.py Rev. {}, ToolheadZ.py Rev. {})'
+              .format(em.REVISION, hm.REVISION, pm.REVISION, th.REVISION),
+              14, TEXT, fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Ketten '
               'gedruckt, beide mit Wanne, Festpunkt und Kettenhalter wie in '
               'Portal.py. Das Netzteil (24 V / 3 A) steht außerhalb.',
@@ -589,6 +665,8 @@ def main():
          'Wandler 24 → 12 V und\nWago-Klemmen'),
         (K['platte'].x[1] - 8.0, K['platte'].y[0] + 2.0,
          'Montageplatte: 4 × M5 in die\nRückseite des 2060, Kabelkanal'),
+        (K['pi'].x[1] - 6.0, K['pi'].y[0] + 2.0,
+         'Pi-Halter: Pi Zero 2 W und\n5-V-Wandler über dem 2060'),
         (K['es_y'][0], K['es_y'][1], 'Y-Endschalter außen am\nrechten 2040 '
          '(links die Kette)'),
         (fach.x[1] - 10.0, fach.y[1] - 10.0,
@@ -631,6 +709,8 @@ def main():
          'Toolhead mit Z unten: {} mm\nvor dem hinteren 2060'.format(
              de(K['luft_2060'], 0))),
         (-60.0, L['rahmen_z1'] - 8.0, '2040 (davor die Kette)'),
+        (K['pi'].y[0], K['pi'].z[1] - 4.0,
+         'Pi und 5-V-Wandler auf dem\nPi-Halter, über dem 2060'),
         (-211.0, 66.0, 'Toolhead oben abgeschnitten')],
         fb.ox + fb.breite + 12, 'start', abstand=26.0)
     t += fb.mass(fach.y[0] + 12.0, fach.z[0], fach.z[1], '{} mm'.format(
@@ -664,11 +744,15 @@ def main():
              de(L['quer_y_hinten'][0] - K['y_tr'], 0), de(K['z_frei'], 0),
              de(K['z_frei'] - L['rahmen_z1'], 0))),
         ('Netzteil', 'Steckernetzteil 24 V / 3 A ({} W), steht außerhalb; '
-         'Motoren ≈ {} W, Lüfter ≈ {} W, Laser über den Wandler ≈ {} W — '
-         'zusammen ≈ {} W, dauernd gehen {} W'.format(
+         'Motoren ≈ {} W, Lüfter ≈ {} W, Laser über den Wandler ≈ {} W, Pi '
+         'mit Uno ≈ {} W — zusammen ≈ {} W, dauernd gehen {} W'.format(
              de(NETZTEIL_W, 0), de(K['leistung']['motoren'], 0),
              de(LUEFTER_W, 0), de(K['leistung']['laser'], 0),
+             de(K['leistung']['pi'], 0),
              de(K['leistung']['summe'], 0), de(K['leistung']['dauer'], 0))),
+        ('Pi', 'Pi Zero 2 W auf dem Pi-Halter rechts neben dem Kasten, ganz '
+         'über dem 2060; sein 5-V-Wandler hängt vor Schalter und Not-Aus an '
+         'der Buchse (docs/pi.md)'),
         ('Endschalter', 'LM393-Gabellichtschranken: X links auf der 2020 '
          'des Portals, Y '
          'außen am rechten 2040 — schaltet {} (Toolhead mit Z unten {} mm '
@@ -688,11 +772,11 @@ def main():
     ]
     for n in ('Y-Motor links', 'Y-Motor rechts', 'X-Motor', 'Z-Motor',
               'Laser (12 V + PWM)', 'X-Endschalter', 'Y-Endschalter',
-              'Z-Endschalter', 'Not-Aus'):
+              'Z-Endschalter', 'Not-Aus', 'Pi 24 V', 'USB Pi–Uno'):
         mm = kab[n][0]
         zeilen.append(('Kabel' if n == 'Y-Motor links' else '',
                        '{}: Weg ≈ {} m → {} m kaufen'.format(
-                           n, de(mm / 1000.0, 2), de(kauflaenge(mm), 1))))
+                           n, de(mm / 1000.0, 2), de(kauflaenge(mm), 2))))
     t.append(text(24, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))
     for i, (k, v) in enumerate(zeilen):
         t.append(text(24, ty + 10 + i * 15, k, 8.5, GRAU))

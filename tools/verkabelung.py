@@ -77,7 +77,13 @@ ANSCHLUSS = {
     'Laser GND': ('Laser, XH Mitte: GND', 'XH'),
     'Laser +12 V': ('Laser, XH rechts: +12 V', 'XH'),
     'Uno USB': ('Uno, USB-B', None),
-    'PC': ('PC', None),
+    # Pi auf dem Pi-Halter (docs/pi.md), mit seinem Abwaertswandler
+    # 24 -> 5 V: Eingang mit Schraubklemmen, Ausgang USB-A [?]
+    '5V-Wandler IN+': ('5-V-Wandler IN+', 'Schraubklemme'),
+    '5V-Wandler IN−': ('5-V-Wandler IN−', 'Schraubklemme'),
+    '5V-Wandler USB': ('5-V-Wandler, USB-A', None),
+    'Pi PWR': ('Pi, Micro-USB „PWR IN“', None),
+    'Pi USB': ('Pi, Micro-USB „USB“', None),
 }
 for _a in ('X', 'Y', 'Z'):
     ANSCHLUSS['LS {} VCC'.format(_a)] = ('Lichtschranke {}, VCC'.format(_a),
@@ -123,11 +129,12 @@ SHIELD = (
 )
 EINGAENGE = {'Shield X−': 'X', 'Shield Y+': 'Y', 'Shield SpnEn': 'Z'}
 
-# Stromaufnahme aus 5 V (USB, Polyfuse 500 mA) [w]
-USB_MA = 500.0
-LS_MA = 25.0            # je Lichtschranke: IR-Diode, Komparator, zwei LEDs
-UNO_MA = 60.0           # Uno mit USB-Wandler
-TREIBER_LOGIK_MA = 5.0  # je TMC2209, VIO
+# Stromaufnahme aus 5 V [w]: stehen in tools/elektronik_zeichnen.py, weil
+# die Leistungsbilanz den Pi mitrechnet
+USB_MA = ez.USB_MA                  # Polyfuse am USB-Eingang des Uno
+LS_MA = ez.LS_MA
+UNO_MA = ez.UNO_MA
+TREIBER_LOGIK_MA = ez.TREIBER_LOGIK_MA
 
 SIG = ez.LITZE_SIGNAL
 
@@ -243,14 +250,31 @@ def leitungen():
                      'Z-Motor B')]),
         dict(nr='W16', name='24-V-Wächter an Abort', art='Widerstand',
              mm2=None, weg='im Kasten',
-             hinweis='fehlen die 24 V (Not-Aus, Schalter, Netzteil), '
-                     'bricht GRBL ab',
+             hinweis='fehlen die 24 V hinter Schalter und Not-Aus, bricht '
+                     'GRBL ab',
              adern=[('R1 22 kΩ', '—', 'Wago +24 V', 'Shield Abort'),
                     ('R2 4,7 kΩ ∥ 100 nF', '—', 'Shield Abort',
                      'Wago GND')]),
-        dict(nr='W17', name='USB', art='USB-Kabel A–B', mm2=None,
-             fertig=True, weg='hinten raus zum PC',
-             adern=[('USB', '—', 'Uno USB', 'PC')]),
+        dict(nr='W17', name='USB zum Pi', art='USB-Kabel Micro-B–B (OTG)',
+             mm2=None, fertig=True, kabel='USB Pi–Uno',
+             weg='hinten aus dem USB-Fenster, hinter dem Kasten nach rechts, '
+                 'an seiner rechten Wand nach vorn zum Pi-Halter',
+             hinweis='Micro-B in die Buchse „USB“ des Pi, nicht in „PWR IN“',
+             adern=[('USB', '—', 'Uno USB', 'Pi USB')]),
+        dict(nr='W18', name='24 V für den Pi', art='Leitung 2-adrig',
+             mm2=ez.LITZE_24V, kabel='Pi 24 V', strom=3.0,
+             weg='an der Buchse gelötet, vorn raus, Kanal, an der Rückseite '
+                 'des hinteren 2060 unter dem Pi-Halter durch, dahinter hoch '
+                 'zum 5-V-Wandler',
+             hinweis='vor Schalter und Not-Aus: Pi und Uno bleiben an',
+             adern=[('+24 V', 'rot', 'Buchse +', '5V-Wandler IN+'),
+                    ('GND', 'schwarz', 'Buchse −', '5V-Wandler IN−')]),
+        dict(nr='W19', name='5 V für den Pi', art='USB-Kabel A–Micro-B',
+             mm2=None, fertig=True, kabel='Pi 5 V',
+             weg='am Pi-Halter: vom USB-Ausgang des Wandlers in „PWR IN“',
+             hinweis='Stromadern mindestens AWG 24, sonst meldet der Pi '
+                     'Unterspannung',
+             adern=[('5 V', '—', '5V-Wandler USB', 'Pi PWR')]),
     ]
 
 
@@ -263,6 +287,8 @@ INNEN = (
     ('Wandler IN−', 'Wandler OUT−', None),        # gemeinsame Masse [w]
     ('Shield −', 'Shield Z− GND', None),          # GND des Shields
     ('Shield Z+', 'Shield Z− S', None),           # beide D11
+    ('Pi PWR', 'Pi USB', None),         # 5 V des Pi an beiden Buchsen [w]
+    ('Uno USB', 'Shield 5V', None),     # 5 V vom USB auf den 5-V-Stift [w]
 )
 BETRIEB = ('ein', 'nicht gedrueckt')
 
@@ -475,7 +501,7 @@ def tab_leitungen(K):
         weg, kauf = laenge_m(lt, K)
         if weg is not None:
             lang, k = '{} m'.format(de(weg, 2)), '**{} m**'.format(
-                de(kauf, 1))
+                de(kauf, 2))
             if lt.get('mitgeliefert') and kauf <= lt['mitgeliefert']:
                 k = 'mitgeliefert ({} m)'.format(de(lt['mitgeliefert'], 1))
             elif lt.get('fertig'):
@@ -598,6 +624,11 @@ def tab_material(K):
              'zum Motor, Dupont 4-polig zum Shield; für W15 lose Adern ohne '
              'Mantel (läuft durch beide Ketten) | W14, W15 (W12, W13: die '
              'mitgelieferten 1-m-Kabel) |')
+    for nr in ('W17', 'W19'):
+        lt = next(lt for lt in leitungen() if lt['nr'] == nr)
+        _, kauf = laenge_m(lt, K)
+        z.append('| 1 | {}, {} m | {} ({}) |'.format(
+            lt['art'], de(kauf, 2), nr, lt['name']))
     z.append('| {} + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, '
              'Lichtschranken, W8, W16 |'.format(kontakte.get('Dupont', 0)))
     z.append('| {} · {} · {} | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, '

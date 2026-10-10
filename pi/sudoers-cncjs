@@ -1,0 +1,4 @@
+# Die Befehle "Pi herunterfahren" und "Pi neu starten" in CNCjs laufen als
+# dieser Benutzer und brauchen sudo ohne Passwort. Vorlage fuer
+# pi/einrichten.sh, das @BENUTZER@ ersetzt und visudo pruefen laesst.
+@BENUTZER@ ALL=(root) NOPASSWD: /usr/sbin/shutdown, /usr/sbin/reboot

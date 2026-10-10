@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """STL-Dateien zum Drucken, ohne Fusion: Kasten und Haube des Elektronik-
-Gehaeuses (fusion/Elektronik) und Kabelhalter (fusion/Kabelhalter).
+Gehaeuses (fusion/Elektronik), Kabelhalter (fusion/Kabelhalter) und
+Pi-Halter (fusion/PiHalter).
 
 Die Geometrie entsteht aus denselben Massen wie in Fusion — lage() der
 Skripte wird mit gestubbtem adsk-Modul importiert — und wird hier mit
@@ -15,9 +16,11 @@ gegen den Elefantenfuss (0,4 mm, in vier Stufen):
   Haube       Oberseite aufs Bett, Waende und Lippe nach oben
   Kabelhalter Querschnitt flach, die 16 mm Breite nach oben, die Spitze der
               Traene oben
+  Pi-Halter   die Seite am 2060 aufs Bett, Stehbolzen nach oben
 
     pip install manifold3d
     python3 tools/stl_export.py        ->  stl/*.stl
+    python3 tools/stl_export.py PiHalter   ->  nur stl/PiHalter_r*.stl
 """
 
 import math
@@ -245,6 +248,30 @@ def kabelhalter(km):
     return fussfase(k, w('fase_fuss')), soll
 
 
+# ---- Pi-Halter ----------------------------------------------------------------
+def pihalter(hm):
+    """Wie bau_halter() in PiHalter.py, in Maschinenkoordinaten; danach so
+    gedreht, dass die Seite am 2060 (Y = quer_y1) auf dem Bett liegt und
+    die Stehbolzen nach oben zeigen: (X, Y, Z) -> (X - x0, Z - z0, y1 - Y)."""
+    w, L = hm.w, hm.lage()
+    (x0, x1), (y0, y1), (z0, z1) = L['x'], L['platte_y'], L['z']
+    teile = [quader(L['x'], L['platte_y'], L['z'])]
+    teile += [zylinder_y(m, w('steg_d'), (L['steg_y'][0], y0 + 0.5))
+              for m in L['pi_loecher']]
+    k = vereinen(teile)
+    weg = [zylinder_y(m, w('m25_kern'), (L['kernloch_y'][0] - 0.5,
+                                         L['kernloch_y'][1]))
+           for m in L['pi_loecher']]
+    weg += [zylinder_y(m, w('m5_durchgang'), (y0 - 1.0, y1 + 1.0))
+            for m in L['m5']]
+    weg += [quader((u0, u1), (y0 - 1.0, y1 + 1.0), (v0, v1))
+            for u0, v0, u1, v1 in L['binder_rechtecke']]
+    k = k - vereinen(weg)
+    k = k.transform([[1, 0, 0, -x0], [0, 0, 1, -z0], [0, -1, 0, y1]])
+    soll = (x1 - x0, z1 - z0, y1 - L['steg_y'][0])
+    return fussfase(k, w('fase_fuss')), soll
+
+
 # ---- STL ----------------------------------------------------------------------
 def stl_schreiben(pfad, teil, name):
     """Binaere STL, Masse in mm."""
@@ -269,19 +296,27 @@ def stl_schreiben(pfad, teil, name):
     return len(dreiecke)
 
 
-def main():
+def main(nur=()):
+    """Schreibt alle Teile; mit Namen (Anfang genuegt, z. B. PiHalter) nur
+    diese."""
     em = bauraum.modul_laden(os.path.join(FUSION, 'Elektronik',
                                           'Elektronik.py'), 'elektronik')
     km = bauraum.modul_laden(os.path.join(FUSION, 'Kabelhalter',
                                           'Kabelhalter.py'), 'kabelhalter')
+    hm = bauraum.modul_laden(os.path.join(FUSION, 'PiHalter',
+                                          'PiHalter.py'), 'pihalter')
     os.makedirs(ZIEL, exist_ok=True)
     fehler = 0
-    for name, (teil, soll), material in (
-            ('Elektronik_Gehaeuse_r{}'.format(em.REVISION), gehaeuse(em),
-             'PETG'),
-            ('Elektronik_Deckel_r{}'.format(em.REVISION), haube(em), 'PETG'),
-            ('Kabelhalter_r{}'.format(km.REVISION), kabelhalter(km),
-             'PETG')):
+    teile = (('Elektronik_Gehaeuse_r{}'.format(em.REVISION),
+              lambda: gehaeuse(em)),
+             ('Elektronik_Deckel_r{}'.format(em.REVISION), lambda: haube(em)),
+             ('Kabelhalter_r{}'.format(km.REVISION), lambda: kabelhalter(km)),
+             ('PiHalter_r{}'.format(hm.REVISION), lambda: pihalter(hm)))
+    for name, bauen in teile:
+        if nur and not name.startswith(tuple(nur)):
+            continue
+        teil, soll = bauen()
+        material = 'PETG'
         bb = teil.bounding_box()
         ist = tuple(bb[3 + i] - bb[i] for i in range(3))
         gut = (teil.status().name == 'NoError' and teil.genus() >= 0
@@ -300,4 +335,4 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

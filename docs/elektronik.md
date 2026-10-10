@@ -19,7 +19,9 @@ mit Wanne, Festpunkt und Halter, dazu der Kabelweg zwischen ihnen
 ([energiekette.md](energiekette.md)). **Die ganze Verdrahtung** — Kabelliste,
 Anschlussliste, Klemmen, Schritt für Schritt und Inbetriebnahme — steht in
 [verkabelung.md](verkabelung.md). Pinbelegung, Treiber und Jumper stehen in
-[hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
+[hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik). Ohne PC
+bedient wird die Maschine über einen Pi mit CNCjs ([pi.md](pi.md)), auf
+einem eigenen Halter rechts neben dem Gehäuse.
 
 ![Platz für die Elektronik](elektronik-platz.svg)
 
@@ -52,11 +54,12 @@ brauchen 107 mm ab der Rückseite des 2060 und enden 3,4 mm vor dem Ende der
 
 | Teil | Platz | Stand |
 |---|---|---|
-| Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Gehäuse](#gehäuse-elektronikpy) links, 24-V-Lüfter im Deckel über den Treibern; USB nach hinten | gezeichnet |
+| Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Gehäuse](#gehäuse-elektronikpy) links, 24-V-Lüfter im Deckel über den Treibern; USB nach hinten zum Pi | gezeichnet |
 | Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Gehäuse kommt nur seine 24-V-Leitung | vorhanden |
 | 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5) | gezeichnet |
 | Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
 | Not-Aus | vorn am vorderen 2060 im eigenen Gehäuse ([notaus.md](notaus.md)); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, Gehäuse gezeichnet |
+| Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | auf dem [Pi-Halter](pi.md#halter) rechts neben dem Gehäuse, obere Nut des hinteren 2060; hängt vor Schalter und Not-Aus an der Buchse und versorgt über USB den Uno | Halter gezeichnet |
 
 Das Gehäuse hängt an der **Rückseite des hinteren 2060** (untere und obere
 Nut) mit 4 × M5 in Hammermuttern, wie die übrigen Halter — der Tisch trägt
@@ -187,7 +190,7 @@ die größere Händlerangabe).
 
 ## Leistung: Reichen 72 W?
 
-Ja, mit Reserve: Alles zusammen braucht **≈ 49 W**, das Netzteil gibt
+Ja, mit Reserve: Alles zusammen braucht **≈ 53 W**, das Netzteil gibt
 dauernd 61 W ab.
 
 | Verbraucher | Leistung |
@@ -195,18 +198,18 @@ dauernd 61 W ab.
 | 4 × NEMA 17 (Stepperonline, 1,5 A) an TMC2209, je 1,05 A eingestellt | ≈ 23 W — je Motor 2 Phasen × (1,05 A)² × 2,3 Ω plus 0,6 W im Treiber; 2,3 Ω laut Datenblatt des 17HE15-1504S `[w]` |
 | Lüfter 40 mm | ≈ 2 W |
 | Laser LASER TREE 4 W: 12 V × 1,8 A (obere Angabe) = 21,6 W, über den Wandler (90 %) | ≈ 24 W |
-| Uno | über USB, nicht aus dem Netzteil |
-| **zusammen** | **≈ 49 W**, also ≈ 2,0 A auf der 24-V-Leitung |
-| Netzteil, dauernd (85 % von 72 W) | 61 W — **≈ 12,5 W Reserve** |
+| Pi, Uno, Treiberlogik und 3 Lichtschranken: zusammen 755 mA aus 5 V, über den 5-V-Wandler des Pi (85 %) | ≈ 4,4 W |
+| **zusammen** | **≈ 53 W**, also ≈ 2,2 A auf der 24-V-Leitung |
+| Netzteil, dauernd (85 % von 72 W) | 61 W — **≈ 8 W Reserve** |
 
 Ein Chopper-Treiber zieht aus dem Netzteil nicht die Spulenströme, sondern
 nur die Verluste in Wicklung und Treiber, dazu die mechanische Leistung —
 bei einem Laser-Portal wenige Watt. Deshalb reichen für vier Motoren rund
 23 W.
 
-Wird das Steckernetzteil überlastet, schaltet es ab: Die Motoren verlieren
-Schritte, GRBL merkt davon nichts, weil der Uno über USB weiterläuft. Die
-Reserve ist dafür da. Ein stärkerer Laser (10 W Lichtleistung und mehr, meist
+Wird das Steckernetzteil überlastet, schaltet es ab, und mit ihm gehen auch
+Pi und Uno aus: Der Auftrag bricht mitten im Werkstück ab, und die SD-Karte
+des Pi kann Schaden nehmen. Die Reserve ist dafür da. Ein stärkerer Laser (10 W Lichtleistung und mehr, meist
 60 W Aufnahme `[w]`) bräuchte ein größeres 24-V-Netzteil — nicht über 28 V,
 das vertragen die TMC2209 nicht.
 
@@ -343,7 +346,7 @@ in `tools/elektronik_check.py` (Abschnitt 14), jeweils am längsten Weg:
 Kein 230 V in der Maschine: Das Steckernetzteil liefert 24 V, am Rahmen muss
 nichts geerdet und keine Netzklemme abgedeckt werden.
 
-Die Verdrahtung Leitung für Leitung (W1–W17), die Belegung von Wago-Klemmen
+Die Verdrahtung Leitung für Leitung (W1–W19), die Belegung von Wago-Klemmen
 und Shield, die Reihenfolge beim Anschließen und die Inbetriebnahme mit
 Tests stehen in [verkabelung.md](verkabelung.md). Plan und Tabellen
 entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
@@ -376,6 +379,7 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
 | 4 | M3×8 | Uno → Stehbolzen |
 | 4 + 4 | M3×16 + M3-Mutter | Lüfter → Deckel |
 | 2 | Kabelbinder, doppelseitiges Klebeband | Wandler, Wago |
+| 1 | Pi Zero 2 W, 5-V-Wandler, USB-Kabel, Pi-Halter und Schrauben | ohne PC: [pi.md](pi.md#teile) |
 
 ## Was noch fehlt
 
@@ -400,6 +404,8 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
    Nut.
 5. **Verkabelung:** drei Dinge, die sich erst beim Anschließen zeigen
    ([verkabelung.md](verkabelung.md#noch-offen)).
+6. **Pi:** Den 5-V-Wandler gibt es noch nicht, Lochbild und Buchsen des Pi
+   sind nach dem Maßblatt gezeichnet ([pi.md](pi.md#noch-offen)).
 
 Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit
 Hohlstecker 5,5 × 2,1; der Laser ein LASER TREE 4 W mit 12 V / 1,6 A;

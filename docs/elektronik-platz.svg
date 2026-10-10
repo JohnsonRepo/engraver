@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1093" height="1479" viewBox="0 0 1093 1479" font-family="Inter, Helvetica, Arial, sans-serif"><defs ><pattern id="schraffur" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#fbeee2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#e8a871" stroke-width="1.4"/></pattern></defs>
-<text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Platz für die Elektronik (Elektronik.py Rev. 4, Portal.py Rev. 28, ToolheadZ.py Rev. 38)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1093" height="1524" viewBox="0 0 1093 1524" font-family="Inter, Helvetica, Arial, sans-serif"><defs ><pattern id="schraffur" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#fbeee2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#e8a871" stroke-width="1.4"/></pattern></defs>
+<text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Platz für die Elektronik (Elektronik.py Rev. 4, PiHalter.py Rev. 1, Portal.py Rev. 28, ToolheadZ.py Rev. 38)</text>
 <text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Ketten gedruckt, beide mit Wanne, Festpunkt und Kettenhalter wie in Portal.py. Das Netzteil (24 V / 3 A) steht außerhalb.</text>
 <clipPath id="drauf"><rect x="262.0" y="92.0" width="581.4" height="599.4"/></clipPath>
 <g clip-path="url(#drauf)">
@@ -78,11 +78,16 @@
 <rect x="438.2" y="124.6" width="40.4" height="18.9" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3"/>
 <rect x="432.1" y="143.5" width="79.1" height="47.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3"/>
 <rect x="387.7" y="142.9" width="34.4" height="34.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.85"/>
+<rect x="537.2" y="209.8" width="150.5" height="4.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="540.6" y="192.6" width="51.6" height="17.2" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="626.6" y="200.9" width="55.9" height="4.6" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
 <polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,314.6 318.8,321.5 318.8,343.9 318.8,350.7 318.8,399.0 318.8,405.9 318.8,426.5 318.8,433.4 318.8,476.4 318.8,483.3 318.8,503.9 318.8,510.8 318.8,607.1 310.9,661.4" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,607.1 794.5,661.4" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,179.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="376.4,161.4 318.8,161.4 318.8,161.4 318.8,307.7 302.4,307.7 302.4,322.4" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 786.6,213.3 786.6,213.3 786.6,607.1 786.6,607.1 731.6,607.1 731.6,617.5 729.0,617.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+<polyline points="443.3,129.8 445.3,200.4 445.3,205.1 536.6,205.1 536.6,213.3 538.1,213.3 538.1,207.2 538.1,207.2 540.6,201.2" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
+<polyline points="646.9,203.1 646.9,188.3 518.6,188.3 518.6,96.7 414.7,96.7 414.7,122.5" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <polyline points="302.4,351.7 360.0,351.7 360.0,395.6 360.0,406.8 520.5,406.8 525.6,400.7 525.6,400.7 525.6,416.6 533.5,416.6" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round"/>
 <circle cx="346.1" cy="434.1" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="796.1" cy="179.5" r="4.5" fill="#b4342f" stroke="#ffffff" stroke-width="1.2"/>
@@ -142,10 +147,14 @@
 <circle cx="753.9" cy="202.9" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="267.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Elektronikfach unter den</text>
 <text x="855.4" y="277.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040, 488 × 104 × 55 mm</text>
-<line x1="525.5" y1="211.5" x2="852.4" y2="298.1" stroke="#5b6472" stroke-width="0.6"/>
+<line x1="677.4" y1="202.6" x2="852.4" y2="298.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="677.4" cy="202.6" r="1.5" fill="#5b6472"/>
+<text x="855.4" y="301.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pi-Halter: Pi Zero 2 W und</text>
+<text x="855.4" y="311.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5-V-Wandler über dem 2060</text>
+<line x1="525.5" y1="211.5" x2="852.4" y2="332.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="525.5" cy="211.5" r="1.5" fill="#5b6472"/>
-<text x="855.4" y="301.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Montageplatte: 4 × M5 in die</text>
-<text x="855.4" y="311.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rückseite des 2060, Kabelkanal</text>
+<text x="855.4" y="335.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Montageplatte: 4 × M5 in die</text>
+<text x="855.4" y="345.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rückseite des 2060, Kabelkanal</text>
 <line x1="722.3" y1="408.9" x2="852.4" y2="408.9" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="722.3" cy="408.9" r="1.5" fill="#5b6472"/>
 <text x="855.4" y="411.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Energiekette X: direkt hinter der</text>
@@ -182,6 +191,9 @@
 <rect x="313.4" y="947.0" width="131.3" height="39.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="327.1" y="998.5" width="99.4" height="40.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.7"/>
 <rect x="347.9" y="932.5" width="58.0" height="14.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="431.6" y="911.9" width="29.0" height="43.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="445.6" y="915.1" width="7.8" height="43.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="460.6" y="901.5" width="7.2" height="87.6" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="354.4" y="880.3" width="118.9" height="8.7" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
 <rect x="448.6" y="851.3" width="29.0" height="29.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
 <rect x="380.9" y="889.0" width="65.8" height="14.5" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
@@ -270,6 +282,10 @@
 <line x1="743.4" y1="919.5" x2="868.4" y2="954.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="743.4" cy="919.5" r="1.5" fill="#5b6472"/>
 <text x="871.4" y="957.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040 (davor die Kette)</text>
+<line x1="445.6" y1="920.9" x2="868.4" y2="980.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="445.6" cy="920.9" r="1.5" fill="#5b6472"/>
+<text x="871.4" y="983.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pi und 5-V-Wandler auf dem</text>
+<text x="871.4" y="993.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pi-Halter, über dem 2060</text>
 <line x1="585.6" y1="1025.3" x2="868.4" y2="1025.3" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="585.6" cy="1025.3" r="1.5" fill="#5b6472"/>
 <text x="871.4" y="1028.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Toolhead mit Z unten: 26 mm</text>
@@ -294,49 +310,55 @@
 <text x="24.0" y="1167.5" font-size="8.5" fill="#5b6472" text-anchor="start">höher</text>
 <text x="110.0" y="1167.5" font-size="8.5" fill="#1c2733" text-anchor="start">in der Mitte (|X| ≤ 225) ab 3 mm hinter dem 2060 frei bis Z −19 — 10 mm über der Oberkante der 2040</text>
 <text x="24.0" y="1182.5" font-size="8.5" fill="#5b6472" text-anchor="start">Netzteil</text>
-<text x="110.0" y="1182.5" font-size="8.5" fill="#1c2733" text-anchor="start">Steckernetzteil 24 V / 3 A (72 W), steht außerhalb; Motoren ≈ 23 W, Lüfter ≈ 2 W, Laser über den Wandler ≈ 24 W — zusammen ≈ 49 W, dauernd gehen 61 W</text>
-<text x="24.0" y="1197.5" font-size="8.5" fill="#5b6472" text-anchor="start">Endschalter</text>
-<text x="110.0" y="1197.5" font-size="8.5" fill="#1c2733" text-anchor="start">LM393-Gabellichtschranken: X links auf der 2020 des Portals, Y außen am rechten 2040 — schaltet am hinteren Schienenende (Toolhead mit Z unten 26 mm vor dem 2060); Z vorhanden</text>
-<text x="24.0" y="1212.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kette Y</text>
-<text x="110.0" y="1212.5" font-size="8.5" fill="#1c2733" text-anchor="start">333 mm Hub + 47 mm Reserve, Festpunkt hinten in der Wanne Y (272 mm vom hinteren Ende des 2040), Schleife nach vorn, 16 Glieder, 328 mm mit Endstücken (R20)</text>
-<text x="24.0" y="1227.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kette X</text>
-<text x="110.0" y="1227.5" font-size="8.5" fill="#1c2733" text-anchor="start">391 mm Hub, Festpunkt in der Mitte des Wegs, Schleife nach rechts (links steht der X-Motor), 17 Glieder, 344 mm mit Endstücken (R20)</text>
-<text x="24.0" y="1242.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kabel</text>
-<text x="110.0" y="1242.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motor links: Weg ≈ 0,71 m → 1 m kaufen</text>
-<text x="24.0" y="1257.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1257.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motor rechts: Weg ≈ 0,98 m → 1,5 m kaufen</text>
+<text x="110.0" y="1182.5" font-size="8.5" fill="#1c2733" text-anchor="start">Steckernetzteil 24 V / 3 A (72 W), steht außerhalb; Motoren ≈ 23 W, Lüfter ≈ 2 W, Laser über den Wandler ≈ 24 W, Pi mit Uno ≈ 4 W — zusammen ≈ 53 W, dauernd gehen 61 W</text>
+<text x="24.0" y="1197.5" font-size="8.5" fill="#5b6472" text-anchor="start">Pi</text>
+<text x="110.0" y="1197.5" font-size="8.5" fill="#1c2733" text-anchor="start">Pi Zero 2 W auf dem Pi-Halter rechts neben dem Kasten, ganz über dem 2060; sein 5-V-Wandler hängt vor Schalter und Not-Aus an der Buchse (docs/pi.md)</text>
+<text x="24.0" y="1212.5" font-size="8.5" fill="#5b6472" text-anchor="start">Endschalter</text>
+<text x="110.0" y="1212.5" font-size="8.5" fill="#1c2733" text-anchor="start">LM393-Gabellichtschranken: X links auf der 2020 des Portals, Y außen am rechten 2040 — schaltet am hinteren Schienenende (Toolhead mit Z unten 26 mm vor dem 2060); Z vorhanden</text>
+<text x="24.0" y="1227.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kette Y</text>
+<text x="110.0" y="1227.5" font-size="8.5" fill="#1c2733" text-anchor="start">333 mm Hub + 47 mm Reserve, Festpunkt hinten in der Wanne Y (272 mm vom hinteren Ende des 2040), Schleife nach vorn, 16 Glieder, 328 mm mit Endstücken (R20)</text>
+<text x="24.0" y="1242.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kette X</text>
+<text x="110.0" y="1242.5" font-size="8.5" fill="#1c2733" text-anchor="start">391 mm Hub, Festpunkt in der Mitte des Wegs, Schleife nach rechts (links steht der X-Motor), 17 Glieder, 344 mm mit Endstücken (R20)</text>
+<text x="24.0" y="1257.5" font-size="8.5" fill="#5b6472" text-anchor="start">Kabel</text>
+<text x="110.0" y="1257.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motor links: Weg ≈ 0,71 m → 1 m kaufen</text>
 <text x="24.0" y="1272.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1272.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Motor: Weg ≈ 0,81 m → 1 m kaufen</text>
+<text x="110.0" y="1272.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Motor rechts: Weg ≈ 0,98 m → 1,5 m kaufen</text>
 <text x="24.0" y="1287.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1287.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Motor: Weg ≈ 1,54 m → 2 m kaufen</text>
+<text x="110.0" y="1287.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Motor: Weg ≈ 0,81 m → 1 m kaufen</text>
 <text x="24.0" y="1302.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (12 V + PWM): Weg ≈ 1,57 m → 2 m kaufen</text>
+<text x="110.0" y="1302.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Motor: Weg ≈ 1,54 m → 2 m kaufen</text>
 <text x="24.0" y="1317.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,83 m → 1 m kaufen</text>
+<text x="110.0" y="1317.5" font-size="8.5" fill="#1c2733" text-anchor="start">Laser (12 V + PWM): Weg ≈ 1,57 m → 2 m kaufen</text>
 <text x="24.0" y="1332.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1332.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Endschalter: Weg ≈ 0,49 m → 1 m kaufen</text>
+<text x="110.0" y="1332.5" font-size="8.5" fill="#1c2733" text-anchor="start">X-Endschalter: Weg ≈ 0,83 m → 1 m kaufen</text>
 <text x="24.0" y="1347.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1347.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Endschalter: Weg ≈ 1,45 m → 2 m kaufen</text>
+<text x="110.0" y="1347.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y-Endschalter: Weg ≈ 0,49 m → 1 m kaufen</text>
 <text x="24.0" y="1362.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="110.0" y="1362.5" font-size="8.5" fill="#1c2733" text-anchor="start">Not-Aus: Weg ≈ 1,01 m → 1,5 m kaufen</text>
-<rect x="24.0" y="1397.5" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<text x="43.0" y="1405.5" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
-<rect x="194.0" y="1397.5" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="213.0" y="1405.5" font-size="8.5" fill="#1c2733" text-anchor="start">Portal (vorhanden)</text>
-<rect x="364.0" y="1397.5" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="383.0" y="1405.5" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead</text>
-<rect x="534.0" y="1397.5" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<text x="553.0" y="1405.5" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
-<rect x="24.0" y="1415.5" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<text x="43.0" y="1423.5" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
-<rect x="194.0" y="1415.5" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
-<text x="213.0" y="1423.5" font-size="8.5" fill="#1c2733" text-anchor="start">Kaufteil</text>
-<rect x="364.0" y="1415.5" width="14.0" height="9.0" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
-<text x="383.0" y="1423.5" font-size="8.5" fill="#1c2733" text-anchor="start">Energiekette (gedruckt)</text>
-<line x1="534.0" y1="1420.0" x2="550.0" y2="1420.0" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
-<text x="555.0" y="1423.5" font-size="8.5" fill="#1c2733" text-anchor="start">Kabel, fest verlegt</text>
-<rect x="24" y="1433.5" width="14" height="9" fill="url(#schraffur)" stroke="#c2621b"/>
-<text x="43.0" y="1441.5" font-size="8.5" fill="#1c2733" text-anchor="start">Elektronikfach</text>
-<circle cx="201.0" cy="1438.0" r="4.5" fill="#b4342f"/>
-<text x="213.0" y="1441.5" font-size="8.5" fill="#1c2733" text-anchor="start">Endschalter</text>
-<text x="24.0" y="1463.5" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: Platzhalter bzw. andere Stellung. Kabelwege mit 15 % Reserve aufgerundet; die Ketten zählen mit ihrer ganzen Länge.</text></svg>
+<text x="110.0" y="1362.5" font-size="8.5" fill="#1c2733" text-anchor="start">Z-Endschalter: Weg ≈ 1,45 m → 2 m kaufen</text>
+<text x="24.0" y="1377.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="110.0" y="1377.5" font-size="8.5" fill="#1c2733" text-anchor="start">Not-Aus: Weg ≈ 1,01 m → 1,5 m kaufen</text>
+<text x="24.0" y="1392.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="110.0" y="1392.5" font-size="8.5" fill="#1c2733" text-anchor="start">Pi 24 V: Weg ≈ 0,27 m → 0,5 m kaufen</text>
+<text x="24.0" y="1407.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="110.0" y="1407.5" font-size="8.5" fill="#1c2733" text-anchor="start">USB Pi–Uno: Weg ≈ 0,43 m → 0,5 m kaufen</text>
+<rect x="24.0" y="1442.5" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="43.0" y="1450.5" font-size="8.5" fill="#1c2733" text-anchor="start">neu zu drucken (PETG)</text>
+<rect x="194.0" y="1442.5" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="213.0" y="1450.5" font-size="8.5" fill="#1c2733" text-anchor="start">Portal (vorhanden)</text>
+<rect x="364.0" y="1442.5" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="383.0" y="1450.5" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead</text>
+<rect x="534.0" y="1442.5" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="553.0" y="1450.5" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<rect x="24.0" y="1460.5" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<text x="43.0" y="1468.5" font-size="8.5" fill="#1c2733" text-anchor="start">Linearführung</text>
+<rect x="194.0" y="1460.5" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<text x="213.0" y="1468.5" font-size="8.5" fill="#1c2733" text-anchor="start">Kaufteil</text>
+<rect x="364.0" y="1460.5" width="14.0" height="9.0" fill="#a3abb8" stroke="#3d4552" stroke-width="0.8"/>
+<text x="383.0" y="1468.5" font-size="8.5" fill="#1c2733" text-anchor="start">Energiekette (gedruckt)</text>
+<line x1="534.0" y1="1465.0" x2="550.0" y2="1465.0" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<text x="555.0" y="1468.5" font-size="8.5" fill="#1c2733" text-anchor="start">Kabel, fest verlegt</text>
+<rect x="24" y="1478.5" width="14" height="9" fill="url(#schraffur)" stroke="#c2621b"/>
+<text x="43.0" y="1486.5" font-size="8.5" fill="#1c2733" text-anchor="start">Elektronikfach</text>
+<circle cx="201.0" cy="1483.0" r="4.5" fill="#b4342f"/>
+<text x="213.0" y="1486.5" font-size="8.5" fill="#1c2733" text-anchor="start">Endschalter</text>
+<text x="24.0" y="1508.5" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: Platzhalter bzw. andere Stellung. Kabelwege mit 15 % Reserve aufgerundet; die Ketten zählen mit ihrer ganzen Länge.</text></svg>

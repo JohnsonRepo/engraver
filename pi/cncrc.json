@@ -1,0 +1,32 @@
+{
+  "watchDirectory": "@GCODE@",
+  "allowRemoteAccess": false,
+  "controller": "Grbl",
+  "baudrates": [115200],
+  "commands": [
+    {
+      "title": "Pi herunterfahren",
+      "commands": "sudo shutdown -h now"
+    },
+    {
+      "title": "Pi neu starten",
+      "commands": "sudo reboot"
+    }
+  ],
+  "macros": [
+    {
+      "name": "Rahmen",
+      "content": "G90\nG0 X[xmin] Y[ymin]\nG0 X[xmax]\nG0 Y[ymax]\nG0 X[xmin]\nG0 Y[ymin]"
+    },
+    {
+      "name": "Laserpunkt 1 %",
+      "content": "G1 F600\nM3 S10"
+    },
+    {
+      "name": "Laser aus",
+      "content": "M5"
+    }
+  ],
+  "events": [],
+  "users": []
+}

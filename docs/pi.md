@@ -31,7 +31,7 @@ und ist keine Sicherheitsfunktion. Der Not-Aus bleibt in Reichweite.
 |---|---|---|
 | 1 | Raspberry Pi Zero 2 W (ohne Stiftleiste genügt) | CNCjs |
 | 1 | microSD-Karte 16–32 GB | Raspberry Pi OS Lite |
-| 1 | Abwärtswandler 24 → 5 V, 63 × 30 mm `[v]`, ≥ 3 A, Eingang bis mindestens 28 V mit Schraubklemmen, Ausgang USB-A, höchstens 20 mm hoch `[?]` | 5 V für Pi und Uno |
+| 1 | Abwärtswandler 24 → 5 V, ≥ 3 A, Eingang bis mindestens 28 V; 63 × 30 mm, höchstens 20 mm hoch, Schraubklemmen und USB-A-Buchse an den schmalen Seiten `[v]` | 5 V für Pi und Uno |
 | 1 | USB-Kabel A → Micro-B, 0,25 m, Stromadern mindestens AWG 24 | W19 |
 | 1 | OTG-Kabel Micro-B → USB-B, 0,5 m | W17 |
 | 0,5 m | Leitung 2 × 0,75 mm², rot/schwarz (wie W2) | W18 |
@@ -61,7 +61,7 @@ Oben steht die Platte 44 mm über das 2060 hinaus. Dort sitzen:
 * **links der 5-V-Wandler**, Eingang zur Kastenseite, USB-A-Buchse zum Pi.
   Zwei Kabelbinder laufen senkrecht über seine Rückseite, durch Schlitze
   über und unter ihm. Beide Enden mit Eingang und Buchse bleiben frei. Der
-  Wandler ist 63 × 30 mm `[v]`, nach hinten ist Platz für 20 mm Höhe `[?]`.
+  Wandler ist 63 × 30 mm und höchstens 20 mm hoch `[v]`.
 * dazwischen **40 mm** für den USB-A-Stecker, bevor das Kabel nach unten
   zum Pi abbiegt.
 
@@ -103,9 +103,13 @@ Netzteil ── Buchse ─┬─ Schalter ── Not-Aus ── Wago +24 V: Shie
 | Not-Aus gedrückt | an, GRBL bricht ab: ALARM, `Pn:R` | aus |
 | Netzteil gezogen | aus, der Pull-down W8 hält den Laser aus | aus |
 
-* **Einschalten:** Netzteil einstecken, Pi und Uno starten. Nach etwa einer
-  Minute ist CNCjs erreichbar. Dann den Schalter an. GRBL läuft dann schon
-  und hält den Laser aus, wenn er Strom bekommt.
+* **Einschalten:** Netzteil einstecken. Der Uno bekommt seine 5 V sofort
+  über W17 vom Pi, nicht erst, wenn der Pi gestartet ist. GRBL läuft nach
+  etwa einer Sekunde und steht bis zur Referenzfahrt in ALARM: Es nimmt
+  keinen G-Code an, auch kein `M3`. Den Schalter darfst du deshalb gleich
+  anschalten, auch während der Pi noch startet. Der Laser bleibt aus, und
+  kein Motor fährt. Nach etwa einer Minute ist CNCjs erreichbar: erst
+  verbinden, dann **Homing** (beim Verbinden startet der Uno neu).
 * **Ausschalten:** Schalter aus, in CNCjs **Pi herunterfahren**, erst dann
   das Netzteil ziehen. Ein harter Stromausfall kann die SD-Karte
   beschädigen. Steckt das Netzteil weiter, bleibt der Pi erreichbar
@@ -223,10 +227,7 @@ Kante nicht.
 
 ## Noch offen
 
-1. **Pi** `[w]`: Lochbild und Lage der Buchsen nach dem Maßblatt der
-   Zero-Reihe, Platinendicke und Bauteilhöhe `[?]`. Vor dem Druck den Pi
-   auf die Zeichnung legen.
-2. **5-V-Wandler:** 63 × 30 mm `[v]` (Angabe 2026-10-10, seit Rev. 2 im
-   Halter). Offen `[?]`: ob er höchstens 20 mm hoch ist und die USB-Buchse
-   am Ende sitzt. Wenn nicht, `wandler_*` in `PiHalter.py` anpassen und neu
-   prüfen.
+**Pi** `[w]`: Lochbild und Lage der Buchsen nach dem Maßblatt der
+Zero-Reihe, Platinendicke und Bauteilhöhe `[?]`. Vor dem Druck den Pi auf
+die Zeichnung legen. Der 5-V-Wandler ist geklärt (2026-10-10, seit Rev. 2
+im Halter).

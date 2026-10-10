@@ -15,8 +15,7 @@
 #               Platte durch.
 #   Referenz_nicht_drucken  Stueck hinteres 2060, Pi (Platine und Bauteile
 #               als Huelle), die beiden Micro-USB-Stecker, der Wandler
-#               (63 x 30 mm, so hoch, wie Platz ist), Schrauben und
-#               Hammermuttern.
+#               (63 x 30 mm, bis 20 mm hoch), Schrauben und Hammermuttern.
 #
 # Drucklage: die Seite am 2060 aufs Bett, die Stehbolzen nach oben; keine
 # Stuetzen.
@@ -101,14 +100,14 @@ MASSE = {
     'stecker_mitte':        (1.4, 'Micro-USB: Steckermitte ueber der Platine'),
 
     # --- Abwaertswandler 24 -> 5 V --------------------------------------------
-    # 63 x 30 mm [v] (Angabe 2026-10-10); die Hoehe ist nicht bekannt [?],
-    # der Platz nimmt bis 20 mm auf. Links der Eingang, rechts die
-    # USB-A-Buchse [?]. Zwei Kabelbinder laufen senkrecht ueber seine
-    # Rueckseite, die Enden mit Eingang und Buchse bleiben frei; die
-    # Schlitze sitzen ueber und unter ihm.
+    # 63 x 30 mm, hoechstens 20 mm hoch, Schraubklemmen und USB-A-Buchse an
+    # den schmalen Seiten [v] (Angabe 2026-10-10): links der Eingang, rechts
+    # die Buchse. Zwei Kabelbinder laufen senkrecht ueber seine Rueckseite,
+    # die Enden mit Eingang und Buchse bleiben frei; die Schlitze sitzen
+    # ueber und unter ihm.
     'wandler_l':           (63.0, '5-V-Wandler: Laenge (X) [v]'),
     'wandler_b':           (30.0, '5-V-Wandler: Breite, hier hoch (Z) [v]'),
-    'wandler_h':           (20.0, '5-V-Wandler: hoechstens so dick (Y) [?]'),
+    'wandler_h':           (20.0, '5-V-Wandler: hoechstens so dick (Y) [v]'),
     'wandler_rand':         (4.0, 'Wandler: so weit von der linken Plattenkante'),
     'binder_b':             (5.0, 'Kabelbinder-Schlitz: Laenge (X)'),
     'binder_t':             (2.2, 'Kabelbinder-Schlitz: Breite (Z)'),
@@ -818,9 +817,7 @@ def hinweise_bauen(L, fehler):
         '',
         'NICHT GEMESSEN [w]: Lochbild und Buchsen des Pi nach dem Massblatt',
         '  der Zero-Reihe; Platinendicke und Bauteilhoehe [?]. Den Pi vor dem',
-        '  Druck auf die Zeichnung (docs/pihalter.svg) legen. Am Wandler',
-        '  (63 x 30 mm [v]) offen [?]: Hoehe und ob die USB-Buchse am Ende',
-        '  sitzt.',
+        '  Druck auf die Zeichnung (docs/pihalter.svg) legen.',
     ]
     if fehler:
         h += ['', 'FEHLER / WARNUNGEN:'] + ['  ' + f for f in fehler]

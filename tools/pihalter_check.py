@@ -50,7 +50,7 @@ def laden():
 def teile(hw, HL):
     """Halter mit allem, was daran sitzt, als Quader (fest am Rahmen):
     Platte, Stehbolzen (als ein Quader), Pi mit Bauteilen, die zwei
-    Stecker, der Wandler (so hoch, wie Platz ist) und die Koepfe der M5."""
+    Stecker, der Wandler und die Koepfe der M5."""
     Q = Quader
     y0, y1 = HL['platte_y']
     xs = [x for x, _ in HL['pi_loecher']]
@@ -249,7 +249,7 @@ def main():
     wx, wz, wy = HL['wandler_x'], HL['wandler_z'], HL['wandler_y']
     p.info('Wandler [v]: laengs X', wx[1] - wx[0])
     p.info('             hoch (Z)', wz[1] - wz[0])
-    p.info('Platz nach hinten (Hoehe des Wandlers) [?]', wy[1] - wy[0])
+    p.info('             nach hinten (Y), hoechstens', wy[1] - wy[0])
     p.ok('Wandler links in der Platte', wx[0] - x0, 1.5)
     p.ok('Kabelbinder senkrecht: auf einem Wandler ab so viel Laenge',
          HL['binder_x'][1] - HL['binder_x'][0] + bb, 40.0, '<=')

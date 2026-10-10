@@ -28,10 +28,11 @@ stehen in [hardware-notizen.md](hardware-notizen.md#elektronik).
    Treiber hin.
 3. **Den Wandler ohne Laser auf 12,0 V stellen.**
 4. **Einschalten: erst das Netzteil einstecken, dann den Schalter.** Der
-   [Pi](pi.md) hängt vor dem Schalter: Pi und Uno starten zuerst, dann läuft
-   GRBL schon und hält den Laser aus, wenn er Strom bekommt. Ausschalten
-   umgekehrt, den Pi vor dem Ausstecken herunterfahren. Hängt statt des Pi
-   der Mac am Uno: erst USB, dann 24 V.
+   [Pi](pi.md) hängt vor dem Schalter und gibt dem Uno über USB sofort 5 V,
+   auch während er selbst noch startet. GRBL läuft nach etwa einer Sekunde
+   und hält den Laser aus, wenn er Strom bekommt; auf den Pi musst du nicht
+   warten. Ausschalten umgekehrt, den Pi vor dem Ausstecken herunterfahren.
+   Hängt statt des Pi der Mac am Uno: erst USB, dann 24 V.
 5. **Beim ersten Lasertest eine Schutzbrille für 450 nm tragen**, auch bei
    wenig Leistung.
 6. **Jede Leitung an beiden Enden mit ihrer W-Nummer beschriften.**

@@ -31,11 +31,11 @@ und ist keine Sicherheitsfunktion. Der Not-Aus bleibt in Reichweite.
 |---|---|---|
 | 1 | Raspberry Pi Zero 2 W (ohne Stiftleiste genügt) | CNCjs |
 | 1 | microSD-Karte 16–32 GB | Raspberry Pi OS Lite |
-| 1 | Abwärtswandler 24 → 5 V, ≥ 3 A, Eingang bis mindestens 28 V mit Schraubklemmen, Ausgang USB-A, höchstens 60 × 30 × 20 mm `[?]` | 5 V für Pi und Uno |
+| 1 | Abwärtswandler 24 → 5 V, 63 × 30 mm `[v]`, ≥ 3 A, Eingang bis mindestens 28 V mit Schraubklemmen, Ausgang USB-A, höchstens 20 mm hoch `[?]` | 5 V für Pi und Uno |
 | 1 | USB-Kabel A → Micro-B, 0,25 m, Stromadern mindestens AWG 24 | W19 |
 | 1 | OTG-Kabel Micro-B → USB-B, 0,5 m | W17 |
 | 0,5 m | Leitung 2 × 0,75 mm², rot/schwarz (wie W2) | W18 |
-| 1 | Pi-Halter, PETG: [`stl/PiHalter_r1.stl`](../stl/PiHalter_r1.stl) | Halter |
+| 1 | Pi-Halter, PETG: [`stl/PiHalter_r2.stl`](../stl/PiHalter_r2.stl) | Halter |
 | 2 + 2 | M5×12 Zylinderkopf + Hammermutter M5 Nut 6 | Halter → obere Nut des 2060 |
 | 4 | M2.5×6 Zylinderkopf | Pi → Stehbolzen |
 | 2 | Kabelbinder 2,5 × 100 | Wandler |
@@ -46,7 +46,7 @@ an Druckern.
 
 ## Halter
 
-Eine Platte, 175 × 60 × 5 mm, liegt wie die Montageplatte des Kastens an
+Eine Platte, 178 × 60 × 5 mm, liegt wie die Montageplatte des Kastens an
 der Rückseite des hinteren 2060, 5,7 mm rechts neben ihr. Zwei M5×12 halten
 sie in Hammermuttern der **oberen Nut**. Unten reicht sie 6 mm unter die
 Mitte dieser Nut. Die Kabel in der mittleren Nut (W2, W10, W14, W18) laufen
@@ -60,18 +60,18 @@ Oben steht die Platte 44 mm über das 2060 hinaus. Dort sitzen:
   5 mm darüber. Vor seiner Antenne ist kein Aluminium.
 * **links der 5-V-Wandler**, Eingang zur Kastenseite, USB-A-Buchse zum Pi.
   Zwei Kabelbinder laufen senkrecht über seine Rückseite, durch Schlitze
-  über und unter ihm. Beide Enden mit Eingang und Buchse bleiben frei. Platz
-  ist für einen Wandler bis 60 × 30 × 20 mm `[?]`.
+  über und unter ihm. Beide Enden mit Eingang und Buchse bleiben frei. Der
+  Wandler ist 63 × 30 mm `[v]`, nach hinten ist Platz für 20 mm Höhe `[?]`.
 * dazwischen **40 mm** für den USB-A-Stecker, bevor das Kabel nach unten
   zum Pi abbiegt.
 
 | | |
 |---|---|
-| Lage | X −18 bis +157 (Maschinenkoordinaten wie `Portal.py`), Z −85 bis −24,6 |
+| Lage | X −18 bis +160 (Maschinenkoordinaten wie `Portal.py`), Z −85 bis −24,6 |
 | Freiraum | 8,6 mm zum X-Wagen mit dem Portal am hinteren Schienenende (die engste Stelle über den ganzen Weg), 5,7 mm zur Montageplatte des Kastens, 8 mm über den Kabeln |
 | Schrauben | 2 × M5×12 wie die Montageplatte: 5,2 mm im Stein, 0,5 mm vor dem Nutgrund. Inbus von hinten |
 | Pi | 4 × M2.5×6 selbstschneidend in Kernlöcher Ø 2,2; die Schraube greift 4,4 bis 5 mm |
-| Druck | PETG, die Seite am 2060 aufs Bett, Stehbolzen nach oben, keine Stützen; 10 mm hoch, ≈ 67 g voll |
+| Druck | PETG, die Seite am 2060 aufs Bett, Stehbolzen nach oben, keine Stützen; 10 mm hoch, ≈ 68 g voll |
 
 `python3 tools/pihalter_check.py` prüft das alles gegen Portal, Toolhead,
 Kasten, Haube, Rahmen und Kabel. `python3 tools/pihalter_zeichnen.py` zeichnet
@@ -226,6 +226,7 @@ Kante nicht.
 1. **Pi** `[w]`: Lochbild und Lage der Buchsen nach dem Maßblatt der
    Zero-Reihe, Platinendicke und Bauteilhöhe `[?]`. Vor dem Druck den Pi
    auf die Zeichnung legen.
-2. **5-V-Wandler** `[?]`: noch nicht gekauft. Passt er nicht in
-   60 × 30 × 20 mm oder sitzt die USB-Buchse nicht am Ende, `wandler_*` in
-   `PiHalter.py` anpassen und neu prüfen.
+2. **5-V-Wandler:** 63 × 30 mm `[v]` (Angabe 2026-10-10, seit Rev. 2 im
+   Halter). Offen `[?]`: ob er höchstens 20 mm hoch ist und die USB-Buchse
+   am Ende sitzt. Wenn nicht, `wandler_*` in `PiHalter.py` anpassen und neu
+   prüfen.

@@ -404,8 +404,9 @@ entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
    Nut.
 5. **Verkabelung:** drei Dinge, die sich erst beim Anschließen zeigen
    ([verkabelung.md](verkabelung.md#noch-offen)).
-6. **Pi:** Den 5-V-Wandler gibt es noch nicht, Lochbild und Buchsen des Pi
-   sind nach dem Maßblatt gezeichnet ([pi.md](pi.md#noch-offen)).
+6. **Pi:** Vom 5-V-Wandler (63 × 30 mm) ist die Höhe offen, Lochbild und
+   Buchsen des Pi sind nach dem Maßblatt gezeichnet
+   ([pi.md](pi.md#noch-offen)).
 
 Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit
 Hohlstecker 5,5 × 2,1; der Laser ein LASER TREE 4 W mit 12 V / 1,6 A;

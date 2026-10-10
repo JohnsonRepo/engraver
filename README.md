@@ -415,7 +415,7 @@ Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),
 Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)),
 Kabelhalter Rev. 2 mit `kabelhalter_check.py` ([kabelhalter.md](docs/kabelhalter.md)),
-Pi-Halter Rev. 1 mit `pihalter_check.py` ([pi.md](docs/pi.md)). Die
+Pi-Halter Rev. 2 mit `pihalter_check.py` ([pi.md](docs/pi.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)). Der

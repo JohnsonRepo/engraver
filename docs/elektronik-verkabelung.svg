@@ -64,9 +64,9 @@
 <rect x="241.0" y="58.0" width="100.0" height="24.0" rx="5" fill="#f4f6f9" stroke="#8c939e" stroke-width="1.0"/>
 <text x="249.0" y="74.0" font-size="10.5" fill="#1c2733" text-anchor="start" font-weight="600">Steckernetzteil</text>
 <polyline points="291.0,82.0 291.0,110.2" fill="none" stroke="#c62828" stroke-width="2.0" stroke-linejoin="round"/>
-<rect x="320.6" y="150.8" width="91.0" height="10.4" rx="2" fill="#fff4e6" stroke="#d9480f" stroke-width="1.2"/>
-<text x="366.4" y="160.0" font-size="10" fill="#d9480f" text-anchor="middle" font-weight="600">Pi</text>
-<polyline points="387.2,150.8 387.2,147.7 310.2,147.7 310.2,106.1 246.8,106.1 246.8,110.2" fill="none" stroke="#495057" stroke-width="2.0" stroke-linejoin="round"/>
+<rect x="320.6" y="150.8" width="92.6" height="10.4" rx="2" fill="#fff4e6" stroke="#d9480f" stroke-width="1.2"/>
+<text x="366.9" y="160.0" font-size="10" fill="#d9480f" text-anchor="middle" font-weight="600">Pi</text>
+<polyline points="388.6,150.8 388.6,147.7 310.2,147.7 310.2,106.1 246.8,106.1 246.8,110.2" fill="none" stroke="#495057" stroke-width="2.0" stroke-linejoin="round"/>
 <rect x="316.2" y="113.8" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="331.7" y="125.3" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
 <text x="164.0" y="131.6" font-size="10.5" fill="#5b6472" text-anchor="end">links raus, unter dem</text>

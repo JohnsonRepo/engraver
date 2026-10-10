@@ -30,6 +30,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from antrieb_zeichnen import (el, f1, text, de,      # noqa: E402
                               TEXT, GRAU, BLAU, ROT)
 from anschluss_zeichnen import P24, MASSE, P5        # noqa: E402
+import bauraum                                       # noqa: E402
 import elektronik_zeichnen as ez                     # noqa: E402
 import verkabelung as vk                             # noqa: E402
 
@@ -1055,9 +1056,13 @@ def uebersicht():
     t += kasten(X(-75) - 50, 58, 100, 24, ['Steckernetzteil'], gr=10.5,
                 dy=16, dx=8)
     t += [linie([(X(-75), 82), (X(-75), Y(12))], P24, 2.0)]
-    t += [quader(-18, 157, 90, 110, '#fff4e6', '#d9480f', 1.2, rx=2),
-          text(X(70), Y(100) + 4, 'Pi', 10, '#d9480f', 'middle', fett=True)]
-    t += [linie([(X(110), Y(90)), (X(110), Y(84)), (X(-38), Y(84)),
+    PH = bauraum.modul_laden(ez.PIHALTER, 'pihalter').lage()
+    hx0, hx1 = PH['x']
+    xu = PH['buchse_x']['USB']
+    t += [quader(hx0, hx1, 90, 110, '#fff4e6', '#d9480f', 1.2, rx=2),
+          text(X((hx0 + hx1) / 2.0), Y(100) + 4, 'Pi', 10, '#d9480f',
+               'middle', fett=True)]
+    t += [linie([(X(xu), Y(90)), (X(xu), Y(84)), (X(-38), Y(84)),
                  (X(-38), Y(4)), (X(-160), Y(4)), (X(-160), Y(12))],
                 '#495057', 2.0)]
     t += marke(X(-38) + 6, Y(40), 'W17')

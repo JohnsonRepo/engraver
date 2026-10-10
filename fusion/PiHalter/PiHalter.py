@@ -14,8 +14,9 @@
 #               mittleren Nut des 2060 (W2, W10, W14, W18) laufen unter der
 #               Platte durch.
 #   Referenz_nicht_drucken  Stueck hinteres 2060, Pi (Platine und Bauteile
-#               als Huelle), die beiden Micro-USB-Stecker, der groesste
-#               Wandler, der passt, Schrauben und Hammermuttern.
+#               als Huelle), die beiden Micro-USB-Stecker, der Wandler
+#               (63 x 30 mm, so hoch, wie Platz ist), Schrauben und
+#               Hammermuttern.
 #
 # Drucklage: die Seite am 2060 aufs Bett, die Stehbolzen nach oben; keine
 # Stuetzen.
@@ -31,7 +32,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'PiHalter'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -55,6 +56,8 @@ MASSE = {
     # --- Platte ---------------------------------------------------------------
     # Rev. 1: erster Stand. Links 5,7 mm neben der Montageplatte des Kastens
     # (endet bei X -23,66), damit das USB-Kabel zum Uno kurz bleibt.
+    # Rev. 2: Der Wandler ist 63 statt hoechstens 60 mm lang [v]; die Platte
+    #         wird 3 mm breiter, der Pi rueckt 3 mm nach rechts.
     'ph_x0':              (-18.0, 'Platte: linke Kante (X)'),
     'platte_dicke':         (5.0, 'Platte: Dicke (liegt an der Rueckseite des 2060)'),
     'unter_nut':            (6.0, 'Platte: reicht so weit unter die Mitte der oberen Nut'),
@@ -97,14 +100,15 @@ MASSE = {
     'stecker_l':           (24.0, 'Micro-USB-Stecker: Laenge ab der Platinenkante'),
     'stecker_mitte':        (1.4, 'Micro-USB: Steckermitte ueber der Platine'),
 
-    # --- Abwaertswandler 24 -> 5 V [?] ----------------------------------------
-    # Nicht festgelegt, welcher: der Platz nimmt einen bis zu dieser Groesse
-    # auf. Links der Eingang, rechts die USB-A-Buchse. Zwei Kabelbinder
-    # laufen senkrecht ueber seine Rueckseite, die Enden mit Eingang und
-    # Buchse bleiben frei; die Schlitze sitzen ueber und unter ihm.
-    'wandler_l':           (60.0, '5-V-Wandler: hoechstens so lang (X)'),
-    'wandler_b':           (30.0, '5-V-Wandler: hoechstens so hoch (Z)'),
-    'wandler_h':           (20.0, '5-V-Wandler: hoechstens so dick (Y)'),
+    # --- Abwaertswandler 24 -> 5 V --------------------------------------------
+    # 63 x 30 mm [v] (Angabe 2026-10-10); die Hoehe ist nicht bekannt [?],
+    # der Platz nimmt bis 20 mm auf. Links der Eingang, rechts die
+    # USB-A-Buchse [?]. Zwei Kabelbinder laufen senkrecht ueber seine
+    # Rueckseite, die Enden mit Eingang und Buchse bleiben frei; die
+    # Schlitze sitzen ueber und unter ihm.
+    'wandler_l':           (63.0, '5-V-Wandler: Laenge (X) [v]'),
+    'wandler_b':           (30.0, '5-V-Wandler: Breite, hier hoch (Z) [v]'),
+    'wandler_h':           (20.0, '5-V-Wandler: hoechstens so dick (Y) [?]'),
     'wandler_rand':         (4.0, 'Wandler: so weit von der linken Plattenkante'),
     'binder_b':             (5.0, 'Kabelbinder-Schlitz: Laenge (X)'),
     'binder_t':             (2.2, 'Kabelbinder-Schlitz: Breite (Z)'),
@@ -801,7 +805,7 @@ def hinweise_bauen(L, fehler):
         .format(L['buchse_x']['PWR'], L['buchse_x']['USB']),
         'WANDLER 24 -> 5 V: links, Eingang zur Kastenseite, USB-Ausgang zum',
         '  Pi; 2 Kabelbinder senkrecht ueber seine Rueckseite, durch die',
-        '  Schlitze ueber und unter ihm. Platz {:.0f} x {:.0f} x {:.0f}'
+        '  Schlitze ueber und unter ihm. {:.0f} x {:.0f} mm, bis {:.0f} mm hoch'
         .format(w('wandler_l'), w('wandler_b'), w('wandler_h')),
         '  (X {:+.1f}..{:+.1f}, Z {:+.1f}..{:+.1f}).'.format(
             wx[0], wx[1], wz[0], wz[1]),
@@ -814,7 +818,9 @@ def hinweise_bauen(L, fehler):
         '',
         'NICHT GEMESSEN [w]: Lochbild und Buchsen des Pi nach dem Massblatt',
         '  der Zero-Reihe; Platinendicke und Bauteilhoehe [?]. Den Pi vor dem',
-        '  Druck auf die Zeichnung (docs/pihalter.svg) legen.',
+        '  Druck auf die Zeichnung (docs/pihalter.svg) legen. Am Wandler',
+        '  (63 x 30 mm [v]) offen [?]: Hoehe und ob die USB-Buchse am Ende',
+        '  sitzt.',
     ]
     if fehler:
         h += ['', 'FEHLER / WARNUNGEN:'] + ['  ' + f for f in fehler]

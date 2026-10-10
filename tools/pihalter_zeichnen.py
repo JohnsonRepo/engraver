@@ -144,7 +144,7 @@ def main():
         (x1 - 5.0, HL['tisch_z'] + 8.0, 'hinteres 2060')],
         fa.ox - 12, 'end', abstand=26.0)
     t += fa.spalte([
-        (sum(wx) / 2.0, wz[1] - 4.0, '5-V-Wandler: Platz\n{} × {} mm, '
+        (sum(wx) / 2.0, wz[1] - 4.0, '5-V-Wandler\n{} × {} mm, '
          'Eingang links'.format(de(wx[1] - wx[0], 0), de(wz[1] - wz[0], 0))),
         (HL['binder_x'][0], HL['binder_z'][1], 'Schlitze für die\n'
          'Kabelbinder'),
@@ -201,8 +201,8 @@ def main():
         ('Pi', 'Lochbild 58 × 23 mm, 4 × M2.5×{} selbstschneidend '
          '(Kernloch {}); Buchsen unten, von hinten gesehen von links: HDMI, '
          'USB, PWR IN'.format(de(hw('m25_l'), 0), de(hw('m25_kern'), 1))),
-        ('Wandler', 'bis {} × {} × {} mm, Eingang zur Kastenseite, USB-A '
-         'zum Pi; 2 Kabelbinder senkrecht über seine Rückseite'.format(
+        ('Wandler', '{} × {} mm, bis {} mm hoch, Eingang zur Kastenseite, '
+         'USB-A zum Pi; 2 Kabelbinder senkrecht über seine Rückseite'.format(
              de(hw('wandler_l'), 0), de(hw('wandler_b'), 0),
              de(hw('wandler_h'), 0))),
     ]

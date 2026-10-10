@@ -8,7 +8,7 @@ Rueckseite des hinteren 2060 rechts neben dem Elektronik-Kasten, Freiraum
 gegen Portal und Toolhead ueber den ganzen Weg, gegen Kasten, Haube, Rahmen
 und die Kabel in der mittleren Nut, die Verschraubung in der Nut mit
 Werkzeugzugang, den Pi (Lochbild, Stehbolzen, Schrauben, Stecker, ganz
-ueber dem 2060), den Platz fuer den Wandler und den Druck. Gibt die
+ueber dem 2060), den Wandler mit seinen Kabelbindern und den Druck. Gibt die
 Stueckliste aus.
 
     python3 tools/pihalter_check.py
@@ -50,7 +50,7 @@ def laden():
 def teile(hw, HL):
     """Halter mit allem, was daran sitzt, als Quader (fest am Rahmen):
     Platte, Stehbolzen (als ein Quader), Pi mit Bauteilen, die zwei
-    Stecker, der groesste Wandler, der passt, und die Koepfe der M5."""
+    Stecker, der Wandler (so hoch, wie Platz ist) und die Koepfe der M5."""
     Q = Quader
     y0, y1 = HL['platte_y']
     xs = [x for x, _ in HL['pi_loecher']]
@@ -244,11 +244,12 @@ def main():
          fach.x[1] - (HL['pi_x'][1] + SD_UEBERSTAND), 20.0)
 
     # ------------------------------------------------------------------
-    p.titel('7) Wandler 24 -> 5 V [?]: Platz und Kabelbinder')
+    p.titel('7) Wandler 24 -> 5 V: Lage und Kabelbinder')
     bt, bb = hw('binder_t'), hw('binder_b')
-    wx, wz = HL['wandler_x'], HL['wandler_z']
-    p.info('Platz fuer den Wandler: laengs X', wx[1] - wx[0])
-    p.info('                         hoch (Z)', wz[1] - wz[0])
+    wx, wz, wy = HL['wandler_x'], HL['wandler_z'], HL['wandler_y']
+    p.info('Wandler [v]: laengs X', wx[1] - wx[0])
+    p.info('             hoch (Z)', wz[1] - wz[0])
+    p.info('Platz nach hinten (Hoehe des Wandlers) [?]', wy[1] - wy[0])
     p.ok('Wandler links in der Platte', wx[0] - x0, 1.5)
     p.ok('Kabelbinder senkrecht: auf einem Wandler ab so viel Laenge',
          HL['binder_x'][1] - HL['binder_x'][0] + bb, 40.0, '<=')
@@ -287,8 +288,8 @@ def main():
             '2x Kabelbinder 2,5 x 100 (Wandler)',
             'Raspberry Pi Zero 2 W, microSD 16-32 GB',
             'Abwaertswandler 24 -> 5 V, >= 3 A, Eingang Schraubklemme, '
-            'Ausgang USB-A, hoechstens {:.0f} x {:.0f} x {:.0f}'.format(
-                hw('wandler_l'), hw('wandler_b'), hw('wandler_h'))):
+            'Ausgang USB-A, {:.0f} x {:.0f} mm, hoechstens {:.0f} mm hoch'
+            .format(hw('wandler_l'), hw('wandler_b'), hw('wandler_h'))):
         p.info(zeile)
 
     # ------------------------------------------------------------------

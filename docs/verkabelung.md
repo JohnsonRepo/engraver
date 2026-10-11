@@ -381,11 +381,14 @@ einer [Haube](pi.md#haube).
 
 1. **Pi-Halter** bestücken, solange er lose ist: die drei Messing-Einsätze
    für die Haube einschmelzen. Den Pi mit 4 × M2.5×6 auf die Stehbolzen,
-   Bauteile nach hinten, Buchsen nach unten. Den 5-V-Wandler links daneben,
-   Eingang zum Kasten, USB-Buchse zum Pi, mit 2 Kabelbindern 2,5 × 200 durch
-   die Schlitze über und unter ihm ([pi.md, Montage](pi.md#halter)). Dann
-   an die Rückseite des hinteren 2060, rechts neben die Montageplatte des
-   Kastens: 2 Hammermuttern in die obere Nut, 2 × M5×12.
+   Bauteile nach hinten, Buchsen nach unten. Ohne kurzes USB-Kabel für W19
+   vorher ein gekürztes an Pin 4 (5 V) und Pin 6 (Masse) der Stiftleiste
+   löten ([pi.md](pi.md#w19-über-die-stiftleiste)). Den 5-V-Wandler links
+   daneben, Eingang zum Kasten, USB-Buchse zum Pi, mit 2 Kabelbindern
+   2,5 × 200 durch die Schlitze über und unter ihm
+   ([pi.md, Montage](pi.md#halter)). Dann an die Rückseite des hinteren
+   2060, rechts neben die Montageplatte des Kastens: 2 Hammermuttern in die
+   obere Nut, 2 × M5×12.
 2. **W18** hängt schon an der Buchse (Schritt 2), also vor Schalter und
    Not-Aus. Vorn aus dem Kasten, im Kanal nach rechts, an der Rückseite des
    2060 unter dem Pi-Halter durch, von unten in die Haube und links neben
@@ -393,7 +396,8 @@ einer [Haube](pi.md#haube).
    mit Aderendhülsen.
 3. Netzteil einstecken, Schalter aus lassen: Am USB-Ausgang des Wandlers
    liegen **5,0–5,2 V**. Erst dann weiter.
-4. **W19:** das kurze USB-Kabel vom Wandler in **PWR IN** des Pi.
+4. **W19:** das kurze USB-Kabel vom Wandler in **PWR IN** des Pi. Hängt
+   W19 an der Stiftleiste (Schritt 1), nur seinen Stecker in den Wandler.
 5. **W17:** das OTG-Kabel von der Buchse **USB** des Pi (die mittlere, nicht
    PWR IN) nach unten aus der Haube, nach links, rechts am Kasten vorbei
    nach hinten und hinter ihm ins USB-Fenster des Uno.

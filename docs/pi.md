@@ -34,7 +34,7 @@ und ist keine Sicherheitsfunktion. Der Not-Aus bleibt in Reichweite.
 | 1 | Raspberry Pi Zero 2 W (ohne Stiftleiste genügt) | CNCjs |
 | 1 | microSD-Karte 16–32 GB | Raspberry Pi OS Lite |
 | 1 | Abwärtswandler 24 → 5 V, ≥ 3 A, Eingang bis mindestens 28 V; 63 × 30 mm, höchstens 20 mm hoch, Schraubklemmen und USB-A-Buchse an den schmalen Seiten `[v]` | 5 V für Pi und Uno |
-| 1 | USB-Kabel A → Micro-B, 0,25 m, Stromadern mindestens AWG 24; oder ein vorhandenes USB-Kabel mit A-Stecker an die [Stiftleiste](#w19-über-die-stiftleiste) | W19 |
+| 1 | USB-Kabel A → Micro-B, 0,25 m, Stromadern mindestens AWG 24; oder ein längeres, auf etwa 15 cm [gekürzt](#w19-kürzen) | W19 |
 | 1 | OTG-Kabel Micro-B → USB-B, 1 m | W17 |
 | 0,5 m | Leitung 2 × 0,75 mm², rot/schwarz (wie W2) | W18 |
 | 1 + 1 | Pi-Halter und Haube, PETG: [`stl/PiHalter_r3.stl`](../stl/PiHalter_r3.stl), [`stl/PiHalter_Haube_r3.stl`](../stl/PiHalter_Haube_r3.stl) | Halter |
@@ -114,8 +114,7 @@ schreibt beide STL.
    nach dem Maßblatt der Zero-Reihe gezeichnet `[w]`.
 2. Die drei Messing-Einsätze M3 mit dem Lötkolben bündig in die Dome
    einschmelzen.
-3. Pi mit 4 × M2.5×6 auf die Stehbolzen, Buchsen nach unten. Kommt W19 an
-   die [Stiftleiste](#w19-über-die-stiftleiste), vorher anlöten.
+3. Pi mit 4 × M2.5×6 auf die Stehbolzen, Buchsen nach unten.
 4. Wandler links auf die Platte legen, Eingang nach links. Je einen
    Kabelbinder 2,5 × 200 von hinten durch den oberen Schlitz, auf der Seite
    zum 2060 hinunter, durch den unteren Schlitz zurück und über den Wandler.
@@ -160,37 +159,28 @@ Netzteil ── Buchse ─┬─ Schalter ── Not-Aus ── Wago +24 V: Shie
   Netzteil. Zusammen mit allem anderen sind es ≈ 53 W, dauernd gehen 61 W
   ([Leistung](elektronik.md#leistung-reichen-72-w)).
 
-### W19 über die Stiftleiste
+### W19 kürzen
 
-Ohne kurzes USB-Kabel geht W19 auch an die Stiftleiste des Pi. Ihre
-5-V-Stifte hängen am selben 5-V-Netz wie PWR IN, Pi und Uno laufen also wie
-oben. Dafür ein vorhandenes USB-Kabel mit A-Stecker 10 bis 15 cm hinter dem
-Stecker abschneiden. Vom Stecker bis zu den Stiften sind es etwa 7 cm. Bis
-25 cm gilt die Rechnung für W19 auch mit dünnen Adern (AWG 28).
+Ein längeres USB-Kabel A → Micro-B lässt sich kürzen: ein Stück
+herausschneiden und die Enden wieder verlöten. Zwischen den Steckern sollen
+etwa 15 cm Kabel bleiben. Der Weg vom Wandler in PWR IN ist 7 cm lang, der
+Rest geht in den Bogen unter dem Pi. Bis 25 cm reichen auch dünne
+Stromadern (AWG 28), so rechnet `elektronik_check.py`.
 
-1. Die Datenadern (meist weiß und grün) und einen Schirm kurz abschneiden
-   und einzeln isolieren.
-2. **Polung messen:** den Stecker in ein USB-Ladegerät stecken. Die beiden
-   Adern dürfen sich nicht berühren. Rot gegen Schwarz zeigt etwa +5 V.
-   Wieder ausstecken.
-3. **Pins finden:** Pin 1 hat das eckige Lötauge. Er liegt an der Ecke bei
-   der SD-Karte, in der inneren Reihe. Am Rand liegen Pin 2, dann **Pin 4
-   (5 V)** und **Pin 6 (Masse)**. Zur Probe den Pi kurz mit irgendeinem
-   USB-Kabel über PWR IN versorgen: Pin 4 gegen Pin 6 zeigt 5 V.
-4. Bevor der Pi auf die Stehbolzen kommt: Rot in Pin 4, Schwarz in Pin 6,
-   von der Bauteilseite durchstecken und auf der Unterseite löten. Zwischen
-   den beiden darf keine Lötbrücke sein. Hat der Pi schon eine Stiftleiste,
-   die Adern an die Stifte löten, mit Schrumpfschlauch darüber.
-   Steckbrücken passen nicht unter die Haube: Auf einer Stiftleiste stehen
-   sie gut 16 mm hoch, bis zur Haube sind es 19,6 mm.
-5. Das Kabel läuft vom Stecker hinter dem Pi zu den Stiften, ohne Zug auf
-   den Lötstellen.
-
-**PWR IN bleibt dann frei:** Ein zweites Netzteil dort arbeitet gegen den
-Wandler. Über die Stiftleiste gibt es weder Sicherung noch Verpolschutz. Ob
-der Zero 2 W hinter PWR IN welche hat, ist offen `[?]`. Vom geregelten
-Wandler droht wenig, aber vertauschte Adern oder ein falscher Pin zerstören
-den Pi sofort.
+1. Den Mantel an beiden Enden 3 cm abziehen. Gebraucht werden nur **Rot
+   (5 V)** und **Schwarz (Masse)**, PWR IN führt nur Strom. Weiß, Grün und
+   den Schirm kurz abschneiden.
+2. Schrumpfschlauch aufschieben, bevor gelötet wird: einen dicken (6 mm)
+   über den Mantel einer Seite, je einen dünnen (2 mm) über Rot und
+   Schwarz.
+3. **Farbe an Farbe** löten, dann stimmt die Polung von selbst. Die beiden
+   Lötstellen etwa 1 cm versetzt, damit sie nicht nebeneinander liegen.
+   Erst die dünnen Schläuche darüber, dann den dicken über alles.
+4. Die Lötstelle in ein gerades Stück legen, nicht in den Bogen unter dem
+   Pi.
+5. **Probe:** Der Pi startet am Wandler. Nach dem ersten Auftrag auf dem Pi
+   `vcgencmd get_throttled` eingeben: `throttled=0x0` heißt, die Spannung
+   war seit dem Start nie zu niedrig.
 
 ## Einrichten
 
@@ -292,7 +282,7 @@ Kante nicht.
 | `laser.local` nicht erreichbar | Pi startet noch, WLAN-Daten falsch, 5-GHz-Netz | eine Minute warten; im Router nach dem Pi sehen; der Zero braucht 2,4 GHz |
 | Seite lädt nicht, Pi antwortet auf `ping` | Dienst läuft nicht | auf dem Pi `systemctl status cncjs` und `journalctl -u cncjs` |
 | Kein Port in CNCjs | W17 in PWR IN statt USB, Kabel ohne OTG | Micro-B in die mittlere Buchse **USB**; OTG-Kabel; `ls /dev/ttyACM* /dev/ttyUSB*` |
-| Pi startet neu, Blitz-Symbol, Unterspannung | W19 dünn oder lang, Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A; am USB-Ausgang 5,0–5,2 V |
+| Pi startet neu, `vcgencmd get_throttled` zeigt nicht `0x0` (Unterspannung) | W19 dünn oder lang, Lötstelle schlecht, Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A; am USB-Ausgang 5,0–5,2 V |
 | Joggen und Anzeige haken | WLAN-Energiesparen an | `iw dev wlan0 get power_save` muss „off“ zeigen; sonst Schritt 3 wiederholen |
 | ALARM:2 oder `error:15` beim Rahmen | Datei nicht auf den Nullpunkt bezogen | Nullpunkt prüfen, in LightBurn „Absolute Coords“ und Ursprung hinten links |
 | Rahmen fährt nach 0, 0 | 3D-Ansicht aus oder keine Datei geladen | Datei laden, 3D-Ansicht an |

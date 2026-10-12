@@ -59,8 +59,19 @@ echo "== Pakete: Node.js, npm und dnsmasq"
 sudo apt-get update
 sudo apt-get install -y nodejs npm dnsmasq-base
 
-echo "== CNCjs $CNCJS_VERSION (dauert auf dem Zero einige Minuten)"
-sudo npm install -g "cncjs@$CNCJS_VERSION"
+echo "== CNCjs $CNCJS_VERSION"
+# Version aus dem package.json; "npm ls" taugt nicht, npm 9 meldet auch ein
+# fehlendes Paket mit Erfolg.
+IST=$(node -p "require('$(npm root -g)/cncjs/package.json').version" \
+    2> /dev/null || true)
+if [ "$IST" = "$CNCJS_VERSION" ]; then
+    echo "Ist schon installiert."
+else
+    echo "Dauert auf dem Zero etwa 6 Minuten."
+    # Nur Fehler zeigen: Die vielen Warnungen kommen aus den alten
+    # Abhaengigkeiten von CNCjs und sind harmlos.
+    sudo npm install -g --loglevel=error --no-fund "cncjs@$CNCJS_VERSION"
+fi
 CNCJS=$(command -v cncjs)
 
 echo "== Ordner und Konfiguration"

@@ -237,7 +237,9 @@ WLAN-Energiesparen ab
 ([`pi/wlan-energiesparen-aus.conf`](../pi/wlan-energiesparen-aus.conf)).
 Ohne das hält der Pi Pakete zurück, und Joggen und Anzeige im Browser
 haken. Eine vorhandene `~/.cncrc` und ein vorhandener Hotspot bleiben, wie
-sie sind. Auf dem Zero dauert der Lauf einige Minuten.
+sie sind. Der erste Lauf dauert auf dem Zero etwa 6 Minuten, fast alles
+davon für CNCjs. Jeder weitere geht schnell: Ist CNCjs in dieser Version
+schon da, lässt das Skript es aus.
 
 ## CNCjs
 
@@ -292,6 +294,12 @@ zurück ist, und ein laufender Auftrag läuft weiter.
 Das Passwort schützt den Laser: Wer im Hotspot ist, kann CNCjs bedienen.
 Ein neues setzt du auf dem Pi mit
 `sudo nmcli connection modify hotspot wifi-sec.psk 'neues-passwort'`.
+
+**Probe**, ohne den Router auszuschalten: auf dem Pi
+`sudo nmcli connection up hotspot`. Die SSH-Verbindung bricht dabei ab.
+iPad mit **laser** verbinden, CNCjs unter `http://10.42.0.1:8000` öffnen,
+zurück mit **Pi neu starten**. Bleibt `laser.local` nach einem Neustart
+länger als eine Minute erreichbar, erkennt der Pi sein WLAN.
 
 ## LightBurn auf dem Mac
 
@@ -348,5 +356,4 @@ im Halter).
 
 **Hotspot:** Das Anlegen der Verbindung und das Skript sind an
 NetworkManager 1.46 geprüft. Auf dem Zero 2 W ist der Hotspot noch nicht
-ausprobiert: beim Einrichten einmal mit ausgeschaltetem Router starten und
-iPad und Mac verbinden.
+ausprobiert ([Probe](#ohne-wlan-hotspot)).

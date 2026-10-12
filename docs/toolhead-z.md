@@ -1166,8 +1166,8 @@ Stand der offenen Punkte aus `hardware-notizen.md`:
   `Bohrlehre_Laser` am Modul bestätigt. Das war die dritte Messung (vorher
   39 × 15 und 40 × 16); die Messhistorie bleibt im Bericht stehen.
   Weil die Lehre **Ø3,4-Rundlöcher** hat, ist damit zugleich bewiesen, dass
-  Rundlöcher an dieser Stelle passen — umgesetzt, siehe [Warum Rundlöcher statt
-  Langlöcher](#warum-rundlöcher-statt-langlöcher).
+  Rundlöcher an dieser Stelle passen — umgesetzt, siehe [Rundloch quer, Langloch
+  senkrecht](#rundloch-quer-langloch-senkrecht).
 
 ## Wenn ein Teil an der falschen Stelle landet
 

@@ -441,8 +441,9 @@ der um 17 mm höheren Platine ist hinfällig — **nicht drucken**.
    Kupplung passt — das ist die Grenze des Verfahrwegs. Dann **8 mm zurück**.
 4. Fahne von unten an den Strahl schieben, bis die LED am Modul umschaltet,
    festziehen.
-5. Probe: referenzieren lassen. Steht die Achse, bleiben zwischen Gleitmutter
-   und Kupplung 11 mm.
+5. Probe: Z von Hand an der Kupplung hochdrehen, bis die LED umschaltet.
+   Dann bleiben zwischen Gleitmutter und Kupplung 11 mm. Nach `$H` sind es
+   12 mm, weil GRBL 1 mm zurückzieht (`$27=1`).
 
 Das gilt für den Aufbau **mit Motoradapter** und der Kupplung 8 mm auf der
 Motorwelle. Ohne Adapter steht die Grenze 10 mm tiefer, und die Fahne käme

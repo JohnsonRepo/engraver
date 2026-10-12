@@ -492,7 +492,8 @@ Nur zum Aufspielen von GRBL (D1) muss der Mac an den Uno.
    mit Fahne `Pn:X` (bzw. Y, Z). Ist es umgekehrt, `$5` umstellen. Diese
    Module melden „unterbrochen“ meist mit HIGH `[w]`, also `$5=1`. Dann
    meldet auch eine gebrochene Signalader „ausgelöst“, die sichere
-   Richtung.
+   Richtung. Ist der 24-V-Wächter (W16) schon angeschlossen und der
+   Schalter aus, steht im `Pn:` zusätzlich ein `R`; das gehört dazu.
 
 ### E. Treiber und Vref
 
@@ -535,12 +536,20 @@ Nur zum Aufspielen von GRBL (D1) muss der Mac an den Uno.
 
 ### G. Referenzfahrt
 
-* GRBL-Werte wie [unten](#grbl-einstellungen), die Hand am Not-Aus.
+* **Vorher von Hand:** Jede Lichtschranke meldet richtig (D4), und ihr
+  Schaltpunkt stimmt: X und Y wie in
+  [endschalter.md](endschalter.md#schaltpunkt-einstellen), Z wie in
+  [toolhead-z.md](toolhead-z.md#einstellen). Dazu jede Achse langsam von
+  Hand an ihre Schranke schieben, Z an der Kupplung drehen (im Stillstand
+  sind die Motoren stromlos), und auf die LED oder `?` achten. Die
+  Richtungen aus F müssen stimmen, sonst fährt `$H` vom Schalter weg.
+* GRBL-Werte wie [unten](#grbl-einstellungen), die Hand am Not-Aus. Beim
+  ersten Mal die Achsen ein paar Zentimeter vor ihre Schranken stellen und
+  langsamer suchen lassen: `$25=200`, danach wieder `$25=500`.
 * `$H`: Z fährt nach oben bis zu seiner Lichtschranke, dann X nach links
   und Y nach hinten, beide zugleich. Jede Achse muss an ihrer eigenen
-  Lichtschranke anhalten und darf nirgends anschlagen.
-* Den Schaltpunkt von X und Y stellst du wie in
-  [endschalter.md](endschalter.md#schaltpunkt-einstellen) ein.
+  Lichtschranke anhalten und darf nirgends anschlagen. Danach meldet `?`
+  `Idle` ohne `Pn:`: Jede Achse steht 1 mm vor ihrem Schaltpunkt.
 * Ab jetzt nach jedem Einschalten, nach dem Not-Aus und nach einem
   Hardlimit zuerst `$H`; `$X` nur nach ALARM:2. Vorn auf der Motorseite hat
   Y keinen Schalter, dort schützen allein die Softlimits, und die stimmen
@@ -616,7 +625,9 @@ Nur zum Aufspielen von GRBL (D1) muss der Mac an den Uno.
 Schaltpunkt bis ans andere Ende, minus 1 mm Rückzug und 2 mm Reserve. Die
 Schaltpunkte von X und Y stehen in [endschalter.md](endschalter.md), der
 von Z in [toolhead-z.md](toolhead-z.md). Alles Übrige bleibt auf dem
-Standardwert von GRBL.
+Standardwert von GRBL. Jeden Wert einzeln in die Konsole, `$22=1` vor
+`$20=1`: Softlimits nimmt GRBL nur an, wenn die Referenzfahrt schon an ist,
+sonst kommt `error:10`.
 
 ## Fehlersuche
 
@@ -627,6 +638,8 @@ Standardwert von GRBL.
 | Motor zittert oder brummt, dreht aber nicht | Spulenpaare vertauscht | Spulen mit dem Ohmmeter suchen, je ein Paar auf 2B·2A und 1A·1B |
 | Motor dreht falsch herum | Richtung | Bit in `$3`; bei Y gegen A: an A eine Spule tauschen |
 | Motoren verlieren Schritte oder werden über 70 °C heiß | Strom zu klein oder zu groß | Vref nach [hardware-notizen.md](hardware-notizen.md#treiber-und-versorgung) |
+| `$H` endet mit ALARM:9 | Schranke nicht gefunden: Die Achse fährt vom Schalter weg (`$3`), die Fahne läuft an der Gabel vorbei, oder `$5` ist falsch | Richtung wie in [F](#f-motoren-und-drehrichtung), Schaltpunkt von Hand und `?` wie in [G](#g-referenzfahrt) |
+| `$H` endet mit ALARM:8 | Nach dem Rückzug meldet die Schranke noch: Die Achse stand schon in der Gabel, oder 1 mm reicht nicht | Achse vor `$H` aus der Gabel schieben; sonst `$27=2` |
 | Ein Motor zieht oder zuckt im Stillstand, ohne dass etwas fährt | Sein Treiber ist an, obwohl GRBL alle über D8 abschaltet: Treiber defekt oder schlecht gesteckt. Ziehen alle Motoren: Jumper auf EN/GND, `$1` oder `$4` verstellt | Treiber mit dem einer anderen Achse tauschen (beide 1,37 V); wandert der Fehler mit, den Ersatz einsetzen und einstellen. Ziehen alle: EN/GND offen, `$1=25`, `$4=0` |
 | Laser brennt nicht | Lasermodus aus, PWM falsch gesteckt, keine 12 V | `$32=1`, `$30=1000`; PWM auf Z+; 12 V am Stecker messen |
 | Laser blitzt beim Einschalten kurz auf | Pull-down fehlt, 24 V vor USB | W8 stecken; erst Netzteil (Pi, Uno), dann Schalter |

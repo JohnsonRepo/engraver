@@ -627,6 +627,7 @@ Standardwert von GRBL.
 | Motor zittert oder brummt, dreht aber nicht | Spulenpaare vertauscht | Spulen mit dem Ohmmeter suchen, je ein Paar auf 2B·2A und 1A·1B |
 | Motor dreht falsch herum | Richtung | Bit in `$3`; bei Y gegen A: an A eine Spule tauschen |
 | Motoren verlieren Schritte oder werden über 70 °C heiß | Strom zu klein oder zu groß | Vref nach [hardware-notizen.md](hardware-notizen.md#treiber-und-versorgung) |
+| Ein Motor zieht oder zuckt im Stillstand, ohne dass etwas fährt | Sein Treiber ist an, obwohl GRBL alle über D8 abschaltet: Treiber defekt oder schlecht gesteckt. Ziehen alle Motoren: Jumper auf EN/GND, `$1` oder `$4` verstellt | Treiber mit dem einer anderen Achse tauschen (beide 1,37 V); wandert der Fehler mit, den Ersatz einsetzen und einstellen. Ziehen alle: EN/GND offen, `$1=25`, `$4=0` |
 | Laser brennt nicht | Lasermodus aus, PWM falsch gesteckt, keine 12 V | `$32=1`, `$30=1000`; PWM auf Z+; 12 V am Stecker messen |
 | Laser blitzt beim Einschalten kurz auf | Pull-down fehlt, 24 V vor USB | W8 stecken; erst Netzteil (Pi, Uno), dann Schalter |
 | Netzteil schaltet ab | Kurzschluss oder Überlast | 24-V-Leitungen prüfen; Vref nicht über 1,05 A |

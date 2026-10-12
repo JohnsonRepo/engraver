@@ -189,13 +189,25 @@ Stromadern (AWG 28), so rechnet `elektronik_check.py`.
 
 ## Einrichten
 
-**1. Karte beschreiben** (am Mac, Raspberry Pi Imager):
+Ein eigenes Image gibt es nicht: Auf die Karte kommt das normale Raspberry
+Pi OS. Die Dateien in `pi/` kommen erst danach auf den Pi, und Schritt 3
+richtet mit ihnen den Rest ein.
 
-* Gerät „Raspberry Pi Zero 2 W“, System „Raspberry Pi OS Lite (64-bit)“.
-* In den Einstellungen: Hostname **laser**, Benutzer und Passwort (hier im
-  Beispiel `laser`), WLAN mit Land DE (der Zero kann nur 2,4 GHz), SSH an.
+**1. Karte beschreiben** am Mac mit dem Raspberry Pi Imager, in der
+aktuellen Version (ab 2.0). Ältere bringen WLAN und SSH beim aktuellen
+Pi OS nicht zuverlässig auf die Karte.
 
-**2. Dateien auf den Pi**, im Ordner des Repos am Mac:
+* Gerät „Raspberry Pi Zero 2 W“, System unter „Raspberry Pi OS (other)“:
+  **„Raspberry Pi OS Lite (64-bit)“**, ohne Desktop. Der Zero hat nur
+  512 MB Speicher, und bedient wird im Browser. Der Imager lädt das System
+  selbst, eine Datei brauchst du nicht.
+* Anpassen: Hostname **laser**; Lokalisierung Berlin (Deutschland), das
+  stellt auch das WLAN-Land; Benutzer und Passwort (hier im Beispiel
+  `laser`); WLAN (der Zero kann nur 2,4 GHz); SSH an, mit Passwort.
+  Raspberry Pi Connect brauchst du nicht.
+
+**2. Dateien auf den Pi:** Karte in den Pi, Strom an. Der erste Start
+dauert einige Minuten. Dann im Ordner des Repos am Mac:
 
 ```sh
 scp -r pi laser@laser.local:
@@ -284,7 +296,7 @@ Kante nicht.
 
 | Was passiert | Ursache | Abhilfe |
 |---|---|---|
-| `laser.local` nicht erreichbar | Pi startet noch, WLAN-Daten falsch, 5-GHz-Netz | eine Minute warten; im Router nach dem Pi sehen; der Zero braucht 2,4 GHz |
+| `laser.local` nicht erreichbar | Pi startet noch, WLAN-Daten falsch, 5-GHz-Netz, Imager älter als 2.0 | warten, der erste Start dauert einige Minuten; im Router nach dem Pi sehen; der Zero braucht 2,4 GHz; Karte mit dem aktuellen Imager neu beschreiben |
 | Seite lädt nicht, Pi antwortet auf `ping` | Dienst läuft nicht | auf dem Pi `systemctl status cncjs` und `journalctl -u cncjs` |
 | Kein Port in CNCjs | W17 in PWR IN statt USB, Kabel ohne OTG | Micro-B in die mittlere Buchse **USB**; OTG-Kabel; `ls /dev/ttyACM* /dev/ttyUSB*` |
 | Pi startet neu, `vcgencmd get_throttled` zeigt nicht `0x0` (Unterspannung) | W19 dünn oder lang, Lötstelle schlecht, Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A; am USB-Ausgang 5,0–5,2 V |

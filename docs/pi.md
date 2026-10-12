@@ -6,6 +6,8 @@ Aufträge entwirfst du weiter in LightBurn auf dem Mac und speicherst sie als
 G-Code-Datei. Die Datei liegt dann auf dem Pi, und gestartet wird im
 Browser: am iPad, am iPhone oder am Mac. Der Pi schickt die Datei selbst
 über USB an den Uno. Bricht das WLAN ab, läuft der Auftrag deshalb weiter.
+Internet braucht der Pi nur zum Einrichten. Findet er beim Start kein
+WLAN, öffnet er ein eigenes ([Hotspot](#ohne-wlan-hotspot)).
 
 Der Pi sitzt mit seinem 5-V-Wandler auf einem gedruckten
 [Halter](#halter) rechts neben dem Elektronik-Kasten, unter einer
@@ -221,8 +223,12 @@ sh pi/einrichten.sh
 sudo reboot
 ```
 
-Das Skript ([`pi/einrichten.sh`](../pi/einrichten.sh)) installiert Node.js
-und CNCjs 1.11.5 und legt den Ordner `~/gcode` an. Es schreibt
+Das Skript ([`pi/einrichten.sh`](../pi/einrichten.sh)) fragt zuerst nach
+einem Passwort für den [Hotspot](#ohne-wlan-hotspot), 8 bis 63 Zeichen,
+und richtet ihn ein ([`pi/hotspot.sh`](../pi/hotspot.sh),
+[`pi/hotspot.service`](../pi/hotspot.service)). Danach läuft es ohne
+Eingaben. Es installiert Node.js und CNCjs 1.11.5 und legt den Ordner
+`~/gcode` an. Es schreibt
 [`pi/cncrc.json`](../pi/cncrc.json) als `~/.cncrc` und richtet CNCjs als
 Dienst ein ([`pi/cncjs.service`](../pi/cncjs.service)). CNCjs startet dann
 mit dem Pi. Dazu erlaubt es die Befehle zum Herunterfahren und Neustarten
@@ -230,8 +236,8 @@ mit dem Pi. Dazu erlaubt es die Befehle zum Herunterfahren und Neustarten
 WLAN-Energiesparen ab
 ([`pi/wlan-energiesparen-aus.conf`](../pi/wlan-energiesparen-aus.conf)).
 Ohne das hält der Pi Pakete zurück, und Joggen und Anzeige im Browser
-haken. Eine vorhandene `~/.cncrc` bleibt, wie sie ist. Auf dem Zero dauert
-der Lauf einige Minuten.
+haken. Eine vorhandene `~/.cncrc` und ein vorhandener Hotspot bleiben, wie
+sie sind. Auf dem Zero dauert der Lauf einige Minuten.
 
 ## CNCjs
 
@@ -263,6 +269,30 @@ Die Außenkante für **Rahmen** liefert die 3D-Ansicht von CNCjs, wenn sie
 die Datei geladen hat. Ist die 3D-Ansicht abgeschaltet, kennt CNCjs die
 Kante nicht.
 
+## Ohne WLAN: Hotspot
+
+Internet braucht der Pi nur zum Einrichten. CNCjs läuft auf dem Pi selbst,
+im Betrieb genügt das WLAN, auch wenn der Router gerade kein Internet hat.
+
+Findet der Pi beim Start kein bekanntes WLAN, etwa in der Werkstatt oder
+weil der Router aus ist, öffnet er nach einer Minute ein eigenes. Es heißt
+wie der Pi, **laser**, und hat das Passwort aus dem Einrichten.
+
+* iPad, iPhone oder Mac mit **laser** verbinden. Die Meldung „Keine
+  Internetverbindung“ stimmt und stört nicht.
+* CNCjs unter `http://laser.local:8000` oder `http://10.42.0.1:8000`.
+* Dateien im Browser hochladen oder mit
+  `scp auftrag.gc laser@10.42.0.1:gcode/`.
+
+Der Hotspot bleibt bis zum nächsten Start. Zurück ins Heimnetz: in CNCjs
+**Pi neu starten**, dann sucht er wieder. Fällt das WLAN erst im Betrieb
+aus, öffnet der Pi keinen Hotspot. Er verbindet sich wieder, sobald es
+zurück ist, und ein laufender Auftrag läuft weiter.
+
+Das Passwort schützt den Laser: Wer im Hotspot ist, kann CNCjs bedienen.
+Ein neues setzt du auf dem Pi mit
+`sudo nmcli connection modify hotspot wifi-sec.psk 'neues-passwort'`.
+
 ## LightBurn auf dem Mac
 
 * **Nullpunkt** einmal einrichten wie in
@@ -284,7 +314,8 @@ Kante nicht.
 
 ## Ablauf an der Maschine
 
-1. Netzteil einstecken und warten, bis CNCjs erreichbar ist.
+1. Netzteil einstecken und warten, bis CNCjs erreichbar ist (ohne WLAN:
+   [Hotspot](#ohne-wlan-hotspot)).
 2. CNCjs öffnen, verbinden, Schalter an, **Homing**.
 3. Werkstück an den Anschlag ([spannmittel.md](spannmittel.md)), Datei laden.
 4. Makro **Rahmen**, die Hand am Not-Aus. Dann **Start**.
@@ -297,6 +328,8 @@ Kante nicht.
 | Was passiert | Ursache | Abhilfe |
 |---|---|---|
 | `laser.local` nicht erreichbar | Pi startet noch, WLAN-Daten falsch, 5-GHz-Netz, Imager älter als 2.0 | warten, der erste Start dauert einige Minuten; im Router nach dem Pi sehen; der Zero braucht 2,4 GHz; Karte mit dem aktuellen Imager neu beschreiben |
+| Im WLAN-Menü steht **laser**, im Heimnetz ist `laser.local` nicht erreichbar | Pi hat beim Start das Heimnetz nicht gefunden (Router aus, WLAN-Daten falsch) und den Hotspot geöffnet | mit **laser** verbinden, in CNCjs **Pi neu starten** |
+| Kein Hotspot, obwohl kein WLAN da ist | der Pi sucht nach dem Start erst eine Minute | warten; sonst über das Heimnetz auf dem Pi `journalctl -u hotspot` |
 | Seite lädt nicht, Pi antwortet auf `ping` | Dienst läuft nicht | auf dem Pi `systemctl status cncjs` und `journalctl -u cncjs` |
 | Kein Port in CNCjs | W17 in PWR IN statt USB, Kabel ohne OTG | Micro-B in die mittlere Buchse **USB**; OTG-Kabel; `ls /dev/ttyACM* /dev/ttyUSB*` |
 | Pi startet neu, `vcgencmd get_throttled` zeigt nicht `0x0` (Unterspannung) | W19 dünn oder lang, Lötstelle schlecht, Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A; am USB-Ausgang 5,0–5,2 V |
@@ -312,3 +345,8 @@ Kante nicht.
 Zero-Reihe, Platinendicke und Bauteilhöhe `[?]`. Vor dem Druck den Pi auf
 die Zeichnung legen. Der 5-V-Wandler ist geklärt (2026-10-10, seit Rev. 2
 im Halter).
+
+**Hotspot:** Das Anlegen der Verbindung und das Skript sind an
+NetworkManager 1.46 geprüft. Auf dem Zero 2 W ist der Hotspot noch nicht
+ausprobiert: beim Einrichten einmal mit ausgeschaltetem Router starten und
+iPad und Mac verbinden.

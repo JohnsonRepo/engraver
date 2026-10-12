@@ -2,15 +2,17 @@
 # einrichten.sh — richtet den Raspberry Pi Zero 2 W als Steuerrechner fuer
 # den Engraver ein (docs/pi.md): CNCjs als Dienst auf Port 8000, ein Ordner
 # fuer G-Code-Dateien, Makros (Rahmen, Laserpunkt, Laser aus), Befehle zum
-# Herunterfahren und Neustarten, WLAN-Energiesparen aus.
+# Herunterfahren und Neustarten, WLAN-Energiesparen aus und ein eigenes WLAN
+# (Hotspot), wenn beim Start keins da ist.
 #
 # Auf dem Pi, als der Benutzer aus dem Raspberry Pi Imager (nicht als root):
 #
 #     sh pi/einrichten.sh
 #     sudo reboot
 #
-# Eine vorhandene ~/.cncrc bleibt unveraendert; wer sie neu haben will,
-# loescht sie vorher. Der Lauf darf wiederholt werden.
+# Eine vorhandene ~/.cncrc und ein vorhandener Hotspot bleiben unveraendert;
+# wer sie neu haben will, loescht sie vorher (den Hotspot mit
+# sudo nmcli connection delete hotspot). Der Lauf darf wiederholt werden.
 
 set -eu
 
@@ -23,9 +25,39 @@ if [ "$BENUTZER" = root ]; then
     exit 1
 fi
 
-echo "== Pakete: Node.js und npm"
+# Zuerst, weil er nach dem Passwort fragt; danach laeuft alles ohne Eingabe.
+echo "== Hotspot, wenn beim Start kein WLAN da ist"
+if ! command -v nmcli > /dev/null; then
+    echo "Kein NetworkManager gefunden: kein Hotspot." >&2
+else
+    if nmcli -t -f NAME connection show | grep -qx hotspot; then
+        echo "Den Hotspot gibt es schon, er bleibt unveraendert."
+    else
+        while :; do
+            printf 'Passwort fuer das WLAN "%s", 8 bis 63 Zeichen: ' "$(hostname)"
+            read -r PASSWORT
+            [ "${#PASSWORT}" -ge 8 ] && [ "${#PASSWORT}" -le 63 ] && break
+        done
+        # wie "nmcli device wifi hotspot", aber ohne ihn gleich einzuschalten
+        sudo nmcli connection add type wifi ifname wlan0 con-name hotspot \
+            autoconnect no ssid "$(hostname)" \
+            802-11-wireless.mode ap 802-11-wireless.band bg \
+            wifi-sec.key-mgmt wpa-psk wifi-sec.proto rsn \
+            wifi-sec.pairwise ccmp wifi-sec.group ccmp \
+            wifi-sec.psk "$PASSWORT" \
+            ipv4.method shared ipv6.method ignore > /dev/null
+    fi
+    sudo install -m 755 "$HIER/hotspot.sh" /usr/local/sbin/hotspot
+    sudo install -m 644 "$HIER/hotspot.service" /etc/systemd/system/
+    sudo systemctl daemon-reload
+    sudo systemctl enable hotspot
+fi
+
+# dnsmasq verteilt im Hotspot die Adressen, ohne ihn schaltet NetworkManager
+# den Hotspot nicht ein.
+echo "== Pakete: Node.js, npm und dnsmasq"
 sudo apt-get update
-sudo apt-get install -y nodejs npm
+sudo apt-get install -y nodejs npm dnsmasq-base
 
 echo "== CNCjs $CNCJS_VERSION (dauert auf dem Zero einige Minuten)"
 sudo npm install -g "cncjs@$CNCJS_VERSION"
@@ -64,3 +96,6 @@ fi
 echo
 echo "Fertig. Jetzt neu starten:  sudo reboot"
 echo "Danach im Browser:          http://$(hostname).local:8000"
+if command -v nmcli > /dev/null; then
+    echo "Ohne WLAN nach 1 Minute:    WLAN \"$(hostname)\", http://10.42.0.1:8000"
+fi

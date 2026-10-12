@@ -1,0 +1,12 @@
+# Hotspot, wenn der Pi beim Start kein WLAN findet (pi/hotspot.sh).
+# pi/einrichten.sh installiert ihn unveraendert.
+[Unit]
+Description=Hotspot ohne WLAN (Engraver)
+After=NetworkManager.service
+Wants=NetworkManager.service
+
+[Service]
+ExecStart=/usr/local/sbin/hotspot
+
+[Install]
+WantedBy=multi-user.target

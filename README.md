@@ -27,7 +27,7 @@ fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für di
 fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 stl/                           druckfertige STL ohne Fusion: Kasten und Haube des Elektronik-Gehäuses, Kabelhalter, Pi-Halter und seine Haube
-pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus
+pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus, Hotspot ohne WLAN
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
 docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
@@ -194,7 +194,8 @@ Seit Rev. 3 deckt eine **Haube** Pi und Wandler ab wie beim
 Elektronikgehäuse: 3 × M3 in Messing-Einsätzen, unten offen für Kabel und
 Luft, Lüftungsschlitze oben.
 Die Software in [`pi/`](pi) richtet ein Skript ein (CNCjs 1.11.5 als
-Dienst, Makros für Rahmen und Laserpunkt, Herunterfahren aus dem Browser).
+Dienst, Makros für Rahmen und Laserpunkt, Herunterfahren aus dem Browser,
+ein eigenes WLAN, wenn beim Start keins da ist).
 Details in [docs/pi.md](docs/pi.md).
 
 ### Not-Aus (neu)

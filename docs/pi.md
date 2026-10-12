@@ -271,6 +271,43 @@ Die Außenkante für **Rahmen** liefert die 3D-Ansicht von CNCjs, wenn sie
 die Datei geladen hat. Ist die 3D-Ansicht abgeschaltet, kennt CNCjs die
 Kante nicht.
 
+Im Menü des Grbl-Widgets stehen die Befehle von GRBL mit ihrem Kürzel
+(`?`, `$$`, `$I` …). Den Eintrag mit `$SLP` (Sleep) nicht wählen: GRBL
+schaltet dann alles ab und wacht erst nach „Reset“ wieder auf.
+
+## GRBL aufspielen
+
+Ohne GRBL auf dem Uno bleibt die Konsole von CNCjs stumm: Nach dem
+Verbinden fehlt die Zeile `Grbl 1.1h ['$' for help]`, und `?` bekommt keine
+Antwort. Aufspielen geht vom Pi aus, W17 bleibt stecken. Per SSH auf dem
+Pi:
+
+```sh
+sudo systemctl stop cncjs
+sudo apt-get update && sudo apt-get install -y avrdude
+curl -LO https://github.com/gnea/grbl/releases/download/v1.1h.20190825/grbl_v1.1h.20190825.hex
+sha256sum grbl_v1.1h.20190825.hex
+avrdude -p atmega328p -c arduino -P /dev/ttyACM0 -b 115200 -D -U flash:w:grbl_v1.1h.20190825.hex:i
+sudo systemctl start cncjs
+```
+
+* CNCjs hält den Port, deshalb ist der Dienst beim Aufspielen aus.
+* `sha256sum` muss
+  `1198b33233d0d89e5798916b1d3125d16dd520bf10cfaa44caaee6074673165d`
+  zeigen. Sonst ist es nicht die Datei von GRBL: nicht aufspielen.
+* avrdude endet mit „… bytes of flash verified“. Meldet es „not in sync“
+  oder „not responding“, antwortet der Uno nicht. Dann den Port prüfen:
+  `ls /dev/ttyACM* /dev/ttyUSB*`, ein Nachbau mit CH340 heißt
+  `/dev/ttyUSB0`.
+* Danach die Seite neu laden und verbinden. Die Konsole zeigt
+  `Grbl 1.1h ['$' for help]`, und `$I` meldet `[OPT:V,15,128]`. Das V
+  steht für die variable Spindel: Laser-PWM an D11, Z-Endschalter an D12,
+  wie verdrahtet.
+
+Die Datei ist der fertige Build von GRBL 1.1h mit den Standardoptionen.
+Dasselbe baut die Arduino-IDE aus `grblUpload`
+([verkabelung.md, D1](verkabelung.md#d-uno-grbl-und-lichtschranken)).
+
 ## Ohne WLAN: Hotspot
 
 Internet braucht der Pi nur zum Einrichten. CNCjs läuft auf dem Pi selbst,
@@ -340,6 +377,7 @@ länger als eine Minute erreichbar, erkennt der Pi sein WLAN.
 | Kein Hotspot, obwohl kein WLAN da ist | der Pi sucht nach dem Start erst eine Minute | warten; sonst über das Heimnetz auf dem Pi `journalctl -u hotspot` |
 | Seite lädt nicht, Pi antwortet auf `ping` | Dienst läuft nicht | auf dem Pi `systemctl status cncjs` und `journalctl -u cncjs` |
 | Kein Port in CNCjs | W17 in PWR IN statt USB, Kabel ohne OTG | Micro-B in die mittlere Buchse **USB**; OTG-Kabel; `ls /dev/ttyACM* /dev/ttyUSB*` |
+| Konsole bleibt stumm: nach dem Verbinden kein `Grbl 1.1h`, auf `?` keine Antwort | GRBL fehlt auf dem Uno, oder der Uno hängt im Reset | [GRBL aufspielen](#grbl-aufspielen). Kommt `Grbl 1.1h` nur bei eingeschaltetem Schalter, hält der 24-V-Wächter den Uno im Reset: W16 gehört an Abort (A0) |
 | Pi startet neu, `vcgencmd get_throttled` zeigt nicht `0x0` (Unterspannung) | W19 dünn oder lang, Lötstelle schlecht, Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A; am USB-Ausgang 5,0–5,2 V |
 | Joggen und Anzeige haken | WLAN-Energiesparen an | `iw dev wlan0 get power_save` muss „off“ zeigen; sonst Schritt 3 wiederholen |
 | ALARM:2 oder `error:15` beim Rahmen | Datei nicht auf den Nullpunkt bezogen | Nullpunkt prüfen, in LightBurn „Absolute Coords“ und Ursprung hinten links |

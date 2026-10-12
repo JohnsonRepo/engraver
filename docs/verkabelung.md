@@ -449,10 +449,10 @@ hängt der Uno am Mac (USB, Konsole in LightBurn oder der Arduino-IDE),
 „USB an“ heißt: Kabel vom Mac stecken. Der Pi läuft dabei schon mit, sobald
 das Netzteil steckt, und stört nicht. J bindet ihn ein.
 
-Steckt W17 schon im Uno, geht es ab D2 auch ohne Mac: „USB an“ heißt dann
+Steckt W17 schon im Uno, geht alles auch ohne Mac: GRBL (D1) spielst du
+vom Pi aus auf ([pi.md](pi.md#grbl-aufspielen)), „USB an“ heißt
 Netzteil einstecken, die Konsole ist die von CNCjs (verbinden wie in J3),
 und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
-Nur zum Aufspielen von GRBL (D1) muss der Mac an den Uno.
 
 ### A. Ohne Strom
 
@@ -479,7 +479,8 @@ Nur zum Aufspielen von GRBL (D1) muss der Mac an den Uno.
 ### D. Uno, GRBL und Lichtschranken
 
 1. GRBL 1.1h auf den Uno spielen (Arduino-IDE, Bibliothek `grbl`, Beispiel
-   `grblUpload`), nur über USB.
+   `grblUpload`), nur über USB. Hängt der Uno schon am Pi, geht es von
+   dort ([pi.md](pi.md#grbl-aufspielen)).
 2. Shield aufstecken, noch ohne Treiber, nur USB. Gegen GND messen: An den
    Signalstiften von X−, Y+ und an SpnEn liegen **etwa 5 V** (die Pull-ups
    von GRBL), an Z+ und Z− **0 V**, am Stift 5V **5 V**. Liegt an SpnEn
@@ -648,6 +649,7 @@ sonst kommt `error:10`.
 | GRBL bricht mitten im Auftrag ab, `Pn:R` blitzt kurz | die 24 V brechen ein (Stecker, Netzteil überlastet) | Hohlstecker und Netzteil prüfen; Vref nicht über 1,05 A |
 | Uno verliert die Verbindung | USB | kürzeres oder besseres USB-Kabel |
 | CNCjs nicht erreichbar | Pi startet noch, WLAN falsch, Dienst aus | eine Minute warten; `ping laser.local`; auf dem Pi `systemctl status cncjs` ([pi.md](pi.md#fehlersuche)) |
+| CNCjs verbunden, die Konsole bleibt stumm | GRBL fehlt auf dem Uno, oder W16 hält den Uno im Reset | [GRBL aufspielen](pi.md#grbl-aufspielen); W16 an Abort (A0) |
 | CNCjs findet keinen Port | W17 in PWR IN statt USB, Kabel ohne OTG | Micro-B in die Buchse USB; OTG-Kabel; auf dem Pi `ls /dev/ttyACM* /dev/ttyUSB*` |
 | Pi startet neu, `vcgencmd get_throttled` zeigt nicht `0x0` (Unterspannung) | W19 zu dünn oder lang, Lötstelle schlecht, 5-V-Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A, am Ausgang 5,0–5,2 V |
 | Pi bleibt dunkel | W18 verpolt oder lose, Netzteil ab | an IN+ gegen IN− 24 V messen |

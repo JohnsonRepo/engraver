@@ -47,7 +47,7 @@ docs/notaus.md                 Not-Aus: Taster, Lage, Gehäuse, Montage, Druck
 docs/notaus.svg                Not-Aus-Gehäuse von vorn, im Schnitt und von oben
 docs/kabelhalter.md            Kabelhalter: Rinne, Kabel, Plätze links und rechts, Montage, Druck
 docs/kabelhalter.svg           Kabelhalter im Schnitt am 2040 und seine Plätze
-docs/pi.md                     Pi: Maschine ohne PC über CNCjs — Teile, Halter, Strom, Einrichten, LightBurn, Ablauf, Fehlersuche
+docs/pi.md                     Pi: Maschine ohne PC über CNCjs — Teile, Halter, Strom, Einrichten, GRBL aufspielen, Hotspot, LightBurn, Ablauf, Fehlersuche
 docs/pihalter.svg              Pi-Halter mit Haube von hinten und im Schnitt am 2060
 docs/opferplatte.md            Opferplatte, Führungsfüße und Riegel: Lage, Höhen, Montage, Druck
 docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, Schnitte durch Füße, Riegel und Anschlag

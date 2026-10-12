@@ -43,6 +43,11 @@ und ist keine Sicherheitsfunktion. Der Not-Aus bleibt in Reichweite.
 | 3 + 3 | M3×8 Zylinderkopf + Messing-Einsatz M3 Ø5 (wie am Deckel des Kastens) | Haube → Dome |
 | 2 | Kabelbinder 2,5 × 200 (2,5 × 100 ist zu kurz) | Wandler |
 
+Der Pi hat zwei Micro-USB-Buchsen, und beide sind belegt: **PWR IN** außen
+nimmt nur Strom, dort steckt W19 vom Wandler. **USB** in der Mitte ist
+seine einzige Datenbuchse, dort steckt W17 zum Uno. Über sie bekommt der
+Uno auch seine 5 V vom Pi.
+
 Ein OTG-Kabel verbindet im Micro-B-Stecker den ID-Stift mit Masse; dann
 arbeitet der Pi an dieser Buchse als Host. Solche Kabel gibt es für Handys
 an Druckern.

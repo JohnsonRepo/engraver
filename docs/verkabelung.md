@@ -449,6 +449,11 @@ hängt der Uno am Mac (USB, Konsole in LightBurn oder der Arduino-IDE),
 „USB an“ heißt: Kabel vom Mac stecken. Der Pi läuft dabei schon mit, sobald
 das Netzteil steckt, und stört nicht. J bindet ihn ein.
 
+Steckt W17 schon im Uno, geht es ab D2 auch ohne Mac: „USB an“ heißt dann
+Netzteil einstecken, die Konsole ist die von CNCjs (verbinden wie in J3),
+und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
+Nur zum Aufspielen von GRBL (D1) muss der Mac an den Uno.
+
 ### A. Ohne Strom
 
 * Jede Ader gegen die [Anschlussliste](#anschlussliste) prüfen und an jedem
@@ -493,17 +498,31 @@ das Netzteil steckt, und stört nicht. J bindet ihn ein.
 
 1. Alles aus. Die Treiber stecken, EN zum EN-Aufdruck, dazu die Jumper wie
    [oben](#klemmen-wago-und-shield). **Motoren noch nicht anschließen.**
-2. W3 in die Wagos. USB an, dann Schalter an.
-3. Vref zwischen GND und dem Schleifer des Potis messen und auf **1,37 V**
-   stellen, an allen vier gleich. Das gibt bei jedem üblichen
-   Messwiderstand höchstens 1,05 A
-   ([Vref](hardware-notizen.md#treiber-und-versorgung)).
-4. Alles aus.
+   Hängen sie schon, dürfen sie bleiben: Solange nichts fährt, schaltet
+   GRBL die Treiber ab (`$1=25`), dann fließt kein Motorstrom. Gefahren
+   wird erst in F.
+2. W3 in die Wagos. Ist die Haube schon drauf, kommt sie ab (4 × M3×8), der
+   Lüfter bleibt angeschlossen. USB an, dann Schalter an.
+3. Die schwarze Messleitung mit einer Krokodilklemme an GND, etwa an ein
+   Stück Litze in einem freien Platz der Wago GND. Die rote auf die
+   Metallschraube des Potis, sie ist der Schleifer.
+4. Vref auf **1,37 V** stellen (1,35–1,40 V reicht), an allen vier gleich.
+   Das gibt bei jedem üblichen Messwiderstand höchstens 1,05 A
+   ([Vref](hardware-notizen.md#treiber-und-versorgung)). In kleinen
+   Schritten drehen und nach jedem messen: In welche Richtung die Spannung
+   steigt, zeigt erst das Messgerät. Nicht mit Kraft gegen den Anschlag.
+   Am besten mit einem Schraubendreher aus Kunststoff oder Keramik: Rutscht
+   einer aus Metall ab, kann er 24 V auf die Logik bringen, das kostet
+   Treiber und Uno.
+5. Alles aus, die Litze aus der Wago, Haube wieder drauf.
 
 ### F. Motoren und Drehrichtung
 
-1. Bei ausgeschaltetem Strom W12–W15 anstecken.
-2. USB an, dann 24 V. Die Motoren halten, von Hand drehen sie schwer.
+1. Bei ausgeschaltetem Strom W12–W15 anstecken, falls sie nicht schon
+   stecken.
+2. USB an, dann 24 V. Von Hand lassen sich die Motoren noch drehen: GRBL
+   schaltet die Treiber erst zum Fahren ein und 25 ms nach dem Halt wieder
+   ab (`$1=25`).
 3. Jede Achse ein paar Millimeter langsam fahren, z. B. `$J=G91 X5 F500`
    (steht GRBL in ALARM, erst `$X`). Nach `$X` gelten die Softlimits ab der
    aktuellen Stellung, nicht ab den Schaltern: nur wenige Millimeter fahren.

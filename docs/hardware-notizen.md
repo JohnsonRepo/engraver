@@ -505,14 +505,16 @@ gewandert:
   | R150 (0,15 Ω) | 1,94 V | 0,74 A |
 
   Solange der Wert unbekannt ist, **mit 1,37 V anfangen** — das sind bei
-  jedem der drei höchstens 1,05 A. Die Aufschrift sitzt auf den zwei
-  kleinen Widerständen neben dem Chip — je nach Modul oben oder auf der
-  Unterseite. Messen zwischen GND und dem Schleifer des Potis (Shield an
-  24 V, Uno an USB, Motoren dürfen ab sein), mit einem isolierten
-  Schraubendreher drehen. Werden die Motoren über 70 °C heiß, zurück; laufen
-  sie kalt und verlieren Schritte, höchstens bis 1,2 A (R100: 1,57 V,
-  R110: 1,70 V, R150: 2,22 V) — das Netzteil trägt das noch (≈ 59 W statt
-  53 W). Alle vier gleich einstellen, Y und A auf jeden Fall.
+  jedem der drei höchstens 1,05 A. Die Aufschrift (R100 oder R10, R110
+  oder R11, R150 oder R15) sitzt auf den zwei kleinen Widerständen neben
+  dem Chip — je nach Modul oben oder auf der Unterseite; am Ersatztreiber,
+  der nicht steckt, sind beide Seiten zu sehen. Messen zwischen GND und
+  dem Schleifer des Potis (Shield an 24 V, Uno an USB, Motoren dürfen ab
+  sein), mit einem isolierten Schraubendreher drehen. Werden die Motoren
+  über 70 °C heiß, zurück; laufen sie kalt und verlieren Schritte,
+  höchstens bis 1,2 A (R100: 1,57 V, R110: 1,70 V, R150: 2,22 V) — das
+  Netzteil trägt das noch (≈ 59 W statt 53 W). Alle vier gleich
+  einstellen, Y und A auf jeden Fall.
 * Treiber richtig herum stecken (EN-Pin zum EN-Aufdruck) und Motoren nie unter
   Spannung ab- oder anstecken — beides kostet den Treiber.
 * Netzteil 24 V für die Motoren (TMC2209 abs. max 29 V, siehe oben). Der Laser

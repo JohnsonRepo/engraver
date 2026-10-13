@@ -60,7 +60,7 @@
 <text x="262.0" y="361.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W2</text>
 <rect x="290.0" y="350.0" width="120.0" height="36.0" rx="3" fill="#fff4f4" stroke="#c62828" stroke-width="1"/>
 <text x="297.0" y="365.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Wago +24 V</text>
-<text x="297.0" y="378.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-415, 5 Plätze</text>
+<text x="297.0" y="378.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-420, 10 Plätze</text>
 <rect x="290.0" y="404.0" width="120.0" height="36.0" rx="3" fill="#f1f3f5" stroke="#1f2328" stroke-width="1"/>
 <text x="297.0" y="419.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Wago GND</text>
 <text x="297.0" y="432.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-420, 10 Plätze</text>
@@ -71,9 +71,6 @@
 <rect x="290.0" y="552.0" width="120.0" height="40.0" rx="3" fill="#f4f6f9" stroke="#8c939e" stroke-width="1"/>
 <text x="297.0" y="567.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Lüfter 40 mm, 24 V</text>
 <text x="297.0" y="580.0" font-size="8.3" fill="#5b6472" text-anchor="start">bläst auf die Treiber</text>
-<rect x="290.0" y="690.0" width="120.0" height="36.0" rx="3" fill="#f8f0fc" stroke="#8e44ad" stroke-width="1"/>
-<text x="297.0" y="705.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Wago +5 V</text>
-<text x="297.0" y="718.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-420, 10 Plätze</text>
 <polyline points="290.0,374.0 276.0,374.0 276.0,486.0 290.0,486.0" fill="none" stroke="#c62828" stroke-width="1.8" stroke-linejoin="round"/>
 <polyline points="290.0,426.0 266.0,426.0 266.0,500.0 290.0,500.0" fill="none" stroke="#1f2328" stroke-width="1.8" stroke-linejoin="round"/>
 <polyline points="290.0,366.0 256.0,366.0 256.0,566.0 290.0,566.0" fill="none" stroke="#c62828" stroke-width="1.8" stroke-linejoin="round"/>
@@ -120,7 +117,7 @@
 <circle cx="640.0" cy="600.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
 <text x="640.0" y="592.0" font-size="8.0" fill="#1c2733" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">SpnEn (D12)</text>
 <circle cx="760.0" cy="600.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
-<text x="760.0" y="592.0" font-size="8.0" fill="#1c2733" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5V</text>
+<text x="760.0" y="592.0" font-size="8.0" fill="#1c2733" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5V (frei)</text>
 <rect x="846.0" y="118.0" width="284.0" height="64.0" rx="3" fill="#eef6ff" stroke="#1864ab" stroke-width="1"/>
 <text x="912.0" y="133.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Laser LASER TREE 4 W</text>
 <text x="912.0" y="146.0" font-size="8.3" fill="#5b6472" text-anchor="start">450 nm, 12 V, 1,6 A (1,4–1,8 A)</text>
@@ -219,17 +216,12 @@
 <circle cx="834.0" cy="750.0" r="2.6" fill="#1f2328"/>
 <rect x="785.2" y="756.0" width="21.6" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
 <text x="796.0" y="765.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W11</text>
-<polyline points="760.0,600.0 760.0,698.0 410.0,698.0" fill="none" stroke="#8e44ad" stroke-width="1.8" stroke-linejoin="round"/>
-<polyline points="410.0,718.0 822.0,718.0" fill="none" stroke="#8e44ad" stroke-width="1.6" stroke-linejoin="round"/>
-<polyline points="822.0,634.0 822.0,738.0" fill="none" stroke="#8e44ad" stroke-width="1.6" stroke-linejoin="round"/>
-<circle cx="822.0" cy="718.0" r="2.6" fill="#8e44ad"/>
-<rect x="651.8" y="692.0" width="16.4" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
-<text x="660.0" y="701.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W6</text>
-<polyline points="290.0,410.0 240.0,410.0 240.0,792.0 834.0,792.0 834.0,646.0" fill="none" stroke="#1f2328" stroke-width="1.6" stroke-linejoin="round"/>
-<circle cx="834.0" cy="750.0" r="2.6" fill="#1f2328"/>
-<circle cx="834.0" cy="698.0" r="2.6" fill="#1f2328"/>
-<rect x="524.0" y="786.0" width="32.0" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
-<text x="540.0" y="795.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W9–11</text>
+<polyline points="24.0,578.0 18.0,578.0 18.0,800.0 822.0,800.0 822.0,634.0" fill="none" stroke="#8e44ad" stroke-width="1.6" stroke-linejoin="round"/>
+<polyline points="204.0,578.0 210.0,578.0 210.0,808.0 834.0,808.0 834.0,646.0" fill="none" stroke="#1f2328" stroke-width="1.6" stroke-linejoin="round"/>
+<rect x="524.0" y="794.0" width="32.0" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
+<text x="540.0" y="803.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W9–11</text>
+<rect x="524.0" y="814.0" width="32.0" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
+<text x="540.0" y="823.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W9–11</text>
 <circle cx="786.0" cy="470.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
 <text x="781.0" y="473.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Abort (A0)</text>
 <polyline points="786.0,470.0 822.0,470.0" fill="none" stroke="#1864ab" stroke-width="1.6" stroke-linejoin="round"/>
@@ -254,12 +246,12 @@
 <polyline points="820.5,528.0 823.5,528.0" fill="none" stroke="#1f2328" stroke-width="1.2" stroke-linejoin="round"/>
 <rect x="792.2" y="464.0" width="21.6" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
 <text x="803.0" y="473.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W16</text>
-<rect x="14" y="470" width="200" height="214" rx="6" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 4"/>
-<text x="20.0" y="464.0" font-size="8.5" fill="#2f5d92" text-anchor="start" font-weight="600">Pi-Halter (im Fach, rechts neben dem Kasten)</text>
+<rect x="14" y="470" width="200" height="226" rx="6" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 4"/>
+<text x="20.0" y="464.0" font-size="8.5" fill="#2f5d92" text-anchor="start" font-weight="600">auch im Elektronikfach: 5-V-Zweig und Pi</text>
 <rect x="24.0" y="486.0" width="180.0" height="58.0" rx="3" fill="#f8f0fc" stroke="#8e44ad" stroke-width="1"/>
 <text x="31.0" y="501.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Abwärtswandler 24 → 5 V</text>
-<text x="31.0" y="514.0" font-size="8.3" fill="#5b6472" text-anchor="start">≥ 3 A, Ausgang USB-A</text>
-<text x="31.0" y="527.0" font-size="8.3" fill="#5b6472" text-anchor="start">vor Schalter und Not-Aus</text>
+<text x="31.0" y="514.0" font-size="8.3" fill="#5b6472" text-anchor="start">≥ 3 A, USB-A mit</text>
+<text x="31.0" y="527.0" font-size="8.3" fill="#5b6472" text-anchor="start">Klemmen-Adapter</text>
 <circle cx="204.0" cy="500.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
 <text x="199.0" y="503.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">IN+</text>
 <circle cx="204.0" cy="516.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
@@ -270,22 +262,33 @@
 <circle cx="316.0" cy="160.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
 <rect x="209.2" y="434.0" width="21.6" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
 <text x="220.0" y="443.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W18</text>
-<rect x="24.0" y="590.0" width="180.0" height="58.0" rx="3" fill="#f4f6f9" stroke="#8c939e" stroke-width="1"/>
-<text x="31.0" y="605.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Raspberry Pi Zero 2 W</text>
-<text x="31.0" y="618.0" font-size="8.3" fill="#5b6472" text-anchor="start">CNCjs im Browser, WLAN 2,4 GHz</text>
-<text x="31.0" y="631.0" font-size="8.3" fill="#5b6472" text-anchor="start">Pi-Halter: PiHalter.py</text>
-<polyline points="114.0,544.0 114.0,590.0" fill="none" stroke="#8e44ad" stroke-width="1.8" stroke-linejoin="round"/>
-<circle cx="114.0" cy="544.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
-<circle cx="114.0" cy="590.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
-<text x="120.0" y="556.0" font-size="7.5" fill="#5b6472" text-anchor="start">USB-A</text>
-<text x="120.0" y="586.0" font-size="7.5" fill="#5b6472" text-anchor="start">PWR IN</text>
-<rect x="129.2" y="562.0" width="21.6" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
-<text x="140.0" y="571.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W19</text>
-<circle cx="204.0" cy="630.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
-<text x="199.0" y="633.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">USB</text>
-<polyline points="204.0,630.0 460.0,630.0 460.0,578.0 470.0,578.0" fill="none" stroke="#868e96" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="5 3"/>
-<rect x="319.2" y="624.0" width="21.6" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
-<text x="330.0" y="633.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
+<rect x="24.0" y="562.0" width="85.0" height="32.0" rx="3" fill="#f8f0fc" stroke="#8e44ad" stroke-width="1"/>
+<text x="31.0" y="577.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Wago +5 V</text>
+<text x="31.0" y="590.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-415</text>
+<rect x="119.0" y="562.0" width="85.0" height="32.0" rx="3" fill="#f1f3f5" stroke="#1f2328" stroke-width="1"/>
+<text x="126.0" y="577.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Wago GND 5 V</text>
+<text x="126.0" y="590.0" font-size="8.3" fill="#5b6472" text-anchor="start">221-415</text>
+<polyline points="66.0,544.0 66.0,562.0" fill="none" stroke="#8e44ad" stroke-width="1.8" stroke-linejoin="round"/>
+<polyline points="161.0,544.0 161.0,562.0" fill="none" stroke="#1f2328" stroke-width="1.8" stroke-linejoin="round"/>
+<circle cx="66.0" cy="544.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
+<circle cx="161.0" cy="544.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
+<rect x="105.8" y="547.0" width="16.4" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
+<text x="114.0" y="556.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W6</text>
+<rect x="24.0" y="626.0" width="180.0" height="58.0" rx="3" fill="#f4f6f9" stroke="#8c939e" stroke-width="1"/>
+<text x="31.0" y="641.0" font-size="9.0" fill="#1c2733" text-anchor="start" font-weight="600">Raspberry Pi Zero 2 W</text>
+<text x="31.0" y="654.0" font-size="8.3" fill="#5b6472" text-anchor="start">5 V über PWR IN (W19)</text>
+<text x="31.0" y="667.0" font-size="8.3" fill="#5b6472" text-anchor="start">CNCjs im Browser, WLAN</text>
+<polyline points="56.0,594.0 56.0,626.0" fill="none" stroke="#8e44ad" stroke-width="1.8" stroke-linejoin="round"/>
+<polyline points="151.0,594.0 151.0,626.0" fill="none" stroke="#1f2328" stroke-width="1.8" stroke-linejoin="round"/>
+<circle cx="56.0" cy="626.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
+<circle cx="151.0" cy="626.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
+<rect x="93.2" y="604.0" width="21.6" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
+<text x="104.0" y="613.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W19</text>
+<circle cx="204.0" cy="666.0" r="2.4" fill="#ffffff" stroke="#1c2733" stroke-width="1"/>
+<text x="199.0" y="669.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">USB</text>
+<polyline points="204.0,666.0 460.0,666.0 460.0,578.0 470.0,578.0" fill="none" stroke="#868e96" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="5 3"/>
+<rect x="319.2" y="660.0" width="21.6" height="12" rx="6" fill="#ffffff" stroke="#495057" stroke-width="0.9"/>
+<text x="330.0" y="669.0" font-size="7.6" fill="#1c2733" text-anchor="middle" font-weight="600">W17</text>
 <text x="24.0" y="846.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Kabelliste</text>
 <text x="24.0" y="864.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W1</text>
 <text x="60.0" y="864.0" font-size="8.2" fill="#5b6472" text-anchor="start">Eingang</text>
@@ -295,12 +298,12 @@
 <text x="24.0" y="878.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W2</text>
 <text x="60.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">Not-Aus-Kreis</text>
 <text x="200.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">2 × 0,75 mm² (AWG 18)</text>
-<text x="384.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,01 → 1,5 m</text>
+<text x="384.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,83 → 1 m</text>
 <text x="476.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="24.0" y="892.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W3</text>
 <text x="60.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">Shield</text>
 <text x="200.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,75 mm² (AWG 18)</text>
-<text x="384.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">≈ 0,15 m</text>
+<text x="384.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">≈ 0,4 m</text>
 <text x="476.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="24.0" y="906.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W4</text>
 <text x="60.0" y="906.0" font-size="8.2" fill="#5b6472" text-anchor="start">Wandler-Eingang</text>
@@ -309,18 +312,18 @@
 <text x="476.0" y="906.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="24.0" y="920.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W5</text>
 <text x="60.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">Lüfter 24 V</text>
-<text x="200.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">Litze des Lüfters</text>
-<text x="384.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">—</text>
+<text x="200.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,25 mm² (AWG 24)</text>
+<text x="384.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">≈ 0,5 m</text>
 <text x="476.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="24.0" y="934.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W6</text>
-<text x="60.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">5 V für die Lichtschranken</text>
-<text x="200.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,25 mm² (AWG 24)</text>
-<text x="384.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">≈ 0,15 m</text>
+<text x="60.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">5 V vom Wandler</text>
+<text x="200.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,75 mm² (AWG 18)</text>
+<text x="384.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">≈ 0,4 m</text>
 <text x="476.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="24.0" y="948.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W7</text>
 <text x="60.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">Laser</text>
 <text x="200.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">3 Silikonlitzen 0,34 mm² (AWG 22)</text>
-<text x="384.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,57 → 2 m</text>
+<text x="384.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,73 → 2 m</text>
 <text x="476.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y + X</text>
 <text x="24.0" y="962.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W8</text>
 <text x="60.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">Pull-down 10 kΩ</text>
@@ -330,67 +333,67 @@
 <text x="24.0" y="976.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W9</text>
 <text x="60.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">Lichtschranke X</text>
 <text x="200.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">3 Silikonlitzen 0,25 mm² (AWG 24)</text>
-<text x="384.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,83 → 1 m</text>
+<text x="384.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,85 → 1 m</text>
 <text x="476.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y</text>
 <text x="24.0" y="990.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W10</text>
 <text x="60.0" y="990.0" font-size="8.2" fill="#5b6472" text-anchor="start">Lichtschranke Y</text>
 <text x="200.0" y="990.0" font-size="8.2" fill="#5b6472" text-anchor="start">3 × 0,25 mm² (AWG 24)</text>
-<text x="384.0" y="990.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,49 → 1 m</text>
+<text x="384.0" y="990.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,59 → 1 m</text>
 <text x="476.0" y="990.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="604.0" y="864.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W11</text>
 <text x="640.0" y="864.0" font-size="8.2" fill="#5b6472" text-anchor="start">Lichtschranke Z</text>
 <text x="780.0" y="864.0" font-size="8.2" fill="#5b6472" text-anchor="start">3 Silikonlitzen 0,25 mm² (AWG 24)</text>
-<text x="964.0" y="864.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,45 → 2 m</text>
+<text x="964.0" y="864.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,47 → 2 m</text>
 <text x="1056.0" y="864.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y + X</text>
 <text x="604.0" y="878.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W12</text>
 <text x="640.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">X-Motor</text>
 <text x="780.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">4 × 0,2 mm² (AWG 24)</text>
-<text x="964.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,81 m, mitgeliefert</text>
+<text x="964.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,94 → 1,5 m</text>
 <text x="1056.0" y="878.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y</text>
 <text x="604.0" y="892.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W13</text>
 <text x="640.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">Y-Motor links</text>
 <text x="780.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">4 × 0,2 mm² (AWG 24)</text>
-<text x="964.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,71 m, mitgeliefert</text>
+<text x="964.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,83 m, mitgeliefert</text>
 <text x="1056.0" y="892.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="604.0" y="906.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W14</text>
 <text x="640.0" y="906.0" font-size="8.2" fill="#5b6472" text-anchor="start">Y-Motor rechts</text>
 <text x="780.0" y="906.0" font-size="8.2" fill="#5b6472" text-anchor="start">4 × 0,2 mm² (AWG 24)</text>
-<text x="964.0" y="906.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,98 → 1,5 m</text>
+<text x="964.0" y="906.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,15 → 1,5 m</text>
 <text x="1056.0" y="906.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="604.0" y="920.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W15</text>
 <text x="640.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">Z-Motor</text>
 <text x="780.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">4 × 0,2 mm² (AWG 24)</text>
-<text x="964.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,54 → 2 m</text>
+<text x="964.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">1,66 → 2 m</text>
 <text x="1056.0" y="920.0" font-size="8.2" fill="#5b6472" text-anchor="start">Kette Y + X</text>
 <text x="604.0" y="934.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W16</text>
 <text x="640.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">24-V-Wächter an Abort</text>
 <text x="780.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">Widerstand</text>
-<text x="964.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">—</text>
+<text x="964.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start">≈ 0,5 m</text>
 <text x="1056.0" y="934.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="604.0" y="948.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W17</text>
 <text x="640.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">USB zum Pi</text>
 <text x="780.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">USB-Kabel Micro-B–B (OTG)</text>
-<text x="964.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,44 → 1 m</text>
+<text x="964.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,11 → 0,25 m</text>
 <text x="1056.0" y="948.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="604.0" y="962.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W18</text>
-<text x="640.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">24 V für den Pi</text>
-<text x="780.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">2 × 0,75 mm² (AWG 18)</text>
-<text x="964.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,28 → 0,5 m</text>
+<text x="640.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">24 V für den 5-V-Wandler</text>
+<text x="780.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,75 mm² (AWG 18)</text>
+<text x="964.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start">≈ 0,2 m</text>
 <text x="1056.0" y="962.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="604.0" y="976.0" font-size="8.2" fill="#1c2733" text-anchor="start" font-weight="600">W19</text>
 <text x="640.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">5 V für den Pi</text>
-<text x="780.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">USB-Kabel A–Micro-B</text>
-<text x="964.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,07 → 0,25 m</text>
+<text x="780.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,2 mm² (AWG 24)</text>
+<text x="964.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start">0,26 → 0,5 m</text>
 <text x="1056.0" y="976.0" font-size="8.2" fill="#5b6472" text-anchor="start"></text>
 <text x="24.0" y="1016.0" font-size="8.5" fill="#5b6472" text-anchor="start">Leistung</text>
 <text x="100.0" y="1016.0" font-size="8.5" fill="#1c2733" text-anchor="start">Motoren ≈ 23 W, Lüfter ≈ 2 W, Laser über den Wandler ≈ 24 W, Pi mit Uno und Lichtschranken ≈ 4 W — zusammen ≈ 53 W von 72 W (dauernd 61 W)</text>
 <text x="24.0" y="1031.0" font-size="8.5" fill="#5b6472" text-anchor="start">Wandler</text>
 <text x="100.0" y="1031.0" font-size="8.5" fill="#1c2733" text-anchor="start">Laser 12 V × 1,8 A = 21,6 W, bei 90 % Wirkungsgrad 24 W aus dem Netzteil; der Wandler (5 A) ist damit zu 36 % belastet. Ausgang vor dem Anschließen des Lasers messen: 12,0 V</text>
 <text x="24.0" y="1046.0" font-size="8.5" fill="#5b6472" text-anchor="start">Masse</text>
-<text x="100.0" y="1046.0" font-size="8.5" fill="#1c2733" text-anchor="start">Netzteil, Shield, Wandler, Laser und Lichtschranken haben ein gemeinsames GND, Stern an der Wago GND; ein isolierter Wandler braucht dafür eine Brücke OUT− → GND</text>
+<text x="100.0" y="1046.0" font-size="8.5" fill="#1c2733" text-anchor="start">ein gemeinsames GND: Stern an der Wago GND (Netzteil, Shield, Wandler, Laser), die Lichtschranken und der Pi an der Wago GND 5 V, über den 5-V-Wandler damit verbunden</text>
 <text x="24.0" y="1061.0" font-size="8.5" fill="#5b6472" text-anchor="start">Not-Aus</text>
 <text x="100.0" y="1061.0" font-size="8.5" fill="#1c2733" text-anchor="start">Wechsler C/NO/NC: C und NC trennen die 24 V von Shield, Wandler und Lüfter, NO bleibt frei. Fehlen sie (Not-Aus, Schalter), zieht der Wächter W16 Abort auf LOW, und GRBL bricht ab</text>
-<text x="24.0" y="1076.0" font-size="8.5" fill="#5b6472" text-anchor="start">Pi</text>
-<text x="100.0" y="1076.0" font-size="8.5" fill="#1c2733" text-anchor="start">sein 5-V-Wandler hängt mit W18 an der Buchse, vor Schalter und Not-Aus: Pi und Uno laufen weiter, der Wächter meldet; über USB (W17) versorgt der Pi den Uno und damit die Lichtschranken</text>
+<text x="24.0" y="1076.0" font-size="8.5" fill="#5b6472" text-anchor="start">5 V</text>
+<text x="100.0" y="1076.0" font-size="8.5" fill="#1c2733" text-anchor="start">der 5-V-Wandler hängt mit W18 an der Buchse, vor Schalter und Not-Aus; W6 (0,75 mm²) bringt seine 5 V direkt an die Wago: Lichtschranken und Pi (W19), der Pi über USB (W17) den Uno</text>
 <text x="24.0" y="1091.0" font-size="8.5" fill="#5b6472" text-anchor="start">Einschalten</text>
 <text x="100.0" y="1091.0" font-size="8.5" fill="#1c2733" text-anchor="start">Netzteil einstecken: Pi und Uno starten, GRBL läuft (der Pull-down W8 hält den Laser aus); dann Schalter EIN: 24 V. Ausschalten umgekehrt, den Pi vor dem Ausstecken herunterfahren</text></svg>

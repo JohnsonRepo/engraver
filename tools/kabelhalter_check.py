@@ -31,8 +31,8 @@ HIER = os.path.dirname(os.path.abspath(__file__))
 KABELHALTER = os.path.join(HIER, '..', 'fusion', 'Kabelhalter',
                            'Kabelhalter.py')
 DOKU = os.path.join(HIER, '..', 'docs', 'kabelhalter.md')
-ELEKTRONIK = os.path.join(HIER, '..', 'fusion', 'Elektronik',
-                          'Elektronik.py')
+ELEKTRONIK = os.path.join(HIER, '..', 'fusion', 'Elektronikfach',
+                          'Elektronikfach.py')
 BETT = 250.0           # Bambu Lab A1: 256, mit Rand
 LUFT = 3.0             # Mindestfreigang zu Teilen am Rahmen
 SPANNE = 100.0         # so weit duerfen zwei Halter hoechstens auseinander
@@ -71,10 +71,11 @@ def kabel(lt):
 
 def abschnitte(PL, EL):
     """Die Strecken in der unteren Seitennut aussen, je Seite, mit ihren
-    Kabeln — aus den Wegen der Kabelliste. Links kommen alle hinten aus dem
-    Gehaeuse; die Litzen der Y-Kette gehen hinter der Wanne Y hinein, nur
-    W13 laeuft bis vorn. Rechts kommen sie ueber die Rueckseite des hinteren
-    2060; nach vorn laufen W2 und W14, W10 nach hinten zum Halter_Y."""
+    Kabeln — aus den Wegen der Kabelliste. Links kommen alle aus den
+    Fenstern der linken Endwand des Elektronikfachs unter dem 2040 durch;
+    die Litzen der Y-Kette gehen hinter der Wanne Y hinein, nur W13 laeuft
+    bis vorn. Rechts kommen sie aus den Fenstern der rechten Endwand; nach
+    vorn laufen W2 und W14, W10 nach hinten zum Halter_Y."""
     lts = vk.leitungen()
     links = [lt for lt in lts if 'untere Nut außen am linken 2040'
              in weg(lt, lts)]
@@ -84,7 +85,7 @@ def abschnitte(PL, EL):
     winkel_vorn = PL['quer_y_vorn'][0] - 20.0
     winkel_hinten = PL['quer_y_hinten'][1] + 20.0
     return [
-        dict(name='links hinten', seite=-1,
+        dict(name='links hinten', seite=-1, anfang_fest=True,
              strecke=(EL['kabel_links_y'], wanne_hinten),
              leitungen=links),
         dict(name='links vorn', seite=-1, strecke=(wanne_hinten, winkel_vorn),
@@ -160,10 +161,12 @@ def sperren(KL, seite, teile):
     return s
 
 
-def plaetze_berechnen(KL, strecke, gesperrt, hb):
+def plaetze_berechnen(KL, strecke, gesperrt, hb, anfang_fest=False):
     """Mitten der Halter auf einer Strecke: in jeder freien Luecke so viele
     gleichmaessig verteilt, dass keine Spanne laenger als SPANNE wird;
-    ganze Millimeter."""
+    ganze Millimeter. anfang_fest: am Anfang der Strecke halten die Kabel
+    schon (Zugentlastung am Elektronikfach) — die Halter der ersten Luecke
+    ruecken an ihr Ende, vor das naechste Hindernis."""
     frei = [tuple(sorted(strecke))]
     for a, b, _ in sorted(gesperrt):
         neu = []
@@ -177,13 +180,15 @@ def plaetze_berechnen(KL, strecke, gesperrt, hb):
                 neu.append((b, f1))
         frei = neu
     mitten = []
-    for f0, f1 in frei:
+    for k, (f0, f1) in enumerate(frei):
         lo, hi = f0 + hb + LUFT, f1 - hb - LUFT
         if hi < lo:
             continue
         n = max(1, int(math.ceil((hi - lo) / SPANNE)))
+        ende = anfang_fest and k == 0 and f0 <= min(strecke) + 1e-9
         for i in range(n):
-            mitten.append(float(round(lo + (i + 0.5) * (hi - lo) / n)))
+            t = (i + 1.0) / n if ende else (i + 0.5) / n
+            mitten.append(float(round(lo + t * (hi - lo))))
     return mitten
 
 
@@ -244,7 +249,8 @@ def alles(km=None, KL=None, pm=None, PL=None, EL=None):
         s['kabel'] = [k for lt in s['leitungen'] for k in kabel(lt)]
         s['sperren'] = [g for g in sperren(KL, s['seite'], teile[s['seite']])
                         if g[1] > min(s['strecke']) and g[0] < max(s['strecke'])]
-        s['plaetze'] = plaetze_berechnen(KL, s['strecke'], s['sperren'], hb)
+        s['plaetze'] = plaetze_berechnen(KL, s['strecke'], s['sperren'], hb,
+                                         s.get('anfang_fest', False))
     nr = {-1: 0, 1: 0}
     for s in ab:
         s['namen'] = []

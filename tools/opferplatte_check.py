@@ -3,7 +3,7 @@
 (fusion/Opferplatte) — laeuft ohne Fusion.
 
 Importiert Opferplatte.py, Portal.py, ToolheadZ.py, NotAus.py und
-Elektronik.py mit gestubbtem adsk-Modul und prueft: Abgleich der
+Elektronikfach.py mit gestubbtem adsk-Modul und prueft: Abgleich der
 Rahmenmasse und des Arbeitsfelds, Lage und Hoehe der Platte, Werkstueck-
 hoehe, dass Toolhead und Portal ueber den ganzen Weg ueber Platte und
 Fuessen bleiben, Fuehrung, Anschlag und Einfuehrschraege, den Riegel

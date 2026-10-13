@@ -2,10 +2,10 @@
 """Zeichnung: Platz fuer die Elektronik — Vorschlag.
 
 Draufsicht auf die ganze Maschine und Seitenansicht von links: das
-Elektronikfach hinter dem hinteren 2060 mit dem Gehaeuse der Steuerung, die
-Endschalter, die festen Kabelwege und die beiden Energieketten. Rahmen,
-Portal und Toolhead kommen aus Portal.py und ToolheadZ.py, das Gehaeuse aus
-Elektronik.py, das Fach und der Y-Weg aus tools/portal_check.py
+Elektronikfach hinter dem hinteren 2060 mit Steuerung, Pi und Verteilung,
+die Endschalter, die festen Kabelwege und die beiden Energieketten. Rahmen,
+Portal und Toolhead kommen aus Portal.py und ToolheadZ.py, das Fach aus
+Elektronikfach.py, der freie Raum und der Y-Weg aus tools/portal_check.py
 (Abschnitte 14 und 16). Die Ketten sind gedruckt und liegen wie in
 Portal.py, jede mit Wanne, Festpunkt und Kettenhalter (X seit Rev. 19, Y
 seit Rev. 21). Das Netzteil ist ein Steckernetzteil und steht ausserhalb.
@@ -33,11 +33,9 @@ from kette_zeichnen import schleife_y                 # noqa: E402
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-platz.svg')
 ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                          'fusion', 'Elektronik', 'Elektronik.py')
+                          'fusion', 'Elektronikfach', 'Elektronikfach.py')
 NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                       'fusion', 'NotAus', 'NotAus.py')
-PIHALTER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                        'fusion', 'PiHalter', 'PiHalter.py')
 
 # ---- Ketten ----------------------------------------------------------------
 # Gedruckt (Portal.py, seit Rev. 19, aus der 3MF ausgemessen): aussen
@@ -70,9 +68,10 @@ LUEFTER_W = 2.0
 LASER_V, LASER_A = 12.0, 1.8     # obere Grenze der Angabe
 WANDLER_A = 5.0                  # Abwaertswandler 24 -> 12 V, 5 A [v]
 WANDLER_ETA = 0.9                # sein Wirkungsgrad [w]
-# 5 V: Der Pi (docs/pi.md) haengt mit seinem Abwaertswandler 24 -> 5 V vor
-# Schalter und Not-Aus an der Buchse und versorgt ueber USB den Uno, der
-# Uno ueber seinen 5-V-Stift die Lichtschranken [w].
+# 5 V: Der Abwaertswandler 24 -> 5 V haengt vor Schalter und Not-Aus an der
+# Buchse. Von seinem USB-A-Adapter gehen die 5 V kurz und dick an die Wago
+# +5 V (W6); daran haengen die Lichtschranken und der Pi (W19), der ueber
+# USB (W17) den Uno versorgt [w].
 USB_MA = 500.0          # Polyfuse am USB-Eingang des Uno
 LS_MA = 25.0            # je Lichtschranke: IR-Diode, Komparator, zwei LEDs
 UNO_MA = 60.0           # Uno mit USB-Wandler
@@ -80,8 +79,9 @@ TREIBER_LOGIK_MA = 5.0  # je TMC2209, VIO
 PI_MA = 600.0           # Pi Zero 2 W unter Last, mit WLAN [w]
 PI_WANDLER_A = 3.0      # Abwaertswandler 24 -> 5 V: mindestens so viel
 PI_WANDLER_ETA = 0.85   # sein Wirkungsgrad [w]
-# Fertige USB-Kabel (W17, W19): Querschnitt der Stromadern; billige Kabel
-# haben nur AWG 28. Unter etwa 4,63 V meldet der Pi Unterspannung [w].
+# Fertige Kabel (W17 USB, W19 Micro-USB mit offenen Enden): Querschnitt
+# der Stromadern; billige Kabel haben nur AWG 28. Unter etwa 4,63 V meldet
+# der Pi Unterspannung [w].
 AWG_MM2 = {24: 0.205, 28: 0.081}
 PI_UNTERSPANNUNG = 4.63  # V
 
@@ -134,26 +134,30 @@ def konzept(w, L, tw, TL, ew, EL):
     # beginnt dann am Fach
     K['y_tr'] = min(TL['traeger_y0'] - d_schiene - w('luft_bau'), fach.y[1])
 
-    # Gehaeuse aus Elektronik.py
+    # Elektronikfach aus Elektronikfach.py
     K['EL'] = EL
-    K['steuerung'] = Quader('Gehaeuse', *EL['geh_x'], *EL['geh_y'],
-                            *EL['geh_z'])
-    K['platte'] = Quader('Montageplatte', *EL['platte_x'], *EL['platte_y'],
-                         *EL['platte_z'])
-    K['deckel'] = Quader('Deckel', *EL['deckel_x'], *EL['geh_y'],
-                         *EL['haube_z'])
+    K['fach_kasten'] = Quader('Elektronikfach', *EL['geh_x'], *EL['geh_y'],
+                              *EL['geh_z'])
+    K['ohren'] = [Quader('Ohr ' + s_, *EL['ohr_x'][s_], *EL['platte_y'],
+                         *EL['ohr_z']) for s_ in ('links', 'rechts')]
+    K['deckel'] = Quader('Deckel', *EL['geh_x'], *EL['geh_y'],
+                         *EL['deckel_z'])
     fm, h = EL['luefter_mitte'], ew('luefter') / 2.0
     K['luefter'] = Quader('Luefter', fm[0] - h, fm[0] + h, fm[1] - h,
                           fm[1] + h, *EL['luefter_z'])
     K['uno'] = Quader('Uno', *EL['uno_x'], *EL['uno_y'], EL['uno_z0'],
                       EL['stapel_z1'])
-    K['eingang'] = Quader('Eingang', EL['buchse_x'] - 6.0,
-                          EL['schalter_x'] + 11.0, EL['innen_y'][0],
-                          EL['innen_y'][0] + ew('eingang_tiefe'),
-                          EL['boden_z'], EL['boden_z'] + 25.0)
-    K['verteiler'] = Quader('Verteiler', *EL['wago_x'], EL['wandler_y'][0],
-                            EL['wago_y'][1], EL['boden_z'],
-                            EL['boden_z'] + 25.0)
+    K['pi'] = Quader('Pi', EL['pi_bauteile_x'][0], EL['pi_pcb_x'][1],
+                     *EL['pi_y'], *EL['pi_z'])
+    K['wandler12'] = Quader('12-V-Wandler', *EL['w12_x'], *EL['w12_y'],
+                            *EL['w12_z'])
+    K['wandler5'] = Quader('5-V-Wandler', *EL['w5_x'], *EL['w5_y'],
+                           *EL['w5_z'])
+    K['adapter'] = Quader('USB-A-Adapter', *EL['adapter'][0],
+                          *EL['adapter'][1], *EL['adapter'][2])
+    K['wago'] = [Quader(n, *x, *y, *z) for n, _, x, y, z in EL['wago']]
+    K['aa'] = Quader('Air Assist', *EL['aa_x'], *EL['aa_y'],
+                     EL['boden_z'], EL['boden_z'] + 20.0)
     K['leistung'] = leistung()
 
     # Aussenseiten der 2040 und ihre untere Nut
@@ -216,18 +220,6 @@ def konzept(w, L, tw, TL, ew, EL):
                          NA['lasche_x'][1][1], *NA['geh_y'], *NA['geh_z'])
     K['notaus_kabel'] = (NA['geh_x'][1], NA['kabel'][0], NA['kabel'][1])
     K['notaus_nut_z'] = NA['nuten_z'][0]
-    # Pi-Halter (PiHalter.py): rechts neben der Montageplatte an der
-    # Rueckseite des hinteren 2060; Pi und 5-V-Wandler ueber dem 2060
-    PH = bauraum.modul_laden(PIHALTER, 'pihalter').lage()
-    K['PH'] = PH
-    K['pihalter'] = Quader('Pi-Halter', *PH['x'], *PH['platte_y'],
-                           *PH['z'])
-    K['pi'] = Quader('Pi', *PH['pi_x'], PH['bauteile_y'][0],
-                     PH['pcb_y'][1], *PH['pi_z'])
-    K['wandler5'] = Quader('5-V-Wandler', *PH['wandler_x'],
-                           *PH['wandler_y'], *PH['wandler_z'])
-    K['pihaube'] = Quader('Pi-Haube', *PH['haube_x'], *PH['haube_y'],
-                          *PH['haube_z'])
     K['kabel'] = kabelwege(w, L, TL, K)
     return K
 
@@ -268,19 +260,27 @@ def litzen(K):
     """Folgen der Querschnitte an den laengsten Wegen (Kauflaengen):
     Spannungsfall am Laser, Widerstand im Z-Motorkabel, Not-Aus bei vollem
     Netzteilstrom — dessen Kabel laeuft zum Gehaeuse vorn am vorderen 2060
-    und zurueck. Dazu der Zweig zum Pi: W18 mit 24 V, W19 mit 5 V fuer
-    alles am Pi, W17 mit dem Strom des Uno (AWG 24 und das duenne AWG 28)."""
+    und zurueck. Dazu die 5 V: W6 traegt alles vom Wandler an die Wago
+    +5 V, W19 den Pi und ueber ihn den Uno, die Lichtschranken haengen
+    direkt an der Wago; W17 traegt nur noch den Uno mit Treiberlogik
+    (W19 und W17 mit AWG 24 und dem duennen AWG 28)."""
     kab = K['kabel']
     netz_a = NETZTEIL_W / 24.0
     m_laser = kauflaenge(kab['Laser (12 V + PWM)'][0])
     m_motor = kauflaenge(kab['Z-Motor'][0])
     m_not = kauflaenge(kab['Not-Aus'][0])
-    m_pi24 = kauflaenge(kab['Pi 24 V'][0])
+    m_pi24 = kab['Pi 24 V'][0] / 1000.0 * (1.0 + RESERVE)
+    m_w6 = kab['5 V vom Wandler'][0] / 1000.0 * (1.0 + RESERVE)
     m_pi5 = kauflaenge(kab['Pi 5 V'][0])
     m_usb = kauflaenge(kab['USB Pi–Uno'][0])
+    m_ls = max(kauflaenge(kab[n][0]) for n in ('X-Endschalter',
+                                                'Y-Endschalter',
+                                                'Z-Endschalter'))
     pi24_a = leistung()['pi'] / 24.0
-    pi5_a = fuenf_volt_ma() / 1000.0
-    usb_a = (UNO_MA + 4 * TREIBER_LOGIK_MA + 3 * LS_MA) / 1000.0
+    alle5_a = fuenf_volt_ma() / 1000.0
+    pi5_a = (PI_MA + UNO_MA + 4 * TREIBER_LOGIK_MA) / 1000.0
+    usb_a = (UNO_MA + 4 * TREIBER_LOGIK_MA) / 1000.0
+    w6_u = spannungsfall(LITZE_24V, m_w6, alle5_a)
     return {'netz_a': netz_a,
             'laser_m': m_laser,
             'laser_u': spannungsfall(LITZE_LASER, m_laser, LASER_A),
@@ -290,9 +290,13 @@ def litzen(K):
             'not_u': spannungsfall(LITZE_24V, m_not, netz_a),
             'pi24_m': m_pi24, 'pi24_a': pi24_a,
             'pi24_u': spannungsfall(LITZE_24V, m_pi24, pi24_a),
+            'w6_m': m_w6, 'w6_a': alle5_a, 'w6_u': w6_u,
             'pi5_m': m_pi5, 'pi5_a': pi5_a,
-            'pi5_u': {awg: spannungsfall(mm2, m_pi5, pi5_a)
+            'pi5_u': {awg: w6_u + spannungsfall(mm2, m_pi5, pi5_a)
                       for awg, mm2 in AWG_MM2.items()},
+            'ls_m': m_ls,
+            'ls_u': w6_u + spannungsfall(LITZE_SIGNAL, m_ls,
+                                         LS_MA / 1000.0),
             'usb_m': m_usb, 'usb_a': usb_a,
             'usb_u': {awg: spannungsfall(mm2, m_usb, usb_a)
                       for awg, mm2 in AWG_MM2.items()}}
@@ -305,13 +309,62 @@ def laenge(punkte):
 def kabelwege(w, L, TL, K):
     """Kabelwege als 3D-Streckenzuege (Portal in der Mitte). Die Ketten
     zaehlen mit ihrer Laenge. Liefert {Name: (Laenge mm, Streckenzug
-    in XY fuer die Draufsicht)}."""
-    R, st, EL = L['R'], K['steuerung'], K['EL']
+    in XY fuer die Draufsicht)}.
+
+    Im Elektronikfach laufen die Kabel in ihren Gassen: Signale vorn,
+    Leistung und Motoren hinten, durch die Fenster der Fuge in die andere
+    Haelfte und durch die Fenster der Endwaende hinaus, dort unter den 2040
+    durch in deren untere Aussennut. Die Stifte des Shields sind
+    angenommen [?]: die Leiste der Endschalter an der linken Kante des Uno,
+    die Motorstecker neben den Treibern, die Klemme 24 V an der Ecke bei
+    USB und Hohlbuchse."""
+    R, EL = L['R'], K['EL']
     xa, zn = K['x_aussen'], K['z_nut_u']
-    # links aus dem Kabelausschnitt, unter dem linken 2040 durch nach aussen
-    yc = EL['kabel_links_y']
-    z_k = EL['kabel_z0'] + 8.0
-    raus = [(st.x[0], yc, z_k), (-xa, yc, z_k), (-xa, yc, zn)]
+    bz = EL['boden_z']
+    zk = bz + 8.0                                  # Kabel in den Gassen
+    yv = sum(EL['gasse_vorn']) / 2.0
+    yh = {s_: sum(EL['gasse_hinten'][s_]) / 2.0 for s_ in ('links', 'rechts')}
+    gx = EL['geh_x'][1]
+    xl = EL['innen_x']['links'][0] + 8.0            # links neben dem Uno
+    ys = sum(EL['fenster_sig_y']) / 2.0
+    yp = {s_: sum(EL['fenster_pow'][s_][0]) / 2.0 for s_ in ('links',
+                                                            'rechts')}
+    ux_fern, ux0 = EL['uno_x']
+    uy0, uy1 = EL['uno_y']
+    zs = EL['uno_z1'] + 14.0                       # Stifte auf dem Shield
+    leiste = (ux_fern + 4.0, (uy0 + uy1) / 2.0, zs)
+    motor = {a: (ux0 - x, uy0 + y) for a, x, y in (
+        ('X', 33.0, 40.0), ('Y', 62.0, 40.0), ('Z', 33.0, 13.0),
+        ('A', 62.0, 13.0))}
+    klemme24 = (ux0 - 5.0, uy0 + 5.0, EL['uno_z1'] + 12.0)
+    # Eintritt der Draehte: 24 V und GND von vorn, die 5-V-Klemmen an der
+    # Endwand von unten
+    wago = {n: ((x[0] + x[1]) / 2.0, (y[0] + y[1]) / 2.0, z[0] - 3.0)
+            if n.endswith('5 V') else ((x[0] + x[1]) / 2.0, y[1], z[0] + 5.0)
+            for n, _, x, y, z in EL['wago']}
+
+    def aus_links(y, z=zk):
+        """durch das Fenster links, unter dem 2040 durch in die Nut"""
+        return [(xl, y, z), (-gx, y, z), (-xa, y, z), (-xa, y, zn)]
+
+    def aus_rechts(y, z=zk):
+        return [(gx, y, z), (xa, y, z), (xa, y, zn)]
+
+    def vom_motor(a):
+        """vom Motorstecker hoch und ueber den Uno schraeg zum Fenster"""
+        x, y = motor[a]
+        return [(x, y, zs), (x, y, zs + 10.0), (xl, yp['links'], zk)]
+
+    def gasse_hinten(x0, x1):
+        """in der Leistungsgasse von x0 nach x1, wenn noetig durch die
+        Fuge"""
+        y0 = yh['links'] if x0 < 0 else yh['rechts']
+        y1 = yh['links'] if x1 < 0 else yh['rechts']
+        if (x0 < 0) == (x1 < 0):
+            return [(x0, y0, zk), (x1, y1, zk)]
+        return [(x0, y0, zk), (0.0, (y0 + y1) / 2.0, zk), (x1, y1, zk)]
+
+    raus = vom_motor('Y') + aus_links(yp['links'])
     zm = sum(K['ym_z']) / 2.0
     fl = w('motor_flansch') / 2.0
     # vorn verlaesst das Kabel die untere Nut zwischen dem 2060 und den
@@ -329,22 +382,30 @@ def kabelwege(w, L, TL, K):
         return (umweg if s < 0 else []) + [
             (s * xa, y_vor, zn), (s * (R + fl + 3.0), K['ym_y'], zm)]
 
-    # vorn aus dem Kabelausschnitt in den Kanal, darin nach rechts, dann an
-    # der Rueckseite des 2060 (mittlere Nut) zum rechten 2040
-    xv = EL['kabel_vorn_x']
-    y_kanal = (st.y[1] + EL['platte_y'][0]) / 2.0
-    y_2060 = L['quer_y_hinten'][0] - 1.0
-    z_2060 = L['quer_z'][0] + 30.0
-    x_ende = EL['platte_x'][1] + 5.0
-    rechts = [(xv, st.y[1], z_k), (xv, y_kanal, z_k), (x_ende, y_kanal, z_k),
-              (x_ende, y_2060, z_2060), (xa, y_2060, z_2060),
-              (xa, y_2060, zn)]
+    # rechts: Motor A durch die Leistungsgasse, Lichtschranke Y durch die
+    # Signalgasse, Not-Aus vom Schalter
+    xa_, ya_ = motor['A']
+    rechts_motor = ([(xa_, ya_, zs), (xa_, yh['links'], zk)]
+                    + gasse_hinten(xa_, gx - 8.0)
+                    + aus_rechts(yp['rechts']))
+    rechts_ls = ([leiste, (ux_fern - 4.0, yv, zk), (gx - 8.0, yv, zk)]
+                 + aus_rechts(ys))
+    sx, ez = EL['schalter']
+    rechts_not = ([(sx, EL['innen_y'][0] + 10.0, ez), (sx, yp['rechts'], zk),
+                   (gx - 8.0, yp['rechts'], zk)] + aus_rechts(yp['rechts']))
     # zur Y-Kette: in der Seitennut nach vorn bis hinter die Wanne Y, dort
     # aus der Nut nach aussen und hinten in das Endstueck 180
     xk = sum(K['ky_x']) / 2.0
     y_wanne = K['ky_wanne'][0] - 5.0
-    zur_kette = raus + [(-xa, y_wanne, zn), (xk, y_wanne, K['ky_z_unten']),
-                        (xk, K['ky_eintritt'], K['ky_z_unten'])]
+    kette_ein = [(-xa, y_wanne, zn), (xk, y_wanne, K['ky_z_unten']),
+                 (xk, K['ky_eintritt'], K['ky_z_unten'])]
+    zur_kette = vom_motor('X') + aus_links(yp['links']) + kette_ein
+    ls_links = [leiste] + aus_links(ys)
+    # Laser: +12 V und GND vom Wandler durch die Leistungsgasse nach links
+    wx, wy = EL['w12_x'][0], sum(EL['w12_y']) / 2.0
+    laser_fach = ([(wx, wy, bz + 10.0), (wx - 4.0, yh['links'], zk)]
+                  + gasse_hinten(wx - 4.0, xl)[1:]
+                  + aus_links(yp['links'])[1:] + kette_ein)
     # bewegtes Ende (Portal in der Mitte): hinten aus dem Anfangsstueck, ein
     # Kabelbinder am Kettenhalter Y
     aus_y = (xk, K['ky_austritt'], K['ky_z_oben'])
@@ -367,11 +428,11 @@ def kabelwege(w, L, TL, K):
     K['weg_portal'] = zur_x
     # X-Motor: hinter dem Motorhalter hoch, seine Litze kommt seitlich aus
     # dem Motor (links angenommen); X-Endschalter ueber das Rohr nach vorn
-    motor = K['portal']['X-Motor']
-    yh = L['stirn_y'][0] - 3.0
-    x_motor = [aus_y, binder, (motor.x[0] - 3.0, yh, zp),
-               (motor.x[0] - 3.0, yh, 65.0), (motor.x[0], -16.4, 65.0)]
-    x_es = [aus_y, binder, (x0, binder[1], zp), (x0, yh, zp),
+    motor_x = K['portal']['X-Motor']
+    yhm = L['stirn_y'][0] - 3.0
+    x_motor = [aus_y, binder, (motor_x.x[0] - 3.0, yhm, zp),
+               (motor_x.x[0] - 3.0, yhm, 65.0), (motor_x.x[0], -16.4, 65.0)]
+    x_es = [aus_y, binder, (x0, binder[1], zp), (x0, yhm, zp),
             (x0, yn, L['profil_z1'] + 3.0),
             (K['es_x'][0], K['es_x'][1], 20.0)]
     xm = K['xm']
@@ -383,61 +444,67 @@ def kabelwege(w, L, TL, K):
     ky, kx = K['ky_laenge'], K['kx_laenge']
     na_x, na_y, na_z = K['notaus_kabel']
     z_nut = K['notaus_nut_z']
-    notaus = rechts + [(xa, y_vor, zn), (xa, y_vor, z_nut),
-                       (na_x + 3.0, y_vor, z_nut), (na_x + 3.0, na_y, na_z),
-                       (na_x, na_y, na_z)]
-    # Pi (PiHalter.py). 24 V: an den Loetfahnen der Buchse, im Kasten nach
-    # vorn, durch den Kanal nach rechts, an der Flaeche des 2060 unter dem
-    # Halter durch, von unten in die Haube und zwischen ihrer linken Wand
-    # und dem Wandler, hinter dem Kopf der M5, hoch zu seinem Eingang
-    PH = K['PH']
-    zw = sum(PH['wandler_z']) / 2.0
-    yw = sum(PH['wandler_y']) / 2.0
-    xw = (PH['haube_innen'][0][0] + PH['wandler_x'][0]) / 2.0
-    y_hinter = PH['kopf_y'][0] - 3.0
-    pi24 = [(EL['buchse_x'], EL['innen_y'][0] + 6.0, EL['eingang_z']),
-            rechts[0], rechts[1], rechts[2], rechts[3],
-            (xw, y_2060, z_2060), (xw, y_hinter, z_2060), (xw, y_hinter, zw),
-            (PH['wandler_x'][0], yw, zw)]
-    # 5 V: aus dem USB-A-Stecker rechts im Wandler (zeigt zum Pi) nach
-    # unten und von unten in PWR
-    ps, sa = PH['stecker']['PWR'], PH['stecker_a']
-    sx, sy = sum(ps[0]) / 2.0, sum(ps[1]) / 2.0
-    ya, za = sum(sa[1]) / 2.0, sum(sa[2]) / 2.0
-    pi5 = [(sa[0][1], ya, za), (sa[0][1] + 5.0, ya, za - 5.0),
-           (sa[0][1] + 5.0, ya, ps[2][0] - 8.0),
-           (sx, sy, ps[2][0] - 8.0), (sx, sy, ps[2][0])]
-    # USB: aus dem Stecker in "USB" nach unten und hinten, nach links bis
-    # neben den Kasten, an seiner rechten Wand nach hinten, hinter ihm nach
-    # links und von hinten in die USB-B-Buchse des Uno (Mitte 38,1 mm von
-    # der Kante unter der Hohlbuchse [w]); der Stecker steht 30 mm ueber
-    us = PH['stecker']['USB']
-    ux, uy = sum(us[0]) / 2.0, sum(us[1]) / 2.0
-    y_usb = PH['wandler_y'][0] - 5.0
-    z_usb = us[2][0] - 7.0
-    x_b = EL['uno_x'][0] + 38.1
-    z_b = EL['uno_z1'] + 5.5
-    y_b = st.y[0] - 30.0
-    usb = [(ux, uy, us[2][0]), (ux, y_usb, z_usb), (st.x[1] + 5.0, y_usb,
-                                                    z_usb),
-           (st.x[1] + 5.0, y_b, z_usb), (x_b, y_b, z_b), (x_b, st.y[0], z_b)]
+    notaus = rechts_not + [(xa, y_vor, zn), (xa, y_vor, z_nut),
+                           (na_x + 3.0, y_vor, z_nut),
+                           (na_x + 3.0, na_y, na_z), (na_x, na_y, na_z)]
+    # im Fach: 24 V fuer den 5-V-Wandler von der Buchse; 5 V vom Adapter
+    # durch die Signalgasse an die 5-V-Klemmen links, von dort zum Pi (W19)
+    bx, _ = EL['buchse']
+    pi24 = [(bx, EL['innen_y'][0] + 8.0, ez), (bx, EL['innen_y'][0] + 8.0,
+                                                 zk),
+            (EL['w5_x'][1] + 4.0, sum(EL['w5_y']) / 2.0, zk),
+            (EL['w5_x'][1], sum(EL['w5_y']) / 2.0, bz + 10.0)]
+    ad = EL['adapter']
+    w5 = wago['+5 V']
+    fuenf = [(ad[0][0], sum(ad[1]) / 2.0, bz + 10.0),
+             (ad[0][0] - 4.0, yv, zk), (w5[0], yv, zk), w5]
+    ps = EL['pi_stecker']['PWR']
+    sx_, sy_ = sum(ps[0]) / 2.0, sum(ps[1]) / 2.0
+    pi5 = [w5, (w5[0], yv, zk), (-25.0, yv, zk), (sx_, yv, ps[2][0] - 8.0),
+           (sx_, sy_, ps[2][0] - 8.0), (sx_, sy_, ps[2][0])]
+    # USB: aus dem USB-B-Stecker am Uno mit einer Schlaufe unter den Pi
+    # und von unten in den Stecker "USB"
+    ub = EL['usb_b_stecker']
+    us = EL['pi_stecker']['USB']
+    ux_, uy_ = sum(us[0]) / 2.0, sum(us[1]) / 2.0
+    zb = sum(ub[2]) / 2.0
+    usb = [(ub[0][1], sum(ub[1]) / 2.0, zb), (ub[0][1] + 15.0, uy_ - 20.0, zb),
+           (ux_, uy_ - 20.0, us[2][0] - 15.0), (ux_, uy_, us[2][0] - 8.0),
+           (ux_, uy_, us[2][0])]
+    # 24 V an die Klemme des Shields, Luefter und Waechter an die Wago
+    w24 = wago['+24 V']
+    shield24 = ([w24, (w24[0], yh['rechts'], zk)]
+                + gasse_hinten(w24[0], klemme24[0])[1:]
+                + [(klemme24[0], klemme24[1], zk), klemme24])
+    fm = EL['luefter_mitte']
+    luefter = ([(fm[0], fm[1], EL['luefter_z'][0]), (fm[0], fm[1], zs + 15.0),
+                (fm[0], yh['links'], zk)] + gasse_hinten(fm[0], w24[0])[1:]
+               + [w24])
+    waechter = [w24, (w24[0], yv, zk), (leiste[0] + 6.0, yv, zk), leiste]
     wege = {
         'Not-Aus': (laenge(notaus), notaus),
         'Y-Motor links': (laenge(raus + y_motor(-1)), raus + y_motor(-1)),
-        'Y-Motor rechts': (laenge(rechts + y_motor(1)), rechts + y_motor(1)),
-        'Y-Endschalter': (laenge(rechts + [(xa, K['es_y'][1], zn)]),
-                          rechts + [(xa, K['es_y'][1], zn)]),
+        'Y-Motor rechts': (laenge(rechts_motor + y_motor(1)),
+                           rechts_motor + y_motor(1)),
+        'Y-Endschalter': (laenge(rechts_ls + [(xa, K['es_y'][1], zn)]),
+                          rechts_ls + [(xa, K['es_y'][1], zn)]),
         'X-Motor': (laenge(zur_kette) + ky + laenge(x_motor), zur_kette),
-        'X-Endschalter': (laenge(zur_kette) + ky + laenge(x_es), None),
-        'Z-Motor': (laenge(zur_kette) + ky + laenge(zur_x) + kx
+        'X-Endschalter': (laenge(ls_links + kette_ein) + ky + laenge(x_es),
+                          ls_links + kette_ein),
+        'Z-Motor': (laenge(vom_motor('Z') + aus_links(yp['links'])
+                           + kette_ein) + ky + laenge(zur_x) + kx
                     + laenge(z_motor), None),
-        'Laser (12 V + PWM)': (laenge(zur_kette) + ky + laenge(zur_x) + kx
-                               + laenge(laser), None),
-        'Z-Endschalter': (laenge(zur_kette) + ky + laenge(zur_x) + kx
-                          + laenge(z_es), None),
+        'Laser (12 V + PWM)': (laenge(laser_fach) + ky + laenge(zur_x) + kx
+                               + laenge(laser), laser_fach),
+        'Z-Endschalter': (laenge(ls_links + kette_ein) + ky + laenge(zur_x)
+                          + kx + laenge(z_es), None),
         'Pi 24 V': (laenge(pi24), pi24),
         'Pi 5 V': (laenge(pi5), pi5),
         'USB Pi–Uno': (laenge(usb), usb),
+        '5 V vom Wandler': (laenge(fuenf), fuenf),
+        'Shield 24 V': (laenge(shield24), shield24),
+        'Lüfter': (laenge(luefter), luefter),
+        'Wächter': (laenge(waechter), waechter),
     }
     return wege
 
@@ -534,27 +601,24 @@ def draufsicht(f, w, L, K):
     # Toolhead in der Mitte: das bewegte Ende steht ueber dem Festpunkt
     t.append(f.rect(K['kx_eintritt'], K['kx_bogen'] + L['xk_bogen_r'][1],
                     *K['kx_y'], 'kette'))
-    # Gehaeuse (Elektronik.py) mit Platte; darin Uno, Eingang, Verteiler;
-    # obenauf der Luefter
-    for n, art, mehr in (('platte', 'neu', {}), ('steuerung', 'neu', {}),
-                         ('uno', 'druck', {'fill_opacity': '0.7'}),
-                         ('eingang', 'kauf', {'stroke_dasharray': '4 3'}),
-                         ('verteiler', 'kauf', {'stroke_dasharray': '4 3'}),
+    # Elektronikfach (Elektronikfach.py) mit Ohren; darin Uno, Pi, Wandler
+    # und Wago; obenauf der Luefter
+    for q in [K['fach_kasten']] + K['ohren']:
+        t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], 'neu'))
+    for n, art, mehr in (('uno', 'druck', {'fill_opacity': '0.7'}),
+                         ('pi', 'kauf', {}),
+                         ('wandler12', 'kauf', {'stroke_dasharray': '4 3'}),
+                         ('wandler5', 'kauf', {'stroke_dasharray': '4 3'}),
+                         ('aa', 'neu', {'fill': 'none',
+                                        'stroke_dasharray': '4 3'}),
                          ('luefter', 'kauf', {'fill_opacity': '0.85'})):
         q = K[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
-    # Pi-Halter (PiHalter.py) rechts neben dem Kasten, dahinter Wandler und
-    # Pi unter der Haube (gestrichelt)
-    for n, art, mehr in (('pihalter', 'neu', {}),
-                         ('wandler5', 'kauf', {'stroke_dasharray': '4 3'}),
-                         ('pi', 'kauf', {}),
-                         ('pihaube', 'neu', {'fill': 'none',
-                                             'stroke_dasharray': '6 3'})):
-        q = K[n]
-        t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], art, **mehr))
+    for q in K['wago']:
+        t.append(f.rect(q.x[0], q.x[1], q.y[0], q.y[1], 'kauf'))
     # feste Kabelwege, dazu der Weg mit dem Portal von der Y- zur X-Kette
     for n in ('Y-Motor links', 'Y-Motor rechts', 'Y-Endschalter', 'X-Motor',
-              'Not-Aus', 'Pi 24 V', 'USB Pi–Uno'):
+              'Not-Aus', 'X-Endschalter', 'Laser (12 V + PWM)'):
         weg = K['kabel'][n][1]
         t.append(linienzug(f, [(p[0], p[1]) for p in weg]))
     t.append(linienzug(f, [(p[0], p[1]) for p in K['weg_portal'][1:]]))
@@ -585,14 +649,11 @@ def seitenansicht(f, w, L, TL, K):
     t.append(fach_rect(f, fach.y[0], fach.y[1], fach.z[0], fach.z[1]))
     t.append(f.rect(fach.y[0], K['y_tr'], fach.z[1], K['z_frei'] - 0.0,
                     'neu', fill='none', stroke_dasharray='3 3'))
-    for n, art, mehr in (('platte', 'neu', {}), ('steuerung', 'neu', {}),
-                         ('deckel', 'neu', {}),
+    for n, art, mehr in (('fach_kasten', 'neu', {}), ('deckel', 'neu', {}),
                          ('uno', 'druck', {'fill_opacity': '0.7'}),
                          ('luefter', 'kauf', {}),
-                         ('wandler5', 'kauf', {'stroke_dasharray': '4 3'}),
-                         ('pi', 'kauf', {}), ('pihalter', 'neu', {}),
-                         ('pihaube', 'neu', {'fill': 'none',
-                                             'stroke_dasharray': '6 3'})):
+                         ('wandler12', 'kauf', {'stroke_dasharray': '4 3'}),
+                         ('pi', 'kauf', {})):
         q = K[n]
         t.append(f.rect(q.y[0], q.y[1], q.z[0], q.z[1], art, **mehr))
     # Portal an der hinteren Grenze, Z unten
@@ -636,8 +697,7 @@ def main():
     tw, TL = th.w, th.lage()
     pm = bauraum.modul_laden(bauraum.PORTAL, 'portal')
     w, L = pm.w, pm.lage()
-    em = bauraum.modul_laden(ELEKTRONIK, 'elektronik')
-    hm = bauraum.modul_laden(PIHALTER, 'pihalter')
+    em = bauraum.modul_laden(ELEKTRONIK, 'elektronikfach')
     K = konzept(w, L, tw, TL, em.w, em.lage())
     K['strahl_y'] = TL['strahl_y']
     K['z_frei'] = -16.0 - w('luft_bau')         # unter dem X-Wagen
@@ -648,9 +708,9 @@ def main():
             '<rect width="7" height="7" fill="#fbeee2"/>'
             '<line x1="0" y1="0" x2="0" y2="7" stroke="#e8a871" '
             'stroke-width="1.4"/></pattern>'),
-         text(24, 30, 'Platz für die Elektronik (Elektronik.py Rev. {}, '
-              'PiHalter.py Rev. {}, Portal.py Rev. {}, ToolheadZ.py Rev. {})'
-              .format(em.REVISION, hm.REVISION, pm.REVISION, th.REVISION),
+         text(24, 30, 'Platz für die Elektronik (Elektronikfach.py Rev. {}, '
+              'Portal.py Rev. {}, ToolheadZ.py Rev. {})'
+              .format(em.REVISION, pm.REVISION, th.REVISION),
               14, TEXT, fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Ketten '
               'gedruckt, beide mit Wanne, Festpunkt und Kettenhalter wie in '
@@ -662,7 +722,7 @@ def main():
     fa = Feld(262, 92, (-338.0, 338.0), (-392.0, 305.0), s1, b_runter=True)
     t += fa.ausschnitt('drauf', draufsicht(fa, w, L, K))
     t += fa.rahmen('Draufsicht (vorn unten)')
-    eg = K['eingang']
+    EL = K['EL']
     xm = K['xm']
     t += fa.spalte([
         (-R, L['rahmen_y'][0] + 20.0, 'linkes 2040 (600 mm)'),
@@ -684,15 +744,15 @@ def main():
         fa.ox - 12, 'end', abstand=24.0)
     t += fa.spalte([
         (K['luefter'].x[1] - 6.0, K['luefter'].y[0] + 6.0,
-         'Gehäuse: Uno + CNC Shield\nV3, Lüfter 24 V im Deckel'),
-        ((eg.x[0] + eg.x[1]) / 2, eg.y[0] + 4.0,
-         '24 V vom Steckernetzteil:\nBuchse und Schalter hinten'),
-        (sum(K['verteiler'].x) / 2, K['verteiler'].y[0] + 10.0,
-         'Wandler 24 → 12 V und\nWago-Klemmen'),
-        (K['platte'].x[1] - 8.0, K['platte'].y[0] + 2.0,
-         'Montageplatte: 4 × M5 in die\nRückseite des 2060, Kabelkanal'),
-        (K['pi'].x[1] - 6.0, K['pi'].y[0] + 2.0,
-         'Pi-Halter: Pi Zero 2 W und\n5-V-Wandler über dem 2060'),
+         'Elektronikfach: Uno + CNC Shield\nV3, Lüfter 24 V im Deckel'),
+        (EL['schalter'][0], EL['innen_y'][0] + 4.0,
+         '24 V vom Netzteil:\nBuchse und Schalter hinten'),
+        (sum(K['wandler5'].x) / 2, K['wandler5'].y[0] + 6.0,
+         'Wandler 24 → 5 V, Wago 24 V\nund GND, Platz für Air Assist'),
+        (K['ohren'][1].x[1] - 4.0, K['ohren'][1].y[0] + 2.0,
+         'Montageplatte mit Ohren: 6 × M5\nin die Rückseite des 2060'),
+        (K['pi'].x[1], K['pi'].y[0] + 4.0,
+         'Pi Zero 2 W senkrecht an der\nFuge, über dem 2060'),
         (K['es_y'][0], K['es_y'][1], 'Y-Endschalter außen am\nrechten 2040 '
          '(links die Kette)'),
         (fach.x[1] - 10.0, fach.y[1] - 10.0,
@@ -736,7 +796,7 @@ def main():
              de(K['luft_2060'], 0))),
         (-60.0, L['rahmen_z1'] - 8.0, '2040 (davor die Kette)'),
         (K['pi'].y[0], K['pi'].z[1] - 4.0,
-         'Pi und 5-V-Wandler auf dem\nPi-Halter, über dem 2060'),
+         'Pi im Fach, an der Fuge,\nmit der Oberkante über dem 2060'),
         (-211.0, 66.0, 'Toolhead oben abgeschnitten')],
         fb.ox + fb.breite + 12, 'start', abstand=26.0)
     t += fb.mass(fach.y[0] + 12.0, fach.z[0], fach.z[1], '{} mm'.format(
@@ -776,9 +836,9 @@ def main():
              de(LUEFTER_W, 0), de(K['leistung']['laser'], 0),
              de(K['leistung']['pi'], 0),
              de(K['leistung']['summe'], 0), de(K['leistung']['dauer'], 0))),
-        ('Pi', 'Pi Zero 2 W auf dem Pi-Halter rechts neben dem Kasten, ganz '
-         'über dem 2060; sein 5-V-Wandler hängt vor Schalter und Not-Aus an '
-         'der Buchse (docs/pi.md)'),
+        ('Pi', 'Pi Zero 2 W im Fach, senkrecht an der Fuge, die Oberkante '
+         'über dem 2060; der 5-V-Wandler hängt vor Schalter und Not-Aus an '
+         'der Buchse und versorgt auch die Lichtschranken (docs/pi.md)'),
         ('Endschalter', 'LM393-Gabellichtschranken: X links auf der 2020 '
          'des Portals, Y '
          'außen am rechten 2040 — schaltet {} (Toolhead mit Z unten {} mm '
@@ -798,7 +858,8 @@ def main():
     ]
     for n in ('Y-Motor links', 'Y-Motor rechts', 'X-Motor', 'Z-Motor',
               'Laser (12 V + PWM)', 'X-Endschalter', 'Y-Endschalter',
-              'Z-Endschalter', 'Not-Aus', 'Pi 24 V', 'USB Pi–Uno'):
+              'Z-Endschalter', 'Not-Aus', 'USB Pi–Uno', 'Pi 5 V',
+              '5 V vom Wandler'):
         mm = kab[n][0]
         zeilen.append(('Kabel' if n == 'Y-Motor links' else '',
                        '{}: Weg ≈ {} m → {} m kaufen'.format(
@@ -857,12 +918,14 @@ def main():
     print('  Litze Motor {} mm2, {} m: {:.2f} Ohm = {:.0f} % der Wicklung'
           .format(LITZE_MOTOR, li['motor_m'], li['motor_r'],
                   100.0 * li['motor_r'] / MOTOR_R))
-    print('  Pi: W18 {} mm2, {} m: {:.2f} A, {:.3f} V; W19 {} m: {:.2f} A, '
+    print('  5 V: W18 {} mm2, {:.2f} m: {:.2f} A; W6 {} mm2, {:.2f} m: '
+          '{:.2f} A, {:.3f} V; Lichtschranken {:.2f} V; am Pi (W19 {} m) '
           '{:.2f} V (AWG 24) bis {:.2f} V (AWG 28); W17 {} m: {:.2f} A, '
           '{:.2f} V (AWG 28)'.format(
-              LITZE_24V, li['pi24_m'], li['pi24_a'], li['pi24_u'],
-              li['pi5_m'], li['pi5_a'], li['pi5_u'][24], li['pi5_u'][28],
-              li['usb_m'], li['usb_a'], li['usb_u'][28]))
+              LITZE_24V, li['pi24_m'], li['pi24_a'], LITZE_24V, li['w6_m'],
+              li['w6_a'], li['w6_u'], 5.0 - li['ls_u'], li['pi5_m'],
+              5.0 - li['pi5_u'][24], 5.0 - li['pi5_u'][28], li['usb_m'],
+              li['usb_a'], li['usb_u'][28]))
 
 
 if __name__ == '__main__':

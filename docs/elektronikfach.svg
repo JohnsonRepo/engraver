@@ -1,0 +1,358 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1340" height="1136" viewBox="0 0 1340 1136" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1340" height="1136" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Elektronikfach (Elektronikfach.py Rev. 1) — zwei Hälften mit Signalgasse vorn und Leistungsgasse hinten</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus dem Skript. Deckel abgenommen, der Lüfter im Deckel gestrichelt; hinten oben, vorn (zum hinteren 2060) unten.</text>
+<clipPath id="drauf"><rect x="262.0" y="96.0" width="848.9" height="239.8"/></clipPath>
+<g clip-path="url(#drauf)">
+<rect x="291.2" y="120.3" width="790.6" height="168.5" fill="#fdf8f2" stroke="#c2621b" stroke-width="1.0" stroke-dasharray="6 4"/>
+<rect x="253.9" y="293.6" width="865.1" height="32.4" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="253.9" y="115.4" width="32.4" height="228.4" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="1086.6" y="115.4" width="32.4" height="228.4" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.35"/>
+<rect x="326.8" y="120.3" width="359.6" height="165.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="330.9" y="124.3" width="351.5" height="161.2" fill="#fdf1e6" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="330.9" y="253.1" width="351.5" height="32.4" fill="#e7f1fb" stroke="none" stroke-width="0.8"/>
+<rect x="330.9" y="124.3" width="351.5" height="29.4" fill="#fbe9e9" stroke="none" stroke-width="0.8"/>
+<rect x="292.8" y="285.5" width="34.0" height="8.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="686.4" y="120.3" width="359.6" height="165.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="690.5" y="124.3" width="351.5" height="161.2" fill="#fdf1e6" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="690.5" y="253.1" width="351.5" height="32.4" fill="#e7f1fb" stroke="none" stroke-width="0.8"/>
+<rect x="690.5" y="124.3" width="351.5" height="26.7" fill="#fbe9e9" stroke="none" stroke-width="0.8"/>
+<rect x="1046.1" y="285.5" width="34.0" height="8.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="326.8" y="285.5" width="719.3" height="8.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="326.8" y="256.4" width="4.1" height="25.9" fill="#ffffff" stroke="#5b6472" stroke-width="0.7" fill-opacity="0.7" stroke-dasharray="2.5 2"/>
+<rect x="326.8" y="128.4" width="4.1" height="35.6" fill="#ffffff" stroke="#5b6472" stroke-width="0.7" fill-opacity="0.7" stroke-dasharray="2.5 2"/>
+<rect x="1042.0" y="256.4" width="4.0" height="25.9" fill="#ffffff" stroke="#5b6472" stroke-width="0.7" fill-opacity="0.7" stroke-dasharray="2.5 2"/>
+<rect x="1042.0" y="128.4" width="4.0" height="48.6" fill="#ffffff" stroke="#5b6472" stroke-width="0.7" fill-opacity="0.7" stroke-dasharray="2.5 2"/>
+<rect x="682.4" y="256.4" width="8.1" height="25.9" fill="#ffffff" stroke="#5b6472" stroke-width="0.7" fill-opacity="0.7" stroke-dasharray="2.5 2"/>
+<rect x="682.4" y="128.4" width="8.1" height="22.7" fill="#ffffff" stroke="#5b6472" stroke-width="0.7" fill-opacity="0.7" stroke-dasharray="2.5 2"/>
+<rect x="385.9" y="249.9" width="260.0" height="3.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="354.3" y="153.8" width="137.8" height="3.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="336.5" y="259.6" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="339.8" y="259.6" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="485.6" y="259.6" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="488.8" y="259.6" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="582.8" y="259.6" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="586.0" y="259.6" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="336.5" y="136.5" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="339.8" y="136.5" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="404.6" y="129.3" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="407.8" y="129.3" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="469.4" y="129.3" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="472.6" y="129.3" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="599.0" y="129.3" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="602.2" y="129.3" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="613.5" y="124.3" width="16.2" height="16.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="621.6" cy="132.4" r="3.7" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<rect x="613.5" y="269.3" width="16.2" height="16.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="621.6" cy="277.4" r="3.7" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<rect x="350.3" y="124.3" width="16.2" height="16.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="358.4" cy="132.4" r="3.7" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<rect x="350.3" y="269.3" width="16.2" height="16.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="358.4" cy="277.4" r="3.7" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<rect x="715.6" y="249.9" width="173.3" height="3.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="905.1" y="249.9" width="129.6" height="3.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1023.4" y="259.6" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1026.6" y="259.6" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="761.0" y="259.6" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="764.2" y="259.6" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="858.2" y="259.6" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="861.4" y="259.6" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="955.4" y="259.6" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="958.6" y="259.6" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="1023.4" y="143.0" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1026.6" y="143.0" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="728.6" y="128.0" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="731.8" y="128.0" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="825.8" y="128.0" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="829.0" y="128.0" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="923.0" y="128.0" width="13.0" height="19.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="926.2" y="128.0" width="6.5" height="19.4" fill="#e9d8c7" stroke="none" stroke-width="0.8"/>
+<rect x="743.1" y="124.3" width="16.2" height="16.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="751.2" cy="132.4" r="3.7" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<rect x="743.1" y="269.3" width="16.2" height="16.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="751.2" cy="277.4" r="3.7" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<rect x="1006.4" y="124.3" width="16.2" height="16.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="1014.5" cy="132.4" r="3.7" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<rect x="1006.4" y="269.3" width="16.2" height="16.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="1014.5" cy="277.4" r="3.7" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<rect x="518.0" y="145.9" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="518.0" y="191.6" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="566.6" y="145.9" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="566.6" y="191.6" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="806.3" y="188.8" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="806.3" y="244.2" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="854.9" y="188.8" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="854.9" y="244.2" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="714.8" y="145.9" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="714.8" y="193.2" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="763.4" y="145.9" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="763.4" y="193.2" width="8.1" height="3.6" fill="#4a3526" stroke="none" stroke-width="0.8"/>
+<rect x="302.9" y="277.4" width="13.8" height="8.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="302.9" y="277.4" width="13.8" height="8.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="566.2" y="277.4" width="13.8" height="8.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="1056.2" y="277.4" width="13.8" height="8.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="1056.2" y="277.4" width="13.8" height="8.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="793.0" y="277.4" width="13.8" height="8.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="385.9" y="160.2" width="111.1" height="86.4" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>
+<circle cx="474.4" cy="164.4" r="5.3" fill="none" stroke="#5b6472" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+<circle cx="472.3" cy="242.5" r="5.3" fill="none" stroke="#5b6472" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+<circle cx="390.0" cy="172.6" r="5.3" fill="none" stroke="#5b6472" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+<circle cx="390.0" cy="217.9" r="5.3" fill="none" stroke="#5b6472" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+<rect x="497.0" y="209.0" width="10.2" height="25.9" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="507.2" y="209.0" width="51.8" height="25.9" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="665.5" y="147.8" width="16.8" height="105.3" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>
+<rect x="663.7" y="206.0" width="12.1" height="17.8" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+<rect x="663.7" y="226.4" width="12.1" height="17.8" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+<rect x="511.5" y="151.1" width="69.7" height="38.9" fill="#d6e0f2" stroke="#3b5b92" stroke-width="0.8"/>
+<rect x="783.6" y="194.0" width="102.1" height="48.6" fill="#d6e0f2" stroke="#3b5b92" stroke-width="0.8"/>
+<rect x="718.8" y="202.1" width="64.8" height="32.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="330.9" y="222.0" width="13.9" height="48.9" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="330.9" y="168.3" width="13.9" height="48.9" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="901.9" y="151.1" width="48.3" height="29.6" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="959.9" y="151.1" width="48.3" height="29.6" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="702.6" y="151.1" width="81.0" height="40.5" fill="none" stroke="#5b6472" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="912.4" y="124.3" width="17.8" height="24.3" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="961.8" y="124.3" width="32.4" height="32.4" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="409.1" y="171.1" width="64.8" height="64.8" fill="none" stroke="#1864ab" stroke-width="1.1" stroke-dasharray="5 3"/>
+<circle cx="441.5" cy="203.5" r="30.8" fill="none" stroke="#1864ab" stroke-width="1.1" stroke-dasharray="5 3"/>
+<polyline points="392.4,203.5 343.8,269.3 326.8,269.3 245.8,269.3" fill="none" stroke="#1971c2" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polygon points="245.8,269.3 250.8,267.3 250.8,271.3" fill="#1971c2"/>
+<polyline points="392.4,203.5 379.4,269.3 1033.1,269.3 1046.1,269.3 1127.1,269.3" fill="none" stroke="#1971c2" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polygon points="1127.1,269.3 1122.1,271.3 1122.1,267.3" fill="#1971c2"/>
+<polyline points="718.8,218.3 712.4,269.3 337.8,269.3 337.8,246.5" fill="none" stroke="#8e44ad" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polyline points="337.8,246.5 337.8,269.3 645.9,269.3 669.8,269.3 669.8,235.3 669.8,235.3" fill="none" stroke="#8e44ad" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polyline points="559.1,222.0 583.4,182.5 669.8,182.5 669.8,214.9 669.8,214.9" fill="none" stroke="#495057" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polyline points="926.0,180.7 926.0,269.3 402.1,269.3 392.4,203.5" fill="none" stroke="#1971c2" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polyline points="511.5,170.5 505.0,139.1 343.8,139.1 326.8,146.2 245.8,146.2" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polygon points="245.8,146.2 250.8,144.2 250.8,148.2" fill="#c92a2a"/>
+<polyline points="396.6,181.3 396.6,139.1 396.6,139.1 686.4,138.4 1033.1,137.7 1046.1,152.7 1127.1,152.7" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polygon points="1127.1,152.7 1122.1,154.7 1122.1,150.7" fill="#c92a2a"/>
+<polyline points="926.0,180.7 926.0,137.7 686.4,138.4 488.9,139.1 488.9,168.3 488.9,168.3" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polyline points="441.5,203.5 441.5,203.5 441.5,139.1 686.4,138.4 926.0,137.7 926.0,180.7" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polyline points="978.0,140.6 978.0,152.7 1033.1,152.7 1046.1,152.7 1127.1,152.7" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polygon points="1127.1,152.7 1122.1,154.7 1122.1,150.7" fill="#c92a2a"/>
+<polyline points="921.3,137.3 921.3,137.3 892.2,218.3 885.7,218.3" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<text x="546.3" y="169.5" font-size="8.0" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wandler</text>
+<text x="546.3" y="179.5" font-size="7.5" fill="#1c2733" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">24 → 12 V</text>
+<text x="834.7" y="217.3" font-size="8.0" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wandler</text>
+<text x="834.7" y="227.3" font-size="7.5" fill="#1c2733" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">24 → 5 V</text>
+<text x="926.0" y="165.9" font-size="8.0" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">+24 V</text>
+<text x="984.0" y="165.9" font-size="8.0" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">GND</text>
+<text x="743.1" y="174.3" font-size="7.5" fill="#5b6472" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Air Assist</text>
+<text x="441.5" y="201.5" font-size="8.5" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Uno + Shield</text>
+<text x="441.5" y="212.5" font-size="7.5" fill="#1c2733" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">4 × TMC2209</text>
+</g>
+<rect x="262.0" y="96.0" width="848.9" height="239.8" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="262.0" y="88.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Draufsicht, Deckel abgenommen (hinten oben)</text>
+<line x1="343.0" y1="139.7" x2="253.0" y2="130.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="343.0" cy="139.7" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="133.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Öse = Zugentlastung</text>
+<text x="250.0" y="143.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Kabelbinder)</text>
+<line x1="326.8" y1="146.2" x2="253.0" y2="165.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="326.8" cy="146.2" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="168.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fenster Leistung: Motoren</text>
+<text x="250.0" y="178.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X, Y, Z, Laser 12 V</text>
+<line x1="518.0" y1="157.6" x2="253.0" y2="200.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="518.0" cy="157.6" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="203.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wandler 24 → 12 V für den</text>
+<text x="250.0" y="213.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Laser, Ausgang zum Fenster</text>
+<line x1="665.5" y1="157.6" x2="253.0" y2="235.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="665.5" cy="157.6" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="238.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pi Zero 2 W senkrecht an</text>
+<text x="250.0" y="248.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">der Fugenwand, Buchsen unten</text>
+<line x1="344.8" y1="246.5" x2="253.0" y2="270.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="344.8" cy="246.5" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="273.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5-V-Klemmen an der Endwand</text>
+<text x="250.0" y="283.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Hebel nach innen)</text>
+<line x1="326.8" y1="269.3" x2="253.0" y2="305.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="326.8" cy="269.3" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="308.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fenster Signale: Licht-</text>
+<text x="250.0" y="318.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">schranken X, Z, Laser-PWM</text>
+<line x1="299.3" y1="289.6" x2="253.0" y2="340.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="299.3" cy="289.6" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="343.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Ohr: 2 × M5 in die</text>
+<text x="250.0" y="353.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rückseite des 2060</text>
+<line x1="978.0" y1="134.1" x2="1119.9" y2="130.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="978.0" cy="134.1" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="133.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Buchse und Schalter in</text>
+<text x="1122.9" y="143.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">der Rückwand</text>
+<line x1="1046.1" y1="152.7" x2="1119.9" y2="165.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1046.1" cy="152.7" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="168.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fenster Leistung: Y-Motor</text>
+<text x="1122.9" y="178.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechts, Not-Aus</text>
+<line x1="1008.2" y1="157.6" x2="1119.9" y2="200.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1008.2" cy="157.6" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="203.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wago +24 V und GND</text>
+<text x="1122.9" y="213.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(221-420, Klebeband)</text>
+<line x1="777.2" y1="157.6" x2="1119.9" y2="235.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="777.2" cy="157.6" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="238.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platz für Air Assist,</text>
+<text x="1122.9" y="248.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Durchbruch in der Rückwand</text>
+<line x1="725.3" y1="218.3" x2="1119.9" y2="270.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="725.3" cy="218.3" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="273.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">USB-A-Adapter mit Klemmen:</text>
+<text x="1122.9" y="283.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5 V über W6 an die Wago</text>
+<line x1="1046.1" y1="269.3" x2="1119.9" y2="305.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1046.1" cy="269.3" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="308.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fenster Signale:</text>
+<text x="1122.9" y="318.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lichtschranke Y</text>
+<line x1="799.8" y1="281.5" x2="1119.9" y2="340.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="799.8" cy="281.5" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="343.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5 innen (obere Nut), vor</text>
+<text x="1122.9" y="353.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">dem Bestücken anziehen</text>
+<text x="443.4" y="272.3" font-size="8.0" fill="#1971c2" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Signalgasse</text>
+<text x="929.4" y="272.3" font-size="8.0" fill="#1971c2" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Signalgasse</text>
+<text x="443.4" y="142.1" font-size="8.0" fill="#c92a2a" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Leistungsgasse</text>
+<text x="848.4" y="140.7" font-size="8.0" fill="#c92a2a" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Leistungsgasse</text>
+<clipPath id="rueck"><rect x="262.0" y="415.8" width="848.9" height="149.0"/></clipPath>
+<g clip-path="url(#rueck)">
+<rect x="291.2" y="464.4" width="790.6" height="89.1" fill="#fdf8f2" stroke="#c2621b" stroke-width="1.0" stroke-dasharray="6 4"/>
+<rect x="326.8" y="428.7" width="719.3" height="124.7" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1046.1" y="464.4" width="34.0" height="89.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.5"/>
+<rect x="292.8" y="464.4" width="34.0" height="89.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" fill-opacity="0.5"/>
+<line x1="686.4" y1="553.5" x2="686.4" y2="428.7" stroke="#c2621b" stroke-width="1.2"/>
+<rect x="997.5" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="974.8" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="952.1" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="929.4" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="906.8" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="884.1" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="861.4" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="838.7" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="816.0" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="793.4" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="770.7" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="725.3" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="660.5" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="637.8" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="592.5" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="569.8" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="547.1" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="524.4" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="501.8" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="479.1" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="456.4" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="433.7" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="411.0" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="388.4" y="438.4" width="4.9" height="19.4" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="446.8,480.7 446.4,481.2 446.0,481.7 445.7,482.3 445.4,482.8 445.2,483.4 445.0,484.0 444.9,484.7 444.9,485.3 444.9,486.0 445.0,486.6 445.1,487.2 445.3,487.8 445.6,488.4 445.9,489.0 446.3,489.5 446.7,490.0 447.2,490.4 447.7,490.8 448.2,491.2 448.8,491.4 449.3,491.7 450.0,491.9 450.6,492.0 451.2,492.1 451.9,492.1 452.5,492.0 453.1,491.9 453.7,491.7 454.3,491.4 454.9,491.2 455.4,490.8 455.9,490.4 456.4,490.0 456.8,489.5 457.2,489.0 457.5,488.4 457.7,487.8 457.9,487.2 458.1,486.6 458.2,486.0 458.2,485.3 458.1,484.7 458.0,484.0 457.9,483.4 457.7,482.8 457.4,482.3 457.0,481.7 456.7,481.2 456.2,480.7 451.5,476.0" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="394.8" cy="485.4" r="18.2" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<polygon points="383.3,473.9 382.8,474.3 382.4,474.8 382.0,475.3 381.6,475.8 381.2,476.4 380.9,476.9 380.5,477.5 380.2,478.0 380.0,478.6 379.7,479.2 379.5,479.8 379.3,480.4 379.1,481.0 378.9,481.7 378.8,482.3 378.7,482.9 378.6,483.6 378.5,484.2 378.5,484.9 378.5,485.5 378.5,486.2 378.5,486.8 378.6,487.5 378.7,488.1 378.8,488.7 379.0,489.4 379.1,490.0 379.3,490.6 379.5,491.2 379.8,491.8 380.1,492.4 380.3,493.0 380.7,493.6 381.0,494.1 381.3,494.7 381.7,495.2 382.1,495.7 382.5,496.2 383.0,496.7 383.4,497.1 383.9,497.6 384.4,498.0 384.9,498.4 385.4,498.8 386.0,499.2 386.5,499.5 387.1,499.8 387.6,500.1 388.2,500.4 388.8,500.6 389.4,500.9 390.1,501.1 390.7,501.2 391.3,501.4 391.9,501.5 392.6,501.6 393.2,501.7 393.9,501.8 394.5,501.8 395.2,501.8 395.8,501.8 396.5,501.7 397.1,501.6 397.7,501.5 398.4,501.4 399.0,501.2 399.6,501.1 400.2,500.9 400.9,500.6 401.4,500.4 402.0,500.1 402.6,499.8 403.2,499.5 403.7,499.2 404.3,498.8 404.8,498.4 405.3,498.0 405.8,497.6 406.3,497.1 406.7,496.7 407.1,496.2 407.6,495.7 408.0,495.2 408.3,494.7 408.7,494.1 409.0,493.6 409.3,493.0 409.6,492.4 409.9,491.8 410.1,491.2 410.4,490.6 410.5,490.0 410.7,489.4 410.9,488.7 411.0,488.1 411.1,487.5 411.1,486.8 411.2,486.2 411.2,485.5 411.2,484.9 411.2,484.2 411.1,483.6 411.0,482.9 410.9,482.3 410.8,481.7 410.6,481.0 410.4,480.4 410.2,479.8 410.0,479.2 409.7,478.6 409.4,478.0 409.1,477.5 408.8,476.9 408.5,476.4 408.1,475.8 407.7,475.3 407.3,474.8 406.9,474.3 406.4,473.9 400.6,468.1 389.0,468.1" fill="none" stroke="#5b6472" stroke-width="0.7" stroke-dasharray="2.5 2"/>
+<polygon points="622.9,519.0 622.4,519.5 622.0,520.0 621.6,520.5 621.3,521.1 621.0,521.7 620.7,522.3 620.5,522.9 620.3,523.5 620.2,524.1 620.1,524.7 620.0,525.4 620.0,526.0 620.0,526.7 620.1,527.3 620.2,527.9 620.4,528.6 620.6,529.2 620.8,529.8 621.1,530.4 621.4,530.9 621.8,531.5 622.2,532.0 622.6,532.5 623.0,532.9 623.5,533.4 624.0,533.8 624.5,534.1 625.1,534.5 625.7,534.7 626.3,535.0 626.9,535.2 627.5,535.4 628.1,535.5 628.8,535.6 629.4,535.6 630.1,535.6 630.7,535.6 631.3,535.5 632.0,535.4 632.6,535.2 633.2,535.0 633.8,534.7 634.4,534.5 634.9,534.1 635.5,533.8 636.0,533.4 636.5,532.9 636.9,532.5 637.3,532.0 637.7,531.5 638.1,530.9 638.4,530.4 638.7,529.8 638.9,529.2 639.1,528.6 639.2,527.9 639.4,527.3 639.4,526.7 639.5,526.0 639.4,525.4 639.4,524.7 639.3,524.1 639.1,523.5 639.0,522.9 638.7,522.3 638.5,521.7 638.2,521.1 637.8,520.5 637.5,520.0 637.1,519.5 636.6,519.0 629.7,512.2" fill="#f3e6d8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="3 2"/>
+<line x1="1110.9" y1="556.7" x2="262.0" y2="556.7" stroke="#5b6472" stroke-width="1.0"/>
+</g>
+<rect x="262.0" y="415.8" width="848.9" height="149.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="262.0" y="407.8" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Rückwand von hinten (rechte Hälfte links im Bild)</text>
+<line x1="394.8" y1="467.2" x2="253.0" y2="467.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="394.8" cy="467.2" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="470.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wippschalter rund</text>
+<text x="250.0" y="480.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Blende Ø22,5)</text>
+<line x1="451.5" y1="485.4" x2="253.0" y2="501.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="451.5" cy="485.4" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="504.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Einbaubuchse 5,5 × 2,1</text>
+<text x="250.0" y="514.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Loch 8,2 mm, Traene)</text>
+<line x1="848.4" y1="438.4" x2="1119.9" y2="438.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="848.4" cy="438.4" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="441.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Lüftungsschlitze</text>
+<text x="1122.9" y="451.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Luft vom Lüfter)</text>
+<line x1="629.7" y1="525.9" x2="1119.9" y2="525.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="629.7" cy="525.9" r="1.5" fill="#5b6472"/>
+<text x="1122.9" y="528.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Air Assist: Durchbruch</text>
+<text x="1122.9" y="538.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">12 mm, Haut zum Ausbrechen</text>
+<clipPath id="fuge"><rect x="262.0" y="624.8" width="348.0" height="264.0"/></clipPath>
+<g clip-path="url(#fuge)">
+<rect x="277.0" y="642.8" width="321.0" height="231.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="284.5" y="642.8" width="298.5" height="223.5" fill="#fdf1e6" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="529.0" y="792.8" width="48.0" height="73.5" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="292.0" y="792.8" width="42.0" height="73.5" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="301.0" cy="672.8" r="5.1" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="301.0" cy="672.8" r="8.2" fill="none" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="301.0" cy="762.8" r="5.1" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="301.0" cy="762.8" r="8.2" fill="none" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="553.0" cy="678.8" r="5.1" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="553.0" cy="678.8" r="8.2" fill="none" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="400.0" cy="846.8" r="5.1" fill="#ffffff" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="400.0" cy="846.8" r="8.2" fill="none" stroke="#4a4f57" stroke-width="0.8"/>
+<polygon points="448.0,845.3 440.5,852.8 448.0,860.3 455.5,852.8" fill="#f3e6d8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="358.0,671.3 350.5,678.8 358.0,686.3 365.5,678.8" fill="#f3e6d8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="328.0" y="666.8" width="195.0" height="90.0" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8" fill-opacity="0.85"/>
+<circle cx="338.5" cy="746.3" r="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="338.5" cy="746.3" r="3.3" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="338.5" cy="677.3" r="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="338.5" cy="677.3" r="3.3" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="512.5" cy="746.3" r="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="512.5" cy="746.3" r="3.3" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="512.5" cy="677.3" r="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="512.5" cy="677.3" r="3.3" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="435.7" y="756.8" width="33.0" height="72.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="473.5" y="756.8" width="33.0" height="72.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<rect x="320.5" y="684.8" width="7.5" height="36.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<line x1="262.0" y1="699.8" x2="610.0" y2="699.8" stroke="#5b6472" stroke-width="0.8" stroke-dasharray="4 3"/>
+</g>
+<rect x="262.0" y="624.8" width="348.0" height="264.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="262.0" y="616.8" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Fugenwand von links, mit dem Pi davor (vorn rechts)</text>
+<line x1="301.0" y1="672.8" x2="253.0" y2="672.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="301.0" cy="672.8" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="675.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M3×12 mit Mutter (4 ×)</text>
+<line x1="358.0" y1="678.8" x2="253.0" y2="698.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="358.0" cy="678.8" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="701.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rauten-Zapfen (2 ×)</text>
+<line x1="328.0" y1="702.8" x2="253.0" y2="724.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="328.0" cy="702.8" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="727.8" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">SD-Karte</text>
+<line x1="292.0" y1="829.5" x2="253.0" y2="829.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="292.0" cy="829.5" r="1.5" fill="#5b6472"/>
+<text x="250.0" y="832.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fenster Leistung</text>
+<line x1="505.0" y1="684.8" x2="619.0" y2="684.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="505.0" cy="684.8" r="1.5" fill="#5b6472"/>
+<text x="622.0" y="687.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Pi Zero 2 W auf 4 Stehbolzen</text>
+<text x="622.0" y="697.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Traene, Spitze unten)</text>
+<line x1="523.0" y1="699.8" x2="619.0" y2="720.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="523.0" cy="699.8" r="1.5" fill="#5b6472"/>
+<text x="622.0" y="723.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Oberkante 2060: der Pi</text>
+<text x="622.0" y="733.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">steht 11 mm darüber (WLAN)</text>
+<line x1="452.2" y1="828.8" x2="619.0" y2="828.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="452.2" cy="828.8" r="1.5" fill="#5b6472"/>
+<text x="622.0" y="831.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Stecker USB (W17)</text>
+<line x1="577.0" y1="829.5" x2="619.0" y2="854.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="577.0" cy="829.5" r="1.5" fill="#5b6472"/>
+<text x="622.0" y="857.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fenster Signale</text>
+<line x1="490.0" y1="828.8" x2="619.0" y2="880.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="490.0" cy="828.8" r="1.5" fill="#5b6472"/>
+<text x="622.0" y="883.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Stecker PWR IN (W19)</text>
+<text x="24.0" y="930.8" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
+<text x="24.0" y="948.8" font-size="8.5" fill="#5b6472" text-anchor="start">Teile</text>
+<text x="110.0" y="948.8" font-size="8.5" fill="#1c2733" text-anchor="start">Fach links 245,4 × 107 × 77 mm, Fach rechts 243 × 107 × 77 mm, Deckel je 222 × 107 × 5,5 mm — alles PETG, jedes Teil ≤ 250 mm</text>
+<text x="24.0" y="963.8" font-size="8.5" fill="#5b6472" text-anchor="start">Lage</text>
+<text x="110.0" y="963.8" font-size="8.5" fill="#1c2733" text-anchor="start">Kasten 444 × 107 × 77 mm hinter dem hinteren 2060, in der Mitte (|X| ≤ 225) und deshalb höher als das Fach (55 mm); der Lüfter endet 89,5 mm über dem Fachboden</text>
+<text x="24.0" y="978.8" font-size="8.5" fill="#5b6472" text-anchor="start">Montage</text>
+<text x="110.0" y="978.8" font-size="8.5" fill="#1c2733" text-anchor="start">je Ohr 2 × M5×12 (untere und obere Nut), innen je 1 × M5×12 (obere Nut); die Hälften mit 4 × M3×12 und 2 Zapfen in der Fuge</text>
+<text x="24.0" y="993.8" font-size="8.5" fill="#5b6472" text-anchor="start">Gassen</text>
+<text x="110.0" y="993.8" font-size="8.5" fill="#1c2733" text-anchor="start">vorn 20 mm Signale, hinten 18 mm Leistung; Leitwände 18 mm hoch, Ösen für Kabelbinder; je Gasse ein Fenster in jeder Endwand und in der Fuge</text>
+<text x="24.0" y="1008.8" font-size="8.5" fill="#5b6472" text-anchor="start">5 V</text>
+<text x="110.0" y="1008.8" font-size="8.5" fill="#1c2733" text-anchor="start">vom Wandler über den USB-A-Adapter (W6, 0,28 m 0,75 mm²) an die Wago +5 V und GND 5 V; daran die Lichtschranken und der Pi (W19), der Uno über USB (W17)</text>
+<text x="24.0" y="1023.8" font-size="8.5" fill="#5b6472" text-anchor="start">Höhen</text>
+<text x="110.0" y="1023.8" font-size="8.5" fill="#1c2733" text-anchor="start">über der Unterkante: Boden 2,5, Uno 7,5, Treiber oben 35,5, Pi 39–69, Rand 77, Deckel 79,5, Lüfter 89,5 mm</text>
+<rect x="24.0" y="1058.8" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="43.0" y="1066.8" font-size="8.5" fill="#1c2733" text-anchor="start">Fach (PETG)</text>
+<rect x="214.0" y="1058.8" width="14.0" height="9.0" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>
+<text x="233.0" y="1066.8" font-size="8.5" fill="#1c2733" text-anchor="start">Uno, Pi</text>
+<rect x="404.0" y="1058.8" width="14.0" height="9.0" fill="#d6e0f2" stroke="#3b5b92" stroke-width="0.8"/>
+<text x="423.0" y="1066.8" font-size="8.5" fill="#1c2733" text-anchor="start">Wandler</text>
+<rect x="594.0" y="1058.8" width="14.0" height="9.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8"/>
+<text x="613.0" y="1066.8" font-size="8.5" fill="#1c2733" text-anchor="start">Kaufteil, Stecker</text>
+<rect x="24.0" y="1076.8" width="14.0" height="9.0" fill="#e7f1fb" stroke="#a5c8ec" stroke-width="0.8"/>
+<text x="43.0" y="1084.8" font-size="8.5" fill="#1c2733" text-anchor="start">Signalgasse</text>
+<rect x="214.0" y="1076.8" width="14.0" height="9.0" fill="#fbe9e9" stroke="#e3a5a5" stroke-width="0.8"/>
+<text x="233.0" y="1084.8" font-size="8.5" fill="#1c2733" text-anchor="start">Leistungsgasse</text>
+<rect x="404.0" y="1076.8" width="14.0" height="9.0" fill="#e3c46b" stroke="#8a6d1b" stroke-width="0.8"/>
+<text x="423.0" y="1084.8" font-size="8.5" fill="#1c2733" text-anchor="start">Gewindeeinsatz</text>
+<rect x="594.0" y="1076.8" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="613.0" y="1084.8" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<line x1="24.0" y1="1099.3" x2="40.0" y2="1099.3" stroke="#1971c2" stroke-width="1.3" stroke-dasharray="4 2.5"/>
+<text x="45.0" y="1102.8" font-size="8.5" fill="#1c2733" text-anchor="start">Signale</text>
+<line x1="214.0" y1="1099.3" x2="230.0" y2="1099.3" stroke="#8e44ad" stroke-width="1.3" stroke-dasharray="4 2.5"/>
+<text x="235.0" y="1102.8" font-size="8.5" fill="#1c2733" text-anchor="start">5 V</text>
+<line x1="404.0" y1="1099.3" x2="420.0" y2="1099.3" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5"/>
+<text x="425.0" y="1102.8" font-size="8.5" fill="#1c2733" text-anchor="start">24 V, 12 V, Motoren</text>
+<line x1="594.0" y1="1099.3" x2="610.0" y2="1099.3" stroke="#1864ab" stroke-width="1.1" stroke-dasharray="5 3"/>
+<text x="615.0" y="1102.8" font-size="8.5" fill="#1c2733" text-anchor="start">Lüfter im Deckel</text>
+<text x="24.0" y="1120.8" font-size="8.5" fill="#5b6472" text-anchor="start">Gestrichelt: verdeckt oder im Deckel. Die Lage der Stifte auf dem Shield ist angenommen [?]; die Kabel laufen in ihrer Gasse und verlassen das Fach durch das Fenster ihrer Art.</text></svg>

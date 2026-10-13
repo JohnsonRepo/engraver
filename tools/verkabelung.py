@@ -5,7 +5,7 @@ Pruefung.
 Jede Leitung steht hier genau einmal: ihre Adern mit Farbe und Anschluss an
 beiden Enden, Querschnitt, Weg und Kauflaenge. Die Wege an der Maschine
 kommen aus den Kabelwegen in tools/elektronik_zeichnen.py (Rahmen, Portal,
-Toolhead, Gehaeuse und Endschalter aus den Fusion-Skripten), die
+Toolhead, Elektronikfach und Endschalter aus den Fusion-Skripten), die
 Querschnitte aus dessen Litzen-Konstanten, die GRBL-Wege aus Portal,
 Toolhead und Endschalter.
 
@@ -57,6 +57,7 @@ ANSCHLUSS = {
     'Wago +24 V': ('Wago +24 V', 'Wago'),
     'Wago GND': ('Wago GND', 'Wago'),
     'Wago +5 V': ('Wago +5 V', 'Wago'),
+    'Wago GND 5 V': ('Wago GND 5 V', 'Wago'),
     'Shield +': ('Shield, Schraubklemme +', 'Schraubklemme'),
     'Shield −': ('Shield, Schraubklemme −', 'Schraubklemme'),
     'Shield 5V': ('Shield, Stift 5V', 'Dupont'),
@@ -71,18 +72,27 @@ ANSCHLUSS = {
     'Wandler IN−': ('Wandler IN−', 'Schraubklemme'),
     'Wandler OUT+': ('Wandler OUT+', 'Schraubklemme'),
     'Wandler OUT−': ('Wandler OUT−', 'Schraubklemme'),
-    'Lüfter +': ('Lüfter, rote Litze', None),
-    'Lüfter −': ('Lüfter, schwarze Litze', None),
+    # Luefter im Deckel: seine Litze mit einem Dupont-Stecker 2-polig an
+    # der Verlaengerung W5, damit der Deckel abgeht
+    'Lüfter +': ('Lüfter, Stecker: rot', None),
+    'Lüfter −': ('Lüfter, Stecker: schwarz', None),
     'Laser PWM': ('Laser, XH links: PWM', 'XH'),
     'Laser GND': ('Laser, XH Mitte: GND', 'XH'),
     'Laser +12 V': ('Laser, XH rechts: +12 V', 'XH'),
     'Uno USB': ('Uno, USB-B', None),
-    # Pi auf dem Pi-Halter (docs/pi.md), mit seinem Abwaertswandler
-    # 24 -> 5 V: Eingang mit Schraubklemmen, Ausgang USB-A [?]
+    # Pi und sein Abwaertswandler 24 -> 5 V im Elektronikfach (docs/pi.md):
+    # Eingang mit Schraubklemmen, Ausgang USB-A [v]. In der USB-A-Buchse
+    # steckt ein Adapter mit Schraubklemmen [?]; von ihm gehen die 5 V an
+    # die Wago (W6), von dort an Pi und Lichtschranken.
     '5V-Wandler IN+': ('5-V-Wandler IN+', 'Schraubklemme'),
     '5V-Wandler IN−': ('5-V-Wandler IN−', 'Schraubklemme'),
     '5V-Wandler USB': ('5-V-Wandler, USB-A', None),
-    'Pi PWR': ('Pi, Micro-USB „PWR IN“', None),
+    '5V-Adapter 5V': ('USB-A-Adapter am 5-V-Wandler, Klemme 5V',
+                      'Schraubklemme'),
+    '5V-Adapter GND': ('USB-A-Adapter am 5-V-Wandler, Klemme GND',
+                       'Schraubklemme'),
+    'Pi PWR': ('Pi, „PWR IN“: +5 V', None),
+    'Pi GND': ('Pi, „PWR IN“: GND', None),
     'Pi USB': ('Pi, Micro-USB „USB“', None),
 }
 for _a in ('X', 'Y', 'Z'):
@@ -107,11 +117,16 @@ for _m in ('X-Motor', 'Y-Motor links', 'Y-Motor rechts', 'Z-Motor'):
     ANSCHLUSS[_m + ' A getauscht'] = (_m + ', Spule A: A− · A+', 'PH')
     ANSCHLUSS[_m + ' B'] = (_m + ', Spule B: B− · B+', 'PH')
 
-# Klemmleisten im Verteiler (Bestand [v], Plaetze nach Datenblatt [w])
-WAGO = (('Wago +24 V', '221-415', 5), ('Wago GND', '221-420', 10),
-        ('Wago +5 V', '221-420', 10))
-# Frei halten fuer einen Wandler mit getrennten Massen (OUT− an GND)
-WAGO_RESERVE = {'Wago GND': 1}
+# Klemmleisten im Elektronikfach, Plaetze nach Datenblatt [w]: 24 V und
+# GND rechts bei Buchse und Wandlern (die beiden 221-420 aus dem Bestand
+# [v]), 5 V und GND 5 V links bei den Lichtschranken (die 221-415 aus dem
+# Bestand und eine neue).
+WAGO = (('Wago +24 V', '221-420', 10), ('Wago GND', '221-420', 10),
+        ('Wago +5 V', '221-415', 5), ('Wago GND 5 V', '221-415', 5))
+# Frei halten: (Plaetze, wofuer)
+WAGO_RESERVE = {'Wago +24 V': (1, 'Air Assist'),
+                'Wago GND': (2, 'Air Assist und OUT− eines isolierten '
+                                'Wandlers')}
 
 # Shield V3 unter GRBL 1.1 (hardware-notizen.md, Pins): Stift, Uno-Pin,
 # Aufgabe. Z+ und Z− liegen beide auf D11 (Laser-PWM), X+/X− beide auf D9,
@@ -119,7 +134,8 @@ WAGO_RESERVE = {'Wago GND': 1}
 SHIELD = (
     ('Shield +', '—', '24 V für die Treiber (12–36 V)'),
     ('Shield −', '—', 'GND'),
-    ('Shield 5V', '5 V', 'Versorgung der Lichtschranken (vom USB des Uno)'),
+    ('Shield 5V', '5 V', 'frei — die Lichtschranken bekommen 5 V vom '
+     'Wandler (W6)'),
     ('Shield X−', 'D9', 'Endschalter X (X+ ist derselbe Pin)'),
     ('Shield Y+', 'D10', 'Endschalter Y (Y− ist derselbe Pin)'),
     ('Shield SpnEn', 'D12', 'Endschalter Z — GRBL 1.1 legt ihn auf D12'),
@@ -141,46 +157,64 @@ SIG = ez.LITZE_SIGNAL
 
 def leitungen():
     """Alle Leitungen in der Reihenfolge der Anleitung. Adern:
-    (Funktion, Farbe, von, an); von/an sind Schluessel in ANSCHLUSS."""
-    kasten = 0.15            # m, im Kasten ablaengen
+    (Funktion, Farbe, von, an); von/an sind Schluessel in ANSCHLUSS.
+    Leitungen im Elektronikfach haben eine feste Laenge je Ader (laenge);
+    tools/elektronik_check.py vergleicht sie mit den Wegen im Fach."""
+    kurz = 0.15              # m, im Fach rechts ablaengen
     return [
         dict(nr='W1', name='Eingang', art='Einzeladern',
-             mm2=ez.LITZE_24V, laenge=kasten, strom=3.0,
-             weg='im Kasten',
+             mm2=ez.LITZE_24V, laenge=kurz, strom=3.0,
+             weg='im Fach rechts: Buchse und Schalter in der Rückwand',
              adern=[('+24 V', 'rot', 'Buchse +', 'Schalter 1'),
                     ('GND', 'schwarz', 'Buchse −', 'Wago GND')]),
         dict(nr='W2', name='Not-Aus-Kreis', art='Leitung 2-adrig',
              mm2=ez.LITZE_24V, kabel='Not-Aus', strom=3.0,
-             weg='vorn raus, Kanal, Rückseite hinteres 2060, untere Nut '
-                 'außen am rechten 2040 nach vorn, obere Nut vorn am 2060 '
-                 'zum Gehäuse',
+             weg='rechts raus (Fenster Leistung), unter dem rechten 2040 '
+                 'durch, untere Nut außen am rechten 2040 nach vorn, obere '
+                 'Nut vorn am 2060 zum Gehäuse',
              hinweis='beide Adern führen +24 V: an beiden Enden rot '
                      'markieren; NO bleibt frei',
              adern=[('+24 V hin', 'Ader 1', 'Schalter 2', 'Not-Aus C'),
                     ('+24 V zurück', 'Ader 2', 'Not-Aus NC',
                      'Wago +24 V')]),
         dict(nr='W3', name='Shield', art='Einzeladern', mm2=ez.LITZE_24V,
-             laenge=kasten, strom=3.0, weg='im Kasten',
+             laenge=0.4, strom=3.0, weg_fach='Shield 24 V',
+             weg='im Fach: Leistungsgasse, durch die Fuge zur Klemme des '
+                 'Shields',
              adern=[('+24 V', 'rot', 'Wago +24 V', 'Shield +'),
                     ('GND', 'schwarz', 'Wago GND', 'Shield −')]),
         dict(nr='W4', name='Wandler-Eingang', art='Einzeladern',
-             mm2=ez.LITZE_24V, laenge=kasten, strom=1.0, weg='im Kasten',
+             mm2=ez.LITZE_24V, laenge=kurz, strom=1.0,
+             weg='im Fach rechts',
              adern=[('+24 V', 'rot', 'Wago +24 V', 'Wandler IN+'),
                     ('GND', 'schwarz', 'Wago GND', 'Wandler IN−')]),
-        dict(nr='W5', name='Lüfter 24 V', art='Litze des Lüfters', mm2=None,
-             strom=0.1, weg='im Kasten, durch die Öffnung im Deckel',
-             hinweis='Litze dünner als 0,14 mm²: abisoliert doppelt legen',
+        dict(nr='W5', name='Lüfter 24 V', art='Einzeladern',
+             mm2=ez.LITZE_SIGNAL, laenge=0.5, strom=0.1,
+             weg_fach='Lüfter',
+             weg='im Fach: vom Deckel durch die Lüfteröffnung, '
+                 'Leistungsgasse, durch die Fuge zu den Wago',
+             hinweis='verlängert die Litze des Lüfters, dazwischen ein '
+                     'Dupont-Stecker 2-polig: der Deckel geht ab',
              adern=[('+24 V', 'rot', 'Lüfter +', 'Wago +24 V'),
                     ('GND', 'schwarz', 'Lüfter −', 'Wago GND')]),
-        dict(nr='W6', name='5 V für die Lichtschranken', art='Einzelader',
-             mm2=SIG, laenge=kasten, strom=0.1, weg='im Kasten',
-             adern=[('+5 V', 'rot', 'Shield 5V', 'Wago +5 V')]),
+        dict(nr='W6', name='5 V vom Wandler', art='Einzeladern',
+             mm2=ez.LITZE_24V, laenge=0.4, strom=1.0,
+             weg_fach='5 V vom Wandler',
+             weg='im Fach: vom USB-A-Adapter am 5-V-Wandler durch die '
+                 'Signalgasse und die Fuge zu den 5-V-Klemmen links',
+             hinweis='kurz und dick: Lichtschranken und Pi hängen direkt am '
+                     'Wandler, nicht mehr am Uno',
+             adern=[('+5 V', 'rot', '5V-Adapter 5V', 'Wago +5 V'),
+                    ('GND', 'schwarz', '5V-Adapter GND', 'Wago GND 5 V')]),
         dict(nr='W7', name='Laser', art='Litzen 3-adrig, Silikon',
              mm2=ez.LITZE_LASER, kabel='Laser (12 V + PWM)',
              strom=ez.LASER_A, kette='Y + X',
-             weg='links raus, untere Nut außen am linken 2040, hinten in die '
+             weg='links raus (Fenster Leistung), unter dem linken 2040 '
+                 'durch, untere Nut außen am linken 2040, hinten in die '
                  'Y-Kette, hinter dem Schlitten in die obere Nut des Rohrs, '
-                 'am Kabelflügel hoch in die X-Kette, Trägerplatte',
+                 'am Kabelflügel hoch in die X-Kette, Trägerplatte; im Fach '
+                 '+12 V und GND durch Leistungsgasse und Fuge zum Wandler, '
+                 'PWM links zum Shield',
              adern=[('+12 V', 'rot', 'Wandler OUT+', 'Laser +12 V'),
                     ('GND', 'schwarz', 'Wandler OUT−', 'Laser GND'),
                     ('PWM', 'weiß', 'Shield Z+', 'Laser PWM')]),
@@ -191,30 +225,35 @@ def leitungen():
              adern=[('10 kΩ', '—', 'Shield Z− S', 'Shield Z− GND')]),
         dict(nr='W9', name='Lichtschranke X', art='Litzen 3-adrig, Silikon',
              mm2=SIG, kabel='X-Endschalter', strom=0.03, kette='Y',
-             weg='links raus, untere Nut außen am linken 2040, Y-Kette, '
-                 'hinter dem Schlitten über das Rohr nach vorn zum Halter X',
+             weg='links raus (Fenster Signal), unter dem linken 2040 durch, '
+                 'untere Nut außen am linken 2040, Y-Kette, hinter dem '
+                 'Schlitten über das Rohr nach vorn zum Halter X',
              adern=[('+5 V', 'rot', 'Wago +5 V', 'LS X VCC'),
-                    ('GND', 'schwarz', 'Wago GND', 'LS X GND'),
+                    ('GND', 'schwarz', 'Wago GND 5 V', 'LS X GND'),
                     ('Signal', 'gelb', 'Shield X−', 'LS X D0')]),
         dict(nr='W10', name='Lichtschranke Y', art='Leitung 3-adrig',
              mm2=SIG, kabel='Y-Endschalter', strom=0.03,
-             weg='vorn raus, Kanal, Rückseite hinteres 2060, untere Nut '
+             weg='im Fach durch die Signalgasse nach rechts, rechts raus '
+                 '(Fenster Signal), unter dem rechten 2040 durch, untere Nut '
                  'außen am rechten 2040 nach hinten',
              adern=[('+5 V', 'rot', 'Wago +5 V', 'LS Y VCC'),
-                    ('GND', 'schwarz', 'Wago GND', 'LS Y GND'),
+                    ('GND', 'schwarz', 'Wago GND 5 V', 'LS Y GND'),
                     ('Signal', 'gelb', 'Shield Y+', 'LS Y D0')]),
         dict(nr='W11', name='Lichtschranke Z', art='Litzen 3-adrig, Silikon',
              mm2=SIG, kabel='Z-Endschalter', strom=0.03, kette='Y + X',
-             weg='wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead',
+             weg='links raus (Fenster Signal), unter dem linken 2040 durch, '
+                 'untere Nut außen am linken 2040, Y-Kette, X-Kette bis zur '
+                 'Trägerplatte, dann zum Halter am Toolhead',
              adern=[('+5 V', 'rot', 'Wago +5 V', 'LS Z VCC'),
-                    ('GND', 'schwarz', 'Wago GND', 'LS Z GND'),
+                    ('GND', 'schwarz', 'Wago GND 5 V', 'LS Z GND'),
                     ('Signal', 'gelb', 'Shield SpnEn', 'LS Z D0')]),
         dict(nr='W12', name='X-Motor', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='X-Motor', strom=ez.MOTOR_I,
              kette='Y', fertig=True, mitgeliefert=1.0,
              hinweis='in der Kette nur die losen Adern, ohne Schlauch',
-             weg='links raus, untere Nut außen am linken 2040, Y-Kette, '
-                 'hinter dem Motorhalter hoch zum Motor',
+             weg='links raus (Fenster Leistung), unter dem linken 2040 '
+                 'durch, untere Nut außen am linken 2040, Y-Kette, hinter '
+                 'dem Motorhalter hoch zum Motor',
              adern=[('Spule A', 'schwarz · grün', 'Shield X 2B·2A',
                      'X-Motor A'),
                     ('Spule B', 'blau · rot', 'Shield X 1A·1B',
@@ -222,9 +261,10 @@ def leitungen():
         dict(nr='W13', name='Y-Motor links', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor links', strom=ez.MOTOR_I,
              fertig=True, mitgeliefert=1.0,
-             weg='links raus, untere Nut außen am linken 2040 nach vorn; in '
-                 'den Kabelhaltern unter den Wänden der drei Träger der Wanne '
-                 'Y durch',
+             weg='links raus (Fenster Leistung), unter dem linken 2040 '
+                 'durch, untere Nut außen am linken 2040 nach vorn; in den '
+                 'Kabelhaltern unter den Wänden der drei Träger der Wanne Y '
+                 'durch',
              adern=[('Spule A', 'schwarz · grün', 'Shield Y 2B·2A',
                      'Y-Motor links A'),
                     ('Spule B', 'blau · rot', 'Shield Y 1A·1B',
@@ -232,8 +272,9 @@ def leitungen():
         dict(nr='W14', name='Y-Motor rechts', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor rechts', strom=ez.MOTOR_I,
              fertig=True, mitgeliefert=1.0,
-             weg='vorn raus, Kanal, Rückseite hinteres 2060, untere Nut '
-                 'außen am rechten 2040 nach vorn',
+             weg='im Fach durch die Leistungsgasse nach rechts, rechts raus '
+                 '(Fenster Leistung), unter dem rechten 2040 durch, untere '
+                 'Nut außen am rechten 2040 nach vorn',
              hinweis='Spule A getauscht: dreht gegen den linken',
              adern=[('Spule A, getauscht', 'grün · schwarz',
                      'Shield A 2B·2A', 'Y-Motor rechts A getauscht'),
@@ -249,7 +290,9 @@ def leitungen():
                     ('Spule B', 'blau · rot', 'Shield Z 1A·1B',
                      'Z-Motor B')]),
         dict(nr='W16', name='24-V-Wächter an Abort', art='Widerstand',
-             mm2=None, weg='im Kasten',
+             mm2=None, laenge=0.5, weg_fach='Wächter',
+             weg='im Fach: Teiler an den Wago 24 V und GND rechts, die Mitte '
+                 'als Einzelader 0,25 mm² durch die Signalgasse an Abort',
              hinweis='fehlen die 24 V hinter Schalter und Not-Aus, bricht '
                      'GRBL ab',
              adern=[('R1 22 kΩ', '—', 'Wago +24 V', 'Shield Abort'),
@@ -257,24 +300,26 @@ def leitungen():
                      'Wago GND')]),
         dict(nr='W17', name='USB zum Pi', art='USB-Kabel Micro-B–B (OTG)',
              mm2=None, fertig=True, kabel='USB Pi–Uno',
-             weg='hinten aus dem USB-Fenster, hinter dem Kasten nach rechts, '
-                 'an seiner rechten Wand nach vorn zum Pi-Halter',
-             hinweis='Micro-B in die Buchse „USB“ des Pi, nicht in „PWR IN“',
+             weg='im Fach links: vom USB-B des Uno unter dem Pi in seine '
+                 'Buchse „USB“',
+             hinweis='kurzes Kabel; Micro-B in die Buchse „USB“ des Pi, '
+                     'nicht in „PWR IN“',
              adern=[('USB', '—', 'Uno USB', 'Pi USB')]),
-        dict(nr='W18', name='24 V für den Pi', art='Leitung 2-adrig',
-             mm2=ez.LITZE_24V, kabel='Pi 24 V', strom=3.0,
-             weg='an der Buchse gelötet, vorn raus, Kanal, an der Rückseite '
-                 'des hinteren 2060 unter dem Pi-Halter durch, von unten in '
-                 'die Haube und an ihrer linken Wand hoch zum 5-V-Wandler',
+        dict(nr='W18', name='24 V für den 5-V-Wandler', art='Einzeladern',
+             mm2=ez.LITZE_24V, laenge=0.2, strom=3.0, weg_fach='Pi 24 V',
+             weg='im Fach rechts: an der Buchse gelötet, zum Eingang des '
+                 '5-V-Wandlers',
              hinweis='vor Schalter und Not-Aus: Pi und Uno bleiben an',
              adern=[('+24 V', 'rot', 'Buchse +', '5V-Wandler IN+'),
                     ('GND', 'schwarz', 'Buchse −', '5V-Wandler IN−')]),
-        dict(nr='W19', name='5 V für den Pi', art='USB-Kabel A–Micro-B',
-             mm2=None, fertig=True, kabel='Pi 5 V',
-             weg='am Pi-Halter: vom USB-Ausgang des Wandlers in „PWR IN“',
-             hinweis='Stromadern mindestens AWG 24, sonst meldet der Pi '
-                     'Unterspannung',
-             adern=[('5 V', '—', '5V-Wandler USB', 'Pi PWR')]),
+        dict(nr='W19', name='5 V für den Pi',
+             art='Micro-USB-Kabel mit offenen Enden', mm2=0.2, fertig=True,
+             kabel='Pi 5 V',
+             weg='im Fach links: von den 5-V-Klemmen durch die Signalgasse '
+                 'zum Pi, von unten in „PWR IN“',
+             hinweis='Stromadern mindestens AWG 24',
+             adern=[('+5 V', 'rot', 'Wago +5 V', 'Pi PWR'),
+                    ('GND', 'schwarz', 'Wago GND 5 V', 'Pi GND')]),
     ]
 
 
@@ -289,6 +334,8 @@ INNEN = (
     ('Shield Z+', 'Shield Z− S', None),           # beide D11
     ('Pi PWR', 'Pi USB', None),         # 5 V des Pi an beiden Buchsen [w]
     ('Uno USB', 'Shield 5V', None),     # 5 V vom USB auf den 5-V-Stift [w]
+    ('5V-Wandler USB', '5V-Adapter 5V', None),     # Adapter in der Buchse
+    ('5V-Wandler IN−', '5V-Adapter GND', None),    # gemeinsame Masse [w]
 )
 BETRIEB = ('ein', 'nicht gedrueckt')
 
@@ -537,8 +584,10 @@ def tab_wago():
         b = bel[name]
         rest = plaetze - len(b)
         frei = str(rest)
-        if WAGO_RESERVE.get(name):
-            frei += ' (einer davon für OUT− eines isolierten Wandlers)'
+        if name in WAGO_RESERVE:
+            n, wofuer = WAGO_RESERVE[name]
+            frei += ' ({} davon für {})'.format(
+                'einer' if n == 1 else n, wofuer)
         z.append('| **{}** | {} | {} von {} | {} | {} |'.format(
             name, typ, len(b), plaetze, frei, ' · '.join(
                 '{} {}'.format(nr, ANSCHLUSS[d][0]) for nr, _, d in b)))

@@ -12,8 +12,9 @@ beschreibt [elektronik.md](elektronik.md#kabel).
 ## Wofür
 
 Die fest verlegten Kabel laufen außen an den 2040 entlang der **unteren
-Seitennut** ([elektronik.md](elektronik.md#kabel)): links alles, was hinten
-aus dem Gehäuse kommt (W7, W9, W11, W12, W13, W15), rechts W2 und W14. In
+Seitennut** ([elektronik.md](elektronik.md#kabel)): links alles, was aus
+der linken Endwand des Elektronikfachs kommt (W7, W9, W11, W12, W13, W15),
+rechts W2 und W14. In
 die Nut selbst passen sie nicht: Links sind es hinter der Wanne Y drei
 Motorkabel und neun Litzen, zusammen rund 76 mm². Die Nut hat im
 vereinfachten Profil aus `Portal.py` nur etwa 40 mm² Platz. Außerdem sitzen dort die Hammermuttern der
@@ -49,7 +50,7 @@ der Skizze.
 
 | Abschnitt | Kabel | Füllgrad |
 |---|---|---|
-| links hinten, Gehäuse bis hinter die Wanne Y | W7, W9, W11 (Litzen einzeln), W12, W13, W15 (Motorkabel) | 51 % |
+| links hinten, Elektronikfach bis hinter die Wanne Y | W7, W9, W11 (Litzen einzeln), W12, W13, W15 (Motorkabel) | 51 % |
 | links vorn, Wanne Y bis vorderes 2060 | W13 | 13 % |
 | rechts, hinteres bis vorderes 2060 | W2, W14 | 32 % |
 
@@ -64,13 +65,16 @@ kurzes Stück nach hinten zum Halter_Y, dort ist kein Halter nötig.
 Neun Halter, links fünf und rechts vier. Die Prüfung verteilt sie in den
 freien Lücken der Nut so, dass zwischen zwei Haltern höchstens rund 100 mm
 frei hängen. Länger sind nur die Spannen über die hintere Kreuzung (L1–L2,
-118 mm) und über den Träger am Festpunkt (L2–L3, 110 mm). Gemessen wird die Mitte des Halters, also die Schraube, vom hinteren 2060,
-so wie bei den Trägern der Wanne Y.
+108 mm) und über den Träger am Festpunkt (L2–L3, 110 mm). L1 sitzt dicht
+vor dem Winkel: Hinter ihm hält die Zugentlastung im Fenster des
+[Elektronikfachs](elektronik.md#elektronikfach) die Kabel. Gemessen wird
+die Mitte des Halters, also die Schraube, vom hinteren 2060, so wie bei
+den Trägern der Wanne Y.
 
 <!-- tabelle:plaetze -->
 | Halter | Seite | Mitte (Schraube), vom hinteren 2060 | Y | Kabel |
 |---|---|---|---|---|
-| **L1** | links | 41 mm hinter der Rückseite | −291 | W7 · W9 · W11 · W12 · W13 · W15 |
+| **L1** | links | 31 mm hinter der Rückseite | −281 | W7 · W9 · W11 · W12 · W13 · W15 |
 | **L2** | links | 57 mm vor der Vorderseite | −173 | W7 · W9 · W11 · W12 · W13 · W15 |
 | **L3** | links | 167 mm vor der Vorderseite | −63 | W13 |
 | **L4** | links | 260 mm vor der Vorderseite | 30 | W13 |

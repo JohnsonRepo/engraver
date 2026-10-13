@@ -4,7 +4,8 @@
 Steckernetzteil 24 V, Schalter und Not-Aus, Verteilung ueber Wago-Klemmen,
 Abwaertswandler 24 -> 12 V fuer den Laser, CNC Shield V3 auf dem Uno mit
 Pins nach GRBL 1.1 (docs/hardware-notizen.md), Motoren, Laser und die drei
-Gabellichtschranken; der Pi mit seinem 5-V-Wandler auf dem Pi-Halter. Jede Leitung traegt ihre Nummer aus der Kabelliste
+Gabellichtschranken; der Pi mit dem 5-V-Wandler und den 5-V-Klemmen im
+Elektronikfach. Jede Leitung traegt ihre Nummer aus der Kabelliste
 (tools/verkabelung.py); die Liste steht unten in der Zeichnung. Die
 Leistungsbilanz kommt aus tools/elektronik_zeichnen.py, damit alle
 Zeichnungen dieselben Zahlen zeigen.
@@ -152,7 +153,7 @@ def main():
     t += marke(262, 206, 'W2') + marke(262, 358, 'W2')
 
     # ---- Verteilung: Wago-Klemmen, Wandler, Lüfter -------------------------
-    t += block(290, 350, 120, 36, ['Wago +24 V', '221-415, 5 Plätze'],
+    t += block(290, 350, 120, 36, ['Wago +24 V', '221-420, 10 Plätze'],
                fett=1, fill='#fff4f4', stroke=P24)
     t += block(290, 404, 120, 36, ['Wago GND', '221-420, 10 Plätze'],
                fett=1, fill='#f1f3f5', stroke=MASSE)
@@ -161,8 +162,6 @@ def main():
         'ohne Laser auf 12,0 V'], fett=1, fill='#fff7ec', stroke=P12)
     t += block(290, 552, 120, 40, ['Lüfter 40 mm, 24 V',
                                    'bläst auf die Treiber'], fett=1)
-    t += block(290, 690, 120, 36, ['Wago +5 V', '221-420, 10 Plätze'],
-               fett=1, fill='#f8f0fc', stroke=P5)
     # W4 (Wandler) innen, W5 (Lüfter) außen; die Masse der Lichtschranken
     # und des Not-Aus-Schließers ganz außen
     t += [draht([(290, 374), (276, 374), (276, 486), (290, 486)], P24),
@@ -209,7 +208,7 @@ def main():
         t += pin(sx + sb, 250 + 30 * i, 'Motor ' + n + ' (2B 2A 1A 1B)',
                  'end')
     unten = ((520, 'X− (D9)'), (580, 'Y+ (D10)'), (640, 'SpnEn (D12)'),
-             (760, '5V'))
+             (760, '5V (frei)'))
     for x, s in unten:
         t += pin(x, sy + sh)
         t.append(text(x, sy + sh - 8, s, 8.0, TEXT, 'middle', halo=True))
@@ -264,16 +263,13 @@ def main():
               draht([(834, y0 + 22), (gx, y0 + 22)], MASSE, 1.4),
               punkt(822, y0 + 10, P5), punkt(834, y0 + 22, MASSE)]
         t += marke(796, y0 + 34, nr)
-    # W6: 5V-Stift -> Wago +5 V; Sammelschiene +5 V -> VCC
-    t += [draht([(760, sy + sh), (760, 698), (410, 698)], P5),
-          draht([(410, 718), (822, 718)], P5, 1.6),
-          draht([(822, 634), (822, 738)], P5, 1.6), punkt(822, 718, P5)]
-    t += marke(700 - 40, 698, 'W6')
-    # Masse: Wago GND -> Sammelschiene -> GND der Lichtschranken
-    t += [draht([(290, 410), (240, 410), (240, 792), (834, 792), (834, 646)],
-                MASSE, 1.6),
-          punkt(834, 750, MASSE), punkt(834, 698, MASSE)]
-    t += marke(540, 792, 'W9–11')
+    # Sammelschienen der Lichtschranken: +5 V und GND 5 V von den Wago
+    # links (5-V-Wandler), unten herum
+    t += [draht([(24, 578), (18, 578), (18, 800), (822, 800), (822, 634)],
+                P5, 1.6),
+          draht([(204, 578), (210, 578), (210, 808), (834, 808),
+                 (834, 646)], MASSE, 1.6)]
+    t += marke(540, 800, 'W9–11') + marke(540, 808 + 12, 'W9–11')
     # W16: 24-V-Waechter an Abort — R1 vom +24 V hinter dem Not-Aus,
     # R2 und 100 nF nach GND
     ya, xk = 470, 822
@@ -300,19 +296,19 @@ def main():
           text(xk + 28, 500, '4,7 kΩ ∥ 100 nF', 7.5, GRAU)]
     t += masse_zeichen(xk, 522)
     t += marke(803, ya, 'W16')
-    # Pi-Halter (im Fach rechts neben dem Kasten): 5-V-Wandler und Pi.
-    # W18 an der Buchse, vor Schalter und Not-Aus; W19 5 V in PWR IN; W17
-    # USB zum Uno
+    # 5-V-Wandler, 5-V-Klemmen und Pi (im Fach, links an der Fuge). W18 an
+    # der Buchse, vor Schalter und Not-Aus; W6 vom Adapter an die Wago
+    # +5 V und GND 5 V; W19 von dort in PWR IN; W17 USB zum Uno
     t.append(el('rect', {'x': '14', 'y': '470', 'width': '200',
-                         'height': '214', 'rx': '6', 'fill': 'none',
+                         'height': '226', 'rx': '6', 'fill': 'none',
                          'stroke': BLAU, 'stroke-width': '1.1',
                          'stroke-dasharray': '6 4'}))
-    t.append(text(20, 464, 'Pi-Halter (im Fach, rechts neben dem Kasten)',
-                  8.5, BLAU, fett=True))
+    t.append(text(20, 464, 'auch im Elektronikfach: 5-V-Zweig und Pi', 8.5,
+                  BLAU, fett=True))
     t += block(24, 486, 180, 58, ['Abwärtswandler 24 → 5 V',
-                                  '≥ {} A, Ausgang USB-A'.format(
+                                  '≥ {} A, USB-A mit'.format(
                                       ez.de(ez.PI_WANDLER_A, 0)),
-                                  'vor Schalter und Not-Aus'],
+                                  'Klemmen-Adapter'],
                fett=1, fill='#f8f0fc', stroke=P5)
     t += pin(204, 500, 'IN+', 'end') + pin(204, 516, 'IN−', 'end')
     t += [draht([(300, 160), (300, 172), (220, 172), (220, 500), (204, 500)],
@@ -321,18 +317,26 @@ def main():
                 MASSE)]
     t += pin(300, 160) + pin(316, 160)
     t += marke(220, 440, 'W18')
-    t += block(24, 590, 180, 58, ['Raspberry Pi Zero 2 W',
-                                  'CNCjs im Browser, WLAN 2,4 GHz',
-                                  'Pi-Halter: PiHalter.py'], fett=1)
-    t += [draht([(114, 544), (114, 590)], P5)]
-    t += pin(114, 544) + pin(114, 590)
-    t.append(text(120, 556, 'USB-A', 7.5, GRAU))
-    t.append(text(120, 586, 'PWR IN', 7.5, GRAU))
-    t += marke(140, 568, 'W19')
-    t += pin(204, 630, 'USB', 'end')
-    t.append(draht([(204, 630), (460, 630), (460, 578), (sx, 578)], USB,
+    t += block(24, 562, 85, 32, ['Wago +5 V', '221-415'], fett=1,
+               fill='#f8f0fc', stroke=P5)
+    t += block(119, 562, 85, 32, ['Wago GND 5 V', '221-415'], fett=1,
+               fill='#f1f3f5', stroke=MASSE)
+    t += [draht([(66, 544), (66, 562)], P5), draht([(161, 544), (161, 562)],
+                                                   MASSE)]
+    t += pin(66, 544) + pin(161, 544)
+    t += marke(114, 553, 'W6')
+    t += block(24, 626, 180, 58, ['Raspberry Pi Zero 2 W',
+                                  '5 V über PWR IN (W19)',
+                                  'CNCjs im Browser, WLAN'],
+               fett=1)
+    t += [draht([(56, 594), (56, 626)], P5), draht([(151, 594), (151, 626)],
+                                                   MASSE)]
+    t += pin(56, 626) + pin(151, 626)
+    t += marke(104, 610, 'W19')
+    t += pin(204, 666, 'USB', 'end')
+    t.append(draht([(204, 666), (460, 666), (460, 578), (sx, 578)], USB,
                    1.6, '5 3'))
-    t += marke(330, 630, 'W17')
+    t += marke(330, 666, 'W17')
 
     # ---- Kabelliste -------------------------------------------------------
     ty = 846
@@ -378,15 +382,15 @@ def main():
              ez.de(ez.WANDLER_ETA * 100, 0), ez.de(lb['laser'], 0),
              ez.de(ez.WANDLER_A, 0),
              ez.de(100.0 * ez.LASER_A / ez.WANDLER_A, 0))),
-        ('Masse', 'Netzteil, Shield, Wandler, Laser und Lichtschranken haben '
-         'ein gemeinsames GND, Stern an der Wago GND; ein isolierter Wandler '
-         'braucht dafür eine Brücke OUT− → GND'),
+        ('Masse', 'ein gemeinsames GND: Stern an der Wago GND (Netzteil, '
+         'Shield, Wandler, Laser), die Lichtschranken und der Pi an der Wago '
+         'GND 5 V, über den 5-V-Wandler damit verbunden'),
         ('Not-Aus', 'Wechsler C/NO/NC: C und NC trennen die 24 V von '
          'Shield, Wandler und Lüfter, NO bleibt frei. Fehlen sie (Not-Aus, '
          'Schalter), zieht der Wächter W16 Abort auf LOW, und GRBL bricht ab'),
-        ('Pi', 'sein 5-V-Wandler hängt mit W18 an der Buchse, vor Schalter '
-         'und Not-Aus: Pi und Uno laufen weiter, der Wächter meldet; über '
-         'USB (W17) versorgt der Pi den Uno und damit die Lichtschranken'),
+        ('5 V', 'der 5-V-Wandler hängt mit W18 an der Buchse, vor Schalter '
+         'und Not-Aus; W6 (0,75 mm²) bringt seine 5 V direkt an die Wago: '
+         'Lichtschranken und Pi (W19), der Pi über USB (W17) den Uno'),
         ('Einschalten', 'Netzteil einstecken: Pi und Uno starten, GRBL läuft '
          '(der Pull-down W8 hält den Laser aus); dann Schalter EIN: 24 V. '
          'Ausschalten umgekehrt, den Pi vor dem Ausstecken herunterfahren'),

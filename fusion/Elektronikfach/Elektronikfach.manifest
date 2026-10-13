@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Elektronikfach hinter dem hinteren 2060, ersetzt Elektronik-Gehaeuse und Pi-Halter: zwei Kastenhaelften (je <= 250 mm, in der Mitte mit 4x M3 und Rauten-Zapfen verbunden) mit Signalgasse vorn und Leistungsgasse hinten, Leitwaenden, Oesen fuer Kabelbinder und eigenen Fenstern je Gasse. Links Uno R3 mit CNC Shield auf Stehbolzen, 5-V-Klemmen, Platz fuer Air Assist, der Pi Zero 2 W senkrecht an der Fugenwand; rechts Wandler 24 -> 12 V und 24 -> 5 V, Wago 24 V, Einbaubuchse und runder Wippschalter. Montageplatte mit Ohren, 6x M5 in Hammermuttern der Rueckseite des 2060. Zwei Deckel, links mit 24-V-Luefter 40 mm, rechts mit Lueftungsschlitzen. Plus ausgeblendete Bohrlehren (Uno, Pi, Fuge) und Referenzteile (nicht drucken)."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

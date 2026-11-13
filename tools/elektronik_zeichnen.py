@@ -68,10 +68,11 @@ LUEFTER_W = 2.0
 LASER_V, LASER_A = 12.0, 1.8     # obere Grenze der Angabe
 WANDLER_A = 5.0                  # Abwaertswandler 24 -> 12 V, 5 A [v]
 WANDLER_ETA = 0.9                # sein Wirkungsgrad [w]
-# 5 V: Der Abwaertswandler 24 -> 5 V haengt vor Schalter und Not-Aus an der
-# Buchse. Von seinem USB-A-Adapter gehen die 5 V kurz und dick an die Wago
-# +5 V (W6); daran haengen die Lichtschranken und der Pi (W19), der ueber
-# USB (W17) den Uno versorgt [w].
+# 5 V: Der Abwaertswandler 24 -> 5 V haengt hinter dem Schalter, aber vor
+# dem Not-Aus (W18, +24 V von Kontakt 2 des Schalters): Der Schalter
+# schaltet Pi und Uno mit aus, der Not-Aus nicht. Von seinem USB-A-Adapter
+# gehen die 5 V kurz und dick an die Wago +5 V (W6); daran haengen die
+# Lichtschranken und der Pi (W19), der ueber USB (W17) den Uno versorgt [w].
 USB_MA = 500.0          # Polyfuse am USB-Eingang des Uno
 LS_MA = 25.0            # je Lichtschranke: IR-Diode, Komparator, zwei LEDs
 UNO_MA = 60.0           # Uno mit USB-Wandler
@@ -447,11 +448,13 @@ def kabelwege(w, L, TL, K):
     notaus = rechts_not + [(xa, y_vor, zn), (xa, y_vor, z_nut),
                            (na_x + 3.0, y_vor, z_nut),
                            (na_x + 3.0, na_y, na_z), (na_x, na_y, na_z)]
-    # im Fach: 24 V fuer den 5-V-Wandler von der Buchse; 5 V vom Adapter
-    # durch die Signalgasse an die 5-V-Klemmen links, von dort zum Pi (W19)
+    # im Fach: 24 V fuer den 5-V-Wandler — rot von Kontakt 2 des Schalters
+    # (die laengere Ader, sie zaehlt), an der Rueckwand entlang zur Buchse,
+    # dort kommt schwarz von der Huelse dazu; 5 V vom Adapter durch die
+    # Signalgasse an die 5-V-Klemmen links, von dort zum Pi (W19)
     bx, _ = EL['buchse']
-    pi24 = [(bx, EL['innen_y'][0] + 8.0, ez), (bx, EL['innen_y'][0] + 8.0,
-                                                 zk),
+    yr = EL['innen_y'][0] + 8.0
+    pi24 = [(sx, yr, ez), (sx, yr, zk), (bx, yr, zk),
             (EL['w5_x'][1] + 4.0, sum(EL['w5_y']) / 2.0, zk),
             (EL['w5_x'][1], sum(EL['w5_y']) / 2.0, bz + 10.0)]
     ad = EL['adapter']
@@ -837,8 +840,8 @@ def main():
              de(K['leistung']['pi'], 0),
              de(K['leistung']['summe'], 0), de(K['leistung']['dauer'], 0))),
         ('Pi', 'Pi Zero 2 W im Fach, senkrecht an der Fuge, die Oberkante '
-         'über dem 2060; der 5-V-Wandler hängt vor Schalter und Not-Aus an '
-         'der Buchse und versorgt auch die Lichtschranken (docs/pi.md)'),
+         'über dem 2060; der 5-V-Wandler hängt hinter dem Schalter, vor dem '
+         'Not-Aus und versorgt auch die Lichtschranken (docs/pi.md)'),
         ('Endschalter', 'LM393-Gabellichtschranken: X links auf der 2020 '
          'des Portals, Y '
          'außen am rechten 2040 — schaltet {} (Toolhead mit Z unten {} mm '

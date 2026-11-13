@@ -129,7 +129,7 @@
 <polyline points="441.5,203.5 441.5,203.5 441.5,139.1 686.4,138.4 926.0,137.7 926.0,180.7" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
 <polyline points="978.0,140.6 978.0,152.7 1033.1,152.7 1046.1,152.7 1127.1,152.7" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
 <polygon points="1127.1,152.7 1122.1,154.7 1122.1,150.7" fill="#c92a2a"/>
-<polyline points="921.3,137.3 921.3,137.3 892.2,218.3 885.7,218.3" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
+<polyline points="978.0,137.3 978.0,137.3 921.3,137.3 892.2,218.3 885.7,218.3" fill="none" stroke="#c92a2a" stroke-width="1.3" stroke-dasharray="4 2.5" stroke-linejoin="round"/>
 <text x="546.3" y="169.5" font-size="8.0" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wandler</text>
 <text x="546.3" y="179.5" font-size="7.5" fill="#1c2733" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">24 → 12 V</text>
 <text x="834.7" y="217.3" font-size="8.0" fill="#1c2733" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Wandler</text>

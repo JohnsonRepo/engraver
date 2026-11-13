@@ -939,14 +939,15 @@ def schritt_waechter():
 
 def schritt_pi():
     usb = '#868e96'
-    # W18: an die Loetfahnen der Buchse (vor dem Schalter), zum 5-V-Wandler
-    t = kasten(14, 46, 92, 58, ['Buchse', 'Lötfahnen'])
+    # W18: rot von Kontakt 2 des Schalters (hinter dem Schalter, vor dem
+    # Not-Aus), schwarz von der Huelse der Buchse, zum 5-V-Wandler
+    t = kasten(14, 46, 92, 58, ['Schalter K2', 'Buchse −'])
     t += [text(98, 66, '+', 12, P24, 'end', fett=True),
           text(98, 96, '−', 12, MASSE, 'end', fett=True)]
     t += kasten(190, 46, 118, 58, ['5-V-Wandler', '24 → 5 V, ≥ {} A'.format(
         de(ez.PI_WANDLER_A, 0))], '#f8f0fc', P5)
     t += [text(198, 66 + 30, 'IN', 10, GRAU)]
-    for i, (a, b, y) in enumerate((('Buchse +', '5V-Wandler IN+', 62),
+    for i, (a, b, y) in enumerate((('Schalter 2', '5V-Wandler IN+', 62),
                                    ('Buchse −', '5V-Wandler IN−', 92))):
         _, f = ader('W18', i, a, b)
         t += draht([(106, y), (190, y)], f)
@@ -966,21 +967,22 @@ def schritt_pi():
     t += draht([(483, 104), (483, 132)], usb, 5)
     t += klemme(483, 104) + klemme(483, 132)
     t += marke(493, 123, 'W17')
-    t += zeilen(14, 128, ['Vor Schalter und Not-Aus: Pi und Uno',
-                          'laufen weiter, der Wächter W16 meldet.',
+    t += zeilen(14, 128, ['Hinter dem Schalter, vor dem Not-Aus: Der',
+                          'Schalter schaltet Pi und Uno mit aus, beim',
+                          'Not-Aus laufen sie weiter, W16 meldet.',
                           'W17 in „USB“, W19 in „PWR IN“.'], 10.5, GRAU,
                 13.5)
     # Einschaltreihenfolge
     t.append(text(14, 190, 'Einschalten', 12, TEXT, fett=True))
-    for k, (s_, x) in enumerate((('Netzteil: Pi und Uno starten', 14),
-                                 ('Schalter EIN: 24 V', 262))):
+    for k, (s_, x) in enumerate((('Schalter EIN: alles startet', 14),
+                                 ('nach $H: arbeiten', 262))):
         t += schrittmarke(x + 8, 206, k + 1)
         t.append(text(x + 20, 210, s_, 11, TEXT))
     t += [linie([(212, 206), (254, 206)], GRAU, 1.4),
           el('polygon', {'points': '254,206 248,203 248,209',
                          'fill': GRAU}),
-          text(420, 210, 'aus: umgekehrt, den Pi', 10.5, GRAU),
-          text(420, 223, 'vorher herunterfahren', 10.5, GRAU)]
+          text(420, 210, 'aus: erst den Pi herunter-', 10.5, GRAU),
+          text(420, 223, 'fahren, dann Schalter AUS', 10.5, GRAU)]
     # Inbetriebnahme
     t.append(text(14, 246, 'Inbetriebnahme, Prüfungen der Anleitung', 12,
                   TEXT, fett=True))
@@ -1169,8 +1171,8 @@ def main():
               'Wago-Plätze in der Reihenfolge der Tabelle „Klemmen“.'.format(
                   len(LTS)), 11.5, GRAU),
          text(RX, 77, 'Alles stromlos verdrahten, nichts unter Spannung '
-              'an- oder abstecken. Einschalten: erst Netzteil (Pi und Uno '
-              'starten), dann Schalter EIN.', 11.5, GRAU)]
+              'an- oder abstecken. Der Schalter schaltet alles, auch den '
+              'Pi: vorher herunterfahren.', 11.5, GRAU)]
     t += legende(102)
     y = 118
     t.append(gruppe(RX, y, uebersicht()))

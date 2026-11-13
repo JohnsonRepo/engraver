@@ -12,11 +12,10 @@ WLAN, öffnet er ein eigenes ([Hotspot](#ohne-wlan-hotspot)).
 Der Pi sitzt mit seinem 5-V-Wandler auf einem gedruckten
 [Halter](#halter) rechts neben dem Elektronik-Kasten, unter einer
 [Haube](#haube) wie die Elektronik: Von außen sieht man keine Platine. Er
-hängt **vor
-Schalter und Not-Aus** am Netzteil: Pi und Uno laufen, solange das Netzteil
-steckt. Not-Aus und Schalter trennen nur Motoren, Laser und Lüfter, und der
-[24-V-Wächter](verkabelung.md#7-24-v-wächter-w16) meldet das wie bisher an
-GRBL.
+hängt **hinter dem Schalter, aber vor dem Not-Aus**: Der Schalter schaltet
+Pi und Uno mit aus. Der Not-Aus trennt nur Motoren, Laser und Lüfter; Pi und
+Uno laufen dann weiter, und der
+[24-V-Wächter](verkabelung.md#7-24-v-wächter-w16) meldet das an GRBL.
 
 ![Pi-Halter von hinten und im Schnitt](pihalter.svg)
 
@@ -139,28 +138,35 @@ schreibt beide STL.
 ## Strom
 
 ```
-Netzteil ── Buchse ─┬─ Schalter ── Not-Aus ── Wago +24 V: Shield, Wandler 12 V, Lüfter
-                    └─ W18 ── 5-V-Wandler ── W19 ── Pi ── W17 (USB) ── Uno ── 5 V der Lichtschranken
+Netzteil ── Buchse ── Schalter ─┬─ Not-Aus ── Wago +24 V: Shield, Wandler 12 V, Lüfter
+                                └─ W18 ── 5-V-Wandler ── W19 ── Pi ── W17 (USB) ── Uno ── 5 V der Lichtschranken
 ```
+
+Das Rot von W18 sitzt an Kontakt 2 des Schalters, zusammen mit der Ader
+zum Not-Aus (seit 2026-11-13; vorher an der Buchse, vor dem Schalter).
 
 | Zustand | Pi und Uno | Motoren, Laser, Lüfter |
 |---|---|---|
-| Netzteil gesteckt, Schalter aus | an, GRBL meldet `Pn:R` | aus |
+| Schalter aus (oder Netzteil gezogen) | aus, der Pull-down W8 hält den Laser aus | aus |
 | Schalter an | an | an |
-| Not-Aus gedrückt | an, GRBL bricht ab: ALARM, `Pn:R` | aus |
-| Netzteil gezogen | aus, der Pull-down W8 hält den Laser aus | aus |
+| Schalter an, Not-Aus gedrückt | an, GRBL bricht ab: ALARM, `Pn:R` | aus |
 
-* **Einschalten:** Netzteil einstecken. Der Uno bekommt seine 5 V sofort
-  über W17 vom Pi, nicht erst, wenn der Pi gestartet ist. GRBL läuft nach
-  etwa einer Sekunde und steht bis zur Referenzfahrt in ALARM: Es nimmt
-  keinen G-Code an, auch kein `M3`. Den Schalter darfst du deshalb gleich
-  anschalten, auch während der Pi noch startet. Der Laser bleibt aus, und
-  kein Motor fährt. Nach etwa einer Minute ist CNCjs erreichbar: erst
-  verbinden, dann **Homing** (beim Verbinden startet der Uno neu).
-* **Ausschalten:** Schalter aus, in CNCjs **Pi herunterfahren**, erst dann
-  das Netzteil ziehen. Ein harter Stromausfall kann die SD-Karte
-  beschädigen. Steckt das Netzteil weiter, bleibt der Pi erreichbar
-  (≈ 1 W im Leerlauf).
+* **Einschalten:** Schalter an. Pi, Uno und die 24 V bekommen zugleich
+  Strom. Der Uno bekommt seine 5 V sofort über W17 vom Pi, nicht erst, wenn
+  der Pi gestartet ist. Bis GRBL nach etwa einer Sekunde läuft, hält der
+  Pull-down W8 die Laser-PWM auf 0 V
+  ([Prüfung H6](verkabelung.md#h-laser)). Danach steht GRBL bis zur
+  Referenzfahrt in ALARM: Es nimmt keinen G-Code an, auch kein `M3`. Der
+  Laser bleibt aus, und kein Motor fährt. Nach etwa einer Minute ist CNCjs
+  erreichbar: erst verbinden, dann **Homing** (beim Verbinden startet der
+  Uno neu).
+* **Ausschalten:** in CNCjs **Pi herunterfahren**, etwa 20 Sekunden warten
+  (die grüne LED des Pi ist dann aus), dann Schalter aus. Der Schalter
+  nimmt dem Pi den Strom hart weg; ohne Herunterfahren kann das die
+  SD-Karte beschädigen. Das Netzteil darf stecken bleiben: Hinter dem
+  ausgeschalteten Schalter ist alles stromlos.
+* **Nur Motoren und Laser aus, Pi an:** Schalter an lassen und den Not-Aus
+  drücken. Der Pi bleibt erreichbar (≈ 1 W im Leerlauf).
 * **Leistung:** Pi, Uno, Treiberlogik und Lichtschranken ziehen zusammen
   höchstens 755 mA aus 5 V. Mit dem Wandler (85 %) sind das ≈ 4,4 W aus dem
   Netzteil. Zusammen mit allem anderen sind es ≈ 53 W, dauernd gehen 61 W
@@ -264,7 +270,7 @@ Vorbereitet in [`pi/cncrc.json`](../pi/cncrc.json):
 | **Rahmen** | fährt mit G0 die Außenkante der geladenen Datei ab, der Laser bleibt aus | `G0 X[xmin] Y[ymin]` … |
 | **Laserpunkt 1 %** | Laser als Punkt an, z. B. für den [Nullpunkt](spannmittel.md#nullpunkt-einrichten-einmal); **Schutzbrille** | `G1 F600`, `M3 S10` |
 | **Laser aus** | | `M5` |
-| **Pi herunterfahren** (Befehl) | vor dem Ziehen des Netzteils | `sudo shutdown -h now` |
+| **Pi herunterfahren** (Befehl) | vor dem Ausschalten am Schalter | `sudo shutdown -h now` |
 | **Pi neu starten** (Befehl) | | `sudo reboot` |
 
 Die Außenkante für **Rahmen** liefert die 3D-Ansicht von CNCjs, wenn sie
@@ -359,25 +365,25 @@ länger als eine Minute erreichbar, erkennt der Pi sein WLAN.
 
 ## Ablauf an der Maschine
 
-1. Netzteil einstecken und warten, bis CNCjs erreichbar ist (ohne WLAN:
-   [Hotspot](#ohne-wlan-hotspot)).
-2. CNCjs öffnen, verbinden, Schalter an, **Homing**.
+1. Schalter an und warten, bis CNCjs erreichbar ist, etwa eine Minute (ohne
+   WLAN: [Hotspot](#ohne-wlan-hotspot)).
+2. CNCjs öffnen, verbinden, **Homing**.
 3. Werkstück an den Anschlag ([spannmittel.md](spannmittel.md)), Datei laden.
 4. Makro **Rahmen**, die Hand am Not-Aus. Dann **Start**.
 5. Bleib dabei, bis der Auftrag fertig ist.
-6. Schalter aus. Soll die Maschine ganz aus: **Pi herunterfahren**, dann das
-   Netzteil ziehen.
+6. **Pi herunterfahren**, etwa 20 Sekunden warten, dann Schalter aus. Jetzt
+   ist alles aus, das Netzteil darf stecken bleiben.
 
 ## Fehlersuche
 
 | Was passiert | Ursache | Abhilfe |
 |---|---|---|
-| `laser.local` nicht erreichbar | Pi startet noch, WLAN-Daten falsch, 5-GHz-Netz, Imager älter als 2.0 | warten, der erste Start dauert einige Minuten; im Router nach dem Pi sehen; der Zero braucht 2,4 GHz; Karte mit dem aktuellen Imager neu beschreiben |
+| `laser.local` nicht erreichbar | Schalter aus (er schaltet auch den Pi), Pi startet noch, WLAN-Daten falsch, 5-GHz-Netz, Imager älter als 2.0 | Schalter an; warten, der erste Start dauert einige Minuten; im Router nach dem Pi sehen; der Zero braucht 2,4 GHz; Karte mit dem aktuellen Imager neu beschreiben |
 | Im WLAN-Menü steht **laser**, im Heimnetz ist `laser.local` nicht erreichbar | Pi hat beim Start das Heimnetz nicht gefunden (Router aus, WLAN-Daten falsch) und den Hotspot geöffnet | mit **laser** verbinden, in CNCjs **Pi neu starten** |
 | Kein Hotspot, obwohl kein WLAN da ist | der Pi sucht nach dem Start erst eine Minute | warten; sonst über das Heimnetz auf dem Pi `journalctl -u hotspot` |
 | Seite lädt nicht, Pi antwortet auf `ping` | Dienst läuft nicht | auf dem Pi `systemctl status cncjs` und `journalctl -u cncjs` |
 | Kein Port in CNCjs | W17 in PWR IN statt USB, Kabel ohne OTG | Micro-B in die mittlere Buchse **USB**; OTG-Kabel; `ls /dev/ttyACM* /dev/ttyUSB*` |
-| Konsole bleibt stumm: nach dem Verbinden kein `Grbl 1.1h`, auf `?` keine Antwort | GRBL fehlt auf dem Uno, oder der Uno hängt im Reset | [GRBL aufspielen](#grbl-aufspielen). Kommt `Grbl 1.1h` nur bei eingeschaltetem Schalter, hält der 24-V-Wächter den Uno im Reset: W16 gehört an Abort (A0) |
+| Konsole bleibt stumm: nach dem Verbinden kein `Grbl 1.1h`, auf `?` keine Antwort | GRBL fehlt auf dem Uno, oder der Uno hängt im Reset | [GRBL aufspielen](#grbl-aufspielen). Kommt `Grbl 1.1h` nur bei entriegeltem Not-Aus, hält der 24-V-Wächter den Uno im Reset: W16 gehört an Abort (A0) |
 | Pi startet neu, `vcgencmd get_throttled` zeigt nicht `0x0` (Unterspannung) | W19 dünn oder lang, Lötstelle schlecht, Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A; am USB-Ausgang 5,0–5,2 V |
 | Joggen und Anzeige haken | WLAN-Energiesparen an | `iw dev wlan0 get power_save` muss „off“ zeigen; sonst Schritt 3 wiederholen |
 | ALARM:2 oder `error:15` beim Rahmen | Datei nicht auf den Nullpunkt bezogen | Nullpunkt prüfen, in LightBurn „Absolute Coords“ und Ursprung hinten links |

@@ -184,10 +184,10 @@ Ein **Raspberry Pi Zero 2 W** mit [CNCjs](https://cnc.js.org/) ersetzt den
 PC am USB des Uno. LightBurn auf dem Mac speichert Aufträge als G-Code-Datei,
 gestartet werden sie im Browser am iPad, iPhone oder Mac. Der Pi schickt die
 Datei selbst an den Uno, ein Abbruch des WLAN hält den Auftrag nicht an.
-Er hängt mit einem **5-V-Wandler** vor Schalter und Not-Aus an der Buchse
-(W18, W19) und versorgt über USB den Uno (W17). Not-Aus und Schalter
-trennen weiter Motoren, Laser und Lüfter, der 24-V-Wächter meldet es an
-GRBL. Pi und Wandler sitzen auf einem gedruckten **Pi-Halter** rechts neben
+Er hängt mit einem **5-V-Wandler** hinter dem Schalter, aber vor dem
+Not-Aus (W18, W19) und versorgt über USB den Uno (W17). Der Schalter
+schaltet alles aus, auch Pi und Uno. Der Not-Aus trennt nur Motoren, Laser
+und Lüfter, der 24-V-Wächter meldet es an GRBL. Pi und Wandler sitzen auf einem gedruckten **Pi-Halter** rechts neben
 dem Elektronikgehäuse, mit 2 × M5 in der oberen Nut des hinteren 2060.
 Der Pi liegt ganz über dem 2060, vor seiner Antenne ist kein Aluminium.
 Seit Rev. 3 deckt eine **Haube** Pi und Wandler ab wie beim

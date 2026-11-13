@@ -81,9 +81,10 @@ ANSCHLUSS = {
     'Laser +12 V': ('Laser, XH rechts: +12 V', 'XH'),
     'Uno USB': ('Uno, USB-B', None),
     # Pi und sein Abwaertswandler 24 -> 5 V im Elektronikfach (docs/pi.md):
-    # Eingang mit Schraubklemmen, Ausgang USB-A [v]. In der USB-A-Buchse
-    # steckt ein Adapter mit Schraubklemmen [?]; von ihm gehen die 5 V an
-    # die Wago (W6), von dort an Pi und Lichtschranken.
+    # Eingang mit Schraubklemmen (W18, +24 V von Kontakt 2 des Schalters:
+    # hinter dem Schalter, vor dem Not-Aus), Ausgang USB-A [v]. In der
+    # USB-A-Buchse steckt ein Adapter mit Schraubklemmen [?]; von ihm gehen
+    # die 5 V an die Wago (W6), von dort an Pi und Lichtschranken.
     '5V-Wandler IN+': ('5-V-Wandler IN+', 'Schraubklemme'),
     '5V-Wandler IN−': ('5-V-Wandler IN−', 'Schraubklemme'),
     '5V-Wandler USB': ('5-V-Wandler, USB-A', None),
@@ -293,8 +294,7 @@ def leitungen():
              mm2=None, laenge=0.5, weg_fach='Wächter',
              weg='im Fach: Teiler an den Wago 24 V und GND rechts, die Mitte '
                  'als Einzelader 0,25 mm² durch die Signalgasse an Abort',
-             hinweis='fehlen die 24 V hinter Schalter und Not-Aus, bricht '
-                     'GRBL ab',
+             hinweis='fehlen die 24 V hinter dem Not-Aus, bricht GRBL ab',
              adern=[('R1 22 kΩ', '—', 'Wago +24 V', 'Shield Abort'),
                     ('R2 4,7 kΩ ∥ 100 nF', '—', 'Shield Abort',
                      'Wago GND')]),
@@ -307,10 +307,12 @@ def leitungen():
              adern=[('USB', '—', 'Uno USB', 'Pi USB')]),
         dict(nr='W18', name='24 V für den 5-V-Wandler', art='Einzeladern',
              mm2=ez.LITZE_24V, laenge=0.2, strom=3.0, weg_fach='Pi 24 V',
-             weg='im Fach rechts: an der Buchse gelötet, zum Eingang des '
+             weg='im Fach rechts: rot an Kontakt 2 des Schalters gelötet, '
+                 'schwarz an der Hülse der Buchse, zum Eingang des '
                  '5-V-Wandlers',
-             hinweis='vor Schalter und Not-Aus: Pi und Uno bleiben an',
-             adern=[('+24 V', 'rot', 'Buchse +', '5V-Wandler IN+'),
+             hinweis='hinter dem Schalter, vor dem Not-Aus: Der Schalter '
+                     'schaltet Pi und Uno mit aus, der Not-Aus nicht',
+             adern=[('+24 V', 'rot', 'Schalter 2', '5V-Wandler IN+'),
                     ('GND', 'schwarz', 'Buchse −', '5V-Wandler IN−')]),
         dict(nr='W19', name='5 V für den Pi',
              art='Micro-USB-Kabel mit offenen Enden', mm2=0.2, fertig=True,
@@ -340,10 +342,12 @@ INNEN = (
 BETRIEB = ('ein', 'nicht gedrueckt')
 
 # 24-V-Waechter an Abort (A0): Spannungsteiler vom +24 V hinter dem Not-Aus.
-# Fehlen die 24 V, zieht R2 den Eingang auf LOW, und GRBL bricht ab —
-# gleich, ob der Not-Aus gedrueckt, der Schalter aus oder das Netzteil ab
-# ist. ATmega328P [w] (Datenblatt): Pull-up 20-50 kOhm, LOW bis 0,3 x VCC,
-# HIGH ab 0,6 x VCC.
+# Fehlen die 24 V, zieht R2 den Eingang auf LOW, und GRBL bricht ab. Das
+# meldet den Not-Aus: Nur er nimmt die 24 V weg und laesst Pi und Uno an.
+# Der Schalter schaltet seit 2026-11-13 auch den 5-V-Wandler (W18) und
+# damit Pi und Uno aus; haengt der Uno am Mac, meldet der Waechter auch
+# den Schalter. ATmega328P [w] (Datenblatt): Pull-up 20-50 kOhm, LOW bis
+# 0,3 x VCC, HIGH ab 0,6 x VCC.
 WAECHTER_R1, WAECHTER_R2 = 22e3, 4.7e3
 PULLUP = (20e3, 50e3)
 VCC, V_IL, V_IH = 5.0, 1.5, 3.0

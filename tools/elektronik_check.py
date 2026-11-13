@@ -793,10 +793,9 @@ def verkabelung_pruefen(p, Q):
     p.ja('Stift 5V des Shields an keiner Leitung (nicht mehr ueber den Uno)',
          not any('Shield 5V' in (a, b) for lt in lts
                  for _, _, a, b in lt['adern']))
-    p.ja('5 V vor Schalter und Not-Aus: der 5-V-Wandler haengt an der Buchse',
-         '5V-Wandler IN+' in plus24 and '5V-Wandler IN+'
-         in vk.netze(zustand=('ein', 'gedrueckt'), lts=lts)['Buchse +'])
-    netze = {'+24 V': plus24, '+12 V': N['Wandler OUT+'],
+    p.ja('+24 V ueber den Schalter an {}'.format(A['5V-Wandler IN+'][0]),
+         '5V-Wandler IN+' in plus24)
+    netze ={'+24 V': plus24, '+12 V': N['Wandler OUT+'],
              '+5 V': N['Wago +5 V'], 'GND': masse}
     for (n1, s1), (n2, s2) in itertools.combinations(netze.items(), 2):
         p.ja('kein Kurzschluss {} <-> {}'.format(n1, n2), not s1 & s2)
@@ -814,6 +813,10 @@ def verkabelung_pruefen(p, Q):
     gedrueckt = vk.netze(zustand=('ein', 'gedrueckt'), lts=lts)
     p.ja('Not-Aus gedrueckt: Shield, Wandler (Laser) und Luefter ohne 24 V',
          not {'Shield +', 'Wandler IN+', 'Lüfter +'} & gedrueckt['Buchse +'])
+    # der 5-V-Wandler haengt hinter dem Schalter, aber vor dem Not-Aus:
+    # Der Not-Aus trennt nur Motoren, Laser und Luefter, der Schalter alles
+    p.ja('Not-Aus gedrueckt: der 5-V-Wandler behaelt 24 V, Pi und Uno '
+         'laufen weiter', '5V-Wandler IN+' in gedrueckt['Buchse +'])
     p.ja('Not-Aus: NO bleibt frei (am Wechsler laege dort C)',
          N.get('Not-Aus NO', {'Not-Aus NO'}) <= {'Not-Aus NO', 'Not-Aus C',
                                                  'Not-Aus NC'})
@@ -826,6 +829,11 @@ def verkabelung_pruefen(p, Q):
     aus = vk.netze(zustand=('nicht gedrueckt',), lts=lts)
     p.ja('Schalter aus: hinter dem Schalter keine 24 V',
          not {'Shield +', 'Wandler IN+', 'Lüfter +'} & aus['Buchse +'])
+    p.ja('Schalter aus: auch der 5-V-Wandler ohne 24 V, Pi und Uno aus',
+         '5V-Wandler IN+' not in aus['Buchse +'])
+    rest = sorted(aus['Buchse +'] - {'Buchse +', 'Schalter 1'})
+    p.ja('Schalter aus: an +24 V der Buchse haengt nur W1 bis zum Schalter',
+         not rest, (' — ' + ', '.join(rest)) if rest else '')
     # 24-V-Waechter: R1 vom +24 V hinter dem Not-Aus an Abort, R2 an GND
     wa = next((lt['adern'] for lt in lts if lt['nr'] == 'W16'), None)
     p.ja('Waechter: R1 am +24 V hinter Schalter und Not-Aus',

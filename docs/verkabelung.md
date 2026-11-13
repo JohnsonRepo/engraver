@@ -62,25 +62,25 @@ begrenzt den Strom selbst.
 <!-- tabelle:leitungen -->
 | Nr | Leitung | Litze | Weg | Länge | kaufen | Kette |
 |---|---|---|---|---|---|---|
-| W1 | **Eingang** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
-| W2 | **Not-Aus-Kreis** — beide Adern führen +24 V: an beiden Enden rot markieren; NO bleibt frei | 2 × 0,75 mm² (AWG 18) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn, obere Nut vorn am 2060 zum Gehäuse | 1,01 m | **1,5 m** | — |
-| W3 | **Shield** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
-| W4 | **Wandler-Eingang** | 0,75 mm² (AWG 18) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
-| W5 | **Lüfter 24 V** — Litze dünner als 0,14 mm²: abisoliert doppelt legen | Litze des Lüfters | im Kasten, durch die Öffnung im Deckel | — | — | — |
-| W6 | **5 V für die Lichtschranken** | 0,25 mm² (AWG 24) | im Kasten | ≈ 0,15 m je Ader | Rolle | — |
-| W7 | **Laser** | 3 Silikonlitzen 0,34 mm² (AWG 22) | links raus, untere Nut außen am linken 2040, hinten in die Y-Kette, hinter dem Schlitten in die obere Nut des Rohrs, am Kabelflügel hoch in die X-Kette, Trägerplatte | 1,57 m | **2 m** | Y + X |
+| W1 | **Eingang** | 0,75 mm² (AWG 18) | im Fach rechts: Buchse und Schalter in der Rückwand | ≈ 0,15 m je Ader | Rolle | — |
+| W2 | **Not-Aus-Kreis** — beide Adern führen +24 V: an beiden Enden rot markieren; NO bleibt frei | 2 × 0,75 mm² (AWG 18) | rechts raus (Fenster Leistung), unter dem rechten 2040 durch, untere Nut außen am rechten 2040 nach vorn, obere Nut vorn am 2060 zum Gehäuse | 0,83 m | **1 m** | — |
+| W3 | **Shield** | 0,75 mm² (AWG 18) | im Fach: Leistungsgasse, durch die Fuge zur Klemme des Shields | ≈ 0,4 m je Ader | Rolle | — |
+| W4 | **Wandler-Eingang** | 0,75 mm² (AWG 18) | im Fach rechts | ≈ 0,15 m je Ader | Rolle | — |
+| W5 | **Lüfter 24 V** — verlängert die Litze des Lüfters, dazwischen ein Dupont-Stecker 2-polig: der Deckel geht ab | 0,25 mm² (AWG 24) | im Fach: vom Deckel durch die Lüfteröffnung, Leistungsgasse, durch die Fuge zu den Wago | ≈ 0,5 m je Ader | Rolle | — |
+| W6 | **5 V vom Wandler** — kurz und dick: Lichtschranken und Pi hängen direkt am Wandler, nicht mehr am Uno | 0,75 mm² (AWG 18) | im Fach: vom USB-A-Adapter am 5-V-Wandler durch die Signalgasse und die Fuge zu den 5-V-Klemmen links | ≈ 0,4 m je Ader | Rolle | — |
+| W7 | **Laser** | 3 Silikonlitzen 0,34 mm² (AWG 22) | links raus (Fenster Leistung), unter dem linken 2040 durch, untere Nut außen am linken 2040, hinten in die Y-Kette, hinter dem Schlitten in die obere Nut des Rohrs, am Kabelflügel hoch in die X-Kette, Trägerplatte; im Fach +12 V und GND durch Leistungsgasse und Fuge zum Wandler, PWM links zum Shield | 1,73 m | **2 m** | Y + X |
 | W8 | **Pull-down 10 kΩ** — hält den Laser aus, solange der Uno startet oder ohne USB ist | Widerstand | auf dem Shield | — | — | — |
-| W9 | **Lichtschranke X** | 3 Silikonlitzen 0,25 mm² (AWG 24) | links raus, untere Nut außen am linken 2040, Y-Kette, hinter dem Schlitten über das Rohr nach vorn zum Halter X | 0,83 m | **1 m** | Y |
-| W10 | **Lichtschranke Y** | 3 × 0,25 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach hinten | 0,49 m | **1 m** | — |
-| W11 | **Lichtschranke Z** | 3 Silikonlitzen 0,25 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Halter am Toolhead | 1,45 m | **2 m** | Y + X |
-| W12 | **X-Motor** — in der Kette nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040, Y-Kette, hinter dem Motorhalter hoch zum Motor | 0,81 m | mitgeliefert (1 m) | Y |
-| W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus, untere Nut außen am linken 2040 nach vorn; in den Kabelhaltern unter den Wänden der drei Träger der Wanne Y durch | 0,71 m | mitgeliefert (1 m) | — |
-| W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | vorn raus, Kanal, Rückseite hinteres 2060, untere Nut außen am rechten 2040 nach vorn | 0,98 m | **1,5 m**, fertig | — |
-| W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,54 m | **2 m**, fertig | Y + X |
-| W16 | **24-V-Wächter an Abort** — fehlen die 24 V hinter Schalter und Not-Aus, bricht GRBL ab | Widerstand | im Kasten | — | — | — |
-| W17 | **USB zum Pi** — Micro-B in die Buchse „USB“ des Pi, nicht in „PWR IN“ | USB-Kabel Micro-B–B (OTG) | hinten aus dem USB-Fenster, hinter dem Kasten nach rechts, an seiner rechten Wand nach vorn zum Pi-Halter | 0,44 m | **1 m**, fertig | — |
-| W18 | **24 V für den Pi** — vor Schalter und Not-Aus: Pi und Uno bleiben an | 2 × 0,75 mm² (AWG 18) | an der Buchse gelötet, vorn raus, Kanal, an der Rückseite des hinteren 2060 unter dem Pi-Halter durch, von unten in die Haube und an ihrer linken Wand hoch zum 5-V-Wandler | 0,28 m | **0,5 m** | — |
-| W19 | **5 V für den Pi** — Stromadern mindestens AWG 24, sonst meldet der Pi Unterspannung | USB-Kabel A–Micro-B | am Pi-Halter: vom USB-Ausgang des Wandlers in „PWR IN“ | 0,07 m | **0,25 m**, fertig | — |
+| W9 | **Lichtschranke X** | 3 Silikonlitzen 0,25 mm² (AWG 24) | links raus (Fenster Signal), unter dem linken 2040 durch, untere Nut außen am linken 2040, Y-Kette, hinter dem Schlitten über das Rohr nach vorn zum Halter X | 0,85 m | **1 m** | Y |
+| W10 | **Lichtschranke Y** | 3 × 0,25 mm² (AWG 24) | im Fach durch die Signalgasse nach rechts, rechts raus (Fenster Signal), unter dem rechten 2040 durch, untere Nut außen am rechten 2040 nach hinten | 0,59 m | **1 m** | — |
+| W11 | **Lichtschranke Z** | 3 Silikonlitzen 0,25 mm² (AWG 24) | links raus (Fenster Signal), unter dem linken 2040 durch, untere Nut außen am linken 2040, Y-Kette, X-Kette bis zur Trägerplatte, dann zum Halter am Toolhead | 1,47 m | **2 m** | Y + X |
+| W12 | **X-Motor** — in der Kette nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | links raus (Fenster Leistung), unter dem linken 2040 durch, untere Nut außen am linken 2040, Y-Kette, hinter dem Motorhalter hoch zum Motor | 0,94 m | **1,5 m**, fertig | Y |
+| W13 | **Y-Motor links** | 4 × 0,2 mm² (AWG 24) | links raus (Fenster Leistung), unter dem linken 2040 durch, untere Nut außen am linken 2040 nach vorn; in den Kabelhaltern unter den Wänden der drei Träger der Wanne Y durch | 0,83 m | mitgeliefert (1 m) | — |
+| W14 | **Y-Motor rechts** — Spule A getauscht: dreht gegen den linken | 4 × 0,2 mm² (AWG 24) | im Fach durch die Leistungsgasse nach rechts, rechts raus (Fenster Leistung), unter dem rechten 2040 durch, untere Nut außen am rechten 2040 nach vorn | 1,15 m | **1,5 m**, fertig | — |
+| W15 | **Z-Motor** — in den Ketten nur die losen Adern, ohne Schlauch | 4 × 0,2 mm² (AWG 24) | wie W7 bis zur Trägerplatte, dann zum Motor oben | 1,66 m | **2 m**, fertig | Y + X |
+| W16 | **24-V-Wächter an Abort** — fehlen die 24 V hinter Schalter und Not-Aus, bricht GRBL ab | Widerstand | im Fach: Teiler an den Wago 24 V und GND rechts, die Mitte als Einzelader 0,25 mm² durch die Signalgasse an Abort | ≈ 0,5 m je Ader | Rolle | — |
+| W17 | **USB zum Pi** — kurzes Kabel; Micro-B in die Buchse „USB“ des Pi, nicht in „PWR IN“ | USB-Kabel Micro-B–B (OTG) | im Fach links: vom USB-B des Uno unter dem Pi in seine Buchse „USB“ | 0,11 m | **0,25 m**, fertig | — |
+| W18 | **24 V für den 5-V-Wandler** — vor Schalter und Not-Aus: Pi und Uno bleiben an | 0,75 mm² (AWG 18) | im Fach rechts: an der Buchse gelötet, zum Eingang des 5-V-Wandlers | ≈ 0,2 m je Ader | Rolle | — |
+| W19 | **5 V für den Pi** — Stromadern mindestens AWG 24 | 0,2 mm² (AWG 24) | im Fach links: von den 5-V-Klemmen durch die Signalgasse zum Pi, von unten in „PWR IN“ | 0,26 m | **0,5 m**, fertig | — |
 <!-- /tabelle:leitungen -->
 
 „Länge“ ist der Weg wie in [elektronik-platz.svg](elektronik-platz.svg)
@@ -104,21 +104,22 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 |  | GND | schwarz | Wago GND | Shield, Schraubklemme − |
 | W4 | +24 V | rot | Wago +24 V | Wandler IN+ |
 |  | GND | schwarz | Wago GND | Wandler IN− |
-| W5 | +24 V | rot | Lüfter, rote Litze | Wago +24 V |
-|  | GND | schwarz | Lüfter, schwarze Litze | Wago GND |
-| W6 | +5 V | rot | Shield, Stift 5V | Wago +5 V |
+| W5 | +24 V | rot | Lüfter, Stecker: rot | Wago +24 V |
+|  | GND | schwarz | Lüfter, Stecker: schwarz | Wago GND |
+| W6 | +5 V | rot | USB-A-Adapter am 5-V-Wandler, Klemme 5V | Wago +5 V |
+|  | GND | schwarz | USB-A-Adapter am 5-V-Wandler, Klemme GND | Wago GND 5 V |
 | W7 | +12 V | rot | Wandler OUT+ | Laser, XH rechts: +12 V |
 |  | GND | schwarz | Wandler OUT− | Laser, XH Mitte: GND |
 |  | PWM | weiß | Shield Z+ (D11), Signalstift | Laser, XH links: PWM |
 | W8 | 10 kΩ | — | Shield Z− (D11), Signalstift | Shield Z−, GND-Stift |
 | W9 | +5 V | rot | Wago +5 V | Lichtschranke X, VCC |
-|  | GND | schwarz | Wago GND | Lichtschranke X, GND |
+|  | GND | schwarz | Wago GND 5 V | Lichtschranke X, GND |
 |  | Signal | gelb | Shield X− (D9), Signalstift | Lichtschranke X, D0 |
 | W10 | +5 V | rot | Wago +5 V | Lichtschranke Y, VCC |
-|  | GND | schwarz | Wago GND | Lichtschranke Y, GND |
+|  | GND | schwarz | Wago GND 5 V | Lichtschranke Y, GND |
 |  | Signal | gelb | Shield Y+ (D10), Signalstift | Lichtschranke Y, D0 |
 | W11 | +5 V | rot | Wago +5 V | Lichtschranke Z, VCC |
-|  | GND | schwarz | Wago GND | Lichtschranke Z, GND |
+|  | GND | schwarz | Wago GND 5 V | Lichtschranke Z, GND |
 |  | Signal | gelb | Shield SpnEn (D12) | Lichtschranke Z, D0 |
 | W12 | Spule A | schwarz · grün | Shield Motor X, 2B · 2A | X-Motor, Spule A: A+ · A− |
 |  | Spule B | blau · rot | Shield Motor X, 1A · 1B | X-Motor, Spule B: B− · B+ |
@@ -133,7 +134,8 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 | W17 | USB | — | Uno, USB-B | Pi, Micro-USB „USB“ |
 | W18 | +24 V | rot | Einbaubuchse, Mittelstift (+) | 5-V-Wandler IN+ |
 |  | GND | schwarz | Einbaubuchse, Hülse (−) | 5-V-Wandler IN− |
-| W19 | 5 V | — | 5-V-Wandler, USB-A | Pi, Micro-USB „PWR IN“ |
+| W19 | +5 V | rot | Wago +5 V | Pi, „PWR IN“: +5 V |
+|  | GND | schwarz | Wago GND 5 V | Pi, „PWR IN“: GND |
 <!-- /tabelle:anschluesse -->
 
 ## Klemmen: Wago und Shield
@@ -141,9 +143,10 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 <!-- tabelle:wago -->
 | Klemme | Typ | belegt | frei | angeschlossen |
 |---|---|---|---|---|
-| **Wago +24 V** | 221-415 | 5 von 5 | 0 | W2 Not-Aus, NC · W3 Shield, Schraubklemme + · W4 Wandler IN+ · W5 Lüfter, rote Litze · W16 Shield Abort (A0) |
-| **Wago GND** | 221-420 | 8 von 10 | 2 (einer davon für OUT− eines isolierten Wandlers) | W1 Einbaubuchse, Hülse (−) · W3 Shield, Schraubklemme − · W4 Wandler IN− · W5 Lüfter, schwarze Litze · W9 Lichtschranke X, GND · W10 Lichtschranke Y, GND · W11 Lichtschranke Z, GND · W16 Shield Abort (A0) |
-| **Wago +5 V** | 221-420 | 4 von 10 | 6 | W6 Shield, Stift 5V · W9 Lichtschranke X, VCC · W10 Lichtschranke Y, VCC · W11 Lichtschranke Z, VCC |
+| **Wago +24 V** | 221-420 | 5 von 10 | 5 (einer davon für Air Assist) | W2 Not-Aus, NC · W3 Shield, Schraubklemme + · W4 Wandler IN+ · W5 Lüfter, Stecker: rot · W16 Shield Abort (A0) |
+| **Wago GND** | 221-420 | 5 von 10 | 5 (2 davon für Air Assist und OUT− eines isolierten Wandlers) | W1 Einbaubuchse, Hülse (−) · W3 Shield, Schraubklemme − · W4 Wandler IN− · W5 Lüfter, Stecker: schwarz · W16 Shield Abort (A0) |
+| **Wago +5 V** | 221-415 | 5 von 5 | 0 | W6 USB-A-Adapter am 5-V-Wandler, Klemme 5V · W9 Lichtschranke X, VCC · W10 Lichtschranke Y, VCC · W11 Lichtschranke Z, VCC · W19 Pi, „PWR IN“: +5 V |
+| **Wago GND 5 V** | 221-415 | 5 von 5 | 0 | W6 USB-A-Adapter am 5-V-Wandler, Klemme GND · W9 Lichtschranke X, GND · W10 Lichtschranke Y, GND · W11 Lichtschranke Z, GND · W19 Pi, „PWR IN“: GND |
 <!-- /tabelle:wago -->
 
 <!-- tabelle:shield -->
@@ -151,7 +154,7 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 |---|---|---|---|
 | Schraubklemme + | — | 24 V für die Treiber (12–36 V) | W3 → Wago +24 V |
 | Schraubklemme − | — | GND | W3 → Wago GND |
-| Stift 5V | 5 V | Versorgung der Lichtschranken (vom USB des Uno) | W6 → Wago +5 V |
+| Stift 5V | 5 V | frei — die Lichtschranken bekommen 5 V vom Wandler (W6) | — |
 | X− (D9), Signalstift | D9 | Endschalter X (X+ ist derselbe Pin) | W9 → Lichtschranke X, D0 |
 | Y+ (D10), Signalstift | D10 | Endschalter Y (Y− ist derselbe Pin) | W10 → Lichtschranke Y, D0 |
 | SpnEn (D12) | D12 | Endschalter Z — GRBL 1.1 legt ihn auf D12 | W11 → Lichtschranke Z, D0 |
@@ -178,10 +181,10 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 <!-- tabelle:material -->
 | Menge | Teil | für |
 |---|---|---|
-| 0,5 m | Einzelader 0,75 mm² (AWG 18), rot | W1 0,15 m · W3 0,15 m · W4 0,15 m |
-| 0,5 m | Einzelader 0,75 mm² (AWG 18), schwarz | W1 0,15 m · W3 0,15 m · W4 0,15 m |
-| 2 m | 2 × 0,75 mm² (AWG 18) | W2 1,5 m · W18 0,5 m |
-| 1,5 m | 3 × 0,25 mm² (AWG 24) | W6 0,15 m · W10 1 m |
+| 1,5 m | Einzelader 0,75 mm² (AWG 18), rot | W1 0,15 m · W3 0,4 m · W4 0,15 m · W6 0,4 m · W18 0,2 m |
+| 1,5 m | Einzelader 0,75 mm² (AWG 18), schwarz | W1 0,15 m · W3 0,4 m · W4 0,15 m · W6 0,4 m · W18 0,2 m |
+| 1 m | 2 × 0,75 mm² (AWG 18) | W2 1 m |
+| 1,5 m | 3 × 0,25 mm² (AWG 24) | W5 0,5 m · W10 1 m |
 | 2 m | Silikonlitze 0,34 mm² (AWG 22), rot | W7 2 m |
 | 2 m | Silikonlitze 0,34 mm² (AWG 22), schwarz | W7 2 m |
 | 2 m | Silikonlitze 0,34 mm² (AWG 22), weiß | W7 2 m |
@@ -189,13 +192,13 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 | 3 m | Silikonlitze 0,25 mm² (AWG 24), schwarz | W9 1 m · W11 2 m |
 | 3 m | Silikonlitze 0,25 mm² (AWG 24), gelb | W9 1 m · W11 2 m |
 | 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker zum Motor, Dupont 4-polig zum Shield; für W15 lose Adern ohne Mantel (läuft durch beide Ketten) | W14, W15 (W12, W13: die mitgelieferten 1-m-Kabel) |
-| 1 | USB-Kabel Micro-B–B (OTG), 1 m | W17 (USB zum Pi) |
-| 1 | USB-Kabel A–Micro-B, 0,25 m | W19 (5 V für den Pi) |
-| 17 + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, Lichtschranken, W8, W16 |
-| 6 · 1 · 3 | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, Pull-down, Lichtschranken |
+| 1 | USB-Kabel Micro-B–B (OTG), 0,25 m | W17 (USB zum Pi) |
+| 1 | Micro-USB-Kabel mit offenen Enden, 0,5 m | W19 (5 V für den Pi) |
+| 16 + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, Lichtschranken, W8, W16 |
+| 5 · 1 · 3 | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, Pull-down, Lichtschranken |
 | 1 + 3 | XH2.54-Gehäuse 3-polig + Crimpkontakte | Laser |
 | 2 | Aderendhülse 0,34 mm² | Schraubklemmen |
-| 6 | Aderendhülse 0,75 mm² | Schraubklemmen |
+| 8 | Aderendhülse 0,75 mm² | Schraubklemmen |
 | 1 | Widerstand 10 kΩ, ¼ W | W8 |
 | 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator 100 nF | W16 |
 | — | Not-Aus-Pilztaster 16 mm, Wechsler C/NO/NC, 3 A / 250 V (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |
@@ -221,8 +224,14 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 
 ## Schritt für Schritt
 
-Zuerst alles im Gehäuse, dann nach außen zur Maschine. Die Prüfungen der
-[Inbetriebnahme](#inbetriebnahme) gehören jeweils dazwischen.
+Zuerst alles im Fach, dann nach außen zur Maschine. Die Prüfungen der
+[Inbetriebnahme](#inbetriebnahme) gehören jeweils dazwischen. Im Fach laufen
+die Kabel nach Art getrennt: Signale (Lichtschranken, 5 V, Wächter) in der
+Signalgasse vorn an der Montageplatte, Leistung (24 V, 12 V zum Laser,
+Motoren) in der Leistungsgasse hinten an der Rückwand. Jede Gasse hat in
+beiden Endwänden ein eigenes Fenster; jede Leitung, die das Fach verlässt,
+an der ersten Öse hinter ihrem Fenster mit einem Kabelbinder festlegen
+(Zugentlastung).
 
 ![Verkabelung Schritt für Schritt](elektronik-verkabelung.svg)
 
@@ -230,17 +239,35 @@ Das Bild zeigt jeden der acht Schritte für sich: jede Ader von Klemme zu
 Klemme in ihrer Farbe aus der [Anschlussliste](#anschlussliste), die
 Wago-Plätze in der Reihenfolge der Tabelle
 [Klemmen](#klemmen-wago-und-shield), und welche Prüfung danach kommt. Oben
-die Leitungen, die das Gehäuse verlassen, mit ihren Wegen. Das Bild entsteht
-aus derselben Kabelliste und bricht ab, wenn eine Ader fehlt, doppelt oder
-im falschen Schritt gezeichnet ist.
+die Leitungen, die das Fach verlassen, mit ihren Wegen, daneben das Fach
+vergrößert: wo die Geräte sitzen und welche Leitung durch welches Fenster
+hinausgeht. Das Bild entsteht aus derselben Kabelliste und bricht ab, wenn
+eine Ader fehlt, doppelt oder im falschen Schritt gezeichnet ist.
 
 ### 1. Vorbereiten
 
+Wo im Fach alles sitzt, zeigt [elektronikfach.svg](elektronikfach.svg).
+
 * Die Leitungen nach der Tabelle ablängen und an beiden Enden mit der
   W-Nummer beschriften.
-* Einbaubuchse und Schalter hinten ins Gehäuse setzen (Mutter innen,
-  Schalter rastet ein), die Wago-Klemmen mit Klebeband auf ihren Platz:
-  von links **+5 V**, **GND**, **+24 V**.
+* Das Fach leer anschrauben: die Hälften mit 4 × M3×12 und Mutter durch
+  die Fugenwände, dann an die Rückseite des hinteren 2060, je Ohr
+  2 × M5×12 und innen je 1 × M5×12 in Hammermuttern. Der Inbus kommt nur
+  von hinten dran, also vor dem Bestücken anziehen. In die acht Dome die
+  Messing-Einsätze M3 für die Deckel einschmelzen.
+* Einbaubuchse und Schalter in die Rückwand der rechten Hälfte setzen
+  (Buchse: Mutter innen; der runde Schalter rastet ein).
+* Die Wago-Klemmen mit Klebeband auf ihren Platz: **+5 V** und **GND 5 V**
+  (221-415) senkrecht an die linke Endwand über dem Fenster Leistung, +5 V
+  vorn, die Hebel zeigen ins Fach, die Drähte kommen von unten.
+  **+24 V** und **GND** (221-420) rechts hinten vor Buchse und Schalter
+  auf den Boden, +24 V links, die Hebel oben, die Drähte von vorn.
+* Die beiden Wandler mit je zwei Kabelbindern 2,5 × 200 durch die
+  Schlitze im Boden: den 12-V-Wandler links hinten neben dem Uno, Ausgang
+  nach links; den 5-V-Wandler rechts vorn. In seine USB-A-Buchse kommt
+  der Adapter mit Schraubklemmen, an dem W6 hängt (Schritt 4).
+* Den Uno mit 4 × M3×8 (selbstschneidend) auf seine Stehbolzen, bevor das
+  Shield draufkommt.
 
 ### 2. 24 V: Buchse, Schalter, Not-Aus (W1, W2)
 
@@ -259,20 +286,27 @@ im falschen Schritt gezeichnet ist.
    +24 V**. Beide Adern führen +24 V, deshalb an beiden Enden rot
    markieren. **NO bleibt frei:** Beim Drücken liegt dort C, also +24 V.
    Anlöten, Schrumpfschlauch über jede Fahne. Der Not-Aus sitzt in seinem
-   Gehäuse vorn am vorderen 2060 ([notaus.md](notaus.md)); W2 kommt von
-   rechts in der oberen Nut des 2060.
+   Gehäuse vorn am vorderen 2060 ([notaus.md](notaus.md)). W2 verlässt das
+   Fach rechts durch das Fenster Leistung, läuft unter dem rechten 2040
+   durch in dessen untere Außennut nach vorn und kommt vorn in der oberen
+   Nut des 2060 von rechts zum Not-Aus.
 
 Dann [Prüfung A und B](#a-ohne-strom).
 
 ### 3. Shield, Wandler, Lüfter (W3–W5)
 
 1. **W3:** Wago +24 V → Schraubklemme **+** des Shields, Wago GND →
-   Schraubklemme **−**. Die Polung steht neben der Klemme. **Nicht
-   vertauschen.**
-2. **W4:** Wago +24 V → **IN+** des Wandlers, Wago GND → **IN−**.
-3. **W5:** Die Litzen des Lüfters in die Wagos, rot an +24 V, schwarz an
-   GND. Ist die Litze dünner als 0,14 mm², das abisolierte Ende doppelt
-   legen. Der Lüfter bläst nach unten auf die Treiber (Pfeil am Rahmen).
+   Schraubklemme **−**, durch die Leistungsgasse und die Fuge in die linke
+   Hälfte. Die Polung steht neben der Klemme. **Nicht vertauschen.**
+2. **W4:** Wago +24 V → **IN+** des 12-V-Wandlers, Wago GND → **IN−**.
+   Der Wandler sitzt links neben dem Uno, sein Eingang kommt durch die
+   Fuge.
+3. **W5:** Der Lüfter sitzt im linken Deckel (4 × M3×16 mit Mutter) und
+   bläst nach unten auf die Treiber (Pfeil am Rahmen). W5 verlängert seine
+   Litze: an einem Ende ein 2-poliger Dupont-Stecker zur Litze des
+   Lüfters, damit der Deckel abgeht; das andere Ende durch die
+   Leistungsgasse und die Fuge in die Wagos, rot an +24 V, schwarz an
+   GND.
 4. **Masse des Wandlers:** Durchgang zwischen IN− und OUT− prüfen. Die
    üblichen Wandler haben eine gemeinsame Masse. Ohne Durchgang eine Brücke
    von OUT− an die Wago GND legen, der Platz dort ist frei gehalten.
@@ -281,19 +315,27 @@ Dann [Prüfung C](#c-wandler-auf-120-v).
 
 ### 4. 5 V und Lichtschranken (W6, W9–W11)
 
-1. **W6:** vom Stift **5V** des Shields (Dupont 1-polig) an die **Wago
-   +5 V**.
+1. **W6** bringt die 5 V vom 5-V-Wandler an die 5-V-Klemmen: am Adapter in
+   seiner USB-A-Buchse rot von **5V** an die **Wago +5 V**, schwarz von
+   **GND** an die **Wago GND 5 V**, am Adapter mit Aderendhülsen. Der Weg
+   führt durch die Signalgasse und die Fuge nach links, an die Klemmen von
+   unten. Der Stift 5V am Shield bleibt frei. Seine 24 V bekommt der
+   Wandler über W18 ([Schritt 8](#8-pi-w17w19)); für Prüfung D muss W18
+   schon an ihm hängen (Schritt 8, Punkte 2 und 3).
 2. An jeder Lichtschranke ein 3-poliges Dupont-Gehäuse, die Adern nach dem
    Aufdruck am Modul: **VCC** rot, **GND** schwarz, **D0** gelb. Hat das
    Modul noch einen Stift A0, bleibt er frei.
-3. Im Gehäuse: rot an die **Wago +5 V**, schwarz an die **Wago GND**, gelb
-   mit einem 1-poligen Dupont-Gehäuse auf den Eingang: X → **X−** (D9),
-   Y → **Y+** (D10), Z → **SpnEn** (D12).
-4. Wege: X durch die Y-Kette, hinter dem Schlitten über das Rohr nach
-   vorn zum Halter ([endschalter.md](endschalter.md)); Y durch den Kanal
-   und in der unteren Nut außen am rechten 2040 nach hinten; Z durch beide
-   Ketten zum Toolhead. Hat die Z-Lichtschranke schon ein Kabel: Es muss
-   bis zum Gehäuse reichen, also 2 m lang sein.
+3. Im Fach: rot an die **Wago +5 V**, schwarz an die **Wago GND 5 V**,
+   gelb mit einem 1-poligen Dupont-Gehäuse auf den Eingang: X → **X−**
+   (D9), Y → **Y+** (D10), Z → **SpnEn** (D12).
+4. Wege: X und Z verlassen das Fach links durch das Fenster Signal, unter
+   dem linken 2040 durch in dessen untere Außennut, dann in die Y-Kette. X
+   läuft hinter dem Schlitten über das Rohr nach vorn zum Halter
+   ([endschalter.md](endschalter.md)), Z durch beide Ketten zum Toolhead.
+   Y läuft in der Signalgasse nach rechts, rechts durch das Fenster Signal
+   hinaus und in der unteren Nut außen am rechten 2040 nach hinten. Hat
+   die Z-Lichtschranke schon ein Kabel: Es muss bis ins Fach reichen, also
+   2 m lang sein.
 
 Dann [Prüfung D](#d-uno-grbl-und-lichtschranken).
 
@@ -303,8 +345,10 @@ Dann [Prüfung D](#d-uno-grbl-und-lichtschranken).
    +12 V** `[v]` Angabe. **Vor dem ersten Einschalten mit dem Aufdruck an
    der Buchse des Lasers vergleichen**: Vertauscht bekäme der PWM-Eingang
    12 V.
-2. Im Gehäuse: rot an **OUT+** des Wandlers, schwarz an **OUT−**, weiß mit
-   einem 1-poligen Dupont-Gehäuse auf den Signalstift von **Z+** (D11).
+2. Im Fach: rot an **OUT+** des 12-V-Wandlers, schwarz an **OUT−**, weiß
+   mit einem 1-poligen Dupont-Gehäuse auf den Signalstift von **Z+** (D11).
+   W7 verlässt das Fach links durch das Fenster Leistung und läuft durch
+   beide Ketten zum Toolhead.
 3. **W8:** einen Widerstand 10 kΩ in ein 2-poliges Dupont-Gehäuse crimpen
    und auf **Z−** stecken, Signal- und GND-Stift. Z− und Z+ liegen beide
    auf D11: Der Widerstand zieht die PWM auf 0 V, solange der Uno startet
@@ -340,7 +384,10 @@ Reset-Taster oben links). Das Bild erzeugt
 5. **In den Ketten nur die losen Adern:** Beim X-Motor (W12) und beim
    Z-Motor (W15) den Schlauch oder Mantel so weit entfernen, wie das Kabel
    durch die Ketten läuft, und die vier Adern einzeln einziehen.
-6. Alles nur bei ausgeschaltetem Strom.
+6. **Wege:** W12, W13 und W15 verlassen das Fach links durch das Fenster
+   Leistung. W14 läuft in der Leistungsgasse nach rechts und durch das
+   rechte Fenster Leistung hinaus.
+7. Alles nur bei ausgeschaltetem Strom.
 
 ### 7. 24-V-Wächter (W16)
 
@@ -362,11 +409,12 @@ gilt für den Not-Aus und für den Schalter. Zieht man das Netzteil, gehen Pi
 und Uno mit aus.
 Der Kondensator filtert Störungen aus der 24-V-Leitung.
 
-Bauen: An jedes Ende eine kurze Litze 0,25 mm² anlöten, die Verbindung
-beider Widerstände mit dem Kondensator in Schrumpfschlauch, von dort ein
-1-poliger Dupont-Stecker auf **Abort**. Die Litzen enden in den Wagos. Auch
-wenn der Stecker verrutscht, fließt über 22 kΩ höchstens 1 mA; das hält
-jeder Pin aus.
+Bauen: Der Teiler sitzt rechts bei der Wago +24 V und der Wago GND. An
+jedes Ende eine kurze Litze 0,25 mm² anlöten, die Verbindung beider
+Widerstände mit dem Kondensator in Schrumpfschlauch. Von dort eine
+Einzelader 0,25 mm² durch die Signalgasse nach links, an ihrem Ende ein
+1-poliger Dupont-Stecker auf **Abort**. Auch wenn der Stecker verrutscht,
+fließt über 22 kΩ höchstens 1 mA; das hält jeder Pin aus.
 
 Warum nicht der zweite Kontakt des Not-Aus: Er ist ein Wechsler, an NO läge
 beim Drücken C, also +24 V. Das zerstört den Uno. Der Wächter braucht keinen
@@ -375,30 +423,27 @@ Kontakt und meldet mehr als nur den Not-Aus.
 ### 8. Pi (W17–W19)
 
 Der Pi steuert die Maschine ohne PC: Aufträge aus LightBurn liegen als
-Datei auf ihm und starten im Browser ([pi.md](pi.md)). Er sitzt mit seinem
-5-V-Wandler auf dem [Pi-Halter](pi.md#halter) rechts neben dem Kasten, unter
-einer [Haube](pi.md#haube).
+Datei auf ihm und starten im Browser ([pi.md](pi.md)). Er steht im Fach
+senkrecht an der Fugenwand der linken Hälfte, die Buchsen unten, die
+SD-Karte hinten. Sein 5-V-Wandler sitzt rechts vorn (Schritt 1) und
+versorgt über W6 und die 5-V-Klemmen auch die Lichtschranken.
 
-1. **Pi-Halter** bestücken, solange er lose ist: die drei Messing-Einsätze
-   für die Haube einschmelzen. Den Pi mit 4 × M2.5×6 auf die Stehbolzen,
-   Bauteile nach hinten, Buchsen nach unten. Den 5-V-Wandler links daneben,
-   Eingang zum Kasten, USB-Buchse zum Pi, mit 2 Kabelbindern 2,5 × 200 durch
-   die Schlitze über und unter ihm ([pi.md, Montage](pi.md#halter)). Dann
-   an die Rückseite des hinteren 2060, rechts neben die Montageplatte des
-   Kastens: 2 Hammermuttern in die obere Nut, 2 × M5×12.
+1. **Pi** mit 4 × M2.5×6 (selbstschneidend) auf die Stehbolzen an der
+   Fugenwand, Buchsen nach unten, SD-Karte nach hinten.
 2. **W18** hängt schon an der Buchse (Schritt 2), also vor Schalter und
-   Not-Aus. Vorn aus dem Kasten, im Kanal nach rechts, an der Rückseite des
-   2060 unter dem Pi-Halter durch, von unten in die Haube und links neben
-   dem Wandler hoch: rot an **IN+**, schwarz an **IN−** des 5-V-Wandlers,
-   mit Aderendhülsen.
-3. Netzteil einstecken, Schalter aus lassen: Am USB-Ausgang des Wandlers
-   liegen **5,0–5,2 V**. Erst dann weiter.
-4. **W19:** das kurze USB-Kabel vom Wandler in **PWR IN** des Pi. Ein
-   längeres vorher auf etwa 15 cm kürzen ([pi.md](pi.md#w19-kürzen)).
-5. **W17:** das OTG-Kabel von der Buchse **USB** des Pi (die mittlere, nicht
-   PWR IN) nach unten aus der Haube, nach links, rechts am Kasten vorbei
-   nach hinten und hinter ihm ins USB-Fenster des Uno.
-6. **Haube** aufsetzen, 3 × M3×8 in die Einsätze.
+   Not-Aus. Im Fach rechts zum 5-V-Wandler: rot an **IN+**, schwarz an
+   **IN−**, mit Aderendhülsen.
+3. Netzteil einstecken, Schalter aus lassen: Zwischen Wago +5 V und Wago
+   GND 5 V liegen **5,0–5,2 V** (über W6 vom Adapter, Schritt 4). Erst
+   dann weiter.
+4. **W19:** ein Micro-USB-Kabel mit offenen Enden, Stromadern mindestens
+   AWG 24. Rot an die **Wago +5 V**, schwarz an die **Wago GND 5 V**;
+   Datenadern und Schirm, falls vorhanden, kurz abschneiden und isolieren.
+   Durch die Signalgasse zum Pi, von unten in **PWR IN**.
+5. **W17:** das kurze OTG-Kabel vom USB-B des Uno unter dem Pi hindurch in
+   seine Buchse **USB** (die mittlere, nicht PWR IN).
+6. **Deckel** aufsetzen: links den Stecker des Lüfters an W5 stecken, je
+   Seite 4 × M3×8 in die Einsätze der Dome.
 
 Für GRBL aufspielen und die ersten Prüfungen darf statt des Pi der Mac am
 USB des Uno hängen. Dann [Prüfung J](#j-pi-und-cncjs).

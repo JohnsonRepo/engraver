@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """Verkabelung Schritt fuer Schritt: jede Ader von Klemme zu Klemme.
 
-Das Bild zur Anleitung docs/verkabelung.md. Oben eine schematische
-Draufsicht mit den Leitungen, die das Gehaeuse verlassen, und ihren Wegen
-durch Kanal und Energieketten bis zum Pi-Halter; darunter die acht
-Schritte der Anleitung,
-jeder fuer sich gezeichnet, mit den Aderfarben der Anschlussliste. Zwei
-Kreuzungen gibt es: eine bei den Lichtschranken, die sich nicht vermeiden
-laesst (drei Lichtschranken an drei Klemmen ergeben einen K3,3), und die
-getauschte Spule am Y-Motor rechts, die Absicht ist.
+Das Bild zur Anleitung docs/verkabelung.md. Oben eine Draufsicht auf die
+Maschine mit dem Elektronikfach hinter dem hinteren 2060 und den
+Leitungen, die es durch die Fenster in den Endwaenden verlassen, mit ihren
+Wegen unter den 2040 und durch die Energieketten; daneben das Fach
+vergroessert: Geraete, Gassen und welche Leitung durch welches Fenster
+geht. Darunter die acht Schritte der Anleitung, jeder fuer sich
+gezeichnet, mit den Aderfarben der Anschlussliste. Zwei Kreuzungen gibt
+es: eine bei den Lichtschranken, die sich nicht vermeiden laesst (drei
+Lichtschranken an drei Klemmen ergeben einen K3,3), und die getauschte
+Spule am Y-Motor rechts, die Absicht ist.
 
 Alles kommt aus tools/verkabelung.py: Nummern, Adern mit Farbe und
-Anschluss, Querschnitte, Laengen, Wago-Belegung. Die Titel der Schritte
+Anschluss, Querschnitte, Laengen, Wago-Belegung, Wege. Lage von Rahmen,
+Portal, Ketten und Fach kommt aus vk.laden() (Portal.py,
+Elektronikfach.py ueber tools/elektronik_zeichnen.py). Die Titel der Schritte
 und Pruefungen liest das Skript aus der Anleitung. Jede gezeichnete Ader
 wird gegen die Kabelliste geprueft, und am Ende muss jede Ader der Liste
 genau einmal gezeichnet sein, in dem Schritt, der sie nennt — sonst bricht
@@ -40,17 +44,20 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
 W = 1240                        # Breite der Zeichnung
 RX = 24                         # Rand links und rechts
 PB, PH, LUECKE = 588, 340, 16   # Schritt-Felder: Breite, Hoehe, Abstand
-UEB_H = 480                     # Hoehe der Uebersicht
+UEB_H = 556                     # Hoehe der Uebersicht
 FILL, RAND = '#f4f6f9', '#8c939e'
 SHIELD = ('#eef4fb', BLAU)
 WANDLER = ('#fff7ec', '#e67700')
-GEH_FILL, GEH_RAND = '#fdf6ee', '#c2621b'   # Gehaeuse wie im Anschlussplan
+GEH_FILL, GEH_RAND = '#fdf6ee', '#c2621b'   # Fach wie im Anschlussplan
+GASSE_SIGNAL, GASSE_LEISTUNG = '#e3eefa', '#fbe3e3'   # wie elektronikfach.svg
+PLATINE = ('#e3f4e8', '#2f9e44')             # Uno, Pi
 KABELWEG = ez.KABEL                          # wie in der Platz-Zeichnung
 HEBEL, HEBEL_RAND = '#f08c00', '#c46a00'     # Hebel der Wago 221
 GELB, GELB_RAND = '#ffd43b', '#b08900'       # Warndreieck
 PRUEF = '#0b7285'                            # Verweis auf eine Pruefung
 STIFT = '#495057'
-WAGO_FARBE = {'Wago +24 V': P24, 'Wago GND': MASSE, 'Wago +5 V': P5}
+WAGO_FARBE = {'Wago +24 V': P24, 'Wago GND': MASSE, 'Wago +5 V': P5,
+              'Wago GND 5 V': MASSE}
 
 # Aderfarben der Anschlussliste; weiss und gelb bekommen einen Rand. Die
 # Adern von W2 fuehren beide +24 V und werden rot markiert.
@@ -131,6 +138,30 @@ def platz(wago, nr, gegen=None):
 def plaetze_frei(wago):
     n = dict((a, c) for a, _, c in vk.WAGO)[wago]
     return n, len(vk.wago_belegung(LTS)[wago])
+
+
+def ausgang(lt):
+    """(Seite, Fenster) fuer eine Leitung, die das Fach verlaesst, aus ihrem
+    Weg in der Kabelliste: 'links raus (Fenster Leistung)' -> ('links',
+    'Leistung'); 'wie W7 ...' wie W7. None: bleibt im Fach."""
+    m = re.search(r'(links|rechts) raus \(Fenster (Leistung|Signal)\)',
+                  lt['weg'])
+    if m:
+        return m.group(1), m.group(2)
+    m = re.match(r'wie (W\d+)', lt['weg'])
+    if m:
+        return ausgang(LT[m.group(1)])
+    if ' raus' in lt['weg']:
+        raise SystemExit('{}: Fenster im Weg nicht erkannt: {}'.format(
+            lt['nr'], lt['weg']))
+    return None
+
+
+def aus_dem_fach(seite=None, fenster=None):
+    """Nummern der Leitungen, die das Fach verlassen (wahlweise nur durch
+    ein Fenster), in der Reihenfolge der Kabelliste."""
+    return [lt['nr'] for lt in LTS if ausgang(lt) and
+            (seite is None or ausgang(lt) == (seite, fenster))]
 
 
 def laenge_text(lt, K):
@@ -312,25 +343,29 @@ def schrittmarke(x, y, nr):
             text(x, y + 4, str(nr), 10.5, '#ffffff', 'middle', fett=True)]
 
 
-def wago(xo, yo, name, seite, n=None, teilung=26.0, tiefe=38.0):
+def wago(xo, yo, name, seite, n=None, teilung=26.0, tiefe=38.0,
+         umgekehrt=False):
     """Wago 221 von oben, die Plaetze nummeriert wie in der Tabelle
     "Klemmen" der Anleitung. (xo, yo) ist die Oeffnung von Platz 1; seite
     sagt, von wo die Adern kommen: 'u' (unten), 'o' (oben), 'l' (links)
-    oder 'r' (rechts). Liefert (svg, {Platz: Oeffnung})."""
+    oder 'r' (rechts). Die Plaetze zaehlen nach rechts bzw. unten,
+    umgekehrt nach links bzw. oben. Liefert (svg, {Platz: Oeffnung})."""
     n = n or plaetze_frei(name)[0]
     farbe = WAGO_FARBE[name]
     hebel_b = min(16.0, teilung - 6.0)
+    r = -1.0 if umgekehrt else 1.0
+    lang = teilung * (n - 1)
     t, auf = [], {}
     if seite in 'uo':
-        x, b, h = xo - teilung / 2, teilung * n, tiefe
+        x, b, h = min(xo, xo + r * lang) - teilung / 2, teilung * n, tiefe
         y = yo - tiefe if seite == 'u' else yo
     else:
         x = xo if seite == 'l' else xo - tiefe
-        y, b, h = yo - teilung / 2, tiefe, teilung * n
+        y, b, h = min(yo, yo + r * lang) - teilung / 2, tiefe, teilung * n
     t.append(rechteck(x, y, b, h, '#eef1f4', farbe, 1.6, rx=4))
     for i in range(n):
         if seite in 'uo':
-            px, py = xo + teilung * i, yo
+            px, py = xo + r * teilung * i, yo
             hy = y + 5 if seite == 'u' else y + h - 27
             t += [rechteck(px - hebel_b / 2, hy, hebel_b, 22, HEBEL,
                            HEBEL_RAND, 0.8, rx=2),
@@ -340,7 +375,7 @@ def wago(xo, yo, name, seite, n=None, teilung=26.0, tiefe=38.0):
             t.append(rechteck(px - 4.5, oy, 9, 6, STIFT, STIFT, 0.5,
                               rx=1.5))
         else:
-            px, py = xo, yo + teilung * i
+            px, py = xo, yo + r * teilung * i
             hx = x + b - 27 if seite == 'l' else x + 5
             t += [rechteck(hx, py - hebel_b / 2, 22, hebel_b, HEBEL,
                            HEBEL_RAND, 0.8, rx=2),
@@ -499,22 +534,32 @@ def schritt_vorbereiten():
                            'GRBL 1.1 der Z-Endschalter.'])
     t += warnung(ax, 224, ['EN/GND offen lassen:',
                            'GRBL schaltet die Treiber über D8.'])
-    # Wago-Klemmen von links +5 V, GND, +24 V
-    t.append(text(ax, 274, 'Wago-Klemmen, von links:', 10.5, TEXT,
-                  fett=True))
+    # Wago-Klemmen im Fach: die 5-V-Klemmen links an der Endwand, 24 V und
+    # GND rechts hinten vor Buchse und Schalter (Elektronikfach.py)
+    lage = {n: x for n, _, x, _, _ in Q['K']['EL']['wago']}
+    t.append(text(ax, 266, 'Wago-Klemmen im Fach:', 10.5, TEXT, fett=True))
     x = ax
-    for name in ('Wago +5 V', 'Wago GND', 'Wago +24 V'):
-        n = plaetze_frei(name)[0]
-        b = 10 + 7 * n
-        t.append(rechteck(x, 282, b, 18, '#eef1f4', WAGO_FARBE[name], 1.6,
-                          rx=3))
-        for k in range(n):
-            t.append(rechteck(x + 6 + 7 * k, 286, 4, 10, HEBEL, HEBEL_RAND,
-                              0.6, rx=1))
-        t.append(text(x + b / 2, 314, name[5:], 10.5, WAGO_FARBE[name],
-                      'middle', fett=True))
-        x += b + 12
-    t.append(text(ax, 330, 'W-Nummer an beide Enden jeder Leitung.', 10,
+    for gruppe_, namen, luecke in (('links, an der Endwand',
+                                    ('Wago +5 V', 'Wago GND 5 V'), 30),
+                                   ('rechts hinten, am Boden',
+                                    ('Wago +24 V', 'Wago GND'), 0)):
+        x_gruppe = x
+        # von links nach rechts wie im Fach (nach X der Klemme)
+        for name in sorted(namen, key=lambda n_: lage[n_[5:]][0]):
+            n = plaetze_frei(name)[0]
+            b = 10 + 5.5 * n
+            t.append(rechteck(x, 274, b, 16, '#eef1f4', WAGO_FARBE[name],
+                              1.6, rx=3))
+            for k in range(n):
+                t.append(rechteck(x + 5 + 5.5 * k, 277, 3.5, 10, HEBEL,
+                                  HEBEL_RAND, 0.6, rx=1))
+            t.append(text(x + b / 2, 303, name[5:], 10, WAGO_FARBE[name],
+                          'middle', fett=True))
+            x += b + 10
+        t.append(text((x_gruppe + x - 10) / 2, 316, gruppe_, 9.5, GRAU,
+                      'middle'))
+        x += luecke
+    t.append(text(ax, 331, 'W-Nummer an beide Enden jeder Leitung.', 10,
                   GRAU))
     return feld(1, [('t', 'vor dem Verdrahten, stromlos')], t)
 
@@ -526,7 +571,7 @@ def schritt_24v():
     wand = 116
     t += [linie([(wand, 44), (wand, 140)], GEH_RAND, 1.4, '6 4'),
           text(wand - 6, 56, 'außen', 10, GRAU, 'end'),
-          text(wand + 6, 56, 'im Gehäuse (Rückwand)', 10, GEH_RAND)]
+          text(wand + 6, 56, 'im Fach (Rückwand)', 10, GEH_RAND)]
     t += kasten(14, 66, 88, 62, ['Netzteil', '24 V / 3 A'])
     t += [linie([(102, 97), (114, 97)], '#495057', 5),
           rechteck(110, 91, 14, 12, '#868e96', STIFT, 0.8, rx=2)]
@@ -543,12 +588,13 @@ def schritt_24v():
     t += [kreis(442, 86, 10, GELB, GELB_RAND), kreis(442, 86, 6.5,
                                                      '#e03131'),
           text(477, 84, 'NO frei', 10, GRAU)]
-    # Wagos: GND links, +24 V rechts, Oeffnungen oben
-    wg, og = wago(214, 250, 'Wago GND', 'o', teilung=22, tiefe=34)
-    wp, op = wago(440, 250, 'Wago +24 V', 'o', teilung=22, tiefe=34)
+    # Wagos: GND links, +24 V rechts, Oeffnungen oben (schematisch: so
+    # kreuzt sich nichts; im Fach liegt +24 V links)
+    wg, og = wago(214, 250, 'Wago GND', 'o', teilung=18, tiefe=34)
+    wp, op = wago(404, 250, 'Wago +24 V', 'o', teilung=18, tiefe=34)
     t += wg + wp
-    t += [text(316, 243, 'Wago GND', 11, MASSE, 'middle', fett=True),
-          text(500, 243, 'Wago +24 V', 11, P24, 'middle', fett=True)]
+    t += [text(295, 243, 'Wago GND', 11, MASSE, 'middle', fett=True),
+          text(485, 243, 'Wago +24 V', 11, P24, 'middle', fett=True)]
     # W1: Buchse + an den Schalter, Buchse − an die Wago GND
     _, f = ader('W1', 0, 'Buchse +', 'Schalter 1')
     t += draht([(202, 80), (234, 80)], f)
@@ -598,10 +644,10 @@ def verbraucher(x, y, plus, minus, liste, fill=FILL, rand=RAND):
 
 def schritt_verteilen():
     t = []
-    wp, op = wago(230, 88, 'Wago +24 V', 'u')
+    wp, op = wago(160, 88, 'Wago +24 V', 'u', teilung=22)
     wm, om = wago(160, 270, 'Wago GND', 'o', teilung=24)
     t += wp + wm
-    t += [text(356, 72, 'Wago +24 V', 12, P24, fett=True),
+    t += [text(376, 72, 'Wago +24 V', 12, P24, fett=True),
           text(396, 296, 'Wago GND', 12, MASSE, fett=True)]
     vx = (24, 216, 416)
     t += verbraucher(vx[0], 140, '+', '−', ['CNC Shield V3', 'Schraubklemme',
@@ -609,15 +655,15 @@ def schritt_verteilen():
     t += verbraucher(vx[1], 140, 'IN+', 'IN−', [
         'Wandler', '24 → 12 V, {} A'.format(de(ez.WANDLER_A, 0)),
         'OUT: Schritt 5'], *WANDLER)
-    t += verbraucher(vx[2], 140, '+', '−', ['Lüfter', '24 V, im Deckel',
-                                           'bläst auf die Treiber'])
+    t += verbraucher(vx[2], 140, '+', '−', ['Lüfter', '24 V, im Deckel,',
+                                           'Dupont-Stecker'])
     pp = [platz('Wago +24 V', n) for n in ('W3', 'W4', 'W5')]
     pm = [platz('Wago GND', n) for n in ('W3', 'W4', 'W5')]
     if pp != [2, 3, 4] or pm != [2, 3, 4]:
         raise SystemExit('Schritt 3 ist fuer die Plaetze 2-4 gezeichnet, '
                          'Kabelliste: {} / {}'.format(pp, pm))
     # +24 V von oben: Shield, Wandler, Luefter
-    ziele = (('W3', 'Shield +', 112, 12), ('W4', 'Wandler IN+', 126, 204),
+    ziele = (('W3', 'Shield +', 116, 12), ('W4', 'Wandler IN+', 126, 204),
              ('W5', 'Lüfter +', 126, 404))
     for (nr, an, yq, xv), p, x in zip(ziele, pp, vx):
         _, f = ader(nr, 0, 'Wago +24 V', an)
@@ -637,8 +683,8 @@ def schritt_verteilen():
         t += klemme(x, 158) + klemme(x, 214)
     # Einspeisung und spaetere Schritte an den Enden
     o = op[platz('Wago +24 V', 'W2')]
-    t += draht([o, (o[0], 100), (196, 100)], 'rot', 2.0) + klemme(196, 100)
-    t += schrittmarke(178, 100, 2) + marke(164, 105, 'W2', 'end')
+    t += draht([o, (o[0], 100), (126, 100)], 'rot', 2.0) + klemme(126, 100)
+    t += schrittmarke(108, 100, 2) + marke(94, 105, 'W2', 'end')
     o = op[platz('Wago +24 V', 'W16')]
     t += draht([o, (o[0], 100), (440, 100)], 'rot', 2.0) + klemme(440, 100)
     t += schrittmarke(458, 100, 7) + marke(472, 105, 'W16')
@@ -649,8 +695,8 @@ def schritt_verteilen():
     rest = wago_rest('Wago GND', 3)
     t += zeilen(396, 312, [' · '.join(rest[:2]), ' · '.join(rest[2:])], 9.5,
                 GRAU, 12)
-    t += warnung(14, 46, ['Shield-Klemme: Polung', 'neben der Klemme, nicht',
-                          'vertauschen.'])
+    t += warnung(14, 282, ['Shield: Polung', 'neben der Klemme,',
+                           'nicht vertauschen.'])
     t += zeilen(452, 48, ['Schraubklemmen mit Ader-',
                           'endhülse, die Wago ohne;',
                           '11 mm abisolieren.'], 10, GRAU, 12.5)
@@ -663,7 +709,14 @@ def schritt_verteilen():
 # ---- 4. 5 V und Lichtschranken -------------------------------------------
 
 def schritt_lichtschranken():
+    """W6 bringt die 5 V vom Adapter am 5-V-Wandler an die Wago +5 V (links,
+    Plaetze von unten nach oben) und die Wago GND 5 V (unten, von links
+    nach rechts): beide Plaetze 1 liegen an der Ecke beim Adapter. Von
+    dort die drei Lichtschranken; ihre D0 gehen hoch ans Shield. Es bleibt
+    die eine Kreuzung, die der K3,3 verlangt: VCC von Y springt ueber D0
+    von X. VCC von Z geht aussen herum."""
     ys, yo, yu = 100, 146, 210       # Shield unten, Sensor oben und unten
+    sb = 128                         # Breite eines Sensors
     adern = [LT[n]['adern'] for n in ('W9', 'W10', 'W11')]
     fb = '{} {}, {} {}, {} {}'.format('VCC', adern[0][0][1], 'GND',
                                       adern[0][1][1], 'D0', adern[0][2][1])
@@ -672,70 +725,83 @@ def schritt_lichtschranken():
          text(564, 62, 'Z+ / Z− (D11) = Laser: hier nichts', 10.5, ROT,
               'end', fett=True),
          text(24, 78, 'X+/X− beide D9, Y+/Y− beide D10 · am Modul: ' + fb +
-              ', A0 frei', 10, GRAU)]
-    # Wago +5 V links (Oeffnungen rechts), Wago GND unten (Oeffnungen oben)
-    w5, o5 = wago(60, 126, 'Wago +5 V', 'r', teilung=16, tiefe=38)
-    wg, og = wago(126, 274, 'Wago GND', 'o', teilung=24, tiefe=36)
+              ', A0 frei', 10, GRAU),
+         text(24, 92, 'Stift 5V bleibt frei', 10, GRAU)]
+    # Wago +5 V links (Oeffnungen rechts, Platz 1 unten), Wago GND 5 V
+    # unten (Oeffnungen oben, Platz 1 links)
+    w5, o5 = wago(54, 250, 'Wago +5 V', 'r', teilung=20, tiefe=38,
+                  umgekehrt=True)
+    wg, og = wago(148, 274, 'Wago GND 5 V', 'o', teilung=24, tiefe=36)
     t += w5 + wg
-    t += [text(41, 294, 'Wago +5 V', 10.5, P5, 'middle', fett=True),
-          text(41, 307, '5–10 frei', 9.5, GRAU, 'middle'),
-          text(362, 292, 'Wago GND', 11, MASSE, fett=True)]
-    rest = wago_rest('Wago GND', 4)
-    t += zeilen(362, 306, [' · '.join(rest[:2]), ' · '.join(rest[2:])], 9.5,
-                GRAU, 12)
-    # W6: Stift 5V an die Wago +5 V
-    _, f = ader('W6', 0, 'Shield 5V', 'Wago +5 V')
+    t += [text(16, 277, 'Wago +5 V', 10.5, P5, fett=True)]
+    t += zeilen(16, 290, wago_rest('Wago +5 V', 4), 9.5, GRAU, 12)
+    t += [text(262, 292, 'Wago GND 5 V', 11, MASSE, fett=True)]
+    t += zeilen(262, 305, wago_rest('Wago GND 5 V', 4), 9.5, GRAU, 12)
+    # W6: Adapter in der USB-A-Buchse des 5-V-Wandlers -> beide Plaetze 1
+    t += kasten(84, 214, 80, 44, ['Adapter', 'am 5-V-Wandler'],
+                '#f8f0fc', P5, gr=10.5, abstand=13, dx=5, dy=15)
     p = o5[platz('Wago +5 V', 'W6')]
-    t += draht([(90, ys), (90, p[1]), p], f)
-    t += [text(90, 92, '5V', 10, TEXT, 'middle', fett=True)] + klemme(90, ys)
-    sensoren = (('W9', 'X', 'Shield X−', 'X− (D9)', 116),
-                ('W10', 'Y', 'Shield Y+', 'Y+ (D10)', 268),
-                ('W11', 'Z', 'Shield SpnEn', 'SpnEn (D12)', 420))
-    # Wege der VCC-Adern: X und Y links heraus, Z rechts herum und unter
-    # der Wago GND durch; die VCC von Y springt ueber die GND von X
-    gnd_lage = (252, 244, 260)
+    _, f = ader('W6', 0, '5V-Adapter 5V', 'Wago +5 V')
+    t += draht([(84, p[1]), p], f) + klemme(84, p[1])
+    g = og[platz('Wago GND 5 V', 'W6')]
+    _, f = ader('W6', 1, '5V-Adapter GND', 'Wago GND 5 V')
+    t += draht([(g[0], 258), g], f) + klemme(g[0], 258)
+    t += [text(90, p[1] + 4, '5V', 9.5, TEXT, fett=True),
+          text(g[0], 252, 'GND', 9.5, TEXT, 'middle', fett=True)]
+    t += marke(90, 277, 'W6')
+    sensoren = (('W9', 'X', 'Shield X−', 'X− (D9)', 124),
+                ('W10', 'Y', 'Shield Y+', 'Y+ (D10)', 270),
+                ('W11', 'Z', 'Shield SpnEn', 'SpnEn (D12)', 416))
+    # Wege: GND hinunter, je weiter rechts, desto tiefer; VCC von X und Y
+    # links an die Wago +5 V, die von Y oben herum ueber D0 von X; VCC von
+    # Z rechts und unten herum, links hoch und von oben an Platz 4
+    gnd_lage = (236, 248, 260)
     for k, (nr, a, pin, druck, bx) in enumerate(sensoren):
         lt = LT[nr]
-        vcc_y, gnd_x, d0_x = 178, bx + 68, bx + 80
-        t += [rechteck(bx, yo, 136, yu - yo, FILL, RAND),
+        vcc_y, gnd_x, d0_x = 178, bx + 64, bx + 76
+        t += [rechteck(bx, yo, sb, yu - yo, FILL, RAND),
               text(d0_x, yo + 14, 'D0', 9.5, GRAU, 'middle'),
               text(gnd_x, yu - 6, 'GND', 9.5, GRAU, 'middle')]
         if a == 'Z':
-            t += [text(bx + 130, vcc_y + 4, 'VCC', 9.5, GRAU, 'end'),
-                  text(bx + 14, 188, a, 15, BLAU, fett=True),
-                  text(bx + 28, 187, 'Lichtschranke', 10, GRAU)]
+            t += [text(bx + sb - 6, vcc_y + 4, 'VCC', 9.5, GRAU, 'end'),
+                  text(bx + 10, 188, a, 15, BLAU, fett=True),
+                  text(bx + 24, 187, 'Lichtschranke', 10, GRAU)]
         else:
             t += [text(bx + 6, vcc_y + 4, 'VCC', 9.5, GRAU),
-                  text(bx + 40, 188, a, 15, BLAU, fett=True),
-                  text(bx + 54, 187, 'Lichtschranke', 10, GRAU)]
+                  text(bx + 36, 188, a, 15, BLAU, fett=True),
+                  text(bx + 50, 187, 'Lichtschranke', 10, GRAU)]
         t += [text(d0_x, 92, druck, 10, BLAU, 'middle', fett=True)]
         # D0 gerade hoch
         _, f = ader(nr, 2, pin, 'LS {} D0'.format(a))
         t += draht([(d0_x, yo), (d0_x, ys)], f)
-        t += marke(d0_x, 128, nr, 'middle')
-        t.append(text(d0_x + 6 + 5 + 3.5 * len(nr), 128,
+        t += marke(d0_x, 118, nr, 'middle')
+        t.append(text(d0_x + 6 + 5 + 3.5 * len(nr), 118,
                       laenge_text(lt, Q['K']), 10, GRAU))
-        # GND hinunter in die Wago GND
-        _, f = ader(nr, 1, 'Wago GND', 'LS {} GND'.format(a))
-        g = og[platz('Wago GND', nr)]
+        # GND hinunter in die Wago GND 5 V
+        _, f = ader(nr, 1, 'Wago GND 5 V', 'LS {} GND'.format(a))
+        g = og[platz('Wago GND 5 V', nr)]
         t += draht([(gnd_x, yu), (gnd_x, gnd_lage[k]), (g[0], gnd_lage[k]),
                     g], f)
         # VCC an die Wago +5 V
         _, f = ader(nr, 0, 'Wago +5 V', 'LS {} VCC'.format(a))
         v = o5[platz('Wago +5 V', nr)]
         if a == 'X':
-            weg = [(bx, vcc_y), (100, vcc_y), (100, v[1]), v]
+            weg = [(bx, vcc_y), (76, vcc_y), (76, v[1]), v]
             t += draht(weg, f)
         elif a == 'Y':
-            weg = [(bx, vcc_y), (260, vcc_y), (260, 226), (84, 226),
-                   (84, v[1]), v]
-            t += draht(weg, f, bruecke=(sensoren[0][4] + 68, 226))
+            weg = [(bx, vcc_y), (bx - 9, vcc_y), (bx - 9, 132), (68, 132),
+                   (68, v[1]), v]
+            t += draht(weg, f, bruecke=(sensoren[0][4] + 76, 132))
         else:
-            weg = [(bx + 136, vcc_y), (570, vcc_y), (570, 330), (72, 330),
-                   (72, v[1]), v]
+            weg = [(bx + sb, vcc_y), (566, vcc_y), (566, 330), (8, 330),
+                   (8, 150), (60, 150), (60, v[1]), v]
             t += draht(weg, f)
         t += klemme(d0_x, ys) + klemme(d0_x, yo) + klemme(gnd_x, yu) + \
             klemme(weg[0][0], vcc_y)
+    t += zeilen(356, 284, ['Die 5 V kommen vom 5-V-Wandler: Für',
+                           'Prüfung D braucht er schon W18 und',
+                           'das Netzteil (Schritt 8, Punkte 2–3).'],
+                9.5, GRAU, 12.5)
     return feld(4, [('t', 'W6, W9–W11 · dann'), ('p', 'Prüfung D')], t)
 
 
@@ -890,8 +956,8 @@ def schritt_waechter():
     wp, op = wago(60, 84, 'Wago +24 V', 'u', teilung=22, tiefe=34)
     wg, og = wago(60, 280, 'Wago GND', 'o', teilung=22, tiefe=34)
     t += wp + wg
-    t += [text(170, 70, 'Wago +24 V', 11, P24, fett=True),
-          text(280, 302, 'Wago GND', 11, MASSE, fett=True)]
+    t += [text(278, 70, 'Wago +24 V', 11, P24, fett=True),
+          text(278, 302, 'Wago GND', 11, MASSE, fett=True)]
     (f1_, _, a1, b1), (f2, _, a2, b2) = LT['W16']['adern']
     ader('W16', 0, a1, b1)
     ader('W16', 1, a2, b2)
@@ -939,7 +1005,8 @@ def schritt_waechter():
 
 def schritt_pi():
     usb = '#868e96'
-    # W18: an die Loetfahnen der Buchse (vor dem Schalter), zum 5-V-Wandler
+    # W18: an die Loetfahnen der Buchse (vor dem Schalter), zum 5-V-Wandler;
+    # seine 5 V gehen ueber W6 an die 5-V-Klemmen, von dort W19 zum Pi
     t = kasten(14, 46, 92, 58, ['Buchse', 'Lötfahnen'])
     t += [text(98, 66, '+', 12, P24, 'end', fett=True),
           text(98, 96, '−', 12, MASSE, 'end', fett=True)]
@@ -952,20 +1019,32 @@ def schritt_pi():
         t += draht([(106, y), (190, y)], f)
         t += klemme(106, y) + klemme(190, y)
     t += marke(148, 81, 'W18', 'middle')
-    # W19: USB-A rechts am Wandler in PWR IN des Pi
-    t += kasten(392, 46, 182, 58, ['Pi Zero 2 W', 'PWR IN · USB (unten)'],
+    # W6 aus Schritt 4: vom Adapter in der USB-A-Buchse an die 5-V-Klemmen
+    t += [linie([(308, 75), (385, 75)], STIFT, 1.2, '4 3')]
+    t += schrittmarke(326, 75, 4) + marke(340, 80, 'W6')
+    w5, o5 = wago(392, 88, 'Wago +5 V', 'u', teilung=14, tiefe=34)
+    wg, og = wago(480, 88, 'Wago GND 5 V', 'u', teilung=14, tiefe=34)
+    t += w5 + wg
+    t += [text(420, 49, 'Wago +5 V', 10, P5, 'middle', fett=True),
+          text(508, 49, 'Wago GND 5 V', 10, MASSE, 'middle', fett=True),
+          text(392, 190, 'Wago-Plätze 1–4: Schritt 4', 9.5, GRAU)]
+    # W19: von Platz 5 beider Klemmen in PWR IN des Pi
+    t += kasten(392, 128, 182, 48, ['Pi Zero 2 W', 'PWR IN · USB (unten)'],
                 *SHIELD)
-    ader('W19', 0, '5V-Wandler USB', 'Pi PWR')
-    t += draht([(308, 75), (392, 75)], usb, 5)
-    t += klemme(308, 75) + klemme(392, 75)
-    t += marke(350, 71, 'W19', 'middle')
+    p = o5[platz('Wago +5 V', 'W19')]
+    _, f = ader('W19', 0, 'Wago +5 V', 'Pi PWR')
+    t += draht([p, (p[0], 128)], f) + klemme(p[0], 128)
+    q = og[platz('Wago GND 5 V', 'W19')]
+    _, f = ader('W19', 1, 'Wago GND 5 V', 'Pi GND')
+    t += draht([q, (q[0], 108), (p[0] + 16, 108), (p[0] + 16, 128)], f)
+    t += klemme(p[0] + 16, 128)
+    t += marke(p[0] - 8, 114, 'W19', 'end')
     # W17: USB des Pi zum Uno
-    t += kasten(392, 132, 182, 40, ['Uno', 'USB-B, hinten im Fenster'],
-                *SHIELD)
+    t += kasten(244, 128, 102, 48, ['Uno', 'USB-B'], *SHIELD)
     ader('W17', 0, 'Pi USB', 'Uno USB')
-    t += draht([(483, 104), (483, 132)], usb, 5)
-    t += klemme(483, 104) + klemme(483, 132)
-    t += marke(493, 123, 'W17')
+    t += draht([(346, 162), (392, 162)], usb, 5)
+    t += klemme(346, 162) + klemme(392, 162)
+    t += marke(369, 151, 'W17', 'middle')
     t += zeilen(14, 128, ['Vor Schalter und Not-Aus: Pi und Uno',
                           'laufen weiter, der Wächter W16 meldet.',
                           'W17 in „USB“, W19 in „PWR IN“.'], 10.5, GRAU,
@@ -995,123 +1074,262 @@ def schritt_pi():
     return feld(8, [('t', 'W17–W19 · dann'), ('p', 'Prüfung J')], t)
 
 
-# ---- Uebersicht: Leitungen aus dem Gehaeuse ------------------------------
+# ---- Uebersicht: Leitungen aus dem Fach ---------------------------------
+
+def fach_bild(x0, y0, s):
+    """Das Elektronikfach von oben (hinten oben, wie die Uebersicht),
+    Massstab s px/mm, die linke obere Ecke des Kastens bei (x0, y0): Gassen,
+    Geraete und Wago aus Elektronikfach.py, an jedem Fenster der Endwaende
+    die Leitungen, die dort hinausgehen (ueber dem Kasten die der
+    Leistungsfenster hinten, darunter die der Signalfenster vorn)."""
+    EL = Q['K']['EL']
+    gx0, gx1 = EL['geh_x']
+    gy0, gy1 = EL['geh_y']
+
+    def X(mm):
+        return x0 + (mm - gx0) * s
+
+    def Y(mm):
+        return y0 + (mm - gy0) * s
+
+    def quader(xs, ys, fill, rand, b=1.0, rx=1.5, strich=None):
+        return rechteck(X(xs[0]), Y(ys[0]), (xs[1] - xs[0]) * s,
+                        (ys[1] - ys[0]) * s, fill, rand, b, rx=rx,
+                        strich=strich)
+
+    t = [quader(EL['geh_x'], EL['geh_y'], GEH_RAND, GEH_RAND, 1.0, rx=2)]
+    for h in ('links', 'rechts'):
+        ix = EL['innen_x'][h]
+        t += [quader(ix, EL['innen_y'], GEH_FILL, 'none', rx=0),
+              quader(ix, EL['gasse_hinten'][h], GASSE_LEISTUNG, 'none',
+                     rx=0),
+              quader(ix, EL['gasse_vorn'], GASSE_SIGNAL, 'none', rx=0)]
+        # Fenster in der Endwand: Leistung hinten, Signale vorn
+        xw = EL['endwand_x'][h]
+        for fy in (EL['fenster_pow'][h][0], EL['fenster_sig_y']):
+            t.append(quader(xw, fy, '#ffffff', 'none', rx=0))
+    # Geraete
+    uno = (EL['uno_x'], EL['uno_y'])
+    pi = ((EL['pi_bauteile_x'][0], EL['pi_pcb_x'][1]), EL['pi_y'])
+    t += [quader(*uno, *PLATINE),
+          quader(*pi, *PLATINE),
+          quader(EL['w12_x'], EL['w12_y'], *WANDLER),
+          quader(EL['w5_x'], EL['w5_y'], '#f8f0fc', P5),
+          quader(*EL['adapter'][:2], '#f8f0fc', P5),
+          quader(EL['aa_x'], EL['aa_y'], 'none', RAND, strich='3 2')]
+    for n, _, xs, ys, _ in EL['wago']:
+        t.append(quader(xs, ys, '#eef1f4', WAGO_FARBE['Wago ' + n], 1.4))
+    for x in (EL['buchse'][0], EL['schalter'][0]):     # in der Rueckwand
+        t.append(kreis(X(x), Y(gy0) + 1.2, 3.2, '#ffffff', STIFT, 1.0))
+    mx = lambda q: X(sum(q) / 2.0)                        # noqa: E731
+    my = lambda q: Y(sum(q) / 2.0)                        # noqa: E731
+    w = {n: (xs, ys) for n, _, xs, ys, _ in EL['wago']}
+    t += [text(mx(uno[0]), my(uno[1]) + 3.5, 'Uno + Shield', 9.5, TEXT,
+               'middle', fett=True),
+          text(X(pi[0][0]) - 4, my(pi[1]) - 2, 'Pi', 9.5, TEXT, 'end',
+               fett=True),
+          text(mx(EL['w12_x']), my(EL['w12_y']) + 3.5, '12 V', 9, TEXT,
+               'middle'),
+          text(mx(EL['w5_x']), my(EL['w5_y']) + 3.5, '5-V-Wandler', 9, TEXT,
+               'middle'),
+          text(mx(EL['adapter'][0]), my(EL['adapter'][1]) + 3, 'Adapter',
+               8, GRAU, 'middle'),
+          text(mx(EL['aa_x']), my(EL['aa_y']) + 3, 'Air Assist', 8, GRAU,
+               'middle'),
+          text(mx(w['+24 V'][0]), my(w['+24 V'][1]) + 3, '+24 V', 8.5, P24,
+               'middle', fett=True),
+          text(mx(w['GND'][0]), my(w['GND'][1]) + 3, 'GND', 8.5, MASSE,
+               'middle', fett=True),
+          text(X(w['+5 V'][0][1]) + 3, my(w['+5 V'][1]) + 3, '+5 V', 8.5,
+               P5, fett=True),
+          text(X(w['GND 5 V'][0][1]) + 3, my(w['GND 5 V'][1]) - 1, 'GND',
+               8.5, MASSE, fett=True),
+          text(X(w['GND 5 V'][0][1]) + 3, my(w['GND 5 V'][1]) + 8, '5 V',
+               8.5, MASSE, fett=True),
+          text(X(EL['buchse'][0]), Y(gy0) + 13, 'Buchse', 8, GRAU, 'middle'),
+          text(X(EL['schalter'][0]) + 4, Y(gy0) + 13, 'Schalter', 8, GRAU)]
+    # Leitungen, die im Fach bleiben, am Pi
+    t += marke(X(-60.0), Y(-318.0), 'W17') + marke(X(-60.0), Y(-262.0),
+                                                   'W19')
+    # Fenster: Leitungen hinaus
+    for seite, sx in (('links', -1), ('rechts', 1)):
+        xw = gx1 * sx
+        for fenster, fy, ym in (
+                ('Leistung', EL['fenster_pow'][seite][0], Y(gy0) - 12),
+                ('Signal', EL['fenster_sig_y'], Y(gy1) + 20)):
+            nrn = aus_dem_fach(seite, fenster)
+            if not nrn:
+                continue
+            yf = Y(sum(fy) / 2.0)
+            xa = X(xw) + 10 * sx
+            t.append(linie([(X(xw), yf), (xa, yf), (xa, ym)], KABELWEG,
+                           1.6, '4 2'))
+            breiten = [10.0 + 7.0 * len(n) for n in nrn]
+            ganz = sum(breiten) + 4.0 * (len(nrn) - 1)
+            xm = xa + (ganz / 2.0 + 6) * -sx
+            t += marken_reihe(xm, ym + 4, nrn)
+    return t
+
 
 def uebersicht():
+    K, L, EL = Q['K'], Q['L'], Q['K']['EL']
     t = [rechteck(0, 0, W - 2 * RX, UEB_H, '#ffffff', '#d0d7de', 1.0, rx=8),
          text(16, 28, 'Übersicht — welche Leitung wohin', 14.5, TEXT,
               fett=True),
-         text(16, 46, 'Draufsicht, schematisch: hinten oben, vorn unten. '
-              'Maßstäblich: elektronik-platz.svg', 11, GRAU)]
-    px, cx, yh = 0.52, 330.0, 104.0      # px/mm, Mitte, hinteres Ende
+         text(16, 46, 'Draufsicht: hinten oben, vorn unten. Lage und Wege '
+              'wie in elektronik-platz.svg, das Fach im Einzelnen in '
+              'elektronikfach.svg', 11, GRAU)]
+    px, cx, yh = 0.6, 330.0, 108.0       # px/mm, Mitte, hinteres Ende
+    y_2040 = L['rahmen_y'][0]
 
     def X(mm):
         return cx + mm * px
 
     def Y(mm):                       # ab hinterem Ende der 2040, nach vorn
-        return yh + mm * px
+        return yh + (mm - y_2040) * px
 
-    def quader(x0, x1, y0, y1, fill, rand, b=1.0, rx=2):
-        return rechteck(X(x0), Y(y0), X(x1) - X(x0), Y(y1) - Y(y0), fill,
-                        rand, b, rx=rx)
+    def quader(xs, ys, fill, rand, b=1.0, rx=2):
+        return rechteck(X(xs[0]), Y(ys[0]), (xs[1] - xs[0]) * px,
+                        (ys[1] - ys[0]) * px, fill, rand, b, rx=rx)
 
     profil = ('#e9ecef', '#868e96')
     kette = ('#ced4da', '#495057')
-    t += [quader(-300, 300, 110, 130, *profil),
-          quader(-300, 300, 545, 565, *profil),
-          quader(-267, -247, 0, 600, *profil),
-          quader(247, 267, 0, 600, *profil),
-          quader(-205, -45, 12, 100, GEH_FILL, GEH_RAND, 1.4, rx=3),
-          text(X(-125), Y(60), 'Gehäuse', 11, GEH_RAND, 'middle', fett=True),
-          quader(-287, -273, 262, 420, *kette, rx=3),
-          quader(0, 215, 306, 320, *kette, rx=3),
-          quader(-250, 250, 320, 340, *profil),
-          quader(-287, -227, 300, 370, '#dbe4ef', '#6b84a3'),
-          quader(227, 287, 300, 370, '#dbe4ef', '#6b84a3'),
-          quader(-25, 25, 340, 400, '#dbe4ef', BLAU),
-          quader(-225, -183, 296, 338, '#ced4da', STIFT),
-          quader(-278, -236, 606, 648, '#ced4da', STIFT),
-          quader(236, 278, 606, 648, '#ced4da', STIFT),
-          quader(150, 210, 574, 606, '#fff4f4', P24, 1.2, rx=3),
-          kreis(X(180), Y(590), 5.5, '#e03131')]
-    for x, y in ((-170, 352), (-27, 372), (285, 40)):
-        t.append(kreis(X(x), Y(y), 4.5, ROT))
-    # Wege (wie in verkabelung.md, Kabelwege und Ketten)
+    neu = ('#dbe4ef', '#6b84a3')
+    R, rb = L['R'], 20.0
+    P = K['portal']
+    t += [quader(L['quer_x'], L['quer_y_hinten'], *profil),
+          quader(L['quer_x'], L['quer_y_vorn'], *profil)]
+    for sx in (-1, 1):
+        t.append(quader(sorted((sx * (R - rb / 2), sx * (R + rb / 2))),
+                        L['rahmen_y'], *profil))
+    # Y-Kette mit Wanne, Portal mit X-Kette und Toolhead in der Mitte
+    from kette_zeichnen import schleife_y
+    _, yb = schleife_y(L, Q['es_w'], 0.0)
+    t += [quader(L['ywanne_x'], K['ky_wanne'], '#f1f3f5', '#adb5bd', 0.8),
+          quader(K['ky_x'], (K['ky_eintritt'], yb + L['xk_bogen_r'][1]),
+                 *kette, rx=3),
+          quader(P['Platte links'].x, P['Platte links'].y, *neu),
+          quader(P['Platte rechts'].x, P['Platte rechts'].y, *neu),
+          quader(P['Portalrohr'].x, P['Portalrohr'].y, *profil),
+          quader((K['kx_eintritt'], K['kx_bogen'] + L['xk_bogen_r'][1]),
+                 K['kx_y'], *kette, rx=3),
+          quader(P['X-Motor'].x, P['X-Motor'].y, '#ced4da', STIFT)]
+    th = K['feste'] + K['bewegte']
+    th_x = (min(q.x[0] for q in th) + K['xm'], max(q.x[1] for q in th)
+            + K['xm'])
+    th_y = (min(q.y[0] for q in th), max(q.y[1] for q in th))
+    t.append(quader(th_x, th_y, '#dbe4ef', BLAU))
+    fl = Q['es_w']('motor_flansch') / 2.0
+    for sx in (-1, 1):
+        t.append(quader(sorted((sx * (R - fl), sx * (R + fl))),
+                        (K['ym_y'] - fl, K['ym_y'] + fl), '#ced4da', STIFT))
+    na = K['notaus']
+    t += [quader(na.x, na.y, '#fff4f4', P24, 1.2, rx=3),
+          kreis(X(sum(na.x) / 2.0), Y(sum(na.y) / 2.0), 5.0, '#e03131')]
+    # Elektronikfach mit Ohren und Gassen; Geraete im Bild rechts
+    fk = K['fach_kasten']
+    for q in [fk] + K['ohren']:
+        t.append(quader(q.x, q.y, GEH_FILL, GEH_RAND, 1.4, rx=1.5))
+    for h in ('links', 'rechts'):
+        t += [quader(EL['innen_x'][h], EL['gasse_hinten'][h],
+                     GASSE_LEISTUNG, 'none', rx=0),
+              quader(EL['innen_x'][h], EL['gasse_vorn'], GASSE_SIGNAL,
+                     'none', rx=0)]
+    for n in ('uno', 'pi', 'wandler12', 'wandler5'):
+        q = K[n]
+        t.append(quader(q.x, q.y, *(PLATINE if n in ('uno', 'pi') else
+                                    WANDLER), 0.8, rx=1))
+    t += [text(X(fk.x[0]), Y(fk.y[0]) - 6, 'Elektronikfach', 11, GEH_RAND,
+               fett=True),
+          text(X(fk.x[0]) + 96, Y(fk.y[0]) - 6, '(rechts vergrößert)', 10,
+               GRAU)]
+    # Steckernetzteil in die Buchse hinten im Fach
+    xb = X(EL['buchse'][0])
+    t += kasten(xb - 50, 62, 100, 24, ['Steckernetzteil'], gr=10.5, dy=16,
+                dx=8)
+    t += [linie([(xb, 86), (xb, Y(fk.y[0]))], P24, 2.0)]
+    # Wege aus den Fenstern (wie tools/elektronik_zeichnen.py, kabelwege):
+    # unter den 2040 durch in die untere Aussennut, links zur Y-Kette und
+    # nach vorn zum Y-Motor, rechts nach hinten zur Lichtschranke Y und nach
+    # vorn zu Y-Motor und Not-Aus
     weg = dict(farbe=KABELWEG, b=2.0, strich='6 3')
-    xl, xr, yk = X(-300), X(285), Y(105)
-    t += [linie([(X(-205), Y(56)), (xl, Y(56)), (xl, Y(627)),
-                 (X(-278), Y(627))], **weg),
-          linie([(xl, Y(262)), (X(-287), Y(262))], **weg),
-          linie([(X(-227), Y(312)), (X(0), Y(312))], **weg),
-          linie([(X(-204), Y(312)), (X(-204), Y(296))], **weg),
-          linie([(X(-170), Y(312)), (X(-170), Y(347))], **weg),
-          linie([(X(12), Y(320)), (X(12), Y(340))], **weg),
-          linie([(X(-110), Y(100)), (X(-110), yk), (xr, yk), (xr, Y(627)),
-                 (X(278), Y(627))], **weg),
-          linie([(xr, Y(40)), (xr, yk)], **weg),
-          linie([(xr, Y(570)), (X(210), Y(570)), (X(210), Y(580))], **weg)]
-    # Netzteil hinter dem Gehaeuse; Pi-Halter rechts neben dem Kasten an
-    # der Rueckseite des hinteren 2060 (PiHalter.py), das USB-Kabel W17 um
-    # den Kasten herum ins Fenster hinten
-    t += kasten(X(-75) - 50, 58, 100, 24, ['Steckernetzteil'], gr=10.5,
-                dy=16, dx=8)
-    t += [linie([(X(-75), 82), (X(-75), Y(12))], P24, 2.0)]
-    PH = bauraum.modul_laden(ez.PIHALTER, 'pihalter').lage()
-    hx0, hx1 = PH['x']
-    xu = PH['buchse_x']['USB']
-    t += [quader(hx0, hx1, 90, 110, '#fff4e6', '#d9480f', 1.2, rx=2),
-          text(X((hx0 + hx1) / 2.0), Y(100) + 4, 'Pi', 10, '#d9480f',
-               'middle', fett=True)]
-    t += [linie([(X(xu), Y(90)), (X(xu), Y(84)), (X(-38), Y(84)),
-                 (X(-38), Y(4)), (X(-160), Y(4)), (X(-160), Y(12))],
-                '#495057', 2.0)]
-    t += marke(X(-38) + 6, Y(40), 'W17')
+    gx, xa = fk.x[1], K['x_aussen']
+    y_pow = {h: sum(EL['fenster_pow'][h][0]) / 2.0 for h in ('links',
+                                                             'rechts')}
+    y_sig = sum(EL['fenster_sig_y']) / 2.0
+    y_vor = L['quer_y_vorn'][1] + 2.0
+    xk, y_wanne = sum(K['ky_x']) / 2.0, K['ky_wanne'][0] - 5.0
+    ym_l = K['kabel']['Y-Motor links'][1][-1]
+    ym_r = K['kabel']['Y-Motor rechts'][1][-1]
+    nk = K['kabel']['Not-Aus'][1]
+    i_vor = max(i for i, p in enumerate(nk) if abs(p[0] - xa) < 0.1)
+    es_x, es_y, es_z = K['es_x'], K['es_y'], K['es_z']
 
-    def schild(x, y, nr, s, anker='start'):
+    def zug(*pkte):
+        return linie([(X(p_[0]), Y(p_[1])) for p_ in pkte], **weg)
+
+    t += [zug((-gx, y_pow['links']), (-xa, y_pow['links']), (-xa, y_vor),
+              ym_l),
+          zug((-gx, y_sig), (-xa, y_sig)),
+          zug((-xa, y_wanne), (xk, y_wanne), (xk, K['ky_eintritt'])),
+          zug((gx, y_pow['rechts']), (xa, y_pow['rechts']), (xa, y_vor),
+              ym_r),
+          zug((gx, y_sig), (xa, y_sig)),
+          zug((xa, es_y[1]), es_y),
+          zug(*nk[i_vor:]),
+          zug(*K['weg_portal'])]
+    for a, b in (es_x, es_y, es_z):
+        t.append(kreis(X(a), Y(b), 4.5, ROT))
+
+    def schild(x, y, nr, s_, anker='start'):
         """Leitungsnummer und Name an einem Geraet."""
         b = 10.0 + 7.0 * len(nr)
         if anker == 'end':
             return marke(x, y, nr, 'end') + [
-                text(x - b - 6, y, s, 10.5, TEXT, 'end')]
-        return marke(x, y, nr) + [text(x + b + 6, y, s, 10.5, TEXT)]
+                text(x - b - 6, y, s_, 10.5, TEXT, 'end')]
+        return marke(x, y, nr) + [text(x + b + 6, y, s_, 10.5, TEXT)]
 
-    ky = ' '.join(lt['nr'] for lt in LTS
-                  if 'Y' in lt.get('kette', '').split())
-    kx = ' '.join(lt['nr'] for lt in LTS
-                  if 'X' in lt.get('kette', '').split())
-    t += [text(xl - 10, Y(53), 'links raus, unter dem', 10.5, GRAU, 'end'),
-          text(xl - 10, Y(53) + 13, '2040 durch, untere Nut', 10.5, GRAU,
+    def in_kette(k):
+        return [lt['nr'] for lt in LTS if k in lt.get('kette', '').split()]
+
+    xl = X(L['ywanne_x'][0]) - 8          # links neben Wanne und Kette
+    t += [text(xl, Y(y_pow['links']) + 4, 'links raus, unter dem', 10.5,
+               GRAU, 'end'),
+          text(xl, Y(y_pow['links']) + 17, '2040 durch, untere Nut', 10.5,
+               GRAU, 'end'),
+          text(xl, Y(-70.0), 'Y-Kette:', 10.5, GRAU, 'end'),
+          text(xl, Y(-70.0) + 13, ' '.join(in_kette('Y')), 10.5, TEXT,
                'end'),
-          text(xl - 10, Y(300), 'Y-Kette:', 10.5, GRAU, 'end'),
-          text(xl - 10, Y(300) + 13, ky, 10.5, TEXT, 'end'),
-          text(X(108), Y(298), 'X-Kette: ' + kx, 10, GRAU, 'middle',
+          text(X(70.0), Y(P['Portalrohr'].y[0]) - 7,
+               'X-Kette: ' + ' '.join(in_kette('X')), 10, GRAU, 'middle',
                halo=True)]
-    t += schild(X(-278) - 6, Y(632), 'W13', 'Y-Motor links', 'end')
-    t += schild(X(-225), Y(284), 'W12', 'X-Motor')
-    t += [linie([(X(-176), Y(352)), (xl - 4, Y(352))], GRAU, 0.8)]
-    t += schild(xl - 10, Y(352) + 4, 'W9', 'Lichtschranke X', 'end')
-    t += marken_reihe(X(0), Y(426), [lt['nr'] for lt in LTS
-                                     if 'X' in lt.get('kette', '').split()])
-    t.append(text(X(0), Y(448), 'Toolhead: Laser, Lichtschranke Z, Z-Motor',
-                  9.5, GRAU, 'middle'))
-    t += schild(xr + 14, Y(40) + 4, 'W10', 'Lichtschranke Y')
-    t += [text(xr + 14, Y(150), 'vorn raus, Kanal,', 10.5, GRAU),
-          text(xr + 14, Y(150) + 13, 'Rückseite hinteres 2060,', 10.5, GRAU),
-          text(xr + 14, Y(150) + 26, 'untere Nut rechts', 10.5, GRAU)]
-    t += schild(xr + 14, Y(612), 'W14', 'Y-Motor rechts')
-    t += schild(X(150) - 8, Y(598), 'W2', 'Not-Aus', 'end')
-    t += marke(X(20), Y(72), 'W18') + [
-        text(X(20) + 40, Y(72), 'Pi-Halter', 10.5, TEXT)]
+    t += schild(X(ym_l[0] - fl) - 6, Y(K['ym_y']) + 4, 'W13',
+                'Y-Motor links', 'end')
+    t += schild(X(P['X-Motor'].x[1]) + 4, Y(P['X-Motor'].y[0]) - 5, 'W12',
+                'X-Motor')
+    t += [linie([(X(es_x[0]) - 5, Y(es_x[1])), (xl + 4, Y(es_x[1]))], GRAU,
+                0.8)]
+    t += schild(xl, Y(es_x[1]) + 4, 'W9', 'Lichtschranke X', 'end')
+    t += marken_reihe(X(sum(th_x) / 2.0), Y(th_y[1]) + 22, in_kette('X'))
+    t.append(text(X(sum(th_x) / 2.0), Y(th_y[1]) + 42, 'Toolhead: Laser, '
+                  'Lichtschranke Z, Z-Motor', 9.5, GRAU, 'middle'))
+    xr = X(es_y[0]) + 12
+    t += schild(xr, Y(es_y[1]) + 4, 'W10', 'Lichtschranke Y')
+    t += [text(xr, Y(-200.0), 'rechts raus, unter dem', 10.5, GRAU),
+          text(xr, Y(-200.0) + 13, '2040 durch, untere Nut', 10.5, GRAU)]
+    t += schild(X(ym_r[0] + fl) + 6, Y(K['ym_y']) + 4, 'W14',
+                'Y-Motor rechts')
+    t += schild(X(na.x[0]) - 8, Y(sum(na.y) / 2.0) + 4, 'W2', 'Not-Aus',
+                'end')
 
-    # Kabelliste der Leitungen, die das Gehaeuse verlassen
+    # Kabelliste der Leitungen, die das Fach verlassen
     kx0 = 676
     sp = (kx0, kx0 + 42, kx0 + 154, kx0 + 330, kx0 + 438)
-    t.append(text(kx0, 76, 'Leitungen aus dem Gehäuse', 12, TEXT, fett=True))
-    for x, s in zip(sp[1:], ('Leitung', 'Litze', 'Länge', 'Kette')):
-        t.append(text(x, 96, s, 10.5, GRAU))
+    t.append(text(kx0, 76, 'Leitungen aus dem Fach', 12, TEXT, fett=True))
+    for x, s_ in zip(sp[1:], ('Leitung', 'Litze', 'Länge', 'Kette')):
+        t.append(text(x, 96, s_, 10.5, GRAU))
     t.append(linie([(kx0, 103), (W - 2 * RX - 16, 103)], '#d0d7de', 1))
-    aussen = [lt for lt in LTS if not lt['weg'].startswith(
-        ('im Kasten', 'auf dem', 'am Pi-Halter'))]
+    aussen = [LT[n] for n in aus_dem_fach()]
     for i, lt in enumerate(aussen):
         y = 122 + 21 * i
         t += marke(kx0, y, lt['nr'])
@@ -1119,16 +1337,24 @@ def uebersicht():
               text(sp[2], y, litze_kurz(lt), 10.5, TEXT),
               text(sp[3], y, laenge_text(lt, Q['K']) or '—', 10.5, TEXT),
               text(sp[4], y, lt.get('kette', '') or '—', 10.5, GRAU)]
-    innen = [lt['nr'] for lt in LTS
-             if lt['weg'].startswith(('im Kasten', 'auf dem'))]
-    halter = [lt['nr'] for lt in LTS if lt['weg'].startswith('am Pi-Halter')]
+    innen = [lt['nr'] for lt in LTS if not ausgang(lt)]
     y = 122 + 21 * len(aussen) + 6
     t += zeilen(kx0, y, [
-        'Im Gehäuse: {}. Am Pi-Halter: {}.'.format(nrn_text(innen),
-                                                   nrn_text(halter)),
+        'Im Fach bleiben {}.'.format(nrn_text(innen)),
         'In den Ketten nur Einzellitzen, keine Mantelleitung; Motorkabel',
         'ohne Schlauch. „Länge“: Weg → kaufen (+{} %, aufgerundet).'.format(
             de(ez.RESERVE * 100, 0))], 10.5, GRAU)
+    # das Fach vergroessert
+    s_bild = 1.0
+    bx0 = (kx0 + W - 2 * RX - 16) / 2.0 - (EL['geh_x'][1] * s_bild)
+    yt = y + 2 * 14 + 28
+    yb0 = yt + 36
+    t.append(text(kx0, yt, 'Im Fach, von oben', 12, TEXT, fett=True))
+    t.append(text(kx0 + 112, yt, 'rot: Leistungsgasse hinten, blau: '
+                  'Signalgasse vorn', 10, GRAU))
+    if yb0 + (EL['geh_y'][1] - EL['geh_y'][0]) * s_bild + 30 > UEB_H:
+        raise SystemExit('Uebersicht: das Fach passt nicht, UEB_H groesser')
+    t += fach_bild(bx0, yb0, s_bild)
     return t
 
 

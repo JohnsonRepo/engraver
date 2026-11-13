@@ -9,22 +9,23 @@ Browser: am iPad, am iPhone oder am Mac. Der Pi schickt die Datei selbst
 Internet braucht der Pi nur zum Einrichten. Findet er beim Start kein
 WLAN, öffnet er ein eigenes ([Hotspot](#ohne-wlan-hotspot)).
 
-Der Pi sitzt mit seinem 5-V-Wandler auf einem gedruckten
-[Halter](#halter) rechts neben dem Elektronik-Kasten, unter einer
-[Haube](#haube) wie die Elektronik: Von außen sieht man keine Platine. Er
-hängt **vor
-Schalter und Not-Aus** am Netzteil: Pi und Uno laufen, solange das Netzteil
-steckt. Not-Aus und Schalter trennen nur Motoren, Laser und Lüfter, und der
-[24-V-Wächter](verkabelung.md#7-24-v-wächter-w16) meldet das wie bisher an
-GRBL.
+Der Pi steht im [Elektronikfach](#im-elektronikfach) hinter dem hinteren
+2060, senkrecht an der Fugenwand der linken Hälfte; sein 5-V-Wandler sitzt
+rechts vorn. Von außen sieht man keine Platine. Er hängt **vor Schalter
+und Not-Aus** am Netzteil: Pi und Uno laufen, solange das Netzteil
+steckt. Not-Aus und Schalter trennen nur Motoren, Laser und Lüfter, und
+der [24-V-Wächter](verkabelung.md#7-24-v-wächter-w16) meldet das wie
+bisher an GRBL.
 
-![Pi-Halter von hinten und im Schnitt](pihalter.svg)
+![Elektronikfach mit dem Pi an der Fugenwand](elektronikfach.svg)
 
 Die Dateien für den Pi stehen in [`pi/`](../pi). Das Einrichtungsskript,
 der Dienst und die Konfiguration mit Makros und Befehlen sind mit
-**CNCjs 1.11.5** geprüft. Der Halter kommt aus `fusion/PiHalter/PiHalter.py`
-und ist mit `python3 tools/pihalter_check.py` geprüft. Die Leitungen W17–W19
-stehen mit allen anderen in [verkabelung.md](verkabelung.md#8-pi-w17w19).
+**CNCjs 1.11.5** geprüft. Das Fach kommt aus
+`fusion/Elektronikfach/Elektronikfach.py` und ist mit
+`python3 tools/elektronik_check.py` geprüft (Abschnitt 7: der Pi an der
+Fugenwand). Die Leitungen W17–W19 stehen mit allen anderen in
+[verkabelung.md](verkabelung.md#8-pi-w17w19).
 
 **Nie unbeaufsichtigt lasern.** Der Stopp-Knopf im Browser hängt am WLAN
 und ist keine Sicherheitsfunktion. Der Not-Aus bleibt in Reichweite.
@@ -35,18 +36,20 @@ und ist keine Sicherheitsfunktion. Der Not-Aus bleibt in Reichweite.
 |---|---|---|
 | 1 | Raspberry Pi Zero 2 W (ohne Stiftleiste genügt) | CNCjs |
 | 1 | microSD-Karte 16–32 GB | Raspberry Pi OS Lite |
-| 1 | Abwärtswandler 24 → 5 V, ≥ 3 A, Eingang bis mindestens 28 V; 63 × 30 mm, höchstens 20 mm hoch, Schraubklemmen und USB-A-Buchse an den schmalen Seiten `[v]` | 5 V für Pi und Uno |
-| 1 | USB-Kabel A → Micro-B, 0,25 m, Stromadern mindestens AWG 24; oder ein längeres, auf etwa 15 cm [gekürzt](#w19-kürzen) | W19 |
-| 1 | OTG-Kabel Micro-B → USB-B, 1 m | W17 |
-| 0,5 m | Leitung 2 × 0,75 mm², rot/schwarz (wie W2) | W18 |
-| 1 + 1 | Pi-Halter und Haube, PETG: [`stl/PiHalter_r3.stl`](../stl/PiHalter_r3.stl), [`stl/PiHalter_Haube_r3.stl`](../stl/PiHalter_Haube_r3.stl) | Halter |
-| 2 + 2 | M5×12 Zylinderkopf + Hammermutter M5 Nut 6 | Halter → obere Nut des 2060 |
-| 4 | M2.5×6 Zylinderkopf | Pi → Stehbolzen |
-| 3 + 3 | M3×8 Zylinderkopf + Messing-Einsatz M3 Ø5 (wie am Deckel des Kastens) | Haube → Dome |
+| 1 | Abwärtswandler 24 → 5 V, ≥ 3 A, Eingang bis mindestens 28 V; 63 × 30 mm, höchstens 20 mm hoch, Schraubklemmen und USB-A-Buchse an den schmalen Seiten `[v]` | 5 V für Pi, Uno und Lichtschranken |
+| 1 | USB-A-Adapter mit Schraubklemmen `[?]` | in der USB-A-Buchse des Wandlers, W6 an die 5-V-Klemmen |
+| 1 | Micro-USB-Kabel mit offenen Enden, 0,5 m, Stromadern mindestens AWG 24; oder ein USB-Kabel A → Micro-B, dessen A-Stecker [abgeschnitten](#w19-aus-einem-usb-kabel) wird | W19 |
+| 1 | OTG-Kabel Micro-B → USB-B, kurz (15–30 cm) | W17 |
+| 0,2 m + 0,2 m | Einzelader 0,75 mm², rot und schwarz | W18 |
+| 4 | M2.5×6 Zylinderkopf, selbstschneidend | Pi → Stehbolzen an der Fugenwand |
 | 2 | Kabelbinder 2,5 × 200 (2,5 × 100 ist zu kurz) | Wandler |
 
+Das Fach selbst mit Schrauben, Wago und Deckeln steht in
+[verkabelung.md, Schritt 1](verkabelung.md#1-vorbereiten).
+
 Der Pi hat zwei Micro-USB-Buchsen, und beide sind belegt: **PWR IN** außen
-nimmt nur Strom, dort steckt W19 vom Wandler. **USB** in der Mitte ist
+nimmt nur Strom, dort steckt W19 von den 5-V-Klemmen. **USB** in der
+Mitte ist
 seine einzige Datenbuchse, dort steckt W17 zum Uno. Über sie bekommt der
 Uno auch seine 5 V vom Pi.
 
@@ -54,93 +57,48 @@ Ein OTG-Kabel verbindet im Micro-B-Stecker den ID-Stift mit Masse; dann
 arbeitet der Pi an dieser Buchse als Host. Solche Kabel gibt es für Handys
 an Druckern.
 
-## Halter
+## Im Elektronikfach
 
-Eine Platte, 190 × 63,4 × 5 mm, liegt wie die Montageplatte des Kastens
-an der Rückseite des hinteren 2060, 5,7 mm rechts neben ihr. Zwei M5×12
-halten sie in Hammermuttern der **oberen Nut**. Unten reicht sie 6 mm unter
-die Mitte dieser Nut. Die Kabel in der mittleren Nut (W2, W10, W14, W18)
-laufen 8 mm darunter frei durch.
+Pi und Wandler liegen im selben Fach wie Uno, Shield und 24-V-Verteilung
+([elektronikfach.svg](elektronikfach.svg)).
 
-Oben steht die Platte 47 mm über das 2060 hinaus. Dort sitzen:
-
-* **rechts der Pi** auf vier Stehbolzen (5 mm hoch, Lochbild 58 × 23 mm
-  `[w]`), Bauteile nach hinten, Buchsen nach unten, die SD-Karte rechts
-  (von hinten gesehen links). Der Pi liegt ganz über der Oberkante des 2060,
-  5 mm darüber. Vor seiner Antenne ist kein Aluminium.
-* **links der 5-V-Wandler**, Eingang zur Kastenseite, USB-A-Buchse zum Pi.
-  Er hat keine Befestigungslöcher: Zwei Kabelbinder laufen senkrecht über
-  seine Rückseite, durch Schlitze über und unter ihm, und ziehen ihn an die
-  Platte. Beide Enden mit Eingang und Buchse bleiben frei. Der
-  Wandler ist 63 × 30 mm und höchstens 20 mm hoch `[v]`. Links von ihm
-  bleiben in der Haube 12 mm: Dort kommt W18 von unten zu den
-  Schraubklemmen, mit Aderendhülsen und Bogen nach unten.
-* dazwischen **40 mm** für den USB-A-Stecker, bevor das Kabel nach unten
-  zum Pi abbiegt.
-* **drei Dome** mit Messing-Einsätzen M3 für die Haube: einer oben zwischen
-  Wandler und Pi, zwei unten.
-
-### Haube
-
-Die Haube deckt Pi und Wandler nach hinten, oben und zu den Seiten ab, wie
-die Haube auf dem Elektronik-Kasten. Ihre Wände sind 2 mm dick und stehen
-auf der Platte, im selben Umriss. 3 × M3×8 halten sie in den Einsätzen der
-Dome. Die Dome enden 0,3 mm vor der Rückwand, so ziehen die Schrauben die
-Haube fest auf die Platte.
-
-* **Unten offen:** Dort kommen die Kabel heraus, und dort strömt kühle Luft
-  nach.
-* **Lüftung:** 6 Schlitze 20 × 3 mm oben in der Rückwand. Die warme Luft
-  steigt dorthin. Die Schlitze liegen über Pi und Wandler, durch sie sieht
-  man keine Platine.
-* **Wärme:** Hinter dem Pi bleiben 15 mm frei. Da passt ein kleiner
-  Kühlkörper auf den Prozessor, falls der Pi zu warm wird
-  ([Fehlersuche](#fehlersuche)).
-* **WLAN:** PETG dämpft das WLAN kaum. Kein Filament mit Kohlefaser oder
-  Metall nehmen.
-* **SD-Karte:** Zum Wechseln die Haube abnehmen.
-
-| | |
-|---|---|
-| Lage | X −18 bis +172 (Maschinenkoordinaten wie `Portal.py`), Z −85 bis −21,6; die Haube reicht 28 mm nach hinten |
-| Freiraum | 6,7 mm zum X-Wagen mit dem Portal am hinteren Schienenende (die engste Stelle über den ganzen Weg; bis Rev. 2 waren es 8,6 mm, die Platte ist seit Rev. 3 oben 3 mm höher), 5,7 mm zur Montageplatte des Kastens, 8 mm über den Kabeln |
-| Schrauben | 2 × M5×12 wie die Montageplatte: 5,2 mm im Stein, 0,5 mm vor dem Nutgrund. Inbus von hinten, bevor die Haube draufkommt |
-| Pi | 4 × M2.5×6 selbstschneidend in Kernlöcher Ø 2,2; die Schraube greift 4,4 bis 5 mm |
-| Haube | 3 × M3×8 in Messing-Einsätzen M3 Ø5 (Bohrung 4,6, 7 mm tief), 5,7 mm im Gewinde. Inbus von hinten |
-| Druck | PETG, keine Stützen. Halter: die Seite am 2060 aufs Bett, Stehbolzen und Dome nach oben, 31 mm hoch, ≈ 84 g voll. Haube: Rückwand aufs Bett, 28 mm hoch, ≈ 50 g |
-
-`python3 tools/pihalter_check.py` prüft das alles gegen Portal, Toolhead,
-Kasten, Rahmen und Kabel, dazu die Haube: innen frei, Dome, Schrauben,
-Lüftung. `python3 tools/pihalter_zeichnen.py` zeichnet
-[`pihalter.svg`](pihalter.svg), `python3 tools/stl_export.py PiHalter`
-schreibt beide STL.
+* **Der Pi** steht senkrecht an der Fugenwand der linken Hälfte, auf vier
+  Stehbolzen (Lochbild 58 × 23 mm `[w]`), 4 × M2.5×6 selbstschneidend. Die
+  Buchsen zeigen nach unten; die Stecker enden 12,5 mm über dem Boden,
+  darunter biegen die Kabel ab. Die SD-Karte zeigt nach hinten, dahinter bleiben 14,5 mm zum
+  Herausziehen.
+* **WLAN:** Die Oberkante des Pi liegt 11 mm über dem 2060, so funkt er
+  über das Profil hinweg. PETG dämpft das WLAN kaum; kein Filament mit
+  Kohlefaser oder Metall nehmen.
+* **Der 5-V-Wandler** sitzt rechts vorn, zwei Kabelbinder 2,5 × 200 durch
+  Schlitze im Boden halten ihn. In seiner USB-A-Buchse steckt ein Adapter
+  mit Schraubklemmen; von ihm bringt W6 die 5 V an die Wago +5 V und GND
+  5 V an der linken Endwand. Von dort gehen W19 zum Pi und die drei
+  Lichtschranken ab.
+* **W17:** kurzes OTG-Kabel vom USB-B des Uno unter dem Pi hindurch in
+  seine Buchse USB.
+* **Wärme:** Der Lüfter im linken Deckel bläst auf die Treiber, der rechte
+  Deckel hat Schlitze über den Wandlern. Wird der Pi zu warm, passt ein
+  kleiner Kühlkörper auf den Prozessor ([Fehlersuche](#fehlersuche)).
 
 **Montage:**
 
-1. Den Pi vor dem Druck auf die Zeichnung legen: Lochbild und Buchsen sind
-   nach dem Maßblatt der Zero-Reihe gezeichnet `[w]`.
-2. Die drei Messing-Einsätze M3 mit dem Lötkolben bündig in die Dome
-   einschmelzen.
-3. Pi mit 4 × M2.5×6 auf die Stehbolzen, Buchsen nach unten.
-4. Wandler links auf die Platte legen, Eingang nach links. Je einen
-   Kabelbinder 2,5 × 200 von hinten durch den oberen Schlitz, auf der Seite
-   zum 2060 hinunter, durch den unteren Schlitz zurück und über den Wandler.
-   Die Schlaufe wird bis 118 mm lang, ein Binder 2,5 × 100 schließt nur
-   etwa 75 mm. Die Köpfe hinten auf den Wandler, am besten neben das
-   höchste Bauteil. Von Hand festziehen, bis nichts mehr wackelt, nicht mit
-   der Zange nachziehen. Die Enden bündig abschneiden, sonst stoßen sie an
-   die Haube. Unter den Wandler muss nichts: Er liegt mit den Lötstellen auf
-   dem PETG, das isoliert.
-5. 2 Hammermuttern in die obere Nut der Rückseite des hinteren 2060, rechts
-   neben der Montageplatte des Kastens. Halter ansetzen, 2 × M5×12.
-6. Verdrahten wie in [verkabelung.md, Schritt 8](verkabelung.md#8-pi-w17w19).
-7. Haube aufsetzen, 3 × M3×8.
+1. Vor dem Druck das Lochbild prüfen: Es ist nach dem Maßblatt der
+   Zero-Reihe gezeichnet `[w]`; die ausgeblendete Bohrlehre_Pi in
+   `Elektronikfach.py` drucken und den Pi darauflegen.
+2. Pi mit 4 × M2.5×6 an die Stehbolzen der Fugenwand, Buchsen nach unten,
+   SD-Karte nach hinten.
+3. Wandler mit zwei Kabelbindern 2,5 × 200 durch die Schlitze im Boden.
+   Von Hand festziehen, bis nichts mehr wackelt, die Enden bündig
+   abschneiden. Den Adapter in die USB-A-Buchse.
+4. Verdrahten wie in [verkabelung.md, Schritt 8](verkabelung.md#8-pi-w17w19).
 
 ## Strom
 
 ```
 Netzteil ── Buchse ─┬─ Schalter ── Not-Aus ── Wago +24 V: Shield, Wandler 12 V, Lüfter
-                    └─ W18 ── 5-V-Wandler ── W19 ── Pi ── W17 (USB) ── Uno ── 5 V der Lichtschranken
+                    └─ W18 ── 5-V-Wandler ── W6 ── Wago +5 V ─┬─ W19 ── Pi ── W17 (USB) ── Uno
+                                                              └─ W9–W11: Lichtschranken
 ```
 
 | Zustand | Pi und Uno | Motoren, Laser, Lüfter |
@@ -166,26 +124,25 @@ Netzteil ── Buchse ─┬─ Schalter ── Not-Aus ── Wago +24 V: Shie
   Netzteil. Zusammen mit allem anderen sind es ≈ 53 W, dauernd gehen 61 W
   ([Leistung](elektronik.md#leistung-reichen-72-w)).
 
-### W19 kürzen
+### W19 aus einem USB-Kabel
 
-Ein längeres USB-Kabel A → Micro-B lässt sich kürzen: ein Stück
-herausschneiden und die Enden wieder verlöten. Zwischen den Steckern sollen
-etwa 15 cm Kabel bleiben. Der Weg vom Wandler in PWR IN ist 7 cm lang, der
-Rest geht in den Bogen unter dem Pi. Bis 25 cm reichen auch dünne
-Stromadern (AWG 28), so rechnet `elektronik_check.py`.
+W19 ist ein Micro-USB-Kabel mit offenen Enden: der Micro-B-Stecker in PWR
+IN, Rot und Schwarz in die 5-V-Klemmen. Gibt es das nicht fertig, geht ein
+USB-Kabel A → Micro-B, dessen A-Stecker abgeschnitten wird. Der Weg von
+den Klemmen durch die Signalgasse in PWR IN ist 26 cm lang; etwa 30 cm
+Kabel hinter dem Micro-B-Stecker genügen.
 
-1. Den Mantel an beiden Enden 3 cm abziehen. Gebraucht werden nur **Rot
-   (5 V)** und **Schwarz (Masse)**, PWR IN führt nur Strom. Weiß, Grün und
-   den Schirm kurz abschneiden.
-2. Schrumpfschlauch aufschieben, bevor gelötet wird: einen dicken (6 mm)
-   über den Mantel einer Seite, je einen dünnen (2 mm) über Rot und
-   Schwarz.
-3. **Farbe an Farbe** löten, dann stimmt die Polung von selbst. Die beiden
-   Lötstellen etwa 1 cm versetzt, damit sie nicht nebeneinander liegen.
-   Erst die dünnen Schläuche darüber, dann den dicken über alles.
-4. Die Lötstelle in ein gerades Stück legen, nicht in den Bogen unter dem
-   Pi.
-5. **Probe:** Der Pi startet am Wandler. Nach dem ersten Auftrag auf dem Pi
+1. Den A-Stecker abschneiden, den Mantel 3 cm abziehen. Gebraucht werden
+   nur **Rot (5 V)** und **Schwarz (Masse)**, PWR IN führt nur Strom.
+   Weiß, Grün und den Schirm kurz abschneiden und mit Schrumpfschlauch
+   isolieren.
+2. Die Stromadern müssen mindestens **AWG 24** (0,2 mm²) haben: Dünnere
+   hält die Wago nicht sicher (ab 0,14 mm²). Mit AWG 24 fallen auf W6 und
+   W19 zusammen 0,07 V ab; mit AWG 28 kämen am Pi nur noch 4,84 V an,
+   kaum mehr als die 0,2 V Abstand, die `elektronik_check.py` zur
+   Unterspannung (unter etwa 4,63 V `[w]`) verlangt. Rot und Schwarz 11 mm abisolieren, rot in die **Wago +5 V**,
+   schwarz in die **Wago GND 5 V**, je Platz 5.
+3. **Probe:** Der Pi startet. Nach dem ersten Auftrag auf dem Pi
    `vcgencmd get_throttled` eingeben: `throttled=0x0` heißt, die Spannung
    war seit dem Start nie zu niedrig.
 
@@ -378,19 +335,21 @@ länger als eine Minute erreichbar, erkennt der Pi sein WLAN.
 | Seite lädt nicht, Pi antwortet auf `ping` | Dienst läuft nicht | auf dem Pi `systemctl status cncjs` und `journalctl -u cncjs` |
 | Kein Port in CNCjs | W17 in PWR IN statt USB, Kabel ohne OTG | Micro-B in die mittlere Buchse **USB**; OTG-Kabel; `ls /dev/ttyACM* /dev/ttyUSB*` |
 | Konsole bleibt stumm: nach dem Verbinden kein `Grbl 1.1h`, auf `?` keine Antwort | GRBL fehlt auf dem Uno, oder der Uno hängt im Reset | [GRBL aufspielen](#grbl-aufspielen). Kommt `Grbl 1.1h` nur bei eingeschaltetem Schalter, hält der 24-V-Wächter den Uno im Reset: W16 gehört an Abort (A0) |
-| Pi startet neu, `vcgencmd get_throttled` zeigt nicht `0x0` (Unterspannung) | W19 dünn oder lang, Lötstelle schlecht, Wandler zu schwach | kurzes Kabel mit dicken Adern; Wandler ≥ 3 A; am USB-Ausgang 5,0–5,2 V |
+| Pi startet neu, `vcgencmd get_throttled` zeigt nicht `0x0` (Unterspannung) | W19 zu dünn, Ader lose in der Wago, Wandler zu schwach | Stromadern mindestens AWG 24, fest in der Wago; Wandler ≥ 3 A; zwischen Wago +5 V und GND 5 V 5,0–5,2 V |
 | Joggen und Anzeige haken | WLAN-Energiesparen an | `iw dev wlan0 get power_save` muss „off“ zeigen; sonst Schritt 3 wiederholen |
 | ALARM:2 oder `error:15` beim Rahmen | Datei nicht auf den Nullpunkt bezogen | Nullpunkt prüfen, in LightBurn „Absolute Coords“ und Ursprung hinten links |
 | Rahmen fährt nach 0, 0 | 3D-Ansicht aus oder keine Datei geladen | Datei laden, 3D-Ansicht an |
 | Befehl „Pi herunterfahren“ tut nichts | sudo fragt nach dem Passwort | `pi/einrichten.sh` noch einmal laufen lassen (legt `/etc/sudoers.d/cncjs` an) |
-| CNCjs wird träge, `vcgencmd measure_temp` zeigt um 80 °C | Pi zu warm unter der Haube, ab 80 °C drosselt er | Lüftungsschlitze frei halten, einen kleinen Kühlkörper auf den Prozessor kleben |
+| CNCjs wird träge, `vcgencmd measure_temp` zeigt um 80 °C | Pi zu warm im Fach, ab 80 °C drosselt er | Lüftungsschlitze frei halten, einen kleinen Kühlkörper auf den Prozessor kleben |
 
 ## Noch offen
 
 **Pi** `[w]`: Lochbild und Lage der Buchsen nach dem Maßblatt der
 Zero-Reihe, Platinendicke und Bauteilhöhe `[?]`. Vor dem Druck den Pi auf
-die Zeichnung legen. Der 5-V-Wandler ist geklärt (2026-10-10, seit Rev. 2
-im Halter).
+die Bohrlehre legen. Der 5-V-Wandler ist geklärt (2026-10-10). Offen sind
+der USB-A-Adapter mit Schraubklemmen `[?]` und ob am Wandler IN− mit dem
+GND der USB-Buchse verbunden ist `[w]`; davon hängt die Masse von Pi und
+Lichtschranken ab ([verkabelung.md](verkabelung.md#noch-offen)).
 
 **Hotspot:** Das Anlegen der Verbindung und das Skript sind an
 NetworkManager 1.46 geprüft. Auf dem Zero 2 W ist der Hotspot noch nicht

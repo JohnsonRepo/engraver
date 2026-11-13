@@ -73,9 +73,10 @@ ANSCHLUSS = {
     'Wandler OUT+': ('Wandler OUT+', 'Schraubklemme'),
     'Wandler OUT−': ('Wandler OUT−', 'Schraubklemme'),
     # Luefter im Deckel: seine Litze mit einem Dupont-Stecker 2-polig an
-    # der Verlaengerung W5, damit der Deckel abgeht
-    'Lüfter +': ('Lüfter, Stecker: rot', None),
-    'Lüfter −': ('Lüfter, Stecker: schwarz', None),
+    # der Verlaengerung W5, damit der Deckel abgeht (W5: Buchsen, Litze
+    # des Luefters: Stifte, siehe material())
+    'Lüfter +': ('Lüfter, Stecker: rot', 'Dupont'),
+    'Lüfter −': ('Lüfter, Stecker: schwarz', 'Dupont'),
     'Laser PWM': ('Laser, XH links: PWM', 'XH'),
     'Laser GND': ('Laser, XH Mitte: GND', 'XH'),
     'Laser +12 V': ('Laser, XH rechts: +12 V', 'XH'),
@@ -184,8 +185,10 @@ def leitungen():
              adern=[('+24 V', 'rot', 'Wago +24 V', 'Shield +'),
                     ('GND', 'schwarz', 'Wago GND', 'Shield −')]),
         dict(nr='W4', name='Wandler-Eingang', art='Einzeladern',
-             mm2=ez.LITZE_24V, laenge=kurz, strom=1.0,
-             weg='im Fach rechts',
+             mm2=ez.LITZE_24V, laenge=0.4, strom=1.0,
+             weg_fach='Wandler 12 V',
+             weg='im Fach: Leistungsgasse, durch die Fuge zum Eingang des '
+                 '12-V-Wandlers links',
              adern=[('+24 V', 'rot', 'Wago +24 V', 'Wandler IN+'),
                     ('GND', 'schwarz', 'Wago GND', 'Wandler IN−')]),
         dict(nr='W5', name='Lüfter 24 V', art='Einzeladern',
@@ -209,12 +212,12 @@ def leitungen():
         dict(nr='W7', name='Laser', art='Litzen 3-adrig, Silikon',
              mm2=ez.LITZE_LASER, kabel='Laser (12 V + PWM)',
              strom=ez.LASER_A, kette='Y + X',
-             weg='links raus (Fenster Leistung), unter dem linken 2040 '
+             weg='links raus (Fenster Leistung), +12 V und GND vom '
+                 '12-V-Wandler durch die Leistungsgasse, die PWM-Ader vom '
+                 'Shield durch das Fenster Signal; unter dem linken 2040 '
                  'durch, untere Nut außen am linken 2040, hinten in die '
                  'Y-Kette, hinter dem Schlitten in die obere Nut des Rohrs, '
-                 'am Kabelflügel hoch in die X-Kette, Trägerplatte; im Fach '
-                 '+12 V und GND durch Leistungsgasse und Fuge zum Wandler, '
-                 'PWM links zum Shield',
+                 'am Kabelflügel hoch in die X-Kette, Trägerplatte',
              adern=[('+12 V', 'rot', 'Wandler OUT+', 'Laser +12 V'),
                     ('GND', 'schwarz', 'Wandler OUT−', 'Laser GND'),
                     ('PWM', 'weiß', 'Shield Z+', 'Laser PWM')]),
@@ -657,8 +660,38 @@ def material(K):
     gehaeuse['Dupont 1-polig'] = len(am_shield - {'Shield Z− S',
                                                   'Shield Z− GND'})
     gehaeuse['Dupont 3-polig'] = 3
-    gehaeuse['Dupont 2-polig'] = 1
+    gehaeuse['Dupont 2-polig'] = 2          # Pull-down W8, W5 zum Luefter
     return meter, kontakte, huelsen, gehaeuse
+
+
+def motorkabel(K):
+    """Zeile der Kaufliste fuer die Motorkabel: was zu kaufen ist (nach
+    Kauflaenge), welche mitgelieferten Kabel reichen, welche in den Ketten
+    nur lose Adern haben."""
+    kaufen, dabei, lose = {}, [], []
+    for lt in leitungen():
+        if not lt['art'].startswith('Motorkabel'):
+            continue
+        _, kauf = laenge_m(lt, K)
+        if lt.get('mitgeliefert') and kauf <= lt['mitgeliefert']:
+            dabei.append(lt)
+        else:
+            kaufen.setdefault(kauf, []).append(lt['nr'])
+        if lt.get('kette'):
+            lose.append(lt['nr'])
+    menge = ' + '.join(str(len(n)) for _, n in sorted(kaufen.items()))
+    laengen = ' und '.join('{} m ({})'.format(de(k, 2), ', '.join(n))
+                           for k, n in sorted(kaufen.items()))
+    fuer = ', '.join(n for _, nn in sorted(kaufen.items()) for n in nn)
+    if dabei:
+        fuer += ' ({}: {} mitgelieferte{} {}-m-Kabel)'.format(
+            ', '.join(lt['nr'] for lt in dabei),
+            'das' if len(dabei) == 1 else 'die',
+            '' if len(dabei) == 1 else 'n',
+            de(dabei[0]['mitgeliefert'], 1))
+    return ('| {} | Motorkabel {}, 4 × AWG 24, PH-Stecker zum Motor, Dupont '
+            '4-polig zum Shield; in den Ketten lose Adern ohne Mantel ({}) '
+            '| {} |'.format(menge, laengen, ', '.join(lose), fuer))
 
 
 def tab_material(K):
@@ -669,21 +702,20 @@ def tab_material(K):
         z.append('| {} m | {} | {} |'.format(
             de(math.ceil(summe * 2.0) / 2.0, 1), art, ' · '.join(
                 '{} {} m'.format(nr, de(m, 2)) for nr, m in teile)))
-    z.append('| 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker '
-             'zum Motor, Dupont 4-polig zum Shield; für W15 lose Adern ohne '
-             'Mantel (läuft durch beide Ketten) | W14, W15 (W12, W13: die '
-             'mitgelieferten 1-m-Kabel) |')
+    z.append(motorkabel(K))
     for nr in ('W17', 'W19'):
         lt = next(lt for lt in leitungen() if lt['nr'] == nr)
         _, kauf = laenge_m(lt, K)
         z.append('| 1 | {}, {} m | {} ({}) |'.format(
             lt['art'], de(kauf, 2), nr, lt['name']))
     z.append('| {} + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, '
-             'Lichtschranken, W8, W16 |'.format(kontakte.get('Dupont', 0)))
+             'Lichtschranken, W5, W8, W16 |'.format(kontakte.get('Dupont', 0)))
     z.append('| {} · {} · {} | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, '
-             'Pull-down, Lichtschranken |'.format(
+             'Pull-down und W5, Lichtschranken |'.format(
                  gehaeuse['Dupont 1-polig'], gehaeuse['Dupont 2-polig'],
                  gehaeuse['Dupont 3-polig']))
+    z.append('| 1 + 2 | Dupont-Gehäuse 2-polig + Crimpkontakte (Stift) | '
+             'Litze des Lüfters, Gegenstück zu W5 |')
     z.append('| 1 + {} | XH2.54-Gehäuse 3-polig + Crimpkontakte | Laser |'
              .format(kontakte.get('XH', 0)))
     for mm2 in sorted(huelsen):

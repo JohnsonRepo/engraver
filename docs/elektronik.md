@@ -1,27 +1,29 @@
-# Elektronik — Platz, Gehäuse, Endschalter, Kabel
+# Elektronik — Platz, Elektronikfach, Endschalter, Kabel
 
 Wohin mit Steuerung, Netzteil, Endschaltern und Kabeln. Der Platz ist
 gerechnet: `python3 tools/portal_check.py`, Abschnitt 16. Das
-[Gehäuse](#gehäuse-elektronikpy) erzeugt `fusion/Elektronik/Elektronik.py`,
-geprüft mit `python3 tools/elektronik_check.py`. Die Zeichnung erzeugt
+[Elektronikfach](#elektronikfach) erzeugt
+`fusion/Elektronikfach/Elektronikfach.py`, geprüft mit
+`python3 tools/elektronik_check.py`. Die Zeichnung erzeugt
 `python3 tools/elektronik_zeichnen.py`; sie gibt auch die Kabellängen und
-die Spannungsfälle der [Litzen](#litzen) aus;
-die [Draufsicht auf das Gehäuse](#gehäuse-elektronikpy)
-`python3 tools/elektronik_box_zeichnen.py`, den
-[Anschlussplan](#anschlussplan)
-`python3 tools/anschluss_zeichnen.py`. **Stand:** Gehäuse gezeichnet
-und gedruckt, der Deckel seit Rev. 3 eine höhere Haube (Elektronik.py
-Rev. 3, der Kasten wie Rev. 2, mit den Angaben vom Aufbau vom 2026-09-27:
-Stapelhöhe, Wandler 12 V / 5 A, Wago-Bestand, 110 mm Überstand der 2040
-hinten, Laseranschluss); die Endschalter sind gebaut
-([endschalter.md](endschalter.md)). Die Energieketten sind gedruckt, beide
-mit Wanne, Festpunkt und Halter, dazu der Kabelweg zwischen ihnen
-([energiekette.md](energiekette.md)). **Die ganze Verdrahtung** — Kabelliste,
-Anschlussliste, Klemmen, Schritt für Schritt und Inbetriebnahme — steht in
-[verkabelung.md](verkabelung.md). Pinbelegung, Treiber und Jumper stehen in
+die Spannungsfälle der [Litzen](#litzen) aus; das Fach im Einzelnen
+`python3 tools/elektronikfach_zeichnen.py`, den
+[Anschlussplan](#anschlussplan) `python3 tools/anschluss_zeichnen.py`.
+**Stand:** Das Elektronikfach (Rev. 1, 2026-10-13) ersetzt das
+Elektronik-Gehäuse (Elektronik.py Rev. 4) und den Pi-Halter: Steuerung, Pi,
+beide Wandler und die Verteilung liegen in einem Fach über die ganze
+Breite, gezeichnet und geprüft, die STL sind fertig. Es übernimmt die
+Angaben vom Aufbau vom 2026-09-27 (Stapelhöhe, Wandler 12 V / 5 A,
+Wago-Bestand, 110 mm Überstand der 2040 hinten, Laseranschluss). Die
+Endschalter sind gebaut ([endschalter.md](endschalter.md)). Die
+Energieketten sind gedruckt, beide mit Wanne, Festpunkt und Halter, dazu
+der Kabelweg zwischen ihnen ([energiekette.md](energiekette.md)). **Die
+ganze Verdrahtung** — Kabelliste, Anschlussliste, Klemmen, Schritt für
+Schritt und Inbetriebnahme — steht in [verkabelung.md](verkabelung.md).
+Pinbelegung, Treiber und Jumper stehen in
 [hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik). Ohne PC
-bedient wird die Maschine über einen Pi mit CNCjs ([pi.md](pi.md)), auf
-einem eigenen Halter mit Haube rechts neben dem Gehäuse.
+bedient wird die Maschine über einen Pi mit CNCjs ([pi.md](pi.md)), der im
+Fach mitsitzt.
 
 ![Platz für die Elektronik](elektronik-platz.svg)
 
@@ -46,149 +48,135 @@ durchdringt.
 
 Die Tiefe folgt aus dem Überstand der 2040 hinter dem hinteren 2060:
 **110 mm** `[v]` (bis Rev. 1 waren 145 mm angenommen), die 2060 liegen damit
-**435 mm** Mitte zu Mitte auseinander. Kasten, Kabelkanal und Montageplatte
-brauchen 107 mm ab der Rückseite des 2060 und enden 3,4 mm vor dem Ende der
-2040 — dafür ist der Kanal 11 statt 12 mm breit.
+**435 mm** Mitte zu Mitte auseinander. Das Elektronikfach braucht mit seiner
+Montageplatte 107 mm ab der Rückseite des 2060 und endet 3 mm vor dem Ende
+der 2040.
 
 ## Was hinein kommt
 
 | Teil | Platz | Stand |
 |---|---|---|
-| Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Gehäuse](#gehäuse-elektronikpy) links, 24-V-Lüfter im Deckel über den Treibern; USB nach hinten zum Pi | gezeichnet |
-| Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Gehäuse kommt nur seine 24-V-Leitung | vorhanden |
-| 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5); an der Buchse zweigt vor dem Schalter W18 zum Pi ab | gezeichnet |
-| Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420, vom 5-V-Stift des Uno), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
+| Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Elektronikfach](#elektronikfach) links, 24-V-Lüfter im linken Deckel über den Treibern; USB nach rechts zum Pi | gezeichnet |
+| Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Fach kommt nur seine 24-V-Leitung | vorhanden |
+| 24-V-Eingang | in der Rückwand der rechten Hälfte: Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5); an der Buchse zweigt vor dem Schalter W18 zum 5-V-Wandler ab | gezeichnet |
+| Verteiler | Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm) links hinten neben dem Uno; Wago +24 V und GND (221-420) rechts hinten vor Buchse und Schalter; Wago +5 V und GND 5 V (221-415) senkrecht an der linken Endwand, gespeist vom 5-V-Wandler über W6 | gezeichnet; Wandler und drei Wago vorhanden, die zweite 221-415 neu |
 | Not-Aus | vorn am vorderen 2060 im eigenen Gehäuse ([notaus.md](notaus.md)); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, Gehäuse gezeichnet |
-| Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | auf dem [Pi-Halter](pi.md#halter) rechts neben dem Gehäuse, obere Nut des hinteren 2060, unter einer [Haube](pi.md#haube); hängt vor Schalter und Not-Aus an der Buchse und versorgt über USB den Uno | Halter und Haube gezeichnet |
+| Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | Pi senkrecht an der Fugenwand der linken Hälfte, der Wandler rechts vorn ([pi.md](pi.md#im-elektronikfach)); hängt vor Schalter und Not-Aus an der Buchse und versorgt über USB den Uno | gezeichnet |
 
-Das Gehäuse hängt an der **Rückseite des hinteren 2060** (untere und obere
-Nut) mit 4 × M5 in Hammermuttern, wie die übrigen Halter — der Tisch trägt
-nichts, die Maschine steht weiter nur auf den 2060.
+Das Fach hängt an der **Rückseite des hinteren 2060** mit 6 × M5 in
+Hammermuttern (je Ohr 2 in der unteren und oberen Nut, innen je 1 in der
+oberen), wie die übrigen Halter — der Tisch trägt nichts, die Maschine
+steht weiter nur auf den 2060.
 
-## Gehäuse (Elektronik.py)
+## Elektronikfach
 
-![Elektronik-Gehäuse von oben](elektronik-box.svg)
+![Elektronikfach von oben, Rückwand und Fugenwand](elektronikfach.svg)
 
-| Teil | Druck (PETG) | Masse (voll) | Bauraum |
-|---|---|---|---|
-| Gehäuse mit Montageplatte (Rev. 4) | auf dem Boden stehend | 150 cm³ ≈ 190 g | 202 × 107 × 55 mm |
-| Deckel als Haube (Rev. 3) | Oberseite nach unten | 75 cm³ ≈ 96 g | 175 × 91 × 30,5 mm |
-| Bohrlehre_Uno (PLA, ausgeblendet) | flach | 7 cm³ ≈ 9 g | 53 × 69 × 2 mm |
+`fusion/Elektronikfach/Elektronikfach.py`, Rev. 1. Vier Druckteile aus
+PETG, jedes höchstens 250 mm (Bambu Lab A1):
 
-Die Massen sind aus den Schritten des Skripts nachgerechnet (Raster,
-0,2 mm); maßgeblich ist der erste Lauf in Fusion. Der Kasten war mit
-Rev. 2 gedruckt. Rev. 3 hat den Deckel zur [Haube](#deckel-als-haube-rev-3)
-gemacht. Rev. 4 gibt dem Kasten ein rundes Loch für den Schalter, dafür
-wird er neu gedruckt; sonst ist er gleich geblieben, die Haube passt.
-Fertige STL in Drucklage: [`stl/Elektronik_Gehaeuse_r4.stl`](../stl/Elektronik_Gehaeuse_r4.stl)
-und [`stl/Elektronik_Deckel_r4.stl`](../stl/Elektronik_Deckel_r4.stl)
-(`python3 tools/stl_export.py`, braucht `pip install manifold3d`). Keine Stützen,
-4 Wandlinien, ≥ 30 % Infill. Die Oberkante des USB-Fensters ist eine
-48-mm-Brücke.
+| Teil | Druck | Bauraum |
+|---|---|---|
+| Fach_links: Kasten links mit Ohr | auf dem Boden stehend | 245,4 × 107 × 77 mm |
+| Fach_rechts: Kasten rechts mit Ohr | auf dem Boden stehend | 243 × 107 × 77 mm |
+| Deckel_links, mit dem Lüfter | Oberseite aufs Bett | 222 × 107 × 5,5 mm |
+| Deckel_rechts, mit Lüftungsschlitzen | Oberseite aufs Bett | 222 × 107 × 5,5 mm |
 
-**Aufbau:** Kasten 160 × 91 × 44 mm, 16 mm hinter dem 2060. Die
-Montageplatte liegt am 2060 an und trägt den Kasten über den Kanalboden und
-drei niedrige Rippen; der Spalt dazwischen (11 mm) ist der **Kabelkanal**
-nach rechts. Links im Kasten der Uno auf vier Stehbolzen, die Buchsenkante
-hinten am **USB-Fenster**, dort steckt W17 vom Pi. Rechts der Verteiler:
-hinten **Einbaubuchse** und **Schalter**, davor der **Wandler** (12 V / 5 A,
-43 × 24 × 20 mm) quer,
-mittig vor dem Schalter, mit zwei Kabelbindern 15 mm neben seiner Mitte —
-sie laufen durch Schlitze im Boden, zwischen Buchse und Schalter bzw.
-rechts am Schalter vorbei, und liegen 4 mm innerhalb seiner Enden. Links
-und rechts vom Wandler bleiben 22,5 bzw. 28,5 mm für die Drähte. Davor die
-drei **Wago-Klemmen** nebeneinander (Klebeband), von links: **+5 V**
-(221-420, neben dem Uno), **GND** (221-420), **+24 V** (221-415, beim
-Schalter); zusammen 89,8 mm auf 92 mm Platz. Kabelausschnitte oben offen:
-links zur Y-Kette und zum linken Y-Motor, vorn in den Kanal.
-Lüftungsschlitze rechts oben. Der Deckel ist seit Rev. 3 eine **Haube**:
-Er sitzt mit einer Lippe innen an den Wänden und 4 × M3 in Domen außen an
-den Seitenwänden, seine Platte liegt aber 25 mm höher. Der **Lüfter** steht
-obenauf über der Mitte des Uno und bläst auf die Treiber.
+Fertige STL in Drucklage: `stl/Elektronikfach_Fach_links_r1.stl`,
+`_Fach_rechts_r1`, `_Deckel_links_r1`, `_Deckel_rechts_r1`
+(`python3 tools/stl_export.py Elektronikfach`, braucht
+`pip install manifold3d`). Keine Stützen: Die Fenster haben ein
+45°-Dach, waagerechte Löcher sind Tränen, die Dome haben eine
+45°-Stütze, die Stehbolzen des Pi sind Tränen mit der Spitze unten.
 
-**Warum es passt:** Der Kasten bleibt im Fach. Haube und Lüfter ragen
-darüber hinaus, bis 26 mm über die Oberkante des Fachs. Sie stehen aber
-16 mm hinter dem 2060 und in der Mitte, dort fährt nichts so tief
-herunter. `tools/elektronik_check.py` fährt Portal und Toolhead über den
-ganzen Weg dagegen. Die engste Stelle ist 22,7 mm (Montageplatte ↔
-Trägerplatte, Portal am hinteren Schienenende). Die Haube bleibt 24,5 mm
-vom hinteren linken Klemmturm weg.
+**Aufbau:** Der Kasten ist 444 × 107 × 77 mm (ohne die Ohren), seine
+Montageplatte (5 mm) liegt an der Rückseite des hinteren 2060. Die zwei
+Hälften stoßen in der Mitte mit je einer Fugenwand aneinander: 4 × M3×12
+mit Mutter, 2 Rauten-Zapfen richten sie aus. Die Kabel laufen nach Art
+getrennt in zwei Gassen längs des Fachs: die **Signalgasse** vorn an der
+Montageplatte (20 mm breit: Lichtschranken, 5 V, Wächter), die
+**Leistungsgasse** hinten an der Rückwand (16,5–18 mm: 24 V, 12 V zum
+Laser, Motoren). Leitwände, 18 mm hoch, trennen sie von den Geräten.
+Ösen am Boden nehmen Kabelbinder 2,5 mm auf; die erste hinter jedem
+Fenster ist die Zugentlastung. Jede Gasse hat ein Fenster in beiden
+Endwänden und eins in der Fuge.
 
-### Deckel als Haube (Rev. 3)
+* **Links:** der Uno mit Shield auf vier Stehbolzen (4 × M3×8
+  selbstschneidend, vor dem Shield), die Endschalter-Stifte links, USB
+  rechts zum Pi. Darüber im linken Deckel der 24-V-Lüfter (4 × M3×16 mit
+  Mutter, bläst nach unten). Hinten neben dem Uno der 12-V-Wandler,
+  Ausgang nach links, zwei Kabelbinder durch den Boden. Senkrecht an der
+  linken Endwand über dem Fenster Leistung die Wago +5 V und GND 5 V
+  (Klebeband, Drähte von unten, Hebel nach innen). An der Fugenwand
+  senkrecht der Pi ([pi.md](pi.md#im-elektronikfach)).
+* **Rechts:** vorn der 5-V-Wandler mit einem USB-A-Adapter mit
+  Schraubklemmen `[?]` in seiner Buchse (W6 an die Wago +5 V), zwei
+  Kabelbinder durch den Boden. Hinten die Wago +24 V und GND (Klebeband,
+  Drähte von vorn, Hebel oben), dahinter in der Rückwand Einbaubuchse und
+  Schalter. Platz für ein Air-Assist-Modul bis 50 × 25 mm an der Fuge,
+  dahinter ein Durchbruch Ø12 in der Rückwand mit 0,6 mm Haut zum
+  Ausbrechen.
+* **Deckel:** je Hälfte einer, mit einer Lippe innen an den Wänden und
+  4 × M3×8 in Messing-Einsätzen M3 der Dome. Der Lüfter hängt über einen
+  Dupont-Stecker an W5, damit der linke Deckel abgeht. Dazu
+  Lüftungsschlitze oben in der Rückwand.
 
-Der flache Deckel von Rev. 2 lag 8 mm über den Kühlkörpern, das war zu
-flach (Angabe 2026-10-08). Der Kasten war schon gedruckt und blieb, wie
-er war. `elektronik_check.py` prüft das Maß für Maß gegen Rev. 2, bis auf
-das Schalterloch aus Rev. 4. Neu gedruckt wurde nur der Deckel:
+Höhen über der Unterkante: Boden 2,5, Uno 7,5, Treiber oben 35,5, Pi
+39–69, Rand 77, Deckel 79,5, Lüfter 89,5 mm.
 
-| | |
-|---|---|
-| Wände | 2,5 mm, stehen auf den Wänden des Kastens und heben die Platte um **25 mm** (`deckel_aufbau`). Unter der Platte sind es jetzt **33 mm** bis zu den Kühlkörpern statt 8 |
-| Lippe | wie bisher innen an den Wänden des Kastens, 3 mm tief, 0,3 mm Spiel. Ein Ring innen am Fuß der Haube trägt sie |
-| Schrauben | dieselben **4 × M3×8** in die Einsätze der Dome. Über jedem Dom steht eine Säule (Ø11) mit einem Kanal (Ø6,5) von oben, unten bleibt ein 3 mm Boden. Kopf und Inbus 2,5 gehen durch den Kanal bis auf diesen Boden, die Schraube greift 5 mm in den Einsatz |
-| Lüfter | oben auf der Platte über der Mitte des Uno, wie bisher 4 × M3×16 mit Mutter |
-| Druck | Oberseite aufs Bett, 30,5 mm hoch, keine Stützen. Die Böden über den Domen sind kurze Brücken über den Kanal. Fertig in Drucklage: [`stl/Elektronik_Deckel_r4.stl`](../stl/Elektronik_Deckel_r4.stl), seit Rev. 3 unverändert |
-
-Höher ginge es bis etwa **65 mm** (`deckel_aufbau`), dann käme das
-Portalrohr am hinteren Schienenende bis auf 3 mm an die Haube. Mit
-`deckel_aufbau = 0` baut das Skript wieder den flachen Deckel.
+**Warum es passt:** Außen bleibt das Fach 55 mm hoch, bis 3 mm unter die
+2040. Darüber ragen nur Kasten, Deckel und Lüfter, und nur in der Mitte
+(|X| ≤ 225 mm), wo nichts so tief herunterfährt. Die Ohren liegen unter
+den 2040. `tools/elektronik_check.py` fährt Portal und Toolhead über den
+ganzen Weg dagegen; zum hinteren linken Klemmturm bleiben 15 mm.
 
 **Montage:**
 
-1. **Bohrlehre_Uno** drucken und den Uno darauflegen: Alle vier Löcher
-   müssen fluchten. Erst dann das Gehäuse drucken.
-2. 4 Messing-Einsätze M3 von oben in die Dome.
-3. Uno mit 4 × M3×8 auf die Stehbolzen (Kernloch 2,8, die Schraube schneidet
-   ihr Gewinde) — **bevor das Shield aufgesteckt wird**, danach liegt es über
-   den Schrauben.
-4. Shield aufstecken, Treiber (EN-Pin zum EN-Aufdruck), Jumper.
-5. Einbaubuchse (Mutter innen) und Schalter (rastet ein) hinten einsetzen.
-6. Wandler mit 2 Kabelbindern 2,5 × 200 (die Schlaufe um Boden und Wandler
-   ist 105 mm lang), Wago-Klemmen mit Klebeband; verdrahten nach
-   [verkabelung.md](verkabelung.md#schritt-für-schritt). Den Wandler
+1. Die ausgeblendeten Bohrlehren (Uno, Pi, Fuge) drucken und Uno und Pi
+   darauflegen: Alle Löcher müssen fluchten. Erst dann das Fach drucken.
+2. 8 Messing-Einsätze M3 in die Dome einschmelzen.
+3. Die Hälften mit 4 × M3×12 und Muttern verbinden, die Zapfen richten
+   sie aus.
+4. Leer an die Rückseite des hinteren 2060: 6 Hammermuttern, je Ohr
+   2 × M5×12 (untere und obere Nut), innen je 1 × M5×12 (obere Nut). Der
+   Inbus kommt nur von hinten dran, also vor dem Bestücken anziehen.
+5. Bestücken und verdrahten nach
+   [verkabelung.md](verkabelung.md#schritt-für-schritt): Uno vor dem
+   Shield, Wandler, Wago, Buchse und Schalter, Pi. Den 12-V-Wandler
    **ohne Laser** auf 12,0 V stellen.
-7. 4 Hammermuttern in die untere und obere Nut der Rückseite des hinteren
-   2060, Gehäuse ansetzen, 4 × M5×12. Der Inbus kommt von hinten neben dem
-   Kasten vorbei.
-8. Kabel links durch den Ausschnitt; die für rechts vorn in den Kanal und
-   darin nach rechts.
-9. Lüfter mit 4 × M3×16 und Muttern auf die Haube, **blasend nach unten**
-   (Pfeil am Lüfterrahmen), Kabel durch die Öffnung. Haube aufsetzen, die
-   Lippe innen an den Wänden, 4 × M3×8 von oben durch die Kanäle der
-   Säulen. Dafür einen langen Inbus 2,5 nehmen, der Kanal ist 25 mm tief.
+6. Lüfter mit 4 × M3×16 und Muttern auf den linken Deckel, **blasend nach
+   unten** (Pfeil am Lüfterrahmen), Stecker an W5. Deckel aufsetzen,
+   4 × M3×8 je Seite.
 
 **Gemessen `[v]` (2026-09-27):** die Höhe von Uno, Shield und Treibern mit
-Kühlkörper, **28 mm** ab Unterseite Uno (bis Rev. 1 mit 34 mm angenommen) —
-der Kasten endet 8 mm darüber und ist dadurch 6 mm niedriger (die Platte
-der Haube liegt seit Rev. 3 33 mm darüber); das
-Lochbild des Uno stimmt mit der Bohrlehre; der Wandler, 43 × 24 × 20 mm.
+Kühlkörper, **28 mm** ab Unterseite Uno; das Lochbild des Uno stimmt mit
+der Bohrlehre; der Wandler, 43 × 24 × 20 mm.
 
-**Schalter (Rev. 4):** rund, die Blende außen **22,5 mm** `[v]` (Angabe
-2026-10-09; bis Rev. 3 war ein eckiger KCD1 mit 19,2 × 12,9 angenommen).
-Das Einbauloch ist **Ø20,2** angenommen `[?]`, bei dieser Blende üblich
-20 mm. Die Wand ist um das Loch innen auf 1,6 mm verdünnt, damit die
-Rastnasen greifen. Oben endet das Loch mit zwei 45°-Flanken 0,6 mm über
-dem Kreis flach. So druckt es in der senkrechten Wand ohne Überhang, und
-die Blende deckt die Kappe. Miss vor dem Druck den Körper des Schalters:
-Ist er dicker als 20 mm, `schalter_d` anpassen.
+**Schalter:** rund, die Blende außen **22,5 mm** `[v]` (Angabe
+2026-10-09). Das Einbauloch ist **Ø20,2** angenommen `[?]`, bei dieser
+Blende üblich 20 mm. Die Rückwand ist um das Loch innen auf 1,6 mm
+verdünnt, damit die Rastnasen greifen. Oben endet das Loch 0,6 mm über dem
+Kreis flach. So druckt es in der senkrechten Wand ohne Überhang, und die
+Blende deckt die Kappe. Miss vor dem Druck den Körper des Schalters: Ist
+er dicker als 20 mm, `schalter_d` anpassen.
 
-**Nicht gemessen `[w]`:** die Einbaubuchse (Loch 8,2 für M8) und die
-Wago-Klemmen nach Datenblatt: 221-415 30,2 × 18,8 × 8,6 mm, 221-420
-(10 Leiter, zwei Reihen) 29,8 × 18,3 × 15,8 mm (Breite × Tiefe × Höhe, je
-die größere Händlerangabe).
+**Nicht gemessen `[w]`/`[?]`:** die Einbaubuchse (Loch 8,2 für M8), der
+USB-A-Adapter, die Stecker, das Lochbild des Pi und die Wago-Klemmen nach
+Datenblatt: 221-415 30,2 × 18,8 × 8,6 mm, 221-420 (10 Leiter, zwei Reihen)
+29,8 × 18,3 × 15,8 mm (Breite × Tiefe × Höhe, je die größere
+Händlerangabe).
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
-| `geh_x0` | −205 mm | linke Außenkante des Kastens |
-| `geh_abstand` | 11 mm | Kabelkanal zwischen Montageplatte und Kasten |
-| `stapel_h` / `luft_luefter` | 28 `[v]` / 8 mm | Höhe Uno + Shield + Treiber, Luft bis zur Oberkante des Kastens — bestimmen die Kastenhöhe (gedruckt, nicht mehr ändern) |
-| `deckel_aufbau` | 25 mm | Haube: so viel höher liegt die Platte mit dem Lüfter; bis etwa 65 mm möglich, 0 = flacher Deckel |
-| `haube_dom_d` / `haube_kanal_d` / `haube_boden` | 11 / 6,5 / 3 mm | Säulen über den Domen, Kanal für Kopf und Inbus, Boden unter dem Kopf |
-| `vert_b` | 94 mm | Breite des Verteilers (3 Wago nebeneinander) |
-| `wandler_l` / `_b` / `_h` | 43 / 24 / 20 mm `[v]` | Wandler; `wandler_binder` 15 mm: Kabelbinder neben seiner Mitte |
-| `buchse_d` | 8,2 mm | Loch der Einbaubuchse |
-| `schalter_d` / `schalter_blende_d` / `schalter_wand` | 20,2 `[?]` / 22,5 `[v]` / 1,6 mm | runder Wippschalter: Einbauloch, Blende außen, Wand am Loch; `schalter_kappe` 0,6 mm: flache Kappe oben |
-| `uno_schraube_d` | 2,8 mm | Kernloch in den Stehbolzen |
+| `geh_x1` / `geh_h` | 222 / 77 mm | halbe Breite und Höhe des Kastens |
+| `gasse_vorn` / `gasse_hinten_r` / `leitwand_h` | 20 / 16,5 / 18 mm | Signalgasse, Leistungsgasse rechts, Höhe der Leitwände |
+| `fenster_pow_l` / `fenster_pow_r` | 22 / 30 mm | Breite der Fenster Leistung links (darüber die 5-V-Klemmen) und rechts |
+| `stapel_h` | 28 mm `[v]` | Höhe Uno + Shield + Treiber |
+| `w12_x0` / `w5_x0` | −108 / 60 mm | Ausgangskante des 12-V-Wandlers, Kante des 5-V-Wandlers mit der USB-A-Buchse |
+| `wago24_x0` | 133 mm | linke Kante der Wago 24 V |
+| `buchse_x` / `buchse_d` | 145 / 8,2 mm | Einbaubuchse: Mitte, Loch |
+| `schalter_x` / `schalter_d` / `schalter_blende_d` / `schalter_wand` | 180 / 20,2 `[?]` / 22,5 `[v]` / 1,6 mm | runder Wippschalter: Mitte, Einbauloch, Blende außen, Wand am Loch |
+| `m5_innen_x` | 70 mm | innere M5 in der oberen Nut, so weit von der Mitte |
 
 ## Leistung: Reichen 72 W?
 
@@ -231,7 +219,8 @@ und Y auch, bräuchte aber 6–36 V und einen Optokoppler.
 **Y rechts, weil links die Y-Kette läuft:** Die Fahne hinge außen neben dem
 Schlitten, genau dort, wo links die Kette neben dem 2040 liegt, und der
 obere Trum der Kette liegt über ihr. Rechts ist die Seite frei. Das Kabel
-läuft mit dem des rechten Y-Motors an der Rückseite des 2060 entlang.
+verlässt das Elektronikfach rechts und läuft in der unteren Nut außen am
+rechten 2040 nach hinten.
 
 **X links, vor dem Rohr:** Am linken Wegende steht der X-Motor 3 mm neben
 der Trägerplatte, und der X-Riemen läuft vom Ritzel zum Riemenhalter. Die
@@ -265,24 +254,21 @@ sie nach [verkabelung.md](verkabelung.md#4-5-v-und-lichtschranken-w6-w9w11).
 rechts vier), in der oberen Nut des Portalrohrs mit Nutabdeckungen oder
 Clips:
 
-* links aus dem Gehäuse, unter dem linken 2040 durch an die **untere Nut
+* links aus dem Elektronikfach (Fenster der linken Endwand), unter dem
+  linken 2040 durch an die **untere Nut
   außen am linken 2040** — dort entlang zum linken Y-Motor (an den drei
   Trägern der Wanne Y in den Kabelhaltern unter ihrer Wand durch) und bis
   hinter die Wanne Y, dort hinein zum Festpunkt der Y-Kette;
 * auf dem linken Y-Schlitten vom Kettenhalter Y hinter Stirnblock und
   Rückwand nach innen, in die **obere Nut des Portalrohrs** und darin zum
   Kabelflügel am Festpunkt der X-Kette; das fährt alles mit dem Portal;
-* vorn aus dem Gehäuse in den Kabelkanal, darin nach rechts, dann an der
-  **Rückseite des hinteren 2060** (mittlere Nut) zum rechten 2040 und in
-  dessen unterer Nut außen nach vorn zum rechten Y-Motor bzw. nach hinten
-  zum Y-Endschalter; das Kabel zum Not-Aus ebenso nach vorn. W18 (24 V zum
-  Pi) verlässt die Nut unter dem [Pi-Halter](pi.md#halter) und läuft von
-  unten in seine Haube zum 5-V-Wandler.
-* hinten aus dem Gehäuse nur das USB-Kabel W17: aus dem USB-Fenster hinter
-  dem Kasten nach rechts, an seiner rechten Wand nach vorn und von unten in
-  die Haube des Pi-Halters. W19 (5 V vom Wandler in den Pi) bleibt am
-  Pi-Halter: aus dem USB-A-Stecker nach unten und in einem Bogen von unten
-  in PWR IN.
+* rechts aus dem Elektronikfach (Fenster der rechten Endwand), unter dem
+  rechten 2040 durch in dessen **untere Nut außen**: nach vorn zum rechten
+  Y-Motor und zum Not-Aus, nach hinten zum Y-Endschalter.
+* im Fach bleiben die Leitungen zum Pi und zum 5-V-Wandler (W17–W19) und
+  alles zwischen Buchse, Wago, Wandlern und Shield. Welche Leitung durch
+  welches Fenster geht, zeigt das Bild in
+  [verkabelung.md](verkabelung.md#schritt-für-schritt).
 * Vorn belegt der [Y-Motorhalter](y-motorhalter.md) die letzten 30 mm der
   unteren Nuten beider Seitenflächen (Nutensteine), dahinter sitzen am
   vorderen 2060 die Winkel, die die 2040 halten. Das Motorkabel verlässt die
@@ -319,7 +305,7 @@ gibt sie auch beim Zeichnen aus.
 In den Ketten nur **Einzellitzen aus Silikon**, keine Mantelleitungen,
 kein Massivdraht und keine starren Flachbandkabel: Für Mantelleitungen ist
 R 20 zu eng ([energiekette.md](energiekette.md#litzen-in-der-kette)). Die üblichen 1-m-Motorkabel
-reichen also nur links und für X. Der Laser bekommt ein eigenes 3-adriges
+reichen also nur für den linken Y-Motor. Der Laser bekommt ein eigenes 3-adriges
 Kabel mit XH-Stecker ([Einkaufsliste](#einkaufsliste-vorschlag)).
 
 ### Litzen
@@ -328,20 +314,20 @@ Kupfer, feindrähtig. Der Querschnitt folgt aus Strom und Länge und aus dem,
 was Stecker und Klemmen nehmen `[w]`: XH-Crimpkontakt 0,08–0,34 mm²
 (AWG 28–22), PH 0,05–0,22 mm² (AWG 30–24), Dupont AWG 28–22, Wago 221
 feindrähtig 0,14–4 mm². Gerechnet in `tools/elektronik_zeichnen.py`, geprüft
-in `tools/elektronik_check.py` (Abschnitt 14), jeweils am längsten Weg:
+in `tools/elektronik_check.py` (Abschnitt 15), jeweils am längsten Weg:
 
 | Leitung | Strom | Litze | warum |
 |---|---|---|---|
-| 24 V: Buchse → Schalter → Not-Aus → Wago +24 V, Buchse − → Wago GND, Wago → Shield und Wandler | bis 3 A (Netzteil) | **0,75 mm² (AWG 18)**, rot und schwarz | belastbar 6 A (VDE 0298-4, flexible Leitung); 0,5 mm² hätte genau die 3 A. Not-Aus 1,5 m hin und zurück: 0,21 V bei 3 A |
-| 24 V zum Pi (W18): Buchse → 5-V-Wandler | 0,19 A, bei einem Kurzschluss im Wandler bis 3 A | **2 × 0,75 mm²**, rot und schwarz | wie die 24-V-Leitung, weil sie vor Schalter und Not-Aus hängt: Das Netzteil begrenzt erst bei 3 A. 0,5 m: 0,004 V |
-| 5 V und USB (W19, W17) | W19 0,76 A (alles an 5 V), W17 0,15 A (Uno, Treiberlogik, Lichtschranken) | fertige USB-Kabel; W19 mit Stromadern AWG 24 | W19 0,25 m: 0,03 V mit AWG 24, 0,08 V mit dünnen AWG 28, am Pi bleiben 4,92 V; unter ≈ 4,63 V meldet er Unterspannung `[w]`. W17 1 m: 0,07 V mit AWG 28 |
+| 24 V: Buchse → Schalter → Not-Aus → Wago +24 V, Buchse − → Wago GND, Wago → Shield und Wandler | bis 3 A (Netzteil) | **0,75 mm² (AWG 18)**, rot und schwarz | belastbar 6 A (VDE 0298-4, flexible Leitung); 0,5 mm² hätte genau die 3 A. Not-Aus 1 m hin und zurück: 0,14 V bei 3 A |
+| 24 V zum 5-V-Wandler (W18): Buchse → Wandler | 0,19 A, bei einem Kurzschluss im Wandler bis 3 A | **0,75 mm²**, rot und schwarz | wie die 24-V-Leitung, weil sie vor Schalter und Not-Aus hängt: Das Netzteil begrenzt erst bei 3 A. 0,2 m: unter 0,01 V |
+| 5 V (W6, W19) und USB (W17) | W6 0,76 A (alles an 5 V), W19 0,68 A (Pi, über ihn Uno und Treiberlogik), W17 0,08 A (Uno, Treiberlogik) | W6 **0,75 mm²**; W19 fertiges Micro-USB-Kabel mit Stromadern mindestens AWG 24; W17 fertiges USB-Kabel | W6 0,33 m: 0,01 V. W6 + W19 mit AWG 24: 0,07 V; mit AWG 28 blieben am Pi 4,84 V, unter ≈ 4,63 V meldet er Unterspannung `[w]`, und die Wago hält AWG 28 nicht sicher. W17 0,25 m: 0,01 V mit AWG 28 |
 | Laser: +12 V, GND, PWM | 1,8 A | **3 × 0,34 mm² (AWG 22)** | dicker passt nicht in den XH-Kontakt am Laser; 2 m: 0,37 V = 3 % von 12 V |
 | Motoren | 1,05 A je Spule | **4 × AWG 24 (0,2 mm²)** | dicker passt nicht in den PH-Kontakt am Motor; Z-Motor, 2 m: 0,35 Ω = 15 % der Wicklung. Fertige Motorkabel mit AWG 26 gehen auch (24 %) |
 | Endschalter: 5 V, GND, Signal | ≈ 20 mA | **3 × 0,25 mm² (AWG 24)** | 0,14 mm² ist das Minimum der Wago (AWG 26 hat nur 0,13); in den Dupont-Kontakt passen bis 0,34 |
-| Lüfter | < 0,1 A | seine eigene Anschlusslitze | |
+| Lüfter | < 0,1 A | seine eigene Litze, über einen Dupont-Stecker verlängert mit W5 (0,25 mm²) | |
 
-* In Schraubklemmen (Shield, Wandler, Not-Aus) mit **Aderendhülse**, in die
-  Wago ohne.
+* In Schraubklemmen (Shield, Wandler, USB-A-Adapter) mit **Aderendhülse**,
+  in die Wago ohne.
 * In den Ketten nur Einzellitzen aus Silikon, die Motorkabel nur als lose
   Adern ohne Schlauch. Die gedruckten Ketten biegen mit R 20, dafür sind
   Mantelleitungen zu steif.
@@ -366,21 +352,25 @@ Die 24 V teilen sich an der Einbaubuchse in zwei Zweige:
 
 ```
 Netzteil ── Buchse ─┬─ W1 ── Schalter ── W2 ── Not-Aus ── W2 ── Wago +24 V: Shield, Wandler 12 V, Lüfter
-                    └─ W18 ── 5-V-Wandler ── W19 ── Pi ── W17 (USB) ── Uno ── Wago +5 V: Lichtschranken
+                    └─ W18 ── 5-V-Wandler ── W6 ── Wago +5 V ─┬─ W19 ── Pi ── W17 (USB) ── Uno
+                                                              └─ W9–W11: Lichtschranken
 ```
 
 * **Zweig mit Schalter und Not-Aus:** Shield (Motoren), Abwärtswandler
   12 V (Laser) und Lüfter. Fehlen hier die 24 V, meldet der 24-V-Wächter
   (W16) das an GRBL, und GRBL bricht ab.
 * **Zweig zum Pi:** W18 ist an der Buchse angelötet, **vor** Schalter und
-  Not-Aus. Der 5-V-Wandler auf dem [Pi-Halter](pi.md#halter) gibt über W19
-  5 V in **PWR IN** des Pi. Über W17 an der Buchse **USB** bekommt der Uno
-  Daten und 5 V. Über seinen 5-V-Stift versorgt der Uno die Wago +5 V und
-  damit die Lichtschranken. Pi und Uno laufen also, sobald das Netzteil
-  steckt. Einschalten heißt: Netzteil einstecken, dann den Schalter
+  Not-Aus. Der 5-V-Wandler im Fach gibt seine 5 V über den USB-A-Adapter
+  und W6 an die Wago +5 V. Von dort gehen W19 in **PWR IN** des Pi und die
+  drei Lichtschranken ab. Über W17 an der Buchse **USB** bekommt der Uno
+  Daten und 5 V vom Pi; der Stift 5V am Shield bleibt frei. Pi und Uno
+  laufen also, sobald das Netzteil steckt. Einschalten heißt: Netzteil einstecken, dann den Schalter
   ([pi.md, Strom](pi.md#strom)).
-* **Masse:** Buchse − an die Wago GND, dazu IN− des 5-V-Wandlers (W18) und
-  über USB der Pi. Pi, Uno und Shield haben so dieselbe Masse.
+* **Masse:** Buchse − an die Wago GND (W1) und an IN− des 5-V-Wandlers
+  (W18). Dessen USB-Masse geht über W6 an die Wago GND 5 V, an der
+  Lichtschranken und Pi hängen (gemeinsame Masse im Wandler `[w]`,
+  [noch offen](verkabelung.md#noch-offen)); über W3 hängt das Shield, über
+  USB der Uno daran. Alle haben so dieselbe Masse.
 
 Zu den Teilen:
 
@@ -395,7 +385,8 @@ Zu den Teilen:
   gibt bei jedem der drei höchstens 1,05 A. Rechnung und Vorgehen in
   [hardware-notizen.md](hardware-notizen.md#treiber-und-versorgung).
 * **5-V-Wandler:** 24 → 5 V, 63 × 30 mm `[v]`, mindestens 3 A, Eingang
-  mit Schraubklemmen, Ausgang USB-A. Er liefert höchstens 0,76 A und ist
+  mit Schraubklemmen, Ausgang USB-A, darin ein Adapter mit Schraubklemmen
+  `[?]`. Er liefert höchstens 0,76 A und ist
   damit zu einem Viertel belastet.
 * **Sicherung:** braucht es nicht, auch nicht im Zweig zum Pi. Das Netzteil
   begrenzt den Strom selbst.
@@ -405,18 +396,20 @@ Zu den Teilen:
 | Menge | Teil | wofür |
 |---|---|---|
 | 1 | Abwärtswandler 24 → 12 V / 5 A, 43 × 24 × 20 mm | vorhanden |
-| 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Gehäuse: Loch 8,2) | 24-V-Eingang |
+| 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Fach: Loch 8,2) | 24-V-Eingang |
 | 1 | Wippschalter rund (Blende Ø22,5, Einbauloch Ø20), ≥ 3 A | EIN/AUS |
 | 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
 | 2 | Energiekette, gedruckt: Anfangsstück und Endstück 180, 17 Glieder für X, 16 für Y (gleiche Größe) | X und Y; Wannen, Stützen, Träger und Halter: [energiekette.md](energiekette.md#verschraubung) |
-| 1 + 2 | Wago 221-415 (+24 V), 221-420 (GND, +5 V); 221-413 Reserve | vorhanden |
+| 2 + 2 | Wago 221-420 (+24 V, GND), 221-415 (+5 V, GND 5 V); 221-413 Reserve | vorhanden bis auf die zweite 221-415 |
 | — | Not-Aus, Kabel, Litzen, Stecker, Aderendhülsen, Pull-down | [verkabelung.md](verkabelung.md#material-und-werkzeug) |
-| 4 + 4 | M5×12 + Hammermutter M5 (Nut 6) | Gehäuse → Rückseite des 2060 |
-| 4 + 4 | M3×8 + Messing-Einsatz M3 Ø5 | Deckel |
+| 4 | Elektronikfach, PETG: `stl/Elektronikfach_*_r1.stl` | [Elektronikfach](#elektronikfach) |
+| 6 + 6 | M5×12 + Hammermutter M5 (Nut 6) | Fach → Rückseite des 2060 |
+| 4 + 4 | M3×12 + M3-Mutter | Fuge zwischen den Hälften |
+| 8 + 8 | M3×8 + Messing-Einsatz M3 Ø5 | Deckel (je 4) |
 | 4 | M3×8 | Uno → Stehbolzen |
 | 4 + 4 | M3×16 + M3-Mutter | Lüfter → Deckel |
-| 2 | Kabelbinder 2,5 × 200 (2,5 × 100 ist zu kurz), doppelseitiges Klebeband | Wandler, Wago |
-| 1 | Pi Zero 2 W, 5-V-Wandler, USB-Kabel, Pi-Halter mit Haube, Schrauben und Einsätze | ohne PC: [pi.md](pi.md#teile) |
+| 4 | Kabelbinder 2,5 × 200 (2,5 × 100 ist zu kurz), doppelseitiges Klebeband | beide Wandler, Wago |
+| 1 | Pi Zero 2 W, 5-V-Wandler mit USB-A-Adapter, USB-Kabel, 4 × M2.5×6 | ohne PC: [pi.md](pi.md#teile) |
 
 ## Was noch fehlt
 
@@ -442,7 +435,7 @@ Zu den Teilen:
 5. **Verkabelung:** drei Dinge, die sich erst beim Anschließen zeigen
    ([verkabelung.md](verkabelung.md#noch-offen)).
 6. **Pi:** Lochbild und Buchsen des Pi sind nach dem Maßblatt gezeichnet,
-   vor dem Druck den Pi auf die Zeichnung legen
+   vor dem Druck den Pi auf die Bohrlehre legen
    ([pi.md](pi.md#noch-offen)).
 
 Geklärt (2026-09-25/26): Netzteil ist das Steckernetzteil 24 V / 3 A mit

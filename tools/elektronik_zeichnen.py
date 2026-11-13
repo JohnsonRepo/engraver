@@ -476,6 +476,14 @@ def kabelwege(w, L, TL, K):
     shield24 = ([w24, (w24[0], yh['rechts'], zk)]
                 + gasse_hinten(w24[0], klemme24[0])[1:]
                 + [(klemme24[0], klemme24[1], zk), klemme24])
+    # 24 V und GND fuer den 12-V-Wandler (W4): er sitzt links, der Eingang
+    # auf seiner rechten Seite; aus der Wago GND (der weiteren der beiden)
+    # durch die Leistungsgasse und die Fuge
+    wgnd, xin = wago['GND'], EL['w12_x'][1]
+    wy12 = sum(EL['w12_y']) / 2.0
+    wandler12 = ([wgnd, (wgnd[0], yh['rechts'], zk)]
+                 + gasse_hinten(wgnd[0], xin + 4.0)[1:]
+                 + [(xin + 4.0, wy12, zk), (xin, wy12, bz + 10.0)])
     fm = EL['luefter_mitte']
     luefter = ([(fm[0], fm[1], EL['luefter_z'][0]), (fm[0], fm[1], zs + 15.0),
                 (fm[0], yh['links'], zk)] + gasse_hinten(fm[0], w24[0])[1:]
@@ -503,6 +511,7 @@ def kabelwege(w, L, TL, K):
         'USB Pi–Uno': (laenge(usb), usb),
         '5 V vom Wandler': (laenge(fuenf), fuenf),
         'Shield 24 V': (laenge(shield24), shield24),
+        'Wandler 12 V': (laenge(wandler12), wandler12),
         'Lüfter': (laenge(luefter), luefter),
         'Wächter': (laenge(waechter), waechter),
     }

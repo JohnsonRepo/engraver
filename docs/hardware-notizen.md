@@ -417,15 +417,15 @@ Steckernetzteil 24 V / 3 A, Laser 12 V / 1,6 A über einen Abwärtswandler
 12 V / 5 A (43 × 24 × 20 mm). Vier NEMA 17 **Stepperonline 17HE15-1504S**
 (1,5 A) — genau die vier Treiberplätze des Shields. Pinbelegung
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
-Netzteil, Endschalter und Kabel hinkommen, und das Gehäuse
-(`fusion/Elektronik`): [elektronik.md](elektronik.md). Hohlstecker des
+Netzteil, Endschalter und Kabel hinkommen, und das Elektronikfach
+(`fusion/Elektronikfach`): [elektronik.md](elektronik.md). Hohlstecker des
 Netzteils: **5,5 × 2,1 mm** `[v]` Angabe; Lüfter 24 V. Not-Aus: Pilztaster
 „STOP“, rastet, Drehen löst, **ein Wechsler C/NO/NC** mit Lötfahnen `[v]`
 (Bild 2026-09-30), **3 A / 250 V**, Gewinde **16 mm** rund `[v]` Angabe —
 Gehäuse und Verdrahtung in [notaus.md](notaus.md). Abwärtswandler 24 → 5 V
 für den Pi: **63 × 30 mm**, höchstens 20 mm hoch, Schraubklemmen und
-USB-A-Buchse an den schmalen Seiten `[v]` Angabe (2026-10-10) — Halter in
-[pi.md](pi.md#halter).
+USB-A-Buchse an den schmalen Seiten `[v]` Angabe (2026-10-10) — Platz im
+Elektronikfach in [pi.md](pi.md#im-elektronikfach).
 
 | Steckplatz | Motor | Schritte/mm bei 1/16 |
 |---|---|---|

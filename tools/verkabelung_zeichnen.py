@@ -141,16 +141,24 @@ def plaetze_frei(wago):
 
 
 def ausgang(lt):
-    """(Seite, Fenster) fuer eine Leitung, die das Fach verlaesst, aus ihrem
-    Weg in der Kabelliste: 'links raus (Fenster Leistung)' -> ('links',
-    'Leistung'); 'wie W7 ...' wie W7. None: bleibt im Fach."""
+    """(Seite, [Fenster]) fuer eine Leitung, die das Fach verlaesst, aus
+    ihrem Weg in der Kabelliste: 'links raus (Fenster Leistung)' ->
+    ('links', ['Leistung']); nennt der Weg danach noch "durch das Fenster
+    Signal" (die PWM-Ader von W7), kommt es dazu. 'wie W7 ...' geht durch
+    das erste Fenster von W7. None: bleibt im Fach."""
     m = re.search(r'(links|rechts) raus \(Fenster (Leistung|Signal)\)',
                   lt['weg'])
     if m:
-        return m.group(1), m.group(2)
+        fenster = [m.group(2)]
+        for f in re.findall(r'durch das Fenster (Leistung|Signal)',
+                            lt['weg']):
+            if f not in fenster:
+                fenster.append(f)
+        return m.group(1), fenster
     m = re.match(r'wie (W\d+)', lt['weg'])
     if m:
-        return ausgang(LT[m.group(1)])
+        seite, fenster = ausgang(LT[m.group(1)])
+        return seite, fenster[:1]
     if ' raus' in lt['weg']:
         raise SystemExit('{}: Fenster im Weg nicht erkannt: {}'.format(
             lt['nr'], lt['weg']))
@@ -161,7 +169,8 @@ def aus_dem_fach(seite=None, fenster=None):
     """Nummern der Leitungen, die das Fach verlassen (wahlweise nur durch
     ein Fenster), in der Reihenfolge der Kabelliste."""
     return [lt['nr'] for lt in LTS if ausgang(lt) and
-            (seite is None or ausgang(lt) == (seite, fenster))]
+            (seite is None or (ausgang(lt)[0] == seite and
+                               fenster in ausgang(lt)[1]))]
 
 
 def laenge_text(lt, K):

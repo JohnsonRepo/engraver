@@ -224,9 +224,11 @@
 <text x="813.5" y="401.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W15</text>
 <polyline points="704.0,501.0 694.0,501.0 694.0,536.0" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="4 2" stroke-linejoin="round"/>
 <rect x="700.0" y="529.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
-<text x="712.0" y="540.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W9</text>
-<rect x="728.0" y="529.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
-<text x="743.5" y="540.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W11</text>
+<text x="712.0" y="540.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W7</text>
+<rect x="728.0" y="529.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="740.0" y="540.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W9</text>
+<rect x="756.0" y="529.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
+<text x="771.5" y="540.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W11</text>
 <polyline points="1148.0,429.0 1158.0,429.0 1158.0,397.0" fill="none" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="4 2" stroke-linejoin="round"/>
 <rect x="1093.0" y="390.0" width="24.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="1105.0" y="401.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W2</text>

@@ -37,6 +37,7 @@ docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ket
 docs/elektronik-anschluss.svg  Anschlussplan mit Kabelnummern W1–W17 und Kabelliste
 docs/elektronik-verkabelung.svg  Verkabelung Schritt für Schritt: jede Ader von Klemme zu Klemme
 docs/motoren-anschluss.svg     Motoren anschließen: Steckplätze am Shield, Adern je Achse
+docs/cnc-shield.svg            CNC Shield V3 von oben: alle Stiftleisten mit Uno-Pin und Belegung
 docs/verkabelung.md            Verkabelung: Kabelliste, Anschlussliste, Klemmen, Schritt für Schritt, Inbetriebnahme, GRBL
 docs/elektronik-box.svg        Elektronik-Gehäuse von oben: Uno, Lüfter, Verteiler, Kabelwege
 docs/endschalter.md            Endschalter X und Y: Halter, Fahnen, Montage, Einstellen, GRBL
@@ -67,6 +68,7 @@ tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellä
 tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
 tools/verkabelung_zeichnen.py  erzeugt das Bild „Verkabelung Schritt für Schritt“
 tools/motoren_zeichnen.py      erzeugt das Bild „Motoren anschließen“
+tools/shield_zeichnen.py       erzeugt die Skizze des CNC Shields mit allen Anschlüssen
 tools/verkabelung.py           Kabelliste — Quelle für Anleitung, Anschlussplan und Prüfung; schreibt die Tabellen in docs/verkabelung.md
 tools/elektronik_box_zeichnen.py erzeugt die Draufsicht auf das Elektronik-Gehäuse
 tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im Spalt, Freiraum über den ganzen Weg
@@ -169,7 +171,9 @@ Referenzfahrt, Laser, Not-Aus) mit den GRBL-Einstellungen. Neu gegenüber
 dem alten Plan: Pull-down 10 kΩ auf der Laser-PWM, 24-V-Wächter an
 Abort, Masse der Lichtschranken über die Wago. Dazu ein Bild, das jeden
 der acht Schritte für sich zeigt, jede Ader von Klemme zu Klemme in ihrer
-Farbe ([elektronik-verkabelung.svg](docs/elektronik-verkabelung.svg)).
+Farbe ([elektronik-verkabelung.svg](docs/elektronik-verkabelung.svg)),
+und eine Skizze des Shields mit allen Stiftleisten, Uno-Pins und
+Belegung ([cnc-shield.svg](docs/cnc-shield.svg)).
 Details in [docs/verkabelung.md](docs/verkabelung.md).
 
 ### Not-Aus (neu)
@@ -289,6 +293,7 @@ python3 tools/elektronik_zeichnen.py # docs/elektronik-platz.svg + Kabellängen
 python3 tools/anschluss_zeichnen.py  # docs/elektronik-anschluss.svg
 python3 tools/verkabelung_zeichnen.py # docs/elektronik-verkabelung.svg
 python3 tools/motoren_zeichnen.py     # docs/motoren-anschluss.svg
+python3 tools/shield_zeichnen.py      # docs/cnc-shield.svg
 python3 tools/verkabelung.py         # Tabellen in docs/verkabelung.md
 python3 tools/elektronik_box_zeichnen.py  # docs/elektronik-box.svg
 python3 tools/geometrie_check.py    # nur die Einzelplatte

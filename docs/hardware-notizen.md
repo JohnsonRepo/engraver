@@ -468,7 +468,17 @@ gewandert:
 | **Z+ / Z−** | D11 | **Laser-PWM** — kein Endschalter! |
 | **SpnEn** | D12 | **Endschalter Z** (Gabellichtschranke) |
 | SpnDir | D13 | Spindelrichtung, für den Laser frei |
+| CoolEn | A3 | Kühlmittel (M8), frei |
 | Abort | A0 | 24-V-Wächter: fehlen die 24 V, bricht GRBL ab ([verkabelung.md](verkabelung.md#7-24-v-wächter-w16)) |
+| Hold / Resume | A1 / A2 | Pause und Start/Weiter für Taster, frei |
+| E-STOP | RST | setzt nur den Uno zurück, kein Not-Aus der Maschine; frei |
+| SCL / SDA | A5 / A4 | A5 ist der Probe-Eingang, beide frei |
+| RX / TX | D0 / D1 | seriell, gehören dem USB: frei lassen |
+| EN/GND | D8 | GRBL schaltet die Treiber ein und aus, Jumper offen |
+
+* Wo jeder Stift auf dem Shield sitzt, mit Belegung:
+  [cnc-shield.svg](cnc-shield.svg) (`python3 tools/shield_zeichnen.py`),
+  nach Bestückungsdruck und Schaltplan des Protoneer V3.00 `[w]`.
 
 * Laser: PWM (5 V TTL) an den PWM-Eingang des Lasertreibers, Masse gemeinsam
   mit dem Shield. `$32=1` (Lasermodus), `$30=1000` passend zum S-Maximum der

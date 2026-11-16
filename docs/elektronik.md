@@ -19,7 +19,8 @@ mit Wanne, Festpunkt und Halter, dazu der Kabelweg zwischen ihnen
 ([energiekette.md](energiekette.md)). **Die ganze Verdrahtung** — Kabelliste,
 Anschlussliste, Klemmen, Schritt für Schritt und Inbetriebnahme — steht in
 [verkabelung.md](verkabelung.md). Pinbelegung, Treiber und Jumper stehen in
-[hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik).
+[hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik), alle
+Anschlüsse des Shields zeigt die [Skizze](cnc-shield.svg).
 
 ![Platz für die Elektronik](elektronik-platz.svg)
 

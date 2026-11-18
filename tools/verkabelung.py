@@ -109,9 +109,13 @@ for _s in ('X', 'Y', 'Z', 'A'):
         'Shield Motor {}, 2B · 2A'.format(_s), 'Dupont')
     ANSCHLUSS['Shield {} 1A·1B'.format(_s)] = (
         'Shield Motor {}, 1A · 1B'.format(_s), 'Dupont')
-# Stecker ab Werk [v]: außen schwarz und rot, innen grün und blau, also
-# A+ · A− · B− · B+. Mit Schwarz an 2B passt er ohne Umstecken.
-MOTOR_STECKER = ('A+', 'A−', 'B−', 'B+')
+# Spulen gemessen [v] (2026-11-18): schwarz–blau ist Spule A, grün–rot
+# Spule B, nicht schwarz–grün wie bei Stepperonline üblich. Der Stecker ab
+# Werk [v] liegt schwarz · grün · blau · rot, also A+ · B− · A− · B+: die
+# Spulen abwechselnd. Unverändert bekäme jedes Stiftpaar am Shield eine Ader
+# jeder Spule, darum im Dupont-Gehäuse grün und blau tauschen. Plus und
+# Minus sind nur Namen, die Drehrichtung zeigt Prüfung F.
+MOTOR_STECKER = ('A+', 'B−', 'A−', 'B+')
 for _m in ('X-Motor', 'Y-Motor links', 'Y-Motor rechts', 'Z-Motor'):
     ANSCHLUSS[_m + ' A'] = (_m + ', Spule A: A+ · A−', 'PH')
     ANSCHLUSS[_m + ' A getauscht'] = (_m + ', Spule A: A− · A+', 'PH')
@@ -254,9 +258,9 @@ def leitungen():
              weg='links raus (Fenster Leistung), unter dem linken 2040 '
                  'durch, untere Nut außen am linken 2040, Y-Kette, hinter '
                  'dem Motorhalter hoch zum Motor',
-             adern=[('Spule A', 'schwarz · grün', 'Shield X 2B·2A',
+             adern=[('Spule A', 'schwarz · blau', 'Shield X 2B·2A',
                      'X-Motor A'),
-                    ('Spule B', 'blau · rot', 'Shield X 1A·1B',
+                    ('Spule B', 'grün · rot', 'Shield X 1A·1B',
                      'X-Motor B')]),
         dict(nr='W13', name='Y-Motor links', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor links', strom=ez.MOTOR_I,
@@ -265,9 +269,9 @@ def leitungen():
                  'durch, untere Nut außen am linken 2040 nach vorn; in den '
                  'Kabelhaltern unter den Wänden der drei Träger der Wanne Y '
                  'durch',
-             adern=[('Spule A', 'schwarz · grün', 'Shield Y 2B·2A',
+             adern=[('Spule A', 'schwarz · blau', 'Shield Y 2B·2A',
                      'Y-Motor links A'),
-                    ('Spule B', 'blau · rot', 'Shield Y 1A·1B',
+                    ('Spule B', 'grün · rot', 'Shield Y 1A·1B',
                      'Y-Motor links B')]),
         dict(nr='W14', name='Y-Motor rechts', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor rechts', strom=ez.MOTOR_I,
@@ -276,18 +280,18 @@ def leitungen():
                  '(Fenster Leistung), unter dem rechten 2040 durch, untere '
                  'Nut außen am rechten 2040 nach vorn',
              hinweis='Spule A getauscht: dreht gegen den linken',
-             adern=[('Spule A, getauscht', 'grün · schwarz',
+             adern=[('Spule A, getauscht', 'blau · schwarz',
                      'Shield A 2B·2A', 'Y-Motor rechts A getauscht'),
-                    ('Spule B', 'blau · rot', 'Shield A 1A·1B',
+                    ('Spule B', 'grün · rot', 'Shield A 1A·1B',
                      'Y-Motor rechts B')]),
         dict(nr='W15', name='Z-Motor', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Z-Motor', strom=ez.MOTOR_I,
              kette='Y + X', fertig=True, mitgeliefert=1.0,
              hinweis='in den Ketten nur die losen Adern, ohne Schlauch',
              weg='wie W7 bis zur Trägerplatte, dann zum Motor oben',
-             adern=[('Spule A', 'schwarz · grün', 'Shield Z 2B·2A',
+             adern=[('Spule A', 'schwarz · blau', 'Shield Z 2B·2A',
                      'Z-Motor A'),
-                    ('Spule B', 'blau · rot', 'Shield Z 1A·1B',
+                    ('Spule B', 'grün · rot', 'Shield Z 1A·1B',
                      'Z-Motor B')]),
         dict(nr='W16', name='24-V-Wächter an Abort', art='Widerstand',
              mm2=None, laenge=0.5, weg_fach='Wächter',
@@ -477,42 +481,56 @@ def shield_belegung(lts=None):
     return bel
 
 
+GRBL_SCHRITT = {
+    'D4': '[D4](#d-uno-grbl-und-lichtschranken)',
+    'D5': '[D5](#d-uno-grbl-und-lichtschranken)',
+    'F': '[F](#f-motoren-und-drehrichtung)',
+    'G': '[G](#g-referenzfahrt)',
+    'H': '[H](#h-laser)',
+}
+
+
 def grbl(Q):
-    """GRBL-Einstellungen; die Wege folgen aus den Schaltpunkten: vom
-    Schaltpunkt bis ans andere Ende, minus 1 mm Rueckzug und 2 mm Reserve
-    (dort stuende der Wagen sonst genau am Schienenende)."""
+    """GRBL-Einstellungen als (Wert, Zahl, Schritt, warum), in der
+    Reihenfolge der Inbetriebnahme: Jeder Wert kommt in dem Schritt auf den
+    Uno, der ihn braucht, die Schritte/mm (D5) vor dem ersten Fahren (F).
+    Die Wege folgen aus den Schaltpunkten: vom Schaltpunkt bis ans andere
+    Ende, minus 1 mm Rueckzug und 2 mm Reserve (dort stuende der Wagen sonst
+    genau am Schienenende)."""
     L, TL, K, es_w = Q['L'], Q['TL'], Q['K'], Q['es_w']
     s = es_w('schaltabstand')
     x = (L['xw_max'] - L['xw_min']) - s - 1.0 - 2.0
     y = K['d_vorn'] + K['d_schiene'] - s - 1.0 - 2.0
     z = TL['z_arbeit'] - 1.0 - 2.0
     return [
-        ('$3', 'nach dem Test', 'Drehrichtung: X+ nach rechts, Y+ nach '
-         'hinten, Z+ nach oben ([Motoren](#f-motoren-und-drehrichtung))'),
-        ('$5', '1 `[w]`', 'Lichtschranken melden „unterbrochen“ mit HIGH; '
-         'im Test prüfen ([Lichtschranken](#d-uno-grbl-und-lichtschranken))'),
-        ('$20', '1', 'Softlimits an: schützen beide Enden, auch die '
-         'Motorseite von Y, aber nur nach `$H` ([warum](endschalter.md'
-         '#softlimits-statt-zweitem-y-schalter))'),
-        ('$21', '0', 'Hardlimits aus, bis die Schalter nie falsch auslösen'),
-        ('$22', '1', 'Referenzfahrt an: erst Z, dann X und Y'),
-        ('$23', '1', 'X referenziert nach links (minus), Y nach hinten und '
-         'Z nach oben (plus)'),
-        ('$27', '1', '1 mm Rückzug vom Schalter'),
-        ('$30', '1000', 'S1000 = volle Laserleistung'),
-        ('$32', '1', 'Lasermodus'),
-        ('$100', '80', 'X: GT2, 20 Zähne, 1/16'),
-        ('$101', '80', 'Y: GT2, 20 Zähne, 1/16'),
-        ('$102', '1600', 'Z: Tr8×2, 1/16'),
-        ('$130', '{:.0f}'.format(math.floor(x)), 'X: {} mm vom Schaltpunkt '
-         'bis ans rechte Schienenende, minus Rückzug und Reserve'.format(
-             de(x + 3.0, 2))),
-        ('$131', '{:.0f}'.format(math.floor(y)), 'Y: {} mm vom Schaltpunkt '
-         'bis vor das vordere 2060, minus Rückzug und Reserve'.format(
-             de(y + 3.0, 2))),
-        ('$132', '{:.0f}'.format(math.floor(z)), 'Z: {} mm Arbeitsweg vom '
-         'Schaltpunkt bis ganz unten, minus Rückzug und Reserve'.format(
+        ('$5', '1 `[w]`', 'D4', 'Lichtschranken melden „unterbrochen“ mit '
+         'HIGH; im Test prüfen'),
+        ('$100', '80', 'D5', 'X: GT2, 20 Zähne, 1/16. GRBL kommt mit 250: '
+         'Dann fährt jede Achse 3,1-mal so weit wie befohlen'),
+        ('$101', '80', 'D5', 'Y: GT2, 20 Zähne, 1/16'),
+        ('$102', '1600', 'D5', 'Z: Tr8×2, 1/16'),
+        ('$3', 'nach dem Test', 'F', 'Drehrichtung: X+ nach rechts, Y+ nach '
+         'hinten, Z+ nach oben'),
+        ('$21', '0', 'G', 'Hardlimits aus, bis die Schalter nie falsch '
+         'auslösen'),
+        ('$22', '1', 'G', 'Referenzfahrt an: erst Z, dann X und Y'),
+        ('$23', '1', 'G', 'X referenziert nach links (minus), Y nach hinten '
+         'und Z nach oben (plus)'),
+        ('$27', '1', 'G', '1 mm Rückzug vom Schalter'),
+        ('$130', '{:.0f}'.format(math.floor(x)), 'G', 'X: {} mm vom '
+         'Schaltpunkt bis ans rechte Schienenende, minus Rückzug und '
+         'Reserve'.format(de(x + 3.0, 2))),
+        ('$131', '{:.0f}'.format(math.floor(y)), 'G', 'Y: {} mm vom '
+         'Schaltpunkt bis vor das vordere 2060, minus Rückzug und '
+         'Reserve'.format(de(y + 3.0, 2))),
+        ('$132', '{:.0f}'.format(math.floor(z)), 'G', 'Z: {} mm Arbeitsweg '
+         'vom Schaltpunkt bis ganz unten, minus Rückzug und Reserve'.format(
              de(z + 3.0, 2))),
+        ('$20', '1', 'G', 'Softlimits an, nach `$22=1`: schützen beide '
+         'Enden, auch die Motorseite von Y, aber nur nach `$H` '
+         '([warum](endschalter.md#softlimits-statt-zweitem-y-schalter))'),
+        ('$30', '1000', 'H', 'S1000 = volle Laserleistung'),
+        ('$32', '1', 'H', 'Lasermodus'),
     ]
 
 
@@ -701,9 +719,10 @@ def tab_material(K):
 
 
 def tab_grbl(Q):
-    z = ['| Einstellung | Wert | warum |', '|---|---|---|']
-    for k, v, warum in grbl(Q):
-        z.append('| `{}` | {} | {} |'.format(k, v, warum))
+    z = ['| wann | Einstellung | Wert | warum |', '|---|---|---|---|']
+    for k, v, schritt, warum in grbl(Q):
+        z.append('| {} | `{}` | {} | {} |'.format(
+            GRBL_SCHRITT[schritt], k, v, warum))
     return '\n'.join(z)
 
 

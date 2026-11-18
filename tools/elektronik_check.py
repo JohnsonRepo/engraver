@@ -909,13 +909,18 @@ def verkabelung_pruefen(p, Q):
              vk.auslesen(anleitung, name) == inhalt,
              '' if vk.auslesen(anleitung, name) == inhalt
              else ' — python3 tools/verkabelung.py')
-    g = {k: v for k, v, _ in vk.grbl(Q)}
+    g = {k: v for k, v, _, _ in vk.grbl(Q)}
     pfad = os.path.join(vk.DOCS, 'endschalter.md')
     with open(pfad, encoding='utf-8') as f:
         es_text = f.read()
     for k in ('$130', '$131'):
         p.ja('endschalter.md nennt `{}={}`'.format(k, g[k]),
              '`{}={}`'.format(k, g[k]) in es_text)
+    # Die Schritte/mm muessen vor dem ersten Fahren (F) auf dem Uno stehen
+    abschnitt_d = anleitung.split('### D.')[-1].split('### E.')[0]
+    for k in ('$100', '$101', '$102'):
+        p.ja('verkabelung.md: D5 nennt `{}={}` vor dem ersten Fahren'.format(
+            k, g[k]), '`{}={}`'.format(k, g[k]) in abschnitt_d)
 
 
 if __name__ == '__main__':

@@ -5,10 +5,12 @@ Das Bild zur Anleitung docs/verkabelung.md. Oben eine schematische
 Draufsicht mit den Leitungen, die das Gehaeuse verlassen, und ihren Wegen
 durch Kanal und Energieketten bis zum Pi-Halter; darunter die acht
 Schritte der Anleitung,
-jeder fuer sich gezeichnet, mit den Aderfarben der Anschlussliste. Zwei
-Kreuzungen gibt es: eine bei den Lichtschranken, die sich nicht vermeiden
-laesst (drei Lichtschranken an drei Klemmen ergeben einen K3,3), und die
-getauschte Spule am Y-Motor rechts, die Absicht ist.
+jeder fuer sich gezeichnet, mit den Aderfarben der Anschlussliste.
+Kreuzungen gibt es an zwei Stellen: bei den Lichtschranken, wo sie sich
+nicht vermeiden lassen (drei Lichtschranken an drei Klemmen ergeben einen
+K3,3), und bei den Motoren mit Absicht: Dort sind die Adern gegen den
+Stecker ab Werk umgesteckt (gruen und blau, am Y-Motor rechts zusaetzlich
+eine Spule).
 
 Alles kommt aus tools/verkabelung.py: Nummern, Adern mit Farbe und
 Anschluss, Querschnitte, Laengen, Wago-Belegung. Die Titel der Schritte
@@ -115,7 +117,7 @@ def ader(nr, i, von, an):
 
 
 def farben(farbe):
-    """'schwarz · grün' -> ['schwarz', 'grün']."""
+    """'schwarz · blau' -> ['schwarz', 'blau']."""
     return [s.strip() for s in farbe.split('·')]
 
 
@@ -873,8 +875,9 @@ def schritt_motoren():
                                        '(oder den Stecker um 180° drehen)'])
     g = 86
     sp_a, sp_b = (LT[motoren[0][1]]['adern'][k][0] for k in (0, 1))
-    t += [text(289, g + 9, sp_a, 10, TEXT, 'middle', fett=True, halo=True),
-          text(289, g + 31, sp_b, 10, TEXT, 'middle', fett=True, halo=True)]
+    # Spulennamen vor der Kreuzung, wo ihre Adern nebeneinanderliegen
+    t += [text(224, g + 9, sp_a, 10, TEXT, 'middle', fett=True, halo=True),
+          text(224, g + 31, sp_b, 10, TEXT, 'middle', fett=True, halo=True)]
     t += zeilen(14, 300, ['Spule finden: 2–3 Ω zwischen',
                           'ihren Adern. In den Ketten nur',
                           'lose Adern ({}).'.format(', '.join(lose))], 10,

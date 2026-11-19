@@ -14,7 +14,11 @@ Fusion erst mitten im Lauf. Diese Pruefung findet sie vorher:
      existiert; die Argumente passen zur Signatur
   3) jeder Schluessel, den Portal.py aus lage() und MASSE des Skripts
      liest, ist da
-  4) Lage der Gruppen: ToolheadZ in der Mitte des X-Wegs, Z im Weg
+  4) Lage der Gruppen: ToolheadZ in der Mitte des X-Wegs, Z im Weg;
+     matrix() mit einem Rechen-Stub von Matrix3D: Fach vor dem vorderen
+     2060, Spannmittel-Ecke vorn rechts; jede Gruppe entsteht gleich an
+     ihrem Platz und wird danach nicht mehr verschoben (eine nachtraeglich
+     gesetzte Lage verwirft Fusion beim Loeschen der Hilfskomponenten)
   5) Kabelhalter: KABELHALTER_Y wie tools/kabelhalter_check.py, der
      gebaute Halter steht auf einem der Plaetze, die Drehung legt ihn
      rechts dorthin, wo die Pruefung ihn annimmt
@@ -44,6 +48,67 @@ FUSION = os.path.normpath(os.path.join(HIER, '..', 'fusion'))
 # Funktionen von Portal.py, die fuer einen Nachbarn mit dessen Modul m
 # arbeiten, ausser maschine_<Ordner> selbst
 HELFER = {'ToolheadZ': ('toolhead_kaufteile',)}
+
+
+class _Vektor:
+    """Punkt bzw. Vektor fuer den Rechen-Stub (Modellkoordinaten, cm)."""
+
+    def __init__(self, x, y, z):
+        self.x, self.y, self.z = x, y, z
+
+    @classmethod
+    def create(cls, x=0.0, y=0.0, z=0.0):
+        return cls(x, y, z)
+
+    def transformBy(self, m3):
+        r, t = m3.r, m3.t
+        v = (self.x, self.y, self.z)
+        self.x, self.y, self.z = (
+            sum(r[i][j] * v[j] for j in range(3)) + t[i] for i in range(3))
+        return True
+
+
+class _Matrix:
+    """So viel von adsk.core.Matrix3D, wie matrix() und
+    kabelhalter_matrix() brauchen: Drehung um eine Achse durch einen Punkt,
+    Verschiebung."""
+
+    def __init__(self):
+        self.r = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+        self.t = [0.0, 0.0, 0.0]
+
+    @classmethod
+    def create(cls):
+        return cls()
+
+    def setToRotation(self, winkel, achse, punkt):
+        import math
+        n = math.sqrt(achse.x ** 2 + achse.y ** 2 + achse.z ** 2)
+        x, y, z = achse.x / n, achse.y / n, achse.z / n
+        c, s_, k = math.cos(winkel), math.sin(winkel), 1.0 - math.cos(winkel)
+        self.r = [[c + x * x * k, x * y * k - z * s_, x * z * k + y * s_],
+                  [y * x * k + z * s_, c + y * y * k, y * z * k - x * s_],
+                  [z * x * k - y * s_, z * y * k + x * s_, c + z * z * k]]
+        p = (punkt.x, punkt.y, punkt.z)
+        self.t = [p[i] - sum(self.r[i][j] * p[j] for j in range(3))
+                  for i in range(3)]
+        return True
+
+    @property
+    def translation(self):
+        return _Vektor(*self.t)
+
+    @translation.setter
+    def translation(self, v):
+        self.t = [v.x, v.y, v.z]
+
+
+def nach_maschine(m3, x, y, z):
+    """Maschinenpunkt (mm) durch die Matrix (Modell: Y und Z getauscht,
+    cm)."""
+    p = _Vektor(x / 10.0, z / 10.0, y / 10.0)
+    p.transformBy(m3)
+    return p.x * 10.0, p.z * 10.0, p.y * 10.0
 
 
 def funktionen(baum):
@@ -253,6 +318,77 @@ def main():
             p.ok('{}: Gruppe am Ursprung (Koordinaten wie Portal.py)'.format(
                 name), abs(dx) + abs(dy) + abs(dz), 0.0, '<=')
             p.ja('{}: nicht gedreht'.format(name), dreh is None)
+
+    # matrix() selbst nachrechnen, mit dem Rechen-Stub statt Fusion
+    kern = sys.modules['adsk.core']
+    alt = {n: getattr(kern, n, None) for n in ('Matrix3D', 'Vector3D',
+                                               'Point3D')}
+    kern.Matrix3D, kern.Vector3D, kern.Point3D = _Matrix, _Vektor, _Vektor
+    try:
+        if 'Elektronikfach' in module:
+            em = module['Elektronikfach']
+            EL = em.lage()
+            m3 = pm.matrix(*pm.gruppe_lage('Elektronikfach', L, em))
+            ecken = [nach_maschine(m3, x, y, EL['geh_z'][0])
+                     for x in EL['geh_x'] for y in EL['geh_y']]
+            vorn = min(y for _, y, _ in ecken)
+            p.info('Elektronikfach mit matrix(): Kasten ab Y', vorn)
+            p.ok('Elektronikfach mit matrix(): vor dem vorderen 2060 (wie '
+                 'die Y-Motoren und die Kamera)', vorn - L['quer_y_vorn'][1],
+                 -0.01)
+            soll = em.bereich_nach_maschine(EL['geh_x'], EL['geh_y'],
+                                            EL['geh_z'])
+            p.ok('Elektronikfach mit matrix(): wie im eigenen Skript', max(
+                abs(min(x for x, _, _ in ecken) - soll[0][0]),
+                abs(vorn - soll[1][0])), 0.01, '<=')
+        if 'Spannmittel' in module:
+            sm = module['Spannmittel']
+            SL = sm.lage()
+            m3 = pm.matrix(*pm.gruppe_lage('Spannmittel', L, sm))
+            gx, gy, _ = nach_maschine(m3, SL['aw_ecke'][0], SL['aw_ecke'][1],
+                                      0.0)
+            p.ok('Spannmittel mit matrix(): Ecke = aw_ecke_maschine', max(
+                abs(gx - SL['aw_ecke_maschine'][0]),
+                abs(gy - SL['aw_ecke_maschine'][1])), 0.01, '<=')
+        if 'ToolheadZ' in module:
+            m3 = pm.matrix(*pm.gruppe_lage('ToolheadZ', L,
+                                           module['ToolheadZ']))
+            x, y, z = nach_maschine(m3, 0.0, 0.0, 0.0)
+            p.ok('ToolheadZ mit matrix(): Wagenmitte in der Mitte des '
+                 'X-Wegs', abs(x - (L['xw_min'] + L['xw_max']) / 2.0)
+                 + abs(y) + abs(z), 0.01, '<=')
+    finally:
+        for n, v in alt.items():
+            if v is None:
+                delattr(kern, n)
+            else:
+                setattr(kern, n, v)
+
+    # Fusion haelt eine nachtraeglich gesetzte Lage nur vorgemerkt; das
+    # Loeschen der Hilfskomponenten der naechsten Gruppen warf sie bis
+    # Rev. 32 wieder weg (Fach und Spannmittel standen hinten). Also: die
+    # Gruppe gleich mit ihrer Lage anlegen, danach nicht mehr verschieben.
+    nb = fn['nachbarn_bauen']
+    anlegen = [n for n in ast.walk(nb) if isinstance(n, ast.Call)
+               and isinstance(n.func, ast.Attribute)
+               and n.func.attr == 'addNewComponent']
+    p.ja('nachbarn_bauen: Gruppe entsteht mit matrix(...) an ihrem Platz',
+         any(isinstance(k, ast.Call) and isinstance(k.func, ast.Name)
+             and k.func.id == 'matrix'
+             for n in anlegen for a in n.args for k in ast.walk(a)))
+    nachher = [n for n in ast.walk(nb)
+               if (isinstance(n, ast.Assign) and any(
+                   isinstance(t, ast.Attribute)
+                   and t.attr in ('transform', 'transform2')
+                   for t in n.targets))
+               or (isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+                   and n.func.id == 'setattr')]
+    p.ja('nachbarn_bauen: keine Lage nachtraeglich gesetzt', not nachher,
+         '' if not nachher else ': Zeile ' + ', '.join(
+             str(n.lineno) for n in nachher))
+    p.ja('nachbarn_bauen: Lage festgehalten (Snapshot) und nachgemessen',
+         'festhalten(' in ast.get_source_segment(quelle, nb)
+         and 'platz_pruefen(' in ast.get_source_segment(quelle, nb))
 
     # ------------------------------------------------------------------
     p.titel('5) Kabelhalter: Plaetze und Drehung')

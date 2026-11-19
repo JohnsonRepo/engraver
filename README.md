@@ -402,12 +402,18 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 32 mit
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 33 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
 Spannmittel Rev. 2, Kamerahalter Rev. 2, `maschine_check.py`) bis auf die
 bekannten 5 Verkabelungstabellen in `elektronik_check.py`.
 
-Neu ist Portal Rev. 32: **Y referenziert vorn.** Die Lichtschranke sitzt
+Neu ist Portal Rev. 33: Im Gesamtmodell stehen **Elektronikfach und
+Anschlag wieder vorn**. Bis Rev. 32 wurden die Gruppen nach dem Bauen
+gedreht, und Fusion verwarf diese Lage wieder. Jetzt entsteht jede Gruppe
+gleich an ihrem Platz, und `maschine_check.py` prüft das
+([portal-y-schlitten.md](docs/portal-y-schlitten.md#gesamtmodell-die-ganze-maschine-seit-rev-29)).
+
+Davor kam Portal Rev. 32: **Y referenziert vorn.** Die Lichtschranke sitzt
 außen am rechten 2040, gut 110 mm hinter dem vorderen 2060. Der Halter_Y
 ist gespiegelt (Gabel hinten, die Fahne kommt von hinten), die Fahne bleibt.
 GRBL: `$23=3`, `$131=325`, danach G54 neu setzen. Hinten schützt nur das

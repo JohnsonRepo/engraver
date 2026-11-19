@@ -89,7 +89,9 @@
 # laedt es die anderen Skripte aus ihren Ordnern neben diesem (so liegen
 # sie in Fusions Scripts-Ordner, wenn alle Ordner aus fusion/ dorthin
 # kopiert sind) und laesst sie ihre Teile mit ihren eigenen Funktionen in je
-# eine Gruppe <Skript>_r<Revision> bauen:
+# eine Gruppe <Skript>_r<Revision> bauen. Seit Rev. 33 entsteht jede Gruppe
+# gleich an ihrem Platz; bis Rev. 32 wurde sie danach verschoben, und Fusion
+# verwarf diese Lage wieder (Fach und Spannmittel standen hinten):
 #   ToolheadZ      Toolhead mit Z-Achse (Z in der Mitte des Wegs), dazu
 #                  seine Kaufteile vereinfacht (Ref_Toolhead): Z-Fuehrung,
 #                  Z-Motor, Kupplung, Spindel, Mutter, Laser, Lichtschranke
@@ -147,7 +149,7 @@ import textwrap
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 32
+REVISION = 33
 
 # Gesamtmodell (seit Rev. 29, siehe oben): False baut nur das Portal.
 MASCHINE = True
@@ -4236,19 +4238,31 @@ def nachbarn_laden():
 
 def nachbarn_bauen(app, design, root, L, module, zeilen):
     """Baut die geladenen Nachbarn, jeden in seine Gruppe
-    <Skript>_r<Revision> am Ursprung, wie im eigenen Skript; ToolheadZ,
-    Elektronikfach und Spannmittel kommen danach an ihren Platz
-    (gruppe_lage). Haengt die
+    <Skript>_r<Revision>, gebaut wie im eigenen Skript. Die Gruppe von
+    ToolheadZ, Elektronikfach und Spannmittel entsteht gleich an ihrem Platz
+    (gruppe_lage), die Teile darin in den Koordinaten ihres Skripts; danach
+    wird die Lage festgehalten und am Ende nachgemessen. Haengt die
     Zeilen fuer die Hinweise an und liefert {Gruppenname: Komponente} fuer
     den Bericht."""
     gruppen = {}
+    plaetze = []
     for name in NACHBARN:
         m = module.get(name)
         if m is None:
             continue
         protokoll = []
         gname = '{}_r{}'.format(m.SKRIPT_NAME, m.REVISION)
-        o = root.occurrences.addNewComponent(adsk.core.Matrix3D.create())
+        # Die Gruppe entsteht gleich an ihrem Platz (seit Rev. 33). Bis
+        # Rev. 32 wurde sie am Ursprung gebaut und danach verschoben; in
+        # einem parametrischen Design ist das nur eine vorgemerkte Lage, und
+        # das Loeschen der Hilfskomponenten der naechsten Gruppen
+        # (wegwerfen) warf sie wieder weg: Fach und Spannmittel standen
+        # hinten.
+        dx, dy, dz, dreh = gruppe_lage(name, L, m)
+        bewegt = abs(dx) + abs(dy) + abs(dz) > 1e-9 or dreh is not None
+        o = root.occurrences.addNewComponent(
+            matrix(dx, dy, dz, dreh) if bewegt
+            else adsk.core.Matrix3D.create())
         o.component.name = gname
         try:
             globals()['maschine_' + name](app, design, o.component, m, L,
@@ -4256,27 +4270,14 @@ def nachbarn_bauen(app, design, root, L, module, zeilen):
         except Exception:
             protokoll.append('abgebrochen: {}'.format(
                 traceback.format_exc().strip().splitlines()[-1]))
-        dx, dy, dz, dreh = gruppe_lage(name, L, m)
-        if abs(dx) + abs(dy) + abs(dz) > 1e-9 or dreh is not None:
-            # transform2 gibt es in neueren Fusion-Versionen; fuer eine
-            # Occurrence direkt unter root ist es dasselbe wie transform.
-            # Nachgemessen wird, wohin der Ursprung der Gruppe kommt.
-            feld = 'transform2' if hasattr(o, 'transform2') else 'transform'
+        if bewegt:
             cx, cy = dreh if dreh is not None else (0.0, 0.0)
             soll = (dx + 2.0 * cx, dy + 2.0 * cy, dz)
-            try:
-                setattr(o, feld, matrix(dx, dy, dz, dreh))
-                p = adsk.core.Point3D.create(0.0, 0.0, 0.0)
-                p.transformBy(getattr(o, feld))
-                ist = (p.x * 10.0, p.z * 10.0, p.y * 10.0)
-                if max(abs(a - b) for a, b in zip(ist, soll)) > 0.01:
-                    protokoll.append(
-                        'steht nicht an seinem Platz: Ursprung bei X {:+.2f} '
-                        'Y {:+.2f} statt X {:+.2f} Y {:+.2f}'.format(
-                            ist[0], ist[1], soll[0], soll[1]))
-            except Exception:
-                protokoll.append('nicht an seinen Platz gebracht: {}'.format(
-                    traceback.format_exc().strip().splitlines()[-1]))
+            festhalten(design, protokoll)
+            fehlt = platz_pruefen(o, soll)
+            if fehlt:
+                protokoll.append(fehlt)
+            plaetze.append((gname, o, soll))
         for i in range(o.component.occurrences.count):
             try:
                 o.component.occurrences.item(i).isGrounded = True
@@ -4290,7 +4291,49 @@ def nachbarn_bauen(app, design, root, L, module, zeilen):
         for p in protokoll:
             zeilen += textwrap.wrap(p, 72, initial_indent='    ',
                                     subsequent_indent='      ')
+    # Nach allen Gruppen noch einmal nachmessen: steht eine nicht mehr an
+    # ihrem Platz, hat Fusion die Lage verworfen
+    nachher = []
+    festhalten(design, nachher)
+    for gname, o, soll in plaetze:
+        fehlt = platz_pruefen(o, soll)
+        if fehlt:
+            nachher.append('{} {}'.format(gname, fehlt))
+    for p in nachher:
+        zeilen += textwrap.wrap(p, 72, initial_indent='  ',
+                                subsequent_indent='    ')
     return gruppen
+
+
+def festhalten(design, protokoll):
+    """Lage der Occurrences festhalten (Snapshot), falls eine vorgemerkt
+    ist; sonst verwirft Fusion sie beim naechsten Loeschen oder Neurechnen."""
+    try:
+        if design.snapshots.hasPendingSnapshot:
+            design.snapshots.add()
+    except Exception:
+        protokoll.append('Lage nicht festgehalten: {}'.format(
+            traceback.format_exc().strip().splitlines()[-1]))
+
+
+def platz_pruefen(o, soll):
+    """Wohin kommt der Ursprung der Gruppe (Maschinenkoordinaten, mm)?
+    Liefert eine Meldung, wenn er mehr als 0,01 mm neben soll liegt, sonst
+    None. transform2 gibt es in neueren Fusion-Versionen; fuer eine
+    Occurrence direkt unter root ist es dasselbe wie transform."""
+    feld = 'transform2' if hasattr(o, 'transform2') else 'transform'
+    try:
+        p = adsk.core.Point3D.create(0.0, 0.0, 0.0)
+        p.transformBy(getattr(o, feld))
+        ist = (p.x * 10.0, p.z * 10.0, p.y * 10.0)
+    except Exception:
+        return 'Lage nicht nachgemessen: {}'.format(
+            traceback.format_exc().strip().splitlines()[-1])
+    if max(abs(a - b) for a, b in zip(ist, soll)) > 0.01:
+        return ('steht nicht an seinem Platz: Ursprung bei X {:+.2f} '
+                'Y {:+.2f} statt X {:+.2f} Y {:+.2f}'.format(
+                    ist[0], ist[1], soll[0], soll[1]))
+    return None
 
 
 def run(context):

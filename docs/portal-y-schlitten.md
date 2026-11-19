@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 32, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 33, fünfundzwanzig
 gedruckte Teile; seit Rev. 29 dazu das
 [Gesamtmodell der ganzen Maschine](#gesamtmodell-die-ganze-maschine-seit-rev-29)).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
@@ -91,6 +91,16 @@ scheitert ein Skript, fehlt nur seine Gruppe. Der Bericht nennt das unter
 **GESAMTMODELL**, mit einer Zeile je Gruppe: Druckteil-Körper, Gramm,
 Referenzkörper. Die Körper selbst listet der Bericht des jeweiligen Skripts.
 `MASCHINE = False` oben im Skript baut nur das Portal wie bis Rev. 28.
+
+**Seit Rev. 33 entsteht jede Gruppe gleich an ihrem Platz.** Bis Rev. 32
+wurden ToolheadZ, Elektronikfach und Spannmittel am Ursprung gebaut und
+danach verschoben bzw. gedreht. In einem parametrischen Design ist so eine
+Lage nur vorgemerkt. Als die nächsten Gruppen ihre Hilfskomponenten
+löschten, verwarf Fusion sie wieder: Das Fach stand hinten statt vor dem
+vorderen 2060, der Anschlag hinten links. Jetzt wird die Gruppe mit ihrer
+Lage angelegt, danach die Lage festgehalten (Snapshot) und am Ende jede
+Gruppe nachgemessen; steht eine nicht an ihrem Platz, sagt es der Bericht
+unter **GESAMTMODELL**.
 
 **Geprüft ohne Fusion** mit `python3 tools/maschine_check.py`:
 

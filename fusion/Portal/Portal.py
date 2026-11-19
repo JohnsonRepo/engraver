@@ -83,6 +83,31 @@
 #                              Kettenhalter (vereinfacht), X- und Y-Kette,
 #                              die beiden Lichtschranken
 #
+# GESAMTMODELL (seit Rev. 29): Portal.py zeigt die ganze Maschine. Dazu
+# laedt es die anderen Skripte aus ihren Ordnern neben diesem (so liegen
+# sie in Fusions Scripts-Ordner, wenn alle Ordner aus fusion/ dorthin
+# kopiert sind) und laesst sie ihre Teile mit ihren eigenen Funktionen in je
+# eine Gruppe <Skript>_r<Revision> bauen:
+#   ToolheadZ      Toolhead mit Z-Achse (Z in der Mitte des Wegs), dazu
+#                  seine Kaufteile vereinfacht (Ref_Toolhead): Z-Fuehrung,
+#                  Z-Motor, Kupplung, Spindel, Mutter, Laser, Lichtschranke
+#   Opferplatte    Fuesse unter den 2060, Riegel, Opferplatte
+#   Spannmittel    Anschlagwinkel, 2 Exzenter, 4 Niederhalter am
+#                  Beispielwerkstueck (der Satz der anderen Staerken nicht)
+#   Elektronikfach Fach und Deckel (Zwischenstand), Uno, Pi, Wandler ...
+#   Kamerahalter   Halter und Camera Module 3 fuer den Autofokus
+#   NotAus         Gehaeuse und Taster
+#   Kabelhalter    alle neun Halter (KABELHALTER_Y), rechts um 180 Grad
+#                  gedreht
+# So steht keine Geometrie doppelt, und das Modell zeigt immer den Stand
+# der Skripte. Fehlt ein Ordner, fehlt nur seine Gruppe (der Bericht sagt
+# es). Bohrlehren der anderen und Teile, die hier schon stehen (Profile,
+# Y-Motor, Opferplatte), baut Portal.py nicht noch einmal; mit ToolheadZ
+# entfallen die vereinfachten Toolhead-Teile aus Ref_Antrieb.
+# tools/maschine_check.py prueft ohne Fusion, dass jede hier aufgerufene
+# Funktion der anderen Skripte existiert und die Argumente passen.
+# MASCHINE = False baut nur das Portal wie bis Rev. 28.
+#
 # Im Modell steht das Portal in der Mitte seines Wegs und der Toolhead in der
 # Mitte des X-Wegs; die Fahnen sitzen also dort, wo sie montiert werden, und
 # nicht in ihrer Gabel. Den Schaltpunkt rechnet lage() (schalt_dy,
@@ -103,12 +128,21 @@
 #
 # Konventionen: siehe fusion-python/SKILL.md und references/baugruppen.md.
 
+import importlib.util
 import math
+import os
+import textwrap
 
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 28
+REVISION = 29
+
+# Gesamtmodell (seit Rev. 29, siehe oben): False baut nur das Portal.
+MASCHINE = True
+# Ordner neben Portal/, deren Skripte mitgebaut werden (in dieser Folge)
+NACHBARN = ('ToolheadZ', 'Opferplatte', 'Spannmittel', 'Elektronikfach',
+            'Kamerahalter', 'NotAus', 'Kabelhalter')
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -1667,14 +1701,47 @@ def material_zuweisen(app, design, ziel, name, fehler=None):
 
 
 # --- Validierung (Standardblock, siehe SKILL.md) ------------------------------
-def validierungs_bericht(app, design, ui, hinweise=None):
+def gruppe_zusammenfassen(gc):
+    """Eine Zeile je Gruppe des Gesamtmodells statt jedes Koerpers (die
+    stehen im Bericht des eigenen Skripts). Zaehlt je Vorkommen, die neun
+    Kabelhalter also neunmal. Liefert (Zeile, Namen der Komponenten)."""
+    namen = {gc.name}
+    druck, ref, gramm = 0, 0, 0.0
+    occs = gc.allOccurrences
+    for i in range(occs.count):
+        c = occs.item(i).component
+        namen.add(c.name)
+        for j in range(c.bRepBodies.count):
+            b = c.bRepBodies.item(j)
+            if c.name.startswith('Ref_'):
+                ref += 1
+            elif b.isLightBulbOn:
+                druck += 1
+                gramm += b.physicalProperties.mass * 1000.0
+    return ('{}: {} Druckteil-Koerper ({:.0f} g), {} Referenzkoerper'.format(
+        gc.name, druck, gramm, ref), namen)
+
+
+def validierungs_bericht(app, design, ui, hinweise=None, gruppen=None):
     """Meldet am Skriptende alle Koerper mit Masse und Abmessungen per
-    messageBox. Scheitert nie — Validierung darf das Skript nicht abbrechen."""
+    messageBox, die Gruppen des Gesamtmodells (gruppen: Name -> Komponente)
+    je in einer Zeile. Scheitert nie — Validierung darf das Skript nicht
+    abbrechen."""
     try:
         zeilen = ['{} (Rev. {})'.format(SKRIPT_NAME, REVISION), '']
+        fremd, gesamt = set(), []
+        for gname in sorted(gruppen or {}):
+            try:
+                zeile, namen = gruppe_zusammenfassen(gruppen[gname])
+                fremd |= namen
+                gesamt.append('  ' + zeile)
+            except Exception:
+                gesamt.append('  {}: nicht auswertbar'.format(gname))
         comps = design.allComponents
         for k in range(comps.count):
             comp = comps.item(k)
+            if comp.name in fremd:
+                continue
             for i in range(comp.bRepBodies.count):
                 b = comp.bRepBodies.item(i)
                 bb = b.boundingBox
@@ -1699,6 +1766,9 @@ def validierungs_bericht(app, design, ui, hinweise=None):
                             mat_name,
                             '{:.2f}'.format(dichte) if dichte else '?',
                             gr[0], gr[1], gr[2], status))
+        if gesamt:
+            zeilen += ['', 'GESAMTMODELL (Koerper im Bericht des eigenen '
+                       'Skripts):'] + gesamt
         if hinweise:
             zeilen += [''] + list(hinweise)
         ui.messageBox('\n'.join(zeilen), 'Validierung')
@@ -2936,7 +3006,7 @@ def bau_profil(comp, name, laengs, bereich, quer, z):
     return k
 
 
-def bau_referenz(app, design, teile, L, fehler):
+def bau_referenz(app, design, teile, L, fehler, toolhead_vereinfacht=True):
     """Kaufteile und Riemen, nur zur Ansicht — NICHT drucken. teile: die
     Komponenten Ref_Profile, Ref_Fuehrungen, Ref_Riemen, Ref_Antrieb,
     Ref_Endschalter, Ref_Kette (X- und seit Rev. 21 Y-Kette, vereinfacht;
@@ -2944,8 +3014,10 @@ def bau_referenz(app, design, teile, L, fehler):
 
     Rahmen und Y-Schienen liegen mittig zum Y-Wagen, das vordere 2060
     35 mm hinter der Stirnseite, das hintere 435 mm (Mitte zu Mitte)
-    dahinter — die 2040 stehen hinten 110 mm ueber. Der Toolhead (hier
-    nur X-Wagen, Riemenhalter und Traegerplatte vereinfacht) steht in der
+    dahinter — die 2040 stehen hinten 110 mm ueber. Der Toolhead (ohne
+    ToolheadZ im Gesamtmodell: X-Wagen, Riemenhalter, Traegerplatte und
+    Kettenhalter vereinfacht; mit ToolheadZ nur der X-Wagen,
+    toolhead_vereinfacht=False) steht in der
     Mitte des X-Wegs, das Umlenkritzel und die Y-Motoren in der Mitte ihres
     Spannwegs. Das hintere Y-Ritzel steht, wo es angenommen ist
     (yh_hinter); seine Welle und Lager sind nicht gezeichnet. Die
@@ -3264,25 +3336,31 @@ def bau_referenz(app, design, teile, L, fehler):
            [(w('kl_d'), L['kl_z'][0], L['kl_z'][1])], w('uw_d'), 'Steel')
     sicher('Gleitlager_Umlenkung', rad, c, 'Gleitlager_Umlenkung', (xu, yc),
            [(w('gl_d'), L['gl_z'][0], L['gl_z'][1])], w('uw_d'), 'Steel')
-    sicher('Riemenhalter_Toolhead', box, c, 'Riemenhalter_Toolhead',
-           L['rh_x'], (-w('rh_tiefe'), 0.0),
-           (w('x_wagen_breite') / 2.0,
-            w('x_wagen_breite') / 2.0 + w('rh_hoehe')), 'PETG')
-    # Traegerplatte vereinfacht, mit der linken Saeulenrippe: daran klemmt
-    # die Fahne X (ToolheadZ.py). Sie reicht bis ueber den Kettenhalter.
+    # Vom Toolhead vereinfacht Riemenhalter, Traegerplatte und Kettenhalter
+    # — nur, wenn ToolheadZ.py im Gesamtmodell fehlt: sonst stehen dort
+    # die echten Teile.
     xm, xt, td = L['xw_mitte'], w('traeger_x_links'), w('traeger_dicke')
     kh_z = (L['xk_unter_z'][1] + w('luft_bau'), L['xk_ober_z'][0] + 3.0)
     th_z = (w('traeger_z0'), kh_z[1])
-    sicher('Traegerplatte_Toolhead', box, c, 'Traegerplatte_Toolhead',
-           (xm + xt, xm - xt), (0.0, td), th_z, 'PETG')
-    sicher('Saeulenrippe_links_Toolhead', box, c,
-           'Saeulenrippe_links_Toolhead', (xm + xt, xm + xt + w('rippe_b')),
-           (td, td + w('rippe_t')), th_z, 'PETG')
-    # Kettenhalter (ToolheadZ.py) als Huelle: Fuss an der Platte, Auflage
-    # unter dem Anfangsstueck, Fuehrungsleisten daneben
-    sicher('Kettenhalter_Toolhead', box, c, 'Kettenhalter_Toolhead',
-           (xm + xt, xm + w('xk_gelenk_x')),
-           (L['wanne_innen_y'][0] - 1.2, 0.0), kh_z, 'PETG')
+    if toolhead_vereinfacht:
+        sicher('Riemenhalter_Toolhead', box, c, 'Riemenhalter_Toolhead',
+               L['rh_x'], (-w('rh_tiefe'), 0.0),
+               (w('x_wagen_breite') / 2.0,
+                w('x_wagen_breite') / 2.0 + w('rh_hoehe')), 'PETG')
+        # Traegerplatte vereinfacht, mit der linken Saeulenrippe: daran
+        # klemmt die Fahne X (ToolheadZ.py). Sie reicht bis ueber den
+        # Kettenhalter.
+        sicher('Traegerplatte_Toolhead', box, c, 'Traegerplatte_Toolhead',
+               (xm + xt, xm - xt), (0.0, td), th_z, 'PETG')
+        sicher('Saeulenrippe_links_Toolhead', box, c,
+               'Saeulenrippe_links_Toolhead',
+               (xm + xt, xm + xt + w('rippe_b')),
+               (td, td + w('rippe_t')), th_z, 'PETG')
+        # Kettenhalter (ToolheadZ.py) als Huelle: Fuss an der Platte,
+        # Auflage unter dem Anfangsstueck, Fuehrungsleisten daneben
+        sicher('Kettenhalter_Toolhead', box, c, 'Kettenhalter_Toolhead',
+               (xm + xt, xm + w('xk_gelenk_x')),
+               (L['wanne_innen_y'][0] - 1.2, 0.0), kh_z, 'PETG')
     sicher('X-Energiekette', kette)
     sicher('Y-Energiekette', kette_y)
 
@@ -3302,9 +3380,10 @@ def bau_referenz(app, design, teile, L, fehler):
                'Kunststoff')
 
 
-def hinweise_bauen(L, fehler):
+def hinweise_bauen(L, fehler, maschine=None):
     """Hinweiszeilen des Validierungsberichts. Modulebene, damit der Block
-    ohne Fusion getestet werden kann (tools/portal_check.py)."""
+    ohne Fusion getestet werden kann (tools/portal_check.py). maschine:
+    Zeilen zum Gesamtmodell aus maschine_bauen(); None = nicht gebaut."""
     R = L['R']
     riemen_x = (2.0 * (L['x_rolle'] - L['x_motor'])
                 + math.pi * w('ritzel_teilkreis'))
@@ -3769,10 +3848,11 @@ def hinweise_bauen(L, fehler):
         .format(w('quer_vorn_zurueck')),
         '    die 2040 {:.0f} mm ueber das hintere 2060 [v].'.format(
             L['quer_y_hinten'][0] - L['rahmen_y'][0]),
-        '  Fuehrungen: MGN12 ({:.0f} mm) mit MGN12H, MGN15 mit MGN15H. Vom'
+        '  Fuehrungen: MGN12 ({:.0f} mm) mit MGN12H, MGN15 mit MGN15H.'
         .format(w('y_schiene_laenge')),
-        '    Toolhead nur X-Wagen, Riemenhalter, Traegerplatte und Ketten-',
-        '    halter (vereinfacht), in der Mitte des X-Wegs.',
+        '  Toolhead in der Mitte des X-Wegs: im Gesamtmodell aus',
+        '    ToolheadZ.py, ohne es nur X-Wagen, Riemenhalter, Traeger-',
+        '    platte und Kettenhalter (vereinfacht).',
         '  X-Energiekette: das bewegte Ende steht dann ueber dem Festpunkt;',
         '    vereinfacht als U aus Untertrum, Bogen und Obertrum. Y-Energie-',
         '    kette ebenso, mit dem Portal in der Mitte seines Wegs.',
@@ -3795,6 +3875,18 @@ def hinweise_bauen(L, fehler):
         '  Die Ritzel sind am Fuss der Verzahnung gezeichnet, die',
         '    Massen der Referenzteile stimmen nur grob.',
         '',
+        'GESAMTMODELL: die anderen Skripte aus den Ordnern neben Portal/,',
+        '  je eine Gruppe <Skript>_r<Revision>. Portal in der Mitte seines',
+        '  Wegs, Toolhead in der Mitte des X- und des Z-Wegs.',
+    ]
+    if maschine is None:
+        h += textwrap.wrap('nicht gebaut (MASCHINE = False): '
+                           + ', '.join(NACHBARN) + '.', 72,
+                           initial_indent='  ', subsequent_indent='    ')
+    else:
+        h += list(maschine)
+    h += [
+        '',
         'PARAMETRIK: MASSE landet als User-Parameter im Dialog. Die absoluten',
         '  Lagen rechnet lage() in Python — nach einer Parameteraenderung das',
         '  Skript neu laufen lassen und tools/portal_check.py ausfuehren.',
@@ -3803,6 +3895,362 @@ def hinweise_bauen(L, fehler):
         h += ['', 'NICHT GESETZT (Geometrie trotzdem masshaltig):'] \
             + ['  ' + z for z in fehler]
     return h
+
+
+# --- Gesamtmodell: die anderen Skripte (seit Rev. 29) --------------------------
+# Kabelhalter.py baut einen Halter (links bei kh_y). Wo alle neun sitzen,
+# rechnet tools/kabelhalter_check.py (docs/kabelhalter.md, L1 bis L5 und
+# R1 bis R4): Schraube in Maschine Y je Seite (-1 links, +1 rechts).
+# tools/maschine_check.py vergleicht.
+KABELHALTER_Y = {-1: (-281.0, -173.0, -63.0, 30.0, 126.0),
+                 1: (-155.0, -67.0, 22.0, 110.0)}
+
+
+def nachbar_pfad(name):
+    """<Ordner dieses Skripts>/../<name>/<name>.py"""
+    hier = os.path.dirname(os.path.abspath(__file__))
+    return os.path.normpath(os.path.join(hier, '..', name, name + '.py'))
+
+
+def nachbar_laden(name):
+    """Laedt das Skript als eigenes Modul (frische Caches), ohne run()
+    aufzurufen."""
+    pfad = nachbar_pfad(name)
+    if not os.path.isfile(pfad):
+        raise IOError('{} fehlt'.format(pfad))
+    spec = importlib.util.spec_from_file_location(
+        'maschine_' + name.lower(), pfad)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def gruppe_versatz(name, L):
+    """Lage der Gruppe in Maschinenkoordinaten (mm). Alle Skripte rechnen in
+    den Koordinaten von Portal.py, nur ToolheadZ.py zaehlt X ab der
+    X-Wagenmitte; der Toolhead steht in der Mitte des X-Wegs."""
+    if name == 'ToolheadZ':
+        return (L['xw_mitte'], 0.0, 0.0)
+    return (0.0, 0.0, 0.0)
+
+
+def matrix(dx=0.0, dy=0.0, dz=0.0):
+    """Verschiebung in Maschinenkoordinaten (mm) als Matrix3D. Im Modell
+    sind Y und Z getauscht."""
+    m3 = adsk.core.Matrix3D.create()
+    m3.translation = adsk.core.Vector3D.create(dx / 10.0, dz / 10.0,
+                                               dy / 10.0)
+    return m3
+
+
+def kabelhalter_matrix(s, y, ky):
+    """Lage eines Kabelhalters, der links bei ky gebaut ist: links um y - ky
+    verschoben; rechts wie am Aufbau um 180 Grad um die Senkrechte gedreht
+    (docs/kabelhalter.md). Die Drehachse liegt bei X = 0 auf halbem Weg
+    zwischen ky und y, dann landet die Schraube bei y."""
+    if s < 0:
+        return matrix(dy=y - ky)
+    m3 = adsk.core.Matrix3D.create()
+    m3.setToRotation(math.pi, adsk.core.Vector3D.create(0.0, 1.0, 0.0),
+                     adsk.core.Point3D.create(0.0, 0.0, (y + ky) / 20.0))
+    return m3
+
+
+def versuchen(protokoll, was, bauen, *args):
+    """bauen(*args); scheitert es, steht das im Protokoll und der Rest wird
+    trotzdem gebaut. Liefert True, wenn es geklappt hat."""
+    try:
+        bauen(*args)
+        return True
+    except Exception:
+        protokoll.append('{} nicht gebaut: {}'.format(
+            was, traceback.format_exc().strip().splitlines()[-1]))
+        return False
+
+
+def teil(g, name):
+    """Neue Komponente am Ursprung der Gruppe g; liefert die Occurrence."""
+    o = g.occurrences.addNewComponent(adsk.core.Matrix3D.create())
+    o.component.name = name
+    return o
+
+
+def wegwerfen(o, protokoll):
+    """Die anderen Skripte bauen ihre Referenzen in einem Zug; was davon hier
+    schon steht (Profile, Y-Motor), landet in einer Hilfskomponente, die
+    danach geloescht wird."""
+    try:
+        o.deleteMe()
+    except Exception:
+        protokoll.append('Hilfskomponente {} nicht geloescht'.format(
+            o.component.name))
+
+
+def toolhead_kaufteile(app, design, c, m, T, zc, protokoll):
+    """Kaufteile des Toolheads vereinfacht — ToolheadZ.py baut nur die
+    Druckteile. Masse aus ToolheadZ.py, Lage wie in tools/bauraum.py, in
+    dessen Koordinaten (X ab der X-Wagenmitte), Z-Wagen bei zc."""
+    tw = m.w
+    sx, sy = tw('spindel_x'), tw('spindel_y')
+    fl = tw('motor_flansch') / 2.0
+
+    def box(name, x, y, z, material, kanal=None, farbe=None):
+        k = quader(c, name, x, y, z, 'neu').bodies.item(0)
+        if kanal:
+            quader(c, name + '_Kanal', kanal[0], kanal[1], kanal[2], 'weg', k)
+        k.name = name
+        bbox_pruefen(k, name.replace('_', ' '), (x, y, z), protokoll)
+        material_zuweisen(app, design, k, material, protokoll)
+        if farbe:
+            aussehen(app, design, k, farbe)
+
+    def walze(name, d, z, material):
+        k = zylinder(c, name, 'z', (sx, sy), d, z[0], z[1],
+                     'neu').bodies.item(0)
+        k.name = name
+        material_zuweisen(app, design, k, material, protokoll)
+
+    hs, hw = tw('z_schiene_breite') / 2.0, tw('z_wagen_breite') / 2.0
+    ys = (T['sockel_y1'], T['z_schiene_y1'])
+    zw = (zc - tw('z_wagen_laenge') / 2.0, zc + tw('z_wagen_laenge') / 2.0)
+    versuchen(protokoll, 'Z-Schiene', box, 'Z-Schiene_MGN9', (-hs, hs), ys,
+              (T['z_schiene_z0'], T['z_schiene_z1']), 'Steel')
+    versuchen(protokoll, 'Z-Wagen', box, 'Z-Wagen_MGN9H', (-hw, hw),
+              (T['sockel_y1'], T['z_wagen_y']), zw, 'Steel',
+              ((-hs, hs), (ys[0] - 1.0, ys[1]), (zw[0] - 1.0, zw[1] + 1.0)))
+    versuchen(protokoll, 'NEMA17 Z', box, 'NEMA17_Z', (sx - fl, sx + fl),
+              (sy - fl, sy + fl), (T['motor_flansch_z'], T['motor_z1']),
+              'Steel')
+    versuchen(protokoll, 'Kupplung', walze, 'Kupplung_Z', tw('kupplung_d'),
+              (T['kupplung_z0'], T['kupplung_z1']), 'Aluminum 6061')
+    versuchen(protokoll, 'Spindel', walze, 'Spindel_Tr8x2', tw('spindel_d'),
+              (T['spindel_z0_ist'], T['spindel_z1']), 'Steel')
+    versuchen(protokoll, 'Mutter', walze, 'Mutter_Tr8x2', tw('t8_flansch_d'),
+              (T['regal_z1_rel'] + zc, T['garnitur_z1_rel'] + zc), 'Steel')
+    hl = tw('laser_breite') / 2.0
+    versuchen(protokoll, 'Laser', box, 'Diodenlaser', (-hl, hl),
+              (T['laser_y'], T['laser_vorn_y']),
+              (T['laser_unten_rel'] + zc, T['laser_oben_rel'] + zc),
+              'Aluminum 6061', None, SCHWARZ)
+    # Lichtschranke Z: Platine am Halter, die Gabel steht nach +X
+    gz = (T['ls_gabel_z0'], T['ls_gabel_z1'])
+    versuchen(protokoll, 'Lichtschranke Z', box, 'LS_Z_Platine',
+              (T['ls_wand_x1'], T['ls_pcb_x1']),
+              (T['ls_pcb_y0'], T['ls_pcb_y1']),
+              (T['ls_pcb_z0'], T['ls_pcb_z1']), 'Leiterplatte')
+    for name, x, y in (
+            ('LS_Z_Gabel_1', (T['ls_pcb_x1'], T['ls_gabel_x1']),
+             (T['ls_gabel_y'][0], T['ls_schlitz_y'][0])),
+            ('LS_Z_Gabel_2', (T['ls_pcb_x1'], T['ls_gabel_x1']),
+             (T['ls_schlitz_y'][1], T['ls_gabel_y'][1])),
+            ('LS_Z_Gabel_Boden', (T['ls_pcb_x1'], T['ls_boden_x']),
+             tuple(T['ls_schlitz_y']))):
+        versuchen(protokoll, name, box, name, x, y, gz, 'Kunststoff')
+
+
+# Je Nachbar eine Funktion maschine_<Ordner>(app, design, g, m, L, protokoll):
+# g ist die Komponente der Gruppe, m das geladene Skript, L die Lage des
+# Portals. Sie bauen, was run() des Skripts baut, ohne Bohrlehren und ohne
+# Teile, die hier schon stehen. Jede Funktion des Skripts wird direkt oder
+# ueber versuchen() aufgerufen, damit tools/maschine_check.py die Argumente
+# zaehlen kann.
+def maschine_ToolheadZ(app, design, g, m, L, protokoll):
+    """Druckteile wie ToolheadZ.py, Z in der Mitte des Wegs; dazu die
+    Kaufteile vereinfacht. Ohne die Gelenke des Skripts: alles fixiert."""
+    T = m.lage()
+    zc = (T['zc_min'] + T['zc_max']) / 2.0
+    versuchen(protokoll, 'Traegerplatte', m.bau_traegerplatte, app, design,
+              teil(g, 'Traegerplatte').component, T, protokoll)
+    versuchen(protokoll, 'Motoradapter', m.bau_motoradapter, app, design,
+              teil(g, 'Motoradapter').component, T, protokoll)
+    versuchen(protokoll, 'Schlittenplatte', m.bau_schlittenplatte, app,
+              design, teil(g, 'Schlittenplatte').component, T, zc, protokoll)
+    versuchen(protokoll, 'Mutternwinkel', m.bau_mutternwinkel, app, design,
+              teil(g, 'Mutternwinkel').component, T, zc, protokoll)
+    versuchen(protokoll, 'Schaltfahne', m.bau_schaltfahne, app, design,
+              teil(g, 'Schaltfahne').component, T, zc, protokoll)
+    versuchen(protokoll, 'Endschalterhalter', m.bau_endschalterhalter, app,
+              design, teil(g, 'Endschalterhalter').component, T, protokoll)
+    versuchen(protokoll, 'Riemenhalter', m.bau_riemenhalter, app, design,
+              teil(g, 'Riemenhalter').component, T, protokoll)
+    versuchen(protokoll, 'Kettenhalter', m.bau_kettenhalter, app, design,
+              teil(g, 'Kettenhalter').component, T, protokoll)
+    versuchen(protokoll, 'Kaufteile Toolhead', toolhead_kaufteile, app,
+              design, teil(g, 'Ref_Toolhead').component, m, T, zc, protokoll)
+
+
+def maschine_Opferplatte(app, design, g, m, L, protokoll):
+    """Fuesse, Riegel und Platte; ohne Referenz (nur die Profile)."""
+    O = m.lage()
+    for s in m.SEITEN:
+        for e in m.ENDEN:
+            name = 'Fuss_{}_{}'.format(s, e)
+            versuchen(protokoll, name, m.bau_fuss, app, design,
+                      teil(g, name).component, O, s, e, protokoll)
+    versuchen(protokoll, 'Riegel', m.bau_riegel, app, design,
+              teil(g, 'Riegel').component, O, protokoll)
+    versuchen(protokoll, 'Opferplatte', m.bau_platte, app, design,
+              teil(g, 'Opferplatte').component, O, protokoll)
+
+
+def maschine_Spannmittel(app, design, g, m, L, protokoll):
+    """Anschlag, Exzenter und die Niederhalter am Beispielwerkstueck (der
+    Satz der anderen Staerken liegt im eigenen Skript neben der Platte,
+    hier nicht). Von der Referenz nur das Werkstueck — die Opferplatte
+    baut Opferplatte.py."""
+    S = m.lage()
+    versuchen(protokoll, 'Anschlagwinkel', m.bau_anschlag, app, design,
+              teil(g, 'Anschlagwinkel').component, S, protokoll)
+    c = teil(g, 'Exzenter').component
+    for ex in S['ex']:
+        versuchen(protokoll, ex['name'], m.bau_exzenter, app, design, c, ex,
+                  S, protokoll)
+    c = teil(g, 'Niederhalter').component
+    for nh in S['nh']:
+        versuchen(protokoll, nh['name'], m.bau_niederhalter, app, design, c,
+                  nh, protokoll)
+
+    def werkstueck(c):
+        k = m.quader(c, 'Werkstueck', S['wst_x'], S['wst_y'], S['wst_z'],
+                     'neu').bodies.item(0)
+        k.name = 'Beispielwerkstueck'
+        m.material_zuweisen(app, design, k, 'Sperrholz', protokoll)
+    versuchen(protokoll, 'Beispielwerkstueck', werkstueck,
+              teil(g, 'Ref_Werkstueck').component)
+
+
+def maschine_Elektronikfach(app, design, g, m, L, protokoll):
+    """Fach und Deckel (Zwischenstand), Geraete als Referenz; ohne das
+    hintere 2060 und die Enden der 2040."""
+    E = m.lage()
+    for name in ('Fach_links', 'Fach_rechts', 'Deckel_links',
+                 'Deckel_rechts'):
+        versuchen(protokoll, name, m.bau_teil, app, design,
+                  teil(g, name).component, E, name, protokoll)
+    weg = teil(g, 'Weg_Elektronikfach')
+    versuchen(protokoll, 'Referenz', m.bau_referenz, app, design,
+              {'Ref_Profile': weg.component,
+               'Ref_Elektronik': teil(g, 'Ref_Elektronik').component},
+              E, protokoll)
+    wegwerfen(weg, protokoll)
+
+
+def maschine_Kamerahalter(app, design, g, m, L, protokoll):
+    """Halter, Kamera, M5-Koepfe und Sichtlinien; ohne das 2060 und den
+    Ausschnitt des Fachs (die stehen schon da)."""
+    K = m.lage()
+    versuchen(protokoll, 'Kamerahalter', m.bau_halter, app, design,
+              teil(g, 'Kamerahalter').component, K, protokoll)
+    weg = teil(g, 'Weg_Kamerahalter')
+    versuchen(protokoll, 'Referenz', m.bau_referenz, app, design,
+              {'Ref_Rahmen': weg.component,
+               'Ref_Kamera': teil(g, 'Ref_Kamera').component,
+               'Ref_Schrauben': teil(g, 'Ref_Schrauben_Kamera').component},
+              K, protokoll)
+    wegwerfen(weg, protokoll)
+
+
+def maschine_NotAus(app, design, g, m, L, protokoll):
+    """Gehaeuse und Taster; ohne Profile und Y-Motor (die baut das
+    Portal)."""
+    N = m.lage()
+    versuchen(protokoll, 'Gehaeuse_NotAus', m.bau_gehaeuse, app, design,
+              teil(g, 'Gehaeuse_NotAus').component, N, protokoll)
+    weg = teil(g, 'Weg_NotAus')
+    versuchen(protokoll, 'Referenz', m.bau_referenz, app, design,
+              {'Ref_Rahmen': weg.component, 'Ref_YMotor': weg.component,
+               'Ref_Taster': teil(g, 'Ref_Taster').component},
+              N, protokoll)
+    wegwerfen(weg, protokoll)
+
+
+def maschine_Kabelhalter(app, design, g, m, L, protokoll):
+    """Einen Halter bauen, dann an alle Plaetze aus KABELHALTER_Y setzen:
+    dieselbe Komponente, rechts um 180 Grad gedreht."""
+    K = m.lage()
+    ky = m.MASSE['kh_y'][0]
+    o = teil(g, 'Kabelhalter')
+    if not versuchen(protokoll, 'Kabelhalter', m.bau_halter, app, design,
+                     o.component, K, protokoll):
+        return
+    if all(abs(y - ky) > 1e-6 for y in KABELHALTER_Y[-1]):
+        protokoll.append('kh_y = {:.0f} ist kein Platz aus KABELHALTER_Y, '
+                         'der Halter dort ist zu viel'.format(ky))
+    for s in (-1, 1):
+        for y in KABELHALTER_Y[s]:
+            if s < 0 and abs(y - ky) < 1e-6:
+                continue                     # steht schon dort
+            versuchen(protokoll, 'Kabelhalter bei Y {:.0f}'.format(y),
+                      g.occurrences.addExistingComponent, o.component,
+                      kabelhalter_matrix(s, y, ky))
+
+
+def nachbarn_laden():
+    """Laedt jeden Nachbarn aus NACHBARN. Liefert ({Ordner: Modul}, Zeilen
+    fuer die Hinweise). Ein fehlender Ordner oder ein Fehler im Skript
+    kostet nur diese Gruppe."""
+    module, zeilen = {}, []
+    for name in NACHBARN:
+        try:
+            module[name] = nachbar_laden(name)
+        except Exception:
+            zeilen += textwrap.wrap(
+                '{}: NICHT GELADEN — {}'.format(
+                    name, traceback.format_exc().strip().splitlines()[-1]),
+                72, initial_indent='  ', subsequent_indent='    ')
+    return module, zeilen
+
+
+def nachbarn_bauen(app, design, root, L, module, zeilen):
+    """Baut die geladenen Nachbarn, jeden in seine Gruppe
+    <Skript>_r<Revision> am Ursprung; ToolheadZ wird danach an seinen
+    Platz geschoben (gebaut wird am Ursprung wie im eigenen Skript).
+    Haengt die Zeilen fuer die Hinweise an und liefert {Gruppenname:
+    Komponente} fuer den Bericht."""
+    gruppen = {}
+    for name in NACHBARN:
+        m = module.get(name)
+        if m is None:
+            continue
+        protokoll = []
+        gname = '{}_r{}'.format(m.SKRIPT_NAME, m.REVISION)
+        o = root.occurrences.addNewComponent(adsk.core.Matrix3D.create())
+        o.component.name = gname
+        try:
+            globals()['maschine_' + name](app, design, o.component, m, L,
+                                          protokoll)
+        except Exception:
+            protokoll.append('abgebrochen: {}'.format(
+                traceback.format_exc().strip().splitlines()[-1]))
+        dx, dy, dz = gruppe_versatz(name, L)
+        if abs(dx) + abs(dy) + abs(dz) > 1e-9:
+            # transform2 gibt es in neueren Fusion-Versionen; fuer eine
+            # Occurrence direkt unter root ist es dasselbe wie transform
+            feld = 'transform2' if hasattr(o, 'transform2') else 'transform'
+            try:
+                setattr(o, feld, matrix(dx, dy, dz))
+                t = getattr(o, feld).translation
+                ist = (t.x * 10.0, t.z * 10.0, t.y * 10.0)
+                if max(abs(a - b) for a, b in zip(ist, (dx, dy, dz))) > 0.01:
+                    protokoll.append('steht nicht an seinem Platz: X {:+.2f} '
+                                     'statt {:+.2f}'.format(ist[0], dx))
+            except Exception:
+                protokoll.append('nicht an seinen Platz geschoben: {}'.format(
+                    traceback.format_exc().strip().splitlines()[-1]))
+        for i in range(o.component.occurrences.count):
+            try:
+                o.component.occurrences.item(i).isGrounded = True
+            except Exception:
+                pass
+        o.isGrounded = True
+        gruppen[gname] = o.component
+        zeilen.append('  {}: {}'.format(
+            gname, 'gebaut' if not protokoll
+            else '{} Meldung(en)'.format(len(protokoll))))
+        for p in protokoll:
+            zeilen += textwrap.wrap(p, 72, initial_indent='    ',
+                                    subsequent_indent='      ')
+    return gruppen
 
 
 def run(context):
@@ -3833,6 +4281,12 @@ def run(context):
                     '{} mm'.format(wert)), 'mm', kommentar)
 
         L = lage()
+
+        # Gesamtmodell: die anderen Skripte zuerst laden — fehlt ToolheadZ,
+        # baut die Referenz unten den Toolhead vereinfacht
+        module, maschine = ({}, None)
+        if MASCHINE:
+            module, maschine = nachbarn_laden()
 
         # Baugruppe: alle Komponenten am globalen Ursprung, jedes Teil steht
         # damit schon an seinem Platz. Nichts bewegt sich gegeneinander (die
@@ -3902,15 +4356,21 @@ def run(context):
             o = ref.component.occurrences.addNewComponent(einheit)
             o.component.name = name
             teile[name] = o.component
-        bau_referenz(app, design, teile, L, fehler)
+        bau_referenz(app, design, teile, L, fehler,
+                     toolhead_vereinfacht='ToolheadZ' not in module)
         ref.isGrounded = True
+
+        gruppen = {}
+        if MASCHINE:
+            gruppen = nachbarn_bauen(app, design, root, L, module, maschine)
 
         if design.snapshots.hasPendingSnapshot:
             design.snapshots.add()
 
         app.activeViewport.fit()
         validierungs_bericht(app, design, ui,
-                             hinweise=hinweise_bauen(L, fehler))
+                             hinweise=hinweise_bauen(L, fehler, maschine),
+                             gruppen=gruppen)
 
     except:
         if ui:

@@ -18,7 +18,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
-fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y, Wanne der X-Energiekette
+fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y, Wanne der X-Energiekette; seit Rev. 29 das Gesamtmodell der ganzen Maschine  ← aktuell
 fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel als Haube mit Lüfter (Rev. 3)  ← neu
 fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
 fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an den 2040  ← neu
@@ -66,6 +66,7 @@ docs/energiekette-y.svg        Y-Energiekette von links und im Schnitt durch ein
 tools/bauraum.py               Bauräume als Quader — Quelle für Prüfung + Zeichnung
 tools/toolhead_check.py        rechnerische Prüfung der Baugruppe (ohne Fusion)
 tools/portal_check.py          Prüfung des Portals mit dem Toolhead über X- und Z-Weg
+tools/maschine_check.py        Prüfung des Gesamtmodells: Aufrufe von Portal.py in die anderen Skripte, Lage der Gruppen, Kabelhalterplätze, Materialien
 tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
 tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/portal_zeichnen.py       erzeugt die Portalzeichnung
@@ -136,6 +137,12 @@ sitzt der [Y-Motorhalter](#y-motorhalter-neu) mit dem Y-Motor, seit Rev. 16
 ebenfalls aus `Portal.py`. Aluprofile, Linearführungen,
 Riemen und Motoren stehen als Referenz mit im Modell (Komponente
 `Referenz_nicht_drucken`, nur zur Ansicht).
+
+Seit Rev. 29 zeigt `Portal.py` die **ganze Maschine**: Es lädt die anderen
+Skripte aus den Ordnern daneben und baut ihre Teile mit, je in eine Gruppe
+`<Skript>_r<Revision>`. Dazu gehören Toolhead, Opferplatte, Spannmittel,
+Elektronikfach, Kamerahalter, Not-Aus und alle neun Kabelhalter
+([Gesamtmodell](docs/portal-y-schlitten.md#gesamtmodell-die-ganze-maschine-seit-rev-29)).
 
 X-Weg **391,2 mm** — die ganze Schiene minus Wagen. Der Toolhead fährt an
 beiden Enden mit mindestens 3 mm an Motor, Umlenkung, Schlitten und Y-Riemen
@@ -326,11 +333,19 @@ Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
 
+**Ganze Maschine:** *Portal* lädt seit Rev. 29 die Skripte aus den Ordnern
+neben `Portal/`. Damit es die ganze Maschine zeigt, alle Ordner aus
+`fusion/` zusammen kopieren und nach jeder Änderung an einem Skript dessen
+Ordner neu kopieren. Fehlt ein Ordner, fehlt im Modell nur diese Gruppe,
+und der Bericht nennt sie. Der Lauf dauert deutlich länger als früher. Wer
+nur das Portal braucht, setzt oben im Skript `MASCHINE = False`.
+
 ## Prüfen und zeichnen
 
 ```sh
 python3 tools/toolhead_check.py     # Maßkette, Kollisionen, Schrauben, Druck
 python3 tools/portal_check.py       # Portal + Toolhead über den ganzen Weg
+python3 tools/maschine_check.py     # Gesamtmodell: Aufrufe in die anderen Skripte, Gruppen, Kabelhalter
 python3 tools/elektronik_check.py   # Elektronikgehäuse gegen Portal, Toolhead, Rahmen; Verkabelung
 python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
 python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
@@ -382,10 +397,16 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 28 mit
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 29 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
-Spannmittel Rev. 1, Kamerahalter Rev. 1). Neu ist der Kamerahalter für den
-Autofokus mit `kamerahalter_check.py`
+Spannmittel Rev. 1, Kamerahalter Rev. 1, `maschine_check.py`). Neu ist
+Portal Rev. 29: Das Skript zeigt die ganze Maschine. Es lädt die anderen
+Skripte aus den Ordnern daneben und baut ihre Teile mit, statt nur Portal
+und einen vereinfachten Toolhead. `maschine_check.py` prüft ohne Fusion,
+dass jede aufgerufene Funktion existiert und die Argumente passen
+([portal-y-schlitten.md](docs/portal-y-schlitten.md#gesamtmodell-die-ganze-maschine-seit-rev-29)).
+Am Portal selbst ändert sich nichts, neu gedruckt wird nichts. Davor kam
+der Kamerahalter für den Autofokus mit `kamerahalter_check.py`
 ([kamerahalter.md](docs/kamerahalter.md)). Davor kam Portal Rev. 28: Die
 Klemmtürme aus Rev. 26/27
 streiften an der engsten Stelle an der 2040. Rev. 26 hatte die an einer

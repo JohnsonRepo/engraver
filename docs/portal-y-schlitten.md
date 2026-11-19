@@ -1,9 +1,11 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 28, fünfundzwanzig
-gedruckte Teile).
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 29, fünfundzwanzig
+gedruckte Teile; seit Rev. 29 dazu das
+[Gesamtmodell der ganzen Maschine](#gesamtmodell-die-ganze-maschine-seit-rev-29)).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
-`fusion/ToolheadZ/ToolheadZ.py`. Zeichnungen:
+`fusion/ToolheadZ/ToolheadZ.py` — und `python3 tools/maschine_check.py`
+(Gesamtmodell). Zeichnungen:
 [portal-y-schlitten.svg](portal-y-schlitten.svg) (Portal),
 [y-motorhalter.svg](y-motorhalter.svg) (Y-Motorhalter vorn),
 [energiekette.svg](energiekette.svg) (X-Energiekette und Kabelweg) und
@@ -55,6 +57,56 @@ Warum so viele Teile: Jedes ist nur so **ohne Stützmaterial** druckbar. Die
 Klemmtürme hängen unter der Platte, die Rohrhalterung steht auf ihr — an
 einem Stück wäre eine der beiden Seiten ein Überhang.
 
+## Gesamtmodell: die ganze Maschine (seit Rev. 29)
+
+Bis Rev. 28 zeigte das Modell nur das Portal, den Rahmen und vom Toolhead
+ein paar vereinfachte Teile. Seit Rev. 29 lädt `Portal.py` die anderen
+Skripte aus den Ordnern neben `Portal/`, ruft ihre eigenen Baufunktionen
+auf und baut so die ganze Maschine. Die Geometrie steht damit nur an einer
+Stelle: Ändert sich ein Skript, zeigt der nächste Lauf von *Portal* den
+neuen Stand. Jedes Skript bekommt eine Gruppe `<Skript>_r<Revision>`,
+damit man im Browser sieht, welcher Stand gebaut wurde.
+
+| Gruppe | Inhalt |
+|---|---|
+| `ToolheadZ_r38` | alle Druckteile des Toolheads, Z-Wagen in der Mitte des Z-Wegs. Dazu in `Ref_Toolhead` die Kaufteile vereinfacht: Z-Schiene MGN9 mit Wagen, Z-Motor, Kupplung, Spindel Tr8×2 mit Mutter, Diodenlaser, Lichtschranke Z. Die Gruppe steht um die X-Wagenmitte verschoben (ToolheadZ rechnet X ab dort), also in der Mitte des X-Wegs |
+| `Opferplatte_r3` | vier Füße unter den 2060, Riegel (zu), Opferplatte |
+| `Spannmittel_r1` | Anschlagwinkel, zwei Exzenter, die vier Niederhalter am Beispielwerkstück und das Werkstück selbst. Den Satz der anderen Stärken legt das eigene Skript neben die Platte, hier fehlt er |
+| `Elektronikfach_r1` | Fach und Deckel links und rechts (Zwischenstand) und in `Ref_Elektronik` die Geräte: Uno, Pi, Wandler, Wago, Lüfter, Buchse, Schalter |
+| `Kamerahalter_r1` | Halter, Camera Module 3, M5-Köpfe und die Sichtlinien zum Messpunkt |
+| `NotAus_r5` | Gehäuse und Taster |
+| `Kabelhalter_r2` | alle neun Halter, links fünf, rechts vier, rechts um 180° gedreht. Die Plätze stehen in `KABELHALTER_Y` in `Portal.py` und kommen aus `kabelhalter_check.py` ([kabelhalter.md](kabelhalter.md)) |
+
+Nicht noch einmal gebaut wird, was es schon gibt: Profile und Y-Motor stehen
+in der Referenz des Portals. Die Opferplatte baut `Opferplatte.py`. Mit
+`ToolheadZ` entfallen die vereinfachten Toolhead-Teile in `Ref_Antrieb`.
+Bohrlehren der anderen Skripte baut nur jedes Skript für sich. Die
+Gelenke aus `ToolheadZ.py` fehlen, alles ist fixiert.
+
+**Einrichten:** Die Ordner müssen nebeneinander liegen wie in `fusion/`.
+Also alle zusammen in den Scripts-Ordner von Fusion kopieren und nach
+einer Änderung den geänderten Ordner neu kopieren. Fehlt ein Ordner oder
+scheitert ein Skript, fehlt nur seine Gruppe. Der Bericht nennt das unter
+**GESAMTMODELL**, mit einer Zeile je Gruppe: Druckteil-Körper, Gramm,
+Referenzkörper. Die Körper selbst listet der Bericht des jeweiligen Skripts.
+`MASCHINE = False` oben im Skript baut nur das Portal wie bis Rev. 28.
+
+**Geprüft ohne Fusion** mit `python3 tools/maschine_check.py`:
+
+* jede Funktion der anderen Skripte, die `Portal.py` aufruft, existiert,
+  und die Zahl der Argumente passt zur Signatur;
+* jeder Schlüssel, den `Portal.py` aus ihren `lage()` und `MASSE` liest,
+  ist da;
+* Lage der Gruppen, die Kabelhalterplätze wie `kabelhalter_check.py` und
+  die Drehung des rechten Halters;
+* eindeutige Komponentennamen;
+* gleiche Dichte für gleichnamige eigene Materialien. Im Gesamtmodell
+  teilen sich alle Skripte ein PETG, ein PLA und so weiter.
+
+Nicht geprüft ist der Lauf in Fusion selbst: Die Skripte bauen in
+Unterkomponenten wie in ihren eigenen Referenzgruppen. Nur der Toolhead
+wird danach verschoben.
+
 ## Referenzteile im Modell (nicht drucken)
 
 Damit das Modell zeigt, wie alles zusammenhängt, baut das Skript die
@@ -68,7 +120,7 @@ sie mit „[Referenz, nicht drucken]“.
 | `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
 | `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkritzel, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: schräg um das mittige Ritzel des Y-Motors, als Rücklauf gerade durch die äußere obere Nut des 2040, um das hintere Ritzel und schräg zurück |
-| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, das X-Umlenkritzel mit Welle, Kugellager und Gleitlager; vom Toolhead der Riemenhalter, der Kettenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
+| `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, das X-Umlenkritzel mit Welle, Kugellager und Gleitlager; nur wenn `ToolheadZ` im Gesamtmodell fehlt: vom Toolhead der Riemenhalter, der Kettenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
 | `Ref_Kette` | die X-Energiekette vereinfacht als U aus Untertrum, Bogen und Obertrum, mit dem Toolhead in der Mitte des X-Wegs (das bewegte Ende steht dann über dem Festpunkt); seit Rev. 21 ebenso die Y-Energiekette mit dem Portal in der Mitte |
 | `Ref_Endschalter` | die beiden Lichtschranken LM393 (Platine und Gabel): Y fest am rechten 2040 hinter dem hinteren 2060, X vor dem linken Ende der 2020 |
 
@@ -80,8 +132,10 @@ Was dabei angenommen ist:
   `[v]`, das hintere 435 mm Mitte zu Mitte dahinter `[v]`: Die 2040 stehen
   hinten 110 mm über (gemessen 2026-09-27, Rev. 14; bis Rev. 13 400 mm
   `[?]`).
-* Der **Toolhead** steht in der Mitte des X-Wegs; von ihm sind nur X-Wagen,
-  Riemenhalter, Kettenhalter und die Trägerplatte (vereinfacht) drin. Lagerschlitten und
+* Der **Toolhead** steht in der Mitte des X-Wegs und mit dem Z-Wagen in der
+  Mitte des Z-Wegs. Im Gesamtmodell kommt er ganz aus `ToolheadZ.py`, ohne
+  es sind nur X-Wagen, Riemenhalter, Kettenhalter und die Trägerplatte
+  (vereinfacht) drin. Lagerschlitten und
   Umlenkritzel stehen in der Mitte des Spannwegs. Die Fahnen der Endschalter stehen
   deshalb nicht in ihrer Gabel; den Schaltpunkt zeigt
   [endschalter.svg](endschalter.svg).

@@ -22,6 +22,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bauraum                                        # noqa: E402
 from toolhead_check import Pruefung                   # noqa: E402
 
+ELEKTRONIKFACH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                              'fusion', 'Elektronikfach',
+                              'Elektronikfach.py')
 INBUS_FREI_D = 6.0            # Platz fuer den Inbus (wie toolhead_check)
 WERKZEUG_LAENGE = 20.0        # kuerzester nutzbarer Inbus-Schenkel
 X_SCHRITTE = 81               # Stellungen ueber den X-Weg
@@ -1075,40 +1078,29 @@ def main():
          WERKZEUG_LAENGE)
 
     # ------------------------------------------------------------------
-    # Elektronikfach: hinter dem hinteren 2060, unter den 2040. Rahmen-
-    # koordinaten wie Abschnitt 14, das Portal faehrt bis an beide
-    # Schienenenden. Stellungen, in denen der Toolhead ein 2060
-    # durchdringen muesste, gibt es nicht — mit Z unten steht das hintere
-    # 2060 davor — und werden uebersprungen.
-    p.titel('16) Elektronikfach hinter dem hinteren 2060 (Referenz)')
+    # Elektronikfach: seit Elektronikfach.py Rev. 2 vor dem vorderen 2060
+    # zwischen den Y-Motoren (dort ist es an der Maschine verbaut). Rahmen-
+    # koordinaten wie Abschnitt 14; das Portal faehrt bis ans vordere
+    # Schienenende, Stellungen, in denen der Toolhead ein 2060 durchdringen
+    # muesste, gibt es nicht und werden uebersprungen.
+    p.titel('16) Elektronikfach vor dem vorderen 2060 (Elektronikfach.py)')
     fach = elektronikfach(w, L)
     p.info('Fach X von', fach.x[0])
     p.info('       bis', fach.x[1])
-    p.info('Fach Y von (vor der Stirnseite hinten)', fach.y[0])
-    p.info('       bis (hinter dem hinteren 2060)', fach.y[1])
+    p.info('Fach Y von (Vorderseite des vorderen 2060)', fach.y[0])
+    p.info('       bis (Frontwand)', fach.y[1])
     p.info('Fach Z von (ueber dem Tisch)', fach.z[0])
-    p.info('       bis (unter den 2040)', fach.z[1])
-    p.info('Fach Breite', fach.x[1] - fach.x[0])
-    p.info('     Tiefe (hinteres 2060 gemessen [v])', fach.y[1] - fach.y[0])
-    p.info('     Hoehe', fach.z[1] - fach.z[0])
-    # Ueber dem Fach: in der Mitte (neben Schlitten und Klemmtuermen) reicht
-    # nur die Traegerplatte tief herunter, und die hoechstens bis vor ihre
-    # Lage am hinteren Schienenende. Dahinter bleibt viel mehr Hoehe.
-    y_tr = hohe_zone_y(w, TL, d_schiene)
-    zonen = {'mitte': (225.0, y_tr, fach.y[0]),
-             'mitte16': (225.0, fach.y[1], fach.y[0])}
-    engste_f, hoch = luft_hinten(w, L, TL, feste_th, bewegte_th, [fach],
-                                 zonen)
+    p.info('       bis (Luefter auf dem Deckel)', fach.z[1])
+    p.ok('Fach liegt an der Vorderseite des vorderen 2060 an',
+         abs(fach.y[0] - L['quer_y_vorn'][1]), 0.0, '<=')
+    engste_f, _ = luft_weg(w, L, TL, feste_th, bewegte_th, [fach], 'vorn')
     p.ok('Fach frei von Portal und Toolhead, alle Stellungen [{}, Portal '
          '{:+.1f}]'.format(engste_f[2], engste_f[3]), engste_f[0],
          w('luft_bau'))
-    zm = hoch.get('mitte', (1e9, None))
-    zd = hoch.get('mitte16', (1e9, None))
-    p.info('hoeher darf es in der Mitte (|X| <= 225) ab {:.1f} mm hinter dem '
-           '2060: frei bis Z [{}]'.format(L['quer_y_hinten'][0] - y_tr,
-                                          zm[1]), zm[0] - w('luft_bau'))
-    p.info('   direkt hinter dem 2060 nur bis Z [{}]'.format(zd[1]),
-           zd[0] - w('luft_bau'))
+    yh = y_halter_quader(w, L)
+    d = min((fach.abstand(q), q.name) for q in yh)
+    p.ok('Fach frei von Y-Motorhalter, Motor und Ritzel [{}]'.format(d[1]),
+         d[0], w('luft_bau'))
 
     # ------------------------------------------------------------------
     p.titel('17) Energiekette X: gedruckte Kette, Wanne, Kettenhalter')
@@ -1472,16 +1464,29 @@ def hohe_zone_y(w, TL, d_schiene):
 
 
 def luft_hinten(w, L, TL, feste_th, bewegte_th, ziele, zonen=None):
+    """Wie luft_weg(..., 'hinten')."""
+    return luft_weg(w, L, TL, feste_th, bewegte_th, ziele, 'hinten', zonen)
+
+
+def luft_weg(w, L, TL, feste_th, bewegte_th, ziele, seite, zonen=None):
     """Kleinste Luft zwischen festen Quadern `ziele` (Rahmenkoordinaten wie
     Abschnitt 14) und allem, was sich bewegt: das Portal ueber die hintere
-    Haelfte des Y-Wegs bis ans Schienenende, der Toolhead dazu ueber X und
+    Haelfte des Y-Wegs bis ans Schienenende bzw. die vordere bis ans
+    Softlimit (seite 'hinten' | 'vorn'), der Toolhead dazu ueber X und
     Z. Stellungen, in denen der Toolhead ein 2060 durchdringen muesste, gibt
     es nicht — mit Z unten steht das 2060 davor — und werden uebersprungen.
 
     Liefert ((luft, ziel, teil, dy), tief). tief: je Zone aus `zonen`
     ({name: (xb, y_vorn, y_hinten)}) der tiefste bewegte Punkt (z, teil) in
     |X| < xb, y_hinten < Y < y_vorn."""
-    d_schiene, _, d_hinten, _ = y_weg(w, L, TL, feste_th, bewegte_th)
+    d_schiene, d_vorn, d_hinten, _ = y_weg(w, L, TL, feste_th, bewegte_th)
+    k = -1.0 if seite == 'hinten' else 1.0
+    d_2060 = d_hinten if seite == 'hinten' else d_vorn
+    if seite == 'vorn':
+        # nach vorn begrenzt das Softlimit den Weg ($131, y_weg_vorn: mit Z
+        # unten 3 mm vor dem vorderen 2060); mit Z oben koennte der Toolhead
+        # sonst ueber das 2060 hinaus bis ans Schienenende fahren
+        d_schiene = min(d_schiene, w('y_weg_vorn'))
     lang_fest = ('Y-Schiene', 'Rahmen 2040', 'Y-Riemen', 'Y-Ruecklauf')
     portal = [q for q in bauraum.portal_bauraeume(w, L)[0]
               if not any(q.name.startswith(t) for t in lang_fest)]
@@ -1491,11 +1496,11 @@ def luft_hinten(w, L, TL, feste_th, bewegte_th, ziele, zonen=None):
         return bauraum.Quader(q.name, q.x[0], q.x[1], q.y[0] + dy,
                               q.y[1] + dy, q.z[0], q.z[1], q.art)
 
-    # nur die hintere Haelfte des Wegs: von vorn kommt nichts bis hierher.
-    # Hinter das Schienenende kommt der Wagen nicht, auch wenn das 2060
-    # weiter hinten liegt (seit Portal Rev. 14 so).
-    dys = sorted(set([-d_schiene, -min(d_hinten, d_schiene), 0.0]
-                     + [-d_schiene + 2.5 * i
+    # nur die Haelfte des Wegs auf dieser Seite: von der anderen kommt
+    # nichts bis hierher. Hinter das Schienenende kommt der Wagen nicht,
+    # auch wenn das 2060 weiter aussen liegt (seit Portal Rev. 14 so).
+    dys = sorted(set([k * d_schiene, k * min(d_2060, d_schiene), 0.0]
+                     + [k * (d_schiene - 2.5 * i)
                         for i in range(int(d_schiene / 2.5) + 1)]))
     xs = [L['xw_min'] + (L['xw_max'] - L['xw_min']) * i / 20.0
           for i in range(21)]
@@ -1534,11 +1539,27 @@ def quer_quader(w, L):
                          ('vorn', L['quer_y_vorn']))]
 
 
-def elektronikfach(w, L, rand=3.0, tisch=2.0):
-    """Freier Raum fuer die Elektronik hinter dem hinteren 2060: zwischen
-    den Innenseiten der 2040, bis vor ihre hintere Stirnseite, vom Tisch
-    bis unter die 2040 — jeweils mit `rand` Abstand, zum Tisch `tisch`.
-    Rahmenkoordinaten wie Abschnitt 14 (Portal in der Mitte)."""
+def elektronikfach(w, L):
+    """Kasten mit Deckel und Luefter des Elektronikfachs in Rahmen-
+    koordinaten (Portal in der Mitte), aus Elektronikfach.py: seit Rev. 2
+    vor dem vorderen 2060, in Fachkoordinaten gerechnet und gedreht
+    (bereich_nach_maschine). Die Ohren stehen nicht darin; sie prueft
+    tools/elektronik_check.py."""
+    em = bauraum.modul_laden(ELEKTRONIKFACH, 'elektronikfach')
+    EL = em.lage()
+    # der Luefter steht auf dem Deckel, innerhalb des Kastens
+    z1 = max(EL['deckel_z'][1], EL['luefter_z'][1])
+    x, y, z = em.bereich_nach_maschine(EL['geh_x'], EL['geh_y'],
+                                       (EL['geh_z'][0], z1))
+    return bauraum.Quader('Elektronikfach', *x, *y, *z)
+
+
+def elektronikfach_hinten(w, L, rand=3.0, tisch=2.0):
+    """Raum hinter dem hinteren 2060, wo das Elektronikfach bis Rev. 1
+    stand: zwischen den Innenseiten der 2040, bis vor ihre hintere
+    Stirnseite, vom Tisch bis unter die 2040. Nur noch fuer die Kabelwege
+    in tools/elektronik_zeichnen.py, die noch fuer diese Lage gerechnet
+    sind."""
     xi = L['R'] - w('rahmen_b') / 2.0 - rand
     return bauraum.Quader('Elektronikfach', -xi, xi, L['rahmen_y'][0] + rand,
                           L['quer_y_hinten'][0] - rand,

@@ -2,13 +2,13 @@
 """Rechnerische Pruefung der Fuehrungsfuesse und der Opferplatte
 (fusion/Opferplatte) — laeuft ohne Fusion.
 
-Importiert Opferplatte.py, Portal.py, ToolheadZ.py, NotAus.py und
+Importiert Opferplatte.py, Portal.py, ToolheadZ.py und
 Elektronikfach.py mit gestubbtem adsk-Modul und prueft: Abgleich der
 Rahmenmasse und des Arbeitsfelds, Lage und Hoehe der Platte, Werkstueck-
 hoehe, dass Toolhead und Portal ueber den ganzen Weg ueber Platte und
 Fuessen bleiben, Fuehrung, Anschlag und Einfuehrschraege, den Riegel
 (Ueberdeckung, freie Bahn, Auflage zu und offen, Schwenkkreis, Schraube,
-Festigkeit), Freiraum zu Not-Aus, Elektronik, Y-Motoren, Halter Y,
+Festigkeit), Freiraum zu Elektronikfach (mit Not-Aus), Y-Motoren, Halter Y,
 Winkeln und Y-Kette, die Verschraubung in der Nut, Werkzeugzugang und
 Druck. Gibt die Stueckliste aus.
 
@@ -25,7 +25,6 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bauraum                                        # noqa: E402
 import elektronik_check                               # noqa: E402
-import notaus_check                                   # noqa: E402
 import portal_check                                   # noqa: E402
 from bauraum import Quader                            # noqa: E402
 from toolhead_check import Pruefung                   # noqa: E402
@@ -171,8 +170,6 @@ def main():
     w, L = pm.w, pm.lage()
     om = bauraum.modul_laden(OPFERPLATTE, 'opferplatte')
     ow, OL = om.w, om.lage()
-    nm = bauraum.modul_laden(notaus_check.NOTAUS, 'notaus')
-    nw, NL = nm.w, nm.lage()
     em = bauraum.modul_laden(elektronik_check.ELEKTRONIK, 'elektronik')
     ew, EL = em.w, em.lage()
     p = Pruefung()
@@ -314,10 +311,11 @@ def main():
          '<=')
 
     # ------------------------------------------------------------------
-    p.titel('6) Freiraum: Not-Aus, Elektronik, Y-Motoren, Halter Y, Winkel, '
+    p.titel('6) Freiraum: Elektronikfach, Y-Motoren, Halter Y, Winkel, '
             'Y-Kette')
-    fremd = [('Not-Aus', notaus_check.teile(nw, NL)),
-             ('Elektronik', elektronik_check.elektronik_quader(ew, EL))]
+    # Seit Elektronikfach Rev. 2 sitzt der Not-Aus in der Frontwand des
+    # Fachs; ein eigenes Gehaeuse gibt es nicht mehr
+    fremd = [('Elektronikfach', elektronik_check.elektronik_quader(ew, EL))]
     YL, fl = L['ymh'], w('motor_flansch')
     ys, zs = L['rahmen_y'][1], L['rahmen_z0']
     ym = []

@@ -8,6 +8,15 @@ zu einem festen Messpunkt kurz innerhalb der Anschlagecke.
 
 ![Kamerahalter von oben, Blick zur Ecke, Schnitt längs der Sichtlinie, Halter von vorn](kamerahalter.svg)
 
+**Stand 2026-11-19, offen:** Das Elektronikfach steht an der Maschine
+**vor dem vorderen 2060** (Elektronikfach Rev. 2), nicht hinter dem
+hinteren. Die Kamera ist dort vorn rechts auf dem 2060 montiert und soll
+dort bleiben. Der Anschlag ist noch nicht verbaut und soll vor die Kamera
+kommen. Dieser Halter (Rev. 1) ist noch für die Lage hinten gerechnet,
+deshalb meldet `kamerahalter_check.py` zwei Fehler: Das Fach steht nicht
+dahinter, und das 200-mm-Kabel reicht von dort nicht bis zum Pi vorn. Lage,
+Messpunkt und Kabelweg werden für vorn rechts neu geplant.
+
 Die Maße stehen in `fusion/Kamerahalter/Kamerahalter.py` (Rev. 1). Geprüft
 wird mit `python3 tools/kamerahalter_check.py`: Lage auf dem 2060, Freiraum
 zu allem, was Toolhead und Portal über den ganzen Weg überstreichen, Abstand

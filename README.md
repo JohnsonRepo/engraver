@@ -19,15 +19,13 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 ```
 fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← aktuell
 fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y, Wanne der X-Energiekette; seit Rev. 29 das Gesamtmodell der ganzen Maschine  ← aktuell
-fusion/Elektronik/             Gehäuse für Uno + CNC Shield, Wandler, Wago; Deckel als Haube mit Lüfter (Rev. 3)  ← neu
-fusion/NotAus/                 Gehäuse für den Not-Aus vorn am vorderen 2060  ← neu
+fusion/Elektronikfach/         Fach vor dem vorderen 2060 zwischen den Y-Motoren (Rev. 2): Uno, Pi, Wandler, Wago; in der Front Buchse, Not-Aus und Schalter  ← neu
 fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an den 2040  ← neu
-fusion/PiHalter/               Halter mit Haube für Pi Zero 2 W und 5-V-Wandler an der Rückseite des hinteren 2060  ← neu
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
 fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/Kamerahalter/           Halter für das Camera Module 3 (Autofokus) oben auf dem hinteren 2060, vor dem Elektronikfach  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
-stl/                           druckfertige STL ohne Fusion: Kasten und Haube des Elektronik-Gehäuses, Kabelhalter, Pi-Halter und seine Haube, Kamerahalter
+stl/                           druckfertige STL ohne Fusion: Elektronikfach (zwei Hälften, zwei Deckel, Rev. 2), Kabelhalter, Kamerahalter
 pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus, Hotspot ohne WLAN
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
@@ -44,8 +42,6 @@ docs/verkabelung.md            Verkabelung: Kabelliste, Anschlussliste, Klemmen,
 docs/elektronik-box.svg        Elektronik-Gehäuse von oben: Uno, Lüfter, Verteiler, Kabelwege
 docs/endschalter.md            Endschalter X und Y: Halter, Fahnen, Montage, Einstellen, GRBL
 docs/endschalter.svg           Endschalter: Y von hinten und von außen, X von vorn und von oben, Klammer X
-docs/notaus.md                 Not-Aus: Taster, Lage, Gehäuse, Montage, Druck
-docs/notaus.svg                Not-Aus-Gehäuse von vorn, im Schnitt und von oben
 docs/kabelhalter.md            Kabelhalter: Rinne, Kabel, Plätze links und rechts, Montage, Druck
 docs/kabelhalter.svg           Kabelhalter im Schnitt am 2040 und seine Plätze
 docs/pi.md                     Pi: Maschine ohne PC über CNCjs — Teile, Halter, Strom, Einrichten, GRBL aufspielen, Hotspot, LightBurn, Ablauf, Fehlersuche
@@ -79,8 +75,6 @@ tools/verkabelung.py           Kabelliste — Quelle für Anleitung, Anschlusspl
 tools/elektronik_box_zeichnen.py erzeugt die Draufsicht auf das Elektronik-Gehäuse
 tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im Spalt, Freiraum über den ganzen Weg
 tools/endschalter_zeichnen.py  erzeugt die Zeichnung der Endschalter
-tools/notaus_check.py          Prüfung des Not-Aus-Gehäuses: Lage, Freiraum, Schrauben, Taster, Druck
-tools/notaus_zeichnen.py       erzeugt die Zeichnung des Not-Aus-Gehäuses
 tools/kabelhalter_check.py     Prüfung der Kabelhalter: Schraube, Rinne und Kabel, Plätze, Freiraum, Druck; schreibt die Plätze in docs/kabelhalter.md
 tools/kabelhalter_zeichnen.py  erzeugt die Zeichnung der Kabelhalter
 tools/pihalter_check.py        Prüfung des Pi-Halters: Lage, Freiraum zu Portal, Kasten und Kabeln, Schrauben, Pi, Wandler, Haube, Druck
@@ -165,6 +159,12 @@ eigene Skript `YMotorhalter.py`); den alten Halter des Portals, Achse
 
 ### Elektronikgehäuse (neu)
 
+**Stand 2026-11-19:** Verbaut ist das Elektronikfach aus
+`fusion/Elektronikfach/` (Rev. 2). Es hängt **vor dem vorderen 2060**
+zwischen den Y-Motoren, die Hälfte mit Uno und Pi rechts, die mit
+Buchse, Not-Aus und Schalter links. Der folgende Text beschreibt noch das
+frühere Gehäuse hinter dem hinteren 2060.
+
 Gehäuse im Fach hinter dem hinteren 2060, unter den 2040 — dorthin fährt
 weder Portal noch Toolhead. Links der **Arduino Uno mit CNC Shield V3** auf
 Stehbolzen, USB nach hinten zum Pi; rechts der **Abwärtswandler 24 → 12 V** für den
@@ -213,12 +213,12 @@ Details in [docs/pi.md](docs/pi.md).
 ### Not-Aus (neu)
 
 Pilztaster mit einem Wechsler (C, NO, NC): C und NC liegen in der
-24-V-Leitung, NO bleibt frei. Er sitzt in einem gedruckten Gehäuse vorn am
-vorderen 2060, rechts innen neben dem rechten 2040, mit 2 × M5 in der
-mittleren Nut und längs verschiebbar. Das Gehäuse ist hinten offen,
-45°-Rippen tragen die Laschen, und es druckt ohne Stützen. Dass die 24 V
-fehlen, meldet ein Spannungsteiler an Abort, und GRBL bricht ab. Details
-in [docs/notaus.md](docs/notaus.md).
+24-V-Leitung, NO bleibt frei. Er sitzt in der **Frontwand des
+Elektronikfachs**, links neben Buchse und Wippschalter, im Loch, das
+Rev. 1 für den Schalter hatte (Elektronikfach Rev. 2, so verbaut). Das
+eigene Gehäuse (`NotAus.py`) gibt es nicht mehr. Dass die 24 V fehlen,
+meldet ein Spannungsteiler an Abort, und GRBL bricht ab. Verdrahtung in
+[docs/verkabelung.md](docs/verkabelung.md).
 
 ### Kabelhalter (neu)
 
@@ -328,15 +328,16 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
 Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
-*Portal*, *Elektronik*, *NotAus*, *Kabelhalter*, *PiHalter*, *Opferplatte*, *Spannmittel* oder *Kamerahalter*). Jeder Lauf legt ein **neues
+*Portal*, *Elektronikfach*, *Kabelhalter*, *Opferplatte*, *Spannmittel* oder *Kamerahalter*). Jeder Lauf legt ein **neues
 Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
 
 **Ganze Maschine:** *Portal* lädt seit Rev. 29 die Skripte aus den Ordnern
-neben `Portal/`. Damit es die ganze Maschine zeigt, alle Ordner aus
-`fusion/` zusammen kopieren und nach jeder Änderung an einem Skript dessen
-Ordner neu kopieren. Fehlt ein Ordner, fehlt im Modell nur diese Gruppe,
+neben `Portal/`. Am einfachsten führt Fusion die Skripte direkt aus
+`fusion/` im Repo aus, dann gilt immer der ausgecheckte Stand. Wer kopiert,
+kopiert alle Ordner aus `fusion/` zusammen und nach jeder Änderung an
+einem Skript dessen Ordner neu. Fehlt ein Ordner, fehlt im Modell nur diese Gruppe,
 und der Bericht nennt sie. Der Lauf dauert deutlich länger als früher. Wer
 nur das Portal braucht, setzt oben im Skript `MASCHINE = False`.
 
@@ -346,7 +347,7 @@ nur das Portal braucht, setzt oben im Skript `MASCHINE = False`.
 python3 tools/toolhead_check.py     # Maßkette, Kollisionen, Schrauben, Druck
 python3 tools/portal_check.py       # Portal + Toolhead über den ganzen Weg
 python3 tools/maschine_check.py     # Gesamtmodell: Aufrufe in die anderen Skripte, Gruppen, Kabelhalter
-python3 tools/elektronik_check.py   # Elektronikgehäuse gegen Portal, Toolhead, Rahmen; Verkabelung
+python3 tools/elektronik_check.py   # Elektronikfach vorn gegen Portal, Toolhead, Rahmen, Y-Motoren; Verkabelung
 python3 tools/layout_zeichnen.py    # docs/toolhead-z-layout.svg neu erzeugen
 python3 tools/antrieb_zeichnen.py   # docs/toolhead-z-antrieb.svg neu erzeugen
 python3 tools/portal_zeichnen.py    # docs/portal-y-schlitten.svg neu erzeugen
@@ -361,13 +362,11 @@ python3 tools/y_motorhalter_check.py  # Y-Motorhalter: Riemen in der Nut, Freig�
 python3 tools/y_motorhalter_zeichnen.py  # docs/y-motorhalter.svg neu erzeugen
 python3 tools/endschalter_check.py  # Endschalter: Schaltpunkte, Freigänge, Schrauben, Druck
 python3 tools/endschalter_zeichnen.py  # docs/endschalter.svg neu erzeugen
-python3 tools/notaus_check.py       # Not-Aus-Gehäuse: Lage, Freiraum, Schrauben, Druck
-python3 tools/notaus_zeichnen.py    # docs/notaus.svg neu erzeugen
 python3 tools/kabelhalter_check.py  # Kabelhalter: Schraube, Rinne, Plätze, Freiraum (--doku: Tabelle neu)
 python3 tools/kabelhalter_zeichnen.py  # docs/kabelhalter.svg neu erzeugen
 python3 tools/pihalter_check.py     # Pi-Halter: Lage, Freiraum, Schrauben, Pi, Wandler, Haube, Druck
 python3 tools/pihalter_zeichnen.py  # docs/pihalter.svg neu erzeugen
-pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Kasten, Haube, Kabelhalter, Pi-Halter und seine Haube, Kamerahalter in Drucklage (mit Namen, z. B. Kamerahalter: nur dieser)
+pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Elektronikfach, Kabelhalter, Kamerahalter in Drucklage (mit Namen, z. B. Kamerahalter: nur dieser)
 python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
 python3 tools/spannmittel_check.py  # Spannmittel: Höhe unter dem Toolhead, Lage, Exzenter, Schrauben
@@ -397,9 +396,19 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 29 mit
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 30 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
-Spannmittel Rev. 1, Kamerahalter Rev. 1, `maschine_check.py`). Neu ist
+Spannmittel Rev. 1, `maschine_check.py`) bis auf die bekannten: die 5
+Verkabelungstabellen in `elektronik_check.py` und, gewollt, 2 Punkte in
+`kamerahalter_check.py` (Kamera und Kabel sind offen). Neu sind
+Elektronikfach Rev. 2 und Portal Rev. 30: Das Fach steht im Modell jetzt
+dort, wo es verbaut ist, **vor dem vorderen 2060** zwischen den Y-Motoren.
+Es sind dieselben Teile, gegenüber Rev. 1 um 180° gedreht. Der Not-Aus
+sitzt in der Frontwand, im alten Schalterloch, der Wippschalter im
+aufgebohrten Air-Assist-Durchbruch. Das Not-Aus-Gehäuse (`NotAus.py`)
+entfällt. Offen sind die Kabelwege und die Plätze der Kabelhalter, beide
+noch für die Lage hinten gerechnet, außerdem die Kamera: Sie sitzt an der
+Maschine vorn rechts, im Modell steht der Halter noch hinten. Davor kam
 Portal Rev. 29: Das Skript zeigt die ganze Maschine. Es lädt die anderen
 Skripte aus den Ordnern daneben und baut ihre Teile mit, statt nur Portal
 und einen vereinfachten Toolhead. `maschine_check.py` prüft ohne Fusion,
@@ -467,7 +476,6 @@ höheren Haube als Deckel, seit Rev. 4 mit rundem Schalterloch
 ([elektronik.md](docs/elektronik.md)). Die Endschalter X und Y baut seit
 Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),
-Not-Aus-Gehäuse Rev. 5 mit `notaus_check.py` ([notaus.md](docs/notaus.md)),
 Kabelhalter Rev. 2 mit `kabelhalter_check.py` ([kabelhalter.md](docs/kabelhalter.md)),
 Pi-Halter Rev. 3 mit Haube und `pihalter_check.py` ([pi.md](docs/pi.md)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,

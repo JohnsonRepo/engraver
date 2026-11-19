@@ -3,11 +3,13 @@
 ohne Fusion.
 
 Importiert Elektronikfach.py, Portal.py und ToolheadZ.py mit gestubbtem
-adsk-Modul und prueft: Abgleich der Rahmenmasse mit Portal.py, Lage im Fach
-hinter dem hinteren 2060, Freiraum gegen Portal und Toolhead ueber den ganzen
-Weg, Montage mit M5 in Hammermuttern und Werkzeugzugang, Druck (Bauraum,
-Waende, Bruecken, Traenen, Fuge), Uno, Pi, Wandler, Wago, Buchse und
-Schalter, die Gassen mit Fenstern und Oesen, die Deckel, die Leistungsbilanz
+adsk-Modul und prueft: Abgleich der Rahmenmasse und der Y-Motoren mit
+Portal.py, Lage vor dem vorderen 2060 (seit Elektronikfach Rev. 2; das Fach
+rechnet in Fachkoordinaten und wird gedreht, siehe drehen()), Freiraum
+gegen Portal und Toolhead ueber den ganzen Weg, Rahmen und Y-Motoren,
+Montage mit M5 in Hammermuttern und Werkzeugzugang, Druck (Bauraum,
+Waende, Bruecken, Traenen, Fuge), Uno, Pi, Wandler, Wago, Buchse, Not-Aus
+und Schalter, die Gassen mit Fenstern und Oesen, die Deckel, die Leistungsbilanz
 und die Litzen (aus tools/elektronik_zeichnen.py) und die Verkabelung
 (Kabelliste aus tools/verkabelung.py: Netze, Not-Aus, Signale, Kontakte,
 Klemmen, Laengen, Ketten und ob die Tabellen in docs/verkabelung.md aktuell
@@ -40,7 +42,6 @@ MITTE_Z = -19.0               # ... bis hierher (unter dem X-Wagen, 3 mm Luft)
 # Einbaumasse der Kaufteile hinter der Rueckwand [w]
 BUCHSE_KOERPER_D = 11.0       # Einbaubuchse M8: Mutter und Loetfahnen
 BUCHSE_KOERPER_T = 15.0       # ... so tief hinter der Wand
-SCHALTER_KOERPER = (20.0, 20.0, 20.0)   # rund: Ø wie das Loch, tief [?]
 # Kabelbinder an den Wandlern: 2,5 x 200, Buendel bis D 50 [w], das Band
 # 1,1 dick [w].
 BINDER = '2,5 x 200'
@@ -75,10 +76,25 @@ def binder_schlaufe(innen, wand, breite, hoehe, seitlich):
             + math.pi * BINDER_DICKE)
 
 
+def drehen(q, EL):
+    """Quader zwischen Fachkoordinaten und Maschinenkoordinaten: 180 Grad
+    um die Senkrechte durch X = 0, Y = dreh_y (wie nach_maschine in
+    Elektronikfach.py). Hin und zurueck dieselbe Rechnung."""
+    c = 2.0 * EL['dreh_y']
+    return Quader(q.name, -q.x[1], -q.x[0], c - q.y[1], c - q.y[0],
+                  q.z[0], q.z[1], q.art)
+
+
 def elektronik_quader(ew, EL):
-    """Kasten, Deckel, Luefter, Ohren und die Koepfe der aeusseren M5 als
-    Quader (Rahmenkoordinaten wie Portal.py). Die inneren M5 sitzen im
+    """Kasten, Deckel, Luefter, Ohren, die Koepfe der aeusseren M5 und der
+    Pilzkopf des Not-Aus als Quader in Rahmenkoordinaten wie Portal.py
+    (also gedreht, vor dem vorderen 2060). Die inneren M5 sitzen im
     Kasten."""
+    return [drehen(q, EL) for q in elektronik_quader_fach(ew, EL)]
+
+
+def elektronik_quader_fach(ew, EL):
+    """Wie elektronik_quader, aber in Fachkoordinaten."""
     fm, h = EL['luefter_mitte'], ew('luefter') / 2.0
     q = [Quader('Kasten', *EL['geh_x'], *EL['geh_y'], *EL['geh_z']),
          Quader('Deckel', *EL['geh_x'], *EL['geh_y'], *EL['deckel_z']),
@@ -93,6 +109,10 @@ def elektronik_quader(ew, EL):
             q.append(Quader('M5-Kopf', x - r, x + r,
                             EL['platte_y'][0] - ew('m5_kopf_h'),
                             EL['platte_y'][0], z - r, z + r))
+    nx, nz = EL['notaus']
+    r, gy0 = ew('notaus_kopf_d') / 2.0, EL['geh_y'][0]
+    q.append(Quader('Not-Aus-Kopf', nx - r, nx + r,
+                    gy0 - ew('notaus_kopf_h'), gy0, nz - r, nz + r))
     return q
 
 
@@ -130,9 +150,7 @@ def innenteile(ew, EL):
           Quader('12-V-Wandler', *EL['w12_x'], *EL['w12_y'], *EL['w12_z']),
           Quader('5-V-Wandler', *EL['w5_x'], *EL['w5_y'], *EL['w5_z']),
           Quader('USB-A-Adapter', *EL['adapter'][0], *EL['adapter'][1],
-                 *EL['adapter'][2]),
-          Quader('Air-Assist-Platz', *EL['aa_x'], *EL['aa_y'], bz,
-                 bz + 20.0)]
+                 *EL['adapter'][2])]
     for n in ('USB', 'PWR'):
         q.append(Quader('Pi-Stecker ' + n, *EL['pi_stecker'][n][0],
                         *EL['pi_stecker'][n][1], *EL['pi_stecker'][n][2]))
@@ -143,11 +161,16 @@ def innenteile(ew, EL):
     q.append(Quader('Buchse', bx - BUCHSE_KOERPER_D / 2.0,
                     bx + BUCHSE_KOERPER_D / 2.0, iy0, iy0 + BUCHSE_KOERPER_T,
                     ez - BUCHSE_KOERPER_D / 2.0, ez + BUCHSE_KOERPER_D / 2.0))
-    sx, _ = EL['schalter']
-    q.append(Quader('Schalter', sx - SCHALTER_KOERPER[0] / 2.0,
-                    sx + SCHALTER_KOERPER[0] / 2.0, iy0,
-                    iy0 + SCHALTER_KOERPER[2], ez - SCHALTER_KOERPER[1] / 2.0,
-                    ez + SCHALTER_KOERPER[1] / 2.0))
+    # Wippschalter (seit Rev. 2 im frueheren Air-Assist-Durchbruch) und
+    # Not-Aus (im Schalterloch aus Rev. 1) hinter der Frontwand
+    sx, sz = EL['schalter']
+    r = ew('schalter_koerper_d') / 2.0
+    q.append(Quader('Schalter', sx - r, sx + r, iy0,
+                    iy0 + ew('schalter_tiefe'), sz - r, sz + r))
+    nx, nz = EL['notaus']
+    r = ew('notaus_mutter') / 2.0
+    q.append(Quader('Not-Aus', nx - r, nx + r, iy0,
+                    iy0 + ew('notaus_tiefe'), nz - r, nz + r))
     return q
 
 
@@ -195,14 +218,17 @@ def main():
     feste_th, bewegte_th, _ = bauraum.bauraeume(tw, TL)
     feste_th = [q for q in feste_th
                 if q.name not in portal_check.TOOLHEAD_OHNE]
+    # Aussen (Lage, Freiraum) rechnet die Pruefung in Maschinenkoordinaten,
+    # innen in Fachkoordinaten; drehen() fuehrt Quader hin und zurueck.
     fach = portal_check.elektronikfach(w, L)
     teile = elektronik_quader(ew, EL)
     innen = innenteile(ew, EL)
     gx, gy, gz = EL['geh_x'], EL['geh_y'], EL['geh_z']
     ix, iy, bz, rz = EL['innen_x'], EL['innen_y'], EL['boden_z'], EL['rand_z']
+    mx, my, mz = em.bereich_nach_maschine(gx, gy, gz)
 
     # ------------------------------------------------------------------
-    p.titel('1) Abgleich Elektronikfach.py <-> Portal.py (Rahmen)')
+    p.titel('1) Abgleich Elektronikfach.py <-> Portal.py (Rahmen, Y-Motoren)')
     for name in ('y_schienen_abstand', 'rahmen_b', 'rahmen_h', 'quer_h',
                  'quer_laenge', 'nut_oben', 'nut_v_t', 'nut_b', 'nut_t',
                  'nut_kammer_b', 'nut_kammer_t', 'kern_d', 'm3_durchgang',
@@ -211,46 +237,65 @@ def main():
         p.ja('{} gleich in beiden Skripten'.format(name),
              abs(ew(name) - w(name)) < 1e-9,
              '   ({} / {})'.format(ew(name), w(name)))
+    H = L['ymh']
     for text, a, b in (
-            ('hintere Stirnseite der 2040', ew('rahmen_y0'),
-             L['rahmen_y'][0]),
+            ('vordere Stirnseite der 2040', ew('rahmen_y1'),
+             L['rahmen_y'][1]),
             ('Unterkante der 2040', ew('rahmen_z0'), L['rahmen_z0']),
-            ('Rueckseite hinteres 2060', ew('quer_y1'),
-             L['quer_y_hinten'][0]),
+            ('Vorderseite vorderes 2060', ew('quer_vorn_y1'),
+             L['quer_y_vorn'][1]),
             ('Tisch (Unterkante 2060)', EL['tisch_z'], L['quer_z'][0]),
-            ('Fach links/rechts', EL['fach_x'][1], fach.x[1]),
-            ('Fach hinten', EL['fach_y'][0], fach.y[0]),
-            ('Fach unten', EL['fach_z'][0], fach.z[0]),
-            ('Fach oben', EL['fach_z'][1], fach.z[1])):
+            ('Y-Motorhalter: halbe Breite', ew('ymh_halbe_b'),
+             H['halbe_breite']),
+            ('Y-Motorhalter: Schenkel hinten', ew('ymh_y0'), H['wange_y0']),
+            ('Y-Motorhalter: Platte vorn', ew('ymh_y1'), H['platte_y1']),
+            ('Y-Motorhalter: unten', ew('ymh_z0'), H['halter_z0']),
+            ('Y-Motorhalter: oben', ew('ymh_z1'), H['halter_z1']),
+            ('NEMA 17: Flansch', ew('motor_b'), w('motor_flansch')),
+            ('Y-Motorachse ganz innen', ew('motor_y_min'), H['motor_y_min']),
+            ('Y-Motorachse ganz aussen', ew('motor_y_max'), H['motor_y_max']),
+            ('Y-Motor unten', ew('motor_z0'), H['motor_z0']),
+            ('Y-Motorflansch', ew('motor_z1'), H['platte_z0'])):
         p.ja('{} gleich'.format(text), abs(a - b) < 1e-9,
              '   ({} / {})'.format(a, b))
+    p.ok('Kasten wie portal_check.elektronikfach (X, Y, unten)', max(
+        abs(mx[0] - fach.x[0]), abs(mx[1] - fach.x[1]),
+        abs(my[0] - fach.y[0]), abs(my[1] - fach.y[1]),
+        abs(mz[0] - fach.z[0])), 0.0, '<=')
 
     # ------------------------------------------------------------------
-    p.titel('2) Lage im Fach hinter dem hinteren 2060')
-    p.info('Kasten Breite (ohne Ohren)', gx[1] - gx[0])
-    p.info('       Tiefe (mit Montageplatte)', gy[1] - gy[0])
-    p.info('       Hoehe (ohne Deckel)', gz[1] - gz[0])
-    for q in teile:
-        an_2060 = q.name.startswith(('Ohr', 'M5-Kopf', 'Kasten', 'Deckel'))
-        d = min(q.x[0] - fach.x[0], fach.x[1] - q.x[1], q.y[0] - fach.y[0],
-                (fach.y[1] + 3.0 if an_2060 else fach.y[1]) - q.y[1],
-                q.z[0] - fach.z[0])
-        p.ok('{} im Fach (X, Y, unten)'.format(q.name), d, 0.0)
-        mitte = max(abs(q.x[0]), abs(q.x[1])) <= MITTE_X
-        p.ok('   oben: {} (|X| {:.0f})'.format(
-            'in der Mitte bis Z {:+.0f}'.format(MITTE_Z) if mitte
-            else 'unter den 2040', max(abs(q.x[0]), abs(q.x[1]))),
-            (MITTE_Z if mitte else fach.z[1]) - q.z[1], 0.0)
-    p.ok('Kasten in der Mitte (|X| <= 225)', MITTE_X - gx[1], 0.0)
-    p.ok('Ohren unter den 2040 (Oberkante <= Fach)',
-         fach.z[1] - EL['ohr_z'][1], 0.0)
-    p.ok('Montageplatte liegt an der Rueckseite des 2060 an',
-         -abs(EL['platte_y'][1] - L['quer_y_hinten'][0]), -0.01)
+    p.titel('2) Lage vor dem vorderen 2060 (gedreht, Elektronikfach Rev. 2)')
+    p.info('Kasten Breite (ohne Ohren)', mx[1] - mx[0])
+    p.info('       Tiefe (mit Montageplatte)', my[1] - my[0])
+    p.info('       Hoehe (ohne Deckel)', mz[1] - mz[0])
+    p.info('Kasten an der Maschine Y von', my[0])
+    p.info('                         bis', my[1])
+    p.ok('Montageplatte liegt an der Vorderseite des vorderen 2060 an',
+         abs(em.nach_maschine(0.0, EL['platte_y'][1], 0.0)[1]
+             - L['quer_y_vorn'][1]), 0.0, '<=')
+    p.ok('Kasten ueber dem Tisch', mz[0] - L['quer_z'][0],
+         ew('fach_tisch') - 0.01)
+    p.ok('Drehung zweimal = Ausgangslage', max(
+        abs(a - b) for a, b in zip(
+            em.nach_maschine(*em.nach_maschine(12.0, -300.0, -90.0)),
+            (12.0, -300.0, -90.0))), 0.0, '<=')
+    for name, x in (('Fach_links', EL['haelfte_x']['links']),
+                    ('Fach_rechts', EL['haelfte_x']['rechts'])):
+        xm_ = em.bereich_nach_maschine(x, gy, gz)[0]
+        p.info('{} an der Maschine X von {:+.0f} bis {:+.0f} ({})'.format(
+            name, xm_[0], xm_[1], 'rechts' if xm_[0] >= 0 else 'links'))
+    for name, (x, z) in (('Not-Aus', EL['notaus']),
+                         ('Buchse', EL['buchse']),
+                         ('Wippschalter', EL['schalter'])):
+        xm_, ym_, _ = em.nach_maschine(x, gy[0], z)
+        p.info('{} in der Frontwand: X {:+.0f}, Z {:+.0f} (Front Y {:+.0f})'
+               .format(name, xm_, z, ym_))
 
     # ------------------------------------------------------------------
-    p.titel('3) Freiraum gegen Portal und Toolhead (ganzer Weg), Rahmen')
-    engste, _ = portal_check.luft_hinten(w, L, TL, feste_th, bewegte_th,
-                                         teile)
+    p.titel('3) Freiraum gegen Portal und Toolhead (ganzer Weg), Rahmen, '
+            'Y-Motoren')
+    engste, _ = portal_check.luft_weg(w, L, TL, feste_th, bewegte_th,
+                                      teile, 'vorn')
     p.ok('{} <-> {} (Portal {:+.1f})'.format(engste[1], engste[2],
                                               engste[3]),
          engste[0], w('luft_bau'))
@@ -268,6 +313,7 @@ def main():
                           *q.z, q.art),
                    Quader(q.name + ' innen links', -xi, -xi + 20.0, *q.y,
                           *q.z, q.art)]
+    ymot = portal_check.y_halter_quader(w, L)
     for q in teile:
         if q.name.startswith(('Ohr', 'M5-Kopf')):
             continue
@@ -277,11 +323,15 @@ def main():
     for s in ('links', 'rechts'):
         ohr = next(q for q in teile if q.name == 'Ohr ' + s)
         d = min(ohr.abstand(r) for r in rahmen if not r.name.startswith(
-            '2060 hinten'))
-        p.ok('Ohr {}: frei von 2040 und Winkeln'.format(s), d, 1.0)
+            '2060 vorn'))
+        p.ok('Ohr {} (an der Maschine {}): frei von 2040 und Winkeln'.format(
+            s, 'rechts' if ohr.x[0] > 0 else 'links'), d, 1.0)
+    d = min((q.abstand(r), q.name, r.name) for q in teile for r in ymot)
+    p.ok('Fach frei von Y-Motorhalter, Motor und Ritzel [{} / {}]'.format(
+        d[1], d[2]), d[0], w('luft_bau'))
 
     # ------------------------------------------------------------------
-    p.titel('4) Montage: 6 x M5 in Hammermuttern der Rueckseite des 2060')
+    p.titel('4) Montage: 6 x M5 in Hammermuttern der Vorderseite des 2060')
     pd = ew('platte_dicke')
     for s in ('links', 'rechts'):
         for x, z in EL['m5'][s]:
@@ -309,9 +359,11 @@ def main():
                       iy[1], z - rk, z + rk)
         d = min(kopf.abstand(q) for q in innen)
         p.ok('M5 innen {}: Kopf frei im Kasten'.format(s), d, 1.0)
-    # Inbus: aussen neben dem Kasten von hinten; innen ebenso, solange das
-    # Fach leer ist (vor dem Bestuecken anziehen)
-    kasten_struktur = rahmen + [Quader('Kasten', *gx, *gy, *gz)]
+    # Inbus: aussen neben dem Kasten von vorn (Fachkoordinaten: -Y);
+    # innen ebenso, solange das Fach leer ist (vor dem Bestuecken anziehen).
+    # Rahmen und Y-Motoren stehen in Maschinenkoordinaten: gedreht.
+    umgebung = [drehen(q, EL) for q in rahmen + ymot]
+    kasten_struktur = umgebung + [Quader('Kasten', *gx, *gy, *gz)]
     schlecht = (float('inf'), None)
     for s in ('links', 'rechts'):
         for x, z in EL['m5'][s][:2]:
@@ -321,7 +373,7 @@ def main():
                                              kasten_struktur)
             if d < schlecht[0]:
                 schlecht = (d, wer)
-    p.ok('M5 der Ohren: Inbus von hinten neben dem Kasten'
+    p.ok('M5 der Ohren: Inbus von vorn neben dem Kasten'
          + ('' if schlecht[1] is None else '  [' + schlecht[1] + ']'),
          999.0 if schlecht[0] == float('inf') else schlecht[0],
          WERKZEUG_LAENGE)
@@ -346,11 +398,10 @@ def main():
             pt = (x, y, EL['deckel_z'][1] + 3.0)
             d, wer = bauraum.freier_korridor(pt, 'z', +1,
                                              ew('inbus_frei_d') / 2.0,
-                                             [q for q in rahmen
-                                              if q.name != '2060 vorn'])
+                                             umgebung)
             if d < schlecht[0]:
                 schlecht = (d, wer)
-    p.ok('Deckelschrauben: Inbus von oben (Portal nach vorn gefahren)'
+    p.ok('Deckelschrauben: Inbus von oben'
          + ('' if schlecht[1] is None else '  [' + schlecht[1] + ']'),
          999.0 if schlecht[0] == float('inf') else schlecht[0],
          WERKZEUG_LAENGE)
@@ -500,9 +551,19 @@ def main():
             p.ok('{} <-> {}'.format(a.name, b.name), a.abstand(b), 1.0)
     p.ja('alle Geraete mit Abstand (>= 1 mm) zueinander', True)
     for q in geraete:
-        d = min(q.abstand(x) for x in struktur
-                if not (q.name == 'Uno mit Shield'
-                        and x.name.startswith('Uno-Stehbolzen')))
+        kandidaten = [x for x in struktur
+                      if not (q.name == 'Uno mit Shield'
+                              and x.name.startswith('Uno-Stehbolzen'))]
+        if q.name == 'Schalter':
+            # seit Rev. 2 so verbaut: der Schalter im aufgebohrten Air-Assist-
+            # Durchbruch, sein Koerper [?] liegt auf der Oese darunter
+            auf = [x for x in kandidaten if x.name.startswith('Oese')
+                   and 0.0 <= q.abstand(x) < 0.5]
+            for x in auf:
+                p.info('Schalter liegt auf {} auf (so verbaut, Rev. 2)'
+                       .format(x.name))
+            kandidaten = [x for x in kandidaten if x not in auf]
+        d = min(q.abstand(x) for x in kandidaten)
         if d < 0.5:
             p.ok('{} frei von Leitwand, Oese, Dom'.format(q.name), d, 0.5)
     p.ja('alle Geraete frei von Leitwaenden, Oesen und Domen', True)
@@ -552,9 +613,15 @@ def main():
             q.y[0] - pw[0][1] if q.y[0] >= pw[0][1] else 99.0,
             q.y[0] - iy[0]), 1.0)
         p.ok('   unter dem Rand (Lippe)', rz - ew('lippe_h') - q.z[1], 3.0)
+    # Frontwand (Rueckwand in Fachkoordinaten): Buchse, Not-Aus und
+    # Wippschalter, so verbaut seit Rev. 2 — der Not-Aus im Schalterloch aus
+    # Rev. 1, der Schalter im aufgebohrten Air-Assist-Durchbruch; beide
+    # Loecher gleich (Traene mit Kappe, aussen verduennt)
     bx, ez_ = EL['buchse']
-    sx, _ = EL['schalter']
+    sx, sz = EL['schalter']
+    nx, nz = EL['notaus']
     rs, rb_ = ew('schalter_d') / 2.0, ew('schalter_blende_d') / 2.0
+    rr = rs + ew('schalter_rand')
     p.ok('Schalter: Blende deckt das Loch (Kreis)', rb_ - rs, 0.5)
     p.ok('Schalter: Blende deckt die flache Kappe oben',
          rb_ - (rs + ew('schalter_kappe')), 0.3)
@@ -562,26 +629,42 @@ def main():
          rs * (2.0 ** 0.5 - 1.0) - ew('schalter_kappe'), 1.0)
     p.ok('Wand am Schalter (Rastnasen, 1 bis 2 mm) [w]',
          ew('schalter_wand'), 2.0, '<=')
-    p.ok('Schalter: Blende ueber dem Boden', ez_ - rb_ - gz[0], 2.0)
+    p.ok('Schalter: Blende ueber dem Boden', sz - rb_ - gz[0], 2.0)
+    p.ok('Schalter: verduennter Rand ueber dem Boden innen',
+         sz - rr - bz, 1.0)
+    p.ok('Schalter: Rand frei von der Fugenwand',
+         sx - rr - ix['rechts'][0], 3.0)
     p.ok('Schalter: Rand unter den Lueftungsschlitzen',
-         EL['lueftung_z'][0] - (ez_ + rs + ew('schalter_rand')), 2.0)
-    p.ok('Schalter neben der Buchse (Koerper)',
-         (sx - SCHALTER_KOERPER[0] / 2.0) - (bx + BUCHSE_KOERPER_D / 2.0),
-         3.0)
-    p.ok('Schalter: Rand frei von der Endwand',
-         ix['rechts'][1] - (sx + rs + ew('schalter_rand')), 3.0)
+         EL['lueftung_z'][0] - (sz + rr), 2.0)
+    p.ok('Schalter: Koerper dringt nicht in die Oesen ein [?]', min(
+        q.abstand(next(x for x in innen if x.name == 'Schalter'))
+        for q in innen if q.name.startswith('Oese')), 0.0)
+    rk = ew('notaus_kopf_d') / 2.0
+    p.ok('Not-Aus: Pilzkopf deckt das Loch samt Kappe',
+         rk - (rs + ew('schalter_kappe')), 3.0)
+    p.ok('Not-Aus: Gewinde im Loch (Spiel je Seite)',
+         rs - ew('notaus_gewinde') / 2.0, 0.0)
+    sw = ew('notaus_mutter') * math.sqrt(3.0) / 2.0
+    p.info('Not-Aus: Mutter SW {:.1f} auf einem Loch {:.1f} — knapp, eine '
+           'Scheibe darunter'.format(sw, ew('schalter_d')))
+    p.ok('Not-Aus: Kopf ueber dem Boden', nz - rk - gz[0], 2.0)
+    p.ok('Not-Aus: Kopf unter dem Rand', rz - (nz + rk), 2.0)
+    p.ok('Not-Aus: Kopf frei von der Endwand (aussen)',
+         gx[1] - (nx + rk), 3.0)
+    p.ok('Not-Aus neben der Buchse (Kopf / Buchsenkoerper)',
+         (nx - rk) - (bx + BUCHSE_KOERPER_D / 2.0), 3.0)
+    p.ok('Not-Aus: Rand unter den Lueftungsschlitzen',
+         EL['lueftung_z'][0] - (nz + rr), 2.0)
+    na = next(x for x in innen if x.name == 'Not-Aus')
+    d = min((na.abstand(q), q.name) for q in innen if q is not na)
+    p.ok('Not-Aus: Koerper und Mutter frei im Fach [{}]'.format(d[1]),
+         d[0], 1.0)
     for x in EL['lueftung_x']['rechts']:
         if abs(x - bx) < BUCHSE_KOERPER_D:
             p.ok('Lueftung bei X {:+.0f} ueber der Buchse'.format(x),
                  EL['lueftung_z'][0] - (ez_ + ew('buchse_d') / 2.0), 3.0)
-    ab = EL['ausbruch']
-    p.ok('Air Assist: Durchbruch ganz in der Rueckwand (Hoehe)',
-         min(ab[1] - ew('ausbruch_d') / 2.0 - bz,
-             EL['lueftung_z'][0] - ab[1] - ew('ausbruch_d') / 2.0
-             * math.sqrt(2.0)), 3.0)
-    p.ok('Air Assist: Haut zum Ausbrechen', ew('ausbruch_haut'), 0.8, '<=')
-    p.ok('Air Assist: Durchbruch hinter dem Platz (X)',
-         min(ab[0] - EL['aa_x'][0], EL['aa_x'][1] - ab[0]), 10.0)
+    p.info('Air Assist: der Platz aus Rev. 1 ist mit dem Schalter belegt; '
+           'die Kabelbinder-Schlitze bleiben')
 
     # ------------------------------------------------------------------
     p.titel('9) Gassen, Fenster, Oesen')
@@ -638,6 +721,12 @@ def main():
             ol, ob = ew('oese_l') / 2.0, ew('oese_b') / 2.0
             q = Quader('Oese', x - ol, x + ol, y - ob, y + ob, bz,
                        bz + ew('oese_h'))
+            schalter = next(z for z in innen if z.name == 'Schalter')
+            if 0.0 <= q.abstand(schalter) < 1.0:
+                p.info('Oese {} X {:+.0f} Y {:+.0f}: unter dem Schalter, '
+                       'nimmt keinen Kabelbinder mehr (so verbaut, Rev. 2)'
+                       .format(s, x, y))
+                continue
             d = min(q.abstand(z) for z in innen if not z.name.startswith(
                 'Oese'))
             p.ok('Oese {} X {:+.0f} Y {:+.0f}: frei'.format(s, x, y), d,

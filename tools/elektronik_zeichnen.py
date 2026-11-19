@@ -34,8 +34,6 @@ ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'elektronik-platz.svg')
 ELEKTRONIK = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                           'fusion', 'Elektronikfach', 'Elektronikfach.py')
-NOTAUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                      'fusion', 'NotAus', 'NotAus.py')
 
 # ---- Ketten ----------------------------------------------------------------
 # Gedruckt (Portal.py, seit Rev. 19, aus der 3MF ausgemessen): aussen
@@ -123,7 +121,7 @@ def konzept(w, L, tw, TL, ew, EL):
          'luft_2060': d_2060 - d_hinten + 3.0}
     K['grenze_hinten'] = ('am hinteren Schienenende' if d_schiene < d_2060
                           else '3 mm vor dem hinteren 2060')
-    fach = portal_check.elektronikfach(w, L)
+    fach = portal_check.elektronikfach_hinten(w, L)
     K['fach'] = fach
     # engste Stelle zwischen Fach und allem, was faehrt (wie portal_check
     # Abschnitt 16): (Luft, Fach, Teil, Portalstellung)
@@ -213,13 +211,13 @@ def konzept(w, L, tw, TL, ew, EL):
     ys, zs = L['rahmen_y'][1], L['rahmen_z0']
     K['ym_y'] = ys + YL['motor_y_mitte']
     K['ym_z'] = (zs + YL['motor_z0'], zs + YL['platte_z0'])
-    # Not-Aus-Gehaeuse vorn am vorderen 2060 (NotAus.py); das Kabel kommt
-    # von rechts in der oberen Nut vorn am 2060
-    NA = bauraum.modul_laden(NOTAUS, 'notaus').lage()
-    K['notaus'] = Quader('Not-Aus', NA['lasche_x'][0][0],
-                         NA['lasche_x'][1][1], *NA['geh_y'], *NA['geh_z'])
-    K['notaus_kabel'] = (NA['geh_x'][1], NA['kabel'][0], NA['kabel'][1])
-    K['notaus_nut_z'] = NA['nuten_z'][0]
+    # Not-Aus: seit Elektronikfach Rev. 2 in der Frontwand des Fachs (im
+    # Schalterloch aus Rev. 1), das Gehaeuse NotAus.py entfaellt. Hier der
+    # Pilzkopf vor der Wand, in denselben Koordinaten wie das Fach
+    nx, nz = EL['notaus']
+    r, gy0 = ew('notaus_kopf_d') / 2.0, EL['geh_y'][0]
+    K['notaus'] = Quader('Not-Aus', nx - r, nx + r,
+                         gy0 - ew('notaus_kopf_h'), gy0, nz - r, nz + r)
     K['kabel'] = kabelwege(w, L, TL, K)
     return K
 
@@ -390,9 +388,13 @@ def kabelwege(w, L, TL, K):
                     + aus_rechts(yp['rechts']))
     rechts_ls = ([leiste, (ux_fern - 4.0, yv, zk), (gx - 8.0, yv, zk)]
                  + aus_rechts(ys))
-    sx, ez = EL['schalter']
-    rechts_not = ([(sx, EL['innen_y'][0] + 10.0, ez), (sx, yp['rechts'], zk),
-                   (gx - 8.0, yp['rechts'], zk)] + aus_rechts(yp['rechts']))
+    # Not-Aus vom Schalter: beide sitzen seit Elektronikfach Rev. 2 in der
+    # Frontwand, die Leitung bleibt im Fach (Leistungsgasse)
+    sx, sz = EL['schalter']
+    nx, nz = EL['notaus']
+    ez = EL['eingang_z']                     # Hoehe von Buchse und Not-Aus
+    notaus = [(sx, EL['innen_y'][0] + 10.0, sz), (sx, yh['rechts'], zk),
+              (nx, yh['rechts'], zk), (nx, EL['innen_y'][0] + 10.0, nz)]
     # zur Y-Kette: in der Seitennut nach vorn bis hinter die Wanne Y, dort
     # aus der Nut nach aussen und hinten in das Endstueck 180
     xk = sum(K['ky_x']) / 2.0
@@ -442,11 +444,6 @@ def kabelwege(w, L, TL, K):
     laser = am_th + [(xm, 0.0, laser_oben), (xm, 41.0, laser_oben)]
     z_es = am_th + [(xm - 20.0, 16.0, 112.0)]
     ky, kx = K['ky_laenge'], K['kx_laenge']
-    na_x, na_y, na_z = K['notaus_kabel']
-    z_nut = K['notaus_nut_z']
-    notaus = rechts_not + [(xa, y_vor, zn), (xa, y_vor, z_nut),
-                           (na_x + 3.0, y_vor, z_nut),
-                           (na_x + 3.0, na_y, na_z), (na_x, na_y, na_z)]
     # im Fach: 24 V fuer den 5-V-Wandler von der Buchse; 5 V vom Adapter
     # durch die Signalgasse an die 5-V-Klemmen links, von dort zum Pi (W19)
     bx, _ = EL['buchse']
@@ -578,7 +575,7 @@ def draufsicht(f, w, L, K):
         q = P[n]
         t.append(f.rect(q.x[0], q.x[1], q.y[0] - dh, q.y[1] - dh, 'druck',
                         fill='none', stroke_dasharray='4 3'))
-    # Y-Motoren vorn (Portal.py), Not-Aus-Gehaeuse (NotAus.py)
+    # Y-Motoren vorn (Portal.py), Not-Aus (Pilzkopf an der Fachfront)
     fl = w('motor_flansch') / 2.0
     for s in (-1, 1):
         x = s * R
@@ -765,7 +762,7 @@ def main():
         (K['es_z'][0], K['es_z'][1], 'Z-Endschalter (vorhanden)'),
         (R, K['ym_y'], 'Y-Motor rechts'),
         (sum(K['notaus'].x) / 2.0, K['notaus'].y[1],
-         'Not-Aus vorn am 2060'),
+         'Not-Aus in der Fachfront'),
         (R + 10.0, 60.0, 'Kabel Y-Motor rechts\nin der unteren Nut außen')],
         fa.ox + fa.breite + 12, 'start', abstand=24.0)
 

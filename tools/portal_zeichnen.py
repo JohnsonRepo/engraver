@@ -33,6 +33,8 @@ FARBE.update({
 })
 ORANGE = '#c2621b'
 RIEMEN = '#2b2f36'
+KABEL = '#6d3fb5'          # Kabelwege (bis Elektronikfach Rev. 2 in
+                           # notaus_zeichnen.py)
 
 
 def _schneiden(p1, p2, p3, p4):
@@ -53,6 +55,17 @@ def quer_mass(f, a0, a1, b, s, dy=-5):
             linie(x1, y - 3, x1, y + 3, BLAU, 0.8),
             text((x0 + x1) / 2, y + dy, s, 8.0, BLAU, 'middle', True,
                  halo=True)]
+
+
+def hoch_mass(f, a, b0, b1, s, dx=6, anker='start'):
+    """Senkrechtes Mass bei a von b0 bis b1, Text daneben (bis Elektronik-
+    fach Rev. 2 in notaus_zeichnen.py)."""
+    (x, y0), (_, y1) = f.px(a, b0), f.px(a, b1)
+    return [linie(x, y0, x, y1, BLAU, 0.8),
+            linie(x - 3, y0, x + 3, y0, BLAU, 0.8),
+            linie(x - 3, y1, x + 3, y1, BLAU, 0.8),
+            text(x + dx if anker == 'start' else x - dx, (y0 + y1) / 2 + 3,
+                 s, 8.0, BLAU, anker, True, halo=True)]
 
 
 class Feld:

@@ -422,7 +422,8 @@ Netzteil, Endschalter und Kabel hinkommen, und das Gehäuse
 Netzteils: **5,5 × 2,1 mm** `[v]` Angabe; Lüfter 24 V. Not-Aus: Pilztaster
 „STOP“, rastet, Drehen löst, **ein Wechsler C/NO/NC** mit Lötfahnen `[v]`
 (Bild 2026-09-30), **3 A / 250 V**, Gewinde **16 mm** rund `[v]` Angabe —
-Gehäuse und Verdrahtung in [notaus.md](notaus.md). Abwärtswandler 24 → 5 V
+er sitzt in der Frontwand des Elektronikfachs (Elektronikfach.py Rev. 2),
+Verdrahtung in [verkabelung.md](verkabelung.md). Abwärtswandler 24 → 5 V
 für den Pi: **63 × 30 mm**, höchstens 20 mm hoch, Schraubklemmen und
 USB-A-Buchse an den schmalen Seiten `[v]` Angabe (2026-10-10) — Halter in
 [pi.md](pi.md#halter).

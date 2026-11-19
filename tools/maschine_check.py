@@ -175,11 +175,12 @@ def main():
     if 'ToolheadZ' in module:
         tm = module['ToolheadZ']
         T = tm.lage()
-        dx, dy, dz = pm.gruppe_versatz('ToolheadZ', L)
+        dx, dy, dz, dreh = pm.gruppe_lage('ToolheadZ', L, tm)
         p.ok('ToolheadZ: X-Wagenmitte = Mitte des X-Wegs', abs(
             dx - (L['xw_min'] + L['xw_max']) / 2.0), 0.0, '<=')
         p.ok('ToolheadZ: in Y und Z nicht verschoben', abs(dy) + abs(dz),
              0.0, '<=')
+        p.ja('ToolheadZ: nicht gedreht', dreh is None)
         zc = (T['zc_min'] + T['zc_max']) / 2.0
         p.info('ToolheadZ: Z-Wagen in der Mitte des Wegs (zc)', zc)
         p.ok('ToolheadZ: zc im Weg (ueber zc_min)', zc - T['zc_min'], 0.0)
@@ -187,11 +188,40 @@ def main():
         for schl in ('x_wagen_laenge', 'x_wagen_breite'):
             p.ok('ToolheadZ: {} wie Portal.py'.format(schl),
                  abs(tm.w(schl) - pm.w(schl)), 0.0, '<=')
+    if 'Elektronikfach' in module:
+        # Elektronikfach.py rechnet in Fachkoordinaten; Portal.py dreht die
+        # Gruppe mit derselben Achse wie Elektronikfach.run(). Nachgerechnet
+        # wird, wo der Kasten dann an der Maschine steht.
+        em = module['Elektronikfach']
+        EL = em.lage()
+        dx, dy, dz, dreh = pm.gruppe_lage('Elektronikfach', L, em)
+        p.ja('Elektronikfach: gedreht um Y {:+.1f} wie im eigenen Skript'
+             .format(EL['dreh_y']), dreh is not None
+             and abs(dreh - EL['dreh_y']) < 1e-9
+             and abs(dx) + abs(dy) + abs(dz) < 1e-9)
+        gx, gy, gz = em.bereich_nach_maschine(EL['geh_x'], EL['geh_y'],
+                                              EL['geh_z'])
+        p.info('Elektronikfach: Kasten Y von (an der Maschine)', gy[0])
+        p.info('                         bis', gy[1])
+        p.ok('Elektronikfach: liegt an der Vorderseite des vorderen 2060 an',
+             abs(gy[0] - L['quer_y_vorn'][1]), 0.0, '<=')
+        p.ok('Elektronikfach: Montageplatte am 2060 (Fach -> Maschine)',
+             abs(em.nach_maschine(0.0, EL['platte_y'][1], 0.0)[1]
+                 - L['quer_y_vorn'][1]), 0.0, '<=')
+        innen = min(abs(x) for s in (-1, 1)
+                    for x in EL['y_motorhalter'][s][0])
+        p.ok('Elektronikfach: Kasten zwischen den Y-Motorhaltern (Luft)',
+             innen - gx[1], 3.0)
+        p.ok('Elektronikfach: Drehung zweimal = Ausgangslage', max(
+            abs(a - b) for a, b in zip(
+                em.nach_maschine(*em.nach_maschine(12.0, -300.0, -90.0)),
+                (12.0, -300.0, -90.0))), 0.0, '<=')
     for name in module:
-        if name != 'ToolheadZ':
+        if name not in ('ToolheadZ', 'Elektronikfach'):
+            dx, dy, dz, dreh = pm.gruppe_lage(name, L, module[name])
             p.ok('{}: Gruppe am Ursprung (Koordinaten wie Portal.py)'.format(
-                name), sum(abs(v) for v in pm.gruppe_versatz(name, L)), 0.0,
-                '<=')
+                name), abs(dx) + abs(dy) + abs(dz), 0.0, '<=')
+            p.ja('{}: nicht gedreht'.format(name), dreh is None)
 
     # ------------------------------------------------------------------
     p.titel('5) Kabelhalter: Plaetze und Drehung')

@@ -1,5 +1,26 @@
-# Elektronikfach.py — Fach fuer Steuerung, Pi und Stromverteilung hinter
-# dem hinteren 2060
+# Elektronikfach.py — Fach fuer Steuerung, Pi und Stromverteilung vor dem
+# vorderen 2060 (bei den Y-Motoren)
+#
+# LAGE (seit Rev. 2): Das Fach haengt aussen am VORDEREN 2060, zwischen den
+# Y-Motoren, so wie es an der Maschine verbaut ist (Fotos 2026-11-19). Bis
+# Rev. 1 stand es im Modell hinter dem hinteren 2060. Die Teile sind
+# dieselben: lage() rechnet weiter in FACHKOORDINATEN — so, als hinge das
+# Fach hinten (Montageflaeche bei Y = quer_y1 = -250) —, und das ganze Fach
+# wird um 180 Grad um die Senkrechte durch X = 0, Y = dreh_y gedreht
+# (nach_maschine): Die Montageflaeche landet auf der Vorderseite des
+# vorderen 2060 (Y 205), die Frontwand bei Y 312. Die Nuten des 2060 liegen
+# vorn auf derselben Hoehe, die Schrauben passen unveraendert.
+# Folge der Drehung: Fach_links (Uno, Pi, Luefter, 12-V-Wandler) steht an
+# der Maschine RECHTS, Fach_rechts (Buchse, Schalter, Not-Aus, Wago 24 V,
+# 5-V-Wandler) LINKS. "links/rechts" und "vorn/hinten" in den Namen und
+# Schluesseln hier meinen die Fachkoordinaten: "vorn" ist die Seite an der
+# Montageplatte (zum 2060), "hinten"/"Rueckwand" die Frontwand zum Bediener.
+#
+# NOT-AUS (seit Rev. 2): Der Pilztaster sitzt in der Frontwand, im Loch, das
+# Rev. 1 fuer den Wippschalter hatte; der Wippschalter sitzt im
+# aufgebohrten Durchbruch, der fuer Air Assist gedacht war (so verbaut).
+# Das Gehaeuse NotAus.py entfaellt. Der Platz fuer ein Air-Assist-Modul ist
+# damit belegt; seine Kabelbinder-Schlitze bleiben.
 #
 # Ersetzt das Elektronik-Gehaeuse (Elektronik.py, Rev. 4) und den Pi-Halter
 # (PiHalter.py, Rev. 3): Uno mit CNC Shield, Raspberry Pi Zero 2 W, beide
@@ -19,30 +40,33 @@
 #                 der Pi steht senkrecht an der Fugenwand, davor der
 #                 Wandler 24 -> 12 V fuer den Laser (kurzer Weg hinaus).
 #   Fach_rechts   Kasten rechts mit Ohr: Wandler 24 -> 5 V (Pi,
-#                 Lichtschranken), Wago 24 V und GND, hinten Einbaubuchse
-#                 5,5 x 2,1 und runder Wippschalter; Platz fuer ein
-#                 Air-Assist-Modul mit Durchbruch in der Rueckwand.
+#                 Lichtschranken), Wago 24 V und GND, in der Rueckwand
+#                 (= Frontwand) Einbaubuchse 5,5 x 2,1, Not-Aus und runder
+#                 Wippschalter.
 #   Deckel_links  mit dem 24-V-Luefter 40 mm ueber den Treibern
 #   Deckel_rechts mit Lueftungsschlitzen ueber den Wandlern
 # Die Haelften stossen in der Mitte mit je einer Fugenwand aneinander:
 # 4 x M3 mit Mutter, 2 Rauten-Zapfen richten sie aus. Jede Haelfte haengt
-# mit der Montageplatte an der Rueckseite des hinteren 2060: aussen ein Ohr
-# mit 2 x M5 (untere und obere Nut), innen 1 x M5 (obere Nut).
+# mit der Montageplatte an der Vorderseite des vorderen 2060: aussen ein
+# Ohr mit 2 x M5 (untere und obere Nut), innen 1 x M5 (obere Nut).
 #   Bohrlehren   ausgeblendet: Uno, Pi, Fuge
-#   Referenz_nicht_drucken  hinteres 2060, Enden der 2040, Uno mit Stapel,
-#                Pi mit Steckern, Wandler, Adapter, Wago, Luefter, Buchse,
-#                Schalter, Air-Assist-Platz.
+#   Referenz_nicht_drucken  vorderes 2060, vordere Enden der 2040, Y-Motor-
+#                halter und Y-Motoren (Huelle), Uno mit Stapel, Pi mit
+#                Steckern, Wandler, Adapter, Wago, Luefter, Buchse, Schalter,
+#                Not-Aus.
 #
 # Die Geometrie steht als Bauplan in lage(): Schritte aus Quadern,
 # Zylindern, Vielecken und Traenen, die hier Fusion und in
 # tools/stl_export.py manifold3d gleich ausfuehren — die beiden koennen
 # nicht auseinanderlaufen. Pruefung: tools/elektronik_check.py.
 #
-# Koordinaten = Maschinenkoordinaten wie in Portal.py, Portal in der Mitte
+# Koordinaten: Maschinenkoordinaten wie in Portal.py, Portal in der Mitte
 # seines Wegs: X nach rechts, Y nach vorn, Z senkrecht, Z = 0 in der Mitte
 # des Portalrohrs. Im Fusion-Modell sind Y und Z getauscht (Modell-Z =
-# Maschine Y). Die Rahmenmasse stehen hier noch einmal (Fusion-Skripte sind
-# eigenstaendig); tools/elektronik_check.py vergleicht sie mit Portal.py.
+# Maschine Y). lage() rechnet in Fachkoordinaten (siehe LAGE); run() baut
+# darin und dreht danach jede Komponente an ihren Platz. Die Rahmenmasse
+# stehen hier noch einmal (Fusion-Skripte sind eigenstaendig);
+# tools/elektronik_check.py vergleicht sie mit Portal.py.
 #
 # Konventionen: siehe fusion-python/SKILL.md und references/baugruppen.md.
 
@@ -50,7 +74,7 @@ import adsk.core, adsk.fusion, traceback
 import math
 
 SKRIPT_NAME = 'Elektronikfach'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -59,9 +83,13 @@ MASSE = {
     'y_schienen_abstand': (514.0, 'Y-Schienen: Abstand Mitte zu Mitte'),
     'rahmen_b':            (20.0, 'Rahmen 2040 hochkant: Breite'),
     'rahmen_h':            (40.0, 'Rahmen 2040 hochkant: Hoehe'),
-    'rahmen_y0':         (-360.0, 'Rahmen: hintere Stirnseite der 2040'),
+    'rahmen_y1':          (240.0, 'Rahmen: vordere Stirnseite der 2040 (Maschine)'),
     'rahmen_z0':          (-69.0, 'Rahmen: Unterkante der 2040 = Oberkante 2060'),
-    'quer_y1':           (-250.0, 'Rahmen: Rueckseite des hinteren 2060'),
+    'quer_vorn_y1':       (205.0, 'Rahmen: Vorderseite des vorderen 2060 (Maschine)'),
+    # Fachkoordinaten: die Montageflaeche liegt bei quer_y1 (bis Rev. 1 die
+    # Rueckseite des hinteren 2060), das Fach reicht fach_tiefe davor
+    'quer_y1':           (-250.0, 'Fachkoordinaten: Montageflaeche am 2060'),
+    'fach_tiefe':         (107.0, 'Fach: Tiefe ab der Montageflaeche (wie Rev. 1)'),
     'quer_h':              (60.0, '2060 quer, hochkant: Hoehe'),
     'quer_laenge':        (600.0, '2060 quer: Laenge'),
     'quer_nut_1':          (10.0, '2060: 1. Nut ueber der Unterkante'),
@@ -183,21 +211,49 @@ MASSE = {
     'wago24_x0':          (133.0, 'Wago 24 V: linke Kante (X)'),
     'buchse_d':             (8.2, 'Einbaubuchse 5,5 x 2,1, Gewinde M8'),
     'buchse_x':           (145.0, 'Einbaubuchse: Mitte (X)'),
+    # Wippschalter und Not-Aus sitzen in Loechern dieses Durchmessers
     'schalter_d':          (20.2, 'Wippschalter rund: Einbauloch [?]'),
     'schalter_blende_d':   (22.5, 'Wippschalter rund: Blende aussen [v]'),
     'schalter_kappe':       (0.6, 'Schalterloch: oben flach, so weit ueber dem Kreis'),
     'schalter_wand':        (1.6, 'Wippschalter: Wand am Loch (Rastnasen)'),
     'schalter_rand':        (3.0, 'Wippschalter: verduennter Rand um das Loch'),
-    'schalter_x':         (180.0, 'Wippschalter: Mitte (X)'),
-    'eingang_z':           (39.5, 'Buchse und Schalter: Mitte ueber dem Boden'),
+    'eingang_z':           (39.5, 'Buchse und Not-Aus: Mitte ueber dem Boden'),
+    # Seit Rev. 2 so verbaut [v] (Fotos 2026-11-19): der Not-Aus im Loch, das
+    # Rev. 1 fuer den Wippschalter hatte (rundes Gewinde 16 in 20,2, die
+    # Mutter klemmt), der Wippschalter im aufgebohrten Durchbruch fuer Air
+    # Assist. Taster wie NotAus.py (Rev. 5): rastet ein, Drehen loest; ein
+    # Wechsler, verdrahtet C und NC in der 24-V-Leitung.
+    'notaus_x':           (180.0, 'Not-Aus: Mitte (X), im Schalterloch aus Rev. 1 [v]'),
+    'notaus_gewinde':      (16.0, 'Not-Aus: Gewindedurchmesser [v]'),
+    'notaus_kopf_d':       (32.0, 'Not-Aus: Pilzkopf [?]'),
+    'notaus_kopf_h':       (22.0, 'Not-Aus: Kopf vor der Frontwand [?]'),
+    'notaus_tiefe':        (30.0, 'Not-Aus: hinter der Frontwand mit Loetfahnen [?]'),
+    'notaus_mutter':       (24.0, 'Not-Aus: Mutter ueber Eck [?]'),
+    'schalter_x':          (35.0, 'Wippschalter: Mitte (X), im frueheren Air-Assist-Durchbruch [v]'),
+    'schalter_z':          (14.5, 'Wippschalter: Mitte ueber dem Boden [v]'),
+    'schalter_tiefe':      (25.0, 'Wippschalter: hinter der Frontwand [?]'),
+    'schalter_koerper_d':  (19.0, 'Wippschalter: Koerper hinter der Wand [?]'),
 
-    # --- Reserve: Air Assist ------------------------------------------------------
-    'aa_x0':               (10.0, 'Air Assist: Platz fuer das Modul, linke Kante'),
-    'aa_l':                (50.0, 'Air Assist: Platz laengs X'),
-    'aa_b':                (25.0, 'Air Assist: Platz laengs Y'),
-    'ausbruch_d':          (12.0, 'Air Assist: Durchbruch in der Rueckwand'),
-    'ausbruch_haut':        (0.6, 'Durchbruch: Haut innen, zum Ausbrechen'),
-    'ausbruch_z':          (14.5, 'Durchbruch: Mitte ueber dem Boden'),
+    # --- Air Assist: bis Rev. 1 Platz fuer ein Modul -----------------------------
+    # Seit Rev. 2 sitzt der Wippschalter in seinem Durchbruch; die Schlitze
+    # fuer die Kabelbinder (Boden) und im Deckel bleiben, wie gedruckt.
+    'aa_x0':               (10.0, 'Air Assist (Rev. 1): Platz, linke Kante'),
+    'aa_l':                (50.0, 'Air Assist (Rev. 1): Platz laengs X'),
+    'aa_b':                (25.0, 'Air Assist (Rev. 1): Platz laengs Y'),
+
+    # --- Y-Motorhalter und Y-Motor vorn, Huelle (wie Portal.py) [v] -------------
+    # Nur Referenz und Pruefung. Y ab der Stirnseite der 2040, Z ab ihrer
+    # Unterkante, X ab ihrer Mitte; der Motor in der Mitte seines Spannwegs
+    'ymh_halbe_b':        (26.15, 'Y-Motorhalter: halbe Breite'),
+    'ymh_y0':             (-30.0, 'Y-Motorhalter: Schenkel hinten'),
+    'ymh_y1':              (56.8, 'Y-Motorhalter: Platte vorn'),
+    'ymh_z0':               (1.0, 'Y-Motorhalter: unten'),
+    'ymh_z1':              (17.5, 'Y-Motorhalter: oben'),
+    'motor_b':             (42.3, 'NEMA 17: Flansch'),
+    'motor_y_min':        (26.15, 'Y-Motorachse ganz innen'),
+    'motor_y_max':        (34.15, 'Y-Motorachse ganz aussen'),
+    'motor_z0':           (-25.5, 'Y-Motor unten'),
+    'motor_z1':            (11.5, 'Y-Motorflansch = Platte unten'),
 
     # --- Fuge zwischen den Haelften --------------------------------------------
     'm3_durchgang':         (3.4, 'M3 Durchgang'),
@@ -271,6 +327,29 @@ def w(name):
     return MASSE[name][0]
 
 
+# --- Lage an der Maschine (seit Rev. 2) ----------------------------------------
+def dreh_y():
+    """Maschine-Y der senkrechten Drehachse (bei X = 0): halber Weg zwischen
+    der Montageflaeche in Fachkoordinaten und der Vorderseite des vorderen
+    2060. Eine halbe Drehung um diese Achse bringt das Fach dorthin."""
+    return (w('quer_y1') + w('quer_vorn_y1')) / 2.0
+
+
+def nach_maschine(x, y, z):
+    """Fachkoordinaten -> Maschinenkoordinaten (180 Grad um die Senkrechte
+    durch X = 0, Y = dreh_y). Die Drehung ist ihr eigenes Gegenstueck: auf
+    Maschinenkoordinaten angewandt liefert sie Fachkoordinaten."""
+    return (-x, 2.0 * dreh_y() - y, z)
+
+
+def bereich_nach_maschine(x, y, z):
+    """Achsparalleler Bereich ((x0, x1), (y0, y1), (z0, z1)) in
+    Fachkoordinaten -> derselbe Bereich in Maschinenkoordinaten (und
+    umgekehrt)."""
+    c = 2.0 * dreh_y()
+    return ((-x[1], -x[0]), (c - y[1], c - y[0]), (z[0], z[1]))
+
+
 # --- Bauplan: Schritte, die Fusion und manifold3d gleich ausfuehren -----------
 # Jeder Schritt ist ein Prisma: Formen in der Ebene quer zu `achse`, entlang
 # `achse` von a[0] bis a[1]. In der Ebene gilt (u, v) = (X, Y) fuer 'z',
@@ -336,8 +415,11 @@ def lage():
     # Fach wie tools/portal_check.py (elektronikfach)
     xi = L['R'] - w('rahmen_b') / 2.0 - w('fach_rand')
     L['fach_x'] = (-xi, xi)
-    L['fach_y'] = (w('rahmen_y0') + w('fach_rand'),
+    L['fach_y'] = (w('quer_y1') - w('fach_tiefe'),
                    w('quer_y1') - w('fach_rand'))
+    # Lage an der Maschine: 180 Grad um die Senkrechte durch X = 0, Y =
+    # dreh_y; die Montageflaeche (quer_y1) landet auf dem vorderen 2060
+    L['dreh_y'] = dreh_y()
     L['fach_z'] = (L['tisch_z'] + w('fach_tisch'),
                    w('rahmen_z0') - w('fach_rand'))
 
@@ -462,20 +544,23 @@ def lage():
                                               xm + w('wandler_binder'))
                         for y in (wy[0] - rand, wy[1] + rand)]
 
-    # Buchse und Schalter hinten rechts, hoch ueber der Leistungsgasse
+    # In der Rueckwand (= Frontwand an der Maschine) rechts: Buchse und
+    # Not-Aus hoch ueber der Leistungsgasse, der Wippschalter tiefer nahe der
+    # Fuge (seit Rev. 2 so verbaut)
     L['eingang_z'] = bz + w('eingang_z')
     L['buchse'] = (w('buchse_x'), L['eingang_z'])
-    L['schalter'] = (w('schalter_x'), L['eingang_z'])
+    L['notaus'] = (w('notaus_x'), L['eingang_z'])
+    L['schalter'] = (w('schalter_x'), bz + w('schalter_z'))
 
-    # Reserve Air Assist rechts hinten an der Fuge: Modul bis 50 x 28 mit
-    # zwei Kabelbindern laengs Y; Durchbruch in der Rueckwand dahinter
+    # Air Assist (Rev. 1): Platz rechts an der Fuge mit zwei Kabelbindern
+    # laengs Y; seit Rev. 2 sitzt der Wippschalter in seinem Durchbruch, die
+    # Schlitze bleiben
     L['aa_x'] = (w('aa_x0'), w('aa_x0') + w('aa_l'))
     L['aa_y'] = (y0, y0 + w('aa_b'))
     xm = (L['aa_x'][0] + L['aa_x'][1]) / 2.0
     L['binder'] += [(x, y, 'y') for x in (xm - w('wandler_binder'),
                                           xm + w('wandler_binder'))
                     for y in (L['aa_y'][0] - rand, L['aa_y'][1] + rand)]
-    L['ausbruch'] = (xm, bz + w('ausbruch_z'))
 
     # Fenster: in jeder Endwand eines fuer die Signalgasse und eines fuer
     # Motoren und Leistung (hinten, mit 45-Grad-Dach); in der Fuge eines je
@@ -579,6 +664,22 @@ def lage():
             auflage=('z', dz),
             druck=[[1, 0, 0, -hx[0]], [0, -1, 0, L['geh_y'][1]],
                    [0, 0, -1, dz]])
+
+    # Nachbarn vorn (Referenz und Pruefung), in MASCHINENKOORDINATEN: der
+    # Y-Motorhalter und der Y-Motor je Seite (-1 links, +1 rechts), wie
+    # Portal.py; der Motor als Huelle ueber seinen ganzen Spannweg
+    R, ys, zs = L['R'], w('rahmen_y1'), w('rahmen_z0')
+    hb, mb = w('ymh_halbe_b'), w('motor_b') / 2.0
+    L['y_motorhalter'], L['y_motor'] = {}, {}
+    for sx in (-1, 1):
+        L['y_motorhalter'][sx] = (
+            tuple(sorted((sx * (R - hb), sx * (R + hb)))),
+            (ys + w('ymh_y0'), ys + w('ymh_y1')),
+            (zs + w('ymh_z0'), zs + w('ymh_z1')))
+        L['y_motor'][sx] = (
+            tuple(sorted((sx * (R - mb), sx * (R + mb)))),
+            (ys + w('motor_y_min') - mb, ys + w('motor_y_max') + mb),
+            (zs + w('motor_z0'), zs + w('motor_z1')))
     return L
 
 
@@ -682,8 +783,11 @@ def plan_fach(L, s):
     if schlitze:
         P.append(schritt('weg', 'Binder_Schlitze', 'z', 'rechteck', schlitze,
                          (z0 - 1.0, bz + 1.0)))
-    # Rueckwand: Lueftung oben; rechts Buchse und Schalter, links der
-    # Durchbruch fuer Air Assist
+    # Rueckwand (= Frontwand an der Maschine): Lueftung oben; rechts Buchse,
+    # Not-Aus und Wippschalter. Not-Aus und Schalter in gleichen Loechern
+    # (20,2 mit flachem Dach, aussen auf 1,6 mm verduennt fuer die Rastnasen
+    # des Schalters): der Not-Aus sitzt im Loch, das Rev. 1 fuer den
+    # Schalter hatte, der Schalter im aufgebohrten Air-Assist-Durchbruch
     ra = (gy[0] - 1.0, iy[0] + 1.0)
     lz, lb = L['lueftung_z'], w('lueftung_b') / 2.0
     P.append(schritt('weg', 'Lueftung', 'y', 'rechteck',
@@ -692,17 +796,14 @@ def plan_fach(L, s):
     if s == 'rechts':
         P.append(schritt('weg', 'Buchse', 'y', 'tropfen', [L['buchse']], ra,
                          d=w('buchse_d'), spitze=1.0))
-        P.append(schritt('weg', 'Schalter', 'y', 'tropfen', [L['schalter']],
-                         ra, d=w('schalter_d'), spitze=1.0,
-                         kappe=w('schalter_kappe')))
-        P.append(schritt('weg', 'Schalter_Rand', 'y', 'kreis',
-                         [L['schalter']], (gy[0] + w('schalter_wand'),
-                                           iy[0] + 1.0),
-                         d=w('schalter_d') + 2.0 * w('schalter_rand')))
-        P.append(schritt('weg', 'Durchbruch_AirAssist', 'y', 'tropfen',
-                         [L['ausbruch']],
-                         (gy[0] - 1.0, iy[0] - w('ausbruch_haut')),
-                         d=w('ausbruch_d'), spitze=1.0))
+        for name, mitte in (('NotAus', L['notaus']),
+                            ('Schalter', L['schalter'])):
+            P.append(schritt('weg', name, 'y', 'tropfen', [mitte], ra,
+                             d=w('schalter_d'), spitze=1.0,
+                             kappe=w('schalter_kappe')))
+            P.append(schritt('weg', name + '_Rand', 'y', 'kreis', [mitte],
+                             (gy[0] + w('schalter_wand'), iy[0] + 1.0),
+                             d=w('schalter_d') + 2.0 * w('schalter_rand')))
     return P
 
 
@@ -1275,28 +1376,37 @@ def referenz_quader(L):
           'Kunststoff'),
          ('Wandler_12V', L['w12_x'], L['w12_y'], L['w12_z'], 'Leiterplatte'),
          ('Wandler_5V', L['w5_x'], L['w5_y'], L['w5_z'], 'Leiterplatte'),
-         ('USB_A_Adapter', ) + L['adapter'] + ('Kunststoff',),
-         ('AirAssist_Platz', L['aa_x'], L['aa_y'], (bz, bz + 20.0),
-          'Kunststoff')]
+         ('USB_A_Adapter', ) + L['adapter'] + ('Kunststoff',)]
     for n in ('USB', 'PWR'):
         q.append(('Pi_Stecker_' + n, ) + L['pi_stecker'][n] + ('Kunststoff',))
     for name, _, x, y, z in L['wago']:
         q.append(('Wago_' + name.replace('+', '').replace(' ', ''), x, y, z,
                   'Kunststoff'))
-    iy0 = L['innen_y'][0]
+    iy0, gy0 = L['innen_y'][0], L['geh_y'][0]
     bx, ez = L['buchse']
     q.append(('Buchse', (bx - 5.5, bx + 5.5), (iy0, iy0 + 15.0),
               (ez - 5.5, ez + 5.5), 'Kunststoff'))
-    sx, _ = L['schalter']
-    q.append(('Schalter', (sx - 10.0, sx + 10.0), (iy0, iy0 + 20.0),
-              (ez - 10.0, ez + 10.0), 'Kunststoff'))
+    sx, sz = L['schalter']
+    r = w('schalter_koerper_d') / 2.0
+    q.append(('Schalter', (sx - r, sx + r), (iy0, iy0 + w('schalter_tiefe')),
+              (sz - r, sz + r), 'Kunststoff'))
+    # Not-Aus: Pilzkopf vor der Frontwand, Koerper mit Loetfahnen dahinter
+    nx, nz = L['notaus']
+    r = w('notaus_kopf_d') / 2.0
+    q.append(('NotAus_Pilzkopf', (nx - r, nx + r),
+              (gy0 - w('notaus_kopf_h'), gy0), (nz - r, nz + r), 'Kunststoff'))
+    r = w('notaus_gewinde') / 2.0
+    q.append(('NotAus_Koerper', (nx - r, nx + r),
+              (iy0, iy0 + w('notaus_tiefe')), (nz - r, nz + r), 'Kunststoff'))
     return q
 
 
 def bau_referenz(app, design, teile, L, fehler):
-    """Hinteres 2060, die hinteren Enden der 2040 und die Kaufteile — nur
-    zur Ansicht, NICHT drucken. Jedes Teil wird fuer sich gebaut: scheitert
-    eines, steht das im Bericht."""
+    """Vorderes 2060, die vorderen Enden der 2040, Y-Motorhalter und
+    Y-Motoren (Huelle) und die Kaufteile im Fach — nur zur Ansicht, NICHT
+    drucken. Gebaut in Fachkoordinaten wie das Fach; run() dreht alles an
+    seinen Platz. Jedes Teil wird fuer sich gebaut: scheitert eines, steht
+    das im Bericht."""
     R = L['R']
 
     def sicher(name, bauen, *args):
@@ -1308,20 +1418,36 @@ def bau_referenz(app, design, teile, L, fehler):
             return None
 
     pr = teile['Ref_Profile']
-    k = sicher('2060', bau_profil, pr, '2060_hinten', 'x',
+    k = sicher('2060', bau_profil, pr, '2060_vorn', 'x',
                (-w('quer_laenge') / 2.0, w('quer_laenge') / 2.0),
                L['quer_y'], (L['tisch_z'], w('rahmen_z0')))
     if k:
         material_zuweisen(app, design, k, 'Aluminum 6061', fehler)
+    # die 2040 enden an der Maschine bei rahmen_y1 (vordere Stirnseite)
+    y_ende = 2.0 * L['dreh_y'] - w('rahmen_y1')
     for s in (-1, 1):
-        n = 'links' if s < 0 else 'rechts'
+        n = 'links' if s > 0 else 'rechts'          # an der Maschine
         x = sorted((s * (R - w('rahmen_b') / 2.0),
                     s * (R + w('rahmen_b') / 2.0)))
-        k = sicher('2040 ' + n, bau_profil, pr, '2040_hinten_' + n, 'y',
-                   (w('rahmen_y0'), L['quer_y'][1] + 40.0), tuple(x),
+        k = sicher('2040 ' + n, bau_profil, pr, '2040_vorn_' + n, 'y',
+                   (y_ende, L['quer_y'][1] + 40.0), tuple(x),
                    (w('rahmen_z0'), w('rahmen_z0') + w('rahmen_h')))
         if k:
             material_zuweisen(app, design, k, 'Aluminum 6061', fehler)
+
+    def quader_neu(comp, name, bereich, mat):
+        kk = quader(comp, name, *bereich, 'neu').bodies.item(0)
+        kk.name = name
+        material_zuweisen(app, design, kk, mat, fehler)
+        return kk
+
+    # Y-Motorhalter und Y-Motoren (Maschinenkoordinaten -> Fach)
+    for sx in (-1, 1):
+        n = 'links' if sx < 0 else 'rechts'
+        sicher('Y-Motorhalter ' + n, quader_neu, pr, 'Y-Motorhalter_' + n,
+               bereich_nach_maschine(*L['y_motorhalter'][sx]), 'PETG')
+        sicher('Y-Motor ' + n, quader_neu, pr, 'Y-Motor_' + n,
+               bereich_nach_maschine(*L['y_motor'][sx]), 'Steel')
 
     el = teile['Ref_Elektronik']
     for name, x, y, z, mat in referenz_quader(L):
@@ -1337,23 +1463,38 @@ def bau_referenz(app, design, teile, L, fehler):
 def hinweise_bauen(L, fehler):
     """Hinweiszeilen des Validierungsberichts. Modulebene, damit der Block
     ohne Fusion getestet werden kann (tools/elektronik_check.py)."""
-    gx, gy, gz = L['geh_x'], L['geh_y'], L['geh_z']
-    fm = L['luefter_mitte']
+    gx, gy, gz = bereich_nach_maschine(L['geh_x'], L['geh_y'], L['geh_z'])
+    fm = nach_maschine(L['luefter_mitte'][0], L['luefter_mitte'][1], 0.0)
     m5 = L['m5']['links']
+    nx = nach_maschine(L['notaus'][0], 0.0, 0.0)[0]
+    bx = nach_maschine(L['buchse'][0], 0.0, 0.0)[0]
+    sx = nach_maschine(L['schalter'][0], 0.0, 0.0)[0]
     h = [
         'BEZUG: Maschinenkoordinaten wie Portal.py, Portal in der Mitte',
         '  seines Wegs (Y nach vorn, Z senkrecht, X = 0 Mitte Portalrohr).',
         '  Im Modell sind Y und Z getauscht (Modell-Z = Maschine Y).',
+        '  Gebaut in Fachkoordinaten (wie bis Rev. 1 hinten), dann alles um',
+        '  180 Grad um die Senkrechte durch Y {:+.1f} gedreht. Darum steht'
+        .format(L['dreh_y']),
+        '  Fach_links an der Maschine RECHTS und Fach_rechts LINKS.',
         '',
-        'LAGE: im Fach hinter dem hinteren 2060, unter den 2040.',
+        'LAGE (seit Rev. 2): vor dem vorderen 2060, zwischen den Y-Motoren.',
         '  Kasten X {:+.1f}..{:+.1f}, Y {:+.1f}..{:+.1f}, Z {:+.1f}..{:+.1f}'
         .format(gx[0], gx[1], gy[0], gy[1], gz[0], gz[1]),
         '  ({:.0f} x {:.0f} x {:.0f} mm), dazu die Ohren bis X {:+.1f}.'.format(
             gx[1] - gx[0], gy[1] - gy[0], gz[1] - gz[0],
             L['ohr_x']['rechts'][1]),
-        '  Ueber das Fach (55 mm) ragen nur Kasten, Deckel und Luefter in',
-        '  der Mitte (|X| <= 225), bis Z {:+.1f}; dort faehrt nichts so tief.'
-        .format(L['luefter_z'][1]),
+        '  Vor dem 2060 faehrt nichts; die Y-Motorhalter beginnen innen bei',
+        '  X {:+.1f} / {:+.1f}.'.format(L['y_motorhalter'][-1][0][1],
+                                       L['y_motorhalter'][1][0][0]),
+        '',
+        'FRONT (an der Maschine von links): Not-Aus X {:+.0f}, Buchse'
+        .format(nx),
+        '  X {:+.0f}, Wippschalter X {:+.0f} (so verbaut: Not-Aus im'
+        .format(bx, sx),
+        '  Schalterloch aus Rev. 1, Schalter im aufgebohrten Air-Assist-',
+        '  Durchbruch).',
+        '  Not-Aus C und NC in der 24-V-Leitung, NO frei.',
         '',
         'TEILE (PETG, je <= 250 mm): Fach_links, Fach_rechts, Deckel_links,',
         '  Deckel_rechts. Die Fachhaelften stehen beim Druck auf dem Boden,',
@@ -1363,47 +1504,74 @@ def hinweise_bauen(L, fehler):
         '',
         'FUGE: die Haelften mit 4 x M3x12 und Mutter durch beide',
         '  Fugenwaende, 2 Rauten-Zapfen links richten aus (Bohrlehre_Fuge).',
-        'MONTAGE: leer an die Rueckseite des hinteren 2060: je Ohr 2 x',
+        'MONTAGE: leer an die Vorderseite des vorderen 2060: je Ohr 2 x',
         '  M5x{:.0f} in Hammermuttern der unteren und oberen Nut (Z {:+.0f} /'
         .format(w('m5_l'), m5[0][1]),
-        '  {:+.0f}), innen je 1 x M5x{:.0f} in der oberen Nut bei X {:+.0f} /'
-        .format(m5[1][1], w('m5_l'), L['m5']['links'][2][0]),
-        '  {:+.0f}. Inbus von hinten; vor dem Verkabeln anziehen.'.format(
-            L['m5']['rechts'][2][0]),
+        '  {:+.0f}), innen je 1 x M5x{:.0f} in der oberen Nut bei X +-{:.0f}.'
+        .format(m5[1][1], w('m5_l'), abs(L['m5']['links'][2][0])),
+        '  Inbus von vorn; vor dem Verkabeln anziehen.',
         '',
-        'GASSEN: vorn Signale (Lichtschranken, 5 V, Waechter), hinten',
-        '  Leistung (24 V, 12 V Laser, Motoren). Leitwaende {:.0f} mm hoch,'
+        'GASSEN: Signale (Lichtschranken, 5 V, Waechter) an der Montage-',
+        '  platte zum 2060, Leistung (24 V, 12 V Laser, Motoren) an der',
+        '  Frontwand. Leitwaende {:.0f} mm hoch, Oesen fuer Kabelbinder'
         .format(w('leitwand_h')),
-        '  Oesen fuer Kabelbinder 2,5 mm am Boden; Fenster je Gasse in den',
-        '  Endwaenden (Zugentlastung an der ersten Oese) und in der Fuge.',
-        'UNO: Platine laengs X, USB rechts zum Pi, Endschalter-Stifte links.',
-        '  4 x M3x8 selbstschneidend in die Stehbolzen, vor dem Shield.',
-        'PI: senkrecht an der Fugenwand links, 4 x M2.5x6 in die',
-        '  Stehbolzen; Buchsen unten, SD-Karte hinten. W17 kurzes OTG-Kabel.',
-        'LUEFTER 24 V: auf dem linken Deckel ueber dem Uno (X {:+.1f},'
-        .format(fm[0]),
-        '  Y {:+.1f}), 4 x M3x16 mit Mutter, blaest nach unten; Stecker an'
-        .format(fm[1]),
-        '  der Litze, damit der Deckel abgeht.',
-        'RECHTS: 5-V-Wandler vorn mit USB-A-Adapter (Schraubklemmen, 5 V',
-        '  direkt an die Wago +5 V), 2 Kabelbinder durch Schlitze im Boden.',
-        '  Wago 24 V und GND vor der Rueckwand, Buchse (Loch {:.1f}) und'
+        '  2,5 mm am Boden; Fenster je Gasse in den Endwaenden (Zugent-',
+        '  lastung an der ersten Oese) und in der Fuge.',
+        'FACH_LINKS (an der Maschine rechts): Uno laengs X, USB zur Fuge',
+        '  und zum Pi; 4 x M3x8 selbstschneidend in die Stehbolzen. Pi',
+        '  senkrecht an der Fugenwand, 4 x M2.5x6, Buchsen unten, SD-Karte',
+        '  zur Frontwand; W17 kurzes OTG-Kabel. 12-V-Wandler an der Front-',
+        '  wand, Ausgang zur Endwand. Wago +5 V und GND 5 V senkrecht an der',
+        '  Endwand (Klebeband, Draehte von unten, Hebel nach innen).',
+        'LUEFTER 24 V: auf Deckel_links ueber dem Uno (X {:+.1f}, Y {:+.1f}),'
+        .format(fm[0], fm[1]),
+        '  4 x M3x16 mit Mutter, blaest nach unten; Stecker an der Litze.',
+        'FACH_RECHTS (an der Maschine links): 5-V-Wandler an der Montage-',
+        '  platte mit USB-A-Adapter (5 V an die Wago +5 V), Wago 24 V und',
+        '  GND an der Frontwand, dort Buchse (Loch {:.1f}), Not-Aus und'
         .format(w('buchse_d')),
-        '  Schalter (Loch {:.1f}) hinten. Platz fuer ein Air-Assist-Modul'
+        '  Schalter (Loch {:.1f}). Kabelbinder durch Schlitze im Boden.'
         .format(w('schalter_d')),
-        '  bis {:.0f} x {:.0f} an der Fuge, Durchbruch in der Rueckwand.'
-        .format(w('aa_l'), w('aa_b')),
-        'LINKS: Wago +5 V und GND 5 V senkrecht an der Endwand (Klebeband,',
-        '  Draehte von unten, Hebel nach innen); 12-V-Wandler hinten neben',
-        '  dem Uno, Ausgang nach links, 2 Kabelbinder durch den Boden.',
         'DECKEL: Lippe innen, 4 x M3x8 in Einsaetze M3 der Dome je Seite.',
         '',
         'NICHT GEMESSEN [w]/[?]: Wago (Datenblatt), USB-A-Adapter, Stecker,',
-        '  Lochbild des Pi (Bohrlehre_Pi), Einbauloch des Schalters.',
+        '  Lochbild des Pi (Bohrlehre_Pi), Einbauloch des Schalters,',
+        '  Not-Aus hinter der Wand (Tiefe, Mutter).',
+        'OFFEN: Kabelwege und Plaetze der Kabelhalter sind noch fuer die',
+        '  Lage hinten gerechnet (tools/elektronik_zeichnen.py).',
     ]
     if fehler:
         h += ['', 'FEHLER / WARNUNGEN:'] + ['  ' + f for f in fehler]
     return h
+
+
+def dreh_matrix(L):
+    """Die Lage an der Maschine als Matrix3D: 180 Grad um die Senkrechte
+    (Modell-Y) durch X = 0, Maschine-Y = dreh_y (Modell-Z)."""
+    m3 = adsk.core.Matrix3D.create()
+    m3.setToRotation(math.pi, adsk.core.Vector3D.create(0.0, 1.0, 0.0),
+                     adsk.core.Point3D.create(0.0, 0.0, L['dreh_y'] / 10.0))
+    return m3
+
+
+def drehen(o, L, fehler):
+    """Occurrence o (direkt unter root, gebaut in Fachkoordinaten) an ihren
+    Platz drehen und nachmessen: der Ursprung muss bei Maschine-Y
+    2 * dreh_y landen. transform2 gibt es in neueren Fusion-Versionen; fuer
+    eine Occurrence direkt unter root ist es dasselbe wie transform."""
+    feld = 'transform2' if hasattr(o, 'transform2') else 'transform'
+    try:
+        setattr(o, feld, dreh_matrix(L))
+        p = adsk.core.Point3D.create(0.0, 0.0, 0.0)
+        p.transformBy(getattr(o, feld))
+        if abs(p.x) > 1e-4 or abs(p.z * 10.0 - 2.0 * L['dreh_y']) > 1e-3:
+            fehler.append('{} steht nicht an seinem Platz (Y {:+.1f} statt '
+                          '{:+.1f})'.format(o.component.name, p.z * 10.0,
+                                            2.0 * L['dreh_y']))
+    except Exception:
+        fehler.append('{} nicht gedreht: {}'.format(
+            o.component.name,
+            traceback.format_exc().strip().splitlines()[-1]))
 
 
 def run(context):
@@ -1434,8 +1602,9 @@ def run(context):
 
         L = lage()
 
-        # Baugruppe: alle Komponenten am globalen Ursprung, jedes Teil steht
-        # schon an seinem Platz; nichts bewegt sich, alles fixiert.
+        # Baugruppe: alle Komponenten am globalen Ursprung, gebaut in
+        # Fachkoordinaten; danach dreht drehen() jede an ihren Platz vor dem
+        # vorderen 2060. Nichts bewegt sich, alles fixiert.
         einheit = adsk.core.Matrix3D.create()
         occ = {}
         for name in ('Fach_links', 'Fach_rechts', 'Deckel_links',
@@ -1447,8 +1616,6 @@ def run(context):
                      'Deckel_rechts'):
             bau_teil(app, design, occ[name].component, L, name, fehler)
         bau_bohrlehren(app, design, occ['Bohrlehren'].component, L, fehler)
-        for o in occ.values():
-            o.isGrounded = True
 
         ref = root.occurrences.addNewComponent(einheit)
         ref.component.name = 'Referenz_nicht_drucken'
@@ -1458,7 +1625,10 @@ def run(context):
             o.component.name = name
             teile[name] = o.component
         bau_referenz(app, design, teile, L, fehler)
-        ref.isGrounded = True
+
+        for o in list(occ.values()) + [ref]:
+            drehen(o, L, fehler)
+            o.isGrounded = True
 
         if design.snapshots.hasPendingSnapshot:
             design.snapshots.add()

@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 29, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 30, fünfundzwanzig
 gedruckte Teile; seit Rev. 29 dazu das
 [Gesamtmodell der ganzen Maschine](#gesamtmodell-die-ganze-maschine-seit-rev-29)).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
@@ -72,9 +72,8 @@ damit man im Browser sieht, welcher Stand gebaut wurde.
 | `ToolheadZ_r38` | alle Druckteile des Toolheads, Z-Wagen in der Mitte des Z-Wegs. Dazu in `Ref_Toolhead` die Kaufteile vereinfacht: Z-Schiene MGN9 mit Wagen, Z-Motor, Kupplung, Spindel Tr8×2 mit Mutter, Diodenlaser, Lichtschranke Z. Die Gruppe steht um die X-Wagenmitte verschoben (ToolheadZ rechnet X ab dort), also in der Mitte des X-Wegs |
 | `Opferplatte_r3` | vier Füße unter den 2060, Riegel (zu), Opferplatte |
 | `Spannmittel_r1` | Anschlagwinkel, zwei Exzenter, die vier Niederhalter am Beispielwerkstück und das Werkstück selbst. Den Satz der anderen Stärken legt das eigene Skript neben die Platte, hier fehlt er |
-| `Elektronikfach_r1` | Fach und Deckel links und rechts (Zwischenstand) und in `Ref_Elektronik` die Geräte: Uno, Pi, Wandler, Wago, Lüfter, Buchse, Schalter |
-| `Kamerahalter_r1` | Halter, Camera Module 3, M5-Köpfe und die Sichtlinien zum Messpunkt |
-| `NotAus_r5` | Gehäuse und Taster |
+| `Elektronikfach_r2` | Fach und Deckel (Zwischenstand) und in `Ref_Elektronik` die Geräte: Uno, Pi, Wandler, Wago, Lüfter, Buchse, Schalter, Not-Aus. Seit Rev. 30 vor dem vorderen 2060 zwischen den Y-Motoren, wie verbaut: `Elektronikfach.py` rechnet in Fachkoordinaten, die Gruppe wird um 180° um die Senkrechte gedreht (`gruppe_lage`), darum steht `Fach_links` rechts |
+| `Kamerahalter_r1` | Halter, Camera Module 3, M5-Köpfe und die Sichtlinien zum Messpunkt. Steht im Modell noch hinten; an der Maschine sitzt die Kamera vorn rechts (offen, [kamerahalter.md](kamerahalter.md)) |
 | `Kabelhalter_r2` | alle neun Halter, links fünf, rechts vier, rechts um 180° gedreht. Die Plätze stehen in `KABELHALTER_Y` in `Portal.py` und kommen aus `kabelhalter_check.py` ([kabelhalter.md](kabelhalter.md)) |
 
 Nicht noch einmal gebaut wird, was es schon gibt: Profile und Y-Motor stehen
@@ -84,8 +83,10 @@ Bohrlehren der anderen Skripte baut nur jedes Skript für sich. Die
 Gelenke aus `ToolheadZ.py` fehlen, alles ist fixiert.
 
 **Einrichten:** Die Ordner müssen nebeneinander liegen wie in `fusion/`.
-Also alle zusammen in den Scripts-Ordner von Fusion kopieren und nach
-einer Änderung den geänderten Ordner neu kopieren. Fehlt ein Ordner oder
+Am einfachsten führt Fusion die Skripte direkt aus `fusion/` im Repo aus;
+dann gilt immer der ausgecheckte Stand. Wer kopiert, kopiert alle Ordner
+zusammen in den Scripts-Ordner von Fusion und nach einer Änderung den
+geänderten Ordner neu. Fehlt ein Ordner oder
 scheitert ein Skript, fehlt nur seine Gruppe. Der Bericht nennt das unter
 **GESAMTMODELL**, mit einer Zeile je Gruppe: Druckteil-Körper, Gramm,
 Referenzkörper. Die Körper selbst listet der Bericht des jeweiligen Skripts.

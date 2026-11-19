@@ -219,6 +219,17 @@ def main():
     p.ja('Pi: Kamerabuchse auf der Bauteilseite (X zwischen Platine und '
          'Bauteilen)', FL['pi_bauteile_x'][0] - 0.5 <= kw('pi_buchse_x')
          <= FL['pi_pcb_x'][0] + 0.5)
+    # Die Werte oben sind Fachkoordinaten. Kamerahalter Rev. 1 setzt voraus,
+    # dass das Fach dort auch steht: hinter dem hinteren 2060, direkt hinter
+    # dem Halter. Seit Elektronikfach Rev. 2 steht es vor dem vorderen 2060
+    # (so verbaut), und die Kamera sitzt an der Maschine vorn rechts.
+    fach_m = fm.bereich_nach_maschine(FL['geh_x'], FL['geh_y'], FL['geh_z'])
+    fach_hinten = fach_m[1][1] <= L['quer_y_hinten'][0] + 0.01
+    p.ja('Elektronikfach hinter dem hinteren 2060, wie Rev. 1 annimmt',
+         fach_hinten, '' if fach_hinten else
+         ' — es steht seit Elektronikfach Rev. 2 vorn (Y {:+.0f}..{:+.0f}); '
+         'Kamerahalter auf die Kamera vorn rechts umstellen'.format(
+             *fach_m[1]))
     u = ueberstrichen(tw, TL, w, L)
     # was vom Toolhead unter den obersten Punkt der Kamera reicht und ueber
     # Kamera und Halter in X faehrt
@@ -274,8 +285,9 @@ def main():
 
     # ------------------------------------------------------------------
     p.titel('4) Freiraum zu Elektronikfach, 2060 und Kabel')
-    fach = Quader('Elektronikfach mit Deckel', *FL['fach_x'], *FL['fach_y'],
-                  FL['fach_z'][0], FL['deckel_z'][1])
+    fx_, fy_, fz_ = fm.bereich_nach_maschine(
+        FL['fach_x'], FL['fach_y'], (FL['fach_z'][0], FL['deckel_z'][1]))
+    fach = Quader('Elektronikfach mit Deckel', *fx_, *fy_, *fz_)
     d, a, _ = engste(kamera + halter, [fach])
     p.ok('Fach und Deckel ({}); der Deckel geht ab'.format(a), d, LUFT_FACH)
     q2060 = Quader('2060 hinten', *L['quer_x'], *L['quer_y_hinten'],
@@ -293,7 +305,11 @@ def main():
          KL['kabel_aus_welt'][2] - kw('kabel_b') / 2.0 - KL['fuss_z'][1],
          3.0)
     # Gasse fuer das Kabel: vom steifen Ende aussen an der Vorderwand nach
-    # links bis zum Eintritt, so hoch wie das Kabel breit ist
+    # links bis zum Eintritt, so hoch wie das Kabel breit ist. Gilt nur mit
+    # dem Fach hinten (Rev. 1); die Zeilen zeigen den Stand des Halters.
+    if not fach_hinten:
+        p.info('Kabelgasse und Eintritt unten gelten fuer das Fach hinten '
+               '(Rev. 1), nicht fuer die Lage vorn')
     sx, sy, sz = KL['kabel_steif_welt']
     hb = kw('kabel_b') / 2.0
     gasse = Quader('Kabelgasse', KL['kabel_eintritt_x'], sx,
@@ -429,9 +445,24 @@ def main():
 
     # ------------------------------------------------------------------
     p.titel('9) Kabel zum Pi')
-    p.ok('Weg (geschaetzt) mit {:.0f} mm Reserve'.format(KABEL_RESERVE),
-         kw('kabel_l') - KL['kabel_weg'], KABEL_RESERVE)
-    p.info('geschaetzter Weg', KL['kabel_weg'])
+    if fach_hinten:
+        p.ok('Weg (geschaetzt) mit {:.0f} mm Reserve'.format(KABEL_RESERVE),
+             kw('kabel_l') - KL['kabel_weg'], KABEL_RESERVE)
+        p.info('geschaetzter Weg', KL['kabel_weg'])
+    else:
+        # Kamerabuchse des Pi an der Maschine (Fach gedreht); als Untergrenze
+        # der Weg in geraden Stuecken laengs X, Y und Z, ohne Umweg um den
+        # Arbeitsbereich
+        pb = fm.nach_maschine(kw('pi_buchse_x'), kw('pi_buchse_y'),
+                              kw('pi_buchse_z'))
+        ka = KL['kabel_aus_welt']
+        weg = sum(abs(a_ - b_) for a_, b_ in zip(ka, pb))
+        p.info('Pi-Kamerabuchse an der Maschine X {:+.0f} Y {:+.0f} Z {:+.0f}'
+               .format(*pb))
+        p.info('Weg mindestens (gerade Stuecke, ohne Umweg)', weg)
+        p.ok('Kabel {:.0f} mm reicht bis zum Pi vorn (offen: Kamera vorn '
+             'rechts, Halter neu)'.format(kw('kabel_l')),
+             kw('kabel_l') - weg, KABEL_RESERVE)
 
     # ------------------------------------------------------------------
     p.titel('10) Statische Pruefung der Schluessel in Kamerahalter.py')

@@ -62,6 +62,10 @@ kurzes Stück nach hinten zum Halter_Y, dort ist kein Halter nötig.
 
 ## Plätze
 
+**Offen (2026-11-19):** Die Plätze unten sind für das Elektronikfach hinter
+dem hinteren 2060 gerechnet. Seit Elektronikfach Rev. 2 steht es vor dem
+vorderen 2060; Kabelwege und Plätze werden dafür neu gerechnet.
+
 Neun Halter, links fünf und rechts vier. Die Prüfung verteilt sie in den
 freien Lücken der Nut so, dass zwischen zwei Haltern höchstens rund 100 mm
 frei hängen. Länger sind nur die Spannen über die hintere Kreuzung (L1–L2,

@@ -27,6 +27,14 @@ einem eigenen Halter mit Haube rechts neben dem Gehäuse.
 
 ## Wohin: das Fach hinter dem hinteren 2060
 
+**Stand 2026-11-19:** Verbaut ist das Fach **vor dem vorderen 2060**,
+zwischen den Y-Motoren (`fusion/Elektronikfach/Elektronikfach.py`, Rev. 2).
+Es sind dieselben Teile wie in Rev. 1, um 180° gedreht: die Hälfte mit
+Uno und Pi rechts, die mit Buchse, Not-Aus und Schalter links. Davor fährt
+nichts; zu den Y-Motorhaltern bleiben 8,8 mm (`elektronik_check.py`).
+Dieser Abschnitt beschreibt noch die Planung hinten. Die Kabelwege unten
+sind noch für diese Lage gerechnet.
+
 Hinter dem hinteren 2060 stehen die 2040 frei nach hinten über. Darunter,
 zwischen Tisch und 2040, fährt nichts hin:
 
@@ -58,7 +66,7 @@ brauchen 107 mm ab der Rückseite des 2060 und enden 3,4 mm vor dem Ende der
 | Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Gehäuse kommt nur seine 24-V-Leitung | vorhanden |
 | 24-V-Eingang | hinten am Gehäuse: Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5); an der Buchse zweigt vor dem Schalter W18 zum Pi ab | gezeichnet |
 | Verteiler | im Gehäuse rechts: Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm), davor drei Wago-Klemmen: +5 V für die Lichtschranken (221-420, vom 5-V-Stift des Uno), GND (221-420), +24 V (221-415) | gezeichnet, Wandler und Wago vorhanden |
-| Not-Aus | vorn am vorderen 2060 im eigenen Gehäuse ([notaus.md](notaus.md)); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, Gehäuse gezeichnet |
+| Not-Aus | in der Frontwand des Elektronikfachs, links neben Buchse und Schalter (im Schalterloch aus Rev. 1; seit Elektronikfach Rev. 2, so verbaut); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, verbaut |
 | Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | auf dem [Pi-Halter](pi.md#halter) rechts neben dem Gehäuse, obere Nut des hinteren 2060, unter einer [Haube](pi.md#haube); hängt vor Schalter und Not-Aus an der Buchse und versorgt über USB den Uno | Halter und Haube gezeichnet |
 
 Das Gehäuse hängt an der **Rückseite des hinteren 2060** (untere und obere

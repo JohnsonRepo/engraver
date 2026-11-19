@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 """Zeichnung: das Elektronikfach — Draufsicht, Rueckwand, Fugenwand.
 
+Gezeichnet in Fachkoordinaten (Elektronikfach.py seit Rev. 2): An der
+Maschine haengt das Fach vor dem vorderen 2060 und ist gegenueber diesen
+Koordinaten um 180 Grad gedreht. Fach_links steht dort rechts, die
+Rueckwand ist die Frontwand zum Bediener.
+
 Draufsicht mit abgenommenen Deckeln: beide Haelften mit Ohren und
-Montageplatte am hinteren 2060, die Signalgasse vorn und die
-Leistungsgasse hinten mit Leitwaenden und Oesen, Uno, Pi, Wandler, Wago,
-Buchse und Schalter, der Luefter im Deckel gestrichelt, und die Kabelwege
-im Fach aus tools/elektronik_zeichnen.py. Dazu die Rueckwand von hinten
-(Buchse, Schalter, Lueftung, Durchbruch fuer Air Assist) und die Fugenwand
-von links mit dem Pi, den Fenstern, Schrauben und Zapfen. Alle Masse aus
-Elektronikfach.py (lage()); die Zeichnung ist massstaeblich.
+Montageplatte am vorderen 2060, die Signalgasse an der Montageplatte und
+die Leistungsgasse an der Frontwand mit Leitwaenden und Oesen, Uno, Pi,
+Wandler, Wago, Buchse, Not-Aus und Schalter, der Luefter im Deckel
+gestrichelt, und die Kabelwege im Fach aus tools/elektronik_zeichnen.py.
+Dazu die Frontwand von vorn, wie man an der Maschine davor steht (Not-Aus,
+Buchse, Schalter, Lueftung), und die Fugenwand mit dem Pi, den Fenstern,
+Schrauben und Zapfen. Alle Masse aus Elektronikfach.py (lage()); die
+Zeichnung ist massstaeblich.
 
     python3 tools/elektronikfach_zeichnen.py   ->  docs/elektronikfach.svg
 """
@@ -42,6 +48,7 @@ FARBE.update({
     'wandler': ('#d6e0f2', '#3b5b92'),
     'gasse_s': ('#e7f1fb', '#a5c8ec'),
     'gasse_l': ('#fbe9e9', '#e3a5a5'),
+    'taster':  ('#e03131', '#a51111'),     # Not-Aus
 })
 # Kabelwege im Fach: Name in elektronik_zeichnen.kabelwege, Farbe, Leitung
 WEGE = (('X-Endschalter', SIGNAL, 'W9'), ('Y-Endschalter', SIGNAL, 'W10'),
@@ -89,12 +96,14 @@ def draufsicht(f, ew, EL, K):
     gx, gy, iy = EL['geh_x'], EL['geh_y'], EL['innen_y']
     py = EL['platte_y']
     a = f.a
-    # Fach, hinteres 2060, die Enden der 2040 (darueber)
+    # Fach, vorderes 2060, die vorderen Enden der 2040 (darueber; in
+    # Fachkoordinaten enden sie bei 2 dreh_y - rahmen_y1)
     t.append(f.rect(*EL['fach_x'], *EL['fach_y'], 'neu', **FACH))
     t.append(f.rect(a[0] - 5, a[1] + 5, *EL['quer_y'], 'profil'))
+    y_ende = 2.0 * EL['dreh_y'] - ew('rahmen_y1')
     for s in (-1, 1):
         x = sorted((s * (R - rb / 2.0), s * (R + rb / 2.0)))
-        t.append(f.rect(*x, ew('rahmen_y0'), f.b[1] + 5, 'profil',
+        t.append(f.rect(*x, y_ende, f.b[1] + 5, 'profil',
                         fill_opacity='0.35'))
     # Kasten: aussen, innen (Boden), Gassen
     for s in ('links', 'rechts'):
@@ -169,13 +178,8 @@ def draufsicht(f, ew, EL, K):
             cx, cy = f.px((x[0] + x[1]) / 2.0, (y[0] + y[1]) / 2.0)
             schrift.append(text(cx, cy, name, 8.0, TEXT, 'middle',
                                 fett=True, halo=True))
-    t.append(f.rect(*EL['aa_x'], *EL['aa_y'], 'neu', fill='none',
-                    stroke=GRAU, stroke_dasharray='4 3'))
-    cx, cy = f.px(sum(EL['aa_x']) / 2.0, sum(EL['aa_y']) / 2.0)
-    schrift.append(text(cx, cy + 3, 'Air Assist', 7.5, GRAU, 'middle',
-                        halo=True))
     for q in ec.innenteile(ew, EL):
-        if q.name in ('Buchse', 'Schalter'):
+        if q.name in ('Buchse', 'Schalter', 'Not-Aus'):
             t.append(f.rect(*q.x, *q.y, 'kauf'))
     # Luefter im Deckel (gestrichelt)
     fm, h = EL['luefter_mitte'], ew('luefter') / 2.0
@@ -201,9 +205,10 @@ def draufsicht(f, ew, EL, K):
     return t + schrift
 
 
-# ---- Rueckwand von hinten ---------------------------------------------------
+# ---- Frontwand (Rueckwand in Fachkoordinaten) von vorn ----------------------
 def rueckwand(f, ew, EL):
-    """Blick von hinten auf die Rueckwand (X nach links, Z nach oben)."""
+    """Blick von aussen auf die Rueckwand (Fach-X nach links, Z nach oben)
+    — an der Maschine die Frontwand, so wie man davor steht."""
     t = []
     gz, bz = EL['geh_z'], EL['boden_z']
     t.append(f.rect(*EL['fach_x'], *EL['fach_z'], 'neu', **FACH))
@@ -220,15 +225,17 @@ def rueckwand(f, ew, EL):
     fm = _fm()
     t.append(f.poly(fm.tropfen_punkte(bx, ez_, ew('buchse_d')), 'neu',
                     fill='#ffffff'))
-    sx, _ = EL['schalter']
-    t.append(f.kreis(sx, ez_, ew('schalter_blende_d') / 2.0, 'kauf'))
-    t.append(f.poly(fm.tropfen_punkte(sx, ez_, ew('schalter_d'), 1.0,
-                                      ew('schalter_kappe')), 'neu',
-                    fill='none', stroke=VERDECKT, stroke_dasharray='2.5 2',
-                    stroke_width='0.7'))
-    ab = EL['ausbruch']
-    t.append(f.poly(fm.tropfen_punkte(ab[0], ab[1], ew('ausbruch_d')), 'neu',
-                    fill='#f3e6d8', stroke_dasharray='3 2'))
+    # Wippschalter (im frueheren Air-Assist-Durchbruch) und Not-Aus (im
+    # Schalterloch aus Rev. 1): gleiche Loecher, verdeckt unter Blende/Kopf
+    sx, sz = EL['schalter']
+    nx, nz = EL['notaus']
+    t.append(f.kreis(sx, sz, ew('schalter_blende_d') / 2.0, 'kauf'))
+    t.append(f.kreis(nx, nz, ew('notaus_kopf_d') / 2.0, 'taster'))
+    for x, z in ((sx, sz), (nx, nz)):
+        t.append(f.poly(fm.tropfen_punkte(x, z, ew('schalter_d'), 1.0,
+                                          ew('schalter_kappe')), 'neu',
+                        fill='none', stroke=VERDECKT,
+                        stroke_dasharray='2.5 2', stroke_width='0.7'))
     t.append(f.linie(f.a[0], EL['tisch_z'], f.a[1], EL['tisch_z'], GRAU,
                      1.0))
     return t
@@ -285,17 +292,19 @@ def main():
     w, L = pm.w, pm.lage()
     K = ez.konzept(w, L, tw, TL, ew, EL)
     gx, gy, gz = EL['geh_x'], EL['geh_y'], EL['geh_z']
-    t = [text(24, 30, 'Elektronikfach (Elektronikfach.py Rev. {}) — zwei '
-              'Hälften mit Signalgasse vorn und Leistungsgasse hinten'.format(
-                  em.REVISION), 14, TEXT, fett=True),
-         text(24, 48, 'Maßstäblich, alle Maße aus dem Skript. Deckel '
-              'abgenommen, der Lüfter im Deckel gestrichelt; hinten oben, '
-              'vorn (zum hinteren 2060) unten.', 9, GRAU)]
+    my = em.bereich_nach_maschine(gx, gy, gz)[1]
+    t = [text(24, 30, 'Elektronikfach (Elektronikfach.py Rev. {}) vor dem '
+              'vorderen 2060 — Signalgasse am 2060, Leistungsgasse an der '
+              'Frontwand'.format(em.REVISION), 14, TEXT, fett=True),
+         text(24, 48, 'Maßstäblich, alle Maße aus dem Skript, gezeichnet in '
+              'Fachkoordinaten: oben die Frontwand (an der Maschine vorn), '
+              'unten die Montageplatte am 2060. An der Maschine ist das Fach '
+              'um 180° gedreht: Fach links steht dort rechts.', 9, GRAU)]
 
     # ---- Draufsicht --------------------------------------------------------
     f = Feld(262, 96, (-262.0, 262.0), (-372.0, -224.0), 1.62, b_runter=True)
     t += f.ausschnitt('drauf', draufsicht(f, ew, EL, K))
-    t += f.rahmen('Draufsicht, Deckel abgenommen (hinten oben)')
+    t += f.rahmen('Draufsicht, Deckel abgenommen (Frontwand oben)')
     sy = sum(EL['fenster_sig_y']) / 2.0
     unten = f.oy + f.hoehe + 18
     t += f.spalte([
@@ -305,7 +314,7 @@ def main():
         (EL['wago'][0][2][1], sum(EL['wago'][0][3]) / 2.0,
          '5-V-Klemmen an der Endwand\n(Hebel nach innen)'),
         (EL['ohr_x']['links'][0] + 4.0, sum(EL['platte_y']) / 2.0,
-         'Ohr: 2 × M5 in die\nRückseite des 2060'),
+         'Ohr: 2 × M5 in die\nVorderseite des 2060'),
         (EL['oesen']['links'][3][0], EL['oesen']['links'][3][1] - 4.0,
          'Öse = Zugentlastung\n(Kabelbinder)'),
         (EL['w12_x'][0] + 4.0, EL['w12_y'][0] + 4.0,
@@ -316,15 +325,15 @@ def main():
     t += f.spalte([
         (EL['adapter'][0][0] + 4.0, sum(EL['adapter'][1]) / 2.0,
          'USB-A-Adapter mit Klemmen:\n5 V über W6 an die Wago'),
-        (EL['aa_x'][1] - 4.0, EL['aa_y'][0] + 4.0,
-         'Platz für Air Assist,\nDurchbruch in der Rückwand'),
+        (EL['schalter'][0], EL['innen_y'][0] + 6.0,
+         'Wippschalter im aufgebohrten\nAir-Assist-Durchbruch'),
         (EL['wago'][3][2][1], EL['wago'][3][3][0] + 4.0,
          'Wago +24 V und GND\n(221-420, Klebeband)'),
-        (EL['schalter'][0], EL['innen_y'][0] + 6.0,
-         'Buchse und Schalter in\nder Rückwand'),
+        (EL['notaus'][0], EL['innen_y'][0] + 6.0,
+         'Buchse und Not-Aus in\nder Frontwand'),
         (gx[1], sy, 'Fenster Signale:\nLichtschranke Y'),
         (gx[1], sum(EL['fenster_pow']['rechts'][0]) / 2.0,
-         'Fenster Leistung: Y-Motor\nrechts, Not-Aus'),
+         'Fenster Leistung:\nMotor, 24 V'),
         (EL['m5']['rechts'][2][0], EL['platte_y'][0] - 2.5,
          'M5 innen (obere Nut), vor\ndem Bestücken anziehen')],
         f.ox + f.breite + 12, 'start', abstand=25.0, unten=unten)
@@ -344,19 +353,22 @@ def main():
     fr = Feld(262, f.oy + f.hoehe + 80, (-262.0, 262.0), (-134.0, -42.0),
               1.62, a_rueck=True)
     t += fr.ausschnitt('rueck', rueckwand(fr, ew, EL))
-    t += fr.rahmen('Rückwand von hinten (rechte Hälfte links im Bild)')
+    t += fr.rahmen('Frontwand von vorn, wie man an der Maschine davor '
+                   'steht (Fach rechts links im Bild)')
     bx, ez_ = EL['buchse']
+    sx, sz = EL['schalter']
+    nx, nz = EL['notaus']
     t += fr.spalte([
+        (nx, nz + ew('notaus_kopf_d') / 2.0,
+         'Not-Aus (Pilz Ø{}) im\nSchalterloch aus Rev. 1'.format(
+             de(ew('notaus_kopf_d'), 0))),
         (bx, ez_, 'Einbaubuchse 5,5 × 2,1\n(Loch {} mm, Traene)'.format(
-            de(ew('buchse_d'), 1))),
-        (EL['schalter'][0], ez_ + ew('schalter_blende_d') / 2.0,
-         'Wippschalter rund\n(Blende Ø{})'.format(
-             de(ew('schalter_blende_d'), 1)))],
+            de(ew('buchse_d'), 1)))],
         fr.ox - 12, 'end', abstand=24.0)
     t += fr.spalte([
-        (EL['ausbruch'][0], EL['ausbruch'][1],
-         'Air Assist: Durchbruch\n{} mm, Haut zum Ausbrechen'.format(
-             de(ew('ausbruch_d'), 0))),
+        (sx, sz + ew('schalter_blende_d') / 2.0,
+         'Wippschalter rund (Blende Ø{}),\nim aufgebohrten Air-Assist-'
+         'Durchbruch'.format(de(ew('schalter_blende_d'), 1))),
         (-100.0, EL['lueftung_z'][1], 'Lüftungsschlitze\n'
          '(Luft vom Lüfter)')],
         fr.ox + fr.breite + 12, 'start', abstand=24.0)
@@ -366,7 +378,8 @@ def main():
     ff = Feld(262, fr.oy + fr.hoehe + 60, (-362.0, -246.0), (-132.0, -44.0),
               s3)
     t += ff.ausschnitt('fuge', fugenwand(ff, ew, EL))
-    t += ff.rahmen('Fugenwand von links, mit dem Pi davor (vorn rechts)')
+    t += ff.rahmen('Fugenwand von links (Fach), Montageplatte rechts, mit '
+                   'dem Pi davor')
     t += ff.spalte([
         (EL['fuge_fenster'][1][0][0], sum(EL['fuge_fenster'][1][1]) / 2.0,
          'Fenster Leistung'),
@@ -405,16 +418,21 @@ def main():
              *(de(EL['teile']['Deckel_links']['bbox'][i][1]
                   - EL['teile']['Deckel_links']['bbox'][i][0], 1)
                for i in range(3)))),
-        ('Lage', 'Kasten {} × {} × {} mm hinter dem hinteren 2060, in der '
-         'Mitte (|X| ≤ 225) und deshalb höher als das Fach ({} mm); der '
-         'Lüfter endet {} mm über dem Fachboden'.format(
+        ('Lage', 'Kasten {} × {} × {} mm vor dem vorderen 2060 zwischen '
+         'den Y-Motoren (an der Maschine Y {} bis {}); der Lüfter endet {} mm '
+         'über der Unterkante'.format(
              de(gx[1] - gx[0], 0), de(gy[1] - gy[0], 0),
-             de(gz[1] - gz[0], 0), de(EL['fach_z'][1] - EL['fach_z'][0], 0),
+             de(gz[1] - gz[0], 0), de(my[0], 0), de(my[1], 0),
              de(EL['luefter_z'][1] - z0, 1))),
+        ('Front', 'an der Maschine von links: Not-Aus X {}, Buchse X {}, '
+         'Wippschalter X {} (so verbaut seit Rev. 2)'.format(
+             *(de(em.nach_maschine(x, 0.0, 0.0)[0], 0)
+               for x in (EL['notaus'][0], EL['buchse'][0],
+                         EL['schalter'][0])))),
         ('Montage', 'je Ohr 2 × M5×{0} (untere und obere Nut), innen je '
          '1 × M5×{0} (obere Nut); die Hälften mit 4 × M3×12 und 2 Zapfen in '
          'der Fuge'.format(de(ew('m5_l'), 0))),
-        ('Gassen', 'vorn {} mm Signale, hinten {} mm Leistung; Leitwände {} '
+        ('Gassen', 'am 2060 {} mm Signale, an der Front {} mm Leistung; Leitwände {} '
          'mm hoch, Ösen für Kabelbinder; je Gasse ein Fenster in jeder '
          'Endwand und in der Fuge'.format(
              de(EL['gasse_vorn'][1] - EL['gasse_vorn'][0], 0),
@@ -431,6 +449,8 @@ def main():
              de(EL['stapel_z1'] - z0), de(EL['pi_z'][0] - z0),
              de(EL['pi_z'][1] - z0), de(EL['rand_z'] - z0),
              de(EL['deckel_z'][1] - z0), de(EL['luefter_z'][1] - z0))),
+        ('Offen', 'die Kabelwege im Bild und ihre Längen sind noch für die '
+         'Lage hinten gerechnet (tools/elektronik_zeichnen.py)'),
     ]
     ty = ff.oy + ff.hoehe + 50
     t.append(text(24, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))

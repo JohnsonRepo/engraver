@@ -94,11 +94,16 @@
 #   Opferplatte    Fuesse unter den 2060, Riegel, Opferplatte
 #   Spannmittel    Anschlagwinkel, 2 Exzenter, 4 Niederhalter am
 #                  Beispielwerkstueck (der Satz der anderen Staerken nicht)
-#   Elektronikfach Fach und Deckel (Zwischenstand), Uno, Pi, Wandler ...
-#   Kamerahalter   Halter und Camera Module 3 fuer den Autofokus
-#   NotAus         Gehaeuse und Taster
+#   Elektronikfach Fach und Deckel (Zwischenstand), Uno, Pi, Wandler, Not-
+#                  Aus in der Front; seit Rev. 30 vor dem vorderen 2060:
+#                  in Fachkoordinaten gebaut und um 180 Grad gedreht
+#                  (Elektronikfach.py Rev. 2, gruppe_lage)
+#   Kamerahalter   Halter und Camera Module 3 fuer den Autofokus (steht im
+#                  Modell noch hinten, an der Maschine vorn rechts)
 #   Kabelhalter    alle neun Halter (KABELHALTER_Y), rechts um 180 Grad
 #                  gedreht
+# Das Not-Aus-Gehaeuse (NotAus.py) gibt es seit Rev. 30 nicht mehr: Der
+# Taster sitzt in der Front des Elektronikfachs.
 # So steht keine Geometrie doppelt, und das Modell zeigt immer den Stand
 # der Skripte. Fehlt ein Ordner, fehlt nur seine Gruppe (der Bericht sagt
 # es). Bohrlehren der anderen und Teile, die hier schon stehen (Profile,
@@ -136,13 +141,13 @@ import textwrap
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 29
+REVISION = 30
 
 # Gesamtmodell (seit Rev. 29, siehe oben): False baut nur das Portal.
 MASCHINE = True
 # Ordner neben Portal/, deren Skripte mitgebaut werden (in dieser Folge)
 NACHBARN = ('ToolheadZ', 'Opferplatte', 'Spannmittel', 'Elektronikfach',
-            'Kamerahalter', 'NotAus', 'Kabelhalter')
+            'Kamerahalter', 'Kabelhalter')
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -3925,21 +3930,34 @@ def nachbar_laden(name):
     return m
 
 
-def gruppe_versatz(name, L):
-    """Lage der Gruppe in Maschinenkoordinaten (mm). Alle Skripte rechnen in
-    den Koordinaten von Portal.py, nur ToolheadZ.py zaehlt X ab der
-    X-Wagenmitte; der Toolhead steht in der Mitte des X-Wegs."""
+def gruppe_lage(name, L, m=None):
+    """Lage der Gruppe: (dx, dy, dz, dreh_y). Verschiebung in Maschinen-
+    koordinaten (mm); ist dreh_y nicht None, vorher eine halbe Drehung um
+    die Senkrechte durch X = 0, Y = dreh_y. Alle Skripte rechnen in den
+    Koordinaten von Portal.py, nur
+      ToolheadZ.py zaehlt X ab der X-Wagenmitte; der Toolhead steht in der
+        Mitte des X-Wegs;
+      Elektronikfach.py (seit Rev. 2) rechnet in Fachkoordinaten und dreht
+        das Fach an das vordere 2060 (lage()['dreh_y'])."""
     if name == 'ToolheadZ':
-        return (L['xw_mitte'], 0.0, 0.0)
-    return (0.0, 0.0, 0.0)
+        return (L['xw_mitte'], 0.0, 0.0, None)
+    if name == 'Elektronikfach' and m is not None:
+        return (0.0, 0.0, 0.0, m.lage().get('dreh_y'))
+    return (0.0, 0.0, 0.0, None)
 
 
-def matrix(dx=0.0, dy=0.0, dz=0.0):
-    """Verschiebung in Maschinenkoordinaten (mm) als Matrix3D. Im Modell
-    sind Y und Z getauscht."""
+def matrix(dx=0.0, dy=0.0, dz=0.0, dreh_y=None):
+    """Lage in Maschinenkoordinaten (mm) als Matrix3D: wenn dreh_y nicht
+    None, erst 180 Grad um die Senkrechte durch X = 0, Y = dreh_y, dann um
+    (dx, dy, dz) verschoben. Im Modell sind Y und Z getauscht."""
     m3 = adsk.core.Matrix3D.create()
-    m3.translation = adsk.core.Vector3D.create(dx / 10.0, dz / 10.0,
-                                               dy / 10.0)
+    if dreh_y is not None:
+        m3.setToRotation(math.pi, adsk.core.Vector3D.create(0.0, 1.0, 0.0),
+                         adsk.core.Point3D.create(0.0, 0.0, dreh_y / 10.0))
+    t = m3.translation
+    m3.translation = adsk.core.Vector3D.create(t.x + dx / 10.0,
+                                               t.y + dz / 10.0,
+                                               t.z + dy / 10.0)
     return m3
 
 
@@ -4120,8 +4138,10 @@ def maschine_Spannmittel(app, design, g, m, L, protokoll):
 
 
 def maschine_Elektronikfach(app, design, g, m, L, protokoll):
-    """Fach und Deckel (Zwischenstand), Geraete als Referenz; ohne das
-    hintere 2060 und die Enden der 2040."""
+    """Fach und Deckel (Zwischenstand), Geraete und Not-Aus als Referenz;
+    ohne 2060, die Enden der 2040 und die Y-Motoren (Ref_Profile, die
+    stehen schon da). Gebaut in Fachkoordinaten; nachbarn_bauen dreht die
+    Gruppe danach an das vordere 2060 (gruppe_lage)."""
     E = m.lage()
     for name in ('Fach_links', 'Fach_rechts', 'Deckel_links',
                  'Deckel_rechts'):
@@ -4147,20 +4167,6 @@ def maschine_Kamerahalter(app, design, g, m, L, protokoll):
                'Ref_Kamera': teil(g, 'Ref_Kamera').component,
                'Ref_Schrauben': teil(g, 'Ref_Schrauben_Kamera').component},
               K, protokoll)
-    wegwerfen(weg, protokoll)
-
-
-def maschine_NotAus(app, design, g, m, L, protokoll):
-    """Gehaeuse und Taster; ohne Profile und Y-Motor (die baut das
-    Portal)."""
-    N = m.lage()
-    versuchen(protokoll, 'Gehaeuse_NotAus', m.bau_gehaeuse, app, design,
-              teil(g, 'Gehaeuse_NotAus').component, N, protokoll)
-    weg = teil(g, 'Weg_NotAus')
-    versuchen(protokoll, 'Referenz', m.bau_referenz, app, design,
-              {'Ref_Rahmen': weg.component, 'Ref_YMotor': weg.component,
-               'Ref_Taster': teil(g, 'Ref_Taster').component},
-              N, protokoll)
     wegwerfen(weg, protokoll)
 
 
@@ -4203,10 +4209,10 @@ def nachbarn_laden():
 
 def nachbarn_bauen(app, design, root, L, module, zeilen):
     """Baut die geladenen Nachbarn, jeden in seine Gruppe
-    <Skript>_r<Revision> am Ursprung; ToolheadZ wird danach an seinen
-    Platz geschoben (gebaut wird am Ursprung wie im eigenen Skript).
-    Haengt die Zeilen fuer die Hinweise an und liefert {Gruppenname:
-    Komponente} fuer den Bericht."""
+    <Skript>_r<Revision> am Ursprung, wie im eigenen Skript; ToolheadZ und
+    Elektronikfach kommen danach an ihren Platz (gruppe_lage). Haengt die
+    Zeilen fuer die Hinweise an und liefert {Gruppenname: Komponente} fuer
+    den Bericht."""
     gruppen = {}
     for name in NACHBARN:
         m = module.get(name)
@@ -4222,20 +4228,26 @@ def nachbarn_bauen(app, design, root, L, module, zeilen):
         except Exception:
             protokoll.append('abgebrochen: {}'.format(
                 traceback.format_exc().strip().splitlines()[-1]))
-        dx, dy, dz = gruppe_versatz(name, L)
-        if abs(dx) + abs(dy) + abs(dz) > 1e-9:
+        dx, dy, dz, dreh_y = gruppe_lage(name, L, m)
+        if abs(dx) + abs(dy) + abs(dz) > 1e-9 or dreh_y is not None:
             # transform2 gibt es in neueren Fusion-Versionen; fuer eine
-            # Occurrence direkt unter root ist es dasselbe wie transform
+            # Occurrence direkt unter root ist es dasselbe wie transform.
+            # Nachgemessen wird, wohin der Ursprung der Gruppe kommt.
             feld = 'transform2' if hasattr(o, 'transform2') else 'transform'
+            soll = (dx, dy + (2.0 * dreh_y if dreh_y is not None else 0.0),
+                    dz)
             try:
-                setattr(o, feld, matrix(dx, dy, dz))
-                t = getattr(o, feld).translation
-                ist = (t.x * 10.0, t.z * 10.0, t.y * 10.0)
-                if max(abs(a - b) for a, b in zip(ist, (dx, dy, dz))) > 0.01:
-                    protokoll.append('steht nicht an seinem Platz: X {:+.2f} '
-                                     'statt {:+.2f}'.format(ist[0], dx))
+                setattr(o, feld, matrix(dx, dy, dz, dreh_y))
+                p = adsk.core.Point3D.create(0.0, 0.0, 0.0)
+                p.transformBy(getattr(o, feld))
+                ist = (p.x * 10.0, p.z * 10.0, p.y * 10.0)
+                if max(abs(a - b) for a, b in zip(ist, soll)) > 0.01:
+                    protokoll.append(
+                        'steht nicht an seinem Platz: Ursprung bei X {:+.2f} '
+                        'Y {:+.2f} statt X {:+.2f} Y {:+.2f}'.format(
+                            ist[0], ist[1], soll[0], soll[1]))
             except Exception:
-                protokoll.append('nicht an seinen Platz geschoben: {}'.format(
+                protokoll.append('nicht an seinen Platz gebracht: {}'.format(
                     traceback.format_exc().strip().splitlines()[-1]))
         for i in range(o.component.occurrences.count):
             try:

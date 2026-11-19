@@ -23,7 +23,7 @@ from antrieb_zeichnen import (text, linie, rect_px, pfeil, de,  # noqa: E402
                               el, f1, TEXT, GRAU, BLAU, FARBE)
 from portal_zeichnen import Feld, quer_mass, ORANGE   # noqa: E402
 from endschalter_zeichnen import profil_schnitt      # noqa: E402
-from notaus_zeichnen import hoch_mass                 # noqa: E402
+from portal_zeichnen import hoch_mass                 # noqa: E402
 from opferplatte_check import (OPFERPLATTE, SICHERHEIT,  # noqa: E402
                                riegel_masse, riegel_ueberstand)
 

@@ -45,7 +45,7 @@ WAND_MIN = 2.0
 # ihren Schlauch, die Silikonlitzen laufen einzeln (verkabelung.ADER_D).
 KABEL_D = {
     'Motorkabel': (5.0, '[?] mit Schlauch, nicht gemessen'),
-    'Leitung 2-adrig': (6.0, '[?] 2 × 0,75 mm², wie NotAus.py'),
+    'Leitung 2-adrig': (6.0, '[?] 2 × 0,75 mm²'),
     'Leitung 3-adrig': (4.5, '[?] 3 × 0,25 mm²'),
 }
 

@@ -198,7 +198,7 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 | 6 | Aderendhülse 0,75 mm² | Schraubklemmen |
 | 1 | Widerstand 10 kΩ, ¼ W | W8 |
 | 1 + 1 + 1 | Widerstand 22 kΩ und 4,7 kΩ, ¼ W; Kondensator 100 nF | W16 |
-| — | Not-Aus-Pilztaster 16 mm, Wechsler C/NO/NC, 3 A / 250 V (vorhanden), Gehäuse aus [NotAus.py](notaus.md) | W2 |
+| — | Not-Aus-Pilztaster 16 mm, Wechsler C/NO/NC, 3 A / 250 V (vorhanden), in der Frontwand des Elektronikfachs | W2 |
 | — | Schrumpfschlauch 2–6 mm, Kabelbinder, Beschriftung (W-Nummer an beiden Enden) | alle |
 <!-- /tabelle:material -->
 
@@ -258,9 +258,9 @@ im falschen Schritt gezeichnet ist.
    Schalters an **C**, Ader 2 geht von **NC** zurück an die **Wago
    +24 V**. Beide Adern führen +24 V, deshalb an beiden Enden rot
    markieren. **NO bleibt frei:** Beim Drücken liegt dort C, also +24 V.
-   Anlöten, Schrumpfschlauch über jede Fahne. Der Not-Aus sitzt in seinem
-   Gehäuse vorn am vorderen 2060 ([notaus.md](notaus.md)); W2 kommt von
-   rechts in der oberen Nut des 2060.
+   Anlöten, Schrumpfschlauch über jede Fahne. Der Not-Aus sitzt in der
+   Frontwand des Elektronikfachs neben Buchse und Schalter (Elektronikfach
+   Rev. 2); W2 bleibt im Fach.
 
 Dann [Prüfung A und B](#a-ohne-strom).
 

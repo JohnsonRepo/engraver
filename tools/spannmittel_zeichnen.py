@@ -21,7 +21,7 @@ import bauraum                                        # noqa: E402
 from antrieb_zeichnen import (text, linie, rect_px, pfeil, de,  # noqa: E402
                               TEXT, GRAU, BLAU, FARBE)
 from portal_zeichnen import Feld, quer_mass, ORANGE   # noqa: E402
-from notaus_zeichnen import hoch_mass                 # noqa: E402
+from portal_zeichnen import hoch_mass                 # noqa: E402
 from opferplatte_zeichnen import bogen, FELD, TIEF    # noqa: E402
 from spannmittel_check import SPANNMITTEL             # noqa: E402
 

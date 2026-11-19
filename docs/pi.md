@@ -56,6 +56,10 @@ an Druckern.
 
 ## Halter
 
+**Stand 2026-11-19:** Der Pi steht im Elektronikfach senkrecht an der
+Fugenwand (`Elektronikfach.py` Rev. 2). Das Fach hängt vor dem vorderen
+2060, die Pi-Hälfte rechts. Der Halter unten ist überholt.
+
 Eine Platte, 190 × 63,4 × 5 mm, liegt wie die Montageplatte des Kastens
 an der Rückseite des hinteren 2060, 5,7 mm rechts neben ihr. Zwei M5×12
 halten sie in Hammermuttern der **oberen Nut**. Unten reicht sie 6 mm unter

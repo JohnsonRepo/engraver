@@ -1,6 +1,6 @@
 # Spannmittel für die Opferplatte
 
-Erzeugt von `fusion/Spannmittel/Spannmittel.py` (Rev. 1). Geprüft mit
+Erzeugt von `fusion/Spannmittel/Spannmittel.py` (Rev. 2). Geprüft mit
 `python3 tools/spannmittel_check.py`, Zeichnung in
 [spannmittel.svg](spannmittel.svg) (neu erzeugen mit
 `python3 tools/spannmittel_zeichnen.py`). Die Opferplatte selbst steht in
@@ -24,6 +24,13 @@ Dafür gibt es drei Druckteile: den **Anschlagwinkel** für die Lage, zwei
 **Exzenter**, die das Werkstück in die Ecke schieben und dort halten, und
 **Niederhalter**, die dünne Platten am Rand flach halten.
 
+**Seit Rev. 2 liegt die Ecke vorn rechts**, vor der Kamera des Autofokus
+([kamerahalter.md](kamerahalter.md)); bis Rev. 1 lag sie hinten links. Die
+Teile sind dieselben. Das Skript rechnet weiter mit der Ecke hinten links
+und dreht dann alles um 180° um die Senkrechte durch die Mitte des
+Arbeitsfelds. Darum heißen Schlüssel wie `aw_b_hinten` im Skript noch nach
+der alten Lage; an der Maschine ist „hinten“ vorn und „links“ rechts.
+
 ## Höhe: Alles bleibt unter dem Toolhead
 
 Zwischen zwei Linien hebt der Laser nicht ab. Der Toolhead fährt in
@@ -45,22 +52,22 @@ fokussieren kann. Darauf sind alle Teile ausgelegt:
 Die Prüfung fährt den Toolhead über das ganze Feld: einmal mit Z ganz
 unten ohne Werkstück, einmal mit dem Beispielwerkstück (3 mm) und dem
 Fokus darauf. Er bleibt überall frei. Am knappsten wird es über dem
-hinteren Niederhalter, dort sind es 1,2 mm.
+vorderen Niederhalter, dort sind es 1,2 mm.
 
 ## Anschlagwinkel
 
 | | |
 |---|---|
-| Lage | fest auf der Platte **hinten links**, also in der Ecke, in der die Maschine referenziert (X nach links, Y nach hinten) |
-| Innenecke | 4 mm im Arbeitsfeld, bei X −199,85 und Y −164,8 (Maschinenkoordinaten wie `Portal.py`) |
+| Lage | fest auf der Platte **vorn rechts**, vor der Kamera des Autofokus (seit Rev. 2; bis Rev. 1 hinten links in der Ecke der Referenzfahrt) |
+| Innenecke | 4 mm im Arbeitsfeld, bei X +183,35 und Y +160,5 (Maschinenkoordinaten wie `Portal.py`) |
 | Schenkel | 50 mm ab der Innenecke, 10 mm breit, 3 mm hoch |
 | Befestigung | 3 Spanplattenschrauben 3,0 × 20 mit Senkkopf |
-| Platz | Hinter dem Arbeitsfeld hat die Platte nur 7,85 mm Rand. Mit der Innenecke 4 mm im Feld bleiben hinter dem Schenkel noch 1,85 mm, und hinter einem Werkstück neben dem Schenkel ist Platz für einen Niederhalter. |
-| Herausziehen | Die Platte lässt sich samt Anschlag herausziehen, er bleibt 2,85 mm vor der hinteren Führung |
+| Platz | Vor dem Arbeitsfeld hat die Platte nur 7,85 mm Rand. Mit der Innenecke 4 mm im Feld bleiben vor dem Schenkel noch 1,85 mm, und vor einem Werkstück neben dem Schenkel ist Platz für einen Niederhalter. |
+| Herausziehen | Die Platte lässt sich samt Anschlag nach rechts herausziehen, er bleibt 2,85 mm hinter der vorderen Führung |
 
 ### Nullpunkt einrichten (einmal)
 
-1. Die Platte nach links an den Anschlag und nach hinten an die Führung
+1. Die Platte nach links an ihren Anschlag und nach vorn an die Führung
    schieben. Damit ist ihre Luft von 1 mm je Seite weg, und der Nullpunkt
    liegt jedes Mal gleich.
 2. Referenzieren (`$H`). Dann den Laser mit 1 % Leistung als Punkt genau
@@ -68,10 +75,16 @@ hinteren Niederhalter, dort sind es 1,2 mm.
 3. `G10 L20 P1 X0 Y0` setzt dort den Werkstücknullpunkt (G54). GRBL
    behält ihn auch nach dem Ausschalten.
 4. Im Laserprogramm den Auftrag auf diesen Nullpunkt beziehen, mit dem
-   Ursprung hinten links. Weil Y+ bei GRBL nach hinten zeigt, liegt das
-   Werkstück bei Y ≤ 0. Vor dem Start mit der Rahmenfunktion prüfen.
+   Ursprung **vorn rechts**. Weil X+ nach rechts und Y+ bei GRBL nach
+   hinten zeigt, liegt das Werkstück bei X ≤ 0 und Y ≥ 0. Vor dem Start mit
+   der Rahmenfunktion prüfen.
 
-Vor jedem Auftrag die Platte wieder nach links und hinten schieben.
+Vor jedem Auftrag die Platte wieder nach links und vorn schieben.
+
+Der Y-Endschalter sitzt noch hinten, referenziert wird also weiter hinten
+links. Geplant ist, die Lichtschranke für Y nach vorn zu verlegen (Fahne,
+Elektronik, GRBL); das ist noch offen und ändert am Nullpunkt in der Ecke
+nichts, nur `$H` und die Maschinenkoordinaten.
 
 ## Exzenter
 
@@ -80,7 +93,7 @@ Vor jedem Auftrag die Platte wieder nach links und hinten schieben.
 | Form | Scheibe Ø 40, 3 mm hoch, die Schraube sitzt 4 mm außermittig; dazu ein Hebel, der 14 mm über die Scheibe ragt |
 | Spannweg | 4 mm: Die Schraube sitzt 20 bis 24 mm neben der Werkstückkante |
 | Selbsthemmung | Die größte Steigung ist 11,5°, der Reibwinkel bei einem Reibwert von 0,3 beträgt 16,7°. Ein Stoß gegen das Werkstück dreht ihn nicht zurück. |
-| Stück | 2: einer an der rechten Kante schiebt nach links, einer an der vorderen schiebt nach hinten |
+| Stück | 2: einer an der linken Kante schiebt nach rechts, einer an der hinteren schiebt nach vorn |
 
 So spannst du:
 
@@ -91,8 +104,8 @@ So spannst du:
    schiebt das Werkstück bis 4 mm weit gegen den Anschlag.
 
 Warum im Uhrzeigersinn: Die Reibung am Kopf nimmt die Schraube dabei mit
-und zieht sie an, der Exzenter klemmt sich also selbst fest. Am rechten
-Rand zeigt der Hebel dafür zuerst nach hinten, am vorderen nach rechts.
+und zieht sie an, der Exzenter klemmt sich also selbst fest. Am linken
+Rand zeigt der Hebel dafür zuerst nach vorn, am hinteren nach links.
 
 ## Niederhalter
 
@@ -106,7 +119,7 @@ Ein Spanneisen je Materialstärke **2, 3, 4, 5 und 6 mm**:
 | Steg | 2,5 mm dick: so weit ragt er über das Werkstück |
 | Toleranz | ±0,5 mm Materialstärke gleicht er durch eine leichte Schräglage aus |
 | Kraft | Handfest anziehen. Bei 50 N an der Schraube drückt die Lippe mit gut 20 N, und der Steg trägt das mit 12 MPa (PETG verträgt in der Schichtebene etwa 45). |
-| Platz | Er passt an alle vier Kanten. Hinter der hinteren Kante bleiben 11,85 mm Platte, er braucht 9,5. |
+| Platz | Er passt an alle vier Kanten. Vor der vorderen Kante bleiben 11,85 mm Platte, er braucht 9,5. |
 
 Wo ein Niederhalter sitzt, **6 mm zwischen Gravur und Werkstückrand**
 lassen, denn die Lippe liegt 5 mm auf.
@@ -162,6 +175,7 @@ die Prüfung mit `Opferplatte.py`, den Freiraum unter dem Toolhead mit
 | Parameter | Wert | Wirkung |
 |---|---|---|
 | `aw_rand` | 4 mm | Innenecke des Anschlags so weit im Arbeitsfeld |
+| `dreh_xy` (lage) | Feldmitte X −8,25, Y −2,15 | um diesen Punkt dreht das Skript alles um 180°: Ecke vorn rechts |
 | `aw_h` / `aw_l` / `aw_b_hinten` / `aw_b_links` | 3 / 50 / 10 / 10 mm | Anschlag: Höhe, Schenkellänge, Breiten |
 | `ex_r` / `ex_e` / `ex_h` | 20 / 4 / 3 mm | Exzenter: Radius, Außermittigkeit (= Spannweg), Höhe. asin(e/R) muss unter dem Reibwinkel bleiben |
 | `ex_hebel_l` / `ex_hebel_b` | 14 / 8 mm | Hebel |

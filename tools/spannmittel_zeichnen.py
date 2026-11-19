@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Zeichnung: Spannmittel auf der Opferplatte.
 
-Von oben die hintere linke Ecke der Platte mit Anschlagwinkel, einem
+Von oben die vordere rechte Ecke der Platte (seit Spannmittel Rev. 2; das
+Skript rechnet mit der Ecke hinten links und dreht um die Feldmitte, die
+Zeichnung zeigt das gedreht, wie an der Maschine) mit Anschlagwinkel, einem
 Beispielwerkstueck, zwei Exzentern und vier Niederhaltern; dazu Schnitte
 durch einen Niederhalter und durch den Anschlag, beide mit der Hoehe des
 Toolheads, und der Exzenter im Detail. Alle Masse aus Spannmittel.py,
@@ -77,10 +79,14 @@ def main():
     sw, SL = sm.w, sm.lage()
     z0 = SL['z0']
     frei = TL['zc_min'] + TL['schlitten_unten_rel'] - OL['platte_z'][1]
+    # gezeichnet in Spannkoordinaten; die Felder sind gespiegelt (a_rueck,
+    # b_runter), so dass das Bild der Maschine entspricht. Die Platte liegt
+    # nicht mittig zum Feld: in Spannkoordinaten zurueckgedreht.
     xi, yi = SL['aw_ecke']
     wx, wy, wz = SL['wst_x'], SL['wst_y'], SL['wst_z']
     t_bsp = sw('nh_t')
-    px_, py_ = SL['platte_x'], SL['platte_y']
+    px_, py_, _ = sm.bereich_nach_maschine(SL['platte_x'], SL['platte_y'],
+                                           SL['platte_z'])
     (hx, hy), (lx, ly) = SL['aw_hinten'], SL['aw_links']
     nh = {n['name'].rsplit('_', 1)[1]: n for n in SL['nh']}
     ex = {e['name'].rsplit('_', 1)[1]: e for e in SL['ex']}
@@ -88,14 +94,14 @@ def main():
     t = [text(24, 30, 'Spannmittel auf der Opferplatte (Spannmittel.py Rev. '
               '{})'.format(sm.REVISION), 14, TEXT, fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Anschlag '
-              'hinten links als Nullpunkt, Exzenter schieben das Werkstück '
+              'vorn rechts (vor der Kamera) als Nullpunkt, Exzenter schieben das Werkstück '
               'in die Ecke, Niederhalter halten dünne Platten flach; alles '
               'flach genug für den Toolhead.', 9, GRAU)]
 
     # ---- Feld 1: von oben, vorn unten -------------------------------------
     f1 = Feld(250, 100, (px_[0] - 8.0, ex['rechts']['hebel'][1][0] + 16.0),
               (py_[0] - 8.0, ex['vorn']['hebel'][1][1] + 9.0), 2.0,
-              b_runter=True)
+              a_rueck=True)
     inhalt = [f1.rect(px_[0], px_[1], py_[0], py_[1], 'holz'),
               f1.rect(sw('feld_x0'), sw('feld_x1'), sw('feld_y0'),
                       sw('feld_y1'), 'holz', fill='none', stroke=FELD,
@@ -119,7 +125,7 @@ def main():
                                                       'B')):
         xx, yy = f1.px(a, b)
         t.append(text(xx, yy, s_, 9.5, BLAU, fett=True, halo=True))
-    t += f1.rahmen('Von oben: hintere linke Ecke der Platte (vorn unten)')
+    t += f1.rahmen('Von oben: vordere rechte Ecke der Platte (vorn unten)')
     t += f1.spalte([
         (lx[0] + 2.0, ly[1] - 6.0, 'Anschlagwinkel, fest\n{} mm hoch, '
          '3 Schrauben'.format(de(sw('aw_h'), 0))),
@@ -128,30 +134,30 @@ def main():
         (sw('feld_x0'), yi + 40.0, 'Arbeitsfeld\n(Strahl, gestrichelt)'),
         (px_[0] + 20.0, -60.0, 'Opferplatte'),
         (nh['links']['schraube'][0], nh['links']['schraube'][1],
-         'Niederhalter links,\nneben dem Schenkel')],
-        f1.ox - 12, 'end', abstand=30.0)
+         'Niederhalter rechts,\nneben dem Schenkel')],
+        f1.ox + f1.breite + 12, 'start', abstand=30.0)
     t += f1.spalte([
         (nh['hinten']['schraube'][0], nh['hinten']['schraube'][1],
-         'Niederhalter hinten: passt\nhinter die Werkstückkante'),
+         'Niederhalter vorn: passt\nvor die Werkstückkante'),
         (ex['rechts']['achse'][0] + 2.0, ex['rechts']['achse'][1],
-         'Exzenter rechts: schiebt\nnach links an den Schenkel'),
+         'Exzenter links: schiebt\nnach rechts an den Schenkel'),
         (nh['rechts']['schraube'][0], nh['rechts']['schraube'][1],
-         'Niederhalter rechts'),
+         'Niederhalter links'),
         (wx[1] - 30.0, wy[1] - 25.0,
          'Beispielwerkstück\n{} × {} × {} mm'.format(
              de(sw('wst_l'), 0), de(sw('wst_b'), 0), de(t_bsp, 0))),
         (nh['vorn']['schraube'][0], nh['vorn']['schraube'][1],
-         'Niederhalter vorn ({} mm)'.format(de(t_bsp, 0))),
+         'Niederhalter hinten ({} mm)'.format(de(t_bsp, 0))),
         (ex['vorn']['achse'][0] + 2.0, ex['vorn']['achse'][1],
-         'Exzenter vorn: schiebt\nnach hinten an den Schenkel')],
-        f1.ox + f1.breite + 12, 'start', abstand=30.0)
+         'Exzenter hinten: schiebt\nnach vorn an den Schenkel')],
+        f1.ox - 12, 'end', abstand=30.0)
 
     # ---- Feld 2: Schnitt A-A durch den Niederhalter vorn ------------------
     s2 = 8.0
     n = nh['vorn']
     ya = (wy[1] - 14.0, wy[1] + sw('nh_ende') + 8.0)
     za = (z0 - 22.0, z0 + t_bsp + frei + 5.0)
-    f2 = Feld(250, f1.oy + f1.hoehe + 110, ya, za, s2)
+    f2 = Feld(250, f1.oy + f1.hoehe + 110, ya, za, s2, a_rueck=True)
     zs = n['steg'][2]
     us = n['schraube'][1]
     inhalt = [f2.rect(ya[0] - 5, ya[1] + 5, za[0] - 5, z0, 'holz'),
@@ -163,20 +169,20 @@ def main():
     zt = z0 + t_bsp + frei
     inhalt.append(f2.linie(ya[0] - 5, zt, ya[1] + 5, zt, TIEF, 1.0, '5 3'))
     t += f2.ausschnitt('schnitt_a', inhalt)
-    t += f2.rahmen('Schnitt A–A: Niederhalter an der Vorderkante (von '
-                   'links, vorn rechts)')
+    t += f2.rahmen('Schnitt A–A: Niederhalter an der Hinterkante (von '
+                   'rechts, vorn rechts)')
     t += hoch_mass(f2, n['steg'][1][1] - 1.5, zs[1], zt, '{} mm'.format(
-        de(zt - zs[1], 1)), anker='end')
+        de(zt - zs[1], 1)))
     t += hoch_mass(f2, n['steg'][1][1] + 2.0, zs[0], zs[1], '{} mm'.format(
-        de(sw('nh_d'), 1)))
+        de(sw('nh_d'), 1)), anker='end')
     t += hoch_mass(f2, ya[0] + 3.0, z0, wz[1], '{} mm'.format(
-        de(t_bsp, 0)))
+        de(t_bsp, 0)), anker='end')
     t += f2.spalte([
         (ya[0] + 8.0, zt, 'Toolhead, Fokus auf dem\nWerkstück: mindestens '
          '{} mm\ndarüber'.format(de(frei, 1))),
         (ya[0] + 8.0, z0 + t_bsp / 2.0, 'Werkstück'),
         (ya[0] + 8.0, z0 - 10.0, 'Opferplatte')],
-        f2.ox - 12, 'end', abstand=34.0)
+        f2.ox + f2.breite + 12, 'start', abstand=34.0)
     t += f2.spalte([
         (wy[1] - sw('nh_lippe') / 2.0, zs[1] - 0.5, 'Lippe {} mm auf dem '
          'Rand'.format(de(sw('nh_lippe'), 0))),
@@ -187,11 +193,11 @@ def main():
          'Platte'.format(de(t_bsp, 0))),
         (us + 0.8, z0 - 8.0, 'fasst {} mm in\nder Platte'.format(
             de(sw('sch_l') - (t_bsp + sw('nh_d') - SL['kopf_tiefer']), 1)))],
-        f2.ox + f2.breite + 12, 'start', abstand=30.0)
+        f2.ox - 12, 'end', abstand=30.0)
 
     # ---- Feld 3: Schnitt B-B durch den Anschlag (hintere Schraube) --------
     yb = (py_[0] - 5.0, yi + 14.0)
-    f3 = Feld(f2.ox + f2.breite + 280, f2.oy, yb, za, s2)
+    f3 = Feld(f2.ox + f2.breite + 280, f2.oy, yb, za, s2, a_rueck=True)
     ub = SL['aw_schrauben'][1][1]
     inhalt = [f3.rect(py_[0], yb[1] + 5, za[0] - 5, z0, 'holz'),
               f3.rect(yi, yb[1] + 5, *wz, 'werkstueck'),
@@ -204,7 +210,7 @@ def main():
                         1.0, '2 3'),
                f3.linie(yb[0] - 5, zt, yb[1] + 5, zt, TIEF, 1.0, '5 3')]
     t += f3.ausschnitt('schnitt_b', inhalt)
-    t += f3.rahmen('Schnitt B–B: Anschlagwinkel, hinterer Schenkel')
+    t += f3.rahmen('Schnitt B–B: Anschlagwinkel, vorderer Schenkel')
     t += hoch_mass(f3, hy[0] + 1.5, SL['aw_z'][1], z0 + frei, '{} mm'.format(
         de(z0 + frei - SL['aw_z'][1], 1)))
     t += f3.spalte([
@@ -212,7 +218,7 @@ def main():
         (hy[0] + 1.0, SL['aw_z'][1] - 1.0, 'Anschlag {} mm hoch'.format(
             de(sw('aw_h'), 0))),
         (yb[0] + 2.0, z0 + frei, 'Toolhead, Z ganz unten\n(ohne Werkstück)')],
-        f3.ox - 12, 'end', abstand=30.0)
+        f3.ox + f3.breite + 12, 'start', abstand=30.0)
     t += f3.spalte([
         (yb[1] - 3.0, zt, 'Toolhead, Fokus auf\n{} mm Material'.format(
             de(t_bsp, 0))),
@@ -220,7 +226,7 @@ def main():
         (yi + 4.0, z0 + t_bsp / 2.0, 'Werkstück an der\nInnenseite = '
          'Nullpunkt'),
         (yb[1] - 3.0, z0 - 10.0, 'Opferplatte')],
-        f3.ox + f3.breite + 12, 'start', abstand=30.0)
+        f3.ox - 12, 'end', abstand=30.0)
 
     # ---- Feld 4: Exzenter im Detail (von oben) ----------------------------
     e = ex['rechts']
@@ -228,7 +234,7 @@ def main():
     R = sw('ex_r')
     f4 = Feld(250, f2.oy + f2.hoehe + 100, (wx[1] - 14.0,
                                             e['hebel'][1][0] + 8.0),
-              (cy - R - 8.0, cy + R + 8.0), 5.0, b_runter=True)
+              (cy - R - 8.0, cy + R + 8.0), 5.0, a_rueck=True)
     inhalt = [f4.rect(wx[1] - 20.0, wx[1], cy - R - 20.0, cy + R + 20.0,
                       'werkstueck')]
     inhalt += exzenter_drauf(f4, sw, e)
@@ -241,13 +247,13 @@ def main():
     inhalt.append(pfeil(*f4.px(ax + rr * math.cos(a), ay + rr * math.sin(a)),
                         -math.sin(a), math.cos(a), ORANGE))
     t += f4.ausschnitt('exzenter', inhalt)
-    t += f4.rahmen('Exzenter rechts im Detail (von oben)')
+    t += f4.rahmen('Exzenter links im Detail (von oben)')
     t += quer_mass(f4, wx[1], ax, cy + R + 4.0, '{}–{} mm'.format(
         de(SL['ex_fenster'][0], 0), de(SL['ex_fenster'][1], 0)), dy=12)
     t += f4.spalte([
         (wx[1] - 6.0, cy - 10.0, 'Werkstück'),
         (wx[1] + 0.5, cy, 'gespannt: größter\nRadius am Werkstück')],
-        f4.ox - 12, 'end', abstand=30.0)
+        f4.ox + f4.breite + 12, 'start', abstand=30.0)
     t += f4.spalte([
         (cx, cy + 0.5, 'Scheibenmitte'),
         (ax + 1.5, ay - 1.5, 'Schraube {} mm außermittig'.format(
@@ -258,7 +264,7 @@ def main():
          'Spannweg {} mm'.format(de(SL['ex_fenster'][0], 0),
                                  de(SL['ex_fenster'][1], 0),
                                  de(sw('ex_e'), 0)))],
-        f4.ox + f4.breite + 12, 'start', abstand=30.0)
+        f4.ox - 12, 'end', abstand=30.0)
 
     # ---- Zahlen und Legende ------------------------------------------------
     tx = f3.ox - 20

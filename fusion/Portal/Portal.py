@@ -93,13 +93,17 @@
 #                  Z-Motor, Kupplung, Spindel, Mutter, Laser, Lichtschranke
 #   Opferplatte    Fuesse unter den 2060, Riegel, Opferplatte
 #   Spannmittel    Anschlagwinkel, 2 Exzenter, 4 Niederhalter am
-#                  Beispielwerkstueck (der Satz der anderen Staerken nicht)
+#                  Beispielwerkstueck (der Satz der anderen Staerken nicht);
+#                  seit Rev. 31 mit der Ecke vorn rechts: in Spann-
+#                  koordinaten gebaut und um 180 Grad um die Feldmitte
+#                  gedreht (Spannmittel.py Rev. 2, gruppe_lage)
 #   Elektronikfach Fach und Deckel (Zwischenstand), Uno, Pi, Wandler, Not-
 #                  Aus in der Front; seit Rev. 30 vor dem vorderen 2060:
 #                  in Fachkoordinaten gebaut und um 180 Grad gedreht
 #                  (Elektronikfach.py Rev. 2, gruppe_lage)
-#   Kamerahalter   Halter und Camera Module 3 fuer den Autofokus (steht im
-#                  Modell noch hinten, an der Maschine vorn rechts)
+#   Kamerahalter   Halter und Kamera v1.3 fuer den Autofokus, seit
+#                  Rev. 31 vorn rechts auf dem vorderen 2060 (Kamerahalter.py
+#                  Rev. 2 baut gleich an der Maschine)
 #   Kabelhalter    alle neun Halter (KABELHALTER_Y), rechts um 180 Grad
 #                  gedreht
 # Das Not-Aus-Gehaeuse (NotAus.py) gibt es seit Rev. 30 nicht mehr: Der
@@ -141,7 +145,7 @@ import textwrap
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 30
+REVISION = 31
 
 # Gesamtmodell (seit Rev. 29, siehe oben): False baut nur das Portal.
 MASCHINE = True
@@ -3931,29 +3935,37 @@ def nachbar_laden(name):
 
 
 def gruppe_lage(name, L, m=None):
-    """Lage der Gruppe: (dx, dy, dz, dreh_y). Verschiebung in Maschinen-
-    koordinaten (mm); ist dreh_y nicht None, vorher eine halbe Drehung um
-    die Senkrechte durch X = 0, Y = dreh_y. Alle Skripte rechnen in den
-    Koordinaten von Portal.py, nur
+    """Lage der Gruppe: (dx, dy, dz, dreh). Verschiebung in Maschinen-
+    koordinaten (mm); ist dreh = (X, Y) nicht None, vorher eine halbe
+    Drehung um die Senkrechte durch diesen Punkt. Alle Skripte rechnen in
+    den Koordinaten von Portal.py, nur
       ToolheadZ.py zaehlt X ab der X-Wagenmitte; der Toolhead steht in der
         Mitte des X-Wegs;
       Elektronikfach.py (seit Rev. 2) rechnet in Fachkoordinaten und dreht
-        das Fach an das vordere 2060 (lage()['dreh_y'])."""
+        das Fach an das vordere 2060 (um X = 0, Y = lage()['dreh_y']);
+      Spannmittel.py (seit Rev. 2) rechnet in Spannkoordinaten (Ecke hinten
+        links) und dreht um die Feldmitte (lage()['dreh_xy']): die Ecke
+        liegt vorn rechts."""
     if name == 'ToolheadZ':
         return (L['xw_mitte'], 0.0, 0.0, None)
     if name == 'Elektronikfach' and m is not None:
-        return (0.0, 0.0, 0.0, m.lage().get('dreh_y'))
+        dy = m.lage().get('dreh_y')
+        return (0.0, 0.0, 0.0, None if dy is None else (0.0, dy))
+    if name == 'Spannmittel' and m is not None:
+        d = m.lage().get('dreh_xy')
+        return (0.0, 0.0, 0.0, None if d is None else tuple(d))
     return (0.0, 0.0, 0.0, None)
 
 
-def matrix(dx=0.0, dy=0.0, dz=0.0, dreh_y=None):
-    """Lage in Maschinenkoordinaten (mm) als Matrix3D: wenn dreh_y nicht
-    None, erst 180 Grad um die Senkrechte durch X = 0, Y = dreh_y, dann um
+def matrix(dx=0.0, dy=0.0, dz=0.0, dreh=None):
+    """Lage in Maschinenkoordinaten (mm) als Matrix3D: wenn dreh = (X, Y)
+    nicht None, erst 180 Grad um die Senkrechte durch diesen Punkt, dann um
     (dx, dy, dz) verschoben. Im Modell sind Y und Z getauscht."""
     m3 = adsk.core.Matrix3D.create()
-    if dreh_y is not None:
+    if dreh is not None:
         m3.setToRotation(math.pi, adsk.core.Vector3D.create(0.0, 1.0, 0.0),
-                         adsk.core.Point3D.create(0.0, 0.0, dreh_y / 10.0))
+                         adsk.core.Point3D.create(dreh[0] / 10.0, 0.0,
+                                                  dreh[1] / 10.0))
     t = m3.translation
     m3.translation = adsk.core.Vector3D.create(t.x + dx / 10.0,
                                                t.y + dz / 10.0,
@@ -4209,8 +4221,9 @@ def nachbarn_laden():
 
 def nachbarn_bauen(app, design, root, L, module, zeilen):
     """Baut die geladenen Nachbarn, jeden in seine Gruppe
-    <Skript>_r<Revision> am Ursprung, wie im eigenen Skript; ToolheadZ und
-    Elektronikfach kommen danach an ihren Platz (gruppe_lage). Haengt die
+    <Skript>_r<Revision> am Ursprung, wie im eigenen Skript; ToolheadZ,
+    Elektronikfach und Spannmittel kommen danach an ihren Platz
+    (gruppe_lage). Haengt die
     Zeilen fuer die Hinweise an und liefert {Gruppenname: Komponente} fuer
     den Bericht."""
     gruppen = {}
@@ -4228,16 +4241,16 @@ def nachbarn_bauen(app, design, root, L, module, zeilen):
         except Exception:
             protokoll.append('abgebrochen: {}'.format(
                 traceback.format_exc().strip().splitlines()[-1]))
-        dx, dy, dz, dreh_y = gruppe_lage(name, L, m)
-        if abs(dx) + abs(dy) + abs(dz) > 1e-9 or dreh_y is not None:
+        dx, dy, dz, dreh = gruppe_lage(name, L, m)
+        if abs(dx) + abs(dy) + abs(dz) > 1e-9 or dreh is not None:
             # transform2 gibt es in neueren Fusion-Versionen; fuer eine
             # Occurrence direkt unter root ist es dasselbe wie transform.
             # Nachgemessen wird, wohin der Ursprung der Gruppe kommt.
             feld = 'transform2' if hasattr(o, 'transform2') else 'transform'
-            soll = (dx, dy + (2.0 * dreh_y if dreh_y is not None else 0.0),
-                    dz)
+            cx, cy = dreh if dreh is not None else (0.0, 0.0)
+            soll = (dx + 2.0 * cx, dy + 2.0 * cy, dz)
             try:
-                setattr(o, feld, matrix(dx, dy, dz, dreh_y))
+                setattr(o, feld, matrix(dx, dy, dz, dreh))
                 p = adsk.core.Point3D.create(0.0, 0.0, 0.0)
                 p.transformBy(getattr(o, feld))
                 ist = (p.x * 10.0, p.z * 10.0, p.y * 10.0)

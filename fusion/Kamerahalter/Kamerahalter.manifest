@@ -3,7 +3,7 @@
     "type": "script",
     "author": "Johnson",
     "description": {
-        "": "Kamerahalter fuer den Autofokus: Raspberry Pi Camera Module 3 (Normalobjektiv) hochkant auf einer senkrechten Wand, Fuss mit 2x M5 in Hammermuttern der Nut oben auf dem hinteren 2060, direkt vor dem Elektronikfach. Die Kamera schaut waagerecht zum Messpunkt kurz innerhalb der Anschlagecke und sieht dort den Laserpunkt je nach Werkstueckdicke hoeher oder tiefer. Vier Traenen-Polster, 4x M2x8 mit Mutter in Sechskanttaschen, Rippe hinter der Wand; druckt in PETG ohne Stuetzen. Plus ausgeblendete Bohrlehre der Kamera und Referenzteile (2060, Ausschnitt des Elektronikfachs, Kamera, Schrauben, Sichtlinien)."
+        "": "Kamerahalter fuer den Autofokus (Rev. 2): Raspberry Pi Kamera v1.3 (wie verbaut; Lochbild wie Camera Module 2/3) hochkant und geneigt vorn rechts auf dem vorderen 2060, am rechten 2040 vor dem Elektronikfach. Fuss mit 2x M5 in Hammermuttern der oberen Nut, ueber dem Eckwinkel 45 Grad ausgespart; senkrechter Steg, geneigte Wand mit vier Traenen-Polstern, oben 2x M2x8 mit Mutter, unten 2 Zapfen. Die Kamera schaut zum Messpunkt kurz innerhalb der Anschlagecke vorn rechts. PETG ohne Stuetzen. Plus ausgeblendete Bohrlehre der Kamera und Referenzteile (2060, 2040, Kamera, Schrauben, Sichtlinien)."
     },
     "supportedOS": "windows|mac",
     "editEnabled": true

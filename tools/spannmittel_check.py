@@ -5,7 +5,9 @@ Fusion.
 Importiert Spannmittel.py, Opferplatte.py, Portal.py und ToolheadZ.py mit
 gestubbtem adsk-Modul und prueft: Abgleich von Platte und Arbeitsfeld,
 Hoehe unter dem Toolhead (auch ueber den ganzen Weg, mit und ohne
-Werkstueck), Lage des Anschlagwinkels, Selbsthemmung und Spannweg des
+Werkstueck), Lage des Anschlagwinkels (seit Rev. 2 vorn rechts: Spannmittel.py
+rechnet mit der Ecke hinten links und dreht alles um die Feldmitte; die
+Quader hier stehen nach der Drehung, an der Maschine), Selbsthemmung und Spannweg des
 Exzenters, Niederhalter (Platz, Hebel, Biegung), Schrauben in der
 Spanplatte, das Beispiel und den Druck. Gibt die Stueckliste aus.
 
@@ -55,28 +57,43 @@ def auf(q, dy):
                   q.z[1], q.art)
 
 
+def gedreht(q, SL):
+    """Quader aus Spannkoordinaten an seinen Platz an der Maschine: 180 Grad
+    um die Senkrechte durch die Feldmitte (wie nach_maschine)."""
+    cx, cy = SL['dreh_xy']
+    return Quader(q.name, 2.0 * cx - q.x[1], 2.0 * cx - q.x[0],
+                  2.0 * cy - q.y[1], 2.0 * cy - q.y[0], q.z[0], q.z[1],
+                  q.art)
+
+
 def anschlag_quader(SL):
+    """Die beiden Schenkel an der Maschine: der vordere (Spannkoordinaten:
+    hinterer) und der rechte (dort: linker)."""
     (hx, hy), (lx, ly) = SL['aw_hinten'], SL['aw_links']
-    return [Quader('Anschlag hinten', *hx, *hy, *SL['aw_z']),
-            Quader('Anschlag links', *lx, *ly, *SL['aw_z'])]
+    return [gedreht(Quader('Anschlag vorn', *hx, *hy, *SL['aw_z']), SL),
+            gedreht(Quader('Anschlag rechts', *lx, *ly, *SL['aw_z']), SL)]
 
 
 def exzenter_quader(sw, SL, ex):
-    """Scheibe als umschreibender Quader (sicher), dazu der Hebel."""
+    """Scheibe als umschreibender Quader (sicher), dazu der Hebel; an der
+    Maschine."""
     (cx, cy), R = ex['mitte'], sw('ex_r')
     hx = [x for x, _ in ex['hebel']]
     hy = [y for _, y in ex['hebel']]
     n = ex['name'].replace('_', ' ')
-    return [Quader(n, cx - R, cx + R, cy - R, cy + R, *SL['ex_z']),
-            Quader(n + ' Hebel', min(hx), max(hx), min(hy), max(hy),
-                   *SL['ex_z'])]
+    return [gedreht(Quader(n, cx - R, cx + R, cy - R, cy + R, *SL['ex_z']),
+                    SL),
+            gedreht(Quader(n + ' Hebel', min(hx), max(hx), min(hy), max(hy),
+                           *SL['ex_z']), SL)]
 
 
-def niederhalter_quader(nh):
+def niederhalter_quader(nh, SL):
+    """Steg und Ferse an der Maschine."""
     n = nh['name'].replace('_', ' ')
-    return [Quader(n, *nh['steg'][0], *nh['steg'][1], *nh['steg'][2]),
-            Quader(n + ' Ferse', *nh['ferse'][0], *nh['ferse'][1],
-                   *nh['ferse'][2])]
+    return [gedreht(Quader(n, *nh['steg'][0], *nh['steg'][1],
+                           *nh['steg'][2]), SL),
+            gedreht(Quader(n + ' Ferse', *nh['ferse'][0], *nh['ferse'][1],
+                           *nh['ferse'][2]), SL)]
 
 
 def senkung_extra(sw, SL):
@@ -153,9 +170,9 @@ def main():
            for i in range(X_SCHRITTE)]
     anschlag = anschlag_quader(SL)
     exzenter = [q for ex in SL['ex'] for q in exzenter_quader(sw, SL, ex)]
-    nieder = [q for nh in SL['nh'] for q in niederhalter_quader(nh)]
-    werkstueck = Quader('Beispielwerkstueck', *SL['wst_x'], *SL['wst_y'],
-                        *SL['wst_z'])
+    nieder = [q for nh in SL['nh'] for q in niederhalter_quader(nh, SL)]
+    werkstueck = gedreht(Quader('Beispielwerkstueck', *SL['wst_x'],
+                                *SL['wst_y'], *SL['wst_z']), SL)
     t_bsp = sw('nh_t')
     for text, hub, teile, grenze in (
             ('ohne Werkstueck, Z ganz unten: Toolhead <-> Anschlag', 0.0,
@@ -176,20 +193,25 @@ def main():
             text, best[1], best[2], best[3], best[4]), best[0], grenze)
 
     # ------------------------------------------------------------------
-    p.titel('3) Anschlagwinkel: fest hinten links')
-    xi, yi = SL['aw_ecke']
+    p.titel('3) Anschlagwinkel: fest vorn rechts (seit Rev. 2)')
+    xi, yi = SL['aw_ecke_maschine']
     sp = ow('platte_spiel')
-    p.ok('Innenecke im Arbeitsfeld (X), Platte links am Anschlag',
-         xi - sw('feld_x0'), 1.0)
-    p.ok('Innenecke im Arbeitsfeld (Y), Platte ganz nach hinten geschoben',
-         yi - sp - sw('feld_y0'), 1.0)
+    p.info('Innenecke an der Maschine: X {:+.2f}, Y {:+.2f}'.format(xi, yi))
+    p.ok('Innenecke im Arbeitsfeld (X)', sw('feld_x1') - xi, 1.0)
+    p.ok('Innenecke im Arbeitsfeld (Y), Platte ganz nach vorn geschoben',
+         sw('feld_y1') - (yi + sp), 1.0)
+    vorn, rechts = anschlag_quader(SL)
+    p.ok('vorderer Schenkel ganz auf der Platte',
+         SL['platte_y'][1] - vorn.y[1], 1.0)
+    p.ok('rechter Schenkel ganz auf der Platte',
+         SL['platte_x'][1] - rechts.x[1], 1.0)
+    p.ok('Platte samt Anschlag laesst sich herausziehen (vor der Fuehrung '
+         'frei)', OL['fuehrung_y']['vorn'] - vorn.y[1], 1.0)
+    p.ok('Drehung zweimal = Ausgangslage', max(
+        abs(a - b) for a, b in zip(
+            sm.nach_maschine(*sm.nach_maschine(12.0, -100.0, -129.0)),
+            (12.0, -100.0, -129.0))), 0.0, '<=')
     (hx, hy), (lx, ly) = SL['aw_hinten'], SL['aw_links']
-    p.ok('hinterer Schenkel ganz auf der Platte', hy[0] - SL['platte_y'][0],
-         1.0)
-    p.ok('linker Schenkel ganz auf der Platte', lx[0] - SL['platte_x'][0],
-         1.0)
-    p.ok('Platte samt Anschlag laesst sich herausziehen (hinter der '
-         'Fuehrung frei)', hy[0] - OL['fuehrung_y']['hinten'], 1.0)
     rand = min(min(sw('aw_b_hinten'), sw('aw_b_links')) / 2.0,
                sw('aw_schraube_ende')) - sw('senk_d') / 2.0
     p.ok('Senkungen: Wand zum Schenkelrand', rand, 1.5)
@@ -231,8 +253,8 @@ def main():
          lippe * (us - ul) / (netto * sw('nh_d') ** 2 / 6.0), SIGMA_SCHICHT,
          '<=', 'MPa')
     p.ok('   Material unter der Senkung', sw('nh_d') - SL['senk_tief'], 0.8)
-    p.ok('passt hinter die hintere Werkstueckkante (Platte dahinter)',
-         (yi - SL['platte_y'][0]) - sw('nh_ende'), 1.0)
+    p.ok('passt vor die vordere Werkstueckkante (Platte davor)',
+         (SL['platte_y'][1] - yi) - sw('nh_ende'), 1.0)
     p.info('Gravur mindestens so weit vom Rand, wo ein Niederhalter sitzt',
            sw('nh_lippe') + 1.0)
 
@@ -253,10 +275,10 @@ def main():
     # ------------------------------------------------------------------
     p.titel('7) Beispiel: Werkstueck {:.0f} x {:.0f} x {:.0f} mm in der '
             'Ecke'.format(sw('wst_l'), sw('wst_b'), t_bsp))
-    p.ok('Werkstueck im Arbeitsfeld (rechts)', sw('feld_x1')
-         - SL['wst_x'][1], 0.0)
-    p.ok('Werkstueck im Arbeitsfeld (vorn)', sw('feld_y1') - SL['wst_y'][1],
-         0.0)
+    p.ok('Werkstueck im Arbeitsfeld (links)', werkstueck.x[0]
+         - sw('feld_x0'), 0.0)
+    p.ok('Werkstueck im Arbeitsfeld (hinten)', werkstueck.y[0]
+         - sw('feld_y0'), 0.0)
     ausserhalb = [q.name for q in anschlag + exzenter + nieder
                   if q.x[0] < SL['platte_x'][0] or q.x[1] > SL['platte_x'][1]
                   or q.y[0] < SL['platte_y'][0]
@@ -264,7 +286,7 @@ def main():
     p.ja('alle Spannmittel des Beispiels liegen auf der Platte',
          not ausserhalb, ' — ' + ', '.join(ausserhalb) if ausserhalb else '')
     gruppen = ([anschlag] + [exzenter_quader(sw, SL, ex) for ex in SL['ex']]
-               + [niederhalter_quader(nh) for nh in SL['nh']])
+               + [niederhalter_quader(nh, SL) for nh in SL['nh']])
     best = (float('inf'),)
     for i, a in enumerate(gruppen):
         for b in gruppen[i + 1:]:

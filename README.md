@@ -22,8 +22,8 @@ fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb,
 fusion/Elektronikfach/         Fach vor dem vorderen 2060 zwischen den Y-Motoren (Rev. 2): Uno, Pi, Wandler, Wago; in der Front Buchse, Not-Aus und Schalter  ← neu
 fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an den 2040  ← neu
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
-fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
-fusion/Kamerahalter/           Halter für das Camera Module 3 (Autofokus) oben auf dem hinteren 2060, vor dem Elektronikfach  ← neu
+fusion/Spannmittel/           Anschlagwinkel (Ecke vorn rechts, Rev. 2), Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
+fusion/Kamerahalter/           Halter für die Kamera (Autofokus), geneigt, vorn rechts auf dem vorderen 2060 vor dem Elektronikfach (Rev. 2)  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 stl/                           druckfertige STL ohne Fusion: Elektronikfach (zwei Hälften, zwei Deckel, Rev. 2), Kabelhalter, Kamerahalter
 pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus, Hotspot ohne WLAN
@@ -50,8 +50,8 @@ docs/opferplatte.md            Opferplatte, Führungsfüße und Riegel: Lage, H�
 docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, Schnitte durch Füße, Riegel und Anschlag
 docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzenter, Niederhalter, Höhe unter dem Toolhead
 docs/spannmittel.svg           Ecke der Opferplatte mit Spannmitteln von oben, Schnitte durch Niederhalter und Anschlag, Exzenter
-docs/kamerahalter.md           Kamerahalter für den Autofokus: Messprinzip, Lage, Sicht zum Messpunkt, Teile, Druck, Montage, Kabelweg
-docs/kamerahalter.svg          Halter von oben auf dem 2060, Blick zur Anschlagecke, Schnitt längs der Sichtlinie, Halter von vorn
+docs/kamerahalter.md           Kamerahalter für den Autofokus: Messprinzip, Kamera, Lage, Sicht zum Messpunkt, Teile, Druck, Fokus, Montage, Kabel
+docs/kamerahalter.svg          Halter von oben auf dem 2060, Blick zur Anschlagecke, Schnitt längs der Sichtlinie, Halter im Schnitt, Wand in Blickrichtung
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
@@ -263,22 +263,28 @@ Spanplattenschrauben 3,0 × 20. Details in
 
 ### Kamerahalter für den Autofokus (neu)
 
-Ein **Raspberry Pi Camera Module 3** soll den Fokus einstellen. Der Kopf
-fährt an einen festen Messpunkt 30 mm rechts und 35 mm vor der Innenecke
-des Anschlags, Z ganz oben, und schaltet den Laser kurz und schwach ein. Der
-Strahl steht senkrecht, also liegt der Punkt bei jeder Werkstückdicke an
-derselben Stelle. Die Kamera sieht ihn je nach Dicke höher oder tiefer im
-Bild: Ein Bild ergibt die Höhe der Oberfläche. Der Halter steht mit einem
-**Fuß** und 2 × M5 in der Nut oben auf dem hinteren 2060, direkt vor dem
-Elektronikfach, so ist das Kabel zum Pi kurz. Darauf steht eine
-**senkrechte Wand**, schräg zur Ecke gedreht; sie trägt die Kamera hochkant
-auf vier Polstern, mit 2 × M2 an der Kabelseite und 2 Zapfen an der
-Gegenkante. Hochkant hat die Kamera senkrecht 66° Bildwinkel und kann
-waagerecht schauen, deshalb druckt der Halter ohne Stützen. Der Punkt liegt
-für 0 bis 58 mm Werkstück mindestens 6,5° im Bild, 168 bis 185 mm von der
-Linse, mit 0,05 mm Höhe je Pixel. Zur Trägerplatte bleiben am Ende des
-Y-Wegs 3 mm, zum X-Wagen 18 mm. Die Software auf dem Pi fehlt noch. Details
-in [docs/kamerahalter.md](docs/kamerahalter.md).
+Eine **Kamera am Pi** soll den Fokus einstellen. Verbaut ist eine Raspberry
+Pi Kamera v1.3; ein Camera Module 3 passt auch.
+
+- **Messen:** Der Kopf fährt an einen festen Messpunkt 30 mm links und
+  58 mm hinter der Innenecke des Anschlags vorn rechts (`G54 X-30 Y58`), Z
+  ganz oben, und schaltet den Laser kurz und schwach ein.
+- **Prinzip:** Der Strahl steht senkrecht, also liegt der Punkt bei jeder
+  Werkstückdicke an derselben Stelle. Die Kamera sieht ihn je nach Dicke
+  höher oder tiefer im Bild: Ein Bild ergibt die Höhe der Oberfläche.
+- **Lage:** Der Halter steht mit einem **Fuß** und 2 × M5 in der Nut oben auf
+  dem vorderen 2060, am rechten 2040 vor dem Elektronikfach, dort wo die
+  Kamera schon sitzt. Über dem Eckwinkel am 2040 ist er unter 45° ausgespart.
+- **Kamera:** Ein senkrechter Steg trägt eine **geneigte Wand**, zum
+  Messpunkt gedreht und 28° nach unten geneigt. Darauf sitzt die Kamera
+  hochkant auf vier Polstern, oben mit 2 × M2, unten mit 2 Zapfen. Gedruckt
+  wird ohne Stützen.
+- **Sicht:** Der Punkt liegt für 0 bis 58 mm Werkstück mindestens 14,6° im
+  Bild, 108 bis 136 mm von der Linse, mit 0,07 mm Höhe je Pixel.
+- **Fokus:** Die Linse der v1.3 wird einmal auf 120 mm gedreht.
+- **Offen:** Die Software auf dem Pi fehlt noch.
+
+Details in [docs/kamerahalter.md](docs/kamerahalter.md).
 
 ### Endschalter X und Y (neu)
 
@@ -396,19 +402,27 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 30 mit
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 31 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
-Spannmittel Rev. 1, `maschine_check.py`) bis auf die bekannten: die 5
-Verkabelungstabellen in `elektronik_check.py` und, gewollt, 2 Punkte in
-`kamerahalter_check.py` (Kamera und Kabel sind offen). Neu sind
-Elektronikfach Rev. 2 und Portal Rev. 30: Das Fach steht im Modell jetzt
+Spannmittel Rev. 2, Kamerahalter Rev. 2, `maschine_check.py`) bis auf die
+bekannten 5 Verkabelungstabellen in `elektronik_check.py`.
+
+Neu sind Kamerahalter Rev. 2, Spannmittel Rev. 2 und Portal Rev. 31:
+
+- **Kamera:** Sie bleibt vorn rechts auf dem vorderen 2060, wo sie an der
+  Maschine sitzt. Der neue Halter neigt sie zum Messpunkt.
+- **Anschlag:** Er kommt vor die Kamera, in die Ecke vorn rechts.
+  Spannmittel sind dieselben Teile, um 180° um die Feldmitte gedreht.
+- **Gesamtmodell:** Portal dreht die Gruppe genauso. Die Lichtschranke für
+  Y soll später nach vorn.
+
+Davor kamen Elektronikfach Rev. 2 und Portal Rev. 30: Das Fach steht im Modell jetzt
 dort, wo es verbaut ist, **vor dem vorderen 2060** zwischen den Y-Motoren.
 Es sind dieselben Teile, gegenüber Rev. 1 um 180° gedreht. Der Not-Aus
 sitzt in der Frontwand, im alten Schalterloch, der Wippschalter im
 aufgebohrten Air-Assist-Durchbruch. Das Not-Aus-Gehäuse (`NotAus.py`)
 entfällt. Offen sind die Kabelwege und die Plätze der Kabelhalter, beide
-noch für die Lage hinten gerechnet, außerdem die Kamera: Sie sitzt an der
-Maschine vorn rechts, im Modell steht der Halter noch hinten. Davor kam
+noch für die Lage hinten gerechnet. Davor kam
 Portal Rev. 29: Das Skript zeigt die ganze Maschine. Es lädt die anderen
 Skripte aus den Ordnern daneben und baut ihre Teile mit, statt nur Portal
 und einen vereinfachten Toolhead. `maschine_check.py` prüft ohne Fusion,

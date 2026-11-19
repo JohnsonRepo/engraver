@@ -595,21 +595,23 @@ stehen in [energiekette.md](energiekette.md).
 
 ## Kamera für den Autofokus `[w]`
 
-Geplant am 2026-11-19, noch nicht gekauft. Halter und Lage stehen in
+An der Maschine verbaut (Foto 2026-11-19): eine **Raspberry Pi Kamera v1.3**
+(OV5647, Modul „P5V04A SUNNY“, rote LED), vorn rechts auf dem vorderen 2060,
+die Linse etwa 30 mm vom rechten 2040. Halter und Lage stehen in
 [kamerahalter.md](kamerahalter.md).
 
 | Wert | Maß | Status |
 |---|---|---|
-| Modul | Raspberry Pi Camera Module 3, Normalobjektiv (Sony IMX708) | Wahl |
-| Platine | 25 × 23,862 × 1,12 mm | `[w]` Maßblatt RP-008153 |
-| Bautiefe | 11,3 mm: Linsenfront 6,98 + 0,45 vor der Platine, Stecker 2,75 dahinter | `[w]` |
-| Löcher | 4 × Ø2,2, je 2,0 von den Seiten; ein Paar 2,0 von der Kante gegenüber dem Stecker, das andere 12,5 weiter; freier Ring Ø4,75 | `[w]` |
-| Linsenmitte | mittig, 9,462 von der Steckerkante (14,4 von der Gegenkante) | `[w]` |
-| Linsenblock | 10,8 × 10,8, Objektiv Ø5,75 | `[w]` |
-| Stecker | hinten an der Steckerkante: 19,61 breit, 5,71 tief, 2,75 hoch | `[w]` |
-| Optik | f = 4,74 mm, f/1,8, 4608 × 2592 Pixel zu 1,4 µm, Bildwinkel 66° × 41°, scharf ab etwa 10 cm | `[w]` Datenblatt |
-| Kabel | Standard–Mini (15 auf 22 Pole) für den Pi Zero; das beiliegende passt nicht | `[w]` |
-| Nut oben auf dem hinteren 2060 | trägt den Kamerahalter (X −56 … −4); dass sie dort frei ist, steht nirgends | `[?]` am Aufbau prüfen |
+| Modul | Raspberry Pi Kamera v1.3 (OV5647); ein Camera Module 3 passt in denselben Halter | Foto |
+| Platine | 25 × 24 × 1 mm | `[w]` |
+| Bautiefe | 9 mm; Linsenfront daraus 5,25 vor der Platine, Stecker 2,75 dahinter | `[w]` / Linse `[?]` |
+| Löcher | 4 × Ø2,2, je 2,0 von den Seiten; ein Paar 2,0 von der Kante gegenüber dem Stecker, das andere 12,5 weiter; freier Ring Ø4,75 | `[w]` wie Module 2/3 |
+| Linsenmitte | mittig, 9,462 von der Steckerkante | `[w]` wie Module 2, Foto passt |
+| Linsenblock | etwa 8,5 × 8,5 | `[?]` |
+| Optik | f = 3,6 mm, f/2,9, 2592 × 1944 Pixel zu 1,4 µm, Bildwinkel 53,5° × 41,4° | `[w]` Raspberry-Pi-Doku |
+| Fokus | fest, ab Werk 1 m bis unendlich; für den Autofokus auf 120 mm drehen | `[w]` / offen |
+| Kabel | Standard–Mini (15 auf 22 Pole), 200 mm, reicht am Aufbau bis zum Pi | Angabe 2026-11-19 |
+| Nut oben auf dem vorderen 2060 | trägt den Kamerahalter (X +190 … +230); innen am rechten 2040 sitzt dort ein Eckwinkel, der Halter ist darüber ausgespart (Hülle 20 × 20) | `[?]` Schenkel am Aufbau messen |
 
 ## Normteile (aus hardware.md, `[w]`)
 

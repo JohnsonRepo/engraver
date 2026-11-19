@@ -1,52 +1,59 @@
-# Kamerahalter.py — Halter fuer das Raspberry Pi Camera Module 3 auf dem
-# hinteren 2060, direkt vor dem Elektronikfach
+# Kamerahalter.py — Halter fuer die Raspberry Pi Kamera v1.3 (wie verbaut;
+# Lochbild wie Camera Module 2/3) vorn rechts auf dem vorderen 2060, vor dem
+# Elektronikfach
 #
 # Wozu: Autofokus ueber Z. Der Kopf faehrt an einen festen Messpunkt kurz
-# innerhalb der Anschlagecke (Spannmittel.py), Z ganz oben, und schaltet den
-# Laser kurz und schwach ein. Der Strahl steht senkrecht, der Punkt liegt
-# also bei jeder Werkstueckdicke an derselben Stelle. Die Kamera sieht ihn
-# von hinten rechts, je nach Dicke hoeher oder tiefer im Bild: ein Bild
-# ergibt die Hoehe der Oberflaeche, Z faehrt auf den Fokus. Das Kabel zum
-# Pi ist kurz, weil die Kamera direkt vor dem Fach sitzt.
+# innerhalb der Anschlagecke vorn rechts (Spannmittel.py Rev. 2), Z ganz
+# oben, und schaltet den Laser kurz und schwach ein. Der Strahl steht
+# senkrecht, der Punkt liegt also bei jeder Werkstueckdicke an derselben
+# Stelle. Die Kamera sieht ihn schraeg von vorn rechts oben, je nach Dicke
+# hoeher oder tiefer im Bild: ein Bild ergibt die Hoehe der Oberflaeche, Z
+# faehrt auf den Fokus. Das Kabel zum Pi im Fach ist kurz.
+#
+# Rev. 2 (2026-11-19): neu fuer vorn rechts. An der Maschine steht das Fach
+# vorn (Elektronikfach.py Rev. 2), die Kamera sitzt dort auf dem vorderen
+# 2060 am rechten 2040 und soll bleiben; der Anschlag kommt vor die Kamera.
+# Rev. 1 stand hinten und hielt die Kamera waagerecht. Von vorn liegt der
+# Messpunkt 18 bis 43 Grad unter der Linse; das Bild reicht hochkant nur
+# +-27 Grad. Deshalb ist die Kamera jetzt geneigt.
 #
 # Ein Druckteil, dazu Lehre und Referenzteile:
-#   Kamerahalter  Fuss auf der Oberseite des hinteren 2060, 2 x M5x10 in
-#                 Hammermuttern der Nut; darauf eine senkrechte Wand, zur
-#                 Ecke gedreht, mit einer Rippe dahinter. Vier Polster
-#                 tragen die Kamera hochkant: an der Kabelseite 2 x M2x8 mit
-#                 Mutter in Taschen hinter der Wand, vorn 2 Zapfen durch die
-#                 Loecher (Schraubenkoepfe waeren dort der vorderste Punkt
-#                 und kosteten 1,5 mm Luft zur Traegerplatte). Die
-#                 Kabelkante zeigt nach hinten links zum Fach.
-#   Bohrlehre_Kamera  ausgeblendet: Umriss und Lochbild des Camera Module 3
-#                 zum Auflegen auf die Platine, bevor der Halter gedruckt
-#                 wird.
-#   Referenz_nicht_drucken  Stueck des hinteren 2060, Vorderwand und Deckel
-#                 des Elektronikfachs (Ausschnitt), die Kamera, Schrauben und
-#                 die Sichtlinien zum Messpunkt.
+#   Kamerahalter  Fuss auf der Oberseite des vorderen 2060, 2 x M5x10 in
+#                 Hammermuttern der Nut; ueber dem Eckwinkel am rechten
+#                 2040 unter 45 Grad ausgespart. Ein senkrechter Steg traegt die
+#                 Wand, die zum Messpunkt gedreht (blick_az) und nach vorn
+#                 unten geneigt ist (neige). Vier Polster tragen die Kamera
+#                 hochkant: oben 2 x M2x8 mit Mutter in Taschen hinter der
+#                 Wand, unten 2 Zapfen durch die Loecher. Die Kabelkante
+#                 zeigt zum Fach und zum Pi.
+#   Bohrlehre_Kamera  ausgeblendet: Umriss und Lochbild der Kamera.
+#   Referenz_nicht_drucken  die Kamera, M5-Koepfe und die Sichtlinien zum
+#                 Messpunkt.
 #
-# Warum hochkant und ohne Neigung: Quer (41 Grad Bildwinkel senkrecht)
-# muesste die Kamera rund 17 Grad nach unten kippen; dann haengen Polster
-# und Wand ueber, und der Halter braucht Stuetzen. Hochkant sind es 66 Grad
-# senkrecht, der Punkt liegt 8 bis 27 Grad unter der Achse, und die Wand
-# steht senkrecht. Hochkant ist die Kamera ausserdem schmal genug fuer den
-# Streifen zwischen Fach und Traegerplatte: Am Ende des Y-Wegs faehrt die
-# Traegerplatte bis luft_bau an ihre Vorderkante heran.
+# Platz: Vor dem vorderen 2060 faehrt der Laser bis Y 182, aber nur bis
+# X 204,8; rechts davon kommt nur die Schlittenplatte, und die bis Y 147.
+# Die Kamera ragt deshalb nur rechts von X 208 ueber die Innenkante des 2060
+# hinaus. Rechts bleibt sie links vom Y-Riemen (X 242,4), hinten vom Fach
+# frei (Deckel geht ab). tools/kamerahalter_check.py prueft das.
 #
-# Drucklage: Fuss aufs Bett, die Wand steht senkrecht. Polster als Traene mit
-# der Spitze unten, Loecher fuer die M2 als Traene mit der Spitze oben,
-# Muttertaschen als Sechseck mit einer Ecke oben, Rippe mit 45 Grad. Keine
-# Stuetzen.
+# Drucklage: Fuss aufs Bett. Die Wand lehnt neige Grad nach vorn, ihre
+# Kameraseite haengt damit hoechstens so weit ueber (unter 45 Grad).
+# Polster und Zapfen als Traene mit der Spitze unten, Loecher fuer die M2 als
+# Traene mit der Spitze oben, Muttertaschen als Sechseck mit einer Ecke oben
+# — jeweils im geneigten Rahmen. Keine Stuetzen.
 #
 # Koordinaten = Maschinenkoordinaten wie Portal.py: X nach rechts, Y nach
 # vorn, Z senkrecht, Z = 0 in der Mitte des Portalrohrs. Im Fusion-Modell
-# sind Y und Z getauscht (Modell-Z = Maschine Y). Der Bauplan steht in einem
-# eigenen Rahmen, in dem die Wand achsparallel liegt ("lokal"): x laengs der
-# Platine (Kabelkante bei x < 0), y in Blickrichtung (Linsenfront bei
-# y = 0), z = Maschine Z. Der fertige Koerper wird um Z gedreht und an
-# seinen Platz geschoben. tools/stl_export.py fuehrt denselben Bauplan aus;
-# fuer den Druck ist die Drehung um Z gleichgueltig. Pruefung:
-# tools/kamerahalter_check.py.
+# sind Y und Z getauscht (Modell-Z = Maschine Y). Gebaut wird in zwei
+# Rahmen:
+#   H (Halter): um Z zum Messpunkt gedreht, Ursprung unter der Linsenfront;
+#     x quer zum Blick, y in Blickrichtung (waagerecht), z = Maschine Z.
+#     Fuss, Steg, M5-Loecher.
+#   K (Kamera): H um die x-Achse um neige gekippt, Ursprung in der
+#     Linsenfront; y in Blickrichtung (geneigt), z nach oben zur Kamera.
+#     Wand, Polster, Zapfen, M2-Loecher, Muttertaschen.
+# kippen() bringt K nach H, verschieben() H an die Maschine. tools/
+# stl_export.py fuehrt beide Bauplaene aus und vereint sie genauso.
 #
 # Konventionen: siehe fusion-python/SKILL.md und references/baugruppen.md.
 
@@ -54,71 +61,79 @@ import adsk.core, adsk.fusion, traceback
 import math
 
 SKRIPT_NAME = 'Kamerahalter'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog). Winkel in Grad und
 # Pixelzahlen stehen in EINHEIT.
 MASSE = {
-    # --- Rahmen (wie Portal.py und Elektronikfach.py) [v] -------------------
-    'quer_y1':           (-250.0, 'hinteres 2060: Rueckseite (Maschine Y)'),
-    'rahmen_b':            (20.0, 'Profil: Breite (2060 hochkant: in Y)'),
-    'quer_h':              (60.0, 'hinteres 2060: Hoehe'),
+    # --- Rahmen (wie Portal.py) [v] -----------------------------------------
+    'quer_vorn_y0':       (185.0, 'vorderes 2060: Innenseite (Maschine Y)'),
+    'quer_vorn_y1':       (205.0, 'vorderes 2060: Vorderseite (Maschine Y)'),
+    'rahmen_b':            (20.0, 'Profil: Breite'),
+    'quer_h':              (60.0, '2060: Hoehe'),
     'rahmen_z0':          (-69.0, 'Oberseite des 2060 = Unterkante der 2040'),
+    'rahmen_x_innen':     (247.0, 'rechtes 2040: Innenseite (Maschine X)'),
     # Nut 6 [w], wie Kabelhalter.py
     'nut_lippe':            (1.8, 'Nut 6: Dicke der Lippe'),
     'nut_tiefe':            (6.0, 'Nut 6: Platz ab Profilflaeche bis zum Nutgrund'),
     'nutenstein_h':         (4.0, 'Hammermutter M5: Gewindelaenge'),
-    # V-Slot vereinfacht (nur Referenz), wie Portal.py
-    'nut_oben':             (6.0, 'V-Slot: Oberkante der Nutoeffnung unter der Kante'),
-    'nut_v_t':              (1.0, 'V-Slot vereinfacht: Tiefe des V aussen'),
-    'nut_b':                (6.2, 'V-Slot: Nutoeffnung innen (Engstelle)'),
-    'nut_t':                (2.0, 'V-Slot vereinfacht: Tiefe der Engstelle'),
-    'nut_kammer_b':         (8.0, 'V-Slot vereinfacht: Breite der Kammer'),
-    'nut_kammer_t':         (5.5, 'V-Slot vereinfacht: Tiefe bis Kammergrund'),
-    'kern_d':               (4.2, 'V-Slot: Kernbohrung'),
+    'nut_oben':             (6.0, 'V-Slot: Oberkante der Nutoeffnung unter der Kante (Referenz, wie Portal.py)'),
+    'nut_v_t':              (1.0, 'V-Slot vereinfacht: Tiefe des V aussen (Referenz)'),
+    'nut_b':                (6.2, 'V-Slot: Nutoeffnung innen (Referenz)'),
+    'nut_t':                (2.0, 'V-Slot vereinfacht: Tiefe der Engstelle (Referenz)'),
+    'nut_kammer_b':         (8.0, 'V-Slot vereinfacht: Breite der Kammer (Referenz)'),
+    'nut_kammer_t':         (5.5, 'V-Slot vereinfacht: Tiefe bis Kammergrund (Referenz)'),
+    'kern_d':               (4.2, 'V-Slot: Kernbohrung (Referenz)'),
 
-    # --- Elektronikfach (Elektronikfach.py Rev. 1, Zwischenstand) [v] -------
-    'fach_vorn_y':       (-253.0, 'Fach: Aussenseite der Vorderwand'),
-    'fach_wand':            (2.0, 'Fach: Vorderwand (Montageplatte), Dicke'),
+    # --- Elektronikfach vorn (Elektronikfach.py Rev. 2, gedreht) [v] ---------
+    'fach_y0':            (205.0, 'Fach: Montageplatte an der Vorderseite des 2060'),
+    'fach_x1':            (222.0, 'Fach: Kasten, halbe Breite'),
     'fach_rand_z':        (-50.0, 'Fach: Oberkante der Waende'),
     'deckel_z1':          (-47.5, 'Fach: Oberseite des Deckels'),
-    'fach_boden_z':      (-127.0, 'Fach: Unterseite'),
-    # Kamerabuchse des Pi: vordere Schmalseite (die SD-Karte ist hinten),
-    # Mitte; X auf der Bauteilseite [?]
-    'pi_buchse_x':        (-10.5, 'Pi: Kamerabuchse, Maschine X'),
-    'pi_buchse_y':       (-275.0, 'Pi: Kamerabuchse, Maschine Y'),
-    'pi_buchse_z':        (-73.0, 'Pi: Kamerabuchse, Maschine Z'),
+    # Kamerabuchse des Pi im Modell (Fachkoordinaten -10,5 / -275 / -73,
+    # gedreht). Am Aufbau liegt der Pi anders (Fotos 2026-11-19); dort
+    # reicht das 200-mm-Kabel laut Angabe.
+    'pi_buchse_x':         (10.5, 'Pi: Kamerabuchse im Modell, Maschine X [?]'),
+    'pi_buchse_y':        (230.0, 'Pi: Kamerabuchse im Modell, Maschine Y [?]'),
+    'pi_buchse_z':        (-73.0, 'Pi: Kamerabuchse im Modell, Maschine Z [?]'),
 
-    # --- was hinten herankommt (tools/kamerahalter_check.py rechnet nach) --
-    # Traegerplatte am Schienenende des Y-Wegs, ab ihrer Unterkante
-    'th_hinten_y':       (-227.3, 'Toolhead: hinterste Lage der Traegerplatte'),
-    'th_hinten_z':        (-66.0, 'Toolhead: Unterkante der Traegerplatte'),
-    'xwagen_hinten_y':   (-243.3, 'X-Wagen: hinterste Lage'),
-    'xwagen_z0':          (-16.0, 'X-Wagen: Unterkante'),
+    # --- was vorn herankommt (tools/kamerahalter_check.py rechnet nach) -----
+    # Der Laser ueber den ganzen Weg bis zum Softlimit vorn; rechts davon nur
+    # noch die Schlittenplatte. Der Y-Riemen laeuft innen am rechten 2040.
+    'laser_vorn_y':       (182.0, 'Toolhead: Laser, vorderste Lage (Softlimit)'),
+    'laser_x1':           (204.8, 'Toolhead: Laser, rechteste Lage'),
+    'schlitten_vorn_y':   (147.0, 'Toolhead: Schlittenplatte, vorderste Lage'),
+    'riemen_x0':          (242.4, 'Y-Riemen rechts: Innenseite (Maschine X)'),
+    'riemen_z0':          (-42.0, 'Y-Riemen rechts: Unterkante'),
     'luft_bau':             (3.0, 'Mindestfreigang zu bewegten Teilen'),
 
-    # --- Messpunkt (Spannmittel.py, Opferplatte.py) [v] ---------------------
-    'ecke_x':           (-199.85, 'Anschlagwinkel: Innenecke, Maschine X'),
-    'ecke_y':           (-164.80, 'Anschlagwinkel: Innenecke, Maschine Y'),
-    # 30/35 statt dicht an der Ecke: so liegt der Punkt fuer jede Dicke
-    # mindestens 6 Grad im Bild (siehe Pruefung, Abschnitt Sicht)
-    'mp_rechts':           (30.0, 'Messpunkt: so weit rechts der Innenecke'),
-    'mp_vorn':             (35.0, 'Messpunkt: so weit vor der Innenecke'),
+    # --- Messpunkt (Spannmittel.py Rev. 2, Opferplatte.py) [v] ---------------
+    'ecke_x':            (183.35, 'Anschlagwinkel: Innenecke, Maschine X (vorn rechts)'),
+    'ecke_y':             (160.5, 'Anschlagwinkel: Innenecke, Maschine Y'),
+    # 30 links, 58 hinter der Ecke: so bleibt die Kamera auch beim dicksten
+    # Werkstueck ueber 100 mm entfernt, der Punkt fuer alle Dicken im Bild
+    'mp_links':            (30.0, 'Messpunkt: so weit links der Innenecke'),
+    'mp_hinten':           (58.0, 'Messpunkt: so weit hinter der Innenecke'),
     'platte_z1':         (-129.0, 'Oberseite der Opferplatte'),
     'werkstueck_max':      (58.0, 'dickstes Werkstueck unter dem Toolhead'),
 
-    # --- Camera Module 3, Normalobjektiv [w] -----------------------------
-    # Massblatt RP-008153 (Raspberry Pi, 2023) und Datenblatt; Bohrlehre
-    # an die Platine halten, bevor der Halter gedruckt wird.
+    # --- Kamera v1.3 (OV5647), wie verbaut [w]/[?] --------------------------
+    # Foto 2026-11-19: an der Maschine steckt eine Raspberry Pi Kamera v1.3
+    # (Modul "P5V04A SUNNY", rote LED D1). Lochbild und Kabelkante wie
+    # Camera Module 2/3 (Massblatt RP-008153), also passt auch ein Module 3.
+    # Optik nach Raspberry-Pi-Doku [w]; Hoehe des Linsenblocks aus 9 mm
+    # Gesamtdicke [?]. Fester Fokus ab Werk 1 m bis unendlich: die Linse
+    # wird auf den Messabstand gedreht (Pruefung 6). Bohrlehre an die
+    # Platine halten, bevor der Halter gedruckt wird.
     'cam_b':               (25.0, 'Kamera: Platine, Breite (laengs der Kabelkante)'),
-    'cam_h':             (23.862, 'Kamera: Platine, Hoehe (quer zur Kabelkante)'),
-    'cam_pcb':             (1.12, 'Kamera: Platinendicke'),
-    'cam_linse':          (9.462, 'Kamera: Linsenmitte ab der Kabelkante'),
-    'cam_front':           (7.43, 'Kamera: Linsenfront vor der Platine (6,98 + 0,45)'),
-    'cam_block':           (10.8, 'Kamera: Linsenblock, Kantenlaenge'),
-    'cam_block_t':        (4.325, 'Kamera: Linsenblock mit Abstand, Dicke'),
-    'cam_tubus_d':         (5.75, 'Kamera: Objektiv, Durchmesser'),
+    'cam_h':               (24.0, 'Kamera: Platine, Hoehe (quer zur Kabelkante)'),
+    'cam_pcb':              (1.0, 'Kamera: Platinendicke'),
+    'cam_linse':          (9.462, 'Kamera: Linsenmitte ab der Kabelkante (wie Module 2, Foto passt)'),
+    'cam_front':           (5.25, 'Kamera: Linsenfront vor der Platine (9 - 1 - 2,75) [?]'),
+    'cam_block':            (8.5, 'Kamera: Linsenblock, Kantenlaenge [?]'),
+    'cam_block_t':          (3.5, 'Kamera: Linsenblock, Dicke [?]'),
+    'cam_tubus_d':          (6.0, 'Kamera: Objektiv, Durchmesser [?]'),
     'cam_loch_d':           (2.2, 'Kamera: Befestigungsloecher'),
     'cam_loch_rand':        (2.0, 'Kamera: Loecher ab Gegenkante und Seiten'),
     'cam_loch_ab':         (12.5, 'Kamera: Lochabstand quer zur Kabelkante'),
@@ -126,40 +141,58 @@ MASSE = {
     'cam_stecker_b':      (19.61, 'Kamera: Stecker hinten, Breite'),
     'cam_stecker_h':       (5.71, 'Kamera: Stecker, Tiefe ab der Kabelkante'),
     'cam_stecker_t':       (2.75, 'Kamera: Stecker, Hoehe ueber der Rueckseite'),
-    'cam_f':               (4.74, 'Kamera: Brennweite'),
+    'cam_f':                (3.6, 'Kamera: Brennweite'),
+    'cam_blende':           (2.9, 'Kamera: Blende f/2,9'),
     'cam_pixel':         (0.0014, 'Kamera: Pixelgroesse'),
-    'cam_px_b':          (4608.0, 'Kamera: Pixel laengs der Kabelkante'),
-    'cam_px_h':          (2592.0, 'Kamera: Pixel quer zur Kabelkante'),
-    'cam_fov_b':           (66.0, 'Kamera: Bildwinkel laengs der Kabelkante'),
-    'cam_fov_h':           (41.0, 'Kamera: Bildwinkel quer zur Kabelkante'),
-    'cam_fokus':          (100.0, 'Kamera: naechster Fokus'),
+    'cam_px_b':          (2592.0, 'Kamera: Pixel laengs der Kabelkante'),
+    'cam_px_h':          (1944.0, 'Kamera: Pixel quer zur Kabelkante'),
+    'cam_fov_b':           (53.5, 'Kamera: Bildwinkel laengs der Kabelkante'),
+    'cam_fov_h':          (41.41, 'Kamera: Bildwinkel quer zur Kabelkante'),
     'kabel_l':            (200.0, 'Kamerakabel Standard-Mini: Laenge'),
     'kabel_b':             (16.0, 'Kamerakabel: Breite an der Kamera'),
     'kabel_steif':          (3.0, 'Kamerakabel: steifes Ende vor der Kabelkante'),
 
-    # --- Lage der Kamera -------------------------------------------------------
-    'blick_az':           (130.0, 'Kamera: Blickrichtung in Grad gegen +X, von oben gegen den Uhrzeigersinn'),
-    'linse_x':            (-40.0, 'Kamera: Linsenfront, Maschine X'),
-    'linse_z':            (-47.5, 'Kamera: Linsenmitte, Maschine Z'),
+    # --- Lage der Kamera ---------------------------------------------------------
+    # Die Linse sitzt ueber der Innenkante des 2060, 30,5 mm vom rechten
+    # 2040 (an der Maschine 30 bis 80 mm, Angabe und Foto 2026-11-19):
+    # rechts vom Laser-Weg (X 204,8), so dass die Kamera dort vor das 2060
+    # ragen darf. Blickrichtung und Neigung rechnet lage() aus der Lage des
+    # Messpunkts. Die Lage ist aus einer Suche ueber X, Y, Z: groesster
+    # kleinster Abstand zu Laser, Fach und Y-Riemen, Steg ganz auf dem Fuss.
+    'linse_x':            (216.5, 'Kamera: Linsenfront, Maschine X'),
+    'linse_y':            (185.0, 'Kamera: Linsenfront, Maschine Y'),
+    'linse_z':            (-42.0, 'Kamera: Linsenfront, Maschine Z'),
+    # +1: die Kabelkante liegt bei lokal x < 0 wie in Rev. 1; -1: die Kamera
+    # um ihre Achse gedreht, die Kabelkante bei x > 0 (zum Fach)
+    'kabel_seite':         (-1.0, 'Kamera: Kabelkante bei -x (+1) oder +x (-1)'),
 
     # --- Halter ------------------------------------------------------------------
-    # Rev. 1: erster Stand.
+    # Rev. 1: erster Stand, hinten, waagerecht.
+    # Rev. 2: vorn rechts, geneigt, Steg statt Rippe, Zapfen unten.
     'fuss_t':               (4.5, 'Fuss: Dicke (M5x10: 5,5 in der Nut, 3,7 im Stein)'),
-    'fuss_hinten':          (0.5, 'Fuss: so weit vor der Rueckseite des 2060'),
-    'fuss_vorn':            (1.0, 'Fuss: so weit hinter der Vorderseite des 2060'),
-    'fuss_rand':            (6.0, 'Fuss: reicht so weit ueber die Mitte der M5'),
-    'm5_links':           (-50.0, 'Fuss: linke M5, Maschine X'),
-    'm5_rechts':          (-10.0, 'Fuss: rechte M5, Maschine X'),
+    'fuss_innen':           (0.5, 'Fuss: so weit hinter der Innenseite des 2060'),
+    'fuss_aussen':          (1.0, 'Fuss: so weit vor der Vorderseite des 2060 (Fach)'),
+    # Die M5 sitzen links neben der Kamera: Dort ist der Inbus von oben frei,
+    # auch mit eingesetzter Kamera; rechts steht der Steg ueber der Nut
+    'fuss_x0':            (190.0, 'Fuss: linke Kante, Maschine X'),
+    # Innen am rechten 2040 sitzt ein Eckwinkel in der oberen Nut des 2060
+    # (hardware-notizen.md, 2 von 8 je Kreuzung). Seine Schenkel sind nicht
+    # gemessen; gerechnet wird mit der Huelle: Dreieck 20 x 20 unter der
+    # Schraege. Fuss und Steg sind parallel dazu unter 45 Grad weggeschnitten
+    # (druckt ohne Stuetzen); der Fuss endet oben dort, wo der Schnitt ihn
+    # trifft. Fehlt der Winkel, schadet der Schnitt nicht.
+    'winkel_l':            (20.0, 'Eckwinkel 2040/2060 innen auf dem 2060: Schenkel [v] (Form [?])'),
+    'winkel_luft':          (1.0, 'Eckwinkel: Luft senkrecht zur Schraege'),
+    'm5_links':           (196.0, 'Fuss: linke M5, Maschine X'),
+    'm5_rechts':          (207.0, 'Fuss: rechte M5, Maschine X'),
     'wand_t':               (4.0, 'Wand: Dicke'),
     'pad_h':                (2.0, 'Polster: Hoehe (Platz fuer die Bauteile hinten)'),
     'pad_d':                (4.5, 'Polster: Durchmesser der Traene'),
     'wand_rand':            (1.0, 'Wand: reicht so weit ueber die Polster'),
     'wand_oben':            (1.0, 'Wand: endet so weit ueber der Platine'),
     'stecker_luft':         (0.5, 'Wand: endet so weit vor dem Stecker'),
-    'rippe_x':              (6.5, 'Rippe hinter der Wand: Mitte (lokal x)'),
-    'rippe_b':              (4.0, 'Rippe: Dicke'),
-    'rippe_l':              (7.0, 'Rippe: Laenge am Fuss und Hoehe an der Wand'),
-    # Zapfen in den vorderen Loechern (Ø2,2): Traene mit der Spitze unten,
+    'steg_ueber':           (0.5, 'Steg: reicht so weit in die Wand'),
+    # Zapfen in den unteren Loechern (Ø2,2): Traene mit der Spitze unten,
     # flach, damit sie ins Loch passt
     'zapfen_d':             (1.8, 'Zapfen: Durchmesser der Traene'),
     'zapfen_kappe':        (0.05, 'Zapfen: flach so weit unter dem Kreis'),
@@ -184,8 +217,8 @@ MASSE = {
 }
 
 # Einheiten der User-Parameter, wo es nicht mm sind
-EINHEIT = {'blick_az': 'deg', 'cam_fov_b': 'deg', 'cam_fov_h': 'deg',
-           'cam_px_b': '', 'cam_px_h': ''}
+EINHEIT = {'cam_fov_b': 'deg', 'cam_fov_h': 'deg', 'cam_px_b': '',
+           'cam_px_h': '', 'kabel_seite': ''}
 
 ZIELDICHTE = {'PLA': 1.24, 'PETG': 1.27,         # g/cm3
               'Leiterplatte': 1.85,             # nur Referenz: FR4
@@ -256,17 +289,36 @@ def sechseck(u, v, sw):
             for i in range(6)]
 
 
-# --- Rahmen lokal <-> Maschine ------------------------------------------------
+# --- Rahmen: K (Kamera, geneigt) -> H (Halter) -> Maschine -------------------
 def welt(L, x, y):
-    """Lokal (x, y) -> Maschine (X, Y); z bleibt."""
+    """H (x, y) -> Maschine (X, Y); z bleibt."""
     return (L['linse'][0] + x * L['sin'] + y * L['cos'],
             L['linse'][1] - x * L['cos'] + y * L['sin'])
 
 
 def lokal(L, X, Y):
-    """Maschine (X, Y) -> lokal (x, y)."""
+    """Maschine (X, Y) -> H (x, y)."""
     dx, dy = X - L['linse'][0], Y - L['linse'][1]
     return (dx * L['sin'] - dy * L['cos'], dx * L['cos'] + dy * L['sin'])
+
+
+def k_nach_h(L, x, y, z):
+    """K (x, y, z) -> H (x, y, z): um die x-Achse um neige nach unten
+    gekippt, Ursprung in der Linsenfront; H-z ist Maschine Z."""
+    sn, cn = L['sin_n'], L['cos_n']
+    return (x, y * cn + z * sn, L['linse'][2] - y * sn + z * cn)
+
+
+def h_nach_k(L, x, y, z):
+    """H (x, y, z) -> K (x, y, z)."""
+    sn, cn = L['sin_n'], L['cos_n']
+    zr = z - L['linse'][2]
+    return (x, y * cn - zr * sn, y * sn + zr * cn)
+
+
+def k_nach_maschine(L, x, y, z):
+    xh, yh, zh = k_nach_h(L, x, y, z)
+    return welt(L, xh, yh) + (zh,)
 
 
 def ecken_quader(x, y, z):
@@ -274,86 +326,99 @@ def ecken_quader(x, y, z):
 
 
 def lage():
-    """Alle Lagen (mm) und der Bauplan. Einzige Quelle fuer Geometrie, STL,
+    """Alle Lagen (mm) und die Bauplaene. Einzige Quelle fuer Geometrie, STL,
     Zeichnung und Pruefung (tools/kamerahalter_check.py, stl_export.py,
     kamerahalter_zeichnen.py)."""
     L = {}
-    A = math.radians(w('blick_az'))
-    L['sin'], L['cos'] = math.sin(A), math.cos(A)
-    zl = w('linse_z')
+    lx, ly, lz = w('linse_x'), w('linse_y'), w('linse_z')
+    L['linse'] = (lx, ly, lz)
 
-    # ---- Kamera im lokalen Rahmen: Linsenfront bei (0, 0), hochkant ------
+    # ---- Messpunkt; Blick waagerecht zu ihm, Neigung auf die Mitte ---------
+    # Die Achse zielt waagerecht genau auf den Punkt (quer 0). Geneigt wird so
+    # weit, dass der Punkt fuer die duennste und die dickste Platte gleich
+    # weit unter und ueber der Bildmitte liegt.
+    mp = (w('ecke_x') - w('mp_links'), w('ecke_y') - w('mp_hinten'))
+    L['mp'] = mp
+    dx, dy = mp[0] - lx, mp[1] - ly
+    A = math.atan2(dy, dx)
+    L['blick_az'] = math.degrees(A) % 360.0
+    L['sin'], L['cos'] = math.sin(A), math.cos(A)
+    horiz = math.hypot(dx, dy)
+    tief = [math.atan2(lz - (w('platte_z1') + t), horiz)
+            for t in (0.0, w('werkstueck_max'))]
+    nu = (tief[0] + tief[1]) / 2.0
+    L['neige'] = math.degrees(nu)
+    sn, cn = math.sin(nu), math.cos(nu)
+    L['sin_n'], L['cos_n'] = sn, cn
+    # K -> H als Matrix (Zeilen, Maschinenachsen): fuer stl_export und Fusion
+    L['k_nach_h'] = [[1.0, 0.0, 0.0, 0.0], [0.0, cn, sn, 0.0],
+                     [0.0, -sn, cn, lz]]
+
+    # ---- Kamera im Rahmen K: Linsenfront bei (0, 0, 0), hochkant ----------
+    # kabel_seite +1: Kabelkante bei x < 0 (wie Rev. 1), -1: gespiegelt
+    s = 1.0 if w('kabel_seite') > 0 else -1.0
+    L['kabel_seite'] = s
+
+    def xb(a, b):
+        return tuple(sorted((s * a, s * b)))
     kab = -w('cam_linse')                          # Kabelkante
     geg = w('cam_h') - w('cam_linse')              # Gegenkante
     hz = w('cam_b') / 2.0                           # halbe Hoehe
     yv = -w('cam_front')                            # Platine vorn
     yh = yv - w('cam_pcb')                          # Platine hinten
     ys = yh - w('cam_stecker_t')                    # Stecker hinten
-    L['platine'] = ((kab, geg), (yh, yv), (zl - hz, zl + hz))
-    L['stecker'] = ((kab, kab + w('cam_stecker_h')), (ys, yh),
-                    (zl - w('cam_stecker_b') / 2.0,
-                     zl + w('cam_stecker_b') / 2.0))
+    L['platine'] = (xb(kab, geg), (yh, yv), (-hz, hz))
+    L['stecker'] = (xb(kab, kab + w('cam_stecker_h')), (ys, yh),
+                    (-w('cam_stecker_b') / 2.0, w('cam_stecker_b') / 2.0))
     bk = w('cam_block') / 2.0
     yb = yv + w('cam_block_t')
-    L['block'] = ((-bk, bk), (yv, yb), (zl - bk, zl + bk))
+    L['block'] = ((-bk, bk), (yv, yb), (-bk, bk))
     tr = w('cam_tubus_d') / 2.0
-    L['tubus'] = ((-tr, tr), (yb, 0.0), (zl - tr, zl + tr))
-    # Loecher: das Paar an der Kabelseite traegt die Schrauben, das vordere
-    # (an der Gegenkante) die Zapfen
-    xz = geg - w('cam_loch_rand')
-    xs_ = xz - w('cam_loch_ab')
-    zz = [zl + s * (hz - w('cam_loch_rand')) for s in (-1, 1)]
-    L['loecher_schraube'] = [(xs_, z) for z in zz]
-    L['loecher_zapfen'] = [(xz, z) for z in zz]
+    L['tubus'] = ((-tr, tr), (yb, 0.0), (-tr, tr))
+    # Loecher: oben (z > 0) die Schrauben mit Mutter, unten die Zapfen —
+    # hinter der Wand unten steht der Steg, dort ist kein Platz fuer Muttern
+    xz = s * (geg - w('cam_loch_rand'))
+    xs_ = s * (geg - w('cam_loch_rand') - w('cam_loch_ab'))
+    zo = hz - w('cam_loch_rand')
+    L['loecher_schraube'] = [(xs_, zo), (xz, zo)]
+    L['loecher_zapfen'] = [(xs_, -zo), (xz, -zo)]
     L['loecher'] = L['loecher_schraube'] + L['loecher_zapfen']
     rk = w('m2_kopf_d') / 2.0
     L['koepfe'] = [((x - rk, x + rk), (yv, yv + w('m2_kopf_h')),
                     (z - rk, z + rk)) for x, z in L['loecher_schraube']]
     L['zapfen_y'] = (yh - 0.5, yv + w('zapfen_ueber'))
-    L['kabel_aus'] = (kab, (yh + ys) / 2.0, zl)
+    L['kabel_aus'] = (s * kab, (yh + ys) / 2.0, 0.0)
 
-    # ---- Halter im lokalen Rahmen ---------------------------------------
-    zf0 = w('rahmen_z0')
-    zf1 = zf0 + w('fuss_t')
+    # ---- Wand im Rahmen K -------------------------------------------------
     wy1 = yh - w('pad_h')                           # Wand vorn
     wy0 = wy1 - w('wand_t')                         # Wand hinten
     xs = [x for x, _ in L['loecher']]
     pr = w('pad_d') / 2.0
-    wx0 = L['stecker'][0][1] + w('stecker_luft')
-    wx1 = max(xs) + pr + w('wand_rand')
-    wz1 = zl + hz + w('wand_oben')
-    L['wand'] = ((wx0, wx1), (wy0, wy1), (zf1, wz1))
-    L['fuss_z'] = (zf0, zf1)
+    st = L['stecker'][0]
+    if s > 0:
+        wx = (st[1] + w('stecker_luft'), max(xs) + pr + w('wand_rand'))
+    else:
+        wx = (min(xs) - pr - w('wand_rand'), st[0] - w('stecker_luft'))
+    wz = (-hz - w('wand_oben'), hz + w('wand_oben'))
+    L['wand'] = (wx, (wy0, wy1), wz)
     L['pad_y'] = (wy1, yh)
     L['pad_kappe'] = max(0.0, w('cam_pad_frei') / 2.0 - pr)
-    rb, rl = w('rippe_b') / 2.0, w('rippe_l')
-    L['rippe'] = ((w('rippe_x') - rb, w('rippe_x') + rb),
-                  [(wy0, zf1), (wy0 - rl, zf1), (wy0, zf1 + rl)])
     tasche = w('m2_mutter_h') + w('mutter_spiel')
     L['tasche_y'] = (wy0, wy0 + tasche)
     L['tasche_sw'] = w('m2_mutter_sw') + w('mutter_spiel')
 
-    # ---- Linse in Y so weit vorn, dass die Traegerplatte luft_bau bleibt --
-    # Alle Punkte von Kamera und Wand ueber der Unterkante der
-    # Traegerplatte; der Fuss liegt fest im Maschinenrahmen.
-    zr = w('zapfen_d') / 2.0
-    punkte = (ecken_quader(*L['platine'][:2], (0.0,))
-              + ecken_quader(*L['stecker'][:2], (0.0,))
-              + ecken_quader(*L['block'][:2], (0.0,))
-              + ecken_quader((-tr, tr), (yb, 0.0), (0.0,))
-              + [p for k in L['koepfe'] for p in ecken_quader(*k[:2], (0.0,))]
-              + [p for x, _ in L['loecher_zapfen']
-                 for p in ecken_quader((x - zr, x + zr), L['zapfen_y'],
-                                       (0.0,))]
-              + ecken_quader(*L['wand'][:2], (0.0,)))
-    vorn = max(-x * L['cos'] + y * L['sin'] for x, y, _ in punkte)
-    ly = w('th_hinten_y') - w('luft_bau') - vorn
-    L['linse'] = (w('linse_x'), ly, zl)
-
-    # ---- Fuss: im Maschinenrahmen auf der Oberseite des 2060 -------------
-    q0, q1 = w('quer_y1'), w('quer_y1') + w('rahmen_b')
-    fx = (w('m5_links') - w('fuss_rand'), w('m5_rechts') + w('fuss_rand'))
-    fy = (q0 + w('fuss_hinten'), q1 - w('fuss_vorn'))
+    # ---- Fuss (Maschine) und Steg (H) -------------------------------------
+    zf0 = w('rahmen_z0')
+    zf1 = zf0 + w('fuss_t')
+    L['fuss_z'] = (zf0, zf1)
+    q0, q1 = w('quer_vorn_y0'), w('quer_vorn_y1')
+    # Eckwinkel innen am rechten 2040: Huelle und 45-Grad-Schnitt (MASSE)
+    xi, wl = w('rahmen_x_innen'), w('winkel_l')
+    L['winkel'] = ((xi - wl, xi), (q0, q1), (zf0, zf0 + wl))
+    xc = xi - wl - w('winkel_luft') * math.sqrt(2.0)
+    L['winkel_schnitt_x'] = xc              # Schnitt trifft die Oberseite
+    fx = (w('fuss_x0'), xc + w('fuss_t'))   # Fuss oben bis zum Schnitt
+    fy = (q0 + w('fuss_innen'), q1 - w('fuss_aussen'))
     L['quer_y'] = (q0, q1)
     L['nut_y'] = (q0 + q1) / 2.0
     L['fuss_x'], L['fuss_y'] = fx, fy
@@ -362,6 +427,11 @@ def lage():
     L['fuss'] = [lokal(L, X, Y) for X, Y in L['fuss_welt']]
     L['m5_welt'] = [(w('m5_links'), L['nut_y']), (w('m5_rechts'), L['nut_y'])]
     L['m5'] = [lokal(L, X, Y) for X, Y in L['m5_welt']]
+    # Steg: senkrecht unter der Unterseite der Wand, vom Fuss bis knapp in
+    # die Wand; die Unterseite liegt hinten hoeher als vorn
+    sy = (wy0 * cn + wz[0] * sn, wy1 * cn + wz[0] * sn)
+    sz1 = lz - wy0 * sn + wz[0] * cn + w('steg_ueber')
+    L['steg'] = (wx, sy, (zf1 - 0.5, sz1))
     # M5x10: Kopf auf dem Fuss, Rest in der Nut
     L['m5_in_nut'] = w('m5_l') - w('fuss_t')
     L['m5_eingriff'] = (min(L['m5_in_nut'], w('nut_lippe')
@@ -371,117 +441,150 @@ def lage():
     L['m2_bis_mutter'] = L['m2_stapel'] - tasche + w('m2_mutter_h')
     L['m2_rest'] = w('m2_l') - L['m2_bis_mutter']
 
-    # ---- Bauplan des Kamerahalters (lokal) -------------------------------
-    tz = list(L['loecher'])
+    # ---- Bauplaene: H (Fuss, Steg, M5) und K (Wand mit Kamerasitz) ------
     ts = list(L['loecher_schraube'])
-    L['plan'] = {'Kamerahalter': [
-        schritt('dazu', 'Fuss', 'z', 'vieleck', [L['fuss']], (zf0, zf1)),
-        quader_schritt('dazu', 'Wand', L['wand'][0], L['wand'][1],
-                       L['wand'][2]),
-        schritt('dazu', 'Rippe', 'x', 'vieleck', [L['rippe'][1]],
-                L['rippe'][0]),
-        schritt('dazu', 'Polster', 'y', 'tropfen', tz, L['pad_y'],
-                d=w('pad_d'), spitze=-1.0, kappe=L['pad_kappe']),
-        schritt('dazu', 'Zapfen', 'y', 'tropfen', L['loecher_zapfen'],
-                L['zapfen_y'], d=w('zapfen_d'), spitze=-1.0,
-                kappe=w('zapfen_kappe')),
-        schritt('weg', 'M2_Loecher', 'y', 'tropfen', ts,
-                (wy0 - 1.0, yh + 1.0), d=w('m2_durchgang'), spitze=1.0,
-                kappe=w('m2_kappe')),
-        schritt('weg', 'Muttertaschen', 'y', 'vieleck',
-                [sechseck(x, z, L['tasche_sw']) for x, z in ts],
-                (wy0 - 1.0, L['tasche_y'][1])),
-        schritt('weg', 'M5_Loecher', 'z', 'kreis', L['m5'],
-                (zf0 - 1.0, zf1 + 1.0), d=w('m5_durchgang')),
-    ]}
-    xs_f = [p[0] for p in L['fuss']]
-    ys_f = [p[1] for p in L['fuss']]
-    bb = ((min(min(xs_f), wx0), max(max(xs_f), wx1)),
-          (min(min(ys_f), wy0 - rl), max(max(ys_f), L['zapfen_y'][1])),
-          (zf0, wz1))
+    (sx0, sx1), (sy0, sy1), (sz0, sz1_) = L['steg']
+    L['plan'] = {
+        'Kamerahalter': [
+            schritt('dazu', 'Fuss', 'z', 'vieleck', [L['fuss']], (zf0, zf1)),
+            quader_schritt('dazu', 'Steg', (sx0, sx1), (sy0, sy1),
+                           (sz0, sz1_)),
+            schritt('weg', 'M5_Loecher', 'z', 'kreis', L['m5'],
+                    (zf0 - 1.0, zf1 + 1.0), d=w('m5_durchgang'))],
+        'Kamerahalter_Wand': [
+            quader_schritt('dazu', 'Wand', *L['wand']),
+            schritt('dazu', 'Polster', 'y', 'tropfen', L['loecher'],
+                    L['pad_y'], d=w('pad_d'), spitze=-1.0,
+                    kappe=L['pad_kappe']),
+            schritt('dazu', 'Zapfen', 'y', 'tropfen', L['loecher_zapfen'],
+                    L['zapfen_y'], d=w('zapfen_d'), spitze=-1.0,
+                    kappe=w('zapfen_kappe')),
+            schritt('weg', 'M2_Loecher', 'y', 'tropfen', ts,
+                    (wy0 - 1.0, yh + 1.0), d=w('m2_durchgang'), spitze=1.0,
+                    kappe=w('m2_kappe')),
+            schritt('weg', 'Muttertaschen', 'y', 'vieleck',
+                    [sechseck(x, z, L['tasche_sw']) for x, z in ts],
+                    (wy0 - 1.0, L['tasche_y'][1]))],
+        # Maschinenkoordinaten: nach dem Verschieben abgezogen
+        'Kamerahalter_Winkel': [
+            schritt('dazu', 'Winkel_Aussparung', 'y', 'vieleck',
+                    [[(xc - 2.0, zf0 - 2.0), (xi + 2.0, zf0 - 2.0),
+                      (xi + 2.0, zf0 + xi + 2.0 - xc)]],
+                    (q0 - 1.0, q1 + 1.0))]}
+    sa_, ca_ = L['sin'], L['cos']
+    L['maschine_nach_h'] = [[sa_, -ca_, 0.0, -lx * sa_ + ly * ca_],
+                            [ca_, sa_, 0.0, -lx * ca_ - ly * sa_],
+                            [0.0, 0.0, 1.0, 0.0]]
+
+    # Bauraum in H (fuer die Pruefung des Koerpers vor dem Verschieben)
+    punkte_h = ([(x, y, zf1) for x, y in L['fuss']]
+                + [lokal(L, min(X, xc), Y) + (zf0,)
+                   for X, Y in L['fuss_welt']]
+                + ecken_quader(*L['steg'])
+                + [k_nach_h(L, *p) for p in ecken_quader(
+                    *L['wand'])]
+                + [k_nach_h(L, *p) for x, z in L['loecher'] for p in
+                   ecken_quader((x - pr, x + pr), (wy1, L['zapfen_y'][1]),
+                                (z - pr * math.sqrt(2.0), z + pr))])
+    bb = tuple((min(p[i] for p in punkte_h), max(p[i] for p in punkte_h))
+               for i in range(3))
+    # vor der Aussparung fuer den Eckwinkel (Fusion prueft vor dem Schnitt)
+    roh = punkte_h + [(x, y, zf0) for x, y in L['fuss']]
+    bb_roh = tuple((min(p[i] for p in roh), max(p[i] for p in roh))
+                   for i in range(3))
     # Drucklage: Fuss bei z = 0, die Drehung um Z bleibt
     L['teile'] = {'Kamerahalter': {
-        'bbox': bb,
+        'bbox': bb, 'bbox_roh': bb_roh,
         'druck': [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, -zf0]],
         'auflage': ('z', zf0)}}
 
-    # ---- Messpunkt und Sicht ----------------------------------------------
-    mp = (w('ecke_x') + w('mp_rechts'), w('ecke_y') + w('mp_vorn'))
-    L['mp'] = mp
+    # ---- Sicht: der Punkt im Rahmen K fuer jede Dicke ---------------------
     fpx = w('cam_f') / w('cam_pixel')
     L['f_px'] = fpx
-    vx, vy = lokal(L, *mp)                    # vy = Abstand laengs der Achse
+    vx, vy = lokal(L, *mp)
     L['mp_lokal'] = (vx, vy)
+
+    def im_bild(t):
+        xk, yk, zk = h_nach_k(L, vx, vy, w('platte_z1') + t)
+        return xk, yk, zk
     sicht = []
     for t in DICKEN + (w('werkstueck_max'),):
-        dz = (w('platte_z1') + t) - zl
+        xk, yk, zk = im_bild(t)
         sicht.append(dict(
-            t=t, quer=math.degrees(math.atan2(vx, vy)),
-            unter=math.degrees(math.atan2(-dz, vy)),
-            abstand=math.sqrt(vx * vx + vy * vy + dz * dz),
-            px_quer=fpx * vx / vy, px_hoch=fpx * -dz / vy))
+            t=t, quer=math.degrees(math.atan2(xk, yk)),
+            unter=math.degrees(math.atan2(-zk, yk)),
+            abstand=math.sqrt(xk * xk + yk * yk + zk * zk),
+            px_quer=fpx * xk / yk, px_hoch=fpx * zk / yk))
     L['sicht'] = sicht
-    L['px_je_mm'] = fpx / vy                  # senkrecht: konstant
+    # Fester Fokus: die Linse wird auf den Abstand gedreht, bei dem die
+    # Unschaerfe am naechsten und am weitesten Punkt gleich ist
+    # (harmonisches Mittel). Zerstreuungskreis nach der Linsengleichung.
+    a_n = min(x['abstand'] for x in sicht)
+    a_w = max(x['abstand'] for x in sicht)
+    af = 2.0 / (1.0 / a_n + 1.0 / a_w)
+    L['fokus_auf'] = af
+    f_ = w('cam_f')
+
+    def bild(a):
+        return f_ * a / (a - f_)
+    for x in sicht:
+        v = bild(x['abstand'])
+        x['unschaerfe_px'] = (f_ / w('cam_blende') * abs(v - bild(af)) / v
+                              / w('cam_pixel'))
+    # Pixel je mm Hoehe: am ungunstigsten Ende des Bereichs
+    def px(t):
+        _, yk, zk = im_bild(t)
+        return fpx * zk / yk
+    L['px_je_mm'] = min(abs(px(t + 0.5) - px(t - 0.5))
+                        for t in (0.5, w('werkstueck_max') - 0.5))
     # hochkant: quer zum Bild ist cam_px_h / cam_fov_h, hoch cam_px_b
     L['bild_halb'] = (w('cam_fov_h') / 2.0, w('cam_fov_b') / 2.0)
     L['bild_px_halb'] = (w('cam_px_h') / 2.0, w('cam_px_b') / 2.0)
 
-    # ---- Kabel: Austritt, Weg zum Pi (Schaetzung) ---------------------------
-    # Das Kabel tritt nach hinten links aus, laeuft aussen an der Vorderwand
-    # des Fachs nach links bis neben den Fuss, dort ueber die Oberkante der
-    # Wand unter den Deckel, innen hinunter in die Signalgasse und darin
-    # nach rechts zur Buchse des Pi.
-    ax, ay = welt(L, L['kabel_aus'][0], L['kabel_aus'][1])
-    L['kabel_aus_welt'] = (ax, ay, zl)
-    L['kabel_wand'] = ay - w('fach_vorn_y')
-    sx, sy = welt(L, L['kabel_aus'][0] - w('kabel_steif'),
-                  L['kabel_aus'][1])
-    L['kabel_steif_welt'] = (sx, sy, zl)
-    L['kabel_steif_wand'] = sy - w('fach_vorn_y')
-    L['kabel_eintritt_x'] = fx[0] - 5.0
-    innen = w('fach_vorn_y') - w('fach_wand')
-    weg = [w('kabel_steif'),
-           abs(sx - L['kabel_eintritt_x']),            # aussen nach links
-           abs(zl - w('fach_rand_z')) + 5.0,           # zur Oberkante
-           w('fach_wand') + 2.0,                       # ueber die Wand
-           w('fach_rand_z') - w('pi_buchse_z'),        # innen hinunter
-           abs(L['kabel_eintritt_x'] - w('pi_buchse_x')),  # in der Gasse
-           abs(innen - w('pi_buchse_y')),              # zur Buchse
-           20.0]                                       # Falten
-    L['kabel_weg'] = sum(weg)
+    # ---- Kabel: Austritt, Weg zum Pi im Modell (nur Schaetzung) ------------
+    # das steife Ende steht von der Kabelkante nach aussen ab
+    ka = k_nach_maschine(L, L['kabel_aus'][0] - s * w('kabel_steif'),
+                         L['kabel_aus'][1], 0.0)
+    L['kabel_aus_welt'] = k_nach_maschine(L, *L['kabel_aus'])
+    L['kabel_steif_welt'] = ka
+    pb = (w('pi_buchse_x'), w('pi_buchse_y'), w('pi_buchse_z'))
+    L['kabel_weg'] = (w('kabel_steif') + sum(abs(a - b) for a, b in
+                                             zip(ka, pb)) + 20.0)
 
-    # ---- Punkte im Maschinenrahmen (fuer Pruefung und Zeichnung) -----------
-    def quader_welt(q):
-        return [welt(L, x, y) + (z,) for x, y, z in ecken_quader(*q)]
+    # ---- Punkte an der Maschine (fuer Pruefung und Zeichnung) -------------
     L['kamera_teile'] = {
         'Platine': L['platine'], 'Stecker': L['stecker'],
         'Linsenblock': L['block'], 'Objektiv': L['tubus']}
     for i, k in enumerate(L['koepfe']):
         L['kamera_teile']['M2-Kopf {}'.format(i + 1)] = k
-    L['halter_teile'] = {
+    zr = w('zapfen_d') / 2.0
+    L['wand_teile'] = {
         'Wand': L['wand'],
-        'Rippe': (L['rippe'][0], (wy0 - rl, wy0), (zf1, zf1 + rl)),
         'Polster': ((min(xs) - pr, max(xs) + pr), L['pad_y'],
-                    (min(z for _, z in tz) - pr * math.sqrt(2.0),
-                     max(z for _, z in tz) + pr)),
-        'Zapfen': ((L['loecher_zapfen'][0][0] - zr,
-                    L['loecher_zapfen'][0][0] + zr), L['zapfen_y'],
-                   (min(z for _, z in tz) - zr * math.sqrt(2.0),
-                    max(z for _, z in tz) + zr))}
-    L['welt'] = {n: quader_welt(q) for n, q in
-                 list(L['kamera_teile'].items())
-                 + list(L['halter_teile'].items())}
+                    (-zo - pr * math.sqrt(2.0), zo + pr)),
+        'Zapfen': ((min(x for x, _ in L['loecher_zapfen']) - zr,
+                    max(x for x, _ in L['loecher_zapfen']) + zr),
+                   L['zapfen_y'], (-zo - zr * math.sqrt(2.0), -zo + zr))}
+    L['welt'] = {n: [k_nach_maschine(L, *p) for p in ecken_quader(*q)]
+                 for n, q in list(L['kamera_teile'].items())
+                 + list(L['wand_teile'].items())}
+    L['welt']['Steg'] = [welt(L, x, y) + (z,)
+                         for x, y, z in ecken_quader(*L['steg'])]
     L['welt']['Fuss'] = [(X, Y, z) for X, Y in L['fuss_welt']
                          for z in L['fuss_z']]
     alle = [p for n, ps in L['welt'].items() if n != 'Fuss' for p in ps]
-    L['vorn_y'] = max(p[1] for p in alle)
-    L['hinten_y'] = min(p[1] for p in alle)
+    L['vorn_y'] = min(p[1] for p in alle)            # zum Arbeitsraum
+    L['hinten_y'] = max(p[1] for p in alle)          # zum Fach
+    L['rechts_x'] = max(p[0] for p in alle)
+    # auf der Hoehe des Y-Riemens (mit Luft) darf es nur bis riemen_x0
+    oben = [p for p in alle if p[2] > w('riemen_z0') - w('luft_bau')]
+    L['rechts_x_riemen'] = max(p[0] for p in oben) if oben else None
+    L['links_x'] = min(p[0] for p in alle)
     L['oben_z'] = max(p[2] for p in alle)
 
-    # ---- Bohrlehre und Referenzen ------------------------------------------
+    # ---- Bohrlehre ----------------------------------------------------------
     L['lehre_z'] = w('platte_z1') - 60.0
-    L['lehre_ursprung'] = (40.0, -275.0)     # neben dem Fach, unter dem Tisch
-    L['ref_x'] = (fx[0] - 20.0, fx[1] + 20.0)
+    L['lehre_ursprung'] = (280.0, 230.0)     # rechts vor dem Fach, unter dem Tisch
     return L
 
 
@@ -909,19 +1012,59 @@ def verschiebung(L):
     return m
 
 
-def verschieben(comp, koerper, L):
-    """Koerper aus dem lokalen Rahmen an ihren Platz (Move-Feature, bleibt
-    im Verlauf)."""
+def _bewegen(comp, koerper, matrix):
+    """Koerper mit einer Matrix bewegen (Move-Feature, bleibt im Verlauf)."""
     coll = adsk.core.ObjectCollection.create()
     for k in koerper:
         coll.add(k)
     mf = comp.features.moveFeatures
     try:
         ein = mf.createInput2(coll)
-        ein.defineAsFreeMove(verschiebung(L))
+        ein.defineAsFreeMove(matrix)
     except AttributeError:
-        ein = mf.createInput(coll, verschiebung(L))
+        ein = mf.createInput(coll, matrix)
     return mf.add(ein)
+
+
+def verschieben(comp, koerper, L):
+    """Koerper aus dem Rahmen H an ihren Platz an der Maschine."""
+    return _bewegen(comp, koerper, verschiebung(L))
+
+
+def kippung(L):
+    """K -> H als Matrix im Modell. Beide Rahmen liegen im Modell wie
+    Maschinenkoordinaten (Modell-Y = z, Modell-Z = y): x bleibt, z_K geht
+    nach (y, z) = (sin, cos) der Neigung, y_K nach (cos, -sin); der
+    Ursprung (Linsenfront) liegt in H auf der Hoehe linse_z."""
+    sn, cn = L['sin_n'], L['cos_n']
+    m = adsk.core.Matrix3D.create()
+    m.setWithCoordinateSystem(
+        adsk.core.Point3D.create(0.0, L['linse'][2] / 10.0, 0.0),
+        adsk.core.Vector3D.create(1.0, 0.0, 0.0),
+        adsk.core.Vector3D.create(0.0, cn, sn),
+        adsk.core.Vector3D.create(0.0, -sn, cn))
+    return m
+
+
+def kippen(comp, koerper, L):
+    """Koerper aus dem Rahmen K (Kamera, geneigt) in den Rahmen H."""
+    return _bewegen(comp, koerper, kippung(L))
+
+
+def vereinen(comp, ziel, werkzeuge, fehler, was):
+    """werkzeuge mit ziel vereinen (Combine, Join)."""
+    try:
+        coll = adsk.core.ObjectCollection.create()
+        for k in werkzeuge:
+            coll.add(k)
+        cf = comp.features.combineFeatures
+        ein = cf.createInput(ziel, coll)
+        ein.operation = adsk.fusion.FeatureOperations.JoinFeatureOperation
+        ein.isKeepToolBodies = False
+        cf.add(ein)
+    except Exception:
+        fehler.append('{}: nicht vereint: {}'.format(
+            was, traceback.format_exc().strip().splitlines()[-1]))
 
 
 # --- Referenzprofil (wie Portal.py) --------------------------------------------
@@ -963,14 +1106,25 @@ def bau_profil(comp, name, laengs, bereich, quer, z):
 
 # --- Bauteile ------------------------------------------------------------------
 def bau_halter(app, design, comp, L, fehler):
-    """Der Halter aus dem Bauplan, lokal gebaut, dann gedreht und
-    verschoben; Fussfase, Bauraum-Pruefung, PETG."""
+    """Der Halter aus zwei Bauplaenen: Fuss, Steg und M5 im Rahmen H, die
+    Wand mit dem Kamerasitz im Rahmen K. Die Wand wird gekippt und mit dem
+    Rest vereint; dann Fussfase, Bauraum-Pruefung, an die Maschine
+    verschieben, die Aussparung fuer den Eckwinkel abziehen, PETG."""
     T = L['teile']['Kamerahalter']
     k = plan_bauen(comp, L['plan']['Kamerahalter'], 'Kamerahalter', fehler)
+    wand = plan_bauen(comp, L['plan']['Kamerahalter_Wand'],
+                      'Kamerahalter_Wand', fehler)
+    kippen(comp, [wand], L)
+    vereinen(comp, k, [wand], fehler, 'Kamerahalter')
     fussfase(comp, k, 'y', T['auflage'][1], w('fase_fuss'), fehler,
              'Kamerahalter')
-    bbox_pruefen(k, 'Kamerahalter (lokal)', T['bbox'], fehler)
+    bbox_pruefen(k, 'Kamerahalter (Rahmen H)', T['bbox_roh'], fehler)
     verschieben(comp, [k], L)
+    try:
+        _schritt_bauen(comp, L['plan']['Kamerahalter_Winkel'][0], 'weg', k)
+    except Exception:
+        fehler.append('Aussparung fuer den Eckwinkel: {}'.format(
+            traceback.format_exc().strip().splitlines()[-1]))
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
@@ -1001,9 +1155,9 @@ def bau_bohrlehre(app, design, comp, L, fehler):
 
 
 def bau_referenz(app, design, teile, L, fehler):
-    """Hinteres 2060, Ausschnitt des Elektronikfachs, die Kamera, Schrauben
-    und Sichtlinien — nur zur Ansicht, NICHT drucken. Jedes Teil fuer sich:
-    scheitert eines, steht das im Bericht."""
+    """Stueck des vorderen 2060 und das Ende des rechten 2040, die Kamera,
+    Schrauben und Sichtlinien — nur zur Ansicht, NICHT drucken. Jedes Teil
+    fuer sich: scheitert eines, steht das im Bericht."""
     def sicher(name, bauen, *args):
         try:
             return bauen(*args)
@@ -1012,11 +1166,16 @@ def bau_referenz(app, design, teile, L, fehler):
                 name, traceback.format_exc().strip().splitlines()[-1]))
             return None
 
-    rx = L['ref_x']
     pr = teile['Ref_Rahmen']
+    rx = (L['fuss_x'][0] - 20.0, w('rahmen_x_innen') + w('rahmen_b') + 10.0)
     zr = (w('rahmen_z0') - w('quer_h'), w('rahmen_z0'))
-    k = sicher('2060', bau_profil, pr, '2060_hinten', 'x', rx,
-               L['quer_y'], zr)
+    k = sicher('2060', bau_profil, pr, '2060_vorn', 'x', rx, L['quer_y'], zr)
+    if k:
+        material_zuweisen(app, design, k, 'Aluminum 6061', fehler)
+    xi = w('rahmen_x_innen')
+    k = sicher('2040', bau_profil, pr, '2040_rechts', 'y',
+               (L['quer_y'][0] - 20.0, L['quer_y'][1] + 35.0),
+               (xi, xi + w('rahmen_b')), (zr[1], zr[1] + 2.0 * w('rahmen_b')))
     if k:
         material_zuweisen(app, design, k, 'Aluminum 6061', fehler)
 
@@ -1025,17 +1184,7 @@ def bau_referenz(app, design, teile, L, fehler):
         kk.name = name
         return kk
 
-    fv = w('fach_vorn_y')
-    for name, y, z in (
-            ('Fach_Vorderwand', (fv - w('fach_wand'), fv),
-             (w('fach_boden_z'), w('fach_rand_z'))),
-            ('Fach_Deckel', (fv - 40.0, fv),
-             (w('fach_rand_z'), w('deckel_z1')))):
-        k = sicher(name, quader_neu, pr, name, rx, y, z)
-        if k:
-            material_zuweisen(app, design, k, 'PETG', fehler)
-
-    # Kamera im lokalen Rahmen, dann wie der Halter verschieben
+    # Kamera im Rahmen K, dann gekippt und wie der Halter verschoben
     kc = teile['Ref_Kamera']
     koerper = []
     for name, q in L['kamera_teile'].items():
@@ -1047,6 +1196,7 @@ def bau_referenz(app, design, teile, L, fehler):
             material_zuweisen(app, design, k, mat, fehler)
             koerper.append(k)
     if koerper:
+        sicher('Kamera kippen', kippen, kc, koerper, L)
         sicher('Kamera verschieben', verschieben, kc, koerper, L)
 
     # M5 mit Kopf auf dem Fuss
@@ -1089,49 +1239,66 @@ def hinweise_bauen(L, fehler):
         '  schwach an; die Kamera sieht den Punkt je nach Dicke hoeher oder',
         '  tiefer. Ein Bild ergibt die Hoehe, Z faehrt auf den Fokus.',
         '',
-        'MESSPUNKT: {:.0f} mm rechts, {:.0f} mm vor der Innenecke des'.format(
-            w('mp_rechts'), w('mp_vorn')),
-        '  Anschlags (X {:+.1f}, Y {:+.1f}); mit dem Nullpunkt in der Ecke'
+        'MESSPUNKT: {:.0f} mm links, {:.0f} mm hinter der Innenecke des'
+        .format(w('mp_links'), w('mp_hinten')),
+        '  Anschlags vorn rechts (X {:+.1f}, Y {:+.1f}); mit dem Nullpunkt in'
         .format(*L['mp']),
-        '  G54 X{:.0f} Y{:.0f}. Dort darf nichts aufs Werkstueck.'.format(
-            w('mp_rechts'), -w('mp_vorn')),
+        '  der Ecke G54 X-{:.0f} Y+{:.0f} (Y+ zeigt bei GRBL nach hinten).'
+        .format(w('mp_links'), w('mp_hinten')),
+        '  Dort darf nichts aufs Werkstueck.',
         '',
-        'KAMERA: Camera Module 3, Normalobjektiv (nicht Wide), hochkant,',
-        '  Kabelkante nach hinten links. Linse X {:+.1f}, Y {:+.1f}, Z {:+.1f};'
+        'KAMERA: Raspberry Pi Kamera v1.3 (OV5647, wie verbaut), hochkant,',
+        '  Kabelkante zum Fach. Linse X {:+.1f}, Y {:+.1f}, Z {:+.1f},'
         .format(lx, ly, lz),
-        '  Blick {:.0f} Grad gegen +X, waagerecht.'.format(w('blick_az')),
-        '  Punkt {:.1f} Grad neben der Achse (Bild +-{:.1f}), {:.1f} bis'
-        .format(s0['quer'], L['bild_halb'][0], s1['unter']),
-        '  {:.1f} Grad darunter (Bild +-{:.1f}), {:.0f} bis {:.0f} mm weit.'
-        .format(s0['unter'], L['bild_halb'][1], s1['abstand'],
+        '  {:.0f} mm vom rechten 2040. Blick {:.1f} Grad gegen +X (schraeg'
+        .format(w('rahmen_x_innen') - lx, L['blick_az']),
+        '  nach hinten links), {:.1f} Grad nach unten geneigt.'.format(
+            L['neige']),
+        '  Punkt {:.1f} Grad neben der Achse (Bild +-{:.1f}), {:+.1f} bis'
+        .format(abs(s0['quer']), L['bild_halb'][0], -s0['unter']),
+        '  {:+.1f} Grad ueber der Achse (Bild +-{:.1f}), {:.0f} bis {:.0f} mm'
+        .format(-s1['unter'], L['bild_halb'][1], s1['abstand'],
                 s0['abstand']),
-        '  {:.1f} Pixel je mm Hoehe ({:.3f} mm je Pixel).'.format(
-            L['px_je_mm'], 1.0 / L['px_je_mm']),
+        '  weit. Mindestens {:.1f} Pixel je mm Hoehe.'.format(
+            L['px_je_mm']),
+        '  FOKUS: fest ab Werk (1 m bis unendlich). Linse auf {:.0f} mm'
+        .format(L['fokus_auf']),
+        '  drehen, dann hoechstens {:.1f} Pixel Unschaerfe.'.format(
+            max(x['unschaerfe_px'] for x in L['sicht'])),
         '',
-        'LUFT: vorn bis Y {:+.1f}, die Traegerplatte faehrt bis {:+.1f};'
-        .format(L['vorn_y'], w('th_hinten_y')),
-        '  oben bis Z {:+.1f}, der X-Wagen unten bei {:+.1f}; hinten bis'
-        .format(L['oben_z'], w('xwagen_z0')),
-        '  Y {:+.1f}, das Fach bei {:+.1f}.'.format(L['hinten_y'],
-                                                   w('fach_vorn_y')),
+        'LUFT: vorn bis Y {:+.1f} (nur rechts von X {:+.1f}, der Laser kommt'
+        .format(L['vorn_y'], w('laser_x1') + w('luft_bau')),
+        '  bis X {:+.1f}); hinten bis Y {:+.1f}, das Fach bei {:+.1f}; rechts'
+        .format(w('laser_x1'), L['hinten_y'], w('fach_y0')),
+        '  bis X {:+.1f}, auf der Hoehe des Y-Riemens bis {:+.1f} (Riemen'
+        .format(L['rechts_x'], L['rechts_x_riemen']),
+        '  bei {:+.1f}).'.format(w('riemen_x0')),
         '',
-        'DRUCK: PETG, Fuss aufs Bett, keine Stuetzen. Polster, Zapfen und',
-        '  Loecher als Traene, Muttertaschen als Sechseck mit Ecke oben.',
-        'MONTAGE: 1. zwei Muttern M2 in die Taschen hinter der Wand.',
-        '  2. Kamera auf die Zapfen, an der Kabelseite 2 x M2x{:.0f};'
-        .format(w('m2_l')),
-        '  Kabel einstecken.',
-        '  3. 2 Hammermuttern M5 in die Nut oben auf dem hinteren 2060,',
-        '  Halter mit 2 x M5x{:.0f} bei X {:+.0f} / {:+.0f} (Inbus von oben).'
+        'DRUCK: PETG, Fuss aufs Bett, keine Stuetzen. Die Wand lehnt {:.0f}'
+        .format(L['neige']),
+        '  Grad nach vorn. Polster, Zapfen und Loecher als Traene,',
+        '  Muttertaschen als Sechseck mit Ecke oben (im geneigten Rahmen).',
+        'ECKWINKEL: Innen am rechten 2040 sitzt ein Winkel in der Nut. Fuss',
+        '  und Steg sind darueber unter 45 Grad ausgespart ({:.0f} mm Luft zur'
+        .format(w('winkel_luft')),
+        '  Huelle {:.0f} x {:.0f}); der Fuss endet oben bei X {:+.1f}. Schenkel'
+        .format(w('winkel_l'), w('winkel_l'), L['fuss_x'][1]),
+        '  nicht gemessen [?]: vor dem Druck am Aufbau nachsehen.',
+        'MONTAGE: 1. 2 Hammermuttern M5 in die Nut oben auf dem vorderen',
+        '  2060, Halter mit 2 x M5x{:.0f} bei X {:+.0f} / {:+.0f} (Inbus von'
         .format(w('m5_l'), m5[0][0], m5[1][0]),
-        '  4. Kabel aussen an der Vorderwand des Fachs nach links bis',
-        '  X {:+.0f}, dort ueber ihre Oberkante unter den Deckel, innen in'
-        .format(L['kabel_eintritt_x']),
-        '  der Signalgasse nach rechts zur Buchse des Pi.',
-        '  Geschaetzt {:.0f} mm, Kabel Standard-Mini {:.0f} mm.'.format(
-            L['kabel_weg'], w('kabel_l')),
+        '  oben, geht auch mit eingesetzter Kamera).',
+        '  2. zwei Muttern M2 in die Taschen hinter der Wand (oben).',
+        '  3. Kamera unten auf die Zapfen, oben 2 x M2x{:.0f}; Kabel'
+        .format(w('m2_l')),
+        '  einstecken und ueber das 2060 ins Fach zum Pi fuehren.',
+        '  Im Modell {:.0f} mm bis zur Buchse; am Aufbau liegt der Pi'
+        .format(L['kabel_weg']),
+        '  anders, dort reicht das {:.0f}-mm-Kabel (Angabe).'.format(
+            w('kabel_l')),
         '',
-        'NICHT GEMESSEN [w]/[?]: Kamera nach Massblatt (Bohrlehre_Kamera),',
+        'NICHT GEMESSEN [w]/[?]: Kamera nach Massblatt und Foto, Hoehe des',
+        '  Linsenblocks geschaetzt (Bohrlehre_Kamera),',
         '  Lage der Kamerabuchse am Pi, Elektronikfach (Zwischenstand).',
     ]
     if fehler:

@@ -189,13 +189,24 @@ def kabelhalter(km):
 
 # ---- Kamerahalter -------------------------------------------------------------
 def kamerahalter(km):
-    """Wie bau_halter() in Kamerahalter.py: der Bauplan im lokalen Rahmen
-    (Wand achsparallel), in Drucklage um die Hoehe des Fusses verschoben."""
+    """Wie bau_halter() in Kamerahalter.py (seit Rev. 2): Fuss, Steg und M5
+    im Rahmen H, die Wand mit dem Kamerasitz im geneigten Rahmen K; die Wand
+    wird nach H gekippt (k_nach_h) und vereint, dann in Drucklage um die
+    Hoehe des Fusses verschoben. Wie dort nach der Fussfase: die Aussparung
+    fuer den Eckwinkel (Bauplan in Maschinenkoordinaten) abziehen."""
     L = km.lage()
     T = L['teile']['Kamerahalter']
-    k = plan_ausfuehren(km, L['plan']['Kamerahalter']).transform(T['druck'])
+    k = plan_ausfuehren(km, L['plan']['Kamerahalter'])
+    if 'Kamerahalter_Wand' in L['plan']:
+        k = k + plan_ausfuehren(km, L['plan']['Kamerahalter_Wand']).transform(
+            L['k_nach_h'])
+    k = k.transform(T['druck'])
     (x0, x1), (y0, y1), (z0, z1) = T['bbox']
-    return fussfase(k, km.w('fase_fuss')), (x1 - x0, y1 - y0, z1 - z0)
+    k = fussfase(k, km.w('fase_fuss'))
+    if 'Kamerahalter_Winkel' in L['plan']:
+        k = k - plan_ausfuehren(km, L['plan']['Kamerahalter_Winkel']) \
+            .transform(L['maschine_nach_h']).transform(T['druck'])
+    return k, (x1 - x0, y1 - y0, z1 - z0)
 
 
 # ---- STL ----------------------------------------------------------------------

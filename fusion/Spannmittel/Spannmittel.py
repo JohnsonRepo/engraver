@@ -3,9 +3,10 @@
 # Ein Laser drueckt nicht auf das Werkstueck. Gespannt wird nur, damit es an
 # einer bekannten Stelle liegt, nicht verrutscht und duennes, verzogenes
 # Material flach bleibt. Druckteile (PETG):
-#   Anschlagwinkel   fest auf der Opferplatte hinten links, in der Ecke der
-#                    Referenzfahrt. Seine Innenecke ist der Nullpunkt fuer
-#                    das Werkstueck. 3 mm hoch, 3 Spanplattenschrauben.
+#   Anschlagwinkel   fest auf der Opferplatte vorn rechts (seit Rev. 2; bis
+#                    Rev. 1 hinten links), vor der Kamera des Autofokus.
+#                    Seine Innenecke ist der Nullpunkt fuer das Werkstueck.
+#                    3 mm hoch, 3 Spanplattenschrauben.
 #   Exzenter         Scheibe mit aussermittiger Schraube und Hebel, 3 mm
 #                    hoch. Neben das Werkstueck geschraubt und vom
 #                    Werkstueck weg gedreht, schiebt er es in die Ecke;
@@ -26,6 +27,15 @@
 # Koordinaten = Maschinenkoordinaten wie Opferplatte.py: X nach rechts, Y
 # nach vorn, Z senkrecht, Z = 0 in der Mitte des Portalrohrs. Im
 # Fusion-Modell sind Y und Z getauscht (Modell-Z = Maschine Y).
+#
+# LAGE (seit Rev. 2): Der Anschlag sitzt vorn rechts, vor der Kamera des
+# Autofokus (Kamerahalter.py Rev. 2). Die Teile sind dieselben wie in Rev. 1:
+# lage() rechnet weiter in SPANNKOORDINATEN mit der Ecke hinten links, und
+# alles wird um 180 Grad um die Senkrechte durch die Mitte des
+# Arbeitsfelds gedreht (nach_maschine). "hinten/links" in Namen und
+# Schluesseln meint die Spannkoordinaten; an der Maschine ist es
+# vorn/rechts. Die Referenzplatte liegt nicht mittig zum Feld und wird
+# deshalb zurueckgedreht gebaut.
 # tools/spannmittel_check.py vergleicht Platte und Arbeitsfeld mit
 # Opferplatte.py und den Freiraum mit ToolheadZ.py.
 #
@@ -37,7 +47,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Spannmittel'
-REVISION = 1
+REVISION = 2
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -107,6 +117,28 @@ def w(name):
     return MASSE[name][0]
 
 
+# --- Lage an der Maschine (seit Rev. 2) ----------------------------------------
+def dreh_xy():
+    """Mitte des Arbeitsfelds (Maschine X, Y): um die Senkrechte durch
+    diesen Punkt wird alles um 180 Grad gedreht."""
+    return ((w('feld_x0') + w('feld_x1')) / 2.0,
+            (w('feld_y0') + w('feld_y1')) / 2.0)
+
+
+def nach_maschine(x, y, z):
+    """Spannkoordinaten -> Maschinenkoordinaten (und zurueck: die Drehung
+    ist ihr eigenes Gegenstueck)."""
+    cx, cy = dreh_xy()
+    return (2.0 * cx - x, 2.0 * cy - y, z)
+
+
+def bereich_nach_maschine(x, y, z):
+    """Achsparalleler Bereich Spann- <-> Maschinenkoordinaten."""
+    cx, cy = dreh_xy()
+    return ((2.0 * cx - x[1], 2.0 * cx - x[0]),
+            (2.0 * cy - y[1], 2.0 * cy - y[0]), (z[0], z[1]))
+
+
 def nh_lage(name, achse, kante, aussen, s, t, z_basis):
     """Lage eines Niederhalters an einer Kante. achse: 'y' fuer eine Kante
     bei konstantem Y (vorn, hinten), 'x' bei konstantem X (links, rechts);
@@ -151,6 +183,9 @@ def lage():
     xi, yi = w('feld_x0') + w('aw_rand'), w('feld_y0') + w('aw_rand')
     bh, bl = w('aw_b_hinten'), w('aw_b_links')
     L['aw_ecke'] = (xi, yi)
+    L['dreh_xy'] = dreh_xy()
+    # an der Maschine (vorn rechts)
+    L['aw_ecke_maschine'] = nach_maschine(xi, yi, 0.0)[:2]
     L['aw_hinten'] = ((xi - bl, xi + w('aw_l')), (yi - bh, yi))
     L['aw_links'] = ((xi - bl, xi), (yi - bh, yi + w('aw_l')))
     L['aw_z'] = (z0, z0 + w('aw_h'))
@@ -774,9 +809,11 @@ def bau_niederhalter(app, design, comp, nh, fehler):
 
 
 def bau_referenz(app, design, comp, L, fehler):
-    """Opferplatte und Beispielwerkstueck — nur zur Ansicht, NICHT drucken."""
-    k = quader(comp, 'Platte', L['platte_x'], L['platte_y'], L['platte_z'],
-               'neu').bodies.item(0)
+    """Opferplatte und Beispielwerkstueck — nur zur Ansicht, NICHT drucken.
+    Die Platte liegt nicht mittig zum Feld: Sie wird in Spannkoordinaten
+    zurueckgedreht gebaut, damit sie nach der Drehung richtig liegt."""
+    k = quader(comp, 'Platte', *bereich_nach_maschine(
+        L['platte_x'], L['platte_y'], L['platte_z']), 'neu').bodies.item(0)
     k.name = 'Opferplatte'
     material_zuweisen(app, design, k, 'Spanplatte', fehler)
     k = quader(comp, 'Werkstueck', L['wst_x'], L['wst_y'], L['wst_z'],
@@ -790,7 +827,7 @@ def bau_referenz(app, design, comp, L, fehler):
 def hinweise_bauen(L, fehler):
     """Hinweiszeilen des Validierungsberichts. Modulebene, damit der Block
     ohne Fusion getestet werden kann (tools/spannmittel_check.py)."""
-    xi, yi = L['aw_ecke']
+    xi, yi = L['aw_ecke_maschine']
     sch = 'Spanplattenschraube 3,0 x {:.0f} Senkkopf'.format(w('sch_l'))
     h = [
         'WOZU: Ein Laser drueckt nicht auf das Werkstueck. Gespannt wird,',
@@ -804,13 +841,15 @@ def hinweise_bauen(L, fehler):
         .format(w('nh_d')),
         '  Toolhead faehrt ueberall darueber, auch bei Leerfahrten.',
         '',
-        'ANSCHLAGWINKEL (fest): hinten links auf der Platte, Innenecke',
-        '  X {:+.2f}, Y {:+.2f} ({:.0f} mm im Arbeitsfeld). Schenkel {:.0f} mm,'
-        .format(xi, yi, w('aw_rand'), w('aw_l')),
-        '  3 x {}.'.format(sch),
+        'ANSCHLAGWINKEL (fest): vorn rechts auf der Platte (seit Rev. 2),',
+        '  vor der Kamera; Innenecke X {:+.2f}, Y {:+.2f} ({:.0f} mm im'
+        .format(xi, yi, w('aw_rand')),
+        '  Arbeitsfeld). Schenkel {:.0f} mm, 3 x {}.'.format(w('aw_l'), sch),
         '  Die Innenecke ist der Nullpunkt: Laser mit 1 % daraufstellen,',
-        '  G10 L20 P1 X0 Y0. Vorher die Platte nach links und hinten',
+        '  G10 L20 P1 X0 Y0. Vorher die Platte nach links und vorn',
         '  schieben, dann liegt der Nullpunkt jedes Mal gleich.',
+        '  Gebaut wie Rev. 1 (Ecke hinten links) und um 180 Grad um die',
+        '  Mitte des Arbeitsfelds gedreht: dieselben Teile.',
         '',
         'EXZENTER (2 x): Scheibe d {:.0f}, Schraube {:.0f} mm aussermittig,'
         .format(2.0 * w('ex_r'), w('ex_e')),
@@ -842,6 +881,37 @@ def hinweise_bauen(L, fehler):
     return h
 
 
+def dreh_matrix(L):
+    """Die Lage an der Maschine als Matrix3D: 180 Grad um die Senkrechte
+    (Modell-Y) durch die Mitte des Arbeitsfelds (Modell-Z = Maschine Y)."""
+    cx, cy = L['dreh_xy']
+    m3 = adsk.core.Matrix3D.create()
+    m3.setToRotation(math.pi, adsk.core.Vector3D.create(0.0, 1.0, 0.0),
+                     adsk.core.Point3D.create(cx / 10.0, 0.0, cy / 10.0))
+    return m3
+
+
+def drehen(o, L, fehler):
+    """Occurrence o (direkt unter root) an ihren Platz drehen und
+    nachmessen: der Ursprung landet bei (2 cx, 2 cy). transform2 gibt es in
+    neueren Fusion-Versionen; direkt unter root ist es dasselbe wie
+    transform."""
+    cx, cy = L['dreh_xy']
+    feld = 'transform2' if hasattr(o, 'transform2') else 'transform'
+    try:
+        setattr(o, feld, dreh_matrix(L))
+        p = adsk.core.Point3D.create(0.0, 0.0, 0.0)
+        p.transformBy(getattr(o, feld))
+        if abs(p.x * 10.0 - 2.0 * cx) > 1e-3 or abs(p.z * 10.0
+                                                    - 2.0 * cy) > 1e-3:
+            fehler.append('{} steht nicht an seinem Platz'.format(
+                o.component.name))
+    except Exception:
+        fehler.append('{} nicht gedreht: {}'.format(
+            o.component.name,
+            traceback.format_exc().strip().splitlines()[-1]))
+
+
 def run(context):
     ui = None
     try:
@@ -870,25 +940,27 @@ def run(context):
 
         L = lage()
 
-        # Baugruppe: alle Komponenten am globalen Ursprung, jedes Teil steht
-        # damit schon an seinem Platz; nichts bewegt sich, alles fixiert.
+        # Baugruppe: alle Komponenten am globalen Ursprung, gebaut in
+        # Spannkoordinaten; danach dreht drehen() jede an ihren Platz vorn
+        # rechts. Nichts bewegt sich, alles fixiert.
         einheit = adsk.core.Matrix3D.create()
+        occ = []
         o = root.occurrences.addNewComponent(einheit)
         o.component.name = 'Anschlagwinkel'
         bau_anschlag(app, design, o.component, L, fehler)
-        o.isGrounded = True
+        occ.append(o)
 
         o = root.occurrences.addNewComponent(einheit)
         o.component.name = 'Exzenter'
         for ex in L['ex']:
             bau_exzenter(app, design, o.component, ex, L, fehler)
-        o.isGrounded = True
+        occ.append(o)
 
         o = root.occurrences.addNewComponent(einheit)
         o.component.name = 'Niederhalter'
         for nh in L['nh'] + L['nh_satz']:
             bau_niederhalter(app, design, o.component, nh, fehler)
-        o.isGrounded = True
+        occ.append(o)
 
         ref = root.occurrences.addNewComponent(einheit)
         ref.component.name = 'Referenz_nicht_drucken'
@@ -899,7 +971,13 @@ def run(context):
         except Exception:
             fehler.append('Referenz nicht gebaut: {}'.format(
                 traceback.format_exc().strip().splitlines()[-1]))
-        ref.isGrounded = True
+        occ.append(ref)
+
+        # gebaut in Spannkoordinaten (Ecke hinten links), jetzt an
+        # den Platz vorn rechts drehen und fixieren
+        for o in occ:
+            drehen(o, L, fehler)
+            o.isGrounded = True
 
         if design.snapshots.hasPendingSnapshot:
             design.snapshots.add()

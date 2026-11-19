@@ -195,9 +195,9 @@ def main():
         em = module['Elektronikfach']
         EL = em.lage()
         dx, dy, dz, dreh = pm.gruppe_lage('Elektronikfach', L, em)
-        p.ja('Elektronikfach: gedreht um Y {:+.1f} wie im eigenen Skript'
-             .format(EL['dreh_y']), dreh is not None
-             and abs(dreh - EL['dreh_y']) < 1e-9
+        p.ja('Elektronikfach: gedreht um X 0, Y {:+.1f} wie im eigenen '
+             'Skript'.format(EL['dreh_y']), dreh is not None
+             and abs(dreh[0]) < 1e-9 and abs(dreh[1] - EL['dreh_y']) < 1e-9
              and abs(dx) + abs(dy) + abs(dz) < 1e-9)
         gx, gy, gz = em.bereich_nach_maschine(EL['geh_x'], EL['geh_y'],
                                               EL['geh_z'])
@@ -216,8 +216,39 @@ def main():
             abs(a - b) for a, b in zip(
                 em.nach_maschine(*em.nach_maschine(12.0, -300.0, -90.0)),
                 (12.0, -300.0, -90.0))), 0.0, '<=')
+    if 'Spannmittel' in module:
+        # Spannmittel.py (Rev. 2) rechnet in Spannkoordinaten mit der Ecke
+        # hinten links und dreht in run() um die Feldmitte; Portal.py dreht
+        # die Gruppe genauso. Nachgerechnet wird die Ecke an der Maschine.
+        sm = module['Spannmittel']
+        SL = sm.lage()
+        dx, dy, dz, dreh = pm.gruppe_lage('Spannmittel', L, sm)
+        cx, cy = SL['dreh_xy']
+        p.ja('Spannmittel: gedreht um die Feldmitte X {:+.2f}, Y {:+.2f} wie '
+             'im eigenen Skript'.format(cx, cy), dreh is not None
+             and abs(dreh[0] - cx) < 1e-9 and abs(dreh[1] - cy) < 1e-9
+             and abs(dx) + abs(dy) + abs(dz) < 1e-9)
+        ex, ey = SL['aw_ecke']
+        gx, gy = 2.0 * cx - ex, 2.0 * cy - ey
+        p.info('Spannmittel: Innenecke an der Maschine X', gx)
+        p.info('                                       Y', gy)
+        p.ok('Spannmittel: Ecke rechts der Feldmitte (vorn rechts)', gx - cx,
+             0.0)
+        p.ok('Spannmittel: Ecke vor der Feldmitte (vorn rechts)', gy - cy,
+             0.0)
+        p.ok('Spannmittel: Ecke = aw_ecke_maschine', max(
+            abs(gx - SL['aw_ecke_maschine'][0]),
+            abs(gy - SL['aw_ecke_maschine'][1])), 0.0, '<=')
+        if 'Kamerahalter' in module:
+            KL = module['Kamerahalter'].lage()
+            km_ = module['Kamerahalter']
+            p.ok('Kamerahalter: rechnet mit derselben Ecke', max(
+                abs(km_.w('ecke_x') - gx), abs(km_.w('ecke_y') - gy)), 0.01,
+                '<=')
+            p.ok('Kamerahalter: Messpunkt im Feld (links und hinter der '
+                 'Ecke)', min(gx - KL['mp'][0], gy - KL['mp'][1]), 0.0)
     for name in module:
-        if name not in ('ToolheadZ', 'Elektronikfach'):
+        if name not in ('ToolheadZ', 'Elektronikfach', 'Spannmittel'):
             dx, dy, dz, dreh = pm.gruppe_lage(name, L, module[name])
             p.ok('{}: Gruppe am Ursprung (Koordinaten wie Portal.py)'.format(
                 name), abs(dx) + abs(dy) + abs(dz), 0.0, '<=')

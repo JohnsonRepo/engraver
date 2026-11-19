@@ -240,8 +240,9 @@ reicht und ob der Halter am Stück druckt.
 - **Fokus der Kamera:** auf 120 mm drehen (oben).
 - **Elektronikfach:** Zwischenstand. Am Aufbau liegt der Pi anders als im
   Modell.
-- **Y-Endschalter:** soll nach vorn wandern (Fahne, Elektronik, GRBL); das
-  ändert am Messpunkt in G54 nichts.
+- **Y-Endschalter:** referenziert seit Portal Rev. 32 vorn; am Messpunkt
+  in G54 ändert das nichts, G54 selbst einmal neu setzen
+  ([spannmittel.md](spannmittel.md#nullpunkt-einrichten-einmal)).
 - **Fokusabstand** des Lasers: noch nicht gemessen. Ohne ihn weiß der
   Autofokus nicht, wohin er Z fahren soll.
 - **Software** auf dem Pi: Bild mit fester Belichtung aufnehmen, den Punkt

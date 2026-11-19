@@ -1,32 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1409" height="1348" viewBox="0 0 1409 1348" font-family="Inter, Helvetica, Arial, sans-serif"><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Endschalter X und Y: Halter und Fahnen (Portal.py Rev. 28)</text>
-<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Portal und Toolhead stehen am Schaltpunkt, 3 mm vor dem Schienenende. Orange: neu (PETG), schwarz: Fahnen und Klammer (schwarz drucken).</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1409" height="1348" viewBox="0 0 1409 1348" font-family="Inter, Helvetica, Arial, sans-serif"><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Endschalter X und Y: Halter und Fahnen (Portal.py Rev. 32)</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Portal und Toolhead stehen am Schaltpunkt, 3 mm vor dem Wegende: Y vorn (Referenz vorn), X links. Orange: neu (PETG), schwarz: Fahnen und Klammer (schwarz drucken).</text>
 <clipPath id="y1"><rect x="250.0" y="100.0" width="281.6" height="378.4"/></clipPath>
 <g clip-path="url(#y1)">
 <polygon points="298.4,465.2 328.8,465.2 328.8,438.8 356.0,438.8 356.0,465.2 386.4,465.2 386.4,434.8 360.0,434.8 360.0,407.6 386.4,407.6 386.4,346.8 360.0,346.8 360.0,319.6 386.4,319.6 386.4,289.2 356.0,289.2 356.0,315.6 328.8,315.6 328.8,289.2 298.4,289.2 298.4,319.6 324.8,319.6 324.8,346.8 298.4,346.8 298.4,407.6 324.8,407.6 324.8,434.8 298.4,434.8" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.9"/>
 <rect x="-1888.4" y="117.6" width="2200.0" height="88.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
 <rect x="254.4" y="278.2" width="39.6" height="90.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
 <rect x="228.9" y="232.0" width="51.9" height="46.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="311.6" y="117.6" width="127.6" height="88.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="210.4" y="117.6" width="101.2" height="88.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="440.1" y="178.5" width="23.3" height="65.1" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<rect x="399.6" y="178.5" width="63.8" height="26.4" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<rect x="406.2" y="232.7" width="57.2" height="11.0" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<rect x="450.2" y="243.7" width="13.2" height="47.7" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<rect x="416.1" y="258.4" width="18.7" height="66.0" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
-<rect x="478.8" y="258.4" width="18.7" height="66.0" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
 <rect x="412.8" y="402.5" width="22.0" height="37.4" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="360.9" y="403.6" width="17.6" height="35.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="283.0" y="232.0" width="118.8" height="44.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<rect x="316.0" y="254.0" width="52.8" height="35.2" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="311.6" y="117.6" width="127.6" height="88.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="210.4" y="117.6" width="101.2" height="88.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="416.1" y="258.4" width="18.7" height="66.0" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
+<rect x="478.8" y="258.4" width="18.7" height="66.0" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
 <rect x="412.8" y="402.5" width="22.0" height="37.4" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="412.8" y="324.4" width="88.0" height="7.9" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>
 <rect x="360.9" y="403.6" width="17.6" height="35.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="386.4" y="332.3" width="26.4" height="124.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="386.4" y="332.3" width="121.0" height="22.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <polygon points="412.8,354.3 426.0,354.3 412.8,367.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="440.1" y="178.5" width="23.3" height="65.1" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<rect x="399.6" y="178.5" width="63.8" height="26.4" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<rect x="406.2" y="232.7" width="57.2" height="11.0" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<rect x="450.2" y="243.7" width="13.2" height="47.7" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<rect x="283.0" y="232.0" width="118.8" height="44.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
 <rect x="254.4" y="278.2" width="39.6" height="90.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
 <rect x="228.9" y="232.0" width="51.9" height="46.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
 <rect x="210.4" y="205.6" width="228.8" height="26.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="316.0" y="254.0" width="52.8" height="35.2" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
 <rect x="367.5" y="320.0" width="6.2" height="26.4" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
 </g>
 <rect x="250.0" y="100.0" width="281.6" height="378.4" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
@@ -75,80 +75,85 @@
 <polygon points="401.8,267.2 406.8,265.2 406.8,269.2" fill="#b4342f"/>
 <polygon points="416.1,267.2 411.1,269.2 411.1,265.2" fill="#b4342f"/>
 <text x="420.1" y="263.2" font-size="8.0" fill="#b4342f" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3,25 mm</text>
-<clipPath id="y2"><rect x="761.6" y="100.0" width="360.8" height="303.4"/></clipPath>
+<clipPath id="y2"><rect x="761.6" y="100.0" width="361.9" height="245.7"/></clipPath>
 <g clip-path="url(#y2)">
-<rect x="988.7" y="161.5" width="36.9" height="21.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="859.6" y="161.5" width="36.9" height="21.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="988.7" y="183.0" width="36.9" height="42.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="859.6" y="183.0" width="36.9" height="42.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="893.4" y="108.2" width="20.5" height="41.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="852.4" y="108.2" width="41.0" height="41.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<rect x="-29.7" y="171.8" width="1025.0" height="16.4" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<rect x="-132.2" y="202.5" width="1207.4" height="12.3" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
-<rect x="978.5" y="241.4" width="20.5" height="16.4" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="945.7" y="241.4" width="20.5" height="16.4" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="-132.2" y="188.1" width="1230.0" height="82.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<line x1="1097.8" y1="256.0" x2="761.6" y2="256.0" stroke="#8c939e" stroke-width="0.6"/>
-<line x1="1097.8" y1="243.3" x2="761.6" y2="243.3" stroke="#8c939e" stroke-width="0.6"/>
-<line x1="1097.8" y1="215.0" x2="761.6" y2="215.0" stroke="#8c939e" stroke-width="0.6"/>
-<line x1="1097.8" y1="202.3" x2="761.6" y2="202.3" stroke="#8c939e" stroke-width="0.6"/>
-<rect x="896.1" y="161.5" width="93.1" height="20.5" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<rect x="943.6" y="208.2" width="57.4" height="57.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="948.8" y="173.8" width="12.3" height="30.8" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
-<rect x="980.0" y="240.9" width="17.4" height="17.4" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="947.2" y="240.9" width="17.4" height="17.4" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="858.6" y="149.2" width="168.1" height="12.3" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="858.6" y="108.2" width="55.3" height="41.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<rect x="930.3" y="136.6" width="24.6" height="30.3" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<rect x="930.3" y="136.6" width="24.6" height="12.3" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<rect x="930.3" y="161.8" width="24.6" height="5.1" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<rect x="930.3" y="166.9" width="24.6" height="22.2" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<rect x="831.3" y="229.1" width="41.0" height="41.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8" fill-opacity="0.8"/>
-<rect x="948.8" y="173.8" width="12.3" height="30.8" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
-<rect x="946.7" y="204.6" width="51.2" height="3.7" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>
-<rect x="943.6" y="208.2" width="57.4" height="10.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<polygon points="872.3,393.1 858.2,393.1 858.2,380.8 845.4,380.8 845.4,393.1 831.3,393.1 831.3,379.0 843.6,379.0 843.6,366.3 831.3,366.3 831.3,338.0 843.6,338.0 843.6,325.3 831.3,325.3 831.3,297.0 843.6,297.0 843.6,284.3 831.3,284.3 831.3,270.1 845.4,270.1 845.4,282.4 858.2,282.4 858.2,270.1 872.3,270.1 872.3,284.3 860.0,284.3 860.0,297.0 872.3,297.0 872.3,325.3 860.0,325.3 860.0,338.0 872.3,338.0 872.3,366.3 860.0,366.3 860.0,379.0 872.3,379.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.9"/>
-<circle cx="988.7" cy="249.6" r="8.7" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<circle cx="955.9" cy="249.6" r="8.7" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="1082.8" y="149.8" width="29.9" height="17.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="978.2" y="149.8" width="29.9" height="17.4" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="1082.8" y="167.2" width="29.9" height="34.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="978.2" y="167.2" width="29.9" height="34.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="1005.6" y="106.6" width="16.6" height="33.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="972.4" y="106.6" width="33.2" height="33.2" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="801.4" y="158.1" width="830.0" height="13.3" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="718.4" y="183.0" width="977.7" height="10.0" fill="#2b2f36" stroke="#2b2f36" stroke-width="0.8"/>
+<rect x="1026.4" y="214.5" width="16.6" height="13.3" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="999.8" y="214.5" width="16.6" height="13.3" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="718.4" y="171.4" width="996.0" height="66.4" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<line x1="1123.5" y1="226.3" x2="761.6" y2="226.3" stroke="#8c939e" stroke-width="0.6"/>
+<line x1="1123.5" y1="216.0" x2="761.6" y2="216.0" stroke="#8c939e" stroke-width="0.6"/>
+<line x1="1123.5" y1="193.1" x2="761.6" y2="193.1" stroke="#8c939e" stroke-width="0.6"/>
+<line x1="1123.5" y1="182.8" x2="761.6" y2="182.8" stroke="#8c939e" stroke-width="0.6"/>
+<rect x="1007.8" y="149.8" width="75.4" height="16.6" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<rect x="998.1" y="187.6" width="46.5" height="46.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="1030.5" y="159.8" width="10.0" height="24.9" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
+<rect x="1027.6" y="214.1" width="14.1" height="14.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="1001.1" y="214.1" width="14.1" height="14.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="977.4" y="139.8" width="136.1" height="10.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="977.4" y="106.6" width="44.8" height="33.2" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="1035.5" y="129.6" width="19.9" height="24.6" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<rect x="1035.5" y="129.6" width="19.9" height="10.0" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<rect x="1035.5" y="150.0" width="19.9" height="4.2" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<rect x="1035.5" y="154.2" width="19.9" height="18.0" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<rect x="776.5" y="204.6" width="33.2" height="33.2" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8" fill-opacity="0.8"/>
+<rect x="1030.5" y="159.8" width="10.0" height="24.9" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
+<rect x="1000.6" y="184.7" width="41.5" height="3.0" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>
+<rect x="998.1" y="187.6" width="46.5" height="8.3" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="809.7,337.4 798.3,337.4 798.3,327.4 788.0,327.4 788.0,337.4 776.5,337.4 776.5,325.9 786.5,325.9 786.5,315.6 776.5,315.6 776.5,292.7 786.5,292.7 786.5,282.4 776.5,282.4 776.5,259.5 786.5,259.5 786.5,249.2 776.5,249.2 776.5,237.8 788.0,237.8 788.0,247.7 798.3,247.7 798.3,237.8 809.7,237.8 809.7,249.2 799.8,249.2 799.8,259.5 809.7,259.5 809.7,282.4 799.8,282.4 799.8,292.7 809.7,292.7 809.7,315.6 799.8,315.6 799.8,325.9 809.7,325.9" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.9"/>
+<circle cx="1034.7" cy="221.2" r="7.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="1008.1" cy="221.2" r="7.1" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 </g>
-<rect x="761.6" y="100.0" width="360.8" height="303.4" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<rect x="761.6" y="100.0" width="361.9" height="245.7" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="761.6" y="92.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Y: von rechts außen (vorn links, hinten rechts)</text>
-<line x1="872.3" y1="153.3" x2="752.6" y2="153.3" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="872.3" cy="153.3" r="1.5" fill="#5b6472"/>
-<text x="749.6" y="156.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schlittenplatte</text>
-<line x1="923.5" y1="169.7" x2="752.6" y2="179.3" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="923.5" cy="169.7" r="1.5" fill="#5b6472"/>
-<text x="749.6" y="182.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Wagen: 3 mm vor dem</text>
-<text x="749.6" y="192.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schienenende</text>
-<line x1="851.8" y1="249.6" x2="752.6" y2="249.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="851.8" cy="249.6" r="1.5" fill="#5b6472"/>
-<text x="749.6" y="252.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Winkel an der</text>
-<text x="749.6" y="262.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kreuzung (20 mm)</text>
-<line x1="851.8" y1="333.7" x2="752.6" y2="333.7" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="851.8" cy="333.7" r="1.5" fill="#5b6472"/>
-<text x="749.6" y="336.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
-<line x1="954.9" y1="173.8" x2="1131.4" y2="173.8" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="954.9" cy="173.8" r="1.5" fill="#5b6472"/>
-<text x="1134.4" y="176.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fahne am Strahl</text>
-<line x1="1056.8" y1="208.6" x2="1131.4" y2="208.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="1056.8" cy="208.6" r="1.5" fill="#5b6472"/>
-<text x="1134.4" y="211.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf in der oberen Nut</text>
-<line x1="1089.6" y1="220.9" x2="1131.4" y2="234.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="1089.6" cy="220.9" r="1.5" fill="#5b6472"/>
-<text x="1134.4" y="237.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechtes 2040, Ende</text>
-<line x1="992.8" y1="249.6" x2="1131.4" y2="260.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="992.8" cy="249.6" r="1.5" fill="#5b6472"/>
-<text x="1134.4" y="263.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Halter Y, M5 in der unteren Nut</text>
-<line x1="943.6" y1="378.8" x2="872.3" y2="378.8" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="943.6" y1="375.8" x2="943.6" y2="381.8" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="872.3" y1="375.8" x2="872.3" y2="381.8" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="908.0" y="373.8" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">35 mm</text>
-<line x1="995.3" y1="171.8" x2="995.3" y2="117.4" stroke="#9aa4b1" stroke-width="0.5"/>
-<line x1="989.1" y1="182.0" x2="989.1" y2="117.4" stroke="#9aa4b1" stroke-width="0.5"/>
-<line x1="995.3" y1="120.5" x2="989.1" y2="120.5" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="995.3" y1="117.5" x2="995.3" y2="123.5" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="989.1" y1="117.5" x2="989.1" y2="123.5" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="992.2" y="115.5" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schienenende 3 mm</text>
+<line x1="884.4" y1="197.9" x2="752.6" y2="197.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="884.4" cy="197.9" r="1.5" fill="#5b6472"/>
+<text x="749.6" y="200.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechtes 2040</text>
+<line x1="801.4" y1="221.2" x2="752.6" y2="223.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="801.4" cy="221.2" r="1.5" fill="#5b6472"/>
+<text x="749.6" y="226.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Winkel an der</text>
+<text x="749.6" y="236.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kreuzung (20 mm)</text>
+<line x1="793.1" y1="289.2" x2="752.6" y2="289.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="793.1" cy="289.2" r="1.5" fill="#5b6472"/>
+<text x="749.6" y="292.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
+<line x1="992.3" y1="126.6" x2="1132.5" y2="126.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="992.3" cy="126.6" r="1.5" fill="#5b6472"/>
+<text x="1135.5" y="129.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Portal am Schaltpunkt: mit Z</text>
+<text x="1135.5" y="139.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">unten 6 mm vor dem 2060</text>
+<line x1="1106.9" y1="144.8" x2="1132.5" y2="162.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1106.9" cy="144.8" r="1.5" fill="#5b6472"/>
+<text x="1135.5" y="165.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Schlittenplatte</text>
+<line x1="1075.3" y1="158.1" x2="1132.5" y2="188.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1075.3" cy="158.1" r="1.5" fill="#5b6472"/>
+<text x="1135.5" y="191.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Y-Wagen</text>
+<line x1="1113.5" y1="188.0" x2="1132.5" y2="214.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1113.5" cy="188.0" r="1.5" fill="#5b6472"/>
+<text x="1135.5" y="217.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rücklauf in der oberen Nut</text>
+<line x1="1035.5" y1="159.8" x2="1132.5" y2="240.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1035.5" cy="159.8" r="1.5" fill="#5b6472"/>
+<text x="1135.5" y="243.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fahne kommt von hinten,</text>
+<text x="1135.5" y="253.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Vorderkante am Strahl</text>
+<line x1="1038.0" y1="221.2" x2="1132.5" y2="276.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1038.0" cy="221.2" r="1.5" fill="#5b6472"/>
+<text x="1135.5" y="279.6" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Halter Y, M5 in der unteren Nut</text>
+<line x1="998.1" y1="325.8" x2="809.7" y2="325.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="998.1" y1="322.8" x2="998.1" y2="328.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="809.7" y1="322.8" x2="809.7" y2="328.8" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="903.9" y="320.8" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Halter 113,5 mm</text>
+<line x1="998.1" y1="234.5" x2="998.1" y2="330.7" stroke="#9aa4b1" stroke-width="0.5"/>
+<line x1="1035.5" y1="159.8" x2="1035.5" y2="297.5" stroke="#9aa4b1" stroke-width="0.5"/>
+<line x1="809.7" y1="237.8" x2="809.7" y2="330.7" stroke="#9aa4b1" stroke-width="0.5"/>
+<line x1="1035.5" y1="292.6" x2="809.7" y2="292.6" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1035.5" y1="289.6" x2="1035.5" y2="295.6" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="809.7" y1="289.6" x2="809.7" y2="295.6" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="922.6" y="287.6" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Strahl 136 mm hinter dem 2060</text>
 <clipPath id="x3"><rect x="250.0" y="568.4" width="349.8" height="382.8"/></clipPath>
 <g clip-path="url(#x3)">
 <rect x="418.3" y="801.1" width="29.7" height="67.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
@@ -320,38 +325,40 @@
 <text x="238.0" y="1300.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Platte, vorn vor der Rippe</text>
 <text x="651.6" y="1063.2" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
 <text x="651.6" y="1081.2" font-size="8.5" fill="#5b6472" text-anchor="start">Y</text>
-<text x="695.6" y="1081.2" font-size="8.5" fill="#1c2733" text-anchor="start">Halter aussen am rechten 2040, 35 mm hinter dem hinteren 2060, 2 × M5×12 in der unteren Nut</text>
+<text x="695.6" y="1081.2" font-size="8.5" fill="#1c2733" text-anchor="start">Referenz vorn: Halter aussen am rechten 2040, 113,5 mm hinter dem vorderen 2060, 2 × M5×12 in der unteren Nut</text>
 <text x="651.6" y="1096.2" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="695.6" y="1096.2" font-size="8.5" fill="#1c2733" text-anchor="start">Gabel 16 mm neben der Profilfläche, Platine 8 mm unter der Oberkante der 2040</text>
+<text x="695.6" y="1096.2" font-size="8.5" fill="#1c2733" text-anchor="start">Gabel an der hinteren Kante der Platine: die Fahne kommt von hinten</text>
 <text x="651.6" y="1111.2" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="695.6" y="1111.2" font-size="8.5" fill="#1c2733" text-anchor="start">Fahne: Klammer an der rechten Schlittenplatte, 35 mm vor ihrer Hinterkante, verschiebbar</text>
-<text x="651.6" y="1126.2" font-size="8.5" fill="#5b6472" text-anchor="start">X</text>
-<text x="695.6" y="1126.2" font-size="8.5" fill="#1c2733" text-anchor="start">Halter vor dem linken Ende der 2020, M5×12 in ihrer vorderen Nut, stößt an die X-Schiene; fährt mit dem Portal</text>
-<text x="651.6" y="1141.2" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="695.6" y="1141.2" font-size="8.5" fill="#1c2733" text-anchor="start">Platine 3 mm vor dem Wagenende am Schienenende; Blatt verstellbar ±2 mm</text>
-<text x="651.6" y="1156.2" font-size="8.5" fill="#5b6472" text-anchor="start">Blatt</text>
-<text x="695.6" y="1156.2" font-size="8.5" fill="#1c2733" text-anchor="start">3 mm dick, je 3,5 mm Luft im Spalt, bis 7,5 mm an die Platine (1,5 mm über den Strahl)</text>
-<text x="651.6" y="1171.2" font-size="8.5" fill="#5b6472" text-anchor="start">Druck</text>
-<text x="695.6" y="1171.2" font-size="8.5" fill="#1c2733" text-anchor="start">PETG; Fahnen und Klammer schwarz (helles PETG lässt IR durch); keine Stützen</text>
-<text x="651.6" y="1186.2" font-size="8.5" fill="#5b6472" text-anchor="start">GRBL</text>
-<text x="695.6" y="1186.2" font-size="8.5" fill="#1c2733" text-anchor="start">$23=1 (X nach links), $130=385, $131=327 (1 mm Rückzug, 2 mm Reserve)</text>
-<rect x="651.6" y="1219.2" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<text x="670.6" y="1227.2" font-size="8.5" fill="#1c2733" text-anchor="start">Halter (PETG)</text>
-<rect x="801.6" y="1219.2" width="14.0" height="9.0" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
-<text x="820.6" y="1227.2" font-size="8.5" fill="#1c2733" text-anchor="start">Fahne, Klammer (schwarz)</text>
-<rect x="951.6" y="1219.2" width="14.0" height="9.0" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>
-<text x="970.6" y="1227.2" font-size="8.5" fill="#1c2733" text-anchor="start">Lichtschranke: Platine</text>
-<rect x="1101.6" y="1219.2" width="14.0" height="9.0" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
-<text x="1120.6" y="1227.2" font-size="8.5" fill="#1c2733" text-anchor="start">Gabel</text>
-<rect x="651.6" y="1237.2" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="670.6" y="1245.2" font-size="8.5" fill="#1c2733" text-anchor="start">Portal</text>
-<rect x="801.6" y="1237.2" width="14.0" height="9.0" fill="#e6def5" stroke="#6a4fa3" stroke-width="0.8"/>
-<text x="820.6" y="1245.2" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead</text>
-<rect x="951.6" y="1237.2" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<text x="970.6" y="1245.2" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
-<rect x="1101.6" y="1237.2" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<text x="1120.6" y="1245.2" font-size="8.5" fill="#1c2733" text-anchor="start">Schiene, Wagen</text>
-<line x1="651.6" y1="1259.7" x2="667.6" y2="1259.7" stroke="#2b2f36" stroke-width="3.0"/>
-<text x="672.6" y="1263.2" font-size="8.5" fill="#1c2733" text-anchor="start">Riemen</text>
-<rect x="801.6" y="1255.2" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<text x="820.6" y="1263.2" font-size="8.5" fill="#1c2733" text-anchor="start">Schrauben, Nutsteine, Winkel</text></svg>
+<text x="695.6" y="1111.2" font-size="8.5" fill="#1c2733" text-anchor="start">Gabel 16 mm neben der Profilfläche, Platine 8 mm unter der Oberkante der 2040</text>
+<text x="651.6" y="1126.2" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="695.6" y="1126.2" font-size="8.5" fill="#1c2733" text-anchor="start">Fahne: Klammer an der rechten Schlittenplatte, 35 mm vor ihrer Hinterkante, verschiebbar</text>
+<text x="651.6" y="1141.2" font-size="8.5" fill="#5b6472" text-anchor="start">X</text>
+<text x="695.6" y="1141.2" font-size="8.5" fill="#1c2733" text-anchor="start">Halter vor dem linken Ende der 2020, M5×12 in ihrer vorderen Nut, stößt an die X-Schiene; fährt mit dem Portal</text>
+<text x="651.6" y="1156.2" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
+<text x="695.6" y="1156.2" font-size="8.5" fill="#1c2733" text-anchor="start">Platine 3 mm vor dem Wagenende am Schienenende; Blatt verstellbar ±2 mm</text>
+<text x="651.6" y="1171.2" font-size="8.5" fill="#5b6472" text-anchor="start">Blatt</text>
+<text x="695.6" y="1171.2" font-size="8.5" fill="#1c2733" text-anchor="start">3 mm dick, je 3,5 mm Luft im Spalt, bis 7,5 mm an die Platine (1,5 mm über den Strahl)</text>
+<text x="651.6" y="1186.2" font-size="8.5" fill="#5b6472" text-anchor="start">Druck</text>
+<text x="695.6" y="1186.2" font-size="8.5" fill="#1c2733" text-anchor="start">PETG; Fahnen und Klammer schwarz (helles PETG lässt IR durch); keine Stützen</text>
+<text x="651.6" y="1201.2" font-size="8.5" fill="#5b6472" text-anchor="start">GRBL</text>
+<text x="695.6" y="1201.2" font-size="8.5" fill="#1c2733" text-anchor="start">$23=3 (X nach links, Y nach vorn), $130=385, $131=325 (hinten 5 mm vor dem Schienenende)</text>
+<rect x="651.6" y="1234.2" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="670.6" y="1242.2" font-size="8.5" fill="#1c2733" text-anchor="start">Halter (PETG)</text>
+<rect x="801.6" y="1234.2" width="14.0" height="9.0" fill="#2b2f36" stroke="#111418" stroke-width="0.8"/>
+<text x="820.6" y="1242.2" font-size="8.5" fill="#1c2733" text-anchor="start">Fahne, Klammer (schwarz)</text>
+<rect x="951.6" y="1234.2" width="14.0" height="9.0" fill="#d3e9da" stroke="#2f7a4f" stroke-width="0.8"/>
+<text x="970.6" y="1242.2" font-size="8.5" fill="#1c2733" text-anchor="start">Lichtschranke: Platine</text>
+<rect x="1101.6" y="1234.2" width="14.0" height="9.0" fill="#8a919c" stroke="#3d4450" stroke-width="0.8"/>
+<text x="1120.6" y="1242.2" font-size="8.5" fill="#1c2733" text-anchor="start">Gabel</text>
+<rect x="651.6" y="1252.2" width="14.0" height="9.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="670.6" y="1260.2" font-size="8.5" fill="#1c2733" text-anchor="start">Portal</text>
+<rect x="801.6" y="1252.2" width="14.0" height="9.0" fill="#e6def5" stroke="#6a4fa3" stroke-width="0.8"/>
+<text x="820.6" y="1260.2" font-size="8.5" fill="#1c2733" text-anchor="start">Toolhead</text>
+<rect x="951.6" y="1252.2" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="970.6" y="1260.2" font-size="8.5" fill="#1c2733" text-anchor="start">Aluprofil</text>
+<rect x="1101.6" y="1252.2" width="14.0" height="9.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
+<text x="1120.6" y="1260.2" font-size="8.5" fill="#1c2733" text-anchor="start">Schiene, Wagen</text>
+<line x1="651.6" y1="1274.7" x2="667.6" y2="1274.7" stroke="#2b2f36" stroke-width="3.0"/>
+<text x="672.6" y="1278.2" font-size="8.5" fill="#1c2733" text-anchor="start">Riemen</text>
+<rect x="801.6" y="1270.2" width="14.0" height="9.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<text x="820.6" y="1278.2" font-size="8.5" fill="#1c2733" text-anchor="start">Schrauben, Nutsteine, Winkel</text></svg>

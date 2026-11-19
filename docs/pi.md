@@ -346,8 +346,9 @@ länger als eine Minute erreichbar, erkennt der Pi sein WLAN.
 
 * **Nullpunkt** einmal einrichten wie in
   [spannmittel.md](spannmittel.md#nullpunkt-einrichten-einmal): an der
-  Innenecke des Anschlags hinten links mit `G10 L20 P1 X0 Y0`. GRBL behält
-  ihn. In LightBurn den Ursprung hinten links.
+  Innenecke des Anschlags vorn rechts mit `G10 L20 P1 X0 Y0`. GRBL behält
+  ihn. In LightBurn den Ursprung vorn rechts. Nach dem Umstellen auf die
+  Referenz vorn (Portal Rev. 32) einmal neu setzen.
 * Aufträge mit **„Start From: Absolute Coords“** anlegen und mit **„Save
   GCode“** speichern. So bezieht sich die Datei auf diesen Nullpunkt und
   läuft im Pi genauso wie direkt aus LightBurn. „Current Position“ und

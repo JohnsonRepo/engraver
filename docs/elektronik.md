@@ -233,13 +233,18 @@ und Y auch, bräuchte aber 6–36 V und einen Optokoppler.
 | Achse | wo | Fahne | Referenz |
 |---|---|---|---|
 | X | vor dem linken Ende des Portalrohrs (der 2020), Block an der X-Schiene; fährt mit dem Portal | Klammer unten an der Trägerplatte | nach links |
-| Y | außen am **rechten** 2040, 35 mm hinter dem hinteren 2060, untere Nut | Klammer an der rechten Schlittenplatte | nach hinten |
+| Y | außen am **rechten** 2040, 113,5 mm hinter dem **vorderen** 2060, untere Nut (seit Portal Rev. 32; bis Rev. 31 hinter dem hinteren 2060) | Klammer an der rechten Schlittenplatte | nach **vorn** (bis Rev. 31 nach hinten) |
 | Z | am Toolhead (vorhanden) | Schaltfahne (vorhanden) | nach oben |
 
 **Y rechts, weil links die Y-Kette läuft:** Die Fahne hinge außen neben dem
 Schlitten, genau dort, wo links die Kette neben dem 2040 liegt, und der
-obere Trum der Kette liegt über ihr. Rechts ist die Seite frei. Das Kabel
-läuft mit dem des rechten Y-Motors an der Rückseite des 2060 entlang.
+obere Trum der Kette liegt über ihr. Rechts ist die Seite frei.
+
+**Y vorn** (2026-11-19, Portal Rev. 32): Seit das Fach vorn steht, ist
+der Weg zum Halter vorn kürzer. Das Kabel kommt rechts aus dem Fach und
+läuft in der unteren Außennut des rechten 2040 nach hinten zum Halter.
+Hinten schützt das Softlimit, einen Anschlag dort baust du später
+([endschalter.md](endschalter.md#softlimits-statt-zweitem-y-schalter)).
 
 **X links, vor dem Rohr:** Am linken Wegende steht der X-Motor 3 mm neben
 der Trägerplatte, und der X-Riemen läuft vom Ritzel zum Riemenhalter. Die
@@ -429,9 +434,10 @@ Zu den Teilen:
 ## Was noch fehlt
 
 1. **Endschalter:** Halter und Fahnen für X und Y sind gezeichnet und
-   geprüft ([endschalter.md](endschalter.md)). Offen sind dort vier
-   Kleinigkeiten am Aufbau: Boden des Gabelschlitzes, Lötstifte, ein
-   Schmiernippel am X-Wagen und der Lagerbock der hinteren Umlenkung
+   geprüft ([endschalter.md](endschalter.md)); Y referenziert seit Portal
+   Rev. 32 vorn. Offen sind dort Kleinigkeiten am Aufbau: Boden des
+   Gabelschlitzes, Lötstifte, ein Schmiernippel am X-Wagen, die
+   Stiftleiste der Platine Y und ein Anschlag hinten
    ([Noch offen](endschalter.md#noch-offen)).
 2. **Energieketten** (gedruckt): Beide sind konstruiert, mit Wanne,
    Festpunkt und Kettenhalter, dazu der Kabelweg in der oberen Nut des

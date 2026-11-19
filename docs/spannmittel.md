@@ -81,10 +81,10 @@ vorderen Niederhalter, dort sind es 1,2 mm.
 
 Vor jedem Auftrag die Platte wieder nach links und vorn schieben.
 
-Der Y-Endschalter sitzt noch hinten, referenziert wird also weiter hinten
-links. Geplant ist, die Lichtschranke für Y nach vorn zu verlegen (Fahne,
-Elektronik, GRBL); das ist noch offen und ändert am Nullpunkt in der Ecke
-nichts, nur `$H` und die Maschinenkoordinaten.
+Referenziert wird seit Portal Rev. 32 vorn links: X links, Y vorn
+([endschalter.md](endschalter.md#grbl)). Am Nullpunkt in der Ecke ändert
+das nichts, aber GRBL speichert ihn relativ zur Referenz. Nach dem
+Umstellen also Schritt 2 und 3 einmal wiederholen.
 
 ## Exzenter
 

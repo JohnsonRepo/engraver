@@ -44,12 +44,14 @@
 #                              zur 2040 direkt auf der Welle; gespannt wird
 #                              in Langloechern. Symmetrisch: links und
 #                              rechts dasselbe Teil.
-#   Halter_Y, Fahne_Y          Endschalter Y (Gabellichtschranke LM393): der
-#                              Halter aussen am rechten 2040 hinter dem
-#                              hinteren 2060, 2x M5 in der UNTEREN Nut (in
-#                              der oberen laeuft der Ruecklauf des Y-Riemens);
-#                              die Fahne klemmt an der Aussenkante der
-#                              rechten Schlittenplatte.
+#   Halter_Y, Fahne_Y          Endschalter Y (Gabellichtschranke LM393),
+#                              seit Rev. 32 VORN (Referenz vorn, bis Rev. 31
+#                              hinten): der Halter aussen am rechten 2040,
+#                              gut 110 mm hinter dem vorderen 2060, 2x M5 in
+#                              der UNTEREN Nut (in der oberen laeuft der
+#                              Ruecklauf des Y-Riemens), Gabel an der
+#                              hinteren Kante der Platine; die Fahne klemmt
+#                              an der Aussenkante der rechten Schlittenplatte.
 #   Halter_X, Klammer_X,       Endschalter X: der Halter vor dem linken Ende
 #   Fahne_X                    der 2020, M5 in ihrer vorderen Nut, stoesst
 #                              an das Ende der X-Schiene; Klammer und Fahne
@@ -145,7 +147,7 @@ import textwrap
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 31
+REVISION = 32
 
 # Gesamtmodell (seit Rev. 29, siehe oben): False baut nur das Portal.
 MASCHINE = True
@@ -624,12 +626,14 @@ MASSE = {
     # Schaltpunkt und Blatt, beide Achsen. Das Blatt reicht bis 7,5 mm an
     # die Platine (1,5 ueber den Schlitzboden, 1,5 ueber den Strahl hinaus)
     # und 2 mm ueber die offene Seite der Gabel.
-    'schaltabstand':        (3.0, 'Schalter schaltet so weit vor dem Schienenende'),
+    # Y seit Rev. 32 vorn: vor dem Ende von y_weg_vorn (Z unten, 3 mm vor
+    # dem 2060); X vor dem linken Schienenende
+    'schaltabstand':        (3.0, 'Schalter schaltet so weit vor dem Wegende'),
     'fahne_dicke':          (3.0, 'Blatt: Dicke im Gabelspalt (wie Z)'),
     'fahne_ab_platine':     (7.5, 'Blatt: Kante so weit ueber der Platine'),
     'fahne_ueber_gabel':    (2.0, 'Blatt: reicht so weit ueber die offene Gabelseite'),
     # Halter Y. 16: der innere Arm der Gabel bleibt 3 mm neben dem Y-Wagen,
-    # der am Schienenende ueber die Gabel faehrt
+    # der vorn an der Gabel vorbeifaehrt
     'gy_mitte_aussen':     (16.0, 'Y: Spaltmitte so weit neben der Aussenflaeche des 2040'),
     'ly_unter_kante':       (8.0, 'Y: Platine so weit unter der Oberkante der 2040'),
     'hy_fuss_dicke':        (6.0, 'Halter Y: Fuss am 2040 (wie Y-Motorhalter)'),
@@ -639,8 +643,8 @@ MASSE = {
     'hy_m5_rand':           (6.0, 'Halter Y: M5 so weit von den Enden'),
     'hy_fase':              (3.0, 'Halter Y: Fase unter dem Boden am Fuss'),
     # Fahne Y: Hinterkante auf der Platte zwischen den Wagenschrauben (Y -70
-    # und -50), so steht der Halter 35 mm hinter dem 2060 und weit vor dem
-    # hinteren Ritzel
+    # und -50). Bis Rev. 31 schaltete ihre Hinterkante hinten (Halter 35 mm
+    # hinter dem hinteren 2060), seit Rev. 32 ihre Vorderkante vorn
     'fy_hinten':          (-66.0, 'Fahne Y: Hinterkante (Y, Portal in der Mitte)'),
     'fy_laenge':           (12.0, 'Fahne Y: Laenge laengs der Plattenkante'),
     'kl_spiel':             (0.3, 'Klammern: Spiel auf die geklemmte Dicke'),
@@ -1033,47 +1037,50 @@ def lage():
     L['yr_laenge'] = y_riemen_weg(L)['laenge']
 
     # ---- Endschalter X und Y (bis Rev. 14 in Endschalter.py) ---------------
-    # Schaltpunkt: das Portal steht schalt_dy von der Mitte, schaltabstand
-    # vor dem hinteren Schienenende (dort sind die Y-Wagen buendig mit ihm);
-    # die X-Wagenmitte bei schalt_xs, schaltabstand vor dem linken. Schluessel
-    # mit _rel liegen relativ zum Portal in der Mitte (Fahne_Y, Halter_X)
-    # bzw. zur X-Wagenmitte (Klammer_X, Fahne_X). Der Halter Y steht fest am
-    # Rahmen, dort, wo die Fahne am Schaltpunkt durch seine Gabel laeuft. Im
-    # Modell steht alles in der Stellung von oben: Portal in der Mitte,
-    # Toolhead bei xw_mitte.
+    # Schaltpunkt: das Portal steht schalt_dy von der Mitte, seit Rev. 32
+    # VORN, schaltabstand vor dem vorderen Ende des Y-Wegs (y_weg_vorn: Z
+    # unten, 3 mm vor dem vorderen 2060); bis Rev. 31 hinten, schaltabstand
+    # vor dem Schienenende. Die X-Wagenmitte bei schalt_xs, schaltabstand vor
+    # dem linken Schienenende. Schluessel mit _rel liegen relativ zum Portal
+    # in der Mitte (Fahne_Y, Halter_X) bzw. zur X-Wagenmitte (Klammer_X,
+    # Fahne_X). Der Halter Y steht fest am Rahmen, dort, wo die Fahne am
+    # Schaltpunkt durch seine Gabel laeuft. Im Modell steht alles in der
+    # Stellung von oben: Portal in der Mitte, Toolhead bei xw_mitte.
     b = w('rahmen_b')
     L['nut_u_z'] = L['rahmen_z0'] + b / 2.0            # untere Seitennut
     L['nut_o_z'] = L['rahmen_z1'] - b / 2.0            # obere: Y-Riemen
     L['aussen_x'] = R + b / 2.0                         # rechtes 2040 aussen
     L['tisch_z'] = L['quer_z'][0]
     L['y_weg_hinten'] = L['wagen_y0'] - L['y_schiene_y'][0]
-    L['schalt_dy'] = -(L['y_weg_hinten'] - w('schaltabstand'))
-    L['schalt_dy_ende'] = -L['y_weg_hinten']
+    L['schalt_dy'] = w('y_weg_vorn') - w('schaltabstand')
+    L['schalt_dy_ende'] = w('y_weg_vorn')
     L['schalt_xs'] = L['xw_min'] + w('schaltabstand')
     pl, pb, pd = w('ls_pcb_laenge'), w('ls_pcb_breite'), w('ls_pcb_dicke')
     r = w('ls_pcb_rand')
     s, gb = w('ls_schlitz') / 2.0, w('ls_gabel_breite') / 2.0
 
-    # Y: Fahne auf der Platte, am Schaltpunkt der Strahl an ihrer Hinterkante
+    # Y: Fahne auf der Platte; sie kommt von hinten, am Schaltpunkt steht
+    # der Strahl an ihrer Vorderkante
     L['fy_y_rel'] = (w('fy_hinten'), w('fy_hinten') + w('fy_laenge'))
     L['fy_y'] = tuple(y + L['schalt_dy'] for y in L['fy_y_rel'])
-    L['ly_strahl_y'] = L['fy_y'][0]
+    L['ly_strahl_y'] = L['fy_y'][1]
     xg = L['aussen_x'] + w('gy_mitte_aussen')          # Spaltmitte
     zp = L['rahmen_z1'] - w('ly_unter_kante')           # Oberseite Platine
     L['gy_x'] = xg
     L['ly_pcb_x'] = (xg - pb / 2.0, xg + pb / 2.0)
     L['ly_pcb_z'] = (zp - pd, zp)
-    # Gabel an der vorderen Stirnkante (dorther kommt die Fahne), Strahl in
-    # ihrer Mitte; die Platine reicht von dort nach hinten.
-    g1 = L['ly_strahl_y'] + w('ls_gabel_dicke') / 2.0
-    L['ly_gabel_y'] = (g1 - w('ls_gabel_dicke'), g1)
-    L['ly_pcb_y'] = (g1 + w('ls_gabel_rand') - pl, g1 + w('ls_gabel_rand'))
+    # Gabel an der hinteren Stirnkante (dorther kommt die Fahne), Strahl in
+    # ihrer Mitte; die Platine reicht von dort nach vorn. Bis Rev. 31
+    # gespiegelt: Gabel vorn, Platine nach hinten.
+    g0 = L['ly_strahl_y'] - w('ls_gabel_dicke') / 2.0
+    L['ly_gabel_y'] = (g0, g0 + w('ls_gabel_dicke'))
+    L['ly_pcb_y'] = (g0 - w('ls_gabel_rand'), g0 - w('ls_gabel_rand') + pl)
     L['ly_gabel_z'] = (zp, zp + w('ls_gabel_hoehe'))
     L['ly_strahl_z'] = zp + w('ls_strahl_hoehe')
     L['ly_boden_z'] = zp + w('ls_schlitz_boden')
     L['ly_arme_x'] = [(xg - gb, xg - s), (xg + s, xg + gb)]
-    L['ly_loecher'] = [(L['ly_pcb_x'][0] + r, L['ly_pcb_y'][0] + r),
-                       (L['ly_pcb_x'][1] - r, L['ly_pcb_y'][0] + r)]
+    L['ly_loecher'] = [(L['ly_pcb_x'][0] + r, L['ly_pcb_y'][1] - r),
+                       (L['ly_pcb_x'][1] - r, L['ly_pcb_y'][1] - r)]
 
     # Halter Y
     rand = w('hy_rand')
@@ -2745,12 +2752,14 @@ def bau_traeger_y(app, design, comp, L, n, fehler):
 
 # --- Endschalter X und Y (bis Rev. 14 in Endschalter.py) -----------------------
 def bau_halter_y(app, design, comp, L, fehler):
-    """Halter der Y-Lichtschranke aussen am rechten 2040, hinter dem hinteren
-    2060. Der Fuss liegt an der Aussenflaeche und haengt mit 2 x M5 in
-    Hammermuttern der UNTEREN Nut; ueber der Platine endet er, die obere Nut
-    (Ruecklauf des Y-Riemens) bleibt frei. Der Boden steht waagerecht nach
-    aussen, die Platine liegt darauf, die Gabel zeigt nach oben und nach
-    vorn — von dort kommt die Fahne.
+    """Halter der Y-Lichtschranke aussen am rechten 2040, seit Rev. 32 vorn:
+    gut 110 mm hinter dem vorderen 2060 (Referenz vorn). Der Fuss liegt an
+    der Aussenflaeche und haengt mit 2 x M5 in Hammermuttern der UNTEREN Nut;
+    ueber der Platine endet er, die obere Nut (Ruecklauf des Y-Riemens)
+    bleibt frei. Der Boden steht waagerecht nach aussen, die Platine liegt
+    darauf, die Gabel zeigt nach oben und sitzt an der HINTEREN Kante der
+    Platine — von dort kommt die Fahne. Bis Rev. 31 gespiegelt (Gabel vorn,
+    Halter hinter dem hinteren 2060).
 
     Drucklage: Fussflaeche (die Seite am Profil) aufs Bett, der Boden steht
     senkrecht nach oben — keine Stuetzen, die M5-Loecher werden rund."""
@@ -3678,21 +3687,27 @@ def hinweise_bauen(L, fehler, maschine=None):
         '',
         'ENDSCHALTER (Gabellichtschranken LM393, docs/endschalter.md):',
         '  Im Modell steht das Portal in der Mitte und der Toolhead in der',
-        '  Mitte des X-Wegs: die Fahnen stehen NICHT in ihrer Gabel. Beide',
-        '  schalten {:.0f} mm vor dem Schienenende: Portal {:+.1f} von der'
-        .format(w('schaltabstand'), L['schalt_dy']),
-        '  Mitte, X-Wagenmitte {:+.2f}.'.format(L['schalt_xs']),
-        '  HALTER_Y: aussen an das rechte 2040, {:.0f} mm hinter dem hinteren'
-        .format(L['quer_y_hinten'][0] - L['hy_y'][1]),
-        '    2060; 2x M5x{:.0f} mit Scheibe in Hammermuttern der UNTEREN Nut'
-        .format(L['hy_m5_schraube']),
-        '    (Z {:+.0f}), NICHT in die obere: dort laeuft der Ruecklauf des'
+        '  Mitte des X-Wegs: die Fahnen stehen NICHT in ihrer Gabel. Y',
+        '  referenziert VORN (seit Rev. 32): Portal {:+.1f} von der Mitte,'
+        .format(L['schalt_dy']),
+        '  {:.0f} mm vor dem Ende des Y-Wegs (Z unten, 3 mm vor dem 2060).'
+        .format(w('schaltabstand')),
+        '  X schaltet {:.0f} mm vor dem linken Schienenende, Wagenmitte {:+.2f}.'
+        .format(w('schaltabstand'), L['schalt_xs']),
+        '  HALTER_Y: aussen an das rechte 2040, {:.1f} mm hinter dem vorderen'
+        .format(L['quer_y_vorn'][0] - L['hy_y'][1]),
+        '    2060 (Strahl Y {:+.0f}); 2x M5x{:.0f} mit Scheibe in Hammermuttern'
+        .format(L['ly_strahl_y'], L['hy_m5_schraube']),
+        '    der UNTEREN Nut (Z {:+.0f}), NICHT in die obere: dort laeuft der'
         .format(L['nut_u_z']),
-        '    Y-Riemens. Lichtschranke mit 2x M2x6, Gabel oben und vorn.',
+        '    Ruecklauf des Y-Riemens. Lichtschranke mit 2x M2x6, Gabel oben',
+        '    und HINTEN (die Fahne kommt von hinten).',
         '  FAHNE_Y: von aussen auf die Kante der rechten Schlittenplatte,',
         '    Hinterkante {:.0f} mm vor der Hinterkante der Platte, Maden-'
         .format(w('fy_hinten') - L['platte_y0']),
         '    schraube M3x8 im Einsatz. Schaltpunkt: laengs der Kante schieben.',
+        '  GRBL: $23=3 (X und Y minus), $131 ab dem Schaltpunkt vorn; hinten',
+        '    schuetzt nur das Softlimit, und das erst nach $H.',
         '  HALTER_X: vor das linke Ende der 2020, Hammermutter M5 in ihre',
         '    vordere Nut, Block rechts an das Ende der X-Schiene, M5x{:.0f}'
         .format(L['hx_m5_schraube']),

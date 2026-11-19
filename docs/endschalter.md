@@ -1,7 +1,7 @@
 # Endschalter X und Y — Halter und Schaltfahnen
 
 Die fünf Druckteile und die ausgeblendete Bohrlehre der Lichtschranke
-erzeugt `fusion/Portal/Portal.py` (seit Rev. 15, jetzt Rev. 30) als eigene Komponenten der
+erzeugt `fusion/Portal/Portal.py` (seit Rev. 15, jetzt Rev. 32) als eigene Komponenten der
 Portal-Baugruppe, neben Schlitten, Klemmtürmen und Antrieben. Bis Portal
 Rev. 14 standen sie im eigenen Skript `Endschalter.py`; Maße und Lagen sind
 dieselben. Geprüft mit `python3 tools/endschalter_check.py`, Skizze in
@@ -14,14 +14,21 @@ dieselben. Geprüft mit `python3 tools/endschalter_check.py`, Skizze in
 
 Beide Achsen bekommen eine **LM393-Gabellichtschranke** wie Z (Maße in
 [hardware-notizen.md](hardware-notizen.md#endschalter)). Warum Y rechts
-hinten und X links, steht in [elektronik.md](elektronik.md#endschalter).
+und X links, steht in [elektronik.md](elektronik.md#endschalter).
 Deine Angaben vom 2026-09-29: Halter und Fahnen bauen, die Winkel an den
 Kreuzungen sind 20 mm groß, die Nuten sind frei, und eine Klammer an der
 Trägerplatte ist in Ordnung.
 
+**Y referenziert seit Portal Rev. 32 vorn.** Bis Rev. 31 saß der Halter
+hinter dem hinteren 2060, und Y referenzierte hinten am Schienenende. Seit
+das Elektronikfach vorn steht, ist das Kabel vorn kürzer. Deine Angabe vom
+2026-11-19: nur eine Lichtschranke vorn, einen anderen Anschlag für hinten
+baust du später. Bis dahin schützt hinten nur das Softlimit
+([unten](#softlimits-statt-zweitem-y-schalter)).
+
 | Teil | Material | sitzt | hält mit |
 |---|---|---|---|
-| **Halter_Y** | PETG | außen am **rechten 2040**, 35 mm hinter dem hinteren 2060 | 2 × M5×12 + Scheibe + Hammermutter in der **unteren** Außennut |
+| **Halter_Y** | PETG | außen am **rechten 2040**, 113,5 mm hinter dem **vorderen** 2060 | 2 × M5×12 + Scheibe + Hammermutter in der **unteren** Außennut |
 | **Fahne_Y** | PETG **schwarz** | Klammer um die Außenkante der rechten Schlittenplatte, das Blatt hängt außen neben dem 2040 | Madenschraube M3×8 in einem Einsatz |
 | **Halter_X** | PETG | Block vor dem **linken Ende des Portalrohrs**, also der 2020 der X-Achse, stößt an das Ende der X-Schiene | 1 × M5×12 + Hammermutter in der vorderen Nut der 2020, Kopf versenkt |
 | **Klammer_X** | PETG **schwarz** | um die linke untere Kante der Trägerplatte und ihre Seitenrippe, unter dem X-Wagen | Madenschraube M3×8 in einem Einsatz |
@@ -35,14 +42,21 @@ Stellung von Y. Der Halter Y sitzt am Rahmen, seine Fahne am rechten
 Schlitten, das geht bei jeder Stellung von X. Jede Lichtschranke hat ihren
 eigenen Eingang, X− an D9 und Y+ an D10.
 
-Beide Schalter lösen **3 mm vor dem Schienenende** aus: Die Wagen dürfen
-nicht über das Ende hinaus, sonst fallen Kugeln heraus. In der Skizze
-stehen Portal und Toolhead genau am Schaltpunkt, die Fahnen stecken mit der
-Kante im Strahl. Das Portal steht dort 224,3 mm hinter der Mitte, die
-X-Wagenmitte bei −200,85 mm. Im Fusion-Modell steht das Portal dagegen in
-der Mitte seines Wegs und der Toolhead in der Mitte des X-Wegs, wie alles
-in `Portal.py`: Die Fahnen sitzen dort, wo sie montiert werden, und nicht
-in ihrer Gabel.
+Beide Schalter lösen **3 mm vor dem Ende ihres Wegs** aus:
+
+* **X** 3 mm vor dem linken Schienenende. Die Wagen dürfen nicht über das
+  Ende hinaus, sonst fallen Kugeln heraus.
+* **Y** 3 mm vor dem vorderen Ende des Y-Wegs. Dort stünde das
+  Lasermodul mit Z ganz unten 3 mm vor dem vorderen 2060, beim Schalten
+  sind es also 6 mm. Bei der Referenzfahrt steht Z oben, dann fährt es
+  ohnehin über das 2060.
+
+In der Skizze stehen Portal und Toolhead genau am Schaltpunkt, die Fahnen
+stecken mit der Kante im Strahl. Das Portal steht dort 103 mm vor der
+Mitte, die X-Wagenmitte bei −200,85 mm. Im Fusion-Modell steht das Portal
+dagegen in der Mitte seines Wegs und der Toolhead in der Mitte des X-Wegs,
+wie alles in `Portal.py`: Die Fahnen sitzen dort, wo sie montiert werden,
+und nicht in ihrer Gabel.
 
 ### Korrektur: Y in der unteren Nut
 
@@ -74,17 +88,23 @@ rechten 2040 und hängt mit 2 × M5 in der unteren Nut. Die Schrauben sitzen
 **Boden** waagerecht nach außen, darunter eine 3-mm-Fase zum Fuß. Auf dem
 Boden liegt die Platine, **8 mm unter der Oberkante** der 2040, und hält
 mit 2 × M2 in Einsätzen. Die Gabel zeigt **nach oben**, liegt an der
-**vorderen** Kante der Platine (von dort kommt die Fahne), und der Spalt
+**hinteren** Kante der Platine (von dort kommt die Fahne), und der Spalt
 läuft längs. Die Spaltmitte liegt **16 mm neben der Außenfläche**. So
-bleibt der innere Arm der Gabel 3,25 mm neben dem Y-Wagen, der am
-Schienenende an ihr vorbeifährt. Unter der Gabel ist eine 1,5 mm tiefe Tasche
-für ihre Lötstifte.
+bleibt der innere Arm der Gabel 3,25 mm neben dem Y-Wagen, der vorn an ihr
+vorbeifährt. Unter der Gabel ist eine 1,5 mm tiefe Tasche für ihre
+Lötstifte.
 
-Der Halter ist 28 mm lang und steht **34,8 mm hinter der Rückseite des
-hinteren 2060**. Ein 20-mm-Winkel hinten am 2060 an der Außenfläche
-(bis 20 mm dahinter) bleibt also 14,8 mm vor ihm. Nach hinten endet er
-47 mm vor dem Profilende. Das hintere Ritzel steht dahinter, 11 mm hinter
-der Stirnseite angenommen `[?]`.
+Der Halter ist 28 mm lang. Seine Vorderkante steht **113,5 mm hinter der
+Innenseite des vorderen 2060**, der Strahl 136 mm (Y +49). Ein
+20-mm-Winkel an der Kreuzung bleibt also gut 90 mm vor ihm, Elektronikfach,
+Y-Motorhalter und Kamerahalter noch weiter. Hinter ihm sitzt der
+Kabelhalter R3 mit 13,5 mm Luft ([kabelhalter.md](kabelhalter.md)).
+
+**Gespiegelt zu Rev. 31:** Einsätze und Gabeltasche haben die Enden
+getauscht, sonst ist alles gleich. Den alten Halter kannst du im Slicer
+längs spiegeln, dann ist es der neue. Den alten Halter nur umzusetzen
+reicht nicht: Dann läge die Gabel vorn, und die Fahne führe vor jedem
+Schalten 18 mm über die Platine.
 
 **Fahne_Y.** Eine 12 mm lange Klammer greift von außen um die Kante der
 rechten Schlittenplatte (6 mm dick, 0,3 mm Spiel). Die obere Backe reicht
@@ -95,8 +115,10 @@ Außen hängt das Blatt senkrecht nach unten in die Gabel. Die Klammer sitzt
 Wagenschrauben (je 0,75 mm Luft).
 
 Über den ganzen Y-Weg bleibt die Fahne **8,5 mm** von Rahmen, Schiene,
-Riemen, 2060 und Winkeln weg. Am Schienenende, 3 mm nach dem Schaltpunkt,
-steht die Hinterkante des Blatts genau an der Rückseite der Gabel.
+Riemen, 2060 und Winkeln weg. Am vorderen Ende des Y-Wegs, 3 mm nach dem
+Schaltpunkt, steht die Vorderkante des Blatts genau an der Vorderseite der
+Gabel. Mit Z oben kann das Portal weiter nach vorn, bis die Y-Kette es nach
+47 mm anhält. Dann läuft das Blatt 7,5 mm über die Platine hinweg.
 
 ## X-Achse
 
@@ -142,13 +164,13 @@ der Kopf der Klammer 2,2 mm vor der Gabel.
 | Stelle | Luft | |
 |---|---|---|
 | Blatt ↔ Arme der Gabel, je Seite | 3,5 mm | beide Achsen |
-| Gabel Y, innerer Arm ↔ Y-Wagen am Schienenende | 3,25 mm | legt 16 mm neben der Außenfläche fest |
-| Blatt Y ↔ Platine | 7,5 mm | |
+| Gabel Y, innerer Arm ↔ Y-Wagen, der vorbeifährt | 3,25 mm | legt 16 mm neben der Außenfläche fest |
+| Blatt Y ↔ Platine | 7,5 mm | auch weiter vorn, bis die Y-Kette hält |
 | Fahne Y ↔ Y-Schiene, über den ganzen Weg | 8,5 mm | engste Stelle der Fahne |
 | Halter Y ↔ Y-Schiene | 9,8 mm | |
 | Halter Y ↔ Rücklauf des Y-Riemens | 2,9 mm | Riemen im Nutkanal, der Fuß liegt außen |
-| Halter Y ↔ hinteres 2060 | 34,8 mm | 20-mm-Winkel passen |
-| Halter Y ↔ Profilende / Flansch des hinteren Ritzels | 47 / 50 mm | Lage des Ritzels `[?]` |
+| Halter Y ↔ vorderes 2060 | 113,5 mm | 20-mm-Winkel passen |
+| Halter Y ↔ Kabelhalter R3 | 13,5 mm | [kabelhalter.md](kabelhalter.md) |
 | X-Wagen ↔ Halter X am Schaltpunkt | 3,0 mm | am Schienenende 0: Anschlag |
 | Kopf der Klammer X ↔ Gabel am Schienenende | 2,2 mm | |
 | Klammer und Fahne X ↔ X-Wagen, Z-Schlitten | 3,0 mm | über X- und Z-Weg |
@@ -189,11 +211,12 @@ Löcher müssen fluchten.
 **Y**
 
 1. **Zwei Hammermuttern M5** in die **untere** Außennut des rechten 2040
-   setzen, hinter dem hinteren 2060.
+   setzen, hinter dem vorderen 2060.
 2. **Halter_Y** ansetzen: Fuß an die Außenfläche, Boden nach außen, die
-   Seite mit der Gabeltasche nach vorn. Vorderkante **35 mm hinter der
-   Rückseite des 2060**. 2 × M5×12 mit Scheibe, festziehen.
-3. **Lichtschranke** mit 2 × M2×6 aufschrauben, Gabel nach oben und vorn.
+   Seite mit der Gabeltasche nach **hinten**. Vorderkante **113,5 mm hinter
+   der Innenseite des vorderen 2060**. 2 × M5×12 mit Scheibe, festziehen.
+3. **Lichtschranke** mit 2 × M2×6 aufschrauben, Gabel nach oben und
+   **hinten**.
 4. **Fahne_Y** von außen auf die Kante der rechten Schlittenplatte
    schieben, 35 mm vor ihrer Hinterkante. Die Madenschraube leicht
    anziehen.
@@ -217,53 +240,79 @@ Die Signal-LED auf dem Modul zeigt den Ausgang an (bei den meisten dieser
 Module `[w]`). Sicher ist die Anzeige in GRBL: `?` meldet `Pn:X` bzw.
 `Pn:Y`, solange der Schalter als ausgelöst gilt.
 
-* **Y:** Motoren stromlos, das Portal von Hand langsam nach hinten
-  schieben. Die Schranke muss schalten, wenn die Y-Wagen noch **3 mm vor
-  dem Schienenende** stehen. Sonst die Fahne längs der Plattenkante
-  verschieben. Reicht das nicht, den Halter in der Nut versetzen.
+* **Y:** Motoren stromlos, Z ganz unten, das Portal von Hand langsam
+  nach vorn schieben. Die Schranke muss schalten, wenn die Vorderseite des
+  Lasermoduls noch **6 mm vor dem vorderen 2060** steht (ein 6-mm-Inbus
+  als Lehre). Sonst
+  die Fahne längs der Plattenkante verschieben. Reicht das nicht, den
+  Halter in der Nut versetzen.
 * **X:** Den Toolhead von Hand nach links schieben. Schalten muss es,
   **3 mm bevor der Wagen am Block anliegt**. Als Lehre dient ein
   3-mm-Inbus zwischen Wagen und Block. Nachstellen im Langloch der
   Fahne_X, ±2 mm, also Schaltabstand 1 bis 5 mm.
 
 **Vor der ersten Referenzfahrt** beide Schalter so von Hand prüfen. Für X
-ist der Block ein Anschlag. Bei Y hält am Schienenende nichts die Wagen,
-falls die Schranke nicht schaltet.
+ist der Block ein Anschlag. Schaltet bei Y die Schranke nicht, hält vorn
+erst die gespannte Y-Kette das Portal auf, hinten gar nichts.
 
 ## GRBL
 
 Aus den Schaltpunkten, gerechnet in `tools/endschalter_check.py`; die
-übrigen Werte stehen in [elektronik.md](elektronik.md#endschalter):
+übrigen Werte stehen in [elektronik.md](elektronik.md#endschalter) und
+[verkabelung.md](verkabelung.md#grbl-einstellungen):
 
 | | |
 |---|---|
-| `$23=1` | X referenziert nach links (minus). Y nach hinten ist Plus, wenn `$3` so gesetzt ist |
+| `$23=3` | X referenziert nach links und Y nach vorn, beide in Minus-Richtung (Y+ zeigt bei GRBL nach hinten, wenn `$3` so gesetzt ist). Z nach oben (plus). Bis Portal Rev. 31 `$23=1`: Y nach hinten |
 | `$27=1` | 1 mm Rückzug vom Schalter |
-| `$130=385` | X: vom Schaltpunkt bis ans rechte Schienenende 388,2 mm, minus 1 mm Rückzug und 2 mm Reserve. Mit 387 stünde der Wagen rechts bündig am Schienenende |
-| `$131=327` | Y: 333 mm zwischen Schienenende und vorderem 2060, minus 3 mm Schaltabstand, 1 mm Rückzug und 2 mm Reserve |
+| `$130=385` | X: vom Schaltpunkt bis ans rechte Schienenende 388,2 mm, minus 1 mm Rückzug und 2 mm Reserve. GRBL zählt den Weg ab dem Schaltpunkt, rechts bleiben also 3,2 mm bis zum Schienenende |
+| `$131=325` | Y: vom Schaltpunkt vorn bis ans hintere Schienenende 330,3 mm, minus 5 mm Reserve. Hinten hält das Softlimit die Y-Wagen 5,3 mm vor dem Schienenende. Bis Rev. 31 `$131=327` |
+
+**Nach dem Umstellen G54 neu setzen.** GRBL speichert den Nullpunkt als
+Abstand zum Maschinennullpunkt, und der liegt mit `$23=3` woanders. Also
+nach der ersten Referenzfahrt den Laserpunkt auf die Innenecke des
+Anschlags fahren und `G10 L20 P1 X0 Y0`
+([spannmittel.md](spannmittel.md#nullpunkt-einrichten-einmal)).
+
+### Erste Referenzfahrt vorn
+
+1. **Schranke prüfen:** `?` darf ohne Fahne in der Gabel kein `Pn:Y`
+   zeigen, mit Fahne schon. Schaltet sie nicht, fährt `$H` bis zu
+   1,5 × `$131`, rund 490 mm, nach vorn, bis die gespannte Y-Kette das
+   Portal aufhält.
+2. **Richtung prüfen:** `$X`, dann `$J=G91 Y-5 F500`. Das Portal muss
+   **nach vorn** fahren.
+3. **Referenzfahrt:** Das Portal etwa 3 cm hinter den Schaltpunkt
+   stellen, die Hand am Not-Aus, dann `$H`. Erst fährt Z nach oben, dann
+   X und Y.
+4. **Hintere Grenze prüfen:** `$J=G53 Y0 F1000` fährt an das hintere
+   Softlimit. Dort müssen die Y-Wagen noch etwa 5 mm vor dem
+   Schienenende stehen. Sind es unter 3 mm, `$131` kleiner machen.
+5. **G54 neu setzen** wie oben.
 
 ### Softlimits statt zweitem Y-Schalter
 
-Y hat nur hinten eine Lichtschranke, vorn auf der Motorseite sitzt keine.
-Ein zweiter Schalter ist dort nicht nötig: Mit `$20=1` prüft GRBL jedes Ziel
-gegen den Weg aus `$131`, bevor es dorthin fährt. Liegt ein Ziel eines
-Auftrags vorn hinter der Grenze, hält GRBL vorher an (ALARM:2, die Position
-bleibt richtig); ein Jog bekommt `error:15` und fährt gar nicht. Das schützt
-vorn genauso wie hinten; die Lichtschranke braucht GRBL nur für die
-Referenzfahrt.
+Y hat nur vorn eine Lichtschranke (seit Portal Rev. 32), hinten sitzt
+keine. Mit `$20=1` prüft GRBL jedes Ziel gegen den Weg aus `$131`, bevor es
+dorthin fährt. Liegt ein Ziel eines Auftrags hinter der Grenze, hält GRBL
+vorher an (ALARM:2, die Position bleibt richtig); ein Jog bekommt
+`error:15` und fährt gar nicht. Das schützt hinten genauso wie vorn; die
+Lichtschranke braucht GRBL nur für die Referenzfahrt.
 
-Hinter der Grenze ist vorn wenig Platz: Mit Z unten stößt der Toolhead nach
-gut 6 mm an das vordere 2060, nach 11 mm verlässt der Strahl die
-Opferplatte. Mit Z oben fährt er über das 2060 hinweg, und erst rund 125 mm
-weiter laufen die Y-Wagen vorn von den Schienen. Dort hält sie nichts auf.
+Vorn liegt die Grenze am Schaltpunkt: Mit Z unten steht das Lasermodul
+dort 6 mm vor dem vorderen 2060. Mit Z oben fährt es darüber hinweg, und
+nach 47 mm hält die gespannte Y-Kette das Portal auf. Hinten liegt die
+Grenze 5,3 mm vor dem Schienenende. Dahinter hält die Wagen nichts auf,
+bis du dort einen Anschlag baust: Sie laufen von den Schienen, und Kugeln
+fallen heraus.
 
 **Die Softlimits stimmen nur nach `$H`.** Nach dem Einschalten kennt GRBL die
 Position nicht. Mit `$X` statt `$H` nimmt es die aktuelle Stellung als
-hinteren Schaltpunkt und erlaubt von dort 327 mm nach vorn. Steht das Portal
+hintere Grenze und erlaubt von dort 325 mm nach vorn. Steht das Portal
 in der Mitte, reicht das bis weit über das vordere 2060 hinaus, nach hinten
-gibt es dann gar keinen Weg. Gefährdet ist also die Motorseite. Dasselbe
-passiert nach Schrittverlusten, etwa nach einem Anschlag oder bei zu hoher
-Beschleunigung. Deshalb:
+gibt es dann gar keinen Weg. Dasselbe passiert nach Schrittverlusten, etwa
+nach einem Anschlag oder bei zu hoher Beschleunigung. Dann stimmt auch
+die hintere Grenze nicht mehr, und dort ist kein Schalter. Deshalb:
 
 * Nach jedem Einschalten, nach dem Not-Aus und nach einem Hardlimit
   (ALARM:1) zuerst `$H`.
@@ -280,22 +329,27 @@ Beschleunigung. Deshalb:
 Eingang. Melden die Module „unterbrochen“ mit HIGH (`$5=1`, Prüfung D in
 [verkabelung.md](verkabelung.md#d-uno-grbl-und-lichtschranken)), ergeben
 zwei an einem Eingang ein UND: Die Leitung meldet erst, wenn beide
-unterbrochen sind, also nie. Beide Schranken wären tot, und `$H` schöbe die
-Wagen hinten über das Schienenende. Soll vorn doch einmal ein Schalter hin,
-dann ein Mikroschalter als **Öffner in Reihe** in die Signalader von W10:
-Öffnet er, zieht der Pull-up von GRBL die Leitung auf HIGH, und GRBL meldet
-„ausgelöst“; ein Kabelbruch tut dasselbe. Dazu `$21=1`. Dann müssen Aufträge
-hinten und links 1 mm vor dem Rand des Arbeitsfelds bleiben, denn dort
-liegen die Schaltpunkte.
+unterbrochen sind, also nie. Beide Schranken wären tot, und `$H` schöbe
+das Portal vorn bis gegen die gespannte Y-Kette. Für den Anschlag hinten,
+den du später baust, passt ein Mikroschalter als **Öffner in Reihe** in
+die Signalader von W10: Öffnet er, zieht der Pull-up von GRBL die Leitung
+auf HIGH, und GRBL meldet „ausgelöst“; ein Kabelbruch tut dasselbe. Dazu
+`$21=1`. Dann müssen Aufträge vorn und links 1 mm vor dem Rand des
+Arbeitsfelds bleiben, denn dort liegen die Schaltpunkte. Und vor `$H`
+darf `?` kein `Pn:Y` zeigen: Steht das Portal im hinteren Schalter, hält
+GRBL ihn für den vorderen.
 
 ## Kabel
 
-Weg wie in [elektronik-platz.svg](elektronik-platz.svg) gezeichnet: Y
-**0,49 m**, X **0,72 m**. Mit 15 % Reserve reicht für beide **1 m**
-3 × 0,25 mm² (AWG 24). Y läuft mit dem Kabel des rechten Y-Motors an der
-Rückseite des hinteren 2060 und dann in der unteren Außennut zum Halter. X
-läuft in der Y-Kette zum linken Schlitten und von dort vorn am Rohrende zum
-Halter. Adern und Anschlüsse (W9, W10): [verkabelung.md](verkabelung.md).
+X **0,72 m** wie in [elektronik-platz.svg](elektronik-platz.svg)
+gezeichnet. Mit 15 % Reserve reicht für beide **1 m** 3 × 0,25 mm²
+(AWG 24). Y kommt seit Portal Rev. 32 rechts aus dem Elektronikfach vorn,
+läuft unter dem rechten 2040 durch und in der unteren Außennut gut 130 mm
+nach hinten zum Halter. Das ist kürzer als die 0,49 m zum Halter hinten;
+die Zeichnung und der Kabelplan zeigen das Fach noch hinten
+(Zwischenstand). X läuft in der Y-Kette zum linken Schlitten und von dort
+vorn am Rohrende zum Halter. Adern und Anschlüsse (W9, W10):
+[verkabelung.md](verkabelung.md).
 
 ## Stückliste
 
@@ -326,8 +380,13 @@ Halter. Adern und Anschlüsse (W9, W10): [verkabelung.md](verkabelung.md).
    stößt er schon vor dem Schaltpunkt an Block oder Platine. Dann den
    Nippel ans rechte Ende setzen oder gegen eine flache Verschlussschraube
    tauschen.
-4. **Hintere Umlenkung** `[?]`: Wie weit reicht ihr Lagerbock außen am
-   rechten 2040 nach vorn? Der Halter endet 47 mm vor dem Profilende.
+4. **Stiftleiste der Platine Y** `[?]`: Sie liegt vorn an der Platine.
+   Steht sie senkrecht nach oben, trifft das Blatt sie erst, wenn das
+   Portal mit Z oben gut 15 mm über den Schaltpunkt hinaus fährt; mit
+   Softlimit nie. Dann darf sie nicht höher als 7,5 mm über der Platine
+   stehen.
+5. **Anschlag hinten:** Bis du ihn baust, schützt hinten nur das Softlimit,
+   und das erst nach `$H` ([oben](#softlimits-statt-zweitem-y-schalter)).
 
 ## Parametrik
 
@@ -338,7 +397,7 @@ ausführen.
 
 | Parameter | Wert | Wirkung |
 |---|---|---|
-| `schaltabstand` | 3 mm | so weit vor dem Schienenende schalten beide |
+| `schaltabstand` | 3 mm | so weit vor dem Wegende schalten beide: Y vor dem vorderen (`y_weg_vorn`), X vor dem linken Schienenende |
 | `fahne_dicke` / `fahne_ab_platine` / `fahne_ueber_gabel` | 3 / 7,5 / 2 mm | Blatt im Spalt, siehe [oben](#blatt-in-der-gabel) |
 | `gy_mitte_aussen` | 16 mm | Spaltmitte Y neben der Außenfläche des 2040 |
 | `ly_unter_kante` | 8 mm | Platine Y unter der Oberkante der 2040 |

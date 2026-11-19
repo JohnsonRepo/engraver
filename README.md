@@ -402,19 +402,25 @@ X-Energiekette mit Wanne und Stützen über den ganzen X-Weg samt Kabelweg
 und die Y-Energiekette mit Halter, Wanne und Trägern über den ganzen
 Y-Weg.
 
-**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 31 mit
+**Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 32 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
 Spannmittel Rev. 2, Kamerahalter Rev. 2, `maschine_check.py`) bis auf die
 bekannten 5 Verkabelungstabellen in `elektronik_check.py`.
 
-Neu sind Kamerahalter Rev. 2, Spannmittel Rev. 2 und Portal Rev. 31:
+Neu ist Portal Rev. 32: **Y referenziert vorn.** Die Lichtschranke sitzt
+außen am rechten 2040, gut 110 mm hinter dem vorderen 2060. Der Halter_Y
+ist gespiegelt (Gabel hinten, die Fahne kommt von hinten), die Fahne bleibt.
+GRBL: `$23=3`, `$131=325`, danach G54 neu setzen. Hinten schützt nur das
+Softlimit, bis dort ein Anschlag sitzt
+([endschalter.md](docs/endschalter.md#grbl)).
+
+Davor kamen Kamerahalter Rev. 2, Spannmittel Rev. 2 und Portal Rev. 31:
 
 - **Kamera:** Sie bleibt vorn rechts auf dem vorderen 2060, wo sie an der
   Maschine sitzt. Der neue Halter neigt sie zum Messpunkt.
 - **Anschlag:** Er kommt vor die Kamera, in die Ecke vorn rechts.
   Spannmittel sind dieselben Teile, um 180° um die Feldmitte gedreht.
-- **Gesamtmodell:** Portal dreht die Gruppe genauso. Die Lichtschranke für
-  Y soll später nach vorn.
+- **Gesamtmodell:** Portal dreht die Gruppe genauso.
 
 Davor kamen Elektronikfach Rev. 2 und Portal Rev. 30: Das Fach steht im Modell jetzt
 dort, wo es verbaut ist, **vor dem vorderen 2060** zwischen den Y-Motoren.

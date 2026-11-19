@@ -166,7 +166,21 @@ def plaetze_berechnen(KL, strecke, gesperrt, hb, anfang_fest=False):
     gleichmaessig verteilt, dass keine Spanne laenger als SPANNE wird;
     ganze Millimeter. anfang_fest: am Anfang der Strecke halten die Kabel
     schon (Zugentlastung am Elektronikfach) — die Halter der ersten Luecke
-    ruecken an ihr Ende, vor das naechste Hindernis."""
+    ruecken an ihr Ende, vor das naechste Hindernis. Reisst so ueber einem
+    Hindernis eine Spanne ueber SPANNE_MAX, gleichmaessig ueber die ganze
+    Strecke, sofern dann kein Halter an ein Hindernis stoesst (seit Portal
+    Rev. 32: Halter_Y steht rechts mitten auf der Strecke)."""
+    mitten = _luecken(KL, strecke, gesperrt, hb, anfang_fest)
+    if any(b - a > SPANNE_MAX for a, b in zip(mitten, mitten[1:])):
+        ganz = _verteilen([tuple(sorted(strecke))], strecke, hb, anfang_fest)
+        if all(y + hb + LUFT <= a or y - hb - LUFT >= b
+               for y in ganz for a, b, _ in gesperrt):
+            return ganz
+    return mitten
+
+
+def _luecken(KL, strecke, gesperrt, hb, anfang_fest):
+    """Die Strecke an den Hindernissen teilen, in jeder Luecke verteilen."""
     frei = [tuple(sorted(strecke))]
     for a, b, _ in sorted(gesperrt):
         neu = []
@@ -179,6 +193,11 @@ def plaetze_berechnen(KL, strecke, gesperrt, hb, anfang_fest=False):
             if b < f1:
                 neu.append((b, f1))
         frei = neu
+    return _verteilen(frei, strecke, hb, anfang_fest)
+
+
+def _verteilen(frei, strecke, hb, anfang_fest):
+    """Halter in den freien Luecken gleichmaessig verteilen."""
     mitten = []
     for k, (f0, f1) in enumerate(frei):
         lo, hi = f0 + hb + LUFT, f1 - hb - LUFT

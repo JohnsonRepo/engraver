@@ -8,7 +8,8 @@ prueft: Abgleich der Bezugsmasse, Schaltpunkte, Blatt im
 Gabelspalt, Freiraum gegen alles, was faehrt (Portal ueber den Y-Weg,
 Toolhead ueber X- und Z-Weg), gegen Rahmen, Riemen, die Winkel an den
 Kreuzungen und die Y-Motorhalter, Nuten und Schrauben, die Klammern und
-den Druck. Gibt die Stueckliste und die GRBL-Werte aus.
+den Druck. Gibt die Stueckliste und die GRBL-Werte aus. Y referenziert
+seit Portal Rev. 32 vorn (bis Rev. 31 hinten am Schienenende).
 
     python3 tools/endschalter_check.py
 
@@ -30,11 +31,13 @@ BETT = 250.0           # Bambu Lab A1: 256, mit Rand
 NUT_PLATZ = 6.0        # so weit darf eine Schraube in die Nut (Y-Motorhalter)
 NUT_LIPPE, NUTSTEIN = 1.8, 4.0     # Hammermutter Nut 6 [w]
 SCHEIBE_M5, SCHEIBE_M5_D = 1.0, 10.0   # DIN 125 unter dem Kopf (Y-Motorhalter)
-RITZEL_R = 8.0         # Flansch des hinteren Y-Ritzels, Radius [w]
 M3_KOPF_D, M3_KOPF_H = 5.5, 3.0
 EINSATZ_M3 = (5.0, 5.7)            # Aussendurchmesser, Laenge [w]
 EINSATZ_M2 = (3.2, 2.5)            # [v]
 X_SCHRITTE, Z_SCHRITTE = 41, 9
+# Softlimit Y hinten: die Y-Wagen bleiben so weit vor dem Schienenende (bis
+# Rev. 31 schaltete dort die Schranke 3 mm davor, dazu 2 mm Reserve)
+Y_RESERVE_HINTEN = 5.0
 
 
 def auf(q, dx=0.0, dy=0.0, dz=0.0, name=None):
@@ -210,11 +213,17 @@ def main():
         p.ok(text, abs(ist - soll), 0.02, '<=')
 
     # ------------------------------------------------------------------
-    p.titel('2) Y: Schaltpunkt und Blatt im Gabelspalt')
-    dy_s = EL['ly_strahl_y'] - EL['fy_y_rel'][0]
+    p.titel('2) Y: Schaltpunkt (vorn) und Blatt im Gabelspalt')
+    # die Fahne kommt von hinten: am Schaltpunkt steht der Strahl an ihrer
+    # Vorderkante; vorn endet der Y-Weg mit Z unten 3 mm vor dem 2060
+    dy_s = EL['ly_strahl_y'] - EL['fy_y_rel'][1]
     p.info('Portal beim Schalten (ab Mitte)', dy_s)
-    p.ok('schaltet vor dem hinteren Schienenende', d_schiene + dy_s,
-         ew('schaltabstand') - 0.01)
+    p.ok('Schaltpunkt wie lage() (schalt_dy)', abs(dy_s - EL['schalt_dy']),
+         0.01, '<=')
+    p.ok('schaltet vor dem vorderen Wegende (Z unten, vor dem 2060)',
+         d_vorn - dy_s, ew('schaltabstand') - 0.01)
+    p.info('   Toolhead mit Z unten beim Schalten vor dem vorderen 2060',
+           d_vorn - dy_s + 3.0)
     wagen_ende = L['wagen_y0'] - d_schiene
     p.ok('Y-Wagen am Schienenende buendig (Schiene hinten)',
          abs(wagen_ende - L['y_schiene_y'][0]), 0.05, '<=')
@@ -229,22 +238,21 @@ def main():
     p.ok('Blatt deckt den Strahl ab', EL['ly_strahl_z'] - bz[0], 1.0)
     p.ok('Blatt reicht ueber die offene Seite der Gabel',
          bz[1] - EL['ly_gabel_z'][1], 2.0)
-    vorne = EL['fy_y_rel'][0] - d_schiene
-    p.ok('am Schienenende: Blatt kommt nicht hinter die Gabel',
-         vorne - EL['ly_gabel_y'][0], 0.0)
+    p.ok('am vorderen Wegende: Blatt noch in der Gabel',
+         EL['ly_gabel_y'][1] - (EL['fy_y_rel'][1] + d_vorn), 0.0)
+    p.info('Strahl hinter der Innenseite des vorderen 2060',
+           L['quer_y_vorn'][0] - EL['ly_strahl_y'])
+    p.info('Halter Y: Abstand zum vorderen 2060',
+           L['quer_y_vorn'][0] - EL['hy_y'][1])
     p.info('Halter Y: Abstand zum hinteren 2060',
-           L['quer_y_hinten'][0] - EL['hy_y'][1])
-    # hinteres Ritzel hinter der Stirnseite der 2040, Lage wie Portal.py [?]
-    ritzel = L['yh_y'] + RITZEL_R
-    p.ok('Halter Y: vor dem Flansch des hinteren Ritzels (Lage [?])',
-         EL['hy_y'][0] - ritzel, 15.0)
-    p.ok('Halter Y: vor dem Profilende (Lagerbock der Umlenkung [?])',
-         EL['hy_y'][0] - L['rahmen_y'][0], 40.0)
+           EL['hy_y'][0] - L['quer_y_hinten'][1])
 
     # ------------------------------------------------------------------
     p.titel('3) Y: Freiraum ueber den ganzen Y-Weg')
     fest_y = T['halter_y']
-    dys = [-d_schiene + (d_schiene + d_vorn) * i / 200.0 for i in range(201)]
+    # vorn mit Z oben weiter als d_vorn: bis die Y-Kette das Portal haelt
+    d_max = d_vorn + L['yk_reserve_vorn']
+    dys = [-d_schiene + (d_schiene + d_max) * i / 200.0 for i in range(201)]
     fahne_y = T['fahne_y']
     ohne_blatt = [q for q in fahne_y if 'Blatt' not in q.name]
     best = (float('inf'),)
@@ -569,9 +577,13 @@ def main():
     # Reserve: sonst stuende der Wagen am anderen Ende genau buendig mit
     # dem Schienenende
     x_weg = L['xw_max'] - xs - 1.0 - 2.0
-    y_weg = d_vorn + d_schiene - ew('schaltabstand') - 1.0 - 2.0
+    # Y referenziert vorn (minus, $23=3): GRBL setzt den Schaltpunkt auf
+    # -$131, das Softlimit 0 liegt $131 weiter hinten
+    y_weg = dy_s + d_schiene - Y_RESERVE_HINTEN
     p.info('$130 (X: ab Schaltpunkt, 1 mm Rueckzug, 2 mm Reserve)', x_weg)
-    p.info('$131 (Y: ab Schaltpunkt, 1 mm Rueckzug, 2 mm Reserve)', y_weg)
+    p.info('$131 (Y: ab Schaltpunkt vorn bis {:.0f} mm vor das hintere '
+           'Schienenende)'.format(Y_RESERVE_HINTEN), y_weg)
+    p.info('$23=3: X nach links, Y nach vorn (beide minus), Z nach oben')
     return p.bericht()
 
 

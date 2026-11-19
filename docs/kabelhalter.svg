@@ -86,12 +86,12 @@
 <text x="253.0" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="middle">Träger</text>
 <text x="319.0" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="middle">Träger</text>
 <text x="440.0" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="end">Motor</text>
-<polyline points="35.7,64.0 35.7,36.0" fill="none" stroke="#5b6472" stroke-width="1.0" stroke-linejoin="round"/>
-<text x="31.7" y="78.0" font-size="9" fill="#5b6472" text-anchor="start">aus dem Gehäuse</text>
-<polygon points="32.2,41.0 39.2,41.0 35.7,35.0" fill="#5b6472"/>
-<rect x="44.7" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
-<text x="50.6" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L1</text>
-<text x="50.6" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">41</text>
+<polyline points="13.9,64.0 13.9,36.0" fill="none" stroke="#5b6472" stroke-width="1.0" stroke-linejoin="round"/>
+<text x="9.9" y="78.0" font-size="9" fill="#5b6472" text-anchor="start">aus dem Gehäuse</text>
+<polygon points="10.4,41.0 17.4,41.0 13.9,35.0" fill="#5b6472"/>
+<rect x="52.1" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
+<text x="57.9" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L1</text>
+<text x="57.9" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">31</text>
 <rect x="131.3" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
 <text x="137.1" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L2</text>
 <text x="137.1" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">57</text>
@@ -114,9 +114,9 @@
 <text x="407.0" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
 <rect x="66.0" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <rect x="385.0" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
-<rect x="34.6" y="17.0" width="20.5" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
+<rect x="295.9" y="17.0" width="20.5" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <rect x="418.0" y="17.0" width="22.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
-<text x="44.9" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="middle">Halter_Y</text>
+<text x="306.2" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="middle">Halter_Y</text>
 <text x="440.0" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="end">Motor</text>
 <rect x="144.5" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
 <text x="150.3" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">R1</text>

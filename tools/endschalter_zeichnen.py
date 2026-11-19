@@ -2,16 +2,18 @@
 """Zeichnung: Halter und Fahnen der Gabellichtschranken X und Y.
 
 Y: rechte Seite von hinten und von rechts aussen — Halter aussen am rechten
-2040 hinter dem hinteren 2060, Fahne an der Schlittenplatte. X: linkes
-Rohrende von vorn und von oben, dazu die Klammer an der Traegerplatte von
-links. Portal und Toolhead stehen am Schaltpunkt (3 mm vor dem
-Schienenende). Alle Masse aus Portal.py (dort stehen seit Rev. 15 auch die
-Endschalter) und ToolheadZ.py;
+2040, seit Portal Rev. 32 vorn (Referenz vorn, gut 110 mm hinter dem
+vorderen 2060), Fahne an der Schlittenplatte. X: linkes Rohrende von vorn
+und von oben, dazu die Klammer an der Traegerplatte von links. Portal und
+Toolhead stehen am Schaltpunkt (Y 3 mm vor dem vorderen Wegende, X 3 mm
+vor dem linken Schienenende). Alle Masse aus Portal.py (dort stehen seit
+Rev. 15 auch die Endschalter) und ToolheadZ.py;
 die Zeichnung ist massstaeblich und wandert mit den Parametern.
 
     python3 tools/endschalter_zeichnen.py   ->  docs/endschalter.svg
 """
 
+import math
 import os
 import sys
 import xml.dom.minidom
@@ -24,6 +26,7 @@ from antrieb_zeichnen import (text, linie, rect_px, de,  # noqa: E402
                               TEXT, GRAU, BLAU, FARBE)
 from portal_zeichnen import Feld                      # noqa: E402
 from portal_zeichnen import quer_mass                 # noqa: E402
+from endschalter_check import Y_RESERVE_HINTEN        # noqa: E402
 
 ZIEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs',
                     'endschalter.svg')
@@ -153,9 +156,10 @@ def main():
               '(Portal.py Rev. {})'.format(pm.REVISION), 14, TEXT,
               fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Portal und '
-              'Toolhead stehen am Schaltpunkt, {} mm vor dem Schienenende. '
-              'Orange: neu (PETG), schwarz: Fahnen und Klammer (schwarz '
-              'drucken).'.format(de(ew('schaltabstand'), 0)), 9, GRAU)]
+              'Toolhead stehen am Schaltpunkt, {} mm vor dem Wegende: Y vorn '
+              '(Referenz vorn), X links. Orange: neu (PETG), schwarz: Fahnen '
+              'und Klammer (schwarz drucken).'.format(
+                  de(ew('schaltabstand'), 0)), 9, GRAU)]
 
     # ---- Feld 1: Y von hinten (X nach rechts, Z nach oben) -----------------
     f1 = Feld(250, 100, (236.0, 300.0), (-72.0, 14.0), 4.4)
@@ -194,20 +198,21 @@ def main():
                                    2)), dx=4, dy=-4)
 
     # ---- Feld 2: Y von rechts aussen (Y nach rechts = vorn) ----------------
-    # von rechts gesehen liegt vorn links: Y laeuft nach links
-    f2 = Feld(f1.ox + f1.breite + 230, 100, (-372.0, -196.0), (-134.0, 14.0),
-              2.05, a_rueck=True)
+    # von rechts gesehen liegt vorn links: Y laeuft nach links. Seit Rev. 32
+    # der vordere Teil: Halter, Portal am Schaltpunkt, vorderes 2060
+    f2 = Feld(f1.ox + f1.breite + 230, 100, (-4.0, 214.0), (-134.0, 14.0),
+              1.66, a_rueck=True)
     quer_schnitt = ('svg', profil_schnitt(
-        f2, L['quer_y_hinten'][0], L['quer_y_hinten'][1], L['quer_z'][0],
+        f2, L['quer_y_vorn'][0], L['quer_y_vorn'][1], L['quer_z'][0],
         L['quer_z'][1], 'lruo'), 300.0)
     winkel = (Q('Winkel', EL['aussen_x'], EL['aussen_x'] + 20.0,
-                *L['quer_y_hinten'], L['rahmen_z0'], L['rahmen_z0'] + 20.0),
+                *L['quer_y_vorn'], L['rahmen_z0'], L['rahmen_z0'] + 20.0),
               'stahl', {'fill_opacity': '0.8'})
     nut_linien = []
     for zn in (EL['nut_u_z'], EL['nut_o_z']):
         for s in (-1, 1):
             nut_linien.append(('svg', f2.linie(
-                L['rahmen_y'][0], zn + s * 3.1, -196.0, zn + s * 3.1,
+                -4.0, zn + s * 3.1, 214.0, zn + s * 3.1,
                 '#8c939e', 0.6), EL['aussen_x'] + 0.01))
     teile2 = ([(Q('2040', R - 10.0, R + 10.0, L['rahmen_y'][0], 240.0,
                   L['rahmen_z0'], EL['rahmen_z1']), 'profil', leer)]
@@ -218,27 +223,31 @@ def main():
     t += f2.ausschnitt('y2', ansicht(f2, teile2 + kreise, 'y', 'z', 'x', 1))
     t += f2.rahmen('Y: von rechts außen (vorn links, hinten rechts)')
     t += f2.spalte([
-        (-240.0, -100.0, 'hinteres 2060'),
-        (-240.0, L['rahmen_z0'] + 10.0, 'Winkel an der\nKreuzung (20 mm)'),
-        (-275.0, -20.0, 'Y-Wagen: {} mm vor dem\nSchienenende'.format(
-            de(ew('schaltabstand'), 0))),
-        (-250.0, -12.0, 'Schlittenplatte')],
+        (195.0, -100.0, 'vorderes 2060'),
+        (190.0, L['rahmen_z0'] + 10.0, 'Winkel an der\nKreuzung (20 mm)'),
+        (140.0, -45.0, 'rechtes 2040')],
         f2.ox - 12, 'end', abstand=26.0)
     t += f2.spalte([
-        (-356.0, -45.0, 'rechtes 2040, Ende'),
-        (-340.0, EL['nut_o_z'], 'Rücklauf in der oberen Nut'),
+        (75.0, -2.0, 'Portal am Schaltpunkt: mit Z\nunten {} mm vor dem '
+         '2060'.format(de(w('y_weg_vorn') - L['schalt_dy'] + 3.0, 0))),
+        (25.0, -21.0, 'Y-Wagen'),
+        (6.0, -13.0, 'Schlittenplatte'),
+        (2.0, EL['nut_o_z'], 'Rücklauf in der oberen Nut'),
         (EL['ly_strahl_y'], EL['ly_gabel_z'][1],
-         'Fahne am Strahl'),
+         'Fahne kommt von hinten,\nVorderkante am Strahl'),
         (hy_y[0] + 4.0, EL['nut_u_z'], 'Halter Y, M5 in der unteren Nut')],
         f2.ox + f2.breite + 12, 'start', abstand=26.0)
-    t += quer_mass(f2, hy_y[1], L['quer_y_hinten'][0], -122.0,
-                   '{} mm'.format(de(L['quer_y_hinten'][0] - hy_y[1], 0)))
-    for yy, zz in ((L['y_schiene_y'][0], EL['rahmen_z1'] + 8.0),
-                   (L['wagen_y0'] + dy, L['y_wagen_z0'])):
-        t.append(f2.linie(yy, zz, yy, 5.5, '#9aa4b1', 0.5))
-    t += quer_mass(f2, L['y_schiene_y'][0], L['wagen_y0'] + dy, 4.0,
-                   'Schienenende {} mm'.format(de(L['wagen_y0'] + dy
-                                                  - L['y_schiene_y'][0], 0)))
+    t += quer_mass(f2, hy_y[1], L['quer_y_vorn'][0], -122.0,
+                   'Halter {} mm'.format(de(L['quer_y_vorn'][0] - hy_y[1], 1)))
+    t.append(f2.linie(hy_y[1], EL['hy_fuss_z'][0], hy_y[1], -125.0,
+                      '#9aa4b1', 0.5))
+    t.append(f2.linie(EL['ly_strahl_y'], EL['ly_gabel_z'][1],
+                      EL['ly_strahl_y'], -105.0, '#9aa4b1', 0.5))
+    t.append(f2.linie(L['quer_y_vorn'][0], L['quer_z'][1],
+                      L['quer_y_vorn'][0], -125.0, '#9aa4b1', 0.5))
+    t += quer_mass(f2, EL['ly_strahl_y'], L['quer_y_vorn'][0], -102.0,
+                   'Strahl {} mm hinter dem 2060'.format(
+                       de(L['quer_y_vorn'][0] - EL['ly_strahl_y'], 0)))
 
     # ---- Teile X (relativ zum Portal; Toolhead am Schaltpunkt) -------------
     hyr = EL['hx_y_rel']
@@ -375,10 +384,12 @@ def main():
     ty = f5.oy + 30
     tx = f5.ox + f5.breite + 200
     zeilen = [
-        ('Y', 'Halter aussen am rechten 2040, {} mm hinter dem hinteren 2060, '
-         '2 × M5×{} in der unteren Nut'.format(
-             de(L['quer_y_hinten'][0] - hy_y[1], 0),
+        ('Y', 'Referenz vorn: Halter aussen am rechten 2040, {} mm hinter '
+         'dem vorderen 2060, 2 × M5×{} in der unteren Nut'.format(
+             de(L['quer_y_vorn'][0] - hy_y[1], 1),
              de(EL['hy_m5_schraube'], 0))),
+        ('', 'Gabel an der hinteren Kante der Platine: die Fahne kommt von '
+         'hinten'),
         ('', 'Gabel {} mm neben der Profilfläche, Platine {} mm unter der '
          'Oberkante der 2040'.format(de(EL['gy_x'] - EL['aussen_x'], 1),
                                       de(EL['rahmen_z1'] - EL['ly_pcb_z'][1],
@@ -400,11 +411,12 @@ def main():
              de(ew('ls_strahl_hoehe') - ew('fahne_ab_platine'), 1))),
         ('Druck', 'PETG; Fahnen und Klammer schwarz (helles PETG lässt IR '
          'durch); keine Stützen'),
-        ('GRBL', '$23=1 (X nach links), $130={}, $131={} (1 mm Rückzug, '
-         '2 mm Reserve)'
-         .format(de(L['xw_max'] - xs - 1.0 - 2.0, 0),
-                 de(portal_check.y_weg(w, L, TL, feste, bewegte)[1]
-                    + EL['y_weg_hinten'] - ew('schaltabstand') - 3.0, 0))),
+        ('GRBL', '$23=3 (X nach links, Y nach vorn), $130={}, $131={} '
+         '(hinten {} mm vor dem Schienenende)'
+         .format(de(math.floor(L['xw_max'] - xs - 1.0 - 2.0), 0),
+                 de(math.floor(L['schalt_dy'] + EL['y_weg_hinten']
+                               - Y_RESERVE_HINTEN), 0),
+                 de(Y_RESERVE_HINTEN, 0))),
     ]
     t.append(text(tx, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))
     for i, (k_, v) in enumerate(zeilen):

@@ -58,7 +58,10 @@ Die Litzen der Y-Kette (W7, W9, W11, W12, W15) gehen hinter der Wanne aus
 der Rinne nach oben über den Wannenboden in das Endstück. Dort hält sie ein
 Kabelbinder durch das Fenster von **L2**, ein zweiter in der Wanne
 ([energiekette.md](energiekette.md#montage-y)). W10 läuft rechts nur ein
-kurzes Stück nach hinten zum Halter_Y, dort ist kein Halter nötig.
+kurzes Stück zum Halter_Y, dort ist kein Halter nötig. Seit Portal Rev. 32
+sitzt der Halter_Y vorn, zwischen R3 und R4 (13,5 mm hinter R3). Die
+Plätze bleiben: Gleichmäßig über die Strecke verteilt, stoßen sie nicht an
+ihn; Lücke für Lücke verteilt, würde die Spanne über ihm 124 mm.
 
 ## Plätze
 

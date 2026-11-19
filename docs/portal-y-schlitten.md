@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 31, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 32, fünfundzwanzig
 gedruckte Teile; seit Rev. 29 dazu das
 [Gesamtmodell der ganzen Maschine](#gesamtmodell-die-ganze-maschine-seit-rev-29)).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
@@ -44,7 +44,7 @@ sind sie unter den Einsätzen schmal
 | 4 | **Spannbock** | 1 | rechts fest auf dem Stirnblock (2 × M3): Anschlag für die Zugschraube |
 | 5 | **Lagerschlitten** | 1 | Rahmen um das Umlenkritzel: oben das Kugellager, unten das Gleitlager der Welle; gleitet auf dem Rohr (Feder in der oberen Nut), die Zugschraube zieht ihn nach außen. Seit Rev. 18, ersetzt Umlenkhalter und Spannklotz |
 | 6 | **Y-Motorhalter** | 2 (dasselbe Teil) | vorn an jeder 2040: U-Bügel mit Schenkeln an beiden Seitenflächen (4 × M5 in den unteren Nuten), NEMA 17 hängend, Ritzel mittig zur 2040 direkt auf der Welle. Seit Rev. 16 in diesem Skript (vorher `YMotorhalter.py`), Einzelheiten in [y-motorhalter.md](y-motorhalter.md) |
-| 7 | **Endschalter** | 5 | Halter_Y und Fahne_Y, Halter_X, Klammer_X und Fahne_X für die Gabellichtschranken; Fahnen und Klammer **schwarz**. Lage, Montage und Einstellen: [endschalter.md](endschalter.md) (bis Rev. 14 im eigenen Skript `Endschalter.py`) |
+| 7 | **Endschalter** | 5 | Halter_Y und Fahne_Y, Halter_X, Klammer_X und Fahne_X für die Gabellichtschranken; Fahnen und Klammer **schwarz**. Lage, Montage und Einstellen: [endschalter.md](endschalter.md) (bis Rev. 14 im eigenen Skript `Endschalter.py`). Seit Rev. 32 referenziert Y vorn: Halter_Y gut 110 mm hinter dem vorderen 2060, gespiegelt (Gabel hinten) |
 | 8 | **Kettenwanne** | 1 | Rinne über dem Portalrohr direkt hinter der Trägerplatte, führt den Untertrum der X-Energiekette und trägt ihren Festpunkt. Seit Rev. 19 |
 | 9 | **Wannenstütze** | 3 | hinten am Rohr (M5 in der hinteren Nut), Arm über X-Riemen und Riemenhalter unter die Wanne; die am Festpunkt ist breiter und trägt seit Rev. 21 den Kabelflügel (Kabelbinder für die Litzen aus der oberen Nut). Seit Rev. 19 |
 | 10 | **Kettenhalter Y** | 1 | auf der Platte des linken Schlittens hinter dem Stirnblock (2 × M3 von unten), trägt das bewegte Ende der Y-Energiekette. Seit Rev. 21 |
@@ -189,9 +189,10 @@ Im Betrieb endet der Y-Weg vorn bei +106 mm (siehe unten), und dort bleiben
 
 Den Y-Weg in der Firmware also vorn auf die Grenze des 2060 setzen (die
 Arbeitsfläche endet ohnehin dort), dann erreicht der Toolhead die Halter nie;
-hinten auf das Schienenende, mit dem Y-Endschalter 3 mm davor — die Wagen
-dürfen nicht über das Ende hinaus
-([elektronik.md](elektronik.md#endschalter)). Hinter dem hinteren 2060
+hinten bis kurz vor das Schienenende — die Wagen dürfen nicht über das
+Ende hinaus. Seit Rev. 32 schaltet der Y-Endschalter vorn, 3 mm vor der
+Grenze am 2060; hinten hält das Softlimit die Wagen 5 mm vor dem
+Schienenende ([endschalter.md](endschalter.md#grbl)). Hinter dem hinteren 2060
 bleibt unter den 2040 ein Fach frei, in das nichts hineinfährt — dort ist
 Platz für die Elektronik ([elektronik.md](elektronik.md)).
 Liegen die Schienen anders als angenommen (mittig zu den 2040 `[?]`), ändern

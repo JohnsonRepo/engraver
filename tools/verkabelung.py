@@ -477,27 +477,34 @@ def shield_belegung(lts=None):
     return bel
 
 
+# Softlimit Y hinten: die Y-Wagen bleiben so weit vor dem Schienenende
+# (wie tools/endschalter_check.py)
+Y_RESERVE_HINTEN = 5.0
+
+
 def grbl(Q):
-    """GRBL-Einstellungen; die Wege folgen aus den Schaltpunkten: vom
-    Schaltpunkt bis ans andere Ende, minus 1 mm Rueckzug und 2 mm Reserve
-    (dort stuende der Wagen sonst genau am Schienenende)."""
+    """GRBL-Einstellungen; die Wege folgen aus den Schaltpunkten: X und Z
+    vom Schaltpunkt bis ans andere Ende, minus 1 mm Rueckzug und 2 mm
+    Reserve (dort stuende der Wagen sonst genau am Schienenende). Y
+    referenziert seit Portal Rev. 32 vorn: vom Schaltpunkt bis
+    Y_RESERVE_HINTEN vor das hintere Schienenende, dort ist kein Schalter."""
     L, TL, K, es_w = Q['L'], Q['TL'], Q['K'], Q['es_w']
     s = es_w('schaltabstand')
     x = (L['xw_max'] - L['xw_min']) - s - 1.0 - 2.0
-    y = K['d_vorn'] + K['d_schiene'] - s - 1.0 - 2.0
+    y = L['schalt_dy'] + K['d_schiene'] - Y_RESERVE_HINTEN
     z = TL['z_arbeit'] - 1.0 - 2.0
     return [
         ('$3', 'nach dem Test', 'Drehrichtung: X+ nach rechts, Y+ nach '
          'hinten, Z+ nach oben ([Motoren](#f-motoren-und-drehrichtung))'),
         ('$5', '1 `[w]`', 'Lichtschranken melden „unterbrochen“ mit HIGH; '
          'im Test prüfen ([Lichtschranken](#d-uno-grbl-und-lichtschranken))'),
-        ('$20', '1', 'Softlimits an: schützen beide Enden, auch die '
-         'Motorseite von Y, aber nur nach `$H` ([warum](endschalter.md'
-         '#softlimits-statt-zweitem-y-schalter))'),
+        ('$20', '1', 'Softlimits an: schützen beide Enden, auch Y hinten '
+         '(dort ist kein Schalter), aber nur nach `$H` ([warum]'
+         '(endschalter.md#softlimits-statt-zweitem-y-schalter))'),
         ('$21', '0', 'Hardlimits aus, bis die Schalter nie falsch auslösen'),
         ('$22', '1', 'Referenzfahrt an: erst Z, dann X und Y'),
-        ('$23', '1', 'X referenziert nach links (minus), Y nach hinten und '
-         'Z nach oben (plus)'),
+        ('$23', '3', 'X referenziert nach links und Y nach vorn (beide '
+         'minus), Z nach oben (plus)'),
         ('$27', '1', '1 mm Rückzug vom Schalter'),
         ('$30', '1000', 'S1000 = volle Laserleistung'),
         ('$32', '1', 'Lasermodus'),
@@ -508,8 +515,8 @@ def grbl(Q):
          'bis ans rechte Schienenende, minus Rückzug und Reserve'.format(
              de(x + 3.0, 2))),
         ('$131', '{:.0f}'.format(math.floor(y)), 'Y: {} mm vom Schaltpunkt '
-         'bis vor das vordere 2060, minus Rückzug und Reserve'.format(
-             de(y + 3.0, 2))),
+         'vorn bis ans hintere Schienenende, minus {} mm Reserve'.format(
+             de(y + Y_RESERVE_HINTEN, 2), de(Y_RESERVE_HINTEN, 0))),
         ('$132', '{:.0f}'.format(math.floor(z)), 'Z: {} mm Arbeitsweg vom '
          'Schaltpunkt bis ganz unten, minus Rückzug und Reserve'.format(
              de(z + 3.0, 2))),

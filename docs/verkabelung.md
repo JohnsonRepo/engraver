@@ -290,8 +290,9 @@ Dann [Prüfung C](#c-wandler-auf-120-v).
    mit einem 1-poligen Dupont-Gehäuse auf den Eingang: X → **X−** (D9),
    Y → **Y+** (D10), Z → **SpnEn** (D12).
 4. Wege: X durch die Y-Kette, hinter dem Schlitten über das Rohr nach
-   vorn zum Halter ([endschalter.md](endschalter.md)); Y durch den Kanal
-   und in der unteren Nut außen am rechten 2040 nach hinten; Z durch beide
+   vorn zum Halter ([endschalter.md](endschalter.md)); Y zum rechten 2040
+   und in dessen unterer Nut außen nach hinten zum Halter, seit Portal
+   Rev. 32 gut 110 mm hinter dem vorderen 2060; Z durch beide
    Ketten zum Toolhead. Hat die Z-Lichtschranke schon ein Kabel: Es muss
    bis zum Gehäuse reichen, also 2 m lang sein.
 
@@ -415,7 +416,9 @@ sind sie in [elektronik.md](elektronik.md#kabel).
   180 der Y-Kette (zwei Kabelbinder durch die Schlitze im Wannenboden).
 * **Vorn aus dem Gehäuse** in den Kanal, darin nach rechts, an der
   Rückseite des hinteren 2060 (mittlere Nut) zum rechten 2040 und in dessen
-  untere Außennut: W14 und W2 nach vorn, W10 nach hinten zum Halter Y. W2
+  untere Außennut: W14 und W2 nach vorn, W10 nach hinten zum Halter Y
+  (seit Portal Rev. 32 vorn, gut 110 mm hinter dem vorderen 2060; mit dem
+  Fach vorn ist W10 kürzer, der Kabelplan rechnet noch hinten). W2
   verlässt die Nut vor dem 2060, läuft in dessen oberer Nut vorn nach
   links und rechts oben ins Gehäuse des Not-Aus. W18 geht mit bis unter
   den Pi-Halter, von unten in seine Haube und an ihrer linken Wand hoch zum
@@ -548,14 +551,17 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
   ersten Mal die Achsen ein paar Zentimeter vor ihre Schranken stellen und
   langsamer suchen lassen: `$25=200`, danach wieder `$25=500`.
 * `$H`: Z fährt nach oben bis zu seiner Lichtschranke, dann X nach links
-  und Y nach hinten, beide zugleich. Jede Achse muss an ihrer eigenen
+  und Y nach **vorn** (seit Portal Rev. 32), beide zugleich. Jede Achse
+  muss an ihrer eigenen
   Lichtschranke anhalten und darf nirgends anschlagen. Danach meldet `?`
   `Idle` ohne `Pn:`: Jede Achse steht 1 mm vor ihrem Schaltpunkt.
 * Ab jetzt nach jedem Einschalten, nach dem Not-Aus und nach einem
-  Hardlimit zuerst `$H`; `$X` nur nach ALARM:2. Vorn auf der Motorseite hat
-  Y keinen Schalter, dort schützen allein die Softlimits, und die stimmen
-  nur nach der Referenzfahrt
+  Hardlimit zuerst `$H`; `$X` nur nach ALARM:2. Hinten hat Y keinen
+  Schalter, dort schützen allein die Softlimits, und die stimmen nur nach
+  der Referenzfahrt
   ([endschalter.md](endschalter.md#softlimits-statt-zweitem-y-schalter)).
+  Nach dem Umstellen auf die Referenz vorn den Nullpunkt G54 neu setzen
+  ([endschalter.md](endschalter.md#erste-referenzfahrt-vorn)).
   In LightBurn „Auto-home on startup“ einschalten; in CNCjs nach dem
   Verbinden „Homing“ drücken, nicht „Unlock“.
 
@@ -606,10 +612,10 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
 |---|---|---|
 | `$3` | nach dem Test | Drehrichtung: X+ nach rechts, Y+ nach hinten, Z+ nach oben ([Motoren](#f-motoren-und-drehrichtung)) |
 | `$5` | 1 `[w]` | Lichtschranken melden „unterbrochen“ mit HIGH; im Test prüfen ([Lichtschranken](#d-uno-grbl-und-lichtschranken)) |
-| `$20` | 1 | Softlimits an: schützen beide Enden, auch die Motorseite von Y, aber nur nach `$H` ([warum](endschalter.md#softlimits-statt-zweitem-y-schalter)) |
+| `$20` | 1 | Softlimits an: schützen beide Enden, auch Y hinten (dort ist kein Schalter), aber nur nach `$H` ([warum](endschalter.md#softlimits-statt-zweitem-y-schalter)) |
 | `$21` | 0 | Hardlimits aus, bis die Schalter nie falsch auslösen |
 | `$22` | 1 | Referenzfahrt an: erst Z, dann X und Y |
-| `$23` | 1 | X referenziert nach links (minus), Y nach hinten und Z nach oben (plus) |
+| `$23` | 3 | X referenziert nach links und Y nach vorn (beide minus), Z nach oben (plus) |
 | `$27` | 1 | 1 mm Rückzug vom Schalter |
 | `$30` | 1000 | S1000 = volle Laserleistung |
 | `$32` | 1 | Lasermodus |
@@ -617,7 +623,7 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
 | `$101` | 80 | Y: GT2, 20 Zähne, 1/16 |
 | `$102` | 1600 | Z: Tr8×2, 1/16 |
 | `$130` | 385 | X: 388,2 mm vom Schaltpunkt bis ans rechte Schienenende, minus Rückzug und Reserve |
-| `$131` | 327 | Y: 330,3 mm vom Schaltpunkt bis vor das vordere 2060, minus Rückzug und Reserve |
+| `$131` | 325 | Y: 330,3 mm vom Schaltpunkt vorn bis ans hintere Schienenende, minus 5 mm Reserve |
 | `$132` | 82 | Z: 85,55 mm Arbeitsweg vom Schaltpunkt bis ganz unten, minus Rückzug und Reserve |
 <!-- /tabelle:grbl -->
 
@@ -671,6 +677,9 @@ sonst kommt `error:10`.
   gestrichen.
 * **GRBL:** `$130=385` und `$132=82`, beide mit 1 mm Rückzug und 2 mm
   Reserve wie Y. Vorher standen dort ≈ 387 und ≈ 84.
+* **Referenz Y vorn** (2026-11-19, Portal Rev. 32): `$23=3` statt 1,
+  `$131=325` statt 327. Die Lichtschranke Y bleibt an Y+ (D10), nur der
+  Halter sitzt vorn ([endschalter.md](endschalter.md#grbl)).
 * **Pi statt PC** (2026-10-10): W17 geht zum Pi, neu sind W18 (24 V vor
   Schalter und Not-Aus zum 5-V-Wandler) und W19 (5 V in den Pi). Damit
   gilt die Einschaltreihenfolge „Netzteil, dann Schalter“ von selbst.

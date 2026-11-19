@@ -25,8 +25,9 @@ fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an d
 fusion/PiHalter/               Halter mit Haube für Pi Zero 2 W und 5-V-Wandler an der Rückseite des hinteren 2060  ← neu
 fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
 fusion/Spannmittel/           Anschlagwinkel, Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
+fusion/Kamerahalter/           Halter für das Camera Module 3 (Autofokus) oben auf dem hinteren 2060, vor dem Elektronikfach  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
-stl/                           druckfertige STL ohne Fusion: Kasten und Haube des Elektronik-Gehäuses, Kabelhalter, Pi-Halter und seine Haube
+stl/                           druckfertige STL ohne Fusion: Kasten und Haube des Elektronik-Gehäuses, Kabelhalter, Pi-Halter und seine Haube, Kamerahalter
 pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus, Hotspot ohne WLAN
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
@@ -53,6 +54,8 @@ docs/opferplatte.md            Opferplatte, Führungsfüße und Riegel: Lage, H�
 docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, Schnitte durch Füße, Riegel und Anschlag
 docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzenter, Niederhalter, Höhe unter dem Toolhead
 docs/spannmittel.svg           Ecke der Opferplatte mit Spannmitteln von oben, Schnitte durch Niederhalter und Anschlag, Exzenter
+docs/kamerahalter.md           Kamerahalter für den Autofokus: Messprinzip, Lage, Sicht zum Messpunkt, Teile, Druck, Montage, Kabelweg
+docs/kamerahalter.svg          Halter von oben auf dem 2060, Blick zur Anschlagecke, Schnitt längs der Sichtlinie, Halter von vorn
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
 docs/y-motorhalter.md          Y-Antrieb: Riemen in der Nut, Aufbau, Spannen, Montage, Druck
@@ -86,6 +89,8 @@ tools/opferplatte_check.py     Prüfung von Opferplatte, Füßen und Riegel: Arb
 tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte, Füßen und Riegel
 tools/spannmittel_check.py     Prüfung der Spannmittel: Höhe unter dem Toolhead, Lage, Selbsthemmung, Schrauben, Druck
 tools/spannmittel_zeichnen.py  erzeugt die Zeichnung der Spannmittel
+tools/kamerahalter_check.py    Prüfung des Kamerahalters: Lage, Freiraum über den ganzen Weg, Fach, Sicht zum Messpunkt je Dicke, Schrauben, Druck, Kabel
+tools/kamerahalter_zeichnen.py erzeugt die Zeichnung des Kamerahalters
 tools/kette_zeichnen.py        erzeugt die Zeichnung der X-Energiekette
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
@@ -249,6 +254,25 @@ und der Toolhead bleibt mindestens 3,7 mm darüber. Befestigt wird mit
 Spanplattenschrauben 3,0 × 20. Details in
 [docs/spannmittel.md](docs/spannmittel.md).
 
+### Kamerahalter für den Autofokus (neu)
+
+Ein **Raspberry Pi Camera Module 3** soll den Fokus einstellen. Der Kopf
+fährt an einen festen Messpunkt 30 mm rechts und 35 mm vor der Innenecke
+des Anschlags, Z ganz oben, und schaltet den Laser kurz und schwach ein. Der
+Strahl steht senkrecht, also liegt der Punkt bei jeder Werkstückdicke an
+derselben Stelle. Die Kamera sieht ihn je nach Dicke höher oder tiefer im
+Bild: Ein Bild ergibt die Höhe der Oberfläche. Der Halter steht mit einem
+**Fuß** und 2 × M5 in der Nut oben auf dem hinteren 2060, direkt vor dem
+Elektronikfach, so ist das Kabel zum Pi kurz. Darauf steht eine
+**senkrechte Wand**, schräg zur Ecke gedreht; sie trägt die Kamera hochkant
+auf vier Polstern, mit 2 × M2 an der Kabelseite und 2 Zapfen an der
+Gegenkante. Hochkant hat die Kamera senkrecht 66° Bildwinkel und kann
+waagerecht schauen, deshalb druckt der Halter ohne Stützen. Der Punkt liegt
+für 0 bis 58 mm Werkstück mindestens 6,5° im Bild, 168 bis 185 mm von der
+Linse, mit 0,05 mm Höhe je Pixel. Zur Trägerplatte bleiben am Ende des
+Y-Wegs 3 mm, zum X-Wagen 18 mm. Die Software auf dem Pi fehlt noch. Details
+in [docs/kamerahalter.md](docs/kamerahalter.md).
+
 ### Endschalter X und Y (neu)
 
 Zwei LM393-Gabellichtschranken wie an Z, beide schalten 3 mm vor dem
@@ -297,7 +321,7 @@ Den Ordner unter `fusion/` (`.py` **und** `.manifest`) hierhin kopieren:
 * Windows: `%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\`
 
 Dann in Fusion *Utilities → Scripts and Add-Ins → ToolheadZ → Run* (bzw.
-*Portal*, *Elektronik*, *NotAus*, *Kabelhalter*, *PiHalter*, *Opferplatte* oder *Spannmittel*). Jeder Lauf legt ein **neues
+*Portal*, *Elektronik*, *NotAus*, *Kabelhalter*, *PiHalter*, *Opferplatte*, *Spannmittel* oder *Kamerahalter*). Jeder Lauf legt ein **neues
 Dokument** an, das aktive bleibt unberührt. Am Ende erscheint
 ein Validierungsbericht mit Maßkette, Verfahrweg, Schraubenliste und
 Montagereihenfolge.
@@ -328,11 +352,13 @@ python3 tools/kabelhalter_check.py  # Kabelhalter: Schraube, Rinne, Plätze, Fre
 python3 tools/kabelhalter_zeichnen.py  # docs/kabelhalter.svg neu erzeugen
 python3 tools/pihalter_check.py     # Pi-Halter: Lage, Freiraum, Schrauben, Pi, Wandler, Haube, Druck
 python3 tools/pihalter_zeichnen.py  # docs/pihalter.svg neu erzeugen
-pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Kasten, Haube, Kabelhalter, Pi-Halter und seine Haube in Drucklage (mit Namen, z. B. PiHalter: nur diese)
+pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Kasten, Haube, Kabelhalter, Pi-Halter und seine Haube, Kamerahalter in Drucklage (mit Namen, z. B. Kamerahalter: nur dieser)
 python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
 python3 tools/spannmittel_check.py  # Spannmittel: Höhe unter dem Toolhead, Lage, Exzenter, Schrauben
 python3 tools/spannmittel_zeichnen.py  # docs/spannmittel.svg neu erzeugen
+python3 tools/kamerahalter_check.py  # Kamerahalter: Lage, Freiraum, Fach, Sicht zum Messpunkt, Schrauben, Kabel
+python3 tools/kamerahalter_zeichnen.py  # docs/kamerahalter.svg neu erzeugen
 python3 tools/kette_zeichnen.py     # docs/energiekette.svg und energiekette-y.svg neu erzeugen
 ```
 
@@ -358,7 +384,10 @@ Y-Weg.
 
 **Stand:** alle Prüfungen bestanden (ToolheadZ Rev. 38, Portal Rev. 28 mit
 dem Y-Motorhalter, `y_motorhalter_check.py`, Opferplatte Rev. 3,
-Spannmittel Rev. 1). Neu ist Portal Rev. 28: Die Klemmtürme aus Rev. 26/27
+Spannmittel Rev. 1, Kamerahalter Rev. 1). Neu ist der Kamerahalter für den
+Autofokus mit `kamerahalter_check.py`
+([kamerahalter.md](docs/kamerahalter.md)). Davor kam Portal Rev. 28: Die
+Klemmtürme aus Rev. 26/27
 streiften an der engsten Stelle an der 2040. Rev. 26 hatte die an einer
 Stelle gemessenen 3,0 statt 2 mm Luft für den ganzen Weg angenommen. Jetzt
 stehen die Türme an der engsten Stelle 1 mm neben der 2040, an der

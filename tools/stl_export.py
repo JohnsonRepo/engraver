@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """STL-Dateien zum Drucken, ohne Fusion: die vier Teile des Elektronikfachs
-(fusion/Elektronikfach) und der Kabelhalter (fusion/Kabelhalter).
+(fusion/Elektronikfach), der Kabelhalter (fusion/Kabelhalter) und der
+Kamerahalter (fusion/Kamerahalter).
 
 Die Geometrie entsteht aus denselben Massen wie in Fusion — lage() der
 Skripte wird mit gestubbtem adsk-Modul importiert. Das Elektronikfach
@@ -16,10 +17,15 @@ gegen den Elefantenfuss (0,4 mm, in vier Stufen):
   Deckel links/rechts Oberseite aufs Bett, Lippe nach oben
   Kabelhalter        Querschnitt flach, die 16 mm Breite nach oben, die
                      Spitze der Traene oben
+  Kamerahalter       Fuss aufs Bett, die Wand steht senkrecht; gebaut im
+                     lokalen Rahmen des Bauplans (die Drehung um Z, mit der
+                     Fusion ihn an seinen Platz stellt, ist fuer den Druck
+                     gleichgueltig)
 
     pip install manifold3d
     python3 tools/stl_export.py               ->  stl/*.stl
     python3 tools/stl_export.py Elektronikfach  ->  nur das Fach
+    python3 tools/stl_export.py Kamerahalter    ->  nur der Kamerahalter
 """
 
 import math
@@ -181,6 +187,17 @@ def kabelhalter(km):
     return fussfase(k, w('fase_fuss')), soll
 
 
+# ---- Kamerahalter -------------------------------------------------------------
+def kamerahalter(km):
+    """Wie bau_halter() in Kamerahalter.py: der Bauplan im lokalen Rahmen
+    (Wand achsparallel), in Drucklage um die Hoehe des Fusses verschoben."""
+    L = km.lage()
+    T = L['teile']['Kamerahalter']
+    k = plan_ausfuehren(km, L['plan']['Kamerahalter']).transform(T['druck'])
+    (x0, x1), (y0, y1), (z0, z1) = T['bbox']
+    return fussfase(k, km.w('fase_fuss')), (x1 - x0, y1 - y0, z1 - z0)
+
+
 # ---- STL ----------------------------------------------------------------------
 def stl_schreiben(pfad, teil, name):
     """Binaere STL, Masse in mm."""
@@ -213,6 +230,8 @@ def main(nur=()):
                              'elektronikfach')
     km = bauraum.modul_laden(os.path.join(FUSION, 'Kabelhalter',
                                           'Kabelhalter.py'), 'kabelhalter')
+    cm = bauraum.modul_laden(os.path.join(FUSION, 'Kamerahalter',
+                                          'Kamerahalter.py'), 'kamerahalter')
     os.makedirs(ZIEL, exist_ok=True)
     fehler = 0
     teile = [('Elektronikfach_{}_r{}'.format(n, fm.REVISION),
@@ -221,6 +240,8 @@ def main(nur=()):
                        'Deckel_rechts')]
     teile.append(('Kabelhalter_r{}'.format(km.REVISION),
                   lambda: kabelhalter(km)))
+    teile.append(('Kamerahalter_r{}'.format(cm.REVISION),
+                  lambda: kamerahalter(cm)))
     for name, bauen in teile:
         if nur and not name.startswith(tuple(nur)):
             continue

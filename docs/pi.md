@@ -395,3 +395,8 @@ im Halter).
 **Hotspot:** Das Anlegen der Verbindung und das Skript sind an
 NetworkManager 1.46 geprüft. Auf dem Zero 2 W ist der Hotspot noch nicht
 ausprobiert ([Probe](#ohne-wlan-hotspot)).
+
+**Kamera für den Autofokus:** Der Halter steht in
+[kamerahalter.md](kamerahalter.md). Die Kamera hängt mit einem Kabel
+Standard–Mini an der Kamerabuchse des Pi. Das Skript, das das Bild auswertet
+und Z über CNCjs fährt, fehlt noch.

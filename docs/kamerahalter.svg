@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1228" height="980" viewBox="0 0 1228 980" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1228" height="980" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Kamerahalter für den Autofokus (Kamerahalter.py Rev. 1)</text>
+<text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Die Kamera sitzt hochkant auf dem hinteren 2060 vor dem Elektronikfach und sieht den Laserpunkt am Messpunkt je nach Werkstückdicke höher oder tiefer im Bild.</text>
+<clipPath id="drauf"><rect x="40.0" y="100.0" width="623.2" height="319.2"/></clipPath>
+<g clip-path="url(#drauf)">
+<rect x="40.0" y="84.8" width="623.2" height="91.2" fill="#eef0f3" stroke="#868e96" stroke-width="0.8"/>
+<rect x="40.0" y="198.8" width="623.2" height="152.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<line x1="40.0" y1="371.3" x2="663.2" y2="371.3" stroke="#b4342f" stroke-width="1.0" stroke-dasharray="6 3"/>
+<polygon points="176.8,202.6 572.0,202.6 572.0,343.2 176.8,343.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<circle cx="222.4" cy="274.8" r="32.3" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="526.4" cy="274.8" r="32.3" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<polygon points="350.5,220.8 460.6,313.2 441.1,336.5 331.0,244.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="429.9,218.0 453.2,237.5 419.0,278.2 395.7,258.7" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="285.1,225.4 424.0,342.0 418.5,348.5 279.6,231.9" fill="#cfe8cf" stroke="#2b8a3e" stroke-width="0.8"/>
+<polygon points="298.5,209.4 331.8,237.3 318.3,253.3 285.1,225.4" fill="#495057" stroke="#212529" stroke-width="0.8"/>
+<polygon points="303.3,251.8 366.1,304.6 345.0,329.7 282.1,277.0" fill="#495057" stroke="#212529" stroke-width="0.8"/>
+<polygon points="296.8,289.3 330.3,317.4 315.1,335.5 281.7,307.4" fill="#495057" stroke="#212529" stroke-width="0.8"/>
+<line x1="291.8" y1="217.4" x2="274.3" y2="202.8" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="274.3" y1="202.8" x2="259.1" y2="185.1" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="259.1" y1="185.1" x2="138.8" y2="185.1" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="138.8" y1="185.1" x2="138.8" y2="145.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="138.8" y1="145.6" x2="522.6" y2="145.6" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="298.4" y1="321.4" x2="5.3" y2="670.7" stroke="#2f5d92" stroke-width="0.9" stroke-dasharray="2 2"/>
+<line x1="298.4" y1="321.4" x2="-688.5" y2="1112.3" stroke="#2f5d92" stroke-width="1.2"/>
+</g>
+<rect x="40.0" y="100.0" width="623.2" height="319.2" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="40.0" y="92.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Von oben: Halter auf dem hinteren 2060, vor dem Fach</text>
+<line x1="146.4" y1="274.8" x2="136.4" y2="314.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="146.4" cy="274.8" r="1.4" fill="#5b6472"/>
+<text x="139.4" y="317.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2060 hinten (oben)</text>
+<line x1="70.4" y1="130.4" x2="70.4" y2="112.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="70.4" cy="130.4" r="1.4" fill="#5b6472"/>
+<text x="73.4" y="115.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Elektronikfach, Vorderwand und Deckel</text>
+<line x1="617.6" y1="371.3" x2="617.6" y2="393.3" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="617.6" cy="371.3" r="1.4" fill="#5b6472"/>
+<text x="614.6" y="396.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">bis hier fährt die Trägerplatte</text>
+<line x1="222.4" y1="274.8" x2="208.4" y2="382.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="222.4" cy="274.8" r="1.4" fill="#5b6472"/>
+<text x="211.4" y="385.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 × M5×10 in Hammermuttern der Nut</text>
+<line x1="210.5" y1="426.2" x2="202.5" y2="428.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="210.5" cy="426.2" r="1.4" fill="#5b6472"/>
+<text x="199.5" y="431.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Blickrichtung 130°</text>
+<line x1="199.0" y1="185.1" x2="219.0" y2="155.1" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="199.0" cy="185.1" r="1.4" fill="#5b6472"/>
+<text x="222.0" y="158.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabel außen nach links, über die Wand ins Fach, innen zum Pi</text>
+<clipPath id="blick"><rect x="740.0" y="100.0" width="448.5" height="315.9"/></clipPath>
+<g clip-path="url(#blick)">
+<rect x="586.0" y="266.4" width="1199.2" height="680.6" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="771.5" y="289.5" width="234.0" height="175.5" fill="#f7ecd6" stroke="#a8783a" stroke-width="0.8"/>
+<rect x="752.0" y="270.0" width="117.0" height="19.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="752.0" y="270.0" width="19.5" height="117.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="740.0" y="123.4" width="448.5" height="39.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="740.0" y="94.2" width="448.5" height="23.4" fill="#eef0f3" stroke="#868e96" stroke-width="0.8"/>
+<line x1="740.0" y1="167.7" x2="1188.5" y2="167.7" stroke="#b4342f" stroke-width="0.9" stroke-dasharray="6 3"/>
+<polygon points="1083.2,154.9 927.0,596.0 675.9,385.3" fill="#dbe7f6" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.45"/>
+<line x1="1083.2" y1="154.9" x2="830.0" y2="357.8" stroke="#2f5d92" stroke-width="1.2"/>
+<polygon points="1079.8,130.2 1115.4,160.1 1114.0,161.8 1078.4,131.9" fill="#cfe8cf" stroke="#2b8a3e" stroke-width="0.8"/>
+<circle cx="830.0" cy="357.8" r="4.3" fill="#b4342f" stroke="#b4342f" stroke-width="0.8"/>
+<line x1="818.3" y1="357.8" x2="841.7" y2="357.8" stroke="#b4342f" stroke-width="0.8"/>
+<line x1="830.0" y1="346.1" x2="830.0" y2="369.5" stroke="#b4342f" stroke-width="0.8"/>
+</g>
+<rect x="740.0" y="100.0" width="448.5" height="315.9" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="740.0" y="92.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Blick zur Anschlagecke (41° Bildwinkel quer)</text>
+<line x1="830.0" y1="357.8" x2="852.0" y2="379.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="830.0" cy="357.8" r="1.4" fill="#5b6472"/>
+<text x="855.0" y="382.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Messpunkt: 30 rechts, 35 vor der Ecke</text>
+<line x1="966.5" y1="387.0" x2="976.5" y2="407.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="966.5" cy="387.0" r="1.4" fill="#5b6472"/>
+<text x="979.5" y="410.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Werkstück in der Ecke</text>
+<line x1="775.4" y1="283.7" x2="771.4" y2="243.7" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="775.4" cy="283.7" r="1.4" fill="#5b6472"/>
+<text x="768.4" y="246.7" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag</text>
+<line x1="1083.2" y1="154.9" x2="1113.2" y2="134.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1083.2" cy="154.9" r="1.4" fill="#5b6472"/>
+<text x="1116.2" y="137.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kamera</text>
+<clipPath id="schnitt"><rect x="40.0" y="490.0" width="572.2" height="316.8"/></clipPath>
+<g clip-path="url(#schnitt)">
+<rect x="360.4" y="780.4" width="251.8" height="60.7" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="78.9" y="636.4" width="76.8" height="144.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="40.0" y="584.8" width="27.4" height="190.8" fill="#eef0f3" stroke="#868e96" stroke-width="0.8"/>
+<line x1="40.0" y1="509.2" x2="612.2" y2="509.2" stroke="#b4342f" stroke-width="0.9" stroke-dasharray="6 3"/>
+<rect x="432.2" y="773.2" width="180.0" height="7.2" fill="#f7ecd6" stroke="#a8783a" stroke-width="0.8"/>
+<rect x="432.2" y="641.2" width="180.0" height="139.2" fill="none" stroke="#a8783a" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="498.2" y="490.0" width="84.0" height="72.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8"/>
+<rect x="120.2" y="554.8" width="2.9" height="60.0" fill="#cfe8cf" stroke="#2b8a3e" stroke-width="0.8"/>
+<rect x="123.0" y="577.8" width="17.8" height="13.9" fill="#495057" stroke="#212529" stroke-width="0.8"/>
+<rect x="105.8" y="552.4" width="9.6" height="73.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="83.2" y="625.6" width="72.0" height="10.8" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<line x1="140.8" y1="584.8" x2="612.2" y2="278.7" stroke="#2f5d92" stroke-width="0.7" stroke-dasharray="3 3"/>
+<line x1="140.8" y1="584.8" x2="612.2" y2="890.9" stroke="#2f5d92" stroke-width="0.7" stroke-dasharray="3 3"/>
+<line x1="140.8" y1="584.8" x2="540.2" y2="780.4" stroke="#2f5d92" stroke-width="1.2"/>
+<circle cx="540.2" cy="780.4" r="2.4" fill="#b4342f" stroke="#b4342f" stroke-width="0.8"/>
+<line x1="140.8" y1="584.8" x2="540.2" y2="641.2" stroke="#2f5d92" stroke-width="1.2"/>
+<circle cx="540.2" cy="641.2" r="2.4" fill="#b4342f" stroke="#b4342f" stroke-width="0.8"/>
+</g>
+<rect x="40.0" y="490.0" width="572.2" height="316.8" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="40.0" y="482.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt längs der Sichtlinie (Kamera hochkant: 66° Bildwinkel senkrecht)</text>
+<line x1="540.2" y1="780.4" x2="500.2" y2="800.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="540.2" cy="780.4" r="1.4" fill="#5b6472"/>
+<text x="497.2" y="803.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">0 mm: 26,5° unter der Achse</text>
+<line x1="540.2" y1="641.2" x2="490.2" y2="617.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="540.2" cy="641.2" r="1.4" fill="#5b6472"/>
+<text x="487.2" y="620.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">58 mm: 8,2° unter der Achse</text>
+<line x1="564.2" y1="548.2" x2="572.2" y2="536.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="564.2" cy="548.2" r="1.4" fill="#5b6472"/>
+<text x="575.2" y="539.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Laser am Messpunkt, Z oben</text>
+<line x1="188.8" y1="509.2" x2="188.8" y2="497.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="188.8" cy="509.2" r="1.4" fill="#5b6472"/>
+<text x="191.8" y="500.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Wagen fährt bis hier herunter</text>
+<line x1="92.8" y1="631.0" x2="126.8" y2="671.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="92.8" cy="631.0" r="1.4" fill="#5b6472"/>
+<text x="129.8" y="674.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Fuß auf dem 2060</text>
+<line x1="54.4" y1="758.8" x2="74.4" y2="798.8" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="54.4" cy="758.8" r="1.4" fill="#5b6472"/>
+<text x="77.4" y="801.8" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Elektronikfach</text>
+<line x1="140.8" y1="584.8" x2="212.8" y2="584.8" stroke="#5b6472" stroke-width="0.6"/>
+<clipPath id="vorn"><rect x="760.0" y="490.0" width="372.0" height="303.8"/></clipPath>
+<g clip-path="url(#vorn)">
+<rect x="782.9" y="722.5" width="320.7" height="27.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="949.1" y="679.1" width="24.8" height="43.4" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8" stroke-dasharray="3 2"/>
+<rect x="901.0" y="533.4" width="117.2" height="189.1" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<polygon points="930.4,692.1 932.0,690.2 933.2,688.1 934.1,685.8 934.5,683.4 934.5,681.0 934.1,678.6 933.2,676.3 932.0,674.2 930.4,672.3 928.6,670.8 926.5,669.6 924.2,668.7 921.8,668.3 919.4,668.3 917.0,668.7 914.7,669.6 912.6,670.8 910.7,672.3 909.2,674.2 907.9,676.3 907.1,678.6 906.7,681.0 906.7,683.4 907.1,685.8 907.9,688.1 909.2,690.2 910.7,692.1 915.6,696.9 925.6,696.9" fill="#f6d7b8" stroke="#8a4b12" stroke-width="0.8"/>
+<polygon points="930.4,561.9 932.0,560.0 933.2,557.9 934.1,555.6 934.5,553.2 934.5,550.8 934.1,548.4 933.2,546.1 932.0,544.0 930.4,542.1 928.6,540.6 926.5,539.4 924.2,538.5 921.8,538.1 919.4,538.1 917.0,538.5 914.7,539.4 912.6,540.6 910.7,542.1 909.2,544.0 907.9,546.1 907.1,548.4 906.7,550.8 906.7,553.2 907.1,555.6 907.9,557.9 909.2,560.0 910.7,561.9 915.6,566.7 925.6,566.7" fill="#f6d7b8" stroke="#8a4b12" stroke-width="0.8"/>
+<polygon points="1007.9,692.1 1009.5,690.2 1010.7,688.1 1011.6,685.8 1012.0,683.4 1012.0,681.0 1011.6,678.6 1010.7,676.3 1009.5,674.2 1007.9,672.3 1006.1,670.8 1004.0,669.6 1001.7,668.7 999.3,668.3 996.9,668.3 994.5,668.7 992.2,669.6 990.1,670.8 988.2,672.3 986.7,674.2 985.4,676.3 984.6,678.6 984.2,681.0 984.2,683.4 984.6,685.8 985.4,688.1 986.7,690.2 988.2,692.1 993.1,696.9 1003.1,696.9" fill="#f6d7b8" stroke="#8a4b12" stroke-width="0.8"/>
+<polygon points="1007.9,561.9 1009.5,560.0 1010.7,557.9 1011.6,555.6 1012.0,553.2 1012.0,550.8 1011.6,548.4 1010.7,546.1 1009.5,544.0 1007.9,542.1 1006.1,540.6 1004.0,539.4 1001.7,538.5 999.3,538.1 996.9,538.1 994.5,538.5 992.2,539.4 990.1,540.6 988.2,542.1 986.7,544.0 985.4,546.1 984.6,548.4 984.2,550.8 984.2,553.2 984.6,555.6 985.4,557.9 986.7,560.0 988.2,561.9 993.1,566.7 1003.1,566.7" fill="#f6d7b8" stroke="#8a4b12" stroke-width="0.8"/>
+<polygon points="1002.0,686.1 1002.7,685.3 1003.2,684.3 1003.6,683.3 1003.7,682.2 1003.6,681.1 1003.2,680.1 1002.7,679.1 1002.0,678.3 1001.2,677.6 1000.2,677.0 999.2,676.7 998.1,676.6 997.0,676.7 995.9,677.0 995.0,677.6 994.1,678.3 993.4,679.1 992.9,680.1 992.6,681.1 992.5,682.2 992.6,683.3 992.9,684.3 993.4,685.3 994.1,686.1 996.1,688.1 1000.1,688.1" fill="#f6d7b8" stroke="#4a4f57" stroke-width="0.8"/>
+<polygon points="1002.0,555.9 1002.7,555.1 1003.2,554.1 1003.6,553.1 1003.7,552.0 1003.6,550.9 1003.2,549.9 1002.7,548.9 1002.0,548.1 1001.2,547.4 1000.2,546.8 999.2,546.5 998.1,546.4 997.0,546.5 995.9,546.8 995.0,547.4 994.1,548.1 993.4,548.9 992.9,549.9 992.6,550.9 992.5,552.0 992.6,553.1 992.9,554.1 993.4,555.1 994.1,555.9 996.1,557.9 1000.1,557.9" fill="#f6d7b8" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="920.6" cy="682.2" r="11.8" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<circle cx="920.6" cy="552.0" r="11.8" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="862.5" y="539.6" width="147.9" height="155.0" fill="none" stroke="#2b8a3e" stroke-width="0.8" stroke-dasharray="5 3"/>
+<rect x="862.5" y="556.3" width="35.4" height="121.6" fill="none" stroke="#212529" stroke-width="0.8" stroke-dasharray="2 2"/>
+<rect x="887.7" y="583.6" width="67.0" height="67.0" fill="none" stroke="#212529" stroke-width="0.8"/>
+<circle cx="921.2" cy="617.1" r="17.8" fill="none" stroke="#212529" stroke-width="0.8"/>
+</g>
+<rect x="760.0" y="490.0" width="372.0" height="303.8" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<text x="760.0" y="482.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Halter von vorn, Kamera gestrichelt (hochkant)</text>
+<line x1="920.6" y1="514.8" x2="998.1" y2="514.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="920.6" y1="511.8" x2="920.6" y2="517.8" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="998.1" y1="511.8" x2="998.1" y2="517.8" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="959.3" y="509.8" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">12,5</text>
+<line x1="1035.3" y1="682.2" x2="1035.3" y2="552.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1032.3" y1="682.2" x2="1038.3" y2="682.2" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1032.3" y1="552.0" x2="1038.3" y2="552.0" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="1041.3" y="620.1" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">21</text>
+<line x1="862.5" y1="772.1" x2="1010.5" y2="772.1" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="862.5" y1="769.1" x2="862.5" y2="775.1" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1010.5" y1="769.1" x2="1010.5" y2="775.1" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="936.5" y="767.1" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">23,862</text>
+<line x1="1091.1" y1="694.6" x2="1091.1" y2="539.6" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1088.1" y1="694.6" x2="1094.1" y2="694.6" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="1088.1" y1="539.6" x2="1094.1" y2="539.6" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="1097.1" y="620.1" font-size="8.0" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">25</text>
+<line x1="920.6" y1="682.2" x2="894.6" y2="704.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="920.6" cy="682.2" r="1.4" fill="#5b6472"/>
+<text x="891.6" y="707.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M2×8 mit Mutter dahinter</text>
+<line x1="998.1" y1="552.0" x2="1022.1" y2="526.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="998.1" cy="552.0" r="1.4" fill="#5b6472"/>
+<text x="1025.1" y="529.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Zapfen</text>
+<line x1="862.5" y1="579.9" x2="848.5" y2="515.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="862.5" cy="579.9" r="1.4" fill="#5b6472"/>
+<text x="845.5" y="518.9" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelkante (Stecker hinten)</text>
+<line x1="973.9" y1="703.9" x2="1033.9" y2="727.9" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="973.9" cy="703.9" r="1.4" fill="#5b6472"/>
+<text x="1036.9" y="730.9" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Rippe hinter der Wand</text>
+<text x="40.0" y="852.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
+<text x="40.0" y="870.0" font-size="8.5" fill="#5b6472" text-anchor="start">Kamera</text>
+<text x="118.0" y="870.0" font-size="8.5" fill="#1c2733" text-anchor="start">Camera Module 3, Normalobjektiv, hochkant; Linse 81,5 mm über der Platte, Blick 130°</text>
+<text x="40.0" y="885.0" font-size="8.5" fill="#5b6472" text-anchor="start">Messpunkt</text>
+<text x="118.0" y="885.0" font-size="8.5" fill="#1c2733" text-anchor="start">G54 X30 Y−35 (Nullpunkt in der Anschlagecke); 168 bis 185 mm von der Linse</text>
+<text x="40.0" y="900.0" font-size="8.5" fill="#5b6472" text-anchor="start">Bild</text>
+<text x="118.0" y="900.0" font-size="8.5" fill="#1c2733" text-anchor="start">Punkt 11,3° neben der Achse, 8,2–26,5° darunter; 20,7 Pixel je mm Höhe</text>
+<text x="40.0" y="915.0" font-size="8.5" fill="#5b6472" text-anchor="start">Luft</text>
+<text x="118.0" y="915.0" font-size="8.5" fill="#1c2733" text-anchor="start">3 mm zur Trägerplatte, 18 mm unter dem X-Wagen, 4,4 mm zum Fach</text>
+<text x="40.0" y="930.0" font-size="8.5" fill="#5b6472" text-anchor="start">Schrauben</text>
+<text x="118.0" y="930.0" font-size="8.5" fill="#1c2733" text-anchor="start">2 × M5×10 in Hammermuttern; 2 × M2×8 mit Mutter, 2 Zapfen</text>
+<text x="40.0" y="945.0" font-size="8.5" fill="#5b6472" text-anchor="start">Druck</text>
+<text x="118.0" y="945.0" font-size="8.5" fill="#1c2733" text-anchor="start">PETG, Fuß aufs Bett, keine Stützen; Kabel Standard–Mini 200 mm (Weg etwa 146)</text>
+<text x="760.0" y="852.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Legende</text>
+<rect x="760.0" y="862.0" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<text x="779.0" y="870.0" font-size="8.5" fill="#1c2733" text-anchor="start">Halter (PETG)</text>
+<rect x="910.0" y="862.0" width="14.0" height="9.0" fill="#cfe8cf" stroke="#2b8a3e" stroke-width="0.8"/>
+<text x="929.0" y="870.0" font-size="8.5" fill="#1c2733" text-anchor="start">Kamera</text>
+<rect x="760.0" y="880.0" width="14.0" height="9.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<text x="779.0" y="888.0" font-size="8.5" fill="#1c2733" text-anchor="start">2060</text>
+<rect x="910.0" y="880.0" width="14.0" height="9.0" fill="#eef0f3" stroke="#868e96" stroke-width="0.8"/>
+<text x="929.0" y="888.0" font-size="8.5" fill="#1c2733" text-anchor="start">Elektronikfach</text>
+<rect x="760.0" y="898.0" width="14.0" height="9.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<text x="779.0" y="906.0" font-size="8.5" fill="#1c2733" text-anchor="start">Opferplatte</text>
+<rect x="910.0" y="898.0" width="14.0" height="9.0" fill="#f7ecd6" stroke="#a8783a" stroke-width="0.8"/>
+<text x="929.0" y="906.0" font-size="8.5" fill="#1c2733" text-anchor="start">Werkstück</text>
+<line x1="760.0" y1="920.5" x2="776.0" y2="920.5" stroke="#2f5d92" stroke-width="1.2"/>
+<text x="781.0" y="924.0" font-size="8.5" fill="#1c2733" text-anchor="start">Sichtlinie</text>
+<line x1="910.0" y1="920.5" x2="926.0" y2="920.5" stroke="#6d3fb5" stroke-width="1.6" stroke-dasharray="5 3"/>
+<text x="931.0" y="924.0" font-size="8.5" fill="#1c2733" text-anchor="start">Kamerakabel</text>
+<line x1="760.0" y1="938.5" x2="776.0" y2="938.5" stroke="#b4342f" stroke-width="1.0" stroke-dasharray="6 3"/>
+<text x="781.0" y="942.0" font-size="8.5" fill="#1c2733" text-anchor="start">Grenze bewegter Teile</text></svg>

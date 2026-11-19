@@ -1,0 +1,10 @@
+{
+    "autodeskProduct": "Fusion360",
+    "type": "script",
+    "author": "Johnson",
+    "description": {
+        "": "Kamerahalter fuer den Autofokus: Raspberry Pi Camera Module 3 (Normalobjektiv) hochkant auf einer senkrechten Wand, Fuss mit 2x M5 in Hammermuttern der Nut oben auf dem hinteren 2060, direkt vor dem Elektronikfach. Die Kamera schaut waagerecht zum Messpunkt kurz innerhalb der Anschlagecke und sieht dort den Laserpunkt je nach Werkstueckdicke hoeher oder tiefer. Vier Traenen-Polster, 4x M2x8 mit Mutter in Sechskanttaschen, Rippe hinter der Wand; druckt in PETG ohne Stuetzen. Plus ausgeblendete Bohrlehre der Kamera und Referenzteile (2060, Ausschnitt des Elektronikfachs, Kamera, Schrauben, Sichtlinien)."
+    },
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

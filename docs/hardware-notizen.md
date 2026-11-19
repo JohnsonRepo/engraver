@@ -592,6 +592,24 @@ stehen in [energiekette.md](energiekette.md).
 | Winkel an den Kreuzungen 2040/2060 | 20 mm, in der unteren Seitennut der 2040 direkt am 2060; sonst sitzt dort zwischen den 2060 nichts | Angaben 2026-09-27/29, bestätigt 2026-10-02 |
 | gekaufte Ketten | 10 × 20 mm innen, 15 × 27 mm außen, je 1 m | `[v]` vorhanden, werden nicht verwendet |
 
+## Kamera für den Autofokus `[w]`
+
+Geplant am 2026-11-19, noch nicht gekauft. Halter und Lage stehen in
+[kamerahalter.md](kamerahalter.md).
+
+| Wert | Maß | Status |
+|---|---|---|
+| Modul | Raspberry Pi Camera Module 3, Normalobjektiv (Sony IMX708) | Wahl |
+| Platine | 25 × 23,862 × 1,12 mm | `[w]` Maßblatt RP-008153 |
+| Bautiefe | 11,3 mm: Linsenfront 6,98 + 0,45 vor der Platine, Stecker 2,75 dahinter | `[w]` |
+| Löcher | 4 × Ø2,2, je 2,0 von den Seiten; ein Paar 2,0 von der Kante gegenüber dem Stecker, das andere 12,5 weiter; freier Ring Ø4,75 | `[w]` |
+| Linsenmitte | mittig, 9,462 von der Steckerkante (14,4 von der Gegenkante) | `[w]` |
+| Linsenblock | 10,8 × 10,8, Objektiv Ø5,75 | `[w]` |
+| Stecker | hinten an der Steckerkante: 19,61 breit, 5,71 tief, 2,75 hoch | `[w]` |
+| Optik | f = 4,74 mm, f/1,8, 4608 × 2592 Pixel zu 1,4 µm, Bildwinkel 66° × 41°, scharf ab etwa 10 cm | `[w]` Datenblatt |
+| Kabel | Standard–Mini (15 auf 22 Pole) für den Pi Zero; das beiliegende passt nicht | `[w]` |
+| Nut oben auf dem hinteren 2060 | trägt den Kamerahalter (X −56 … −4); dass sie dort frei ist, steht nirgends | `[?]` am Aufbau prüfen |
+
 ## Normteile (aus hardware.md, `[w]`)
 
 | Gewinde | Durchgang | Kopf-Ø | Kopfhöhe |

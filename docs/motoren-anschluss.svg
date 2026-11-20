@@ -186,7 +186,7 @@
 <rect x="334.0" y="89.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="349.5" y="100.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W12</text>
 <text x="371.0" y="100.0" font-size="9.5" fill="#5b6472" text-anchor="start">Kette Y</text>
-<text x="334.0" y="118.0" font-size="9.5" fill="#5b6472" text-anchor="start">0,81 m, mitgeliefert</text>
+<text x="334.0" y="118.0" font-size="9.5" fill="#5b6472" text-anchor="start">0,94 → 1,5 m</text>
 <text x="292.0" y="135.0" font-size="9.5" fill="#5b6472" text-anchor="start">PH-Stecker am Motor (ab Werk)</text>
 <text x="86.0" y="172.0" font-size="9.5" fill="#5b6472" text-anchor="start">In der Kette nur die losen Adern, ohne Schlauch.</text>
 <text x="18.0" y="242.0" font-size="26" fill="#2f5d92" text-anchor="start" font-weight="600">Y</text>
@@ -216,7 +216,7 @@
 <text x="334.0" y="214.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Y-Motor links</text>
 <rect x="334.0" y="223.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="349.5" y="234.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W13</text>
-<text x="334.0" y="252.0" font-size="9.5" fill="#5b6472" text-anchor="start">0,71 m, mitgeliefert</text>
+<text x="334.0" y="252.0" font-size="9.5" fill="#5b6472" text-anchor="start">0,83 m, mitgeliefert</text>
 <text x="292.0" y="269.0" font-size="9.5" fill="#5b6472" text-anchor="start">PH-Stecker am Motor (ab Werk)</text>
 <text x="18.0" y="376.0" font-size="26" fill="#2f5d92" text-anchor="start" font-weight="600">Z</text>
 <text x="18.0" y="392.0" font-size="9.5" fill="#5b6472" text-anchor="start">Steckplatz</text>
@@ -246,7 +246,7 @@
 <rect x="334.0" y="357.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="349.5" y="368.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W15</text>
 <text x="371.0" y="368.0" font-size="9.5" fill="#5b6472" text-anchor="start">Kette Y + X</text>
-<text x="334.0" y="386.0" font-size="9.5" fill="#5b6472" text-anchor="start">1,54 → 2 m</text>
+<text x="334.0" y="386.0" font-size="9.5" fill="#5b6472" text-anchor="start">1,66 → 2 m</text>
 <text x="292.0" y="403.0" font-size="9.5" fill="#5b6472" text-anchor="start">PH-Stecker am Motor (ab Werk)</text>
 <text x="86.0" y="440.0" font-size="9.5" fill="#5b6472" text-anchor="start">In der Kette nur die losen Adern, ohne Schlauch.</text>
 <text x="18.0" y="510.0" font-size="26" fill="#2f5d92" text-anchor="start" font-weight="600">A</text>
@@ -276,7 +276,7 @@
 <text x="334.0" y="482.0" font-size="12" fill="#1c2733" text-anchor="start" font-weight="600">Y-Motor rechts</text>
 <rect x="334.0" y="491.0" width="31.0" height="15.0" rx="7.5" fill="#ffffff" stroke="#495057" stroke-width="1.1"/>
 <text x="349.5" y="502.5" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">W14</text>
-<text x="334.0" y="520.0" font-size="9.5" fill="#5b6472" text-anchor="start">0,98 → 1,5 m</text>
+<text x="334.0" y="520.0" font-size="9.5" fill="#5b6472" text-anchor="start">1,15 → 1,5 m</text>
 <text x="292.0" y="537.0" font-size="9.5" fill="#5b6472" text-anchor="start">PH-Stecker am Motor (ab Werk)</text>
 <polygon points="86.0,577.0 94.5,562.0 103.0,577.0" fill="#ffd43b" stroke="#b08900" stroke-width="1" stroke-linejoin="round"/>
 <text x="94.5" y="575.2" font-size="10.5" fill="#1c2733" text-anchor="middle" font-weight="600">!</text>

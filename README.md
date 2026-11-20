@@ -33,20 +33,19 @@ docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch 
 docs/toolhead-z-layout.svg     maßstäbliche Seiten- und Vorderansicht
 docs/toolhead-z-antrieb.svg    Skizze des Z-Antriebs: Motor, Kupplung, Spindel, Garnitur
 docs/toolhead-grundplatte.md   Doku der Einzelplatte
-docs/elektronik.md             Platz, Gehäuse, Leistung, Endschalter, Kabel, Anschlussplan
+docs/elektronik.md             Platz, Elektronikfach, Leistung, Endschalter, Kabel, Anschlussplan
 docs/elektronik-platz.svg      Draufsicht und Seitenansicht: Elektronikfach, Ketten, Kabelwege
 docs/elektronik-anschluss.svg  Anschlussplan mit Kabelnummern W1–W19 und Kabelliste
 docs/elektronik-verkabelung.svg  Verkabelung Schritt für Schritt: jede Ader von Klemme zu Klemme
 docs/motoren-anschluss.svg     Motoren anschließen: Steckplätze am Shield, Adern je Achse
 docs/cnc-shield.svg            CNC Shield V3 von oben: alle Stiftleisten mit Uno-Pin und Belegung
 docs/verkabelung.md            Verkabelung: Kabelliste, Anschlussliste, Klemmen, Schritt für Schritt, Inbetriebnahme, GRBL
-docs/elektronik-box.svg        Elektronik-Gehäuse von oben: Uno, Lüfter, Verteiler, Kabelwege
+docs/elektronikfach.svg        Elektronikfach von oben, Rückwand, Fugenwand mit dem Pi; Gassen und Fenster
 docs/endschalter.md            Endschalter X und Y: Halter, Fahnen, Montage, Einstellen, GRBL
 docs/endschalter.svg           Endschalter: Y von hinten und von außen, X von vorn und von oben, Klammer X
 docs/kabelhalter.md            Kabelhalter: Rinne, Kabel, Plätze links und rechts, Montage, Druck
 docs/kabelhalter.svg           Kabelhalter im Schnitt am 2040 und seine Plätze
-docs/pi.md                     Pi: Maschine ohne PC über CNCjs — Teile, Halter, Strom, Einrichten, GRBL aufspielen, Hotspot, LightBurn, Ablauf, Fehlersuche
-docs/pihalter.svg              Pi-Halter mit Haube von hinten und im Schnitt am 2060
+docs/pi.md                     Pi: Maschine ohne PC über CNCjs — Teile, Platz im Fach, Strom, Einrichten, GRBL aufspielen, Hotspot, LightBurn, Ablauf, Fehlersuche
 docs/opferplatte.md            Opferplatte, Führungsfüße und Riegel: Lage, Höhen, Montage, Druck
 docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, Schnitte durch Füße, Riegel und Anschlag
 docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzenter, Niederhalter, Höhe unter dem Toolhead
@@ -68,20 +67,18 @@ tools/maschine_check.py        Prüfung des Gesamtmodells: Aufrufe von Portal.py
 tools/layout_zeichnen.py       erzeugt die Layout-Zeichnung
 tools/antrieb_zeichnen.py      erzeugt die Antriebsskizze
 tools/portal_zeichnen.py       erzeugt die Portalzeichnung
-tools/elektronik_check.py      Prüfung des Elektronikgehäuses (Fach, Freiraum, Montage, Druck, Leistung, Litzen) und der Verkabelung
+tools/elektronik_check.py      Prüfung des Elektronikfachs (Lage, Freiraum, Montage, Druck, Uno, Pi, Wandler, Wago, Gassen, Deckel, Leistung, Litzen) und der Verkabelung
 tools/elektronik_zeichnen.py   erzeugt die Elektronik-Zeichnung und die Kabellängen
 tools/anschluss_zeichnen.py    erzeugt den Anschlussplan
 tools/verkabelung_zeichnen.py  erzeugt das Bild „Verkabelung Schritt für Schritt“
 tools/motoren_zeichnen.py      erzeugt das Bild „Motoren anschließen“
 tools/shield_zeichnen.py       erzeugt die Skizze des CNC Shields mit allen Anschlüssen
 tools/verkabelung.py           Kabelliste — Quelle für Anleitung, Anschlussplan und Prüfung; schreibt die Tabellen in docs/verkabelung.md
-tools/elektronik_box_zeichnen.py erzeugt die Draufsicht auf das Elektronik-Gehäuse
+tools/elektronikfach_zeichnen.py erzeugt die Zeichnung des Elektronikfachs
 tools/endschalter_check.py     Prüfung der Endschalter: Schaltpunkte, Blatt im Spalt, Freiraum über den ganzen Weg
 tools/endschalter_zeichnen.py  erzeugt die Zeichnung der Endschalter
 tools/kabelhalter_check.py     Prüfung der Kabelhalter: Schraube, Rinne und Kabel, Plätze, Freiraum, Druck; schreibt die Plätze in docs/kabelhalter.md
 tools/kabelhalter_zeichnen.py  erzeugt die Zeichnung der Kabelhalter
-tools/pihalter_check.py        Prüfung des Pi-Halters: Lage, Freiraum zu Portal, Kasten und Kabeln, Schrauben, Pi, Wandler, Haube, Druck
-tools/pihalter_zeichnen.py     erzeugt die Zeichnung des Pi-Halters
 tools/stl_export.py            schreibt stl/ aus denselben Maßen wie die Fusion-Skripte (braucht manifold3d)
 tools/opferplatte_check.py     Prüfung von Opferplatte, Füßen und Riegel: Arbeitsfeld, Höhen, Freiraum, Riegel, Schrauben, Druck
 tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte, Füßen und Riegel
@@ -161,25 +158,27 @@ eigene Skript `YMotorhalter.py`); den alten Halter des Portals, Achse
 15,55 mm neben der Profilmitte, gibt es nicht mehr. Details in
 [docs/y-motorhalter.md](docs/y-motorhalter.md).
 
-### Elektronikgehäuse (neu)
+### Elektronikfach (neu)
 
 **Stand 2026-11-19:** Verbaut ist das Elektronikfach aus
 `fusion/Elektronikfach/` (Rev. 2). Es hängt **vor dem vorderen 2060**
 zwischen den Y-Motoren, die Hälfte mit Uno und Pi rechts, die mit
-Buchse, Not-Aus und Schalter links. Der folgende Text beschreibt noch das
-frühere Gehäuse hinter dem hinteren 2060.
+Buchse, Not-Aus und Schalter links. Der folgende Text beschreibt noch die
+Planung hinter dem hinteren 2060 (Rev. 1).
 
-Gehäuse im Fach hinter dem hinteren 2060, unter den 2040 — dorthin fährt
-weder Portal noch Toolhead. Links der **Arduino Uno mit CNC Shield V3** auf
-Stehbolzen, USB nach hinten zum Pi; rechts der **Abwärtswandler 24 → 12 V** für den
-Laser (43 × 24 × 20 mm) und drei **Wago-Klemmen** (221-415 für +24 V,
-2 × 221-420 für GND und +5 V); hinten **Einbaubuchse** (Hohlstecker
-5,5 × 2,1) und runder **Schalter** (Blende Ø22,5, seit Rev. 4). Der
-**Deckel** trägt den 24-V-Lüfter über den Treibern. Seit Rev. 3 ist er
-eine Haube, deren Platte 25 mm höher liegt. Eine Montageplatte hängt es mit 4 × M5 an die Rückseite des 2060,
-dazwischen läuft ein Kabelkanal. Dazu Endschalter, Kabelwege, Energieketten,
-Leistungsbilanz des 72-W-Netzteils und der Anschlussplan in
-[docs/elektronik.md](docs/elektronik.md).
+Ein Fach hinter dem hinteren 2060, unter den 2040 und über die ganze
+Breite zwischen ihnen — dorthin fährt weder Portal noch Toolhead. Es
+ersetzt das Elektronikgehäuse und den Pi-Halter: zwei gedruckte Hälften
+(je ≤ 250 mm) und zwei Deckel, mit 6 × M5 an der Rückseite des 2060. Links
+der **Arduino Uno mit CNC Shield V3**, darüber der 24-V-Lüfter im Deckel,
+daneben der **Abwärtswandler 24 → 12 V** für den Laser und senkrecht an
+der Fugenwand der **Pi**; rechts der **5-V-Wandler**, die Wago-Klemmen für
+24 V und GND, hinten **Einbaubuchse** (Hohlstecker 5,5 × 2,1) und runder
+**Schalter**. Die Kabel laufen getrennt in einer Signalgasse vorn und
+einer Leistungsgasse hinten und verlassen das Fach durch Fenster in den
+Endwänden. Dazu Endschalter, Kabelwege, Energieketten, Leistungsbilanz des
+72-W-Netzteils und der Anschlussplan in
+[docs/elektronik.md](docs/elektronik.md#elektronikfach).
 
 ### Verkabelung (neu)
 
@@ -196,21 +195,18 @@ und eine Skizze des Shields mit allen Stiftleisten, Uno-Pins und
 Belegung ([cnc-shield.svg](docs/cnc-shield.svg)).
 Details in [docs/verkabelung.md](docs/verkabelung.md).
 
-### Pi und Pi-Halter (neu)
+### Pi (neu)
 
 Ein **Raspberry Pi Zero 2 W** mit [CNCjs](https://cnc.js.org/) ersetzt den
 PC am USB des Uno. LightBurn auf dem Mac speichert Aufträge als G-Code-Datei,
 gestartet werden sie im Browser am iPad, iPhone oder Mac. Der Pi schickt die
 Datei selbst an den Uno, ein Abbruch des WLAN hält den Auftrag nicht an.
 Er hängt mit einem **5-V-Wandler** vor Schalter und Not-Aus an der Buchse
-(W18, W19) und versorgt über USB den Uno (W17). Not-Aus und Schalter
+(W18, W6, W19) und versorgt über USB den Uno (W17). Not-Aus und Schalter
 trennen weiter Motoren, Laser und Lüfter, der 24-V-Wächter meldet es an
-GRBL. Pi und Wandler sitzen auf einem gedruckten **Pi-Halter** rechts neben
-dem Elektronikgehäuse, mit 2 × M5 in der oberen Nut des hinteren 2060.
-Der Pi liegt ganz über dem 2060, vor seiner Antenne ist kein Aluminium.
-Seit Rev. 3 deckt eine **Haube** Pi und Wandler ab wie beim
-Elektronikgehäuse: 3 × M3 in Messing-Einsätzen, unten offen für Kabel und
-Luft, Lüftungsschlitze oben.
+GRBL. Der Pi steht im Elektronikfach senkrecht an der Fugenwand, seine
+Oberkante 11 mm über dem 2060; der 5-V-Wandler versorgt über die Wago
++5 V auch die Lichtschranken.
 Die Software in [`pi/`](pi) richtet ein Skript ein (CNCjs 1.11.5 als
 Dienst, Makros für Rahmen und Laserpunkt, Herunterfahren aus dem Browser,
 ein eigenes WLAN, wenn beim Start keins da ist).
@@ -369,7 +365,7 @@ python3 tools/verkabelung_zeichnen.py # docs/elektronik-verkabelung.svg
 python3 tools/motoren_zeichnen.py     # docs/motoren-anschluss.svg
 python3 tools/shield_zeichnen.py      # docs/cnc-shield.svg
 python3 tools/verkabelung.py         # Tabellen in docs/verkabelung.md
-python3 tools/elektronik_box_zeichnen.py  # docs/elektronik-box.svg
+python3 tools/elektronikfach_zeichnen.py  # docs/elektronikfach.svg
 python3 tools/geometrie_check.py    # nur die Einzelplatte
 python3 tools/y_motorhalter_check.py  # Y-Motorhalter: Riemen in der Nut, Freigänge, Schrauben
 python3 tools/y_motorhalter_zeichnen.py  # docs/y-motorhalter.svg neu erzeugen
@@ -377,8 +373,6 @@ python3 tools/endschalter_check.py  # Endschalter: Schaltpunkte, Freigänge, Sch
 python3 tools/endschalter_zeichnen.py  # docs/endschalter.svg neu erzeugen
 python3 tools/kabelhalter_check.py  # Kabelhalter: Schraube, Rinne, Plätze, Freiraum (--doku: Tabelle neu)
 python3 tools/kabelhalter_zeichnen.py  # docs/kabelhalter.svg neu erzeugen
-python3 tools/pihalter_check.py     # Pi-Halter: Lage, Freiraum, Schrauben, Pi, Wandler, Haube, Druck
-python3 tools/pihalter_zeichnen.py  # docs/pihalter.svg neu erzeugen
 pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Elektronikfach, Kabelhalter, Kamerahalter in Drucklage (mit Namen, z. B. Kamerahalter: nur dieser)
 python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
@@ -510,7 +504,8 @@ höheren Haube als Deckel, seit Rev. 4 mit rundem Schalterloch
 Rev. 15 `Portal.py` mit, geprüft mit `endschalter_check.py`
 ([endschalter.md](docs/endschalter.md)),
 Kabelhalter Rev. 2 mit `kabelhalter_check.py` ([kabelhalter.md](docs/kabelhalter.md)),
-Pi-Halter Rev. 3 mit Haube und `pihalter_check.py` ([pi.md](docs/pi.md)). Die
+Elektronikfach Rev. 1 statt Gehäuse und Pi-Halter, geprüft mit
+`elektronik_check.py` ([elektronik.md](docs/elektronik.md#elektronikfach)). Die
 Verkabelung steht als Kabelliste in `tools/verkabelung.py`,
 `elektronik_check.py` prüft sie (Netze, Not-Aus, Kontakte, Klemmen, Längen,
 Tabellen in [verkabelung.md](docs/verkabelung.md)). Der

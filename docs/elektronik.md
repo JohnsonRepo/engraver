@@ -19,7 +19,8 @@ mit Wanne, Festpunkt und Halter, dazu der Kabelweg zwischen ihnen
 ([energiekette.md](energiekette.md)). **Die ganze Verdrahtung** — Kabelliste,
 Anschlussliste, Klemmen, Schritt für Schritt und Inbetriebnahme — steht in
 [verkabelung.md](verkabelung.md). Pinbelegung, Treiber und Jumper stehen in
-[hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik). Ohne PC
+[hardware-notizen.md, Elektronik](hardware-notizen.md#elektronik), alle
+Anschlüsse des Shields zeigt die [Skizze](cnc-shield.svg). Ohne PC
 bedient wird die Maschine über einen Pi mit CNCjs ([pi.md](pi.md)), auf
 einem eigenen Halter mit Haube rechts neben dem Gehäuse.
 

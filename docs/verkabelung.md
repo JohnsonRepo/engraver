@@ -8,7 +8,9 @@ Tabellen hier.
 Die Kabelliste steht einmal in `tools/verkabelung.py`. Daraus entstehen die
 Tabellen dieser Anleitung (`python3 tools/verkabelung.py`, schreibt nur
 zwischen den Markierungen), der Anschlussplan
-(`python3 tools/anschluss_zeichnen.py`) und das Bild zu
+(`python3 tools/anschluss_zeichnen.py`), die
+[Skizze des Shields](#klemmen-wago-und-shield)
+(`python3 tools/shield_zeichnen.py`) und das Bild zu
 [Schritt für Schritt](#schritt-für-schritt)
 (`python3 tools/verkabelung_zeichnen.py`). `python3 tools/elektronik_check.py`
 prüft in Abschnitt 15 die Netze (kein Kurzschluss, der Not-Aus trennt die
@@ -148,6 +150,18 @@ die Drehrichtung zeigt [F](#f-motoren-und-drehrichtung).
 | **Wago +5 V** | 221-420 | 4 von 10 | 6 | W6 Shield, Stift 5V · W9 Lichtschranke X, VCC · W10 Lichtschranke Y, VCC · W11 Lichtschranke Z, VCC |
 <!-- /tabelle:wago -->
 
+![CNC Shield V3 mit allen Anschlüssen](cnc-shield.svg)
+
+Die Skizze zeigt das Shield von oben mit allen Stiftleisten: jeden Stift
+mit seinem Uno-Pin unter GRBL 1.1 und der Ader, die daran kommt, freie
+Stifte grau. Die Lage der Leisten folgt dem Bestückungsdruck des Protoneer
+V3.00, den die Nachbauten übernehmen `[w]`. Danach liegt am rechten Rand in
+jeder Reihe innen das Signal und außen GND `[w]`; welcher Stift welcher
+ist, zeigt [Prüfung D](#d-uno-grbl-und-lichtschranken). Die beiden
+5V-Stifte (oben rechts und links an der 2×6-Leiste) hängen am selben Pin
+des Uno und bleiben frei: Seit dem Elektronikfach kommt W6 vom
+5-V-Wandler.
+
 <!-- tabelle:shield -->
 | Stift | Uno-Pin | Aufgabe | angeschlossen |
 |---|---|---|---|
@@ -167,8 +181,8 @@ die Drehrichtung zeigt [F](#f-motoren-und-drehrichtung).
   (D10) und Z+/Z− (D11). Stecken nur dort, wo die Tabelle es sagt: An
   Z+/Z− liegt die Laser-PWM, das ist ein Ausgang.
 * Die Masse der Lichtschranken geht an die Wago GND, nicht an einen
-  GND-Stift am Shield. So muss niemand GND-Stifte suchen, und neben SpnEn
-  gibt es womöglich keinen.
+  GND-Stift am Shield. So muss niemand GND-Stifte suchen, und es passt
+  auch, falls ein Nachbau neben SpnEn keinen hat.
 * **Jumper:** MS1 + MS2 an allen vier Treibern (1/16), MS3 frei. A klont
   Y: A.STEP ↔ Y.STEP und A.DIR ↔ Y.DIR. Die Jumper **D12/D13 für A nicht
   stecken**, denn D12 ist der Z-Endschalter. EN/GND bleibt offen, GRBL
@@ -502,7 +516,10 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
    nichts,
    ist GRBL ohne variable Spindel gebaut und der Z-Endschalter läge auf
    D11. Stimmt etwas davon nicht, hat das Shield eine andere Belegung:
-   dann hier aufhören und nachsehen.
+   dann hier aufhören und nachsehen. Dabei zeigt sich auch, welcher Stift
+   einer Reihe am rechten Rand das Signal ist: Er hat die 5 V, der andere
+   ist GND ([Skizze](#klemmen-wago-und-shield): innen Signal, außen GND
+   `[w]`).
 3. W6 und W9–W11 anschließen, weiter nur USB.
 4. In der Konsole `?` senden. Ohne Fahne in der Gabel erscheint kein `Pn:`,
    mit Fahne `Pn:X` (bzw. Y, Z). Ist es umgekehrt, `$5` umstellen. Diese

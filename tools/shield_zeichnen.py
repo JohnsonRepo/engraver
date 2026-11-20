@@ -700,7 +700,7 @@ def hinweise(x, y):
     r2 = teiler['Wago GND'].split(' ', 1)[1]
     vref = min(ez.vref(ez.MOTOR_I, r) for r in ez.R_SENSE)
     zeilen = [
-        [('Aufdruck aus GRBL 0.9: ', True, None),
+        [('Aufdruck aus GRBL 0.8: ', True, None),
          ('Z+/Z− (D11) ist unter GRBL 1.1 die Laser-PWM, SpnEn (D12) der '
           'Z-Endschalter.', False, None)],
         [('', False, None),

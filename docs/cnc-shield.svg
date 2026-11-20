@@ -500,7 +500,7 @@
 <rect x="30" y="795.0" width="28" height="18" rx="2" fill="#2b2f36" fill-opacity="0.1" stroke="#2b2f36" stroke-width="1" stroke-dasharray="4 3"/>
 <text x="64.0" y="808.0" font-size="10" fill="#1c2733" text-anchor="start">Treiber TMC2209, durchsichtig gezeichnet</text>
 <text x="470.0" y="714.0" font-size="12" fill="#2f5d92" text-anchor="start" font-weight="600">Hinweise</text>
-<text x="470.0" y="736.0" font-size="10" fill="#1c2733" text-anchor="start"><tspan font-weight="600">Aufdruck aus GRBL 0.9: </tspan><tspan>Z+/Z− (D11) ist unter GRBL 1.1 die Laser-PWM, SpnEn (D12) der Z-Endschalter.</tspan></text>
+<text x="470.0" y="736.0" font-size="10" fill="#1c2733" text-anchor="start"><tspan font-weight="600">Aufdruck aus GRBL 0.8: </tspan><tspan>Z+/Z− (D11) ist unter GRBL 1.1 die Laser-PWM, SpnEn (D12) der Z-Endschalter.</tspan></text>
 <text x="470.0" y="751.0" font-size="10" fill="#1c2733" text-anchor="start"><tspan></tspan><tspan>X+/X− sind beide D9, Y+/Y− beide D10: je Achse nur ein Endschalter.</tspan></text>
 <text x="470.0" y="766.0" font-size="10" fill="#1c2733" text-anchor="start"><tspan font-weight="600">Rechter Rand: </tspan><tspan>innen das Signal (S), außen GND (G) [w] — vor dem Stecken messen (Prüfung D):</tspan></text>
 <text x="470.0" y="781.0" font-size="10" fill="#1c2733" text-anchor="start"><tspan></tspan><tspan>mit GRBL liegen an S von X−, Y+ und SpnEn etwa 5 V, G hat Durchgang zur Klemme −.</tspan></text>

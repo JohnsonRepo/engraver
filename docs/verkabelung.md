@@ -180,6 +180,14 @@ des Uno und bleiben frei: Seit dem Elektronikfach kommt W6 vom
 * Auf dem Shield liegen **X+ und X− auf demselben Pin** (D9), ebenso Y+/Y−
   (D10) und Z+/Z− (D11). Stecken nur dort, wo die Tabelle es sagt: An
   Z+/Z− liegt die Laser-PWM, das ist ein Ausgang.
+* **Warum die Laser-PWM an Z+ steckt:** Der Aufdruck stammt aus GRBL 0.8,
+  damals war D11 der Z-Endschalter und D12 (SpnEn) „Spindel an“. Seit
+  GRBL 0.9 sind die beiden getauscht, denn die Laserleistung braucht einen
+  Hardware-PWM, und D11 ist der einzige, den GRBL frei hat. Die
+  Leiterbahnen sind geblieben: An Z+/Z− kommt die PWM heraus, SpnEn ist
+  der Eingang für den Z-Endschalter. Ob das Shield so verdrahtet ist,
+  zeigt die Messung in [Prüfung D](#d-uno-grbl-und-lichtschranken). Mehr
+  in [hardware-notizen.md](hardware-notizen.md#pins-grbl-11-gegen-den-aufdruck).
 * Die Masse der Lichtschranken geht an die Wago GND, nicht an einen
   GND-Stift am Shield. So muss niemand GND-Stifte suchen, und es passt
   auch, falls ein Nachbau neben SpnEn keinen hat.

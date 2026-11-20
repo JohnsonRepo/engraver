@@ -85,11 +85,13 @@ begrenzt den Strom selbst.
 
 „Länge“ ist der Weg wie in [elektronik-platz.svg](elektronik-platz.svg)
 gezeichnet, „kaufen“ dieser Weg plus 15 % und aufgerundet. Was übrig ist,
-bleibt als Schlaufe beim Gehäuse. Die Motorfarben sind die übliche Belegung
-von Stepperonline `[w]`: A+ schwarz, A− grün, B+ rot, B− blau. Am Stecker ab
-Werk liegen sie schwarz · grün · blau · rot `[v]` (außen schwarz und rot),
-also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
-([Motoren](#6-motoren-w12w15)).
+bleibt als Schlaufe beim Gehäuse. Die Spulen der Motorkabel sind gemessen
+`[v]` (2026-11-18): **schwarz–blau** ist Spule A, **grün–rot** Spule B. Die
+bei Stepperonline übliche Belegung mit schwarz–grün stimmt für diese Kabel
+nicht. Am Stecker ab Werk liegen die Adern schwarz · grün · blau · rot `[v]`,
+also A+ · B− · A− · B+: die Spulen abwechselnd. Deshalb im Stecker grün und
+blau tauschen ([Motoren](#6-motoren-w12w15)). Plus und Minus sind nur Namen,
+die Drehrichtung zeigt [F](#f-motoren-und-drehrichtung).
 
 ## Anschlussliste
 
@@ -120,14 +122,14 @@ also A+ · A− · B− · B+. Vor dem Anschließen mit dem Ohmmeter prüfen
 | W11 | +5 V | rot | Wago +5 V | Lichtschranke Z, VCC |
 |  | GND | schwarz | Wago GND | Lichtschranke Z, GND |
 |  | Signal | gelb | Shield SpnEn (D12) | Lichtschranke Z, D0 |
-| W12 | Spule A | schwarz · grün | Shield Motor X, 2B · 2A | X-Motor, Spule A: A+ · A− |
-|  | Spule B | blau · rot | Shield Motor X, 1A · 1B | X-Motor, Spule B: B− · B+ |
-| W13 | Spule A | schwarz · grün | Shield Motor Y, 2B · 2A | Y-Motor links, Spule A: A+ · A− |
-|  | Spule B | blau · rot | Shield Motor Y, 1A · 1B | Y-Motor links, Spule B: B− · B+ |
-| W14 | Spule A, getauscht | grün · schwarz | Shield Motor A, 2B · 2A | Y-Motor rechts, Spule A: A− · A+ |
-|  | Spule B | blau · rot | Shield Motor A, 1A · 1B | Y-Motor rechts, Spule B: B− · B+ |
-| W15 | Spule A | schwarz · grün | Shield Motor Z, 2B · 2A | Z-Motor, Spule A: A+ · A− |
-|  | Spule B | blau · rot | Shield Motor Z, 1A · 1B | Z-Motor, Spule B: B− · B+ |
+| W12 | Spule A | schwarz · blau | Shield Motor X, 2B · 2A | X-Motor, Spule A: A+ · A− |
+|  | Spule B | grün · rot | Shield Motor X, 1A · 1B | X-Motor, Spule B: B− · B+ |
+| W13 | Spule A | schwarz · blau | Shield Motor Y, 2B · 2A | Y-Motor links, Spule A: A+ · A− |
+|  | Spule B | grün · rot | Shield Motor Y, 1A · 1B | Y-Motor links, Spule B: B− · B+ |
+| W14 | Spule A, getauscht | blau · schwarz | Shield Motor A, 2B · 2A | Y-Motor rechts, Spule A: A− · A+ |
+|  | Spule B | grün · rot | Shield Motor A, 1A · 1B | Y-Motor rechts, Spule B: B− · B+ |
+| W15 | Spule A | schwarz · blau | Shield Motor Z, 2B · 2A | Z-Motor, Spule A: A+ · A− |
+|  | Spule B | grün · rot | Shield Motor Z, 1A · 1B | Z-Motor, Spule B: B− · B+ |
 | W16 | R1 22 kΩ | — | Wago +24 V | Shield Abort (A0) |
 |  | R2 4,7 kΩ ∥ 100 nF | — | Shield Abort (A0) | Wago GND |
 | W17 | USB | — | Uno, USB-B | Pi, Micro-USB „USB“ |
@@ -324,24 +326,34 @@ Reset-Taster oben links). Das Bild erzeugt
 
 1. **Spulen finden:** Zwischen den zwei Adern einer Spule zeigt das
    Ohmmeter wenige Ohm (etwa 2–3 Ω), zwischen Adern verschiedener Spulen
-   nichts.
+   nichts. Gemessen `[v]`: **schwarz–blau** ist Spule A, **grün–rot**
+   Spule B.
 2. **Am Shield** gehört jede Spule auf ein Stiftpaar: **2B · 2A** und
    **1A · 1B**, wie neben jedem Treiber aufgedruckt. Welche Spule auf
    welchem Paar liegt und wie herum, bestimmt nur die Drehrichtung.
-   Der Stecker ab Werk (schwarz · grün · blau · rot) passt so, wie er ist:
-   **Schwarz oben an 2B**, dann grün an 2A, blau an 1A, rot an 1B.
+   Der Stecker ab Werk (schwarz · grün · blau · rot) passt so **nicht**:
+   Darin wechseln sich die Spulen ab, jedes Stiftpaar bekäme eine Ader von
+   jeder Spule, und der Motor rattert und verliert Schritte, auch ohne Last.
+   Deshalb im Stecker **grün und blau tauschen**: **Schwarz oben an 2B**,
+   dann blau an 2A, grün an 1A, rot an 1B. Die Kontakte lassen sich mit
+   einer Nadel aus dem Dupont-Gehäuse lösen: die kleine Lasche über dem
+   Kontakt anheben und die Ader herausziehen. An der neuen Stelle
+   einschieben, bis sie einrastet, und leicht ziehen: Sie muss halten.
+   Danach am Stecker messen: Stift 1–2 und 3–4 je 2–3 Ω, 2–3 offen.
 3. X-Motor → **X**, Y-Motor links → **Y**, Z-Motor → **Z**, Y-Motor rechts →
    **A**.
 4. **Y-Motor rechts mit getauschter Spule:** Beide Y-Motoren bekommen
    dasselbe Signal, müssen aber gegenläufig drehen. Deshalb am Stecker des
-   rechten zwei Adern **einer** Spule tauschen, schwarz und grün. Die
-   Kontakte lassen sich mit einer Nadel aus dem Dupont-Gehäuse lösen. Den
-   4-poligen Stecker um 180° gedreht aufzustecken, wirkt genauso
+   rechten zusätzlich die zwei Adern **einer** Spule tauschen, schwarz und
+   blau: von oben blau · schwarz · grün · rot. Den 4-poligen Stecker um 180°
+   gedreht aufzustecken, wirkt genauso
    ([Zwei Y-Motoren](hardware-notizen.md#zwei-y-motoren)).
 5. **In den Ketten nur die losen Adern:** Beim X-Motor (W12) und beim
    Z-Motor (W15) den Schlauch oder Mantel so weit entfernen, wie das Kabel
    durch die Ketten läuft, und die vier Adern einzeln einziehen.
-6. Alles nur bei ausgeschaltetem Strom.
+6. Alles nur bei ausgeschaltetem Strom. Einen Motor nie bei eingeschalteten
+   24 V an- oder abstecken: Öffnet sich der Spulenkreis, während Strom
+   fließt, zerstört die Spannungsspitze den Treiber.
 
 ### 7. 24-V-Wächter (W16)
 
@@ -498,6 +510,14 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
    meldet auch eine gebrochene Signalader „ausgelöst“, die sichere
    Richtung. Ist der 24-V-Wächter (W16) schon angeschlossen und der
    Schalter aus, steht im `Pn:` zusätzlich ein `R`; das gehört dazu.
+5. **Schritte pro Millimeter eintragen,** bevor in F etwas fährt:
+   `$100=80`, `$101=80`, `$102=1600`, jede Zeile einzeln, dann mit `$$`
+   prüfen. GRBL kommt mit 250. Damit fährt jede Achse 3,1-mal so weit wie
+   befohlen, schlägt am Ende an, und der Riemen springt über die Zähne.
+   War GRBL auf dem Uno schon eingestellt, etwa für eine andere Maschine,
+   vorher `$RST=$`: Das setzt alle `$`-Werte auf den Standard von GRBL
+   zurück, von dem diese Anleitung ausgeht, z. B. `$1=25` (im Stillstand
+   sind die Motoren stromlos).
 
 ### E. Treiber und Vref
 
@@ -529,8 +549,10 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
    schaltet die Treiber erst zum Fahren ein und 25 ms nach dem Halt wieder
    ab (`$1=25`).
 3. Jede Achse ein paar Millimeter langsam fahren, z. B. `$J=G91 X5 F500`
-   (steht GRBL in ALARM, erst `$X`). Nach `$X` gelten die Softlimits ab der
-   aktuellen Stellung, nicht ab den Schaltern: nur wenige Millimeter fahren.
+   (steht GRBL in ALARM, erst `$X`). Sie fährt genau 5 mm; fährt sie etwa
+   dreimal so weit, fehlen die Schritte/mm aus D5. Nach `$X` gelten die
+   Softlimits ab der aktuellen Stellung, nicht ab den Schaltern: nur wenige
+   Millimeter fahren.
    **X+ fährt nach rechts, Y+ nach hinten, Z+ nach oben.** Sonst das Bit
    der Achse in `$3` setzen (X = 1, Y = 2, Z = 4, zusammenzählen).
 4. **Y:** Beide Seiten müssen das Portal in dieselbe Richtung ziehen.
@@ -547,9 +569,11 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
   Hand an ihre Schranke schieben, Z an der Kupplung drehen (im Stillstand
   sind die Motoren stromlos), und auf die LED oder `?` achten. Die
   Richtungen aus F müssen stimmen, sonst fährt `$H` vom Schalter weg.
-* GRBL-Werte wie [unten](#grbl-einstellungen), die Hand am Not-Aus. Beim
-  ersten Mal die Achsen ein paar Zentimeter vor ihre Schranken stellen und
-  langsamer suchen lassen: `$25=200`, danach wieder `$25=500`.
+* Die Werte für G aus der [Tabelle](#grbl-einstellungen) eintragen; `$5`
+  aus D4, die Schritte/mm aus D5 und `$3` aus F stehen schon. Die Hand am
+  Not-Aus. Beim ersten Mal die Achsen ein paar Zentimeter vor ihre
+  Schranken stellen und langsamer suchen lassen: `$25=200`, danach wieder
+  `$25=500`.
 * `$H`: Z fährt nach oben bis zu seiner Lichtschranke, dann X nach links
   und Y nach **vorn** (seit Portal Rev. 32), beide zugleich. Jede Achse
   muss an ihrer eigenen
@@ -608,33 +632,36 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
 ## GRBL-Einstellungen
 
 <!-- tabelle:grbl -->
-| Einstellung | Wert | warum |
-|---|---|---|
-| `$3` | nach dem Test | Drehrichtung: X+ nach rechts, Y+ nach hinten, Z+ nach oben ([Motoren](#f-motoren-und-drehrichtung)) |
-| `$5` | 1 `[w]` | Lichtschranken melden „unterbrochen“ mit HIGH; im Test prüfen ([Lichtschranken](#d-uno-grbl-und-lichtschranken)) |
-| `$20` | 1 | Softlimits an: schützen beide Enden, auch Y hinten (dort ist kein Schalter), aber nur nach `$H` ([warum](endschalter.md#softlimits-statt-zweitem-y-schalter)) |
-| `$21` | 0 | Hardlimits aus, bis die Schalter nie falsch auslösen |
-| `$22` | 1 | Referenzfahrt an: erst Z, dann X und Y |
-| `$23` | 3 | X referenziert nach links und Y nach vorn (beide minus), Z nach oben (plus) |
-| `$27` | 1 | 1 mm Rückzug vom Schalter |
-| `$30` | 1000 | S1000 = volle Laserleistung |
-| `$32` | 1 | Lasermodus |
-| `$100` | 80 | X: GT2, 20 Zähne, 1/16 |
-| `$101` | 80 | Y: GT2, 20 Zähne, 1/16 |
-| `$102` | 1600 | Z: Tr8×2, 1/16 |
-| `$130` | 385 | X: 388,2 mm vom Schaltpunkt bis ans rechte Schienenende, minus Rückzug und Reserve |
-| `$131` | 325 | Y: 330,3 mm vom Schaltpunkt vorn bis ans hintere Schienenende, minus 5 mm Reserve |
-| `$132` | 82 | Z: 85,55 mm Arbeitsweg vom Schaltpunkt bis ganz unten, minus Rückzug und Reserve |
+| wann | Einstellung | Wert | warum |
+|---|---|---|---|
+| [D4](#d-uno-grbl-und-lichtschranken) | `$5` | 1 `[w]` | Lichtschranken melden „unterbrochen“ mit HIGH; im Test prüfen |
+| [D5](#d-uno-grbl-und-lichtschranken) | `$100` | 80 | X: GT2, 20 Zähne, 1/16. GRBL kommt mit 250: Dann fährt jede Achse 3,1-mal so weit wie befohlen |
+| [D5](#d-uno-grbl-und-lichtschranken) | `$101` | 80 | Y: GT2, 20 Zähne, 1/16 |
+| [D5](#d-uno-grbl-und-lichtschranken) | `$102` | 1600 | Z: Tr8×2, 1/16 |
+| [F](#f-motoren-und-drehrichtung) | `$3` | nach dem Test | Drehrichtung: X+ nach rechts, Y+ nach hinten, Z+ nach oben |
+| [G](#g-referenzfahrt) | `$21` | 0 | Hardlimits aus, bis die Schalter nie falsch auslösen |
+| [G](#g-referenzfahrt) | `$22` | 1 | Referenzfahrt an: erst Z, dann X und Y |
+| [G](#g-referenzfahrt) | `$23` | 3 | X referenziert nach links und Y nach vorn (beide minus), Z nach oben (plus) |
+| [G](#g-referenzfahrt) | `$27` | 1 | 1 mm Rückzug vom Schalter |
+| [G](#g-referenzfahrt) | `$130` | 385 | X: 388,2 mm vom Schaltpunkt bis ans rechte Schienenende, minus Rückzug und Reserve |
+| [G](#g-referenzfahrt) | `$131` | 325 | Y: 330,3 mm vom Schaltpunkt vorn bis ans hintere Schienenende, minus 5 mm Reserve |
+| [G](#g-referenzfahrt) | `$132` | 82 | Z: 85,55 mm Arbeitsweg vom Schaltpunkt bis ganz unten, minus Rückzug und Reserve |
+| [G](#g-referenzfahrt) | `$20` | 1 | Softlimits an, nach `$22=1`: schützen beide Enden, auch Y hinten (dort ist kein Schalter), aber nur nach `$H` ([warum](endschalter.md#softlimits-statt-zweitem-y-schalter)) |
+| [H](#h-laser) | `$30` | 1000 | S1000 = volle Laserleistung |
+| [H](#h-laser) | `$32` | 1 | Lasermodus |
 <!-- /tabelle:grbl -->
 
-`$3` und `$5` ergeben sich aus den Tests. `$130` bis `$132` rechnet
-`tools/verkabelung.py` aus Portal, Toolhead und Endschaltern: vom
-Schaltpunkt bis ans andere Ende, minus 1 mm Rückzug und 2 mm Reserve. Die
-Schaltpunkte von X und Y stehen in [endschalter.md](endschalter.md), der
-von Z in [toolhead-z.md](toolhead-z.md). Alles Übrige bleibt auf dem
-Standardwert von GRBL. Jeden Wert einzeln in die Konsole, `$22=1` vor
-`$20=1`: Softlimits nimmt GRBL nur an, wenn die Referenzfahrt schon an ist,
-sonst kommt `error:10`.
+„wann“ ist der Schritt der Inbetriebnahme, in dem ein Wert auf den Uno
+kommt: die Schritte/mm vor dem ersten Fahren, alle anderen erst dort, wo
+sie gebraucht werden. `$3` und `$5` ergeben sich aus den Tests. `$130` bis
+`$132` rechnet `tools/verkabelung.py` aus Portal, Toolhead und
+Endschaltern: vom Schaltpunkt bis ans andere Ende, minus 1 mm Rückzug und
+2 mm Reserve. Die Schaltpunkte von X und Y stehen in
+[endschalter.md](endschalter.md), der von Z in
+[toolhead-z.md](toolhead-z.md). Alles Übrige bleibt auf dem Standardwert
+von GRBL (`$RST=$` stellt ihn wieder her, siehe D5). Jeden Wert einzeln in
+die Konsole, `$22=1` vor `$20=1`: Softlimits nimmt GRBL nur an, wenn die
+Referenzfahrt schon an ist, sonst kommt `error:10`.
 
 ## Fehlersuche
 
@@ -642,8 +669,9 @@ sonst kommt `error:10`.
 |---|---|---|
 | `Pn:X` erscheint ohne Fahne oder nie | `$5` falsch herum, Signal auf dem falschen Stift, VCC fehlt | `$5` umstellen; Stift nach der [Tabelle](#klemmen-wago-und-shield); 5 V am Modul messen |
 | ALARM „Hard limit“ mitten im Auftrag | `$21=1` und Störungen auf der Signalleitung | `$21=0`; 100 nF zwischen Eingang und GND am Shield; Signalleitung nicht neben Motorkabeln führen |
-| Motor zittert oder brummt, dreht aber nicht | Spulenpaare vertauscht | Spulen mit dem Ohmmeter suchen, je ein Paar auf 2B·2A und 1A·1B |
+| Motor rattert, zittert oder brummt und verliert Schritte, auch ohne Last | Spulenpaare vertauscht, etwa der Stecker ab Werk unverändert aufgesteckt | Spulen mit dem Ohmmeter suchen (schwarz–blau und grün–rot, je 2–3 Ω), je ein Paar auf 2B·2A und 1A·1B; beim Stecker ab Werk grün und blau tauschen ([Motoren](#6-motoren-w12w15)) |
 | Motor dreht falsch herum | Richtung | Bit in `$3`; bei Y gegen A: an A eine Spule tauschen |
+| Achse fährt etwa dreimal so weit wie befohlen, schlägt am Ende an, der Riemen springt über die Zähne | Schritte/mm noch auf dem GRBL-Standard 250 | `$100=80`, `$101=80`, `$102=1600` wie in [D5](#d-uno-grbl-und-lichtschranken), mit `$$` prüfen |
 | Motoren verlieren Schritte oder werden über 70 °C heiß | Strom zu klein oder zu groß | Vref nach [hardware-notizen.md](hardware-notizen.md#treiber-und-versorgung) |
 | `$H` endet mit ALARM:9 | Schranke nicht gefunden: Die Achse fährt vom Schalter weg (`$3`), die Fahne läuft an der Gabel vorbei, oder `$5` ist falsch | Richtung wie in [F](#f-motoren-und-drehrichtung), Schaltpunkt von Hand und `?` wie in [G](#g-referenzfahrt) |
 | `$H` endet mit ALARM:8 | Nach dem Rückzug meldet die Schranke noch: Die Achse stand schon in der Gabel, oder 1 mm reicht nicht | Achse vor `$H` aus der Gabel schieben; sonst `$27=2` |
@@ -683,14 +711,16 @@ sonst kommt `error:10`.
 * **Pi statt PC** (2026-10-10): W17 geht zum Pi, neu sind W18 (24 V vor
   Schalter und Not-Aus zum 5-V-Wandler) und W19 (5 V in den Pi). Damit
   gilt die Einschaltreihenfolge „Netzteil, dann Schalter“ von selbst.
+* **Motorstecker** (2026-11-18): Die Spulen sind gemessen schwarz–blau und
+  grün–rot, nicht schwarz–grün und blau–rot. Vorher hieß es, der Stecker ab
+  Werk passe unverändert; so verloren alle vier Motoren Schritte. Jetzt im
+  Stecker grün und blau tauschen, am Y-Motor rechts zusätzlich schwarz und
+  blau statt schwarz und grün.
 
 ## Noch offen
 
-1. **Motorfarben** `[w]`: die übliche Belegung von Stepperonline. Die
-   Reihenfolge am Stecker ist abgelesen `[v]`, welche Farbe zu welcher
-   Spule gehört, zeigt das Ohmmeter beim Anschließen.
-2. **Lichtschranken** `[w]`: Reihenfolge der Stifte am Modul und ob D0 beim
+1. **Lichtschranken** `[w]`: Reihenfolge der Stifte am Modul und ob D0 beim
    Unterbrechen HIGH wird. Das zeigt Prüfung D. Bei HIGH darf an D10 kein
    zweites Modul dazu ([endschalter.md](endschalter.md#softlimits-statt-zweitem-y-schalter)).
-3. **Wandler:** Schraubklemmen oder Lötpunkte, und ob IN− und OUT−
+2. **Wandler:** Schraubklemmen oder Lötpunkte, und ob IN− und OUT−
    verbunden sind. Beides zeigt ein Blick auf das Modul.

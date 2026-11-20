@@ -1,0 +1,17 @@
+# Live-Bild der Autofokus-Kamera als Dienst: Webseite auf Port 8080
+# (pi/kamera.py, docs/kamerahalter.md). Die Kamera laeuft nur, solange
+# jemand zusieht. Vorlage fuer pi/einrichten.sh, das die @...@ ersetzt.
+[Unit]
+Description=Kamera-Livebild (Engraver)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=@BENUTZER@
+ExecStart=/usr/bin/python3 /usr/local/bin/kamera-live
+Environment=PYTHONUNBUFFERED=1
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

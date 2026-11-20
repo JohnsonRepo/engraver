@@ -155,12 +155,19 @@ wäre der Punkt ein Fleck von rund 30 Pixeln. Die Linse wird deshalb einmal
 auf **120 mm** gedreht. Dann ist der Punkt überall höchstens 3 Pixel
 unscharf, und seine Mitte findet das Skript genau.
 
-1. Kamera am Pi, Bild live ansehen (`rpicam-hello` bzw. `libcamera-hello`).
-2. Ein bedrucktes Blatt 120 mm vor die Linse halten.
+1. Kamera am Pi, Bild live im Browser ansehen:
+   **`http://laser.local:8080`** ([pi.md](pi.md#kamera)). `rpicam-hello`
+   zeigt am Pi ohne Bildschirm nichts.
+2. Ein bedrucktes Blatt 120 mm vor die Linse halten, gut beleuchtet: Zeigt
+   die Seite „zu dunkel“, rauscht das Bild zu stark zum Scharfstellen.
 3. Die Linse mit einer Spitzzange oder dem Fokusring vorsichtig **gegen den
    Uhrzeigersinn** herausdrehen, bis die Schrift scharf ist. Ab Werk ist sie
    mit einem Punkt Kleber gesichert, der beim ersten Drehen bricht. Nicht
    mehr als nötig drehen.
+4. Die Zahl **Schärfe** oben auf der Seite hilft: Sie steigt, je schärfer
+   das Bild. Etwas über den besten Wert hinausdrehen, bis sie wieder fällt,
+   dann zurück. Vergleichbar ist sie nur bei demselben Blatt an derselben
+   Stelle und gleichem Licht.
 
 Das geht auch mit der Kamera im Halter; die Linse zeigt frei nach vorn.
 

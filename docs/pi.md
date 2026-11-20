@@ -240,8 +240,10 @@ mit dem Pi. Dazu erlaubt es die Befehle zum Herunterfahren und Neustarten
 WLAN-Energiesparen ab
 ([`pi/wlan-energiesparen-aus.conf`](../pi/wlan-energiesparen-aus.conf)).
 Ohne das hält der Pi Pakete zurück, und Joggen und Anzeige im Browser
-haken. Eine vorhandene `~/.cncrc` und ein vorhandener Hotspot bleiben, wie
-sie sind. Der erste Lauf dauert auf dem Zero etwa 6 Minuten, fast alles
+haken. Das Live-Bild der [Kamera](#kamera) richtet es als Dienst
+`kamera-live` ein ([`pi/kamera.py`](../pi/kamera.py),
+[`pi/kamera.service`](../pi/kamera.service)). Eine vorhandene `~/.cncrc`
+und ein vorhandener Hotspot bleiben, wie sie sind. Der erste Lauf dauert auf dem Zero etwa 6 Minuten, fast alles
 davon für CNCjs. Jeder weitere geht schnell: Ist CNCjs in dieser Version
 schon da, lässt das Skript es aus.
 
@@ -278,6 +280,37 @@ Kante nicht.
 Im Menü des Grbl-Widgets stehen die Befehle von GRBL mit ihrem Kürzel
 (`?`, `$$`, `$I` …). Den Eintrag mit `$SLP` (Sleep) nicht wählen: GRBL
 schaltet dann alles ab und wacht erst nach „Reset“ wieder auf.
+
+## Kamera
+
+Der Pi hat keinen Bildschirm, `rpicam-hello` zeigt auf ihm kein Bild. Das
+Live-Bild der [Autofokus-Kamera](kamerahalter.md) kommt deshalb in den
+Browser: **`http://laser.local:8080`**, im Hotspot
+`http://10.42.0.1:8080`. Dahinter steckt
+[`pi/kamera.py`](../pi/kamera.py), ein kleiner Server, der als Dienst
+`kamera-live` mit dem Pi startet. Er braucht nur Python und `rpicam-vid`,
+beides bringt Pi OS Lite mit.
+
+* **Schärfe:** höher ist schärfer; daneben der beste Wert, seit die Seite
+  offen ist (**neu** setzt ihn zurück). Zum
+  [Scharfstellen der Linse](kamerahalter.md#fokus-der-kamera-einstellen).
+* **Licht** in Lux. Unter 30 Lux wird das Bild dunkel und rauscht, die
+  Seite sagt dann „zu dunkel, Lampe an“.
+* **↻ 90°** dreht das Bild, die Kamera sitzt hochkant. Der Browser merkt
+  sich die Drehung.
+* **Foto** speichert ein Einzelbild, direkt auch unter
+  `http://laser.local:8080/bild.jpg`.
+* Die Kamera läuft nur, solange jemand zusieht, und ist 5 s danach wieder
+  frei. Solange das Bild offen ist, meldet `rpicam-still` „failed to
+  acquire camera“; umgekehrt zeigt die Seite diese Meldung, wenn ein
+  anderes Programm die Kamera hat.
+* Mit Zuschauer: 10 Bilder/s in 1296 × 972, gut ein Viertel eines Kerns
+  und rund 7 Mbit/s im WLAN.
+
+**Im Webcam-Widget von CNCjs** (linke Spalte): in seinen Einstellungen
+„Connect to an IP camera“ wählen und `http://laser.local:8080/stream`
+eintragen. Das Widget kann das Bild selbst drehen und spiegeln. CNCjs
+speichert das je Browser, am iPad also dort noch einmal eintragen.
 
 ## GRBL aufspielen
 
@@ -387,6 +420,9 @@ länger als eine Minute erreichbar, erkennt der Pi sein WLAN.
 | Joggen und Anzeige haken | WLAN-Energiesparen an | `iw dev wlan0 get power_save` muss „off“ zeigen; sonst Schritt 3 wiederholen |
 | ALARM:2 oder `error:15` beim Rahmen | Datei nicht auf den Nullpunkt bezogen | Nullpunkt prüfen, in LightBurn „Absolute Coords“ und Ursprung hinten links |
 | Rahmen fährt nach 0, 0 | 3D-Ansicht aus oder keine Datei geladen | Datei laden, 3D-Ansicht an |
+| `http://laser.local:8080` lädt nicht, CNCjs schon | Dienst `kamera-live` fehlt oder läuft nicht | `pi/einrichten.sh` noch einmal laufen lassen; `systemctl status kamera-live` und `journalctl -u kamera-live` |
+| Kamera-Seite meldet „failed to acquire camera“ | ein anderes Programm hat die Kamera, z. B. `rpicam-still` | warten, bis es fertig ist; die Seite versucht es alle 3 s neu |
+| Kamera-Seite meldet „no cameras available“, `rpicam-hello --list-cameras` findet keine | Kamerakabel lose oder verkehrt herum | stromlos (**Pi herunterfahren**) beide Stecker prüfen, die Kontakte zeigen zur Platine ([Kamerakabel](kamerahalter.md#kamerakabel)) |
 | Befehl „Pi herunterfahren“ tut nichts | sudo fragt nach dem Passwort | `pi/einrichten.sh` noch einmal laufen lassen (legt `/etc/sudoers.d/cncjs` an) |
 | CNCjs wird träge, `vcgencmd measure_temp` zeigt um 80 °C | Pi zu warm unter der Haube, ab 80 °C drosselt er | Lüftungsschlitze frei halten, einen kleinen Kühlkörper auf den Prozessor kleben |
 
@@ -403,5 +439,5 @@ ausprobiert ([Probe](#ohne-wlan-hotspot)).
 
 **Kamera für den Autofokus:** Der Halter steht in
 [kamerahalter.md](kamerahalter.md). Die Kamera hängt mit einem Kabel
-Standard–Mini an der Kamerabuchse des Pi. Das Skript, das das Bild auswertet
-und Z über CNCjs fährt, fehlt noch.
+Standard–Mini an der Kamerabuchse des Pi. Das [Live-Bild](#kamera) läuft.
+Das Skript, das das Bild auswertet und Z über CNCjs fährt, fehlt noch.

@@ -272,6 +272,7 @@ Vorbereitet in [`pi/cncrc.json`](../pi/cncrc.json):
 | **Rahmen** | fährt mit G0 die Außenkante der geladenen Datei ab, der Laser bleibt aus | `G0 X[xmin] Y[ymin]` … |
 | **Laserpunkt 1 %** | Laser als Punkt an, z. B. für den [Nullpunkt](spannmittel.md#nullpunkt-einrichten-einmal); **Schutzbrille** | `G1 F600`, `M3 S10` |
 | **Laser aus** | | `M5` |
+| **Fokustest grob (±1 mm)**, **fein (±0,5 mm)** | brennt ab dem Kopf 11 Linien, jede eine Z-Stufe tiefer; die dünnste liegt im [Fokus](fokustest.md); **Schutzbrille** | `G91`, `M4 S400`, `G1 Y… F2000` … |
 | **Pi herunterfahren** (Befehl) | vor dem Ziehen des Netzteils | `sudo shutdown -h now` |
 | **Pi neu starten** (Befehl) | | `sudo reboot` |
 

@@ -52,6 +52,7 @@ docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzen
 docs/spannmittel.svg           Ecke der Opferplatte mit Spannmitteln von oben, Schnitte durch Niederhalter und Anschlag, Exzenter
 docs/kamerahalter.md           Kamerahalter für den Autofokus: Messprinzip, Kamera, Lage, Sicht zum Messpunkt, Teile, Druck, Fokus, Montage, Kabel
 docs/autofokus.md              Autofokus in CNCjs: Ablauf, Widget einrichten, Einlernen, Benutzen, Fehlersuche, Einstellungen
+docs/fokustest.md              Fokustest: Makros brennen Linien in Z-Stufen, die dünnste ist der Fokus
 docs/kamerahalter.svg          Halter von oben auf dem 2060, Blick zur Anschlagecke, Schnitt längs der Sichtlinie, Halter im Schnitt, Wand in Blickrichtung
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
@@ -88,6 +89,8 @@ tools/spannmittel_zeichnen.py  erzeugt die Zeichnung der Spannmittel
 tools/kamerahalter_check.py    Prüfung des Kamerahalters: Lage, Freiraum über den ganzen Weg, Fach, Sicht zum Messpunkt je Dicke, Schrauben, Druck, Kabel
 tools/kamerahalter_zeichnen.py erzeugt die Zeichnung des Kamerahalters
 tools/autofokus_check.py       Prüfung des Autofokus ohne Pi: Bildauswertung, Lerntabelle, Ablauf gegen simulierte Maschine, Socket zu CNCjs, Webseite
+tools/fokustest.py             schreibt die Fokustest-Makros in pi/cncrc.json (--zeigen zum Einfügen in CNCjs)
+tools/fokustest_check.py       Prüfung der Fokustest-Makros an einem GRBL-Nachbau im Lasermodus
 tools/kette_zeichnen.py        erzeugt die Zeichnung der X-Energiekette
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
@@ -208,7 +211,7 @@ Seit Rev. 3 deckt eine **Haube** Pi und Wandler ab wie beim
 Elektronikgehäuse: 3 × M3 in Messing-Einsätzen, unten offen für Kabel und
 Luft, Lüftungsschlitze oben.
 Die Software in [`pi/`](pi) richtet ein Skript ein (CNCjs 1.11.5 als
-Dienst, Makros für Rahmen und Laserpunkt, Herunterfahren aus dem Browser,
+Dienst, Makros für Rahmen, Laserpunkt und Fokustest, Herunterfahren aus dem Browser,
 ein eigenes WLAN, wenn beim Start keins da ist).
 Details in [docs/pi.md](docs/pi.md).
 

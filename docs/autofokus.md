@@ -90,7 +90,9 @@ dünnste Platte, die dickste, die du bearbeitest, und eine dazwischen. Je
 Dicke:
 
 1. Werkstück an den Anschlag.
-2. Von Hand scharfstellen wie bisher.
+2. Scharfstellen, am genauesten mit dem [Fokustest](fokustest.md) neben
+   dem Messpunkt. Für weitere Dicken reicht oft der Messschieber
+   ([Fokustest, Danach](fokustest.md#danach)).
 3. Einen Namen eintragen (z. B. „leere Platte“, „6 mm Pappel“) und
    **Fokus lernen**.
 

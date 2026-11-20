@@ -25,6 +25,14 @@
     {
       "name": "Laser aus",
       "content": "M5"
+    },
+    {
+      "name": "Fokustest grob (±1 mm)",
+      "content": "; Fokustest: 11 Linien, Z 1.000 bis -1.000 mm um die Starthoehe, Schritt 0.200\n; Start: Kopf grob scharf ueber der rechten vorderen Ecke einer freien\n; Flaeche, 22 x 17 mm nach links und hinten. Rechts hoch, links tief.\nM5\nG21\nG91\nG0 Z1.000\nM4 S400\nG1 Y12.500 F2000\nG0 Y-12.500\nG0 Z-0.200\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y15.000 F2000\nG0 Y-15.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.200\nG0 X-2.000\nG1 Y12.500 F2000\nG0 Y-12.500\nM5\nG0 Z1.000\nG0 X20.000\nG90"
+    },
+    {
+      "name": "Fokustest fein (±0,5 mm)",
+      "content": "; Fokustest: 11 Linien, Z 0.500 bis -0.500 mm um die Starthoehe, Schritt 0.100\n; Start: Kopf grob scharf ueber der rechten vorderen Ecke einer freien\n; Flaeche, 22 x 17 mm nach links und hinten. Rechts hoch, links tief.\nM5\nG21\nG91\nG0 Z0.500\nM4 S400\nG1 Y12.500 F2000\nG0 Y-12.500\nG0 Z-0.100\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y15.000 F2000\nG0 Y-15.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y10.000 F2000\nG0 Y-10.000\nG0 Z-0.100\nG0 X-2.000\nG1 Y12.500 F2000\nG0 Y-12.500\nM5\nG0 Z0.500\nG0 X20.000\nG90"
     }
   ],
   "events": [],

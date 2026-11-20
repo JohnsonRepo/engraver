@@ -73,17 +73,19 @@ ANSCHLUSS = {
     'Wandler OUT+': ('Wandler OUT+', 'Schraubklemme'),
     'Wandler OUT−': ('Wandler OUT−', 'Schraubklemme'),
     # Luefter im Deckel: seine Litze mit einem Dupont-Stecker 2-polig an
-    # der Verlaengerung W5, damit der Deckel abgeht
-    'Lüfter +': ('Lüfter, Stecker: rot', None),
-    'Lüfter −': ('Lüfter, Stecker: schwarz', None),
+    # der Verlaengerung W5, damit der Deckel abgeht (W5: Buchsen, Litze
+    # des Luefters: Stifte, siehe material())
+    'Lüfter +': ('Lüfter, Stecker: rot', 'Dupont'),
+    'Lüfter −': ('Lüfter, Stecker: schwarz', 'Dupont'),
     'Laser PWM': ('Laser, XH links: PWM', 'XH'),
     'Laser GND': ('Laser, XH Mitte: GND', 'XH'),
     'Laser +12 V': ('Laser, XH rechts: +12 V', 'XH'),
     'Uno USB': ('Uno, USB-B', None),
     # Pi und sein Abwaertswandler 24 -> 5 V im Elektronikfach (docs/pi.md):
-    # Eingang mit Schraubklemmen, Ausgang USB-A [v]. In der USB-A-Buchse
-    # steckt ein Adapter mit Schraubklemmen [?]; von ihm gehen die 5 V an
-    # die Wago (W6), von dort an Pi und Lichtschranken.
+    # Eingang mit Schraubklemmen (W18, +24 V von Kontakt 2 des Schalters:
+    # hinter dem Schalter, vor dem Not-Aus), Ausgang USB-A [v]. In der
+    # USB-A-Buchse steckt ein Adapter mit Schraubklemmen [?]; von ihm gehen
+    # die 5 V an die Wago (W6), von dort an Pi und Lichtschranken.
     '5V-Wandler IN+': ('5-V-Wandler IN+', 'Schraubklemme'),
     '5V-Wandler IN−': ('5-V-Wandler IN−', 'Schraubklemme'),
     '5V-Wandler USB': ('5-V-Wandler, USB-A', None),
@@ -109,9 +111,13 @@ for _s in ('X', 'Y', 'Z', 'A'):
         'Shield Motor {}, 2B · 2A'.format(_s), 'Dupont')
     ANSCHLUSS['Shield {} 1A·1B'.format(_s)] = (
         'Shield Motor {}, 1A · 1B'.format(_s), 'Dupont')
-# Stecker ab Werk [v]: außen schwarz und rot, innen grün und blau, also
-# A+ · A− · B− · B+. Mit Schwarz an 2B passt er ohne Umstecken.
-MOTOR_STECKER = ('A+', 'A−', 'B−', 'B+')
+# Spulen gemessen [v] (2026-11-18): schwarz–blau ist Spule A, grün–rot
+# Spule B, nicht schwarz–grün wie bei Stepperonline üblich. Der Stecker ab
+# Werk [v] liegt schwarz · grün · blau · rot, also A+ · B− · A− · B+: die
+# Spulen abwechselnd. Unverändert bekäme jedes Stiftpaar am Shield eine Ader
+# jeder Spule, darum im Dupont-Gehäuse grün und blau tauschen. Plus und
+# Minus sind nur Namen, die Drehrichtung zeigt Prüfung F.
+MOTOR_STECKER = ('A+', 'B−', 'A−', 'B+')
 for _m in ('X-Motor', 'Y-Motor links', 'Y-Motor rechts', 'Z-Motor'):
     ANSCHLUSS[_m + ' A'] = (_m + ', Spule A: A+ · A−', 'PH')
     ANSCHLUSS[_m + ' A getauscht'] = (_m + ', Spule A: A− · A+', 'PH')
@@ -184,8 +190,10 @@ def leitungen():
              adern=[('+24 V', 'rot', 'Wago +24 V', 'Shield +'),
                     ('GND', 'schwarz', 'Wago GND', 'Shield −')]),
         dict(nr='W4', name='Wandler-Eingang', art='Einzeladern',
-             mm2=ez.LITZE_24V, laenge=kurz, strom=1.0,
-             weg='im Fach rechts',
+             mm2=ez.LITZE_24V, laenge=0.4, strom=1.0,
+             weg_fach='Wandler 12 V',
+             weg='im Fach: Leistungsgasse, durch die Fuge zum Eingang des '
+                 '12-V-Wandlers links',
              adern=[('+24 V', 'rot', 'Wago +24 V', 'Wandler IN+'),
                     ('GND', 'schwarz', 'Wago GND', 'Wandler IN−')]),
         dict(nr='W5', name='Lüfter 24 V', art='Einzeladern',
@@ -209,12 +217,12 @@ def leitungen():
         dict(nr='W7', name='Laser', art='Litzen 3-adrig, Silikon',
              mm2=ez.LITZE_LASER, kabel='Laser (12 V + PWM)',
              strom=ez.LASER_A, kette='Y + X',
-             weg='links raus (Fenster Leistung), unter dem linken 2040 '
+             weg='links raus (Fenster Leistung), +12 V und GND vom '
+                 '12-V-Wandler durch die Leistungsgasse, die PWM-Ader vom '
+                 'Shield durch das Fenster Signal; unter dem linken 2040 '
                  'durch, untere Nut außen am linken 2040, hinten in die '
                  'Y-Kette, hinter dem Schlitten in die obere Nut des Rohrs, '
-                 'am Kabelflügel hoch in die X-Kette, Trägerplatte; im Fach '
-                 '+12 V und GND durch Leistungsgasse und Fuge zum Wandler, '
-                 'PWM links zum Shield',
+                 'am Kabelflügel hoch in die X-Kette, Trägerplatte',
              adern=[('+12 V', 'rot', 'Wandler OUT+', 'Laser +12 V'),
                     ('GND', 'schwarz', 'Wandler OUT−', 'Laser GND'),
                     ('PWM', 'weiß', 'Shield Z+', 'Laser PWM')]),
@@ -254,9 +262,9 @@ def leitungen():
              weg='links raus (Fenster Leistung), unter dem linken 2040 '
                  'durch, untere Nut außen am linken 2040, Y-Kette, hinter '
                  'dem Motorhalter hoch zum Motor',
-             adern=[('Spule A', 'schwarz · grün', 'Shield X 2B·2A',
+             adern=[('Spule A', 'schwarz · blau', 'Shield X 2B·2A',
                      'X-Motor A'),
-                    ('Spule B', 'blau · rot', 'Shield X 1A·1B',
+                    ('Spule B', 'grün · rot', 'Shield X 1A·1B',
                      'X-Motor B')]),
         dict(nr='W13', name='Y-Motor links', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor links', strom=ez.MOTOR_I,
@@ -265,9 +273,9 @@ def leitungen():
                  'durch, untere Nut außen am linken 2040 nach vorn; in den '
                  'Kabelhaltern unter den Wänden der drei Träger der Wanne Y '
                  'durch',
-             adern=[('Spule A', 'schwarz · grün', 'Shield Y 2B·2A',
+             adern=[('Spule A', 'schwarz · blau', 'Shield Y 2B·2A',
                      'Y-Motor links A'),
-                    ('Spule B', 'blau · rot', 'Shield Y 1A·1B',
+                    ('Spule B', 'grün · rot', 'Shield Y 1A·1B',
                      'Y-Motor links B')]),
         dict(nr='W14', name='Y-Motor rechts', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Y-Motor rechts', strom=ez.MOTOR_I,
@@ -276,25 +284,24 @@ def leitungen():
                  '(Fenster Leistung), unter dem rechten 2040 durch, untere '
                  'Nut außen am rechten 2040 nach vorn',
              hinweis='Spule A getauscht: dreht gegen den linken',
-             adern=[('Spule A, getauscht', 'grün · schwarz',
+             adern=[('Spule A, getauscht', 'blau · schwarz',
                      'Shield A 2B·2A', 'Y-Motor rechts A getauscht'),
-                    ('Spule B', 'blau · rot', 'Shield A 1A·1B',
+                    ('Spule B', 'grün · rot', 'Shield A 1A·1B',
                      'Y-Motor rechts B')]),
         dict(nr='W15', name='Z-Motor', art='Motorkabel 4-adrig',
              mm2=ez.LITZE_MOTOR, kabel='Z-Motor', strom=ez.MOTOR_I,
              kette='Y + X', fertig=True, mitgeliefert=1.0,
              hinweis='in den Ketten nur die losen Adern, ohne Schlauch',
              weg='wie W7 bis zur Trägerplatte, dann zum Motor oben',
-             adern=[('Spule A', 'schwarz · grün', 'Shield Z 2B·2A',
+             adern=[('Spule A', 'schwarz · blau', 'Shield Z 2B·2A',
                      'Z-Motor A'),
-                    ('Spule B', 'blau · rot', 'Shield Z 1A·1B',
+                    ('Spule B', 'grün · rot', 'Shield Z 1A·1B',
                      'Z-Motor B')]),
         dict(nr='W16', name='24-V-Wächter an Abort', art='Widerstand',
              mm2=None, laenge=0.5, weg_fach='Wächter',
              weg='im Fach: Teiler an den Wago 24 V und GND rechts, die Mitte '
                  'als Einzelader 0,25 mm² durch die Signalgasse an Abort',
-             hinweis='fehlen die 24 V hinter Schalter und Not-Aus, bricht '
-                     'GRBL ab',
+             hinweis='fehlen die 24 V hinter dem Not-Aus, bricht GRBL ab',
              adern=[('R1 22 kΩ', '—', 'Wago +24 V', 'Shield Abort'),
                     ('R2 4,7 kΩ ∥ 100 nF', '—', 'Shield Abort',
                      'Wago GND')]),
@@ -306,11 +313,13 @@ def leitungen():
                      'nicht in „PWR IN“',
              adern=[('USB', '—', 'Uno USB', 'Pi USB')]),
         dict(nr='W18', name='24 V für den 5-V-Wandler', art='Einzeladern',
-             mm2=ez.LITZE_24V, laenge=0.2, strom=3.0, weg_fach='Pi 24 V',
-             weg='im Fach rechts: an der Buchse gelötet, zum Eingang des '
+             mm2=ez.LITZE_24V, laenge=0.25, strom=3.0, weg_fach='Pi 24 V',
+             weg='im Fach rechts: rot an Kontakt 2 des Schalters gelötet, '
+                 'schwarz an der Hülse der Buchse, zum Eingang des '
                  '5-V-Wandlers',
-             hinweis='vor Schalter und Not-Aus: Pi und Uno bleiben an',
-             adern=[('+24 V', 'rot', 'Buchse +', '5V-Wandler IN+'),
+             hinweis='hinter dem Schalter, vor dem Not-Aus: Der Schalter '
+                     'schaltet Pi und Uno mit aus, der Not-Aus nicht',
+             adern=[('+24 V', 'rot', 'Schalter 2', '5V-Wandler IN+'),
                     ('GND', 'schwarz', 'Buchse −', '5V-Wandler IN−')]),
         dict(nr='W19', name='5 V für den Pi',
              art='Micro-USB-Kabel mit offenen Enden', mm2=0.2, fertig=True,
@@ -340,10 +349,12 @@ INNEN = (
 BETRIEB = ('ein', 'nicht gedrueckt')
 
 # 24-V-Waechter an Abort (A0): Spannungsteiler vom +24 V hinter dem Not-Aus.
-# Fehlen die 24 V, zieht R2 den Eingang auf LOW, und GRBL bricht ab —
-# gleich, ob der Not-Aus gedrueckt, der Schalter aus oder das Netzteil ab
-# ist. ATmega328P [w] (Datenblatt): Pull-up 20-50 kOhm, LOW bis 0,3 x VCC,
-# HIGH ab 0,6 x VCC.
+# Fehlen die 24 V, zieht R2 den Eingang auf LOW, und GRBL bricht ab. Das
+# meldet den Not-Aus: Nur er nimmt die 24 V weg und laesst Pi und Uno an.
+# Der Schalter schaltet seit 2026-11-13 auch den 5-V-Wandler (W18) und
+# damit Pi und Uno aus; haengt der Uno am Mac, meldet der Waechter auch
+# den Schalter. ATmega328P [w] (Datenblatt): Pull-up 20-50 kOhm, LOW bis
+# 0,3 x VCC, HIGH ab 0,6 x VCC.
 WAECHTER_R1, WAECHTER_R2 = 22e3, 4.7e3
 PULLUP = (20e3, 50e3)
 VCC, V_IL, V_IH = 5.0, 1.5, 3.0
@@ -481,45 +492,59 @@ def shield_belegung(lts=None):
 # (wie tools/endschalter_check.py)
 Y_RESERVE_HINTEN = 5.0
 
+GRBL_SCHRITT = {
+    'D4': '[D4](#d-uno-grbl-und-lichtschranken)',
+    'D5': '[D5](#d-uno-grbl-und-lichtschranken)',
+    'F': '[F](#f-motoren-und-drehrichtung)',
+    'G': '[G](#g-referenzfahrt)',
+    'H': '[H](#h-laser)',
+}
+
 
 def grbl(Q):
-    """GRBL-Einstellungen; die Wege folgen aus den Schaltpunkten: X und Z
-    vom Schaltpunkt bis ans andere Ende, minus 1 mm Rueckzug und 2 mm
-    Reserve (dort stuende der Wagen sonst genau am Schienenende). Y
-    referenziert seit Portal Rev. 32 vorn: vom Schaltpunkt bis
-    Y_RESERVE_HINTEN vor das hintere Schienenende, dort ist kein Schalter."""
+    """GRBL-Einstellungen als (Wert, Zahl, Schritt, warum), in der
+    Reihenfolge der Inbetriebnahme: Jeder Wert kommt in dem Schritt auf den
+    Uno, der ihn braucht, die Schritte/mm (D5) vor dem ersten Fahren (F).
+    Die Wege folgen aus den Schaltpunkten: X und Z vom Schaltpunkt bis ans
+    andere Ende, minus 1 mm Rueckzug und 2 mm Reserve (dort stuende der
+    Wagen sonst genau am Schienenende). Y referenziert seit Portal Rev. 32
+    vorn: vom Schaltpunkt bis Y_RESERVE_HINTEN vor das hintere
+    Schienenende, dort ist kein Schalter."""
     L, TL, K, es_w = Q['L'], Q['TL'], Q['K'], Q['es_w']
     s = es_w('schaltabstand')
     x = (L['xw_max'] - L['xw_min']) - s - 1.0 - 2.0
     y = L['schalt_dy'] + K['d_schiene'] - Y_RESERVE_HINTEN
     z = TL['z_arbeit'] - 1.0 - 2.0
     return [
-        ('$3', 'nach dem Test', 'Drehrichtung: X+ nach rechts, Y+ nach '
-         'hinten, Z+ nach oben ([Motoren](#f-motoren-und-drehrichtung))'),
-        ('$5', '1 `[w]`', 'Lichtschranken melden „unterbrochen“ mit HIGH; '
-         'im Test prüfen ([Lichtschranken](#d-uno-grbl-und-lichtschranken))'),
-        ('$20', '1', 'Softlimits an: schützen beide Enden, auch Y hinten '
-         '(dort ist kein Schalter), aber nur nach `$H` ([warum]'
-         '(endschalter.md#softlimits-statt-zweitem-y-schalter))'),
-        ('$21', '0', 'Hardlimits aus, bis die Schalter nie falsch auslösen'),
-        ('$22', '1', 'Referenzfahrt an: erst Z, dann X und Y'),
-        ('$23', '3', 'X referenziert nach links und Y nach vorn (beide '
+        ('$5', '1 `[w]`', 'D4', 'Lichtschranken melden „unterbrochen“ mit '
+         'HIGH; im Test prüfen'),
+        ('$100', '80', 'D5', 'X: GT2, 20 Zähne, 1/16. GRBL kommt mit 250: '
+         'Dann fährt jede Achse 3,1-mal so weit wie befohlen'),
+        ('$101', '80', 'D5', 'Y: GT2, 20 Zähne, 1/16'),
+        ('$102', '1600', 'D5', 'Z: Tr8×2, 1/16'),
+        ('$3', 'nach dem Test', 'F', 'Drehrichtung: X+ nach rechts, Y+ nach '
+         'hinten, Z+ nach oben'),
+        ('$21', '0', 'G', 'Hardlimits aus, bis die Schalter nie falsch '
+         'auslösen'),
+        ('$22', '1', 'G', 'Referenzfahrt an: erst Z, dann X und Y'),
+        ('$23', '3', 'G', 'X referenziert nach links und Y nach vorn (beide '
          'minus), Z nach oben (plus)'),
-        ('$27', '1', '1 mm Rückzug vom Schalter'),
-        ('$30', '1000', 'S1000 = volle Laserleistung'),
-        ('$32', '1', 'Lasermodus'),
-        ('$100', '80', 'X: GT2, 20 Zähne, 1/16'),
-        ('$101', '80', 'Y: GT2, 20 Zähne, 1/16'),
-        ('$102', '1600', 'Z: Tr8×2, 1/16'),
-        ('$130', '{:.0f}'.format(math.floor(x)), 'X: {} mm vom Schaltpunkt '
-         'bis ans rechte Schienenende, minus Rückzug und Reserve'.format(
-             de(x + 3.0, 2))),
-        ('$131', '{:.0f}'.format(math.floor(y)), 'Y: {} mm vom Schaltpunkt '
-         'vorn bis ans hintere Schienenende, minus {} mm Reserve'.format(
-             de(y + Y_RESERVE_HINTEN, 2), de(Y_RESERVE_HINTEN, 0))),
-        ('$132', '{:.0f}'.format(math.floor(z)), 'Z: {} mm Arbeitsweg vom '
-         'Schaltpunkt bis {} mm über der Opferplatte, minus Rückzug und '
+        ('$27', '1', 'G', '1 mm Rückzug vom Schalter'),
+        ('$130', '{:.0f}'.format(math.floor(x)), 'G', 'X: {} mm vom '
+         'Schaltpunkt bis ans rechte Schienenende, minus Rückzug und '
+         'Reserve'.format(de(x + 3.0, 2))),
+        ('$131', '{:.0f}'.format(math.floor(y)), 'G', 'Y: {} mm vom '
+         'Schaltpunkt vorn bis ans hintere Schienenende, minus {} mm '
+         'Reserve'.format(de(y + Y_RESERVE_HINTEN, 2),
+                          de(Y_RESERVE_HINTEN, 0))),
+        ('$132', '{:.0f}'.format(math.floor(z)), 'G', 'Z: {} mm Arbeitsweg '
+         'vom Schaltpunkt bis {} mm über der Opferplatte, minus Rückzug und '
          'Reserve'.format(de(z + 3.0, 2), de(TL['platte_ueber_bett'], 0))),
+        ('$20', '1', 'G', 'Softlimits an, nach `$22=1`: schützen beide '
+         'Enden, auch Y hinten (dort ist kein Schalter), aber nur nach `$H` '
+         '([warum](endschalter.md#softlimits-statt-zweitem-y-schalter))'),
+        ('$30', '1000', 'H', 'S1000 = volle Laserleistung'),
+        ('$32', '1', 'H', 'Lasermodus'),
     ]
 
 
@@ -664,8 +689,38 @@ def material(K):
     gehaeuse['Dupont 1-polig'] = len(am_shield - {'Shield Z− S',
                                                   'Shield Z− GND'})
     gehaeuse['Dupont 3-polig'] = 3
-    gehaeuse['Dupont 2-polig'] = 1
+    gehaeuse['Dupont 2-polig'] = 2          # Pull-down W8, W5 zum Luefter
     return meter, kontakte, huelsen, gehaeuse
+
+
+def motorkabel(K):
+    """Zeile der Kaufliste fuer die Motorkabel: was zu kaufen ist (nach
+    Kauflaenge), welche mitgelieferten Kabel reichen, welche in den Ketten
+    nur lose Adern haben."""
+    kaufen, dabei, lose = {}, [], []
+    for lt in leitungen():
+        if not lt['art'].startswith('Motorkabel'):
+            continue
+        _, kauf = laenge_m(lt, K)
+        if lt.get('mitgeliefert') and kauf <= lt['mitgeliefert']:
+            dabei.append(lt)
+        else:
+            kaufen.setdefault(kauf, []).append(lt['nr'])
+        if lt.get('kette'):
+            lose.append(lt['nr'])
+    menge = ' + '.join(str(len(n)) for _, n in sorted(kaufen.items()))
+    laengen = ' und '.join('{} m ({})'.format(de(k, 2), ', '.join(n))
+                           for k, n in sorted(kaufen.items()))
+    fuer = ', '.join(n for _, nn in sorted(kaufen.items()) for n in nn)
+    if dabei:
+        fuer += ' ({}: {} mitgelieferte{} {}-m-Kabel)'.format(
+            ', '.join(lt['nr'] for lt in dabei),
+            'das' if len(dabei) == 1 else 'die',
+            '' if len(dabei) == 1 else 'n',
+            de(dabei[0]['mitgeliefert'], 1))
+    return ('| {} | Motorkabel {}, 4 × AWG 24, PH-Stecker zum Motor, Dupont '
+            '4-polig zum Shield; in den Ketten lose Adern ohne Mantel ({}) '
+            '| {} |'.format(menge, laengen, ', '.join(lose), fuer))
 
 
 def tab_material(K):
@@ -676,21 +731,20 @@ def tab_material(K):
         z.append('| {} m | {} | {} |'.format(
             de(math.ceil(summe * 2.0) / 2.0, 1), art, ' · '.join(
                 '{} {} m'.format(nr, de(m, 2)) for nr, m in teile)))
-    z.append('| 1 + 1 | Motorkabel 1,5 m und 2 m, 4 × AWG 24, PH-Stecker '
-             'zum Motor, Dupont 4-polig zum Shield; für W15 lose Adern ohne '
-             'Mantel (läuft durch beide Ketten) | W14, W15 (W12, W13: die '
-             'mitgelieferten 1-m-Kabel) |')
+    z.append(motorkabel(K))
     for nr in ('W17', 'W19'):
         lt = next(lt for lt in leitungen() if lt['nr'] == nr)
         _, kauf = laenge_m(lt, K)
         z.append('| 1 | {}, {} m | {} ({}) |'.format(
             lt['art'], de(kauf, 2), nr, lt['name']))
     z.append('| {} + Reserve | Dupont-Crimpkontakte (Buchse) | Shield, '
-             'Lichtschranken, W8, W16 |'.format(kontakte.get('Dupont', 0)))
+             'Lichtschranken, W5, W8, W16 |'.format(kontakte.get('Dupont', 0)))
     z.append('| {} · {} · {} | Dupont-Gehäuse 1-, 2- und 3-polig | Shield, '
-             'Pull-down, Lichtschranken |'.format(
+             'Pull-down und W5, Lichtschranken |'.format(
                  gehaeuse['Dupont 1-polig'], gehaeuse['Dupont 2-polig'],
                  gehaeuse['Dupont 3-polig']))
+    z.append('| 1 + 2 | Dupont-Gehäuse 2-polig + Crimpkontakte (Stift) | '
+             'Litze des Lüfters, Gegenstück zu W5 |')
     z.append('| 1 + {} | XH2.54-Gehäuse 3-polig + Crimpkontakte | Laser |'
              .format(kontakte.get('XH', 0)))
     for mm2 in sorted(huelsen):
@@ -708,9 +762,10 @@ def tab_material(K):
 
 
 def tab_grbl(Q):
-    z = ['| Einstellung | Wert | warum |', '|---|---|---|']
-    for k, v, warum in grbl(Q):
-        z.append('| `{}` | {} | {} |'.format(k, v, warum))
+    z = ['| wann | Einstellung | Wert | warum |', '|---|---|---|---|']
+    for k, v, schritt, warum in grbl(Q):
+        z.append('| {} | `{}` | {} | {} |'.format(
+            GRBL_SCHRITT[schritt], k, v, warum))
     return '\n'.join(z)
 
 

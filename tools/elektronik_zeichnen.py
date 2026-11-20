@@ -66,10 +66,11 @@ LUEFTER_W = 2.0
 LASER_V, LASER_A = 12.0, 1.8     # obere Grenze der Angabe
 WANDLER_A = 5.0                  # Abwaertswandler 24 -> 12 V, 5 A [v]
 WANDLER_ETA = 0.9                # sein Wirkungsgrad [w]
-# 5 V: Der Abwaertswandler 24 -> 5 V haengt vor Schalter und Not-Aus an der
-# Buchse. Von seinem USB-A-Adapter gehen die 5 V kurz und dick an die Wago
-# +5 V (W6); daran haengen die Lichtschranken und der Pi (W19), der ueber
-# USB (W17) den Uno versorgt [w].
+# 5 V: Der Abwaertswandler 24 -> 5 V haengt hinter dem Schalter, aber vor
+# dem Not-Aus (W18, +24 V von Kontakt 2 des Schalters): Der Schalter
+# schaltet Pi und Uno mit aus, der Not-Aus nicht. Von seinem USB-A-Adapter
+# gehen die 5 V kurz und dick an die Wago +5 V (W6); daran haengen die
+# Lichtschranken und der Pi (W19), der ueber USB (W17) den Uno versorgt [w].
 USB_MA = 500.0          # Polyfuse am USB-Eingang des Uno
 LS_MA = 25.0            # je Lichtschranke: IR-Diode, Komparator, zwei LEDs
 UNO_MA = 60.0           # Uno mit USB-Wandler
@@ -444,11 +445,13 @@ def kabelwege(w, L, TL, K):
     laser = am_th + [(xm, 0.0, laser_oben), (xm, 41.0, laser_oben)]
     z_es = am_th + [(xm - 20.0, 16.0, 112.0)]
     ky, kx = K['ky_laenge'], K['kx_laenge']
-    # im Fach: 24 V fuer den 5-V-Wandler von der Buchse; 5 V vom Adapter
-    # durch die Signalgasse an die 5-V-Klemmen links, von dort zum Pi (W19)
+    # im Fach: 24 V fuer den 5-V-Wandler — rot von Kontakt 2 des Schalters
+    # (die laengere Ader, sie zaehlt), an der Wand entlang zur Buchse, dort
+    # kommt schwarz von der Huelse dazu; 5 V vom Adapter durch die
+    # Signalgasse an die 5-V-Klemmen links, von dort zum Pi (W19)
     bx, _ = EL['buchse']
-    pi24 = [(bx, EL['innen_y'][0] + 8.0, ez), (bx, EL['innen_y'][0] + 8.0,
-                                                 zk),
+    yr = EL['innen_y'][0] + 8.0
+    pi24 = [(sx, yr, sz), (sx, yr, zk), (bx, yr, zk),
             (EL['w5_x'][1] + 4.0, sum(EL['w5_y']) / 2.0, zk),
             (EL['w5_x'][1], sum(EL['w5_y']) / 2.0, bz + 10.0)]
     ad = EL['adapter']
@@ -473,6 +476,14 @@ def kabelwege(w, L, TL, K):
     shield24 = ([w24, (w24[0], yh['rechts'], zk)]
                 + gasse_hinten(w24[0], klemme24[0])[1:]
                 + [(klemme24[0], klemme24[1], zk), klemme24])
+    # 24 V und GND fuer den 12-V-Wandler (W4): er sitzt links, der Eingang
+    # auf seiner rechten Seite; aus der Wago GND (der weiteren der beiden)
+    # durch die Leistungsgasse und die Fuge
+    wgnd, xin = wago['GND'], EL['w12_x'][1]
+    wy12 = sum(EL['w12_y']) / 2.0
+    wandler12 = ([wgnd, (wgnd[0], yh['rechts'], zk)]
+                 + gasse_hinten(wgnd[0], xin + 4.0)[1:]
+                 + [(xin + 4.0, wy12, zk), (xin, wy12, bz + 10.0)])
     fm = EL['luefter_mitte']
     luefter = ([(fm[0], fm[1], EL['luefter_z'][0]), (fm[0], fm[1], zs + 15.0),
                 (fm[0], yh['links'], zk)] + gasse_hinten(fm[0], w24[0])[1:]
@@ -500,6 +511,7 @@ def kabelwege(w, L, TL, K):
         'USB Pi–Uno': (laenge(usb), usb),
         '5 V vom Wandler': (laenge(fuenf), fuenf),
         'Shield 24 V': (laenge(shield24), shield24),
+        'Wandler 12 V': (laenge(wandler12), wandler12),
         'Lüfter': (laenge(luefter), luefter),
         'Wächter': (laenge(waechter), waechter),
     }
@@ -834,8 +846,8 @@ def main():
              de(K['leistung']['pi'], 0),
              de(K['leistung']['summe'], 0), de(K['leistung']['dauer'], 0))),
         ('Pi', 'Pi Zero 2 W im Fach, senkrecht an der Fuge, die Oberkante '
-         'über dem 2060; der 5-V-Wandler hängt vor Schalter und Not-Aus an '
-         'der Buchse und versorgt auch die Lichtschranken (docs/pi.md)'),
+         'über dem 2060; der 5-V-Wandler hängt hinter dem Schalter, vor dem '
+         'Not-Aus und versorgt auch die Lichtschranken (docs/pi.md)'),
         ('Endschalter', 'LM393-Gabellichtschranken: X links auf der 2020 '
          'des Portals, Y '
          'außen am rechten 2040 — schaltet {} (Toolhead mit Z unten {} mm '

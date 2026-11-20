@@ -143,14 +143,19 @@ def main():
     t += [draht([(204, 132), (290, 132)], P24),              # Netzteil +
           draht([(204, 150), (290, 150)], MASSE),            # Netzteil −
           text(258, 145, 'Hohlstecker', 7.2, GRAU, 'middle')]
-    # W1: Buchse + -> Schalter, Buchse − -> Wago GND (rechts herum)
+    # W1: Buchse + -> Schalter Kontakt 1, Buchse − -> Wago GND (rechts herum)
     t += [draht([(350, 160), (350, 186)], P24),
           draht([(410, 150), (424, 150), (424, 410), (410, 410)], MASSE)]
+    t += pin(350, 186)
+    t.append(text(378, 182, 'Kontakt 1', 7.5, GRAU))
     t += marke(366, 173, 'W1') + marke(424, 300, 'W1')
-    # W2: Schalter -> Öffner 11, Öffner 12 -> Wago +24 V
-    t += [draht([(290, 206), (238, 206), (238, 250), (204, 250)], P24),
+    # W2: Schalter Kontakt 2 -> Not-Aus C, NC -> Wago +24 V. An Kontakt 2
+    # haengt auch W18 (weiter unten): hinter dem Schalter, vor dem Not-Aus
+    t += [draht([(290, 214), (238, 214), (238, 250), (204, 250)], P24),
           draht([(204, 268), (230, 268), (230, 358), (290, 358)], P24)]
-    t += marke(262, 206, 'W2') + marke(262, 358, 'W2')
+    t += pin(290, 202) + pin(290, 214)
+    t.append(text(284, 197, 'Kontakt 2', 7.5, GRAU, 'end', halo=True))
+    t += marke(262, 214, 'W2') + marke(262, 358, 'W2')
 
     # ---- Verteilung: Wago-Klemmen, Wandler, Lüfter -------------------------
     t += block(290, 350, 120, 36, ['Wago +24 V', '221-420, 10 Plätze'],
@@ -296,8 +301,9 @@ def main():
           text(xk + 28, 500, '4,7 kΩ ∥ 100 nF', 7.5, GRAU)]
     t += masse_zeichen(xk, 522)
     t += marke(803, ya, 'W16')
-    # 5-V-Wandler, 5-V-Klemmen und Pi (im Fach, links an der Fuge). W18 an
-    # der Buchse, vor Schalter und Not-Aus; W6 vom Adapter an die Wago
+    # 5-V-Wandler, 5-V-Klemmen und Pi (im Fach, links an der Fuge). W18:
+    # +24 V von Kontakt 2 des Schalters (hinter dem Schalter, vor dem
+    # Not-Aus), GND von der Huelse der Buchse; W6 vom Adapter an die Wago
     # +5 V und GND 5 V; W19 von dort in PWR IN; W17 USB zum Uno
     t.append(el('rect', {'x': '14', 'y': '470', 'width': '200',
                          'height': '226', 'rx': '6', 'fill': 'none',
@@ -311,11 +317,10 @@ def main():
                                   'Klemmen-Adapter'],
                fett=1, fill='#f8f0fc', stroke=P5)
     t += pin(204, 500, 'IN+', 'end') + pin(204, 516, 'IN−', 'end')
-    t += [draht([(300, 160), (300, 172), (220, 172), (220, 500), (204, 500)],
-                P24),
-          draht([(316, 160), (316, 178), (212, 178), (212, 516), (204, 516)],
+    t += [draht([(290, 202), (220, 202), (220, 500), (204, 500)], P24),
+          draht([(304, 160), (304, 174), (212, 174), (212, 516), (204, 516)],
                 MASSE)]
-    t += pin(300, 160) + pin(316, 160)
+    t += pin(304, 160)
     t += marke(220, 440, 'W18')
     t += block(24, 562, 85, 32, ['Wago +5 V', '221-415'], fett=1,
                fill='#f8f0fc', stroke=P5)
@@ -385,15 +390,19 @@ def main():
         ('Masse', 'ein gemeinsames GND: Stern an der Wago GND (Netzteil, '
          'Shield, Wandler, Laser), die Lichtschranken und der Pi an der Wago '
          'GND 5 V, über den 5-V-Wandler damit verbunden'),
-        ('Not-Aus', 'Wechsler C/NO/NC: C und NC trennen die 24 V von '
-         'Shield, Wandler und Lüfter, NO bleibt frei. Fehlen sie (Not-Aus, '
-         'Schalter), zieht der Wächter W16 Abort auf LOW, und GRBL bricht ab'),
-        ('5 V', 'der 5-V-Wandler hängt mit W18 an der Buchse, vor Schalter '
-         'und Not-Aus; W6 (0,75 mm²) bringt seine 5 V direkt an die Wago: '
-         'Lichtschranken und Pi (W19), der Pi über USB (W17) den Uno'),
-        ('Einschalten', 'Netzteil einstecken: Pi und Uno starten, GRBL läuft '
-         '(der Pull-down W8 hält den Laser aus); dann Schalter EIN: 24 V. '
-         'Ausschalten umgekehrt, den Pi vor dem Ausstecken herunterfahren'),
+        ('Not-Aus', 'Wechsler C/NO/NC: C und NC trennen die 24 V nur von '
+         'Shield, Wandler und Lüfter, NO bleibt frei; Pi und Uno laufen '
+         'weiter. Der Wächter W16 zieht dann Abort auf LOW, und GRBL bricht '
+         'ab'),
+        ('Schalter', 'schaltet alles: W18 hängt an Kontakt 2, hinter dem '
+         'Schalter und vor dem Not-Aus. AUS nimmt auch dem 5-V-Wandler die '
+         '24 V, Pi und Uno gehen mit aus'),
+        ('5 V', 'W6 (0,75 mm²) bringt die 5 V des Wandlers direkt an die '
+         'Wago: Lichtschranken und Pi (W19), der Pi über USB (W17) den Uno'),
+        ('Einschalten', 'Schalter EIN: Pi und Uno starten, die 24 V liegen '
+         'zugleich an; der Pull-down W8 hält den Laser aus, bis GRBL läuft. '
+         'Ausschalten: erst den Pi in CNCjs herunterfahren, dann Schalter '
+         'AUS'),
     ]
     for i, (k, v) in enumerate(zeilen):
         t.append(text(24, ty + 15 * i, k, 8.5, GRAU))

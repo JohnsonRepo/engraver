@@ -170,13 +170,14 @@ def achsen(Q):
             if ziel == p:
                 t += vz.draht([(xs + 30, p), (xk, p)], f)
             else:
-                t += vz.draht([(xs + 30, p), (150, p), (176, ziel),
+                t += vz.draht([(xs + 30, p), (226, p), (252, ziel),
                                (xk, ziel)], f)
         for p in pins:
             t.append(vz.kreis(xs, p, 2.4, '#fcc419'))
-        t += [text(214, g + 12, fa.split(',')[0], 9.5, TEXT, 'middle',
+        # Spulennamen vor der Kreuzung, wo ihre Adern nebeneinanderliegen
+        t += [text(176, g + 12, fa.split(',')[0], 9.5, TEXT, 'middle',
                    fett=True, halo=True),
-              text(214, g + 48, fb, 9.5, TEXT, 'middle', fett=True,
+              text(176, g + 48, fb, 9.5, TEXT, 'middle', fett=True,
                    halo=True)]
         # Motor mit PH-Stecker ab Werk
         t += [vz.rechteck(xk, g - 9, 12, 72, '#f8f9fa', '#868e96', 0.8,
@@ -193,7 +194,7 @@ def achsen(Q):
                    GRAU)]
         if 'getauscht' in fa:
             t += vz.warnung(xs - 10, g + 86, [
-                'Schwarz und Grün getauscht: dreht gegen Y.',
+                'Schwarz und Blau getauscht: dreht gegen Y.',
                 'Oder den ganzen Stecker um 180° gedreht aufstecken.'],
                 10, 13)
         elif 'lose' in lt.get('hinweis', ''):
@@ -209,11 +210,11 @@ def main():
          text(24, 58, 'Shield von oben wie im Gehäuse. Farben der Motorkabel '
               'wie in der Anschlussliste (verkabelung.md, W12–W15).', 11.5,
               GRAU),
-         text(24, 76, 'Der Stecker ab Werk (schwarz · grün · blau · rot) '
-              'passt, wie er ist: Schwarz oben an 2B. Nur an A Schwarz und '
-              'Grün tauschen.', 11.5, GRAU),
+         text(24, 76, 'Stecker ab Werk (schwarz · grün · blau · rot) passt '
+              'so nicht: Grün und Blau tauschen, Schwarz oben an 2B; an A '
+              'zusätzlich Schwarz und Blau.', 11.5, GRAU),
          text(24, 94, 'Nur stromlos stecken. Vorher mit dem Ohmmeter: '
-              'schwarz–grün und blau–rot je 2–3 Ω, zwischen den Paaren '
+              'schwarz–blau und grün–rot je 2–3 Ω, zwischen den Paaren '
               'offen.', 11.5, GRAU)]
     t.append(vz.gruppe(24, 112, shield()))
     t.append(vz.gruppe(506, 112, achsen(Q)))

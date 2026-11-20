@@ -420,16 +420,16 @@ Steckernetzteil 24 V / 3 A, Laser 12 V / 1,6 A über einen Abwärtswandler
 12 V / 5 A (43 × 24 × 20 mm). Vier NEMA 17 **Stepperonline 17HE15-1504S**
 (1,5 A) — genau die vier Treiberplätze des Shields. Pinbelegung
 und Jumper `[w]` (GRBL 1.1, Shield V3 und seine Nachbauten). Wo Steuerung,
-Netzteil, Endschalter und Kabel hinkommen, und das Gehäuse
-(`fusion/Elektronik`): [elektronik.md](elektronik.md). Hohlstecker des
+Netzteil, Endschalter und Kabel hinkommen, und das Elektronikfach
+(`fusion/Elektronikfach`): [elektronik.md](elektronik.md). Hohlstecker des
 Netzteils: **5,5 × 2,1 mm** `[v]` Angabe; Lüfter 24 V. Not-Aus: Pilztaster
 „STOP“, rastet, Drehen löst, **ein Wechsler C/NO/NC** mit Lötfahnen `[v]`
 (Bild 2026-09-30), **3 A / 250 V**, Gewinde **16 mm** rund `[v]` Angabe —
 er sitzt in der Frontwand des Elektronikfachs (Elektronikfach.py Rev. 2),
 Verdrahtung in [verkabelung.md](verkabelung.md). Abwärtswandler 24 → 5 V
 für den Pi: **63 × 30 mm**, höchstens 20 mm hoch, Schraubklemmen und
-USB-A-Buchse an den schmalen Seiten `[v]` Angabe (2026-10-10) — Halter in
-[pi.md](pi.md#halter).
+USB-A-Buchse an den schmalen Seiten `[v]` Angabe (2026-10-10) — Platz im
+Elektronikfach in [pi.md](pi.md#im-elektronikfach).
 
 | Steckplatz | Motor | Schritte/mm bei 1/16 |
 |---|---|---|
@@ -464,9 +464,12 @@ eigene Achse, sondern eine elektrische Kopie von Y.
 
 ### Pins: GRBL 1.1 gegen den Aufdruck
 
-Der Aufdruck des Shields stammt aus GRBL 0.9. In GRBL 1.1 braucht die
-Laserleistung den Hardware-PWM an D11, dafür ist der Z-Endschalter auf D12
-gewandert:
+Der Aufdruck des Shields stammt aus GRBL 0.8: Damals war D11 der
+Z-Endschalter und D12 „Spindel an“. Seit GRBL 0.9 sind die beiden
+getauscht. Die Laserleistung braucht einen Hardware-PWM, und D11 ist der
+einzige, den GRBL frei hat: Zwei der drei Timer des Uno erzeugen die
+Schritte, der dritte hat seine Ausgänge an D3 (Schritt Y) und D11. Die
+Leiterbahnen des Shields sind geblieben, nur ihre Bedeutung nicht:
 
 | Aufdruck | Uno-Pin | GRBL 1.1 |
 |---|---|---|
@@ -475,7 +478,17 @@ gewandert:
 | **Z+ / Z−** | D11 | **Laser-PWM** — kein Endschalter! |
 | **SpnEn** | D12 | **Endschalter Z** (Gabellichtschranke) |
 | SpnDir | D13 | Spindelrichtung, für den Laser frei |
+| CoolEn | A3 | Kühlmittel (M8), frei |
 | Abort | A0 | 24-V-Wächter: fehlen die 24 V, bricht GRBL ab ([verkabelung.md](verkabelung.md#7-24-v-wächter-w16)) |
+| Hold / Resume | A1 / A2 | Pause und Start/Weiter für Taster, frei |
+| E-STOP | RST | setzt nur den Uno zurück, kein Not-Aus der Maschine; frei |
+| SCL / SDA | A5 / A4 | A5 ist der Probe-Eingang, beide frei |
+| RX / TX | D0 / D1 | seriell, gehören dem USB: frei lassen |
+| EN/GND | D8 | GRBL schaltet die Treiber ein und aus, Jumper offen |
+
+* Wo jeder Stift auf dem Shield sitzt, mit Belegung:
+  [cnc-shield.svg](cnc-shield.svg) (`python3 tools/shield_zeichnen.py`),
+  nach Bestückungsdruck und Schaltplan des Protoneer V3.00 `[w]`.
 
 * Laser: PWM (5 V TTL) an den PWM-Eingang des Lasertreibers, Masse gemeinsam
   mit dem Shield. `$32=1` (Lasermodus), `$30=1000` passend zum S-Maximum der

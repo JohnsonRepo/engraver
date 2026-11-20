@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autofokus</title>
+<style>
+:root { --grund: #fff; --text: #333; --leise: #777; --linie: #ddd;
+        --feld: #f5f5f5; --knopf: #fff; --haupt: #2a6ebb; --haupt-text: #fff;
+        --gut: #2e7d32; --warn: #b26a00; --fehler: #c62828; }
+@media (prefers-color-scheme: dark) {     /* in CNCjs immer hell wie CNCjs */
+  :root:not(.hell) { --grund: #1b1b1b; --text: #ddd; --leise: #999; --linie: #3a3a3a;
+          --feld: #262626; --knopf: #2a2a2a; --haupt: #3d85d8;
+          --gut: #6cc070; --warn: #f0b040; --fehler: #ff6b6b; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 8px; background: var(--grund); color: var(--text);
+       font: 13px/1.4 -apple-system, system-ui, "Helvetica Neue", sans-serif; }
+button { font: inherit; color: var(--text); background: var(--knopf);
+         border: 1px solid var(--linie); border-radius: 4px; padding: 4px 8px;
+         cursor: pointer; }
+button:disabled { opacity: .45; cursor: default; }
+button.haupt { background: var(--haupt); border-color: var(--haupt);
+               color: var(--haupt-text); font-weight: 600; padding: 8px 12px; }
+.zeile { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.leise { color: var(--leise); }
+.gut { color: var(--gut); } .warn { color: var(--warn); }
+.fehler { color: var(--fehler); }
+.wert { font-variant-numeric: tabular-nums; }
+#rahmen { position: relative; width: 100%; overflow: hidden; background: #000;
+          border-radius: 4px; margin: 6px 0; }
+#bild { position: absolute; top: 50%; left: 50%; display: block; }
+#bildhinweis { position: absolute; inset: 0; display: none; padding: 16px;
+               text-align: center; color: #aaa; }
+.reiter button.an { background: var(--feld); font-weight: 600; }
+#los { flex: 1 1 auto; }
+#meldung { margin: 6px 0; min-height: 1.4em; }
+details { margin-top: 8px; border-top: 1px solid var(--linie); padding-top: 6px; }
+summary { cursor: pointer; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; margin: 6px 0; }
+td, th { padding: 3px 4px; border-bottom: 1px solid var(--linie);
+         text-align: left; }
+th { font-weight: 600; color: var(--leise); }
+td.zahl, th.zahl { text-align: right; font-variant-numeric: tabular-nums; }
+input[type=text] { font: inherit; color: var(--text); background: var(--grund);
+                   border: 1px solid var(--linie); border-radius: 4px;
+                   padding: 4px 6px; flex: 1 1 8em; min-width: 0; }
+.klein { font-size: 12px; }
+p { margin: 6px 0; }
+code { background: var(--feld); padding: 0 3px; border-radius: 3px; }
+</style></head><body>
+
+<div class="zeile">
+  <b>Autofokus</b>
+  <span id="status" class="leise">…</span>
+</div>
+
+<div id="rahmen"><img id="bild" alt="Kamerabild">
+  <div id="bildhinweis"></div></div>
+<div class="zeile reiter">
+  <button id="r-live">Live</button>
+  <button id="r-mess">Messbild</button>
+  <button id="drehen" title="Bild um 90° drehen">↻ 90°</button>
+</div>
+
+<div class="zeile" style="margin-top:8px">
+  <button id="los" class="haupt">Autofokus</button>
+  <button id="stopp" hidden>Abbrechen</button>
+</div>
+<div id="meldung"></div>
+<p class="klein leise">Schutzbrille: Der Laser geht kurz mit
+  <span id="leistung">1 %</span> an. Der Kopf fährt erst ganz hoch, dann zum
+  Messpunkt; das Werkstück muss dort liegen.</p>
+
+<details id="lernen">
+  <summary>Einlernen (<span id="anzahl">0</span> Dicken)</summary>
+
+  <p><b>1. Messpunkt</b> <span id="messpunkt" class="wert leise">nicht gesetzt</span></p>
+  <p class="klein leise">Kopf über eine Stelle fahren, die die Kamera sieht
+    (mit Nullpunkt in der Anschlagecke: <code>G0 X-30 Y58</code>). Mit dem Makro
+    „Laserpunkt 1 %“ prüfen, dass der Punkt im Live-Bild liegt, dann
+    „Laser aus“. Neu setzen löscht die Tabelle.</p>
+  <button id="mp">Messpunkt = aktuelle Position</button>
+
+  <p style="margin-top:10px"><b>2. Dicken lernen</b></p>
+  <p class="klein leise">Werkstück an den Anschlag, von Hand scharfstellen
+    wie bisher, dann „Fokus lernen“. Mindestens drei: die dünnste und die
+    dickste Platte, die du bearbeitest, und eine dazwischen.</p>
+  <table><thead><tr><th>Name</th><th class="zahl">Z</th>
+    <th class="zahl">Zeile</th><th></th></tr></thead>
+    <tbody id="tabelle"></tbody></table>
+  <p id="tabhinweis" class="klein warn"></p>
+  <div class="zeile">
+    <input id="name" type="text" maxlength="40" placeholder="z. B. leere Platte">
+    <button id="lern">Fokus lernen</button>
+  </div>
+</details>
+
+<script>
+const $ = id => document.getElementById(id);
+const bild = $('bild'), rahmen = $('rahmen');
+let z = null, ansicht = 'live', dreh = 0, bildNr = -1, versuch = 0;
+let lokal = null;   // Antwort auf einen Klick, kurz vor dem Serverzustand
+// Im Custom Widget von CNCjs haengt dessen Sitzungs-Token an der Adresse.
+// Damit darf die Seite CNCjs ihre Hoehe melden; CNCjs passt das iframe an.
+const cncToken = new URLSearchParams(location.search).get('token');
+const eingebettet = !!cncToken && window.parent !== window;
+if (eingebettet) document.documentElement.classList.add('hell');
+let gemeldet = 0;
+function hoeheMelden() {
+  if (!eingebettet) return;
+  const h = Math.ceil(document.documentElement.scrollHeight);
+  if (Math.abs(h - gemeldet) < 2) return;
+  gemeldet = h;
+  window.parent.postMessage({token: cncToken, action: {type: 'resize',
+                             payload: {scrollHeight: h}}}, '*');
+}
+let groesse = {live: [1296, 972], mess: [640, 480]};
+try {
+  dreh = +localStorage.getItem('dreh') || 0;
+  ansicht = localStorage.getItem('af-ansicht') || 'live';
+} catch (e) {}
+
+function auslegen() {
+  const [B, H] = groesse[ansicht];
+  const quer = dreh % 180 === 0;
+  const w = quer ? B : H, h = quer ? H : B;
+  // eingebettet nur nach der Breite: die Hoehe des iframe folgt dem Inhalt
+  const s = eingebettet ? rahmen.clientWidth / w :
+      Math.min(rahmen.clientWidth / w, Math.max(innerHeight * 0.55, 160) / h);
+  rahmen.style.height = Math.round(h * s) + 'px';
+  bild.style.width = Math.round(B * s) + 'px';
+  bild.style.height = Math.round(H * s) + 'px';
+  bild.style.transform = 'translate(-50%,-50%) rotate(' + dreh + 'deg)';
+  hoeheMelden();
+}
+function zeigen(neu) {
+  ansicht = neu;
+  try { localStorage.setItem('af-ansicht', neu); } catch (e) {}
+  $('r-live').classList.toggle('an', neu === 'live');
+  $('r-mess').classList.toggle('an', neu === 'mess');
+  $('bildhinweis').style.display = 'none';
+  if (neu === 'live') { versuch = 0; verbinden(); }
+  else if (z && z.bild > 0) bild.src = '/api/af/bild.png?' + z.bild;
+  else { bild.removeAttribute('src'); hinweis('Noch keine Messung'); }
+  auslegen();
+}
+function verbinden() {
+  if (ansicht !== 'live' || Date.now() - versuch < 3000) return;
+  versuch = Date.now();
+  bild.src = '/stream?' + versuch;
+}
+function hinweis(text) {
+  $('bildhinweis').textContent = text;
+  $('bildhinweis').style.display = text ? 'block' : 'none';
+}
+bild.onerror = () => { if (ansicht === 'live') setTimeout(verbinden, 3000); };
+
+async function senden(aktion, daten) {
+  try {
+    const r = await fetch('/api/af/' + aktion, {
+      method: 'POST', cache: 'no-store',
+      headers: {'Content-Type': 'application/json', 'X-Autofokus': '1'},
+      body: JSON.stringify(daten || {})});
+    const a = await r.json();
+    lokal = r.ok ? null : {text: a.fehler || 'Fehler', bis: Date.now() + 6000};
+  } catch (e) { lokal = {text: 'Pi nicht erreichbar', bis: Date.now() + 6000}; }
+  abfragen();
+}
+function meldung(text, art) { $('meldung').textContent = text;
+                              $('meldung').className = art || ''; }
+
+function zahl(x, n) { return x == null ? '–' : x.toFixed(n).replace('.', ','); }
+
+function malen() {
+  const l = z.laeuft;
+  $('status').textContent = l ? z.schritt + ' …' :
+      (z.fehler ? 'Fehler' : (z.tabelle ? 'erst einlernen' : 'bereit'));
+  $('status').className = l ? 'warn' : (z.fehler ? 'fehler' : 'leise');
+  $('los').disabled = l || !!z.tabelle || !z.messpunkt;
+  $('stopp').hidden = !l;
+  $('mp').disabled = $('lern').disabled = l;
+  $('leistung').textContent = (z.laser_s / 10).toString().replace('.', ',') + ' %';
+  if (lokal && Date.now() < lokal.bis) meldung(lokal.text, 'fehler');
+  else if (z.fehler) meldung(z.fehler, 'fehler');
+  else if (z.meldung) meldung(z.meldung, 'gut');
+  else if (!l) meldung('');
+  $('messpunkt').textContent = z.messpunkt ?
+      'X ' + zahl(z.messpunkt[0], 2) + '  Y ' + zahl(z.messpunkt[1], 2) :
+      'nicht gesetzt';
+  $('anzahl').textContent = z.punkte.length;
+  $('tabhinweis').textContent = z.messpunkt && z.punkte.length ? z.tabelle : '';
+  const sortiert = z.punkte.map((p, i) => [p, i]).sort((a, b) => a[0].z - b[0].z);
+  const tb = $('tabelle');
+  tb.textContent = '';
+  for (const [p, i] of sortiert) {
+    const tr = document.createElement('tr');
+    for (const [t, k] of [[p.name || p.zeit, ''], [zahl(p.z, 2), 'zahl'],
+                          [zahl(p.v, 0), 'zahl']]) {
+      const td = document.createElement('td');
+      td.textContent = t; td.className = k; tr.appendChild(td);
+    }
+    const td = document.createElement('td'), x = document.createElement('button');
+    x.textContent = '×'; x.title = 'Eintrag löschen'; x.disabled = l;
+    x.onclick = () => senden('loeschen', {index: i});
+    td.appendChild(x); tr.appendChild(td); tb.appendChild(tr);
+  }
+  if (!z.messpunkt || z.punkte.length < 2) $('lernen').open = true;
+  if (z.bild !== bildNr) {
+    if (bildNr >= 0 && z.bild > 0) zeigen('mess');   // neues Messbild zeigen
+    bildNr = z.bild;
+  }
+  if (ansicht === 'live') {
+    const k = z.kamera || {};
+    if (k.messung) hinweis('Kamera misst …');
+    else if (k.fehler && !k.laeuft) hinweis(k.fehler);
+    else hinweis('');
+    if (!k.laeuft && !k.messung) verbinden();
+  }
+}
+
+let timer = null;
+async function abfragen() {
+  clearTimeout(timer);
+  try {
+    z = await (await fetch('/api/af', {cache: 'no-store'})).json();
+    malen();
+  } catch (e) { $('status').textContent = 'Pi nicht erreichbar';
+                $('status').className = 'fehler'; }
+  timer = setTimeout(abfragen, z && z.laeuft ? 400 : 2000);
+}
+
+$('r-live').onclick = () => zeigen('live');
+$('r-mess').onclick = () => zeigen('mess');
+$('drehen').onclick = () => {
+  dreh = (dreh + 90) % 360;
+  try { localStorage.setItem('dreh', dreh); } catch (e) {}
+  auslegen();
+};
+$('los').onclick = () => { meldung(''); senden('messen'); };
+$('stopp').onclick = () => senden('abbrechen');
+$('mp').onclick = () => { meldung(''); senden('messpunkt'); };
+$('lern').onclick = () => { meldung(''); senden('lernen', {name: $('name').value.trim()}); };
+addEventListener('resize', auslegen);
+if (window.ResizeObserver) new ResizeObserver(hoeheMelden).observe(document.body);
+$('lernen').addEventListener('toggle', hoeheMelden);
+
+zeigen(ansicht);
+abfragen();
+</script></body></html>

@@ -26,7 +26,7 @@ fusion/Spannmittel/           Anschlagwinkel (Ecke vorn rechts, Rev. 2), Exzente
 fusion/Kamerahalter/           Halter für die Kamera (Autofokus), geneigt, vorn rechts auf dem vorderen 2060 vor dem Elektronikfach (Rev. 2)  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 stl/                           druckfertige STL ohne Fusion: Elektronikfach (zwei Hälften, zwei Deckel, Rev. 2), Kabelhalter, Kamerahalter
-pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus, Hotspot ohne WLAN
+pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus, Hotspot ohne WLAN, Kamera-Livebild und Autofokus (Widget für CNCjs)  ← neu
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
 docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
@@ -51,6 +51,7 @@ docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, 
 docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzenter, Niederhalter, Höhe unter dem Toolhead
 docs/spannmittel.svg           Ecke der Opferplatte mit Spannmitteln von oben, Schnitte durch Niederhalter und Anschlag, Exzenter
 docs/kamerahalter.md           Kamerahalter für den Autofokus: Messprinzip, Kamera, Lage, Sicht zum Messpunkt, Teile, Druck, Fokus, Montage, Kabel
+docs/autofokus.md              Autofokus in CNCjs: Ablauf, Widget einrichten, Einlernen, Benutzen, Fehlersuche, Einstellungen
 docs/kamerahalter.svg          Halter von oben auf dem 2060, Blick zur Anschlagecke, Schnitt längs der Sichtlinie, Halter im Schnitt, Wand in Blickrichtung
 docs/hardware-notizen.md       Kaufteilmaße mit Verifizierungsstatus
 docs/ausrichten.md             Gestell und Y-Achse mit einer Winkel-Messbox ausrichten
@@ -86,6 +87,7 @@ tools/spannmittel_check.py     Prüfung der Spannmittel: Höhe unter dem Toolhea
 tools/spannmittel_zeichnen.py  erzeugt die Zeichnung der Spannmittel
 tools/kamerahalter_check.py    Prüfung des Kamerahalters: Lage, Freiraum über den ganzen Weg, Fach, Sicht zum Messpunkt je Dicke, Schrauben, Druck, Kabel
 tools/kamerahalter_zeichnen.py erzeugt die Zeichnung des Kamerahalters
+tools/autofokus_check.py       Prüfung des Autofokus ohne Pi: Bildauswertung, Lerntabelle, Ablauf gegen simulierte Maschine, Socket zu CNCjs, Webseite
 tools/kette_zeichnen.py        erzeugt die Zeichnung der X-Energiekette
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters

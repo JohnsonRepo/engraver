@@ -2,7 +2,8 @@
 # einrichten.sh — richtet den Raspberry Pi Zero 2 W als Steuerrechner fuer
 # den Engraver ein (docs/pi.md): CNCjs als Dienst auf Port 8000, ein Ordner
 # fuer G-Code-Dateien, Makros (Rahmen, Laserpunkt, Laser aus), Befehle zum
-# Herunterfahren und Neustarten, das Live-Bild der Kamera auf Port 8080,
+# Herunterfahren und Neustarten, das Live-Bild der Kamera und den Autofokus
+# auf Port 8080,
 # WLAN-Energiesparen aus und ein eigenes WLAN (Hotspot), wenn beim Start
 # keins da ist.
 #
@@ -89,12 +90,15 @@ sed -e "s|@BENUTZER@|$BENUTZER|" -e "s|@CNCJS@|$CNCJS|" -e "s|@HOME@|$HOME|" \
 sudo systemctl daemon-reload
 sudo systemctl enable cncjs
 
-echo "== Dienst kamera-live (Kamera-Bild auf Port 8080)"
+echo "== Dienst kamera-live (Kamera-Bild und Autofokus auf Port 8080)"
 # rpicam-vid gehoert zu Pi OS, auch zur Lite-Version.
 if ! command -v rpicam-vid > /dev/null; then
     echo "rpicam-vid fehlt: sudo apt-get install rpicam-apps-lite" >&2
 fi
-sudo install -m 755 "$HIER/kamera.py" /usr/local/bin/kamera-live
+sudo install -d /usr/local/lib/engraver
+sudo install -m 644 "$HIER/kamera.py" "$HIER/autofokus.py" \
+    "$HIER/cncjs_client.py" "$HIER/autofokus.html" /usr/local/lib/engraver/
+sudo rm -f /usr/local/bin/kamera-live     # alter Ort bis 2026-11-20
 sed "s|@BENUTZER@|$BENUTZER|" "$HIER/kamera.service" \
     | sudo tee /etc/systemd/system/kamera-live.service > /dev/null
 sudo systemctl daemon-reload
@@ -121,6 +125,7 @@ echo
 echo "Fertig. Jetzt neu starten:  sudo reboot"
 echo "Danach im Browser:          http://$(hostname).local:8000"
 echo "Kamera:                     http://$(hostname).local:8080"
+echo "Autofokus fuer CNCjs:       http://$(hostname).local:8080/autofokus"
 if command -v nmcli > /dev/null; then
     echo "Ohne WLAN nach 1 Minute:    WLAN \"$(hostname)\", http://10.42.0.1:8000"
 fi

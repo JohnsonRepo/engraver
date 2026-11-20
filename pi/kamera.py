@@ -9,15 +9,19 @@ Server zeigt das Bild der Kamera stattdessen im Browser
     http://laser.local:8080/stream     nur das Bild (MJPEG), z. B. fuer das
                                        Webcam-Fenster in CNCjs
     http://laser.local:8080/bild.jpg   ein Einzelbild
+    http://laser.local:8080/autofokus  Autofokus, fuer das Custom Widget
+                                       in CNCjs (autofokus.py)
 
 Die Kamera laeuft nur, solange jemand zusieht. 5 s nach dem letzten
-Zuschauer gibt der Server sie wieder frei, fuer rpicam-still und spaeter den
-Autofokus. Braucht nur Python 3 und rpicam-vid (beides auf Pi OS Lite).
+Zuschauer gibt der Server sie wieder frei, fuer rpicam-still. Fuer eine
+Messung des Autofokus nimmt er sie dem Live-Bild kurz weg. Braucht nur
+Python 3 und rpicam-vid (beides auf Pi OS Lite).
 
 Von Hand starten:  python3 pi/kamera.py
 Als Dienst:        pi/einrichten.sh installiert ihn als kamera-live
 """
 
+import contextlib
 import http.server
 import json
 import os
@@ -28,7 +32,10 @@ import sys
 import threading
 import time
 
-PORT = 8080
+import autofokus
+
+HIER = os.path.dirname(os.path.abspath(__file__))
+PORT = int(os.environ.get('KAMERA_PORT') or 8080)   # anderer Port zum Testen
 BREITE, HOEHE = 1296, 972   # halbe Sensoraufloesung, ganzes Bildfeld
 BILDRATE = 10
 QUALITAET = 70              # JPEG; gut 100 kB je Bild bei wenig Licht
@@ -51,6 +58,7 @@ class Kamera:
         self.fom = None            # FocusFoM des ISP: hoeher = schaerfer
         self.lux = None
         self.fehler = ''
+        self.messend = False       # Autofokus hat die Kamera
         threading.Thread(target=self._waechter, daemon=True).start()
 
     # -- Zuschauer ----------------------------------------------------------
@@ -58,7 +66,7 @@ class Kamera:
     def anmelden(self):
         with self.cv:
             self.zuschauer += 1
-            if self.proc is None:
+            if self.proc is None and not self.messend:
                 self._starten()
 
     def abmelden(self):
@@ -74,7 +82,10 @@ class Kamera:
             # bild ist None, bis nach einem Start das erste Bild da ist
             def neu():
                 return self.nummer != nummer and self.bild is not None
-            self.cv.wait_for(lambda: neu() or self.proc is None, warten)
+            # waehrend einer Messung warten statt aufgeben
+            self.cv.wait_for(
+                lambda: neu() or (self.proc is None and not self.messend),
+                warten)
             if neu():
                 return self.bild, self.nummer
             return None, nummer
@@ -82,6 +93,7 @@ class Kamera:
     def zustand(self):
         with self.cv:
             return {'laeuft': self.proc is not None,
+                    'messung': self.messend,
                     'zuschauer': self.zuschauer,
                     'schaerfe': self.fom, 'lux': self.lux,
                     'fehler': self.fehler}
@@ -199,8 +211,110 @@ class Kamera:
             proc.gestoppt = True
             self._beenden(proc)
 
+    @contextlib.contextmanager
+    def messung(self, belichtung_us, verstaerkung):
+        """Kamera fuer eine Messung: Live-Bild aus, RohKamera an, danach
+        wieder Live-Bild, falls jemand zusieht."""
+        with self.cv:
+            if self.messend:
+                raise autofokus.AfFehler('Die Kamera misst schon')
+            self.messend = True
+            alt, self.proc = self.proc, None
+            if alt is not None:
+                alt.gestoppt = True
+            self.cv.notify_all()
+        roh = None
+        try:
+            if alt is not None:
+                self._beenden(alt)
+            roh = RohKamera(belichtung_us, verstaerkung)
+            yield roh
+        finally:
+            if roh is not None:
+                roh.stop()
+            with self.cv:
+                self.messend = False
+                self.leer_seit = time.monotonic()
+                if self.zuschauer > 0 and self.proc is None:
+                    self._starten()
+                self.cv.notify_all()
+
+
+class RohKamera:
+    """rpicam-vid mit fester Belichtung; liefert die Y-Ebene jedes Bildes
+    (YUV420, 1280 x 960: Breite durch 64 teilbar, also ohne Rand)."""
+
+    def __init__(self, belichtung_us, verstaerkung,
+                 b=autofokus.B, h=autofokus.H):
+        self.b, self.h = b, h
+        self.groesse = b * h * 3 // 2
+        self.cv = threading.Condition()
+        self.bild, self.zeit, self.nummer, self.geholt = None, 0.0, 0, 0
+        self.fehler = ''
+        self.meldungen = []
+        self.gestoppt = False
+        befehl = ['rpicam-vid', '-n', '-t', '0', '-v', '0',
+                  '--codec', 'yuv420', '--width', str(b), '--height', str(h),
+                  '--framerate', '10', '--shutter', str(int(belichtung_us)),
+                  '--gain', str(verstaerkung), '--awbgains', '1.5,1.5',
+                  '--denoise', 'off', '--flush', '-o', '-']
+        try:
+            self.proc = subprocess.Popen(
+                befehl, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                stdin=subprocess.DEVNULL,
+                env=dict(os.environ, LIBCAMERA_LOG_LEVELS='*:ERROR'))
+        except OSError as e:
+            raise autofokus.AfFehler('rpicam-vid startet nicht: %s' % e)
+        threading.Thread(target=self._lesen, daemon=True).start()
+        threading.Thread(target=self._meldungen_lesen, daemon=True).start()
+
+    def _lesen(self):
+        while True:
+            daten = self.proc.stdout.read(self.groesse)
+            if len(daten) < self.groesse:
+                break
+            with self.cv:
+                self.bild = daten[:self.b * self.h]
+                self.zeit = time.monotonic()
+                self.nummer += 1
+                self.cv.notify_all()
+        rc = self.proc.wait()
+        with self.cv:
+            if not self.gestoppt:
+                letzte = [z for z in self.meldungen if z][-2:]
+                self.fehler = ('Kamera für die Messung nicht verfügbar '
+                               '(rpicam-vid %d): %s'
+                               % (rc, ' | '.join(letzte) or 'ohne Meldung'))
+            self.cv.notify_all()
+
+    def _meldungen_lesen(self):
+        for zeile in self.proc.stderr:
+            self.meldungen = (self.meldungen + [
+                zeile.decode('utf-8', 'replace').strip()])[-20:]
+
+    def naechstes(self, nach=None, warten=4.0):
+        """Naechstes noch nicht geholte Bild, das nach `nach` (monotonic)
+        ankam. Gibt (zeit, y_ebene)."""
+        with self.cv:
+            ok = self.cv.wait_for(
+                lambda: self.fehler or (self.nummer > self.geholt and
+                                        (nach is None or self.zeit >= nach)),
+                warten)
+            if self.fehler:
+                raise autofokus.AfFehler(self.fehler)
+            if not ok:
+                raise autofokus.AfFehler('Die Kamera liefert kein Messbild')
+            self.geholt = self.nummer
+            return self.zeit, self.bild
+
+    def stop(self):
+        with self.cv:
+            self.gestoppt = True
+        Kamera._beenden(self.proc)
+
 
 KAMERA = Kamera()
+AF = autofokus.Autofokus(KAMERA)
 
 SEITE = '''<!doctype html>
 <html lang="de"><head><meta charset="utf-8">
@@ -288,8 +402,8 @@ async function abfragen() {
     lh.textContent = dunkel ? 'zu dunkel, Lampe an' : '';
     lh.className = dunkel ? 'warn' : '';
     hinweis.textContent = z.fehler;
-    hinweis.style.display = z.fehler && !z.laeuft ? 'block' : 'none';
-    if (!z.laeuft) verbinden();
+    hinweis.style.display = z.fehler && !z.laeuft && !z.messung ? 'block' : 'none';
+    if (!z.laeuft && !z.messung) verbinden();
   } catch (e) {}
 }
 auslegen(); verbinden();
@@ -310,10 +424,50 @@ class Anfrage(http.server.BaseHTTPRequestHandler):
         elif pfad == '/bild.jpg':
             self._einzelbild()
         elif pfad == '/status':
-            self._antwort(200, 'application/json',
-                          json.dumps(KAMERA.zustand()).encode())
+            self._json(200, KAMERA.zustand())
+        elif pfad == '/autofokus':
+            with open(os.path.join(HIER, 'autofokus.html'), 'rb') as f:
+                self._antwort(200, 'text/html; charset=utf-8', f.read())
+        elif pfad == '/api/af':
+            self._json(200, dict(AF.zustand(), kamera=KAMERA.zustand()))
+        elif pfad == '/api/af/bild.png' and AF.png():
+            self._antwort(200, 'image/png', AF.png())
         else:
             self._antwort(404, 'text/plain; charset=utf-8', b'nicht da\n')
+
+    def do_POST(self):
+        """Aktionen des Autofokus. Nur mit JSON und eigenem Kopf: So kann
+        keine fremde Webseite im Browser den Laser ausloesen (CORS)."""
+        pfad = self.path.split('?', 1)[0]
+        if (self.headers.get('X-Autofokus') != '1' or not self.headers.get(
+                'Content-Type', '').startswith('application/json')):
+            self._json(403, {'fehler': 'nur von der Autofokus-Seite'})
+            return
+        try:
+            laenge = min(int(self.headers.get('Content-Length') or 0), 10000)
+            daten = json.loads(self.rfile.read(laenge) or b'{}')
+        except ValueError:
+            self._json(400, {'fehler': 'kein JSON'})
+            return
+        aktion = pfad[len('/api/af/'):] if pfad.startswith('/api/af/') else ''
+        try:
+            if aktion in ('messen', 'lernen', 'messpunkt'):
+                AF.starten(aktion, str(daten.get('name', ''))[:40])
+            elif aktion == 'abbrechen':
+                AF.abbrechen()
+            elif aktion == 'loeschen':
+                AF.loeschen(None if daten.get('alle') else int(daten['index']))
+            else:
+                self._json(404, {'fehler': 'unbekannte Aktion'})
+                return
+        except (autofokus.AfFehler, KeyError, ValueError, IndexError) as f:
+            self._json(409, {'fehler': str(f)})
+            return
+        self._json(200, {'ok': True})
+
+    def _json(self, code, daten):
+        self._antwort(code, 'application/json',
+                      json.dumps(daten, ensure_ascii=False).encode())
 
     def _antwort(self, code, art, daten):
         self.send_response(code)

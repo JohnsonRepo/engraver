@@ -43,15 +43,13 @@ Die Zeichnung erzeugt `python3 tools/kamerahalter_zeichnen.py`.
    Werkstückdicke an derselben Stelle, nur höher oder tiefer. Die Kamera
    sieht ihn von vorn rechts oben: Je dicker das Werkstück, desto höher
    liegt er im Bild.
-4. Ein Bild genügt. Aus der Höhe des Punkts im Bild folgt über eine einmal
-   gemessene Tabelle die Höhe der Oberfläche. Z fährt auf den Fokus: Z für
-   den Fokus auf der leeren Platte plus die Dicke.
+4. Ein Bild genügt. Aus der Lage des Punkts im Bild folgt über eine einmal
+   gelernte Tabelle das Z, bei dem der Laser scharf ist. Z fährt dorthin.
 
-Dafür muss die **Linse des Lasers fest** stehen und der Fokusabstand einmal
-bestimmt sein ([hardware-notizen.md](hardware-notizen.md#fokusabstand----offen)).
-Kalibriert wird einmal: leere Platte und zwei, drei Bretter bekannter Dicke
-an den Messpunkt, je ein Bild. Das Skript auf dem Pi (Bild aufnehmen, Punkt
-finden, Z über CNCjs fahren) ist noch nicht geschrieben.
+Dafür muss die **Linse des Lasers fest** stehen. Den Fokusabstand muss
+niemand kennen: Gelernt wird mit drei oder mehr Werkstücken, die von Hand
+scharfgestellt sind. Programm, Widget in CNCjs, Einlernen und Fehlersuche:
+[autofokus.md](autofokus.md).
 
 Klares Acryl und spiegelnde Flächen lassen den Punkt durch oder spiegeln ihn
 weg: Schutzfolie oder Abdeckpapier drauflassen.

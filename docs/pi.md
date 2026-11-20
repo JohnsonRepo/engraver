@@ -240,9 +240,11 @@ mit dem Pi. Dazu erlaubt es die Befehle zum Herunterfahren und Neustarten
 WLAN-Energiesparen ab
 ([`pi/wlan-energiesparen-aus.conf`](../pi/wlan-energiesparen-aus.conf)).
 Ohne das hält der Pi Pakete zurück, und Joggen und Anzeige im Browser
-haken. Das Live-Bild der [Kamera](#kamera) richtet es als Dienst
-`kamera-live` ein ([`pi/kamera.py`](../pi/kamera.py),
-[`pi/kamera.service`](../pi/kamera.service)). Eine vorhandene `~/.cncrc`
+haken. Das Live-Bild der [Kamera](#kamera) und den
+[Autofokus](autofokus.md) richtet es als Dienst `kamera-live` ein
+([`pi/kamera.py`](../pi/kamera.py), [`pi/autofokus.py`](../pi/autofokus.py),
+[`pi/kamera.service`](../pi/kamera.service)); die Dateien liegen dann in
+`/usr/local/lib/engraver`. Eine vorhandene `~/.cncrc`
 und ein vorhandener Hotspot bleiben, wie sie sind. Der erste Lauf dauert auf dem Zero etwa 6 Minuten, fast alles
 davon für CNCjs. Jeder weitere geht schnell: Ist CNCjs in dieser Version
 schon da, lässt das Skript es aus.
@@ -310,7 +312,9 @@ beides bringt Pi OS Lite mit.
 **Im Webcam-Widget von CNCjs** (linke Spalte): in seinen Einstellungen
 „Connect to an IP camera“ wählen und `http://laser.local:8080/stream`
 eintragen. Das Widget kann das Bild selbst drehen und spiegeln. CNCjs
-speichert das je Browser, am iPad also dort noch einmal eintragen.
+speichert das je Browser, am iPad also dort noch einmal eintragen. Mit dem
+[Autofokus-Widget](autofokus.md#in-cncjs-einrichten) ist es überflüssig:
+Das zeigt das Bild auch.
 
 ## GRBL aufspielen
 
@@ -440,4 +444,5 @@ ausprobiert ([Probe](#ohne-wlan-hotspot)).
 **Kamera für den Autofokus:** Der Halter steht in
 [kamerahalter.md](kamerahalter.md). Die Kamera hängt mit einem Kabel
 Standard–Mini an der Kamerabuchse des Pi. Das [Live-Bild](#kamera) läuft.
-Das Skript, das das Bild auswertet und Z über CNCjs fährt, fehlt noch.
+Der [Autofokus](autofokus.md) ist geschrieben und ohne Maschine geprüft,
+an der Maschine aber noch nicht erprobt.

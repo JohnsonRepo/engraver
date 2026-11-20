@@ -111,6 +111,16 @@ def main():
         p.info('  Grenze: ' + text, wert)
     p.info('bindende Grenze: ' + L['zc_bindend'])
     p.info('mechanischer Z-Verfahrweg', L['z_weg'])
+    # Unten bindet seit Rev. 39 die Opferplatte: Maschine und Platte stehen
+    # auf demselben Tisch, das Softlimit ($132) haelt die Schlittenplatte
+    # bett_luft darueber.
+    for text, wert in sorted(L['zc_unten_grenzen'].items(),
+                             key=lambda t: -t[1]):
+        p.info('  Grenze unten: ' + text, wert)
+    p.info('Softlimit unten: Wagenmitte zc ab (bindend: {})'.format(
+        L['zc_unten_bindend']), L['zc_unten'])
+    p.info('Schlittenplatte mechanisch ganz unten ueber der Platte '
+           '(negativ: nur das Softlimit schuetzt)', L['platte_ueber_bett_mech'])
     # Gearbeitet wird nur bis zum Schaltpunkt des Endschalters. Fuer 0 bis
     # werkstueck_max mm Werkstueck muss die Linse genau so weit fahren koennen.
     p.ok('Arbeitsweg bis zum Endschalter deckt 0..{:.0f} mm Werkstueck'.format(

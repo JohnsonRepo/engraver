@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 33, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 34, fünfundzwanzig
 gedruckte Teile; seit Rev. 29 dazu das
 [Gesamtmodell der ganzen Maschine](#gesamtmodell-die-ganze-maschine-seit-rev-29)).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
@@ -69,11 +69,11 @@ damit man im Browser sieht, welcher Stand gebaut wurde.
 
 | Gruppe | Inhalt |
 |---|---|
-| `ToolheadZ_r38` | alle Druckteile des Toolheads, Z-Wagen in der Mitte des Z-Wegs. Dazu in `Ref_Toolhead` die Kaufteile vereinfacht: Z-Schiene MGN9 mit Wagen, Z-Motor, Kupplung, Spindel Tr8×2 mit Mutter, Diodenlaser, Lichtschranke Z. Die Gruppe steht um die X-Wagenmitte verschoben (ToolheadZ rechnet X ab dort), also in der Mitte des X-Wegs |
-| `Opferplatte_r3` | vier Füße unter den 2060, Riegel (zu), Opferplatte |
-| `Spannmittel_r2` | Anschlagwinkel, zwei Exzenter, die vier Niederhalter am Beispielwerkstück und das Werkstück selbst. Den Satz der anderen Stärken legt das eigene Skript neben die Platte, hier fehlt er. Seit Rev. 31 mit der Ecke vorn rechts: `Spannmittel.py` rechnet mit der Ecke hinten links, die Gruppe wird um 180° um die Senkrechte durch die Feldmitte gedreht (`gruppe_lage`, `dreh_xy`) |
+| `ToolheadZ_r39` | alle Druckteile des Toolheads, Z-Wagen in der Mitte des Z-Wegs. Dazu in `Ref_Toolhead` die Kaufteile vereinfacht: Z-Schiene MGN9 mit Wagen, Z-Motor, Kupplung, Spindel Tr8×2 mit Mutter, Diodenlaser, Lichtschranke Z. Die Gruppe steht um die X-Wagenmitte verschoben (ToolheadZ rechnet X ab dort), also in der Mitte des X-Wegs |
+| `Opferplatte_r4` | vier Halter innen an den 2060 (Anschlag links, Führung rechts), Riegel (zu), Opferplatte auf dem Tisch. Bis Rev. 33 standen hier vier Füße, die es nur im Modell gab |
+| `Spannmittel_r3` | Anschlagwinkel, zwei Exzenter, die vier Niederhalter am Beispielwerkstück und das Werkstück selbst. Den Satz der anderen Stärken legt das eigene Skript neben die Platte, hier fehlt er. Seit Rev. 31 mit der Ecke vorn rechts: `Spannmittel.py` rechnet mit der Ecke hinten links, die Gruppe wird um 180° um die Senkrechte durch die Feldmitte gedreht (`gruppe_lage`, `dreh_xy`) |
 | `Elektronikfach_r2` | Fach und Deckel (Zwischenstand) und in `Ref_Elektronik` die Geräte: Uno, Pi, Wandler, Wago, Lüfter, Buchse, Schalter, Not-Aus. Seit Rev. 30 vor dem vorderen 2060 zwischen den Y-Motoren, wie verbaut: `Elektronikfach.py` rechnet in Fachkoordinaten, die Gruppe wird um 180° um die Senkrechte gedreht (`gruppe_lage`), darum steht `Fach_links` rechts |
-| `Kamerahalter_r2` | Halter, Kamera (v1.3), M5-Köpfe und die Sichtlinien zum Messpunkt. Seit Rev. 31 vorn rechts auf dem vorderen 2060, wie verbaut; das Skript baut gleich an der Maschine ([kamerahalter.md](kamerahalter.md)) |
+| `Kamerahalter_r3` | Halter, Kamera (v1.3), M5-Köpfe und die Sichtlinien zum Messpunkt. Seit Rev. 31 vorn rechts auf dem vorderen 2060, wie verbaut; das Skript baut gleich an der Maschine ([kamerahalter.md](kamerahalter.md)) |
 | `Kabelhalter_r2` | alle neun Halter, links fünf, rechts vier, rechts um 180° gedreht. Die Plätze stehen in `KABELHALTER_Y` in `Portal.py` und kommen aus `kabelhalter_check.py` ([kabelhalter.md](kabelhalter.md)) |
 
 Nicht noch einmal gebaut wird, was es schon gibt: Profile und Y-Motor stehen
@@ -227,7 +227,7 @@ Maschinen-Y), wie beim Toolhead.
 | Rohr | 500 mm, endet 7 mm vor jeder Schienenmitte |
 | X-Schiene | 450 mm, **8,25 mm nach links versetzt**: X −233,25 bis +216,75 |
 | X-Wagenmitte | −203,85 bis +187,35 → **X-Weg 391,2 mm** |
-| Portalhöhe | Rohr liegt direkt auf der 6-mm-Platte — wie bisher, 130 mm zum Bett |
+| Portalhöhe | Rohr liegt direkt auf der 6-mm-Platte — wie bisher, 130 mm zum Tisch |
 
 **391,2 mm sind Schiene minus Wagen** (450 − 58,8): Mehr geht mit dieser
 Schiene nicht, und nichts am Portal nimmt davon etwas weg. Motor und Umlenkung

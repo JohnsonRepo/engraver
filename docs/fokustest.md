@@ -85,8 +85,8 @@ Abbrechen mit **Feedhold** und **Reset** in CNCjs. Der Reset setzt auch
   höher. Die Maschinenposition Z aus CNCjs notieren und die Dicke beider
   Platten mit dem Messschieber am Messpunkt messen. Für die neue Platte
   `G53 G0 Z` mit Z alt + (Dicke neu − Dicke alt), dann **Fokus lernen**.
-  Beispiel: 3-mm-Platte scharf bei Z −61,40, die 6,2-mm-Platte dann bei
-  −61,40 + 3,2 = −58,20 (`G53 G0 Z-58.2`). Z fährt auf einer
+  Beispiel: 3-mm-Platte scharf bei Z −41,40, die 6,2-mm-Platte dann bei
+  −41,40 + 3,2 = −38,20 (`G53 G0 Z-38.2`). Z fährt auf einer
   Tr8×2-Spindel, die Millimeter stimmen.
 
 ## In CNCjs anlegen

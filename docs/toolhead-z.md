@@ -80,12 +80,15 @@ hoch die Schürze des MGN9H über der Schienenauflage endet.
 
 | Z | Ebene |
 |---|---|
-| −130,0 | Bettoberfläche (`bett_abstand`) |
-| −125,3 | Unterkante Schlittenplatte, tiefste Stellung |
-| −115,8 | Laser-Unterkante (Linse), tiefste Stellung |
+| −129,0 | Tisch = Unterkante der 2060 |
+| −125,3 | Unterkante Schlittenplatte, mechanisch tiefste Stellung (in der Opferplatte, siehe unten) |
+| −115,8 | Laser-Unterkante (Linse), mechanisch tiefste Stellung |
+| −103,7 | Oberfläche der Opferplatte (`bett_abstand`) |
+| −99,7 | Unterkante Schlittenplatte am Softlimit `$132`, 4 mm über der Platte |
+| −90,2 | Laser-Unterkante (Linse) am Softlimit |
 | −66,0 | Unterkante Trägerplatte |
 | −60,0 | Unterkante MGN9-Schiene (**200 mm lang, 10 Schrauben**) |
-| −40,1 … +53,5 | Bereich der Wagenmitte `zc` |
+| −40,1 … +53,5 | Bereich der Wagenmitte `zc`, gearbeitet wird ab −14,5 (Softlimit) |
 | +119,0 | Oberkante der Garnitur in der höchsten Stellung (3 mm unter der Kupplung) |
 | +122,0 … +147,0 | Kupplung 5 → 8 mm (modelliert mit 8 mm Einstecktiefe), oben 2 mm in der Bundbohrung der Konsole |
 | +140,0 | Oberkante MGN9-Schiene |
@@ -110,20 +113,47 @@ Teil gemessen) und ist damit das oberste bewegte Teil — sie kostet rund 50 mm
 Weg gegenüber der alten M6-Lösung. Bis Rev. 30 standen hier geschätzte 45 mm;
 die 7 mm Unterschied kommen oben als Verfahrweg dazu.
 
-**Was davon gebraucht wird:** für 0–50 mm Werkstück muss die Linse **50 mm**
+**Was davon gebraucht wird:** für 0–32 mm Werkstück muss die Linse **32 mm**
 fahren können. Gearbeitet wird aber nur bis zum Schaltpunkt des Endschalters,
-der 8 mm unter der mechanischen Grenze liegt (`ls_ueberfahrt`). Also:
+der 8 mm unter der mechanischen Grenze liegt (`ls_ueberfahrt`), und unten nur
+bis zum Softlimit über der Opferplatte ([unten](#opferplatte-und-softlimit-rev-39)).
+Also:
 
 | | mm |
 |---|---|
 | mechanischer Verfahrweg | 93,6 |
 | − Überfahrweg über dem Endschalter | 8,0 |
-| = **Arbeitsweg** | **85,6** |
-| − gebraucht für 0…50 mm Werkstück | 50,0 |
-| = **Reserve** | **35,6** |
+| − unten bis zum Softlimit über der Opferplatte | 25,6 |
+| = **Arbeitsweg** (`$132` = 56 nach Rückzug und Reserve) | **60,0** |
+| − gebraucht für 0…32 mm Werkstück | 32,0 |
+| = **Reserve** | **28,0** |
 
 Hier stand bis Rev. 28 „gebraucht werden rund 30 mm". Das war falsch — es sind
-50 mm plus der Überfahrweg des Endschalters.
+die Werkstückdicke plus der Überfahrweg des Endschalters. Bis Rev. 38 stand
+hier 85,6 mm Arbeitsweg für 0–50 mm: Das Modell sah die Opferplatte auf
+Füßen, die es nie gab ([unten](#opferplatte-und-softlimit-rev-39)).
+
+### Opferplatte und Softlimit (Rev. 39)
+
+Maschine und Opferplatte stehen auf demselben Tisch. Die Plattenoberfläche
+liegt deshalb 25,3 mm über der Unterkante der 2060, bei Z −103,7. Bis
+Rev. 38 rechnete das Skript mit dem Bett bei −130, als läge die Platte auf
+Höhe der Unterkante der 2060; dafür standen in `Opferplatte.py` vier Füße,
+die es an der Maschine nie gab.
+
+| | bis Rev. 38 (Bett −130) | seit Rev. 39 (Platte −103,7) |
+|---|---|---|
+| Schlittenplatte, Z mechanisch ganz unten | 4,7 mm über dem Bett | **21,6 mm in der Platte** |
+| Softlimit `$132` | 82 | **56**: Schlittenplatte 4 mm über der Platte (`bett_luft`) |
+| Arbeitsweg | 85,6 mm | **60,0 mm** |
+| dickstes Werkstück (Trägerplatte 5 mm darüber) | 59 mm | **32,7 mm** |
+| Linse über der Platte, Lochmitte | 14,2 … 99,8 mm | **13,5 … 73,5 mm** |
+| Fokusfenster für 0 … `werkstueck_max` | f = 6 … 57 mm (0–50 mm) | **f = 5,5 … 49 mm (0–32 mm)** |
+
+**Mit `$132=82` kann die Schlittenplatte in die Opferplatte fahren.** Das
+Softlimit greift nur nach `$H`. Die Spalte links und die Tabellen zum
+Motoradapter unten sind mit dem alten Bett gerechnet; was der Motoradapter
+an Weg bringt, gilt unverändert, nur unten endet der Weg jetzt am Softlimit.
 
 ### Motoradapter: 10 mm mehr Weg ohne neue Trägerplatte (Rev. 30)
 
@@ -200,7 +230,8 @@ Motorkonsole rückt von +68 auf +145. Nach unten wäre die Schiene mit 200 mm
 bis −125 gekommen — 45 mm **in** das Werkstück hinein.
 
 Damit ist nicht mehr der Verfahrweg die Grenze für dicke Werkstücke, sondern
-die Plattenunterkante: **59 mm** bei 5 mm Luft (`werkstueck_frei` im Bericht).
+die Plattenunterkante: **32,7 mm** über der Opferplatte bei 5 mm Luft
+(`werkstueck_frei` im Bericht; bis Rev. 38 mit dem Bett bei −130: 59 mm).
 Mehr geht nur, indem `traeger_z_unten` steigt — das kostet Weg nach unten und
 damit den Fokus auf dünnem Material.
 
@@ -276,25 +307,28 @@ hinten verschraubt. Liegt die obere Lochreihe auf der Wagenmitte, steht der
 Z-Wagen davor und der Inbus hat 12 mm Platz — zu wenig. Die Reihe muss weiter
 weg als halbe Wagenlänge plus Werkzeugradius (19,95 + 3 = 22,95 mm).
 
-**Fokus.** Gemessen sind **130 mm** von der Bezugsebene bis zur Bettoberfläche
-(`bett_abstand`) und **50 mm** dickstes Werkstück (`werkstueck_max`). Die
-Gehäuseunterkante des Lasers liegt in Lochmitte zwischen **14,2 und 99,8 mm**
-über dem Bett (oben am Schaltpunkt des Endschalters, nicht an der mechanischen
-Grenze). Der Fokusabstand *f* des Moduls steht nicht auf dem Modul —
+**Fokus.** Von der Bezugsebene bis zur Oberfläche der Opferplatte sind es
+**103,7 mm** (`bett_abstand`: gemessen 130 mm bis zum Tisch, aus den
+Profilmaßen 129, minus 25,3 mm Platte), dazu **32 mm** dickstes Werkstück
+(`werkstueck_max`). Die Gehäuseunterkante des Lasers liegt in Lochmitte
+zwischen **13,5 und 73,5 mm** über der Platte (unten am Softlimit, oben am
+Schaltpunkt des Endschalters, nicht an den mechanischen Grenzen). Der
+Fokusabstand *f* des Moduls steht nicht auf dem Modul —
 deshalb sind die vier Laserbefestigungen **senkrechte Langlöcher**, ±8 mm, und
 die Höhe wird beim Zusammenbau eingestellt:
 
 | f | Langlochstellung | Bemerkung |
 |---|---|---|
-| 10 mm | 4,2 mm nach unten | die Linse kommt sonst nicht tief genug für dünnes Material |
-| 15 … 45 mm | Lochmitte (0) | in beide Richtungen voller Verstellweg |
-| 50 mm | 0,2 mm nach oben | praktisch Lochmitte |
-| 55 mm | 5,2 mm nach oben | sonst reicht es oben nicht für 50 mm Werkstück |
+| 10 mm | 3,5 mm nach unten | die Linse kommt sonst nicht tief genug für dünnes Material |
+| 15 … 40 mm | Lochmitte (0) | in beide Richtungen voller Verstellweg |
+| 45 mm | 3,5 mm nach oben | sonst reicht es oben nicht für 32 mm Werkstück |
+| 50 mm | 7,8 mm nach oben | dann nur 31 mm Werkstück |
 
 **Nach oben nutzbar sind +7,8 mm** — nicht weil der Hub endet, sondern weil die
 obere Schraubenreihe sonst hinter dem Z-Wagen verschwindet und nicht mehr
-verschraubbar ist. Das Fenster reicht damit von **f = 6 bis 57 mm** (ohne
-Motoradapter bis 47 mm). Du musst
+verschraubbar ist. Das Fenster reicht damit von **f = 5,5 bis 49 mm** für
+0–32 mm Werkstück (bis Rev. 38 mit dem Bett bei −130: f = 6 bis 57 mm für
+0–50 mm). Du musst
 *f* also nicht kennen, um die Platte zu drucken; nur zum Einstellen beim
 Zusammenbau.
 
@@ -305,11 +339,12 @@ verliert, wächst der Langloch-Weg nach oben (vorher +2,8, jetzt +7,8 mm), weil
 die obere Schraubenreihe weiter vom Z-Wagen wegrückt. Bis −51,2 geht diese
 Rechnung auf, darunter ist der Hub von 8 mm ausgeschöpft. Den Preis zahlt die
 Unterkante der Schlittenplatte: sie ragt 9,5 mm unter das Lasergehäuse (sie
-muss die untere Langlochreihe samt Hub tragen) und kommt in der tiefsten
-Stellung bis auf **4,7 mm** ans Bett (vorher 9,7). Die Prüfung verlangt dort
-mindestens 3 mm. Z also nicht mit Werkstück oder Wabenplatte ganz nach unten
-fahren — die Referenzfahrt geht ohnehin nach oben, ein Z-Softlimit in der
-Firmware fängt den Rest ab.
+muss die untere Langlochreihe samt Hub tragen) und ist das tiefste Teil.
+Mechanisch kommt sie 21,6 mm unter die Oberfläche der Opferplatte; das
+Softlimit `$132=56` hält sie 4 mm darüber, die Prüfung verlangt mindestens
+3 mm. Z also vor `$H` nicht von Hand ganz nach unten fahren — die
+Referenzfahrt geht ohnehin nach oben, danach fängt das Softlimit den Rest
+ab.
 
 ### Motor höher oder tiefer?
 
@@ -328,10 +363,11 @@ Gleitmutter gegen etwas läuft — oben ist das die Kupplung, und das ist eine
 harte Kollision, kein weicher Anschlag.
 
 Eine dickere Opferplatte wirkt genau wie eine Langlochstellung nach unten
-(1 mm dicker = 1 mm tiefer) — mit dem langen Verfahrweg brauchst du sie für den
-Fokus nicht mehr. Die Spanplatte (25,3 mm) liegt zwischen Führungsfüßen
-derselben Höhe, ihre Oberfläche also auf dem bisherigen Bett
-([opferplatte.md](opferplatte.md)).
+(1 mm dicker = 1 mm tiefer). Die Spanplatte (25,3 mm) liegt mit der
+Maschine auf demselben Tisch ([opferplatte.md](opferplatte.md)): Unten
+kostet sie nichts, das Softlimit rückt mit; oben fehlen ihre 25,3 mm bei
+der Werkstückhöhe. Bis Rev. 38 stand hier, sie liege zwischen
+Führungsfüßen derselben Höhe; die gab es nur im Modell.
 
 ## Endschalter: Gabellichtschranke
 
@@ -831,9 +867,9 @@ Spindel klappern.
 
 Mit gemessenen **38 mm** Bauhöhe ist ihre Oberkante das oberste bewegte
 Teil und bindet den Verfahrweg: **93,6 mm statt 136,1 mm** (mit dem
-Motoradapter; ohne wären es 83,6). Davon sind 85,6 mm Arbeitsweg bis zum
-Endschalter; gebraucht werden für 0–50 mm Werkstück 50 mm, es bleiben
-35,6 mm Reserve (Tabelle oben).
+Motoradapter; ohne wären es 83,6). Davon sind 60,0 mm Arbeitsweg zwischen
+Endschalter und Softlimit über der Opferplatte; gebraucht werden für
+0–32 mm Werkstück 32 mm, es bleiben 28,0 mm Reserve (Tabelle oben).
 
 Die Bauhöhe (`t8_garnitur_h`) geht in keine Druckteilgeometrie ein, nur in
 diese Grenze und in die Lage des Schaltpunkts. Bis Rev. 30 war sie mit 45 mm
@@ -842,7 +878,7 @@ geschätzt; seit Rev. 31 ist sie am Teil gemessen.
 **Spindellänge: kürzen ist Pflicht.** Gebraucht werden 147,6 mm, bestellt sind
 200 mm. Ungekürzt hängt das untere Ende bis Z = −80 und ist damit — wie Schiene
 und Plattenunterkante — ein festes Hindernis auf seiner Höhe: das dickste
-Werkstück sinkt von 59 auf **45 mm** und verfehlt die geforderten 50 mm. Der
+Werkstück sinkt von 32,7 auf **28,7 mm** und verfehlt die geforderten 32 mm. Der
 Zuschnitt steht als `spindel_zuschnitt` = **160 mm** im Skript (12,4 mm Reserve
 über dem Bedarf); unteres Ende dann bei Z = −30, also unkritisch. Ist sie schon
 auf 150 mm gekürzt (bis Rev. 29 der Zuschnitt), reicht das auch: 2,5 mm
@@ -1210,8 +1246,9 @@ und `tools/toolhead_check.py` ausführen. Die wichtigsten Stellschrauben:
 | `laser_versatz_z` | −51 mm | Lage des Lasers am Schlitten — bindet Montagezugang, Fokusfenster **und** die Bodenfreiheit der Platte |
 | `laser_langloch_hub` | 8 mm | senkrechter Verstellweg je Richtung (nach oben nutzbar: +7,8 mm) |
 | `laser_loch_d` | 4,0 mm | Langlochbreite; ±1,0 mm Lochbildtoleranz quer |
-| `bett_abstand` | 130 mm | gemessen: Bezugsebene → Bettoberfläche (nur Bericht) |
-| `werkstueck_max` | 50 mm | dickstes Werkstück (nur Bericht) |
+| `bett_abstand` | 103,7 mm | Bezugsebene → Oberfläche der Opferplatte: 129 bis zum Tisch, minus 25,3 mm Platte (Bericht und Softlimit) |
+| `werkstueck_max` | 32 mm | dickstes Werkstück (nur Bericht) |
+| `bett_luft` | 4 mm | so weit bleibt die Schlittenplatte am Softlimit über der Platte; daraus `$132` |
 | `inbus_frei_d` | 6,0 mm | Werkzeugkorridor, begrenzt die Langlochstellung |
 | `traeger_dicke` | 8 mm | Dicke der Trägerplatte |
 | `motor_rippe_hoehe` | 3 mm | Höhe der Führungsrippen am Motorflansch |

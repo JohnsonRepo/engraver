@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Zeichnung: Opferplatte und Fuehrungsfuesse unter dem Gestell.
+"""Zeichnung: Opferplatte mit Anschlag und Fuehrung am Gestell.
 
-Von oben das ganze Gestell mit Platte, Arbeitsfeld, den vier Fuessen und
-dem Riegel, dazu Schnitte durch einen hinteren und einen vorderen Fuss
+Von oben das ganze Gestell mit Platte, Arbeitsfeld, den vier Haltern und
+dem Riegel, dazu Schnitte durch einen hinteren und einen vorderen Halter
 (Blick von links), durch den Riegel (von links, mit der offenen Lage und
 dem Schwenkkreis), laengs seiner Achse (von vorn) und durch den Anschlag am
 linken Ende (von vorn). Alle Masse aus Opferplatte.py, Portal.py und
@@ -34,35 +34,46 @@ FELD = '#2f5d92'
 TIEF = '#b4342f'
 
 
-def fuss_drauf(f, OL, ow, s, e):
-    """Ein Fuss von oben: was nicht unter dem 2060 liegt (Flansch, Innen-
-    teil oder Wand mit Boden, Anschlag), rechts mit der Einfuehrschraege."""
-    x0, x1 = OL['fuss_x'][e]
+def halter_drauf(f, OL, ow, s, e):
+    """Ein Halter von oben: innen am 2060 der volle Block (vorn) oder
+    Flansch, Boden und Wand (hinten), links der Anschlag, rechts die
+    Einfuehrschraege; vorn rechts Endplatte, Ausleger und Lagerbock. Dazu
+    die Koepfe der M5 (vorn versenkt, hinten mit Scheibe)."""
+    x0, x1 = OL['halter_x'][e]
     g, aus = OL['fuehrung_y'][s], OL['aus'][s]
-    innen = OL['innen_y'][s]
-    q_innen = innen[1] if s == 'vorn' else innen[0]   # Innenseite 2060
-    t = [f.rect(x0, x1, *OL['flansch_y'][s], 'neu')]
-    if e == 'rechts':
-        ee = ow('einfuehr')
-        t.append(f.poly([(x0, g), (x1 - ee, g), (x1, g + aus * ee),
-                         (x1, q_innen), (x0, q_innen)], 'neu'))
-    else:
-        t.append(f.rect(x0, x1, g, q_innen, 'neu'))
-        t.append(f.rect(*OL['anschlag_x'], *OL['anschlag_y'][s], 'neu'))
-    if not OL['voll'][s]:          # Wand an der Platte, Boden niedriger
-        wy = OL['wand_y'][s]
-        t.append(f.linie(x0, wy[1] if s == 'hinten' else wy[0],
-                         x1 - (ow('einfuehr') if e == 'rechts' else 0.0),
-                         wy[1] if s == 'hinten' else wy[0], ORANGE, 0.7))
+    innen = OL['innen'][s]
+    t = []
     if (s, e) == OL['riegel_an']:  # Ausleger mit dem Lagerbock
         t += [f.rect(*OL['ausleger_x'], *OL['ausleger_y'], 'neu'),
               f.rect(*OL['lager_x'], *OL['lager_y'], 'neu')]
-    # M5 mit Scheibe aussen am Flansch
-    fy = OL['flansch_y'][s]
-    ya = fy[1] if aus > 0 else fy[0]
-    yb = ya + aus * (ow('m5_scheibe_h') + ow('m5_kopf_h'))
+    if e == 'rechts':
+        ee, xe = ow('einfuehr'), OL['fuehrung_ende_x'][s]
+        pkt = [(x0, g), (xe - ee, g), (xe, g + aus * ee)]
+        if xe > x1:                # Endplatte vor dem Ende des 2060
+            ey = OL['endplatte_y'][1] if aus > 0 else OL['endplatte_y'][0]
+            pkt += [(xe, ey), (x1, ey), (x1, innen)]
+        else:
+            pkt += [(x1, innen)]
+        t.append(f.poly(pkt + [(x0, innen)], 'neu'))
+    else:
+        t.append(f.rect(x0, x1, g, innen, 'neu'))
+        t.append(f.rect(*OL['anschlag_x'], *OL['anschlag_y'][s], 'neu'))
+    if not OL['voll'][s]:          # Wand an der Platte, Flansch am 2060
+        xr = x1 - (ow('einfuehr') if e == 'rechts' else 0.0)
+        for y in (g + aus * ow('wand_t'), innen - aus * ow('flansch_t')):
+            t.append(f.linie(x0, y, xr if y != innen else x1, y, ORANGE,
+                             0.7))
+    # Koepfe der M5 (und Scheibe) auf der Plattenseite
+    ya = OL['auflage_y'][s]
+    sch = ow('m5_scheibe_h') if OL['m5_scheibe'][s] else 0.0
+    yk = ya - aus * sch
+    yb = yk - aus * ow('m5_kopf_h')
+    r = ow('m5_kopf_d') / 2.0
     for mx in OL['m5_x'][e]:
-        t.append(f.rect(mx - 4.25, mx + 4.25, ya, yb, 'stahl'))
+        if sch:
+            t.append(f.rect(mx - ow('m5_scheibe_d') / 2.0,
+                            mx + ow('m5_scheibe_d') / 2.0, ya, yk, 'stahl'))
+        t.append(f.rect(mx - r, mx + r, yk, yb, 'stahl'))
     return t
 
 
@@ -113,43 +124,47 @@ def riegel_drauf(f, OL, ow):
                    'stahl')]
 
 
-def schnitt_fuss(f, OL, ow, s, platte_bis):
-    """Schnitt quer durch einen rechten Fuss (Blick von links, vorn
-    rechts): Profil 2060 mit Nuten, Fuss mit Feder und Flansch, M5 mit
-    Scheibe und Hammermutter, die Platte bis `platte_bis`, der Tisch."""
+def schnitt_halter(f, OL, ow, s, platte_bis):
+    """Schnitt quer durch einen rechten Halter in der Ebene einer M5 (Blick
+    von links, vorn rechts): Profil 2060 mit Nuten auf dem Tisch, Halter
+    (Block mit Senkung oder Flansch, Boden, Wand), M5 mit Kopf auf der
+    Plattenseite, Hammermutter in der inneren Seitennut, die Platte bis
+    `platte_bis`."""
     q0, q1 = OL['quer_y'][s]
     z0, z1 = OL['quer_z']
     tz = OL['tisch_z']
     aus = OL['aus'][s]
+    innen = OL['innen'][s]
     t = [profil_schnitt(f, q0, q1, z0, z1, 'lruo')]
     py = OL['platte_y']
     kante = py[1] if s == 'vorn' else py[0]
     t.append(f.rect(min(kante, platte_bis), max(kante, platte_bis),
                     *OL['platte_z'], 'holz'))
-    t.append(f.rect(q0, q1, *OL['fuss_z'], 'neu'))
-    t.append(f.rect(*OL['flansch_y'][s], *OL['flansch_z'], 'neu'))
-    t.append(f.rect(*OL['feder_y'][s], *OL['feder_z'], 'neu'))
-    if OL['voll'][s]:
-        t.append(f.rect(*OL['innen_y'][s], *OL['fuss_z'], 'neu'))
-    else:
-        t.append(f.rect(*OL['wand_y'][s], *OL['fuss_z'], 'neu'))
-        t.append(f.rect(*OL['boden_y'][s], tz, tz + ow('boden_t'), 'neu'))
-    # M5: Kopf und Scheibe aussen, Schaft durch den Flansch in die Nut,
-    # Hammermutter in der Nut
-    fy = OL['flansch_y'][s]
-    ya = fy[1] if aus > 0 else fy[0]
     zn = OL['nut_seite_z']
-    sch = ow('m5_scheibe_h')
-    yk = ya + aus * sch
-    yk2 = yk + aus * ow('m5_kopf_h')
-    aussen = q1 if aus > 0 else q0
-    spitze = yk - aus * OL['m5_schraube']       # Laenge ab Kopfauflage
-    t += [f.rect(min(ya, yk), max(ya, yk), zn - 5.0, zn + 5.0, 'stahl'),
-          f.rect(min(yk, yk2), max(yk, yk2), zn - 4.25, zn + 4.25, 'stahl'),
+    if OL['voll'][s]:
+        t.append(f.rect(*OL['innen_y'][s], *OL['halter_z'], 'neu'))
+        t.append(f.rect(*OL['senk_y'][s], zn - ow('senk_d') / 2.0,
+                        zn + ow('senk_d') / 2.0, 'neu', fill='#ffffff'))
+    else:
+        t.append(f.rect(*OL['wand_y'][s], *OL['halter_z'], 'neu'))
+        t.append(f.rect(*OL['boden_y'][s], tz, tz + ow('boden_t'), 'neu'))
+        t.append(f.rect(*OL['flansch_y'][s], *OL['flansch_z'], 'neu'))
+    # M5: Kopf (und Scheibe) auf der Plattenseite, Schaft durch den Halter
+    # in die Nut, Hammermutter in der inneren Seitennut
+    ya = OL['auflage_y'][s]
+    sch = ow('m5_scheibe_h') if OL['m5_scheibe'][s] else 0.0
+    yk = ya - aus * sch
+    yk2 = yk - aus * ow('m5_kopf_h')
+    spitze = yk + aus * OL['m5_schraube'][s]    # Laenge ab Kopfauflage
+    if sch:
+        t.append(f.rect(min(ya, yk), max(ya, yk), zn - 5.0, zn + 5.0,
+                        'stahl'))
+    t += [f.rect(min(yk, yk2), max(yk, yk2), zn - ow('m5_kopf_d') / 2.0,
+                 zn + ow('m5_kopf_d') / 2.0, 'stahl'),
           f.rect(min(yk, spitze), max(yk, spitze), zn - 2.5, zn + 2.5,
                  'stahl'),
-          f.rect(min(aussen - aus * 1.8, aussen - aus * 5.8),
-                 max(aussen - aus * 1.8, aussen - aus * 5.8), zn - 5.0,
+          f.rect(min(innen + aus * 1.8, innen + aus * 5.8),
+                 max(innen + aus * 1.8, innen + aus * 5.8), zn - 5.0,
                  zn + 5.0, 'messing')]
     return t
 
@@ -163,18 +178,18 @@ def main():
     px, py, pz = OL['platte_x'], OL['platte_y'], OL['platte_z']
     top = pz[1]
     tz = OL['tisch_z']
-    tief = TL['zc_min'] + TL['schlitten_unten_rel']   # Toolhead, Z unten
+    tief = TL['zc_unten'] + TL['schlitten_unten_rel']  # Toolhead, Softlimit
     frei = min(tw('traeger_z_unten'), TL['z_schiene_z0']) - top - SICHERHEIT
     fx0, fx1, fy0, fy1 = (ow('feld_x0'), ow('feld_x1'), ow('feld_y0'),
                           ow('feld_y1'))
 
-    t = [text(24, 30, 'Opferplatte und Führungsfüße unter dem Gestell '
+    t = [text(24, 30, 'Opferplatte mit Anschlag und Führung am Gestell '
               '(Opferplatte.py Rev. {})'.format(om.REVISION), 14, TEXT,
               fett=True),
          text(24, 48, 'Maßstäblich, alle Maße aus den Skripten. Spanplatte '
-              '{} × {} × {} mm [v]; die Füße sind so hoch, wie die Platte '
-              'dick ist: Ihre Oberfläche liegt, wo bisher der Tisch '
-              'war. Rechts hält sie ein Klappriegel.'.format(
+              '{} × {} × {} mm [v]; sie liegt wie die Maschine auf dem '
+              'Tisch, vier Halter innen an den 2060 führen sie. Rechts hält '
+              'sie ein Klappriegel.'.format(
                   de(ow('platte_l'), 0), de(ow('platte_b'), 0),
                   de(ow('platte_dicke'), 1)), 9, GRAU)]
 
@@ -184,7 +199,7 @@ def main():
     inhalt = [f1.rect(*px, *py, 'holz')]
     for s in om.SEITEN:
         for e in om.ENDEN:
-            inhalt += fuss_drauf(f1, OL, ow, s, e)
+            inhalt += halter_drauf(f1, OL, ow, s, e)
     inhalt += riegel_drauf(f1, OL, ow)
     (yp, zp), rx = OL['riegel_achse'], OL['riegel_x']
     rh, rl, rs = riegel_masse(ow, OL)
@@ -203,7 +218,7 @@ def main():
     inhalt.append(f1.rect(fx0, fx1, fy0, fy1, 'holz', fill='none',
                           stroke=FELD, stroke_dasharray='6 3',
                           stroke_width='1.1'))
-    xa_a = (OL['fuss_x']['rechts'][0] + OL['fuss_x']['rechts'][1]) / 2.0
+    xa_a = OL['m5_x']['rechts'][1]           # Schnitt A-A durch eine M5
     ys = (OL['anschlag_y']['vorn'][0] + OL['anschlag_y']['vorn'][1]) / 2.0
     inhalt += [f1.linie(xa_a, -268.0, xa_a, 236.0, BLAU, 0.8, '10 3 2 3'),
                f1.linie(OL['quer_x'][0] - 30.0, ys, -215.0, ys, BLAU, 0.8,
@@ -221,11 +236,11 @@ def main():
           pfeil(xa + 38, ya, 1, 0, ORANGE),
           text(xa + 2, ya - 7, 'herausziehen', 8.5, ORANGE, fett=True,
                halo=True)]
-    hl, hr = OL['fuss_x']['links'], OL['fuss_x']['rechts']
+    hl, hr = OL['halter_x']['links'], OL['halter_x']['rechts']
     t += f1.spalte([
         (-150.0, OL['quer_y']['hinten'][0] + 10.0, 'hinteres 2060'),
-        ((hl[0] + hl[1]) / 2.0, OL['flansch_y']['hinten'][0],
-         'Fuß hinten links:\nFlansch mit 2 × M5 außen'),
+        ((hl[0] + hl[1]) / 2.0, OL['flansch_y']['hinten'][1] + 2.0,
+         'Anschlag_hinten: Flansch\ninnen am 2060, 2 × M5'),
         (OL['anschlag_x'][1], OL['anschlag_y']['hinten'][1] - 3.0,
          'Anschlag (links, hinten\nund vorn)'),
         (-R, 100.0, '2040 links\n(liegt darüber)'),
@@ -234,27 +249,27 @@ def main():
             de(ow('platte_dicke'), 1))),
         (fx0, 60.0, 'Arbeitsfeld {} × {} mm\n(Strahl, gestrichelt)'.format(
             de(fx1 - fx0, 0), de(fy1 - fy0, 0))),
-        ((hl[0] + hl[1]) / 2.0, OL['flansch_y']['vorn'][1],
-         'Fuß vorn links'),
+        ((hl[0] + hl[1]) / 2.0, OL['innen_y']['vorn'][1] - 3.0,
+         'Anschlag_vorn: voller\nBlock, M5 versenkt'),
         (-150.0, OL['quer_y']['vorn'][0] + 10.0, 'vorderes 2060')],
         f1.ox - 12, 'end', abstand=30.0)
     t += f1.spalte([
-        ((hr[0] + hr[1]) / 2.0, OL['flansch_y']['hinten'][0],
-         'Fuß hinten rechts'),
+        ((hr[0] + hr[1]) / 2.0, OL['flansch_y']['hinten'][1] + 2.0,
+         'Führung_hinten'),
         (R, 100.0, '2040 rechts (darüber)'),
         (hr[1] - 1.0, OL['fuehrung_y']['hinten'] + 2.0,
          'Einführschräge {} mm'.format(de(ow('einfuehr'), 0))),
         (px[1] - 3.0, py[0] + 60.0, 'steht {} mm über:\nhier fassen'.format(
             de(OL['platte_ueber'], 0))),
-        (hr[1] - 1.0, OL['fuehrung_y']['vorn'] - 2.0,
+        (hr[0] + 10.0, OL['fuehrung_y']['vorn'] - 0.5,
          'Führung, {} mm Luft\nje Seite'.format(de(ow('platte_spiel'), 1))),
         (xc, OL['riegel_nase_y'] + 3.0,
          'Riegel zu (C–C, D–D),\noffen nach vorn geklappt\n(gestrichelt)'),
-        (OL['ausleger_x'][0] + 12.0, OL['ausleger_y'][1] - 2.0,
-         'Ausleger mit Lagerbock'),
-        (OL['m5_x']['rechts'][1], OL['flansch_y']['vorn'][1] + 3.0,
-         'M5×{} + Scheibe in\nHammermutter'.format(
-             de(OL['m5_schraube'], 0)))],
+        (OL['endplatte_x'][1] - 1.0, OL['endplatte_y'][1] - 2.0,
+         'Endplatte vor dem 2060,\nAusleger mit Lagerbock'),
+        (OL['m5_x']['rechts'][0], OL['auflage_y']['vorn'] - 3.0,
+         'M5×{} versenkt, Hammer-\nmutter innen im 2060'.format(
+             de(OL['m5_schraube']['vorn'], 0)))],
         f1.ox + f1.breite + 12, 'start', abstand=30.0)
     t += quer_mass(f1, px[0], px[1], OL['ausleger_y'][1] + 8.0,
                    '{} mm'.format(de(px[1] - px[0], 0)), dy=12)
@@ -263,66 +278,68 @@ def main():
     t += quer_mass(f1, fx0, fx1, fy0 + 12.0, '{} mm'.format(
         de(fx1 - fx0, 0)), dy=12)
 
-    # ---- Feld 2: Schnitt durch den hinteren rechten Fuss --------------------
+    # ---- Feld 2: Schnitt durch den hinteren rechten Halter -----------------
     sz = 3.0
     zb = (tz - 8.0, OL['quer_z'][1] + 6.0)
-    yh = (OL['flansch_y']['hinten'][0] - 14.0, py[0] + 18.0)
+    yh = (OL['quer_y']['hinten'][0] - 8.0, py[0] + 18.0)
     f2 = Feld(250, f1.oy + f1.hoehe + 110, yh, zb, sz)
-    inhalt = schnitt_fuss(f2, OL, ow, 'hinten', yh[1] + 5.0)
+    inhalt = schnitt_halter(f2, OL, ow, 'hinten', yh[1] + 5.0)
     inhalt += [f2.linie(yh[0] - 5, tz, yh[1] + 5, tz, GRAU, 1.4),
                f2.linie(OL['quer_y']['hinten'][1], tief, yh[1] + 5, tief,
                         TIEF, 1.0, '5 3')]
     t += f2.ausschnitt('hinten', inhalt)
-    t += f2.rahmen('Schnitt A–A: Fuß hinten rechts (von links, vorn '
+    t += f2.rahmen('Schnitt A–A: Führung_hinten (von links, vorn '
                    'rechts)')
     t += f2.spalte([
         (OL['quer_y']['hinten'][0] + 3.0, OL['quer_z'][1] - 10.0,
          'hinteres 2060'),
-        (OL['nut_unten_y']['hinten'], OL['feder_z'][1] - 0.5,
-         'Feder in der\nunteren Nut'),
-        (OL['flansch_y']['hinten'][0] - 4.0, OL['nut_seite_z'] + 3.0,
-         'M5×{} + Scheibe,\nHammermutter in der\nunteren Seitennut'.format(
-             de(OL['m5_schraube'], 0))),
-        (OL['flansch_y']['hinten'][0] + 2.0, tz + 30.0, 'Flansch außen'),
+        (OL['innen']['hinten'] - 3.0, OL['nut_seite_z'] + 4.0,
+         'Hammermutter in der\ninneren unteren\nSeitennut'),
         (yh[0] + 4.0, tz, 'Tisch')],
         f2.ox - 12, 'end', abstand=30.0)
     t += f2.spalte([
-        (yh[1] - 5.0, tief, 'Toolhead, Z ganz unten'),
+        (yh[1] - 5.0, tief, 'Toolhead, Z ganz unten\n(Softlimit $132)'),
         (py[0] + 6.0, pz[1] - 4.0, 'Opferplatte'),
         (OL['wand_y']['hinten'][0] + 3.0, tz + 18.0,
          'Führungswand, {} mm\nLuft zur Platte'.format(
              de(ow('platte_spiel'), 1))),
         (OL['boden_y']['hinten'][0] + 20.0, tz + 2.0, 'Boden {} mm'.format(
-            de(ow('boden_t'), 0)))],
+            de(ow('boden_t'), 0))),
+        (OL['auflage_y']['hinten'] + 4.0, OL['nut_seite_z'],
+         'M5×{} + Scheibe durch\nden Flansch innen'.format(
+             de(OL['m5_schraube']['hinten'], 0)))],
         f2.ox + f2.breite + 12, 'start', abstand=30.0)
     t += hoch_mass(f2, yh[1] - 3.0, top, tief, '{} mm'.format(
         de(tief - top, 1)), anker='end')
-    t += hoch_mass(f2, OL['quer_y']['hinten'][1] + 4.0, tz, top,
+    t += hoch_mass(f2, OL['wand_y']['hinten'][0] - 4.0, tz, top,
                    '{} mm'.format(de(top - tz, 1)))
 
-    # ---- Feld 3: Schnitt durch den vorderen rechten Fuss --------------------
-    yv = (py[1] - 16.0, OL['flansch_y']['vorn'][1] + 14.0)
+    # ---- Feld 3: Schnitt durch den vorderen rechten Halter -----------------
+    yv = (py[1] - 16.0, OL['quer_y']['vorn'][1] + 10.0)
     f3 = Feld(f2.ox + f2.breite + 260, f2.oy, yv, zb, sz)
-    inhalt = schnitt_fuss(f3, OL, ow, 'vorn', yv[0] - 5.0)
+    inhalt = schnitt_halter(f3, OL, ow, 'vorn', yv[0] - 5.0)
     inhalt += [f3.linie(yv[0] - 5, tz, yv[1] + 5, tz, GRAU, 1.4),
                f3.linie(yv[0] - 5, tief, OL['quer_y']['vorn'][0] - 3.0, tief,
                         TIEF, 1.0, '5 3')]
     t += f3.ausschnitt('vorn', inhalt)
-    t += f3.rahmen('Schnitt A–A: Fuß vorn rechts')
+    t += f3.rahmen('Schnitt A–A: Führung_vorn')
     t += f3.spalte([
         (yv[0] + 4.0, pz[1] - 4.0, 'Opferplatte'),
-        (OL['innen_y']['vorn'][0] + 3.0, tz + 12.0,
-         'Innenteil voll\n({} mm breit)'.format(de(
-             OL['innen_y']['vorn'][1] - OL['innen_y']['vorn'][0], 1))),
+        (OL['innen_y']['vorn'][0] + 2.0, tz + 20.0,
+         'voller Block\n({} mm breit)'.format(de(
+             OL['innen_y']['vorn'][1] - OL['innen_y']['vorn'][0], 2))),
+        (OL['auflage_y']['vorn'] - 3.0, OL['nut_seite_z'] - 3.0,
+         'M5×{} ohne Scheibe\nin der Senkung'.format(
+             de(OL['m5_schraube']['vorn'], 0))),
         (yv[0] + 6.0, tief, 'Toolhead, Z ganz unten:\nam vorderen Wegende '
          '3 mm\nvor dem 2060')],
         f3.ox - 12, 'end', abstand=34.0)
     t += f3.spalte([
         (OL['quer_y']['vorn'][1] - 3.0, OL['quer_z'][1] - 10.0,
          'vorderes 2060'),
-        (OL['flansch_y']['vorn'][1] + 4.0, OL['nut_seite_z'] - 3.0,
-         'M5 von vorn'),
-        (OL['flansch_y']['vorn'][1] - 2.0, tz + 30.0, 'Flansch')],
+        (OL['innen']['vorn'] + 3.0, OL['nut_seite_z'] + 4.0,
+         'Hammermutter in der\ninneren Seitennut'),
+        (OL['quer_y']['vorn'][1] + 2.0, tz, 'Tisch')],
         f3.ox + f3.breite + 12, 'start', abstand=30.0)
 
     # ---- Feld 5: Schnitt C-C quer durch den Riegel (von links) -------------
@@ -380,12 +397,12 @@ def main():
     xm = xs + ow('m5_mutter_h')
     xd = (OL['quer_x'][1] - 14.0, xm + riegel_ueberstand(ow, OL) + 8.0)
     f6 = Feld(f5.ox + f5.breite + 270, f5.oy, xd,
-              (tz - 6.0, OL['quer_z'][0] + 14.0), 4.5)
+              (tz - 6.0, OL['lager_z'][1] + 6.0), 4.5)
     tt, sw = OL['riegel_tasche_t'], ow('m5_sw')
     inhalt = [f6.rect(xd[0] - 5.0, px[1], *pz_, 'holz', fill_opacity='0.45'),
               f6.rect(xd[0] - 5.0, OL['quer_x'][1], OL['quer_z'][0],
-                      OL['quer_z'][0] + 20.0, 'profil'),
-              f6.rect(xd[0] - 5.0, OL['quer_x'][1], *OL['fuss_z'], 'neu'),
+                      OL['lager_z'][1] + 11.0, 'profil'),
+              f6.rect(*OL['endplatte_x'], *OL['endplatte_z'], 'neu'),
               f6.rect(*OL['ausleger_x'], *OL['ausleger_z'], 'neu'),
               f6.rect(*OL['lager_x'], OL['ausleger_z'][1], OL['lager_z'][1],
                       'neu'),
@@ -415,7 +432,8 @@ def main():
          'Tasche, dreht mit'.format(de(OL['riegel_schraube'], 0))),
         (px[1] - 9.0, zp - 4.0, 'Stoß der Platte: wirkt längs\nder Achse '
          'auf den Lagerbock'),
-        (xd[0] + 3.0, tz + 5.0, 'Fuß vorn rechts'),
+        (OL['endplatte_x'][0] + 1.0, OL['endplatte_z'][1] - 2.0,
+         'Endplatte (Führung_vorn)\nam Ende des 2060'),
         (xd[0] + 3.0, tz, 'Tisch')],
         f6.ox - 12, 'end', abstand=30.0)
     t += f6.spalte([
@@ -429,7 +447,7 @@ def main():
         f6.ox + f6.breite + 12, 'start', abstand=30.0)
 
     # ---- Feld 4: Schnitt durch den Anschlag (von vorn) ----------------------
-    xa4 = (OL['quer_x'][0] - 18.0, OL['fuss_x']['links'][1] + 30.0)
+    xa4 = (OL['quer_x'][0] - 18.0, OL['halter_x']['links'][1] + 30.0)
     f4 = Feld(f2.ox, f5.oy + max(f5.hoehe, f6.hoehe) + 100, xa4,
               (tz - 8.0, top + 22.0), sz)
     inhalt = [f4.rect(*OL['anschlag_x'], *OL['anschlag_z'], 'neu'),
@@ -441,7 +459,7 @@ def main():
     t += f4.spalte([
         (OL['anschlag_x'][0] + 2.0, OL['anschlag_z'][1] - 4.0,
          'Anschlag {} × {} mm, {} mm unter der\nOberfläche; sitzt am '
-         'Fuß vorn links,\nder vor der Schnittebene liegt'.format(
+         'Halter Anschlag_vorn,\nder vor der Schnittebene liegt'.format(
              de(ow('anschlag_t'), 0), de(ow('anschlag_h'), 0),
              de(top - OL['anschlag_z'][1], 0))),
         (OL['quer_x'][0] - 10.0, tz, 'Tisch')],
@@ -467,17 +485,20 @@ def main():
         ('Arbeitsfeld', '{} × {} mm; in Y je Seite {} mm Platte darüber '
          'hinaus'.format(
             de(fx1 - fx0, 0), de(fy1 - fy0, 0), de(fy0 - py[0], 1))),
-        ('Höhe', 'Oberfläche Z {} = Unterkante der 2060 = bisher der '
-         'Tisch'.format(de(top, 0, True))),
+        ('Höhe', 'Platte und Maschine auf demselben Tisch: Oberfläche Z {}, '
+         '{} mm über der Unterkante der 2060'.format(
+             de(top, 1, True), de(top - OL['z_2060'], 1))),
         ('', 'Werkstück bis {} mm ({} mm unter dem Toolhead frei)'.format(
-            de(frei, 0), de(SICHERHEIT, 0))),
-        ('', 'Toolhead mit Z ganz unten: {} mm über Platte und '
-         'Füßen'.format(de(tief - top, 1))),
-        ('Füße', '{} mm lang, {} mm hoch; der Tisch liegt jetzt {} mm '
-         'tiefer'.format(de(ow('fuss_l'), 0), de(OL['fuss_h'], 1),
-                         de(OL['fuss_h'], 1))),
-        ('Befestigung', 'je Fuß 2 × M5×{} + Scheibe, Hammermuttern in der '
-         'unteren Seitennut'.format(de(OL['m5_schraube'], 0))),
+            de(frei, 1), de(SICHERHEIT, 0))),
+        ('', 'Toolhead mit Z ganz unten (Softlimit $132): {} mm über '
+         'der Platte'.format(de(tief - top, 1))),
+        ('Halter', '4 × {} mm lang, so hoch wie die Platte, innen am 2060 '
+         'auf dem Tisch'.format(de(ow('halter_l'), 0))),
+        ('Befestigung', 'je 2 × M5 in Hammermuttern der inneren unteren '
+         'Seitennut: vorn M5×{} versenkt,'.format(
+             de(OL['m5_schraube']['vorn'], 0))),
+        ('', 'hinten M5×{} + Scheibe durch den Flansch'.format(
+            de(OL['m5_schraube']['hinten'], 0))),
         ('Riegel', 'klappt um eine M5×{} längs X; zu {} mm vor dem '
          'Plattenende, {} mm Luft'.format(
              de(OL['riegel_schraube'], 0), de(ow('riegel_ueber'), 0),
@@ -486,7 +507,7 @@ def main():
          'ihn nicht auf'),
         ('', 'Platte höchstens {} mm lang (Anschlag bis Riegel)'.format(
             de(rx[0] - OL['anschlag_x'][1], 0))),
-        ('Druck', 'PETG, keine Stützen, 5 Teile: 4 Füße und der Riegel'),
+        ('Druck', 'PETG, keine Stützen, 5 Teile: 4 Halter und der Riegel'),
     ]
     t.append(text(tx, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))
     for i, (k, v) in enumerate(zeilen):

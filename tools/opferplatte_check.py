@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""Rechnerische Pruefung der Fuehrungsfuesse und der Opferplatte
+"""Rechnerische Pruefung der Halter und der Opferplatte
 (fusion/Opferplatte) — laeuft ohne Fusion.
 
 Importiert Opferplatte.py, Portal.py, ToolheadZ.py und
 Elektronikfach.py mit gestubbtem adsk-Modul und prueft: Abgleich der
-Rahmenmasse und des Arbeitsfelds, Lage und Hoehe der Platte, Werkstueck-
-hoehe, dass Toolhead und Portal ueber den ganzen Weg ueber Platte und
-Fuessen bleiben, Fuehrung, Anschlag und Einfuehrschraege, den Riegel
+Rahmenmasse und des Arbeitsfelds, Lage und Hoehe der Platte (Maschine und
+Platte auf demselben Tisch), Werkstueckhoehe und Softlimit Z, dass
+Toolhead und Portal ueber den ganzen Weg ueber Platte und Haltern
+bleiben, Fuehrung, Anschlag, Einfuehrschraege und Endplatte, den Riegel
 (Ueberdeckung, freie Bahn, Auflage zu und offen, Schwenkkreis, Schraube,
-Festigkeit), Freiraum zu Elektronikfach (mit Not-Aus), Y-Motoren, Halter Y,
-Winkeln und Y-Kette, die Verschraubung in der Nut, Werkzeugzugang und
-Druck. Gibt die Stueckliste aus.
+Festigkeit), Freiraum zu Elektronikfach (mit Not-Aus), Y-Motoren, Halter
+Y, Winkeln und Y-Kette, die Verschraubung in der inneren Seitennut,
+Werkzeugzugang und Druck. Gibt die Stueckliste aus.
 
     python3 tools/opferplatte_check.py
 
@@ -65,46 +66,58 @@ def auf(q, dx=0.0, dy=0.0, dz=0.0):
                   q.y[1] + dy, q.z[0] + dz, q.z[1] + dz, q.art)
 
 
-def fuss_quader(ow, OL, s, e):
-    """Ein Fuss als Quader (Rahmenkoordinaten wie Portal.py, Portal in der
-    Mitte). Die Einfuehrschraege fehlt, die Bohrungen auch: fuer
-    Kollisionen liegt das auf der sicheren Seite."""
+def halter_quader(ow, OL, s, e):
+    """Ein Halter als Quader (Rahmenkoordinaten wie Portal.py, Portal in
+    der Mitte). Die Einfuehrschraege fehlt, die Bohrungen auch: fuer
+    Kollisionen liegt das auf der sicheren Seite. Die Quader ueberlappen
+    sich nicht, damit das Volumen stimmt."""
     n = '{} {}'.format(s, e)
-    x, Q = OL['fuss_x'][e], Quader
-    q = [Q('Fuss {} Block'.format(n), *x, *OL['block_y'][s], *OL['fuss_z']),
-         Q('Fuss {} Flansch'.format(n), *x, *OL['flansch_y'][s],
-           *OL['flansch_z']),
-         Q('Fuss {} Feder'.format(n), *x, *OL['feder_y'][s],
-           *OL['feder_z'])]
+    x, Q, tz = OL['halter_x'][e], Quader, OL['tisch_z']
     if OL['voll'][s]:
-        q.append(Q('Fuss {} innen'.format(n), *x, *OL['innen_y'][s],
-                   *OL['fuss_z']))
+        q = [Q('Halter {} Block'.format(n), *x, *OL['innen_y'][s],
+               *OL['halter_z'])]
     else:
-        q += [Q('Fuss {} Wand'.format(n), *x, *OL['wand_y'][s],
-                *OL['fuss_z']),
-              Q('Fuss {} Boden'.format(n), *x, *OL['boden_y'][s],
-                OL['tisch_z'], OL['tisch_z'] + ow('boden_t'))]
+        q = [Q('Halter {} Wand'.format(n), *x, *OL['wand_y'][s],
+               *OL['halter_z']),
+             Q('Halter {} Boden'.format(n), *x, *OL['boden_y'][s],
+               tz, tz + ow('boden_t')),
+             Q('Halter {} Flansch'.format(n), *x, *OL['flansch_y'][s],
+               *OL['flansch_z'])]
     if e == 'links':
-        q.append(Q('Fuss {} Anschlag'.format(n), *OL['anschlag_x'],
+        # liegt ganz vor der Fuehrung, Block und Wand beginnen dort
+        q.append(Q('Halter {} Anschlag'.format(n), *OL['anschlag_x'],
                    *OL['anschlag_y'][s], *OL['anschlag_z']))
     if (s, e) == OL['riegel_an']:
-        # Lagerbock erst ab der Oberseite des Auslegers: keine Ueberlappung,
-        # damit das Volumen stimmt
-        q += [Q('Fuss {} Ausleger'.format(n), *OL['ausleger_x'],
+        # Ausleger ab der Endplatte, Lagerbock ab der Oberseite des
+        # Auslegers
+        ep = OL['endplatte_x']
+        q += [Q('Halter {} Endplatte'.format(n), *ep, *OL['endplatte_y'],
+                *OL['endplatte_z']),
+              Q('Halter {} Ausleger'.format(n), ep[1], OL['ausleger_x'][1],
                 *OL['ausleger_y'], *OL['ausleger_z']),
-              Q('Fuss {} Lagerbock'.format(n), *OL['lager_x'],
+              Q('Halter {} Lagerbock'.format(n), *OL['lager_x'],
                 *OL['lager_y'], OL['ausleger_z'][1], OL['lager_z'][1])]
     return q
 
 
-def fuss_volumen(ow, OL, s, e):
-    """Volumen eines Fusses (mm3): Quader minus Bohrungen und Schraege."""
+def halter_volumen(ow, OL, s, e):
+    """Volumen eines Halters (mm3): Quader minus Bohrungen, Senkungen und
+    Schraege."""
     v = sum((q.x[1] - q.x[0]) * (q.y[1] - q.y[0]) * (q.z[1] - q.z[0])
-            for q in fuss_quader(ow, OL, s, e))
+            for q in halter_quader(ow, OL, s, e))
     loch = math.pi * (ow('m5_durchgang') / 2.0) ** 2
-    v -= 2 * loch * ow('flansch_t')
+    if OL['voll'][s]:
+        b = OL['innen_y'][s][1] - OL['innen_y'][s][0]
+        st = abs(OL['fuehrung_y'][s] - OL['auflage_y'][s])
+        v -= 2 * (loch * b + math.pi / 4.0 * (ow('senk_d') ** 2
+                                              - ow('m5_durchgang') ** 2) * st)
+    else:
+        v -= 2 * loch * ow('flansch_t')
     if e == 'rechts':
-        v -= ow('einfuehr') ** 2 / 2.0 * (OL['fuss_z'][1] - OL['fuss_z'][0])
+        h = (OL['endplatte_z'][1] - OL['endplatte_z'][0]
+             if (s, e) == OL['riegel_an']
+             else OL['halter_z'][1] - OL['halter_z'][0])
+        v -= ow('einfuehr') ** 2 / 2.0 * h
     if (s, e) == OL['riegel_an']:
         v -= loch * ow('lager_t')
     return v
@@ -177,14 +190,14 @@ def main():
     feste_th, bewegte_th, _ = bauraum.bauraeume(tw, TL)
     feste_th = [q for q in feste_th
                 if q.name not in portal_check.TOOLHEAD_OHNE]
-    FUESSE = {(s, e): fuss_quader(ow, OL, s, e)
+    HALTER = {(s, e): halter_quader(ow, OL, s, e)
               for s in om.SEITEN for e in om.ENDEN}
-    alle_fuesse = [q for v in FUESSE.values() for q in v]
+    alle_halter = [q for v in HALTER.values() for q in v]
     RQ = riegel_quader(ow, OL)
     riegel = [RQ['schwenk'], RQ['mutter']]
     platte = Quader('Opferplatte', *OL['platte_x'], *OL['platte_y'],
                     *OL['platte_z'], 'holz')
-    unten = alle_fuesse + riegel + [platte]
+    unten = alle_halter + riegel + [platte]
     top = OL['platte_z'][1]
 
     # ------------------------------------------------------------------
@@ -226,7 +239,7 @@ def main():
     p.info('Arbeitsfeld Y', feld['feld_y1'] - feld['feld_y0'])
 
     # ------------------------------------------------------------------
-    p.titel('3) Opferplatte: Lage')
+    p.titel('3) Opferplatte: Lage (Maschine und Platte auf demselben Tisch)')
     px, py, pz = OL['platte_x'], OL['platte_y'], OL['platte_z']
     for text, wert in (('links', feld['feld_x0'] - px[0]),
                        ('rechts', px[1] - feld['feld_x1']),
@@ -236,11 +249,10 @@ def main():
     p.ok('Platte mittig unter dem Feld (Y)',
          abs((py[0] + py[1]) - (feld['feld_y0'] + feld['feld_y1'])) / 2.0,
          0.05, '<=')
-    p.ok('Oberflaeche = Unterkante der 2060 (bisher der Tisch)',
-         abs(pz[1] - L['quer_z'][0]), 0.01, '<=')
-    p.ok('Fuesse so hoch wie die Platte dick ist',
-         abs(OL['fuss_h'] - ow('platte_dicke')), 0.01, '<=')
-    p.info('Tisch jetzt bei Z (Maschine steht so viel hoeher)', OL['tisch_z'])
+    p.ok('Platte liegt auf dem Tisch = Unterkante der 2060',
+         abs(pz[0] - L['quer_z'][0]), 0.01, '<=')
+    p.ok('Oberflaeche = Unterkante der 2060 + gemessene Dicke',
+         abs(pz[1] - (L['quer_z'][0] + ow('platte_dicke'))), 0.01, '<=')
     p.ok('Platte steht rechts ueber das Gestell (zum Fassen)',
          OL['platte_ueber'], 15.0)
     p.ok('Platte links am Anschlag', abs(px[0] - OL['anschlag_x'][1]),
@@ -249,35 +261,47 @@ def main():
          L['quer_y_vorn'][0] - py[1], ow('wand_t'))
     p.ok('Platte zwischen den 2060 (hinten)',
          py[0] - L['quer_y_hinten'][1], ow('wand_t'))
+    p.ok('Platte unter den 2040 durch (Unterkante 2040 ueber der Platte)',
+         L['rahmen_z0'] - top, ow('luft_bau'))
     p.info('Masse der Platte ({:.2f} g/cm3)'.format(SPANPLATTE),
            (px[1] - px[0]) * (py[1] - py[0]) * (pz[1] - pz[0]) * SPANPLATTE
            / 1e6, 'kg')
 
     # ------------------------------------------------------------------
-    p.titel('4) Hoehen: Werkstueck, Fokus, Toolhead ueber der Platte')
+    p.titel('4) Hoehen: Werkstueck, Fokus, Softlimit Z ueber der Platte')
     fest_unten = min(tw('traeger_z_unten'), TL['z_schiene_z0'])
     frei = fest_unten - top - SICHERHEIT
     p.ok('Werkstueckhoehe ueber der Platte (wie ToolheadZ.py, {:.0f} mm '
          'Sicherheit)'.format(SICHERHEIT), frei, tw('werkstueck_max'))
-    p.info('   ToolheadZ.py rechnet mit (Bett {:.0f} mm [?])'.format(
-        tw('bett_abstand')), TL['werkstueck_frei'])
-    p.ok('Bett laut ToolheadZ.py [?, auf cm gerundet] <-> Plattenoberflaeche',
-         abs(tw('bett_abstand') + top), 5.0, '<=')
-    platte_tief = TL['zc_min'] + TL['schlitten_unten_rel']
-    p.ok('Z ganz unten: Schlittenplatte ueber der Platte', platte_tief - top,
-         ow('luft_bau'))
-    laser_tief = (TL['zc_min'] + TL['laser_unten_rel']
+    p.info('   ToolheadZ.py rechnet mit', TL['werkstueck_frei'])
+    p.ok('Bett laut ToolheadZ.py = Plattenoberflaeche',
+         abs(tw('bett_abstand') + top), 0.05, '<=')
+    platte_tief = TL['zc_unten'] + TL['schlitten_unten_rel']
+    p.ok('Z unten (Softlimit): Schlittenplatte ueber der Platte',
+         platte_tief - top, ow('luft_bau'))
+    laser_tief = (TL['zc_unten'] + TL['laser_unten_rel']
                   - tw('laser_langloch_hub'))
-    p.ok('Z ganz unten, Laser ganz unten im Langloch: ueber der Platte',
-         laser_tief - top, ow('luft_bau'))
+    p.ok('Z unten (Softlimit), Laser ganz unten im Langloch: ueber der '
+         'Platte', laser_tief - top, ow('luft_bau'))
+    p.info('Z mechanisch ganz unten: Schlittenplatte ueber der Platte '
+           '(negativ: nur das Softlimit schuetzt)',
+           TL['zc_min'] + TL['schlitten_unten_rel'] - top)
+    # $132 wie tools/verkabelung.py: Arbeitsweg minus 1 mm Rueckzug und
+    # 2 mm Reserve, abgerundet. MPos 0 liegt 1 mm unter dem Schaltpunkt.
+    s132 = math.floor(TL['z_arbeit'] - 1.0 - 2.0)
+    zc_132 = TL['zc_arbeit_max'] - 1.0 - s132
+    p.info('$132 (Z-Weg ab dem Schaltpunkt)', s132)
+    p.ok('mit $132={:.0f}: Schlittenplatte bei MPos Z -{:.0f} ueber der '
+         'Platte'.format(s132, s132),
+         zc_132 + TL['schlitten_unten_rel'] - top, tw('bett_luft'))
     p.info('Fokusfenster: Gehaeuseunterkante ueber der Platte, Z unten',
            TL['linse_tief'] + tw('bett_abstand') + top)
     p.info('   ... Z oben (Schaltpunkt)',
            TL['linse_hoch'] + tw('bett_abstand') + top)
 
     # ------------------------------------------------------------------
-    p.titel('5) Toolhead und Portal ueber Platte und Fuessen (ganzer Weg, Z '
-            'unten)')
+    p.titel('5) Toolhead und Portal ueber Platte und Haltern (ganzer Weg, '
+            'Z unten am Softlimit)')
     dys = [-L['y_weg_hinten'] + (L['y_weg_hinten'] + w('y_weg_vorn')) * i
            / (Y_SCHRITTE - 1.0) for i in range(Y_SCHRITTE)]
     xws = [L['xw_min'] + (L['xw_max'] - L['xw_min']) * i / (X_SCHRITTE - 1.0)
@@ -286,12 +310,12 @@ def main():
     for dy in dys:
         for xw in xws:
             th_ = ([auf(q.verschoben(0.0, xw), dy=dy) for q in feste_th]
-                   + [auf(q.verschoben(TL['zc_min'], xw), dy=dy)
+                   + [auf(q.verschoben(TL['zc_unten'], xw), dy=dy)
                       for q in bewegte_th])
             d = engste(th_, unten)
             if d[0] < best[0]:
                 best = d + (xw, dy)
-    p.ok('Toolhead <-> Platte, Fuesse, Riegel ({} / {}, X {:+.0f}, Portal '
+    p.ok('Toolhead <-> Platte, Halter, Riegel ({} / {}, X {:+.0f}, Portal '
          '{:+.0f})'.format(best[1], best[2], best[3], best[4]), best[0],
          ow('luft_bau'))
     lang = ('Y-Schiene', 'Rahmen 2040', 'Y-Riemen', 'Y-Ruecklauf')
@@ -302,17 +326,28 @@ def main():
         d = engste([auf(q, dy=dy) for q in portal], unten)
         if d[0] < best[0]:
             best = d + (dy,)
-    p.ok('Portal <-> Platte, Fuesse, Riegel ({} / {}, Portal {:+.0f})'.format(
+    p.ok('Portal <-> Platte, Halter, Riegel ({} / {}, Portal {:+.0f})'.format(
         best[1], best[2], best[3]), best[0], ow('luft_bau'))
-    innen_oben = max(q.z[1] for (s, e), v in FUESSE.items() for q in v
-                     if q.y[1] <= L['quer_y_vorn'][0] + 0.01
-                     and q.y[0] >= L['quer_y_hinten'][1] - 0.01)
-    p.ok('Fuesse innen nicht hoeher als die Platte', innen_oben - top, 0.01,
-         '<=')
+    innen_oben = max(q.z[1] for v in HALTER.values() for q in v)
+    p.ok('Halter nicht hoeher als die Platte', innen_oben - top, 0.01, '<=')
 
     # ------------------------------------------------------------------
-    p.titel('6) Freiraum: Elektronikfach, Y-Motoren, Halter Y, Winkel, '
-            'Y-Kette')
+    p.titel('6) Freiraum: Gestell, Elektronikfach, Y-Motoren, Halter Y, '
+            'Winkel, Y-Kette')
+    # Die Halter liegen innen am 2060 an, die Endplatte vor seinem Ende:
+    # beruehren ja, durchdringen nein
+    gestell = portal_check.quer_quader(w, L) + [
+        Quader('2040 ' + n, sx * R - 10.0, sx * R + 10.0, *L['rahmen_y'],
+               L['rahmen_z0'], L['rahmen_z0'] + w('rahmen_h'))
+        for sx, n in ((-1, 'links'), (1, 'rechts'))]
+    d = engste(alle_halter + [platte], gestell)
+    p.ok('Halter und Platte durchdringen das Gestell nicht ({} / {})'.format(
+        d[1], d[2]), d[0], 0.0)
+    for (s, e), v in sorted(HALTER.items()):
+        anlage = min(abs(q.y[1] - OL['innen'][s]) if s == 'vorn'
+                     else abs(q.y[0] - OL['innen'][s]) for q in v)
+        p.ok('Halter {} {} liegt innen am 2060 an'.format(s, e), anlage,
+             0.01, '<=')
     # Seit Elektronikfach Rev. 2 sitzt der Not-Aus in der Frontwand des
     # Fachs; ein eigenes Gehaeuse gibt es nicht mehr
     fremd = [('Elektronikfach', elektronik_check.elektronik_quader(ew, EL))]
@@ -349,38 +384,57 @@ def main():
     fremd.append(('Wanne und Traeger der Y-Kette',
                   bauraum.y_kette_rahmen(w, L)[0]))
     for text, liste in fremd:
-        d = engste(alle_fuesse + riegel + [platte], liste)
-        p.ok('Fuesse, Riegel, Platte <-> {} ({} / {})'.format(
+        d = engste(alle_halter + riegel + [platte], liste)
+        p.ok('Halter, Riegel, Platte <-> {} ({} / {})'.format(
             text, d[1], d[2]), d[0], ow('luft_bau'))
     fach = portal_check.elektronikfach(w, L)
-    d = engste(alle_fuesse, [fach])
-    p.ok('Fuesse ausserhalb des Elektronikfachs ({})'.format(d[1]), d[0],
+    d = engste(alle_halter, [fach])
+    p.ok('Halter ausserhalb des Elektronikfachs ({})'.format(d[1]), d[0],
          0.0)
-    # Riegel, Ausleger und Lagerbock gegen das Gestell (die Fuesse selbst
-    # sitzen am 2060 und beruehren es)
-    gestell = portal_check.quer_quader(w, L) + [
-        Quader('2040 ' + n, sx * R - 10.0, sx * R + 10.0, *L['rahmen_y'],
-               L['rahmen_z0'], L['rahmen_z0'] + w('rahmen_h'))
-        for sx, n in ((-1, 'links'), (1, 'rechts'))]
-    aussen = riegel + [q for q in FUESSE[OL['riegel_an']]
-                       if q.name.endswith(('Ausleger', 'Lagerbock'))]
+    # Riegel und Lagerbock gegen das Gestell (Endplatte und Ausleger liegen
+    # am Ende des 2060 an)
+    aussen = riegel + [q for q in HALTER[OL['riegel_an']]
+                       if q.name.endswith('Lagerbock')]
     d = engste(aussen, gestell)
-    p.ok('Riegel (Schwenkbereich), Ausleger <-> Gestell ({} / {})'.format(
+    p.ok('Riegel (Schwenkbereich), Lagerbock <-> Gestell ({} / {})'.format(
         d[1], d[2]), d[0], ow('luft_bau'))
 
     # ------------------------------------------------------------------
-    p.titel('7) Verschraubung: je Fuss 2 x M5 in Hammermuttern der unteren '
-            'Seitennut')
-    in_nut = OL['m5_schraube'] - ow('m5_scheibe_h') - ow('flansch_t')
-    p.ok('M5x{:.0f} + Scheibe: Spitze vor dem Nutgrund'.format(
-        OL['m5_schraube']), NUT_PLATZ - in_nut, 0.5)
-    p.ok('   Gewinde im Nutstein',
-         min(in_nut, NUT_LIPPE + NUTSTEIN) - NUT_LIPPE, 3.0)
+    p.titel('7) Verschraubung: je Halter 2 x M5 in Hammermuttern der '
+            'inneren unteren Seitennut')
     p.ok('M5 in der unteren Seitennut (10 mm ueber der Unterkante)',
          abs(OL['nut_seite_z'] - (L['quer_z'][0] + 10.0)), 0.01, '<=')
     sr = ow('m5_scheibe_d') / 2.0
-    p.ok('Scheibe liegt ganz auf dem Flansch (oben)',
-         OL['flansch_z'][1] - (OL['nut_seite_z'] + sr), 1.0)
+    for s in om.SEITEN:
+        ls = OL['m5_schraube'][s]
+        in_nut = (ls - OL['unter_kopf'][s]
+                  - (ow('m5_scheibe_h') if OL['m5_scheibe'][s] else 0.0))
+        art = ('ohne Scheibe, versenkt' if not OL['m5_scheibe'][s]
+               else '+ Scheibe')
+        p.ok('{}: M5x{:.0f} {}: Spitze vor dem Nutgrund'.format(s, ls, art),
+             NUT_PLATZ - in_nut, 0.5)
+        p.ok('   Gewinde im Nutstein',
+             min(in_nut, NUT_LIPPE + NUTSTEIN) - NUT_LIPPE, 3.0)
+        p.ok('   Material unter dem Kopf', OL['unter_kopf'][s], 4.0)
+        if OL['voll'][s]:
+            tiefe = abs(OL['fuehrung_y'][s] - OL['auflage_y'][s])
+            p.ok('   Kopf unter der Fuehrungsflaeche (Senkung {:.2f} mm)'
+                 .format(tiefe), tiefe - ow('m5_kopf_h'), ow('senk_luft'))
+            p.ok('   Senkung weiter als der Kopf (Ø{:.1f})'.format(
+                ow('m5_kopf_d')), ow('senk_d') - ow('m5_kopf_d'), 1.0)
+            p.ok('   Senkung ueber dem Tisch',
+                 OL['nut_seite_z'] - ow('senk_d') / 2.0 - OL['tisch_z'], 2.0)
+            rand = ow('senk_d') / 2.0
+        else:
+            p.ok('   Scheibe liegt ganz auf dem Flansch (oben)',
+                 OL['flansch_z'][1] - (OL['nut_seite_z'] + sr), 1.0)
+            rand = sr
+        for e in om.ENDEN:
+            mx = sorted(OL['m5_x'][e])
+            p.ok('   {} {}: Senkung/Scheibe ganz im Halter (X)'.format(s, e),
+                 min(min(abs(x - OL['halter_x'][e][0]),
+                         abs(x - OL['halter_x'][e][1])) for x in mx) - rand,
+                 1.0)
     for e in om.ENDEN:
         mx = sorted(OL['m5_x'][e])
         p.ok('Hammermuttern {} nebeneinander (Abstand der M5)'.format(e),
@@ -388,50 +442,58 @@ def main():
         rand = min(abs(x - L['quer_x'][i]) for x in mx for i in (0, 1))
         p.ok('Hammermutter {} ganz im Profil (vor dem Ende)'.format(e),
              rand - HAMMERMUTTER_L / 2.0, 1.0)
-        p.ok('Scheibe {} ganz auf dem Flansch (X)'.format(e),
-             min(min(abs(x - OL['fuss_x'][e][0]), abs(x - OL['fuss_x'][e][1]))
-                 for x in mx) - sr, 1.0)
-    p.ok('Feder schmaler als die Nutoeffnung (6,2)', 6.2 - ow('feder_b'),
-         0.3)
-    p.ok('Feder nicht tiefer als die Nut', (ow('nut_v_t') + ow('nut_t'))
-         - ow('feder_t'), 0.5)
-    # Inbus von aussen: vorn nach vorn, hinten nach hinten
+    # Inbus von der Plattenseite (ohne Platte montiert). Hinten steht die
+    # eigene Fuehrungswand im Weg: so lang muss der kurze Schenkel passen.
     hindernisse = ([q for _, liste in fremd for q in liste]
                    + portal_check.quer_quader(w, L))
     for s in om.SEITEN:
         aus = OL['aus'][s]
-        fy = OL['flansch_y'][s]
-        y_kopf = (fy[1] if aus > 0 else fy[0]) + aus * (ow('m5_scheibe_h')
-                                                         + ow('m5_kopf_h'))
+        y_kopf = OL['auflage_y'][s] - aus * (
+            ow('m5_kopf_h')
+            + (ow('m5_scheibe_h') if OL['m5_scheibe'][s] else 0.0))
+        eigene = [q for e in om.ENDEN for q in HALTER[(s, e)]
+                  if q.name.endswith('Wand')]
         pkt = [(x, y_kopf, OL['nut_seite_z']) for e in om.ENDEN
                for x in OL['m5_x'][e]]
-        laenge = min(bauraum.freier_korridor(pt, 'y', aus, INBUS / 2.0 + 1.0,
-                                             hindernisse)[0] for pt in pkt)
-        p.ok('Inbus an den M5 der Fuesse {} (von aussen)'.format(s),
+        laenge = min(bauraum.freier_korridor(pt, 'y', -aus, INBUS / 2.0 + 1.0,
+                                             hindernisse + eigene)[0]
+                     for pt in pkt)
+        p.ok('Inbus an den M5 der Halter {} (von der Plattenseite)'.format(s),
              999.0 if laenge == float('inf') else laenge, WERKZEUG_LAENGE)
+    p.info('Gegen einen Stoss nach links halten die Anschlaege nur durch die '
+           'Klemmung der M5 (Reibung): je Schraube {:.0f} N noetig'.format(
+               F_STOSS / (2 * 0.3)))
 
     # ------------------------------------------------------------------
-    p.titel('8) Fuehrung, Anschlag, Einfuehrschraege')
+    p.titel('8) Fuehrung, Anschlag, Einfuehrschraege, Endplatte')
     for s in om.SEITEN:
         g = OL['fuehrung_y'][s]
         kante = py[1] if s == 'vorn' else py[0]
         p.ok('Luft Platte <-> Fuehrung {}'.format(s), abs(g - kante),
              ow('platte_spiel') - 0.01)
-        p.info('Innenteil {} {} mm breit: {}'.format(
-            s, '{:.1f}'.format(OL['innen_y'][s][1] - OL['innen_y'][s][0]),
-            'voll' if OL['voll'][s] else 'Boden + Fuehrungswand'))
+        p.info('Halter {} {} mm breit: {}'.format(
+            s, '{:.2f}'.format(OL['innen_y'][s][1] - OL['innen_y'][s][0]),
+            'voller Block' if OL['voll'][s] else 'Flansch, Boden, Wand'))
         p.ok('Anschlag {} greift vor das Plattenende'.format(s),
              OL['anschlag_y'][s][1] - OL['anschlag_y'][s][0], 10.0)
+        p.ok('Fuehrung rechts {} (vor der Einfuehrschraege)'.format(s),
+             OL['fuehrung_ende_x'][s] - OL['halter_x']['rechts'][0]
+             - ow('einfuehr'), 30.0)
     p.ok('Anschlag unter der Plattenoberflaeche',
          top - OL['anschlag_z'][1], 1.0)
     p.ok('Fuehrung links (hinter dem Anschlag)',
-         OL['fuss_x']['links'][1] - OL['anschlag_x'][1], 30.0)
-    p.ok('Fuehrung rechts (vor der Einfuehrschraege)',
-         OL['fuss_x']['rechts'][1] - OL['fuss_x']['rechts'][0]
-         - ow('einfuehr'), 30.0)
+         OL['halter_x']['links'][1] - OL['anschlag_x'][1], 30.0)
     p.ok('Einfuehrschraege', ow('einfuehr'), 3.0)
+    p.ok('Endplatte liegt am Ende des vorderen 2060',
+         abs(OL['endplatte_x'][0] - L['quer_x'][1]), 0.01, '<=')
+    p.ok('Endplatte deckt das Profilende (Y)',
+         OL['endplatte_y'][1] - L['quer_y_vorn'][1], 0.0)
+    p.ok('Endplatte in der Flucht der Fuehrung',
+         abs(OL['endplatte_y'][0] - OL['fuehrung_y']['vorn']), 0.01, '<=')
+    p.ok('Endplatte unter der Plattenoberflaeche',
+         top - OL['endplatte_z'][1], 1.0)
     p.info('Platte zwischen den Fuehrungen gefuehrt (Abstand links-rechts)',
-           OL['fuss_x']['rechts'][0] - OL['fuss_x']['links'][1])
+           OL['halter_x']['rechts'][0] - OL['halter_x']['links'][1])
 
     # ------------------------------------------------------------------
     p.titel('9) Riegel vorn rechts: klappt um eine M5 laengs X')
@@ -442,6 +504,7 @@ def main():
          'Fuehrung)', py[1] - ow('platte_spiel') - nase, 10.0)
     p.ok('Riegel deckt das Plattenende in der Hoehe', ow('riegel_h'), 10.0)
     p.ok('Luft Plattenende <-> Riegel (X)', rx[0] - px[1], 0.5)
+    p.ok('Riegel rechts der Endplatte', rx[0] - OL['endplatte_x'][1], 5.0)
     p.info('   Platz zwischen Anschlag und Riegel = laengste Platte',
            rx[0] - OL['anschlag_x'][1])
     p.ok('Riegel unter der Plattenoberflaeche', top - OL['riegel_z'][1], 1.0)
@@ -474,12 +537,22 @@ def main():
          F_STOSS * (zp - OL['ausleger_z'][1])
          / (ow('lager_b') * ow('lager_t') ** 2 / 6.0), SIGMA_QUER, '<=',
          'MPa')
-    yb = min(OL['ausleger_y'][1], OL['fuss_y']['vorn'][1]) - \
-        OL['ausleger_y'][0]                 # Anschluss am Fuss
+    yb = (min(OL['ausleger_y'][1], OL['endplatte_y'][1])
+          - max(OL['ausleger_y'][0], OL['endplatte_y'][0]))
     ta = ow('ausleger_t')
-    p.ok('Ausleger am Fuss: Biegung und Zug (in der Schichtebene)',
+    p.ok('Ausleger an der Endplatte: Biegung und Zug (in der Schichtebene)',
          F_STOSS * (zp - OL['tisch_z'] - ta / 2.0) / (yb * ta ** 2 / 6.0)
          + F_STOSS / (yb * ta), SIGMA_SCHICHT, '<=', 'MPa')
+    # Hals: Endplatte am Block, Schnitt am Ende des 2060. Der Stoss greift
+    # in Y versetzt (an der Nase) und in Z ueber der Mitte an.
+    hb = OL['innen_y']['vorn'][1] - OL['innen_y']['vorn'][0]
+    hh = OL['endplatte_z'][1] - OL['endplatte_z'][0]
+    hebel_y = abs(sum(OL['innen_y']['vorn']) / 2.0 - kontakt)
+    hebel_z = abs(zp - (OL['tisch_z'] + hh / 2.0))
+    p.ok('Endplatte am Block (Schnitt am Ende des 2060): Zug und Biegung',
+         F_STOSS / (hb * hh) + F_STOSS * hebel_y / (hh * hb ** 2 / 6.0)
+         + F_STOSS * hebel_z / (hb * hh ** 2 / 6.0), SIGMA_SCHICHT, '<=',
+         'MPa')
     zug = F_STOSS * hebel / (yp - OL['lager_y'][0])
     p.info('Schraube: Zug, wenn der Riegel um die Kante des Lagerbocks '
            'kippt', zug, 'N')
@@ -510,19 +583,18 @@ def main():
     # ------------------------------------------------------------------
     p.titel('10) Druck (Bambu Lab A1)')
     gesamt = 0.0
-    for (s, e), q in sorted(FUESSE.items()):
-        xb = OL['fuss_bb_x'][s + '_' + e]
-        bx = xb[1] - xb[0]
-        yb = OL['fuss_bb_y'][s + '_' + e]
-        by = yb[1] - yb[0]
-        bz = OL['flansch_z'][1] - OL['flansch_z'][0]
-        v = fuss_volumen(ow, OL, s, e) / 1000.0
+    for (s, e), q in sorted(HALTER.items()):
+        n = om.halter_name(s, e)
+        xb, yb = OL['halter_bb_x'][n], OL['halter_bb_y'][n]
+        bx, by = xb[1] - xb[0], yb[1] - yb[0]
+        bz = OL['halter_z'][1] - OL['halter_z'][0]
+        v = halter_volumen(ow, OL, s, e) / 1000.0
         gesamt += v
-        p.ok('Fuss {} {}: {:.0f} x {:.1f} x {:.0f} mm, {:.1f} cm3 ({:.0f} g '
-             'voll)'.format(s, e, bx, by, bz, v, v * PETG),
-             max(bx, by, bz), BETT, '<=')
-    p.info('Fuesse: Unterseite aufs Bett. Flansch, Wand, Anschlag und '
-           'Lagerbock senkrecht; Feder oben; M5 waagerecht')
+        p.ok('{}: {:.0f} x {:.1f} x {:.1f} mm, {:.1f} cm3 ({:.0f} g voll)'
+             .format(n, bx, by, bz, v, v * PETG), max(bx, by, bz), BETT,
+             '<=')
+    p.info('Halter: Unterseite aufs Bett. Block, Flansch, Wand, Anschlag, '
+           'Endplatte und Lagerbock senkrecht; M5 und Senkungen waagerecht')
     sw_a = math.sqrt(3.0) / 2.0 * OL['riegel_tasche_sw'] ** 2
     d_r, tt = ow('riegel_dicke'), OL['riegel_tasche_t']
     v = (rl * 2.0 * rh * d_r + math.pi * rh ** 2 / 2.0 * d_r - sw_a * tt
@@ -564,10 +636,13 @@ def main():
 
     p.titel('13) Stueckliste')
     for zeile in (
-            'Druck (PETG): Fuss_vorn_links, Fuss_vorn_rechts (mit Ausleger), '
-            'Fuss_hinten_links, Fuss_hinten_rechts, Riegel',
-            '8 x M5x{:.0f} + 8 Scheiben M5 + 8 Hammermuttern M5 (Nut 6), '
-            'untere Seitennut aussen an den 2060'.format(OL['m5_schraube']),
+            'Druck (PETG): Anschlag_vorn, Anschlag_hinten, Fuehrung_vorn '
+            '(mit Endplatte, Ausleger und Lagerbock), Fuehrung_hinten, Riegel',
+            '4 x M5x{:.0f} Zylinderkopf ohne Scheibe (vorn, versenkt) + 4 x '
+            'M5x{:.0f} + 4 Scheiben M5 (hinten)'.format(
+                OL['m5_schraube']['vorn'], OL['m5_schraube']['hinten']),
+            '8 Hammermuttern M5 (Nut 6) in der unteren Seitennut INNEN an den '
+            '2060, je 2 nahe jedem Ende',
             '1 x Sechskantschraube M5x{:.0f} (ISO 4017) + 1 Scheibe M5 + 1 '
             'Stoppmutter M5 (DIN 985): Achse des Riegels'.format(
                 OL['riegel_schraube']),

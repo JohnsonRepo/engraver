@@ -95,7 +95,9 @@
 #   ToolheadZ      Toolhead mit Z-Achse (Z in der Mitte des Wegs), dazu
 #                  seine Kaufteile vereinfacht (Ref_Toolhead): Z-Fuehrung,
 #                  Z-Motor, Kupplung, Spindel, Mutter, Laser, Lichtschranke
-#   Opferplatte    Fuesse unter den 2060, Riegel, Opferplatte
+#   Opferplatte    Halter innen an den 2060 (Anschlag, Fuehrung), Riegel,
+#                  Opferplatte auf dem Tisch; seit Rev. 34 ohne Fuesse
+#                  (Opferplatte.py Rev. 4: es gab sie nur im Modell)
 #   Spannmittel    Anschlagwinkel, 2 Exzenter, 4 Niederhalter am
 #                  Beispielwerkstueck (der Satz der anderen Staerken nicht);
 #                  seit Rev. 31 mit der Ecke vorn rechts: in Spann-
@@ -149,7 +151,7 @@ import textwrap
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 33
+REVISION = 34
 
 # Gesamtmodell (seit Rev. 29, siehe oben): False baut nur das Portal.
 MASCHINE = True
@@ -3432,7 +3434,7 @@ def hinweise_bauen(L, fehler, maschine=None):
         '  {:+.2f}. X-Wagenmitte {:+.2f} bis {:+.2f} = {:.1f} mm X-Weg.'.format(
             L['x_schiene_x'][1], L['xw_min'], L['xw_max'], L['x_weg']),
         '  Das Rohr liegt wie bisher direkt auf der 6-mm-Platte: Portalhoehe',
-        '  und damit die 130 mm zum Bett bleiben.',
+        '  und damit die 130 mm zum Tisch bleiben.',
         '  Schienenabstand: erst das Portal mit beiden Schlitten verschrauben,',
         '  dann die Y-Schienen parallel dazu ausrichten. Er ergibt sich aus',
         '  der Rohrlaenge + 2 x {:.1f} mm; ein kuerzeres Rohr zieht die'
@@ -4127,12 +4129,12 @@ def maschine_ToolheadZ(app, design, g, m, L, protokoll):
 
 
 def maschine_Opferplatte(app, design, g, m, L, protokoll):
-    """Fuesse, Riegel und Platte; ohne Referenz (nur die Profile)."""
+    """Halter, Riegel und Platte; ohne Referenz (nur die Profile)."""
     O = m.lage()
     for s in m.SEITEN:
         for e in m.ENDEN:
-            name = 'Fuss_{}_{}'.format(s, e)
-            versuchen(protokoll, name, m.bau_fuss, app, design,
+            name = m.halter_name(s, e)
+            versuchen(protokoll, name, m.bau_halter, app, design,
                       teil(g, name).component, O, s, e, protokoll)
     versuchen(protokoll, 'Riegel', m.bau_riegel, app, design,
               teil(g, 'Riegel').component, O, protokoll)

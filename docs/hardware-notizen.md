@@ -10,8 +10,8 @@ Status: `[v]` am realen Teil verifiziert · `[w]` Datenblatt/Web, ungeprüft ·
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem vorderen Ende der 2040, hinten stehen die 2040 110 mm über), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; an jeder Kreuzung 8 Winkel (20 mm). Seit 2026-10-02 auf 4 gedruckten Führungsfüßen 25,3 mm über dem Tisch ([opferplatte.md](opferplatte.md)) |
-| Opferplatte | **Spanplatte 615 × 349 × 25 mm**, gemessen **25,3 mm** dick, Länge 615 bestätigt (`[v]` Angabe und Messung 2026-10-02; notfalls an der Kreissäge kürzbar), liegt zwischen den Führungsfüßen auf dem Tisch, Oberfläche auf der Unterkante der 2060; wird nach rechts herausgezogen, dort hält sie seit Rev. 3 ein Klappriegel |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem vorderen Ende der 2040, hinten stehen die 2040 110 mm über), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; an jeder Kreuzung 8 Winkel (20 mm). Steht direkt auf dem Tisch; die Führungsfüße von 2026-10-02 gab es nur im Modell, seit Opferplatte Rev. 4 (2026-11-21) auch dort nicht mehr ([opferplatte.md](opferplatte.md)) |
+| Opferplatte | **Spanplatte 615 × 349 × 25 mm**, gemessen **25,3 mm** dick, Länge 615 bestätigt (`[v]` Angabe und Messung 2026-10-02; notfalls an der Kreissäge kürzbar), liegt mit der Maschine auf demselben Tisch zwischen vier Haltern innen an den 2060, Oberfläche 25,3 mm über der Unterkante der 2060 (Z −103,7); wird nach rechts herausgezogen, dort hält sie seit Rev. 3 ein Klappriegel |
 | Y-Achse | 2 Linearführungen **MGN12H** (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn **je Seite ein NEMA 17** mit dem Ritzel direkt auf der Welle, mittig zur 2040 (Y-Motorhalter in `Portal.py`) |
 | Portal | Halterungen auf den Y-Schlitten, dazwischen 2020 V-Slot, 500 mm |
 | X-Achse | Linearführung **MGN15H**, Schiene 450 mm am Portalprofil |
@@ -217,16 +217,20 @@ Variante.
 
 | Wert | Maß | Status |
 |---|---|---|
-| Bezugsebene (Mitte X-Wagen-Lochbild) → Bettoberfläche | **130 mm** | `[?]` am 2026-09-17 genannt, auf cm gerundet |
-| dickstes Werkstück | **50 mm** | Vorgabe |
+| Bezugsebene (Mitte X-Wagen-Lochbild) → Tisch | **130 mm** | `[?]` am 2026-09-17 genannt, auf cm gerundet; aus den Profilmaßen 129 |
+| Bezugsebene → Oberfläche der Opferplatte | **103,7 mm** | 129 − 25,3: Maschine und Platte stehen auf demselben Tisch |
+| dickstes Werkstück | **32 mm** | 32,7 mm lässt die Trägerplatte frei (5 mm Luft); bis 2026-11-20 50 mm, als läge die Platte auf Füßen |
 
-Beide stehen als `bett_abstand` und `werkstueck_max` im Skript — sie erzeugen
-keine Geometrie, sondern nur die Fokusrechnung im Bericht. Aus ihnen folgt das
-Fenster **f = 6 … 57 mm**, in dem 0–50 mm Werkstückdicke erreichbar bleiben
+`bett_abstand` (103,7) und `werkstueck_max` (32) stehen im Skript — sie
+erzeugen keine Geometrie, sondern die Fokusrechnung im Bericht und das
+Softlimit **`$132=56`**: Es hält die Schlittenplatte 4 mm über der Platte,
+mechanisch käme sie 21,6 mm hinein. Aus ihnen folgt das
+Fenster **f = 5,5 … 49 mm**, in dem 0–32 mm Werkstückdicke erreichbar bleiben
 (oben gerechnet bis zum Schaltpunkt des Endschalters, nicht bis zur
-mechanischen Grenze — bis Rev. 28 stand hier fälschlich 49; mit dem
-10-mm-Motoradapter und der gemessenen Garnitur von 38 mm sind es seit
-Rev. 31 57 mm).
+mechanischen Grenze, unten bis zum Softlimit). Bis ToolheadZ Rev. 38 stand
+hier f = 6 … 57 mm für 0–50 mm, gerechnet mit dem Bett bei 130 mm; das hätte
+nur mit den Füßen gegolten. Davor: bis Rev. 28 fälschlich 49, seit Rev. 31
+mit dem 10-mm-Motoradapter und der gemessenen Garnitur von 38 mm.
 Nach oben begrenzt es die Montage (die obere Laser-Schraubenreihe muss beim
 Verschrauben neben dem Z-Wagen liegen, also höchstens +7,8 mm über Lochmitte),
 nach unten der Langlochhub von −8 mm. Seit Rev. 27 hängt der Laser dafür 5 mm
@@ -236,11 +240,10 @@ kurze Z-Achse.
 
 Eine dickere Opferplatte wirkt wie eine Langlochstellung nach unten (1 mm
 dicker = 1 mm tiefer) und verschiebt das Fenster nur in diese Richtung.
-Die Spanplatte (25,3 mm) liegt deshalb zwischen Führungsfüßen derselben
-Höhe: Ihre Oberfläche liegt auf der Unterkante der 2060, wo vorher der
-Tisch war, und Bettabstand und Fenster gelten weiter
-([opferplatte.md](opferplatte.md)). Aus den Profilmaßen sind es 129 mm
-statt der gerundeten 130.
+Die Spanplatte (25,3 mm) liegt mit der Maschine auf demselben Tisch, das
+Fenster oben ist deshalb um ihre Dicke kürzer
+([opferplatte.md](opferplatte.md)). Die Führungsfüße, die das ausgleichen
+sollten (Opferplatte Rev. 1–3), gab es nur im Modell.
 
 ## Z-Antrieb: Trapezgewindespindel Tr8×2 mit Anti-Backlash-Garnitur `[w]`
 

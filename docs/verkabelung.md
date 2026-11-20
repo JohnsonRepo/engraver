@@ -624,12 +624,16 @@ und „alles aus“ heißt Schalter aus, Pi herunterfahren, Netzteil ziehen.
 | `$102` | 1600 | Z: Tr8×2, 1/16 |
 | `$130` | 385 | X: 388,2 mm vom Schaltpunkt bis ans rechte Schienenende, minus Rückzug und Reserve |
 | `$131` | 325 | Y: 330,3 mm vom Schaltpunkt vorn bis ans hintere Schienenende, minus 5 mm Reserve |
-| `$132` | 82 | Z: 85,55 mm Arbeitsweg vom Schaltpunkt bis ganz unten, minus Rückzug und Reserve |
+| `$132` | 56 | Z: 59,95 mm Arbeitsweg vom Schaltpunkt bis 4 mm über der Opferplatte, minus Rückzug und Reserve |
 <!-- /tabelle:grbl -->
 
 `$3` und `$5` ergeben sich aus den Tests. `$130` bis `$132` rechnet
 `tools/verkabelung.py` aus Portal, Toolhead und Endschaltern: vom
-Schaltpunkt bis ans andere Ende, minus 1 mm Rückzug und 2 mm Reserve. Die
+Schaltpunkt bis ans andere Ende, minus 1 mm Rückzug und 2 mm Reserve. Bei
+Z ist das andere Ende nicht die Schiene, sondern die Opferplatte: Sie
+liegt mit der Maschine auf demselben Tisch, und die Schlittenplatte käme
+mechanisch bis 21,6 mm unter ihre Oberfläche. `$132` hält sie 4 mm darüber
+([toolhead-z.md](toolhead-z.md)). Die
 Schaltpunkte von X und Y stehen in [endschalter.md](endschalter.md), der
 von Z in [toolhead-z.md](toolhead-z.md). Alles Übrige bleibt auf dem
 Standardwert von GRBL. Jeden Wert einzeln in die Konsole, `$22=1` vor
@@ -677,6 +681,10 @@ sonst kommt `error:10`.
   gestrichen.
 * **GRBL:** `$130=385` und `$132=82`, beide mit 1 mm Rückzug und 2 mm
   Reserve wie Y. Vorher standen dort ≈ 387 und ≈ 84.
+* **Z-Softlimit über der Opferplatte** (2026-11-21, ToolheadZ Rev. 39):
+  `$132=56` statt 82. Bis dahin lag die Platte im Modell auf Füßen, die es
+  an der Maschine nie gab, 25,3 mm zu tief. Mit `$132=82` kann die
+  Schlittenplatte in die Platte fahren.
 * **Referenz Y vorn** (2026-11-19, Portal Rev. 32): `$23=3` statt 1,
   `$131=325` statt 327. Die Lichtschranke Y bleibt an Y+ (D10), nur der
   Halter sitzt vorn ([endschalter.md](endschalter.md#grbl)).

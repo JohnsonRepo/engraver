@@ -1,19 +1,23 @@
-# Opferplatte.py — Fuehrungsfuesse unter dem Gestell und die Opferplatte
+# Opferplatte.py — Anschlag und Fuehrung der Opferplatte am Gestell
+#
+# Maschine und Opferplatte stehen auf demselben Tisch: Die Plattenober-
+# flaeche liegt 25,3 mm ueber der Unterkante der 2060. Bis Rev. 3 hob das
+# Modell die Maschine auf vier Fuesse, die es an der Maschine nie gab
+# (Rev. 4, 2026-11-21). Die Z-Grenze ueber der Platte rechnet ToolheadZ.py.
 #
 # Fuenf Druckteile, dazu die Platte und Referenzteile nur zur Ansicht:
-#   Fuss_vorn_links/rechts, Fuss_hinten_links/rechts
-#               je ein Fuss unter einem Ende der beiden 2060. Die Fuesse
-#               heben die Maschine so hoch, wie die Opferplatte dick ist:
-#               deren Oberflaeche liegt dann dort, wo bisher der Tisch war,
-#               und Fokus und Werkstueckhoehe bleiben, wie ToolheadZ.py sie
-#               rechnet. Oben greift eine Feder in die untere Nut des 2060,
-#               aussen haelt ein Flansch den Fuss mit 2x M5 in Hammermuttern
-#               der unteren Seitennut. Innen reicht der Fuss bis an die
-#               Platte und fuehrt sie. Die linken Fuesse tragen den
-#               Anschlag fuer das Plattenende, die rechten eine
-#               Einfuehrschraege: herausgezogen wird die Platte nach rechts.
-#               Der Fuss vorn rechts traegt dazu auf einem Ausleger den
-#               Lagerbock fuer den Riegel.
+#   Anschlag_vorn, Anschlag_hinten   am linken Ende der beiden 2060
+#   Fuehrung_vorn, Fuehrung_hinten   am rechten Ende
+#               Je ein Halter steht innen an einem Ende eines 2060 auf dem
+#               Tisch, gehalten von 2x M5 in Hammermuttern der inneren
+#               unteren Seitennut. Er reicht bis an die Platte und fuehrt
+#               sie in Y. Vorn ist dort nur 11,65 mm Platz: voller Block,
+#               die M5 versenkt. Hinten Flansch am 2060, Boden und Wand an
+#               der Platte. Die linken tragen den Anschlag fuer das
+#               Plattenende, die rechten eine Einfuehrschraege:
+#               herausgezogen wird die Platte nach rechts. Fuehrung_vorn
+#               traegt dazu vor dem Ende des 2060 eine Endplatte mit dem
+#               Ausleger und dem Lagerbock fuer den Riegel.
 #   Riegel      Klappriegel vor dem rechten Plattenende (Rev. 3), damit die
 #               Platte nicht nach rechts herausrutscht. Er dreht sich um
 #               eine M5 laengs X: Ein Stoss gegen die Platte drueckt ihn
@@ -24,7 +28,7 @@
 #               Tasche im Riegel, die Stoppmutter stellt man von rechts nach.
 #   Opferplatte  Spanplatte 615 x 349 x 25 (vorhanden, Angabe vom
 #               2026-10-02), gemessen 25,3 dick [v]. Sie liegt auf dem
-#               Tisch zwischen den Fuessen,
+#               Tisch zwischen den 2060 und den Haltern,
 #               mittig unter dem Arbeitsfeld, und steht rechts ueber das
 #               Gestell hinaus: dort fasst man sie zum Herausziehen.
 #   Referenz_nicht_drucken  die beiden 2060 und die beiden 2040.
@@ -36,7 +40,7 @@
 # mit Portal.py und ToolheadZ.py.
 #
 # Konventionen: siehe fusion-python/SKILL.md und references/baugruppen.md.
-# Eine Bohrlehre gibt es nicht: Die Fuesse sind in Hammermuttern
+# Eine Bohrlehre gibt es nicht: Die Halter sind in Hammermuttern
 # geschraubt, die Achse des Riegels verbindet zwei Druckteile durch fertig
 # gedruckte Loecher. Gebohrt wird nichts.
 
@@ -45,7 +49,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Opferplatte'
-REVISION = 3
+REVISION = 4
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -82,29 +86,38 @@ MASSE = {
     'feld_y1':            (164.5, 'Arbeitsfeld: vorn'),
 
     # --- Opferplatte [v] Angabe 2026-10-02 ------------------------------------
-    # Nennmass 25, gemessen 25,3 (Rev. 2, 2026-10-02): die Fuesse werden
-    # genau so hoch wie die gemessene Dicke.
+    # Nennmass 25, gemessen 25,3 (Rev. 2, 2026-10-02). Sie liegt auf dem
+    # Tisch, auf dem auch die 2060 stehen.
     'platte_l':           (615.0, 'Opferplatte: Laenge (X, wird nach rechts gezogen)'),
     'platte_b':           (349.0, 'Opferplatte: Breite (Y)'),
-    'platte_dicke':        (25.3, 'Opferplatte: Dicke (gemessen) = Hoehe der Fuesse'),
+    'platte_dicke':        (25.3, 'Opferplatte: Dicke (gemessen)'),
     'platte_spiel':         (1.0, 'Opferplatte: Luft je Seite zur Fuehrung'),
 
-    # --- Fuesse -------------------------------------------------------------
-    # 50 mm: unter der Kreuzung mit dem 2040 und hinten ausserhalb des
-    # Elektronikfachs (zwischen den Innenseiten der 2040, 3 mm Rand)
-    'fuss_l':              (50.0, 'Fuss: Laenge (X) unter dem Ende des 2060'),
-    'flansch_t':            (6.0, 'Fuss: Flansch aussen am 2060, Dicke'),
-    'flansch_ueber':       (19.0, 'Fuss: Flansch reicht so weit ueber die Unterkante des 2060'),
-    'feder_b':              (5.8, 'Fuss: Feder in der unteren Nut, Breite'),
-    'feder_t':              (1.5, 'Fuss: Feder, Hoehe'),
-    'wand_t':               (6.0, 'Fuss: Fuehrungswand an der Platte, Dicke'),
-    'boden_t':              (5.0, 'Fuss: Boden zwischen 2060 und Wand, Dicke'),
-    'voll_bis':            (20.0, 'Fuss: bis zu dieser Breite ist der Innenteil voll'),
-    'm5_abstand':          (32.0, 'Fuss: Abstand der beiden M5 (X)'),
+    # --- Halter innen an den 2060 (Rev. 4) ----------------------------------
+    # 50 mm wie bisher die Fuesse: unter der Kreuzung mit dem 2040, die
+    # Hammermuttern ganz im Profil.
+    'halter_l':            (50.0, 'Halter: Laenge (X) am Ende des 2060'),
+    'flansch_t':            (6.0, 'Halter hinten: Flansch innen am 2060, Dicke'),
+    'flansch_ueber':       (19.0, 'Halter: Flansch reicht so weit ueber den Tisch'),
+    'wand_t':               (6.0, 'Halter: Fuehrungswand an der Platte, Dicke'),
+    'boden_t':              (5.0, 'Halter: Boden zwischen Flansch und Wand, Dicke'),
+    'voll_bis':            (20.0, 'Halter: bis zu dieser Breite voller Block'),
+    'm5_abstand':          (32.0, 'Halter: Abstand der beiden M5 (X)'),
+    # M5 waagerecht in die innere untere Seitennut: 5 mm ueber die
+    # Profilflaeche (1,8 Lippe, 3,2 im Stein, 1 mm vor dem Nutgrund).
+    # Im vollen Halter (vorn) sitzt der Kopf ohne Scheibe in einer Senkung.
+    'nut_ein':              (5.0, 'M5: so weit ueber die Profilflaeche in die Nut'),
+    'senk_d':              (10.0, 'Senkung fuer den M5-Zylinderkopf (voller Halter)'),
+    'senk_luft':            (0.5, 'Kopf mindestens so weit unter der Fuehrungsflaeche'),
     'anschlag_t':           (5.0, 'Anschlag (links): Dicke in X'),
     'anschlag_tief':       (15.0, 'Anschlag: greift so weit vor das Plattenende'),
     'anschlag_h':          (20.0, 'Anschlag: Hoehe ueber dem Tisch'),
     'einfuehr':             (5.0, 'Einfuehrschraege (rechts): 45 Grad, so weit'),
+    # Endplatte vorn rechts vor dem Ende des 2060: traegt den Ausleger auf
+    # ganzer Breite und verlaengert die Fuehrung, die Einfuehrschraege sitzt
+    # dort an ihrem Ende.
+    'endplatte_t':          (6.0, 'Endplatte (vorn rechts): Dicke in X'),
+    'endplatte_h':         (20.0, 'Endplatte: Hoehe ueber dem Tisch'),
 
     # --- Riegel vorn rechts (Rev. 3) -----------------------------------------
     # Klappt um eine M5 laengs X. Lagerbock und Ausleger liegen vor der
@@ -127,6 +140,7 @@ MASSE = {
     'm5_scheibe_d':        (10.0, 'M5 Scheibe DIN 125: Durchmesser'),
     'm5_scheibe_h':         (1.0, 'M5 Scheibe DIN 125: Dicke'),
     'm5_kopf_h':            (5.0, 'M5 Zylinderkopf: Hoehe'),
+    'm5_kopf_d':            (8.5, 'M5 Zylinderkopf: Durchmesser'),
     # Achse des Riegels: Sechskantschraube, der Kopf sitzt in einer Tasche
     # im Riegel und dreht sich mit ihm; die Stoppmutter stellt man von
     # rechts mit dem Maulschluessel nach
@@ -141,8 +155,15 @@ MASSE = {
 
 SEITEN = ('vorn', 'hinten')         # welches 2060
 ENDEN = ('links', 'rechts')         # welches Ende
-RIEGEL_AN = ('vorn', 'rechts')      # dieser Fuss traegt den Riegel (lage()
+TEIL = {'links': 'Anschlag', 'rechts': 'Fuehrung'}
+RIEGEL_AN = ('vorn', 'rechts')      # dieser Halter traegt den Riegel (lage()
                                     # rechnet ihn fuer vorn rechts)
+M5_LAENGEN = (8.0, 10.0, 12.0, 16.0, 20.0, 25.0)
+
+
+def halter_name(s, e):
+    """Name des Halters an Seite s ('vorn' | 'hinten'), Ende e."""
+    return '{}_{}'.format(TEIL[e], s)
 
 
 def w(name):
@@ -164,84 +185,101 @@ def lage():
                    'hinten': (w('quer_hinten_y0'), w('quer_hinten_y0') + b)}
     L['rahmen_y'] = (w('rahmen_y1') - w('rahmen_laenge'), w('rahmen_y1'))
     L['rahmen_z'] = (w('rahmen_z0'), w('rahmen_z0') + w('rahmen_h'))
-    z_u = L['quer_z'][0]                     # Unterkante der 2060
+    z_u = L['quer_z'][0]                     # Unterkante der 2060 = Tisch
     L['z_2060'] = z_u
-    # untere Nut (Mitte der Unterseite) und untere Seitennut der 2060
+    # untere Nut und untere Seitennut der 2060 (die Seitennut innen nimmt
+    # die Hammermuttern der Halter)
     L['nut_unten_y'] = {s: (y[0] + y[1]) / 2.0 for s, y in L['quer_y'].items()}
     L['nut_seite_z'] = z_u + w('nut_mitte')
 
-    # ---- Opferplatte: mittig unter dem Arbeitsfeld (Y), links am Anschlag.
-    #      Die Fuesse sind so hoch wie die Platte dick ist: ihre Oberflaeche
-    #      liegt auf der Unterkante der 2060, wo bisher der Tisch war.
+    # ---- Opferplatte: auf dem Tisch, auf dem auch die 2060 stehen; mittig
+    #      unter dem Arbeitsfeld (Y), links am Anschlag.
     fy = (w('feld_y0') + w('feld_y1')) / 2.0
     pb = w('platte_b') / 2.0
     L['platte_y'] = (fy - pb, fy + pb)
-    L['fuss_h'] = w('platte_dicke')
-    L['tisch_z'] = z_u - L['fuss_h']
-    L['platte_z'] = (L['tisch_z'], L['tisch_z'] + w('platte_dicke'))
+    L['tisch_z'] = z_u
+    L['platte_z'] = (z_u, z_u + w('platte_dicke'))
+    top = L['platte_z'][1]
     x0 = L['quer_x'][0] + w('anschlag_t')
     L['platte_x'] = (x0, x0 + w('platte_l'))
     L['platte_ueber'] = L['platte_x'][1] - L['quer_x'][1]   # rechts zum Fassen
 
-    # ---- Fuesse: unter den Enden der beiden 2060 ---------------------------
-    fl = w('fuss_l')
-    L['fuss_x'] = {'links': (L['quer_x'][0], L['quer_x'][0] + fl),
-                   'rechts': (L['quer_x'][1] - fl, L['quer_x'][1])}
+    # ---- Halter: innen an den Enden der beiden 2060 ------------------------
+    hl = w('halter_l')
+    L['halter_x'] = {'links': (L['quer_x'][0], L['quer_x'][0] + hl),
+                     'rechts': (L['quer_x'][1] - hl, L['quer_x'][1])}
     sp = w('platte_spiel')
     L['fuehrung_y'] = {'vorn': L['platte_y'][1] + sp,
                        'hinten': L['platte_y'][0] - sp}
-    L['fuss_z'] = (L['tisch_z'], z_u)
-    L['flansch_z'] = (L['tisch_z'], z_u + w('flansch_ueber'))
-    L['feder_z'] = (z_u, z_u + w('feder_t'))
-    for k in ('aus', 'block_y', 'innen_y', 'voll', 'wand_y', 'boden_y',
-              'flansch_y', 'feder_y', 'fuss_y', 'anschlag_y'):
+    # Block und Wand reichen bis zur Plattenoberflaeche, nicht darueber
+    L['halter_z'] = (z_u, top)
+    L['flansch_z'] = (z_u, z_u + w('flansch_ueber'))
+    for k in ('aus', 'innen', 'innen_y', 'voll', 'wand_y', 'boden_y',
+              'flansch_y', 'anschlag_y', 'm5_schraube', 'm5_scheibe',
+              'unter_kopf', 'auflage_y', 'senk_y'):
         L[k] = {}
     for s in SEITEN:
         q0, q1 = L['quer_y'][s]
         aus = 1.0 if s == 'vorn' else -1.0   # von der Platte zum 2060 hin
         innen = q0 if s == 'vorn' else q1    # Innenseite des 2060
-        aussen = q1 if s == 'vorn' else q0   # Aussenseite des 2060
         g = L['fuehrung_y'][s]
         L['aus'][s] = aus
-        L['block_y'][s] = (q0, q1)
+        L['innen'][s] = innen
         L['innen_y'][s] = (min(g, innen), max(g, innen))
-        # schmaler Innenteil voll, breiter als Wand an der Platte plus Boden
-        L['voll'][s] = abs(innen - g) <= w('voll_bis')
+        breite = abs(innen - g)
+        # schmal: voller Block; breit: Flansch am 2060, Boden, Wand
+        L['voll'][s] = breite <= w('voll_bis')
         wg = g + aus * w('wand_t')
         L['wand_y'][s] = (min(g, wg), max(g, wg))
-        L['boden_y'][s] = (min(wg, innen), max(wg, innen))
-        fa = aussen + aus * w('flansch_t')
-        L['flansch_y'][s] = (min(aussen, fa), max(aussen, fa))
-        ny = L['nut_unten_y'][s]
-        L['feder_y'][s] = (ny - w('feder_b') / 2.0, ny + w('feder_b') / 2.0)
-        L['fuss_y'][s] = (min(g, fa), max(g, fa))
+        fi = innen - aus * w('flansch_t')
+        L['flansch_y'][s] = (min(fi, innen), max(fi, innen))
+        L['boden_y'][s] = (min(wg, fi), max(wg, fi))
         ag = g - aus * w('anschlag_tief')
         L['anschlag_y'][s] = (min(g, ag), max(g, ag))
-    # zwei M5 je Fuss: waagerecht durch den Flansch in die untere Seitennut
+        # M5: immer nut_ein ueber die Profilflaeche. Im vollen Block ohne
+        # Scheibe versenkt: die laengste Schraube, deren Kopf noch
+        # senk_luft unter der Fuehrungsflaeche bleibt. Am Flansch mit
+        # Scheibe.
+        if L['voll'][s]:
+            ls = max(l for l in M5_LAENGEN
+                     if breite - (l - w('nut_ein'))
+                     >= w('m5_kopf_h') + w('senk_luft'))
+            unter, scheibe = ls - w('nut_ein'), False
+        else:
+            ls = min(l for l in M5_LAENGEN
+                     if l >= w('flansch_t') + w('m5_scheibe_h')
+                     + w('nut_ein'))
+            unter, scheibe = w('flansch_t'), True
+        L['m5_schraube'][s] = ls
+        L['m5_scheibe'][s] = scheibe
+        L['unter_kopf'][s] = unter
+        auflage = innen - aus * unter        # Kopf (oder Scheibe) liegt hier
+        L['auflage_y'][s] = auflage
+        L['senk_y'][s] = ((min(g, auflage), max(g, auflage))
+                          if L['voll'][s] else None)
+    # zwei M5 je Halter, waagerecht in die innere untere Seitennut
     L['m5_x'] = {e: [(x[0] + x[1]) / 2.0 + d * w('m5_abstand') / 2.0
-                     for d in (-1, 1)] for e, x in L['fuss_x'].items()}
-    # Flansch 6 + Scheibe 1, dann 5 mm in die Nut: 1,8 Lippe, 3,2 im Stein,
-    # 1 mm vor dem Nutgrund (wie Not-Aus, Halter Y und Y-Motorhalter)
-    L['m5_schraube'] = 12.0
+                     for d in (-1, 1)] for e, x in L['halter_x'].items()}
     L['anschlag_x'] = (L['quer_x'][0], L['quer_x'][0] + w('anschlag_t'))
     L['anschlag_z'] = (L['tisch_z'], L['tisch_z'] + w('anschlag_h'))
-    # Bauraum je Fuss in Y: links reicht der Anschlag vor die Fuehrung
-    L['fuss_bb_y'] = {}
-    for s in SEITEN:
-        for e in ENDEN:
-            y = L['fuss_y'][s]
-            if e == 'links':
-                a = L['anschlag_y'][s]
-                y = (min(y[0], a[0]), max(y[1], a[1]))
-            L['fuss_bb_y'][s + '_' + e] = y
+
+    # ---- Endplatte vorn rechts: vor dem Ende des vorderen 2060, von der
+    #      Flucht der Fuehrung bis ueber den Ausleger. Sie verlaengert die
+    #      Fuehrung um ihre Dicke; die Einfuehrschraege sitzt deshalb dort.
+    x1 = L['quer_x'][1]
+    L['endplatte_x'] = (x1, x1 + w('endplatte_t'))
+    L['endplatte_z'] = (L['tisch_z'], L['tisch_z'] + w('endplatte_h'))
+    L['fuehrung_ende_x'] = {s: x1 + (w('endplatte_t')
+                                     if (s, 'rechts') == RIEGEL_AN else 0.0)
+                            for s in SEITEN}
     # Einfuehrschraege am rechten Ende der Fuehrung: Dreieck in X/Y, ueber
     # die Kanten hinaus verlaengert, damit der Schnitt sauber durchgeht
-    e, x1 = w('einfuehr'), L['quer_x'][1]
+    e_ = w('einfuehr')
     L['einfuehr_pkt'] = {}
     for s in SEITEN:
-        g, aus = L['fuehrung_y'][s], L['aus'][s]
-        L['einfuehr_pkt'][s] = [(x1 - e - 1.0, g - aus), (x1 + 1.0, g - aus),
-                                (x1 + 1.0, g + aus * (e + 1.0))]
+        g, aus, xe = L['fuehrung_y'][s], L['aus'][s], L['fuehrung_ende_x'][s]
+        L['einfuehr_pkt'][s] = [(xe - e_ - 1.0, g - aus), (xe + 1.0, g - aus),
+                                (xe + 1.0, g + aus * (e_ + 1.0))]
 
     # ---- Riegel vorn rechts: dreht sich um eine M5 laengs X ----------------
     #      Lagerbock und Ausleger beginnen ausleger_luft vor der Flucht der
@@ -267,6 +305,8 @@ def lage():
     L['ausleger_x'] = (x1, L['lager_x'][1])
     L['ausleger_y'] = (ai, yp + L['riegel_l'] + 1.0)  # offen liegt er darauf
     L['ausleger_z'] = (L['tisch_z'], L['tisch_z'] + w('ausleger_t'))
+    L['endplatte_y'] = (L['fuehrung_y']['vorn'],
+                        max(L['ausleger_y'][1], L['quer_y']['vorn'][1]))
     # Sechskantkopf auf der Plattenseite in einer Tasche, 0,5 mm unter der
     # Flaeche; hinter dem Lagerbock Scheibe und Stoppmutter. Laenge auf
     # 5 mm aufgerundet.
@@ -276,15 +316,21 @@ def lage():
               + w('m5_scheibe_h') + w('m5_mutter_h') + w('ueberstand'))
     L['riegel_schraube'] = 5.0 * math.ceil(noetig / 5.0)
 
-    # Bauraum je Fuss in X; vorn rechts reichen Ausleger und Lagerbock
-    # nach rechts und vorn ueber den Fuss hinaus
-    L['fuss_bb_x'] = {s + '_' + e: L['fuss_x'][e] for s in SEITEN
-                      for e in ENDEN}
-    n = '_'.join(RIEGEL_AN)
-    L['fuss_bb_x'][n] = (L['fuss_x'][RIEGEL_AN[1]][0], L['ausleger_x'][1])
-    y = L['fuss_bb_y'][n]
-    L['fuss_bb_y'][n] = (min(y[0], L['ausleger_y'][0]),
-                         max(y[1], L['ausleger_y'][1]))
+    # ---- Bauraum je Halter: links reicht der Anschlag vor die Fuehrung,
+    #      vorn rechts Endplatte, Ausleger und Lagerbock nach rechts und vorn
+    L['halter_bb_x'], L['halter_bb_y'] = {}, {}
+    for s in SEITEN:
+        for e in ENDEN:
+            n = halter_name(s, e)
+            x, y = L['halter_x'][e], L['innen_y'][s]
+            if e == 'links':
+                a = L['anschlag_y'][s]
+                y = (min(y[0], a[0]), max(y[1], a[1]))
+            if (s, e) == RIEGEL_AN:
+                x = (x[0], L['ausleger_x'][1])
+                y = (min(y[0], L['endplatte_y'][0]),
+                     max(y[1], L['endplatte_y'][1]))
+            L['halter_bb_x'][n], L['halter_bb_y'][n] = x, y
     return L
 
 
@@ -797,39 +843,39 @@ def prisma_vieleck(comp, name, achse, punkte, a0, a1, art, ziel=None):
                         ziel)
 
 
-def bau_fuss(app, design, comp, L, s, e, fehler):
-    """Fuss unter einem Ende eines 2060 (s = 'vorn' | 'hinten', e = 'links'
-    | 'rechts'): Block unter dem Profil mit der Feder fuer die untere Nut,
-    aussen der Flansch mit 2x M5 in die untere Seitennut, innen bis an die
-    Platte (voll oder als Boden mit Fuehrungswand). Links der Anschlag fuer
-    das Plattenende, rechts die Einfuehrschraege. Vorn rechts dazu der
-    Ausleger mit dem Lagerbock fuer den Riegel.
+def bau_halter(app, design, comp, L, s, e, fehler):
+    """Halter innen an einem Ende eines 2060 (s = 'vorn' | 'hinten', e =
+    'links' | 'rechts'), steht auf dem Tisch: schmal (vorn) ein voller
+    Block mit versenkten M5, breit (hinten) Flansch am 2060, Boden und
+    Fuehrungswand. Links der Anschlag fuer das Plattenende, rechts die
+    Einfuehrschraege. Vorn rechts dazu die Endplatte vor dem Ende des
+    2060 mit Ausleger und Lagerbock fuer den Riegel.
 
-    Drucklage: Unterseite (Tischseite) aufs Bett. Flansch, Wand, Anschlag
-    und Lagerbock stehen senkrecht, die Feder liegt oben, die M5-Loecher
-    waagerecht — keine Stuetzen."""
-    name = 'Fuss_{}_{}'.format(s, e)
-    x = L['fuss_x'][e]
-    k = quader(comp, 'Block_' + name, x, L['block_y'][s], L['fuss_z'],
-               'neu').bodies.item(0)
-    k.name = name
-    quader(comp, 'Flansch_' + name, x, L['flansch_y'][s], L['flansch_z'],
-           'dazu', k)
-    quader(comp, 'Feder_' + name, x, L['feder_y'][s], L['feder_z'], 'dazu', k)
+    Drucklage: Unterseite (Tischseite) aufs Bett. Block, Flansch, Wand,
+    Anschlag, Endplatte und Lagerbock stehen senkrecht, die M5-Loecher und
+    die Senkungen waagerecht — keine Stuetzen."""
+    name = halter_name(s, e)
+    x, tz = L['halter_x'][e], L['tisch_z']
     if L['voll'][s]:
-        quader(comp, 'Innen_' + name, x, L['innen_y'][s], L['fuss_z'], 'dazu',
-               k)
+        k = quader(comp, 'Block_' + name, x, L['innen_y'][s], L['halter_z'],
+                   'neu').bodies.item(0)
     else:
-        quader(comp, 'Wand_' + name, x, L['wand_y'][s], L['fuss_z'], 'dazu',
-               k)
+        k = quader(comp, 'Wand_' + name, x, L['wand_y'][s], L['halter_z'],
+                   'neu').bodies.item(0)
         quader(comp, 'Boden_' + name, x, L['boden_y'][s],
-               (L['tisch_z'], L['tisch_z'] + w('boden_t')), 'dazu', k)
+               (tz, tz + w('boden_t')), 'dazu', k)
+        quader(comp, 'Flansch_' + name, x, L['flansch_y'][s], L['flansch_z'],
+               'dazu', k)
+    k.name = name
     if e == 'links':
         quader(comp, 'Anschlag_' + name, L['anschlag_x'], L['anschlag_y'][s],
                L['anschlag_z'], 'dazu', k)
     else:
+        if (s, e) == RIEGEL_AN:
+            quader(comp, 'Endplatte_' + name, L['endplatte_x'],
+                   L['endplatte_y'], L['endplatte_z'], 'dazu', k)
         prisma_vieleck(comp, 'Einfuehrung_' + name, 'z', L['einfuehr_pkt'][s],
-                       L['tisch_z'] - 1.0, L['quer_z'][0] + 1.0, 'weg', k)
+                       tz - 1.0, L['halter_z'][1] + 1.0, 'weg', k)
     if (s, e) == RIEGEL_AN:
         # Ausleger flach auf dem Tisch nach rechts (erst nach der Schraege,
         # sonst kerbt deren Schnitt ihn an), darauf der Lagerbock mit dem
@@ -841,16 +887,21 @@ def bau_fuss(app, design, comp, L, s, e, fehler):
         bohrung(comp, 'Achse_' + name, 'x', [L['riegel_achse']],
                 w('m5_durchgang'), L['lager_x'][0] - 1.0,
                 L['lager_x'][1] + 1.0, k)
-    # 2x M5 waagerecht durch den Flansch, auf Hoehe der unteren Seitennut
-    fy = L['flansch_y'][s]
-    bohrung(comp, 'M5_' + name, 'y',
-            [(mx, L['nut_seite_z']) for mx in L['m5_x'][e]],
-            w('m5_durchgang'), fy[0] - 1.0, fy[1] + 1.0, k)
-    fussfase(comp, k, 'y', L['tisch_z'], w('fase_fuss'), fehler,
-             name.replace('_', ' '))
+    # 2x M5 waagerecht in die innere untere Seitennut; im vollen Block mit
+    # Senkung fuer den Kopf von der Plattenseite
+    zn = L['nut_seite_z']
+    punkte = [(mx, zn) for mx in L['m5_x'][e]]
+    y = L['innen_y'][s] if L['voll'][s] else L['flansch_y'][s]
+    bohrung(comp, 'M5_' + name, 'y', punkte, w('m5_durchgang'), y[0] - 1.0,
+            y[1] + 1.0, k)
+    if L['voll'][s]:
+        g, aus = L['fuehrung_y'][s], L['aus'][s]
+        bohrung(comp, 'Senkung_' + name, 'y', punkte, w('senk_d'),
+                g - aus * 1.0, L['auflage_y'][s], k)
+    fussfase(comp, k, 'y', tz, w('fase_fuss'), fehler, name.replace('_', ' '))
     bbox_pruefen(k, name.replace('_', ' '),
-                 (L['fuss_bb_x'][s + '_' + e], L['fuss_bb_y'][s + '_' + e],
-                  L['flansch_z']), fehler)
+                 (L['halter_bb_x'][name], L['halter_bb_y'][name],
+                  L['halter_z']), fehler)
     material_zuweisen(app, design, k, 'PETG', fehler)
     return k
 
@@ -926,27 +977,38 @@ def hinweise_bauen(L, fehler):
     ohne Fusion getestet werden kann (tools/opferplatte_check.py)."""
     px, py, pz = L['platte_x'], L['platte_y'], L['platte_z']
     yp, zp = L['riegel_achse']
+    hl, hr = L['halter_x']['links'], L['halter_x']['rechts']
+    sv, sh = L['m5_schraube']['vorn'], L['m5_schraube']['hinten']
     h = [
         'BEZUG: Maschinenkoordinaten wie Portal.py (X rechts, Y nach vorn,',
         '  Z = 0 Rohrmitte), Portal in der Mitte seines Wegs.',
         '',
-        'FUESSE (4, PETG): je einer unter jedem Ende der beiden 2060, X',
-        '  {:+.0f} bis {:+.0f} und {:+.0f} bis {:+.0f}. Sie heben die Maschine '
-        '{:.1f} mm'.format(L['fuss_x']['links'][0], L['fuss_x']['links'][1],
-                          L['fuss_x']['rechts'][0], L['fuss_x']['rechts'][1],
-                          L['fuss_h']),
-        '  (so dick wie die Platte), der Tisch liegt bei Z {:+.1f}.'.format(
+        'TISCH: Maschine und Opferplatte stehen auf demselben Tisch',
+        '  (Unterkante der 2060, Z {:+.0f}). Fuesse gibt es nicht (bis'.format(
             L['tisch_z']),
-        '  Oben greift eine Feder in die untere Nut des 2060, aussen haelt',
-        '  ein Flansch mit 2x M5x{:.0f} + Scheibe in Hammermuttern der'.format(
-            L['m5_schraube']),
-        '  unteren Seitennut (Z {:+.0f}). Innen fuehren sie die Platte, '
-        '{:.1f} mm'.format(L['nut_seite_z'], w('platte_spiel')),
-        '  Luft je Seite. Links der ANSCHLAG ({:.0f} mm vor das Plattenende),'
-        .format(w('anschlag_tief')),
-        '  rechts eine EINFUEHRSCHRAEGE ({:.0f} mm, 45 Grad). Vorn rechts'
+        '  Rev. 3 standen sie im Modell, an der Maschine nie).',
+        '',
+        'HALTER (4, PETG): innen an den Enden der beiden 2060, X {:+.0f}'
+        .format(hl[0]),
+        '  bis {:+.0f} und {:+.0f} bis {:+.0f}, auf dem Tisch. Je 2x M5 in '
+        'Hammer-'.format(hl[1], hr[0], hr[1]),
+        '  muttern der INNEREN unteren Seitennut (Z {:+.0f}). Sie fuehren'
+        .format(L['nut_seite_z']),
+        '  die Platte in Y, {:.1f} mm Luft je Seite.'.format(
+            w('platte_spiel')),
+        '  vorn: voller Block {:.2f} mm breit, M5x{:.0f} OHNE Scheibe in einer'
+        .format(L['innen_y']['vorn'][1] - L['innen_y']['vorn'][0], sv),
+        '    Senkung von der Plattenseite',
+        '  hinten: Flansch am 2060, Boden und Wand, M5x{:.0f} + Scheibe'
+        .format(sh),
+        '  Anschlag_vorn/_hinten (links): ANSCHLAG {:.0f} mm vor das'.format(
+            w('anschlag_tief')),
+        '    Plattenende, {:.1f} mm unter der Oberflaeche.'.format(
+            pz[1] - L['anschlag_z'][1]),
+        '  Fuehrung_vorn/_hinten (rechts): EINFUEHRSCHRAEGE {:.0f} mm, 45'
         .format(w('einfuehr')),
-        '  traegt ein Ausleger bis X {:+.0f} den Lagerbock fuer den Riegel.'
+        '    Grad. Fuehrung_vorn traegt vor dem Ende des 2060 die Endplatte',
+        '    mit dem Ausleger bis X {:+.0f} und dem Lagerbock fuer den Riegel.'
         .format(L['ausleger_x'][1]),
         '',
         'RIEGEL (PETG) vor dem rechten Plattenende: dreht sich um eine M5',
@@ -963,49 +1025,50 @@ def hinweise_bauen(L, fehler):
         '',
         'OPFERPLATTE (Spanplatte {:.0f} x {:.0f} x {:.1f}, vorhanden): liegt '
         'auf'.format(w('platte_l'), w('platte_b'), w('platte_dicke')),
-        '  dem Tisch zwischen den Fuessen, Y {:+.1f} bis {:+.1f} (mittig'
+        '  dem Tisch zwischen den Haltern, Y {:+.1f} bis {:+.1f} (mittig'
         .format(py[0], py[1]),
         '  unter dem Arbeitsfeld), X {:+.1f} bis {:+.1f}: links am Anschlag,'
         .format(px[0], px[1]),
         '  rechts steht sie {:.0f} mm ueber das Gestell, dort herausziehen.'
         .format(L['platte_ueber']),
-        '  Oberflaeche Z {:+.1f} = Unterkante der 2060 = bisher der Tisch:'
-        .format(pz[1]),
-        '  Fokus und Werkstueckhoehe bleiben, wie ToolheadZ.py sie rechnet.',
+        '  Oberflaeche Z {:+.1f}, {:.1f} mm ueber der Unterkante der 2060.'
+        .format(pz[1], pz[1] - L['z_2060']),
+        '  Z ganz unten und die Werkstueckhoehe rechnet ToolheadZ.py',
+        '  (bett_abstand, Softlimit $132).',
         '',
-        'MONTAGE:',
-        '  1. 8 Hammermuttern M5 in die untere Seitennut AUSSEN an beiden',
+        'MONTAGE (ohne Platte):',
+        '  1. 8 Hammermuttern M5 in die untere Seitennut INNEN an beiden',
         '     2060, je 2 nahe jedem Ende.',
-        '  2. Maschine an einer Seite anheben, die beiden Fuesse dieser',
-        '     Seite unterstellen: Feder in die untere Nut, Flansch aussen',
-        '     anlegen. Absetzen, je Fuss 2x M5x{:.0f} + Scheibe durch den'
-        .format(L['m5_schraube']),
-        '     Flansch in die Hammermuttern.',
-        '  3. Andere Seite ebenso.',
-        '  4. Riegel: Sechskantschraube M5x{:.0f} (ISO 4017) von links'
+        '  2. Halter innen an das Ende stellen, auf den Tisch und ans',
+        '     Profil: vorn 2x M5x{:.0f} ohne Scheibe in die Senkungen, hinten'
+        .format(sv),
+        '     2x M5x{:.0f} + Scheibe durch den Flansch. Fuehrung_vorn mit'
+        .format(sh),
+        '     der Endplatte am Ende des 2060.',
+        '  3. Riegel: Sechskantschraube M5x{:.0f} (ISO 4017) von links'
         .format(L['riegel_schraube']),
         '     (Plattenseite) durch Riegel und Lagerbock, der Kopf in die',
         '     Tasche; rechts Scheibe + Stoppmutter M5 (DIN 985). Mit SW 8',
         '     so fest, dass er nicht wackelt, aber von Hand klappt.',
-        '  5. Riegel nach vorn klappen, Platte von rechts zwischen die',
-        '     Fuesse schieben, bis sie links am Anschlag steht, Riegel',
+        '  4. Riegel nach vorn klappen, Platte von rechts zwischen die',
+        '     Halter schieben, bis sie links am Anschlag steht, Riegel',
         '     zurueckklappen. Herausnehmen: Riegel nach vorn, Platte nach',
         '     rechts ziehen.',
         '',
-        'DRUCK (PETG, Bambu Lab A1): Fuesse mit der Unterseite',
-        '  (Tischseite) aufs Bett, Flansch, Wand, Anschlag und Lagerbock',
-        '  stehen senkrecht. Riegel mit der Seite ohne Tasche aufs Bett.',
-        '  Keine Stuetzen, 4 Wandlinien, 20 % Infill. Vier verschiedene',
-        '  Fuesse: links mit Anschlag, rechts mit Schraege, vorn schmal,',
-        '  hinten breit, vorn rechts mit Ausleger.',
+        'DRUCK (PETG, Bambu Lab A1): Halter mit der Unterseite',
+        '  (Tischseite) aufs Bett, Block, Wand, Anschlag, Endplatte und',
+        '  Lagerbock stehen senkrecht. Riegel mit der Seite ohne Tasche',
+        '  aufs Bett. Keine Stuetzen, 4 Wandlinien, 20 % Infill. Vier',
+        '  verschiedene Halter: links mit Anschlag, rechts mit Schraege,',
+        '  vorn voll, hinten mit Flansch, vorn rechts mit Endplatte.',
         '',
-        'KEINE BOHRLEHRE: Die Fuesse gehen in Hammermuttern, die Achse des',
+        'KEINE BOHRLEHRE: Die Halter gehen in Hammermuttern, die Achse des',
         '  Riegels ist ein einzelnes gedrucktes Loch je Teil.',
         '',
-        'GEMESSEN (2026-10-02): Platte {:.1f} mm dick (Nennmass 25), die'
-        .format(w('platte_dicke')),
-        '  Fuesse sind genau so hoch. Untere Nut und untere Seitennut an',
-        '  den Enden der 2060 sind frei.',
+        'GEMESSEN (2026-10-02): Platte {:.1f} mm dick (Nennmass 25).'.format(
+            w('platte_dicke')),
+        '  NICHT GEMESSEN: ob die innere untere Seitennut an den Enden der',
+        '  2060 frei ist.',
     ]
     if fehler:
         h += ['', 'FEHLER / WARNUNGEN:'] + ['  ' + f for f in fehler]
@@ -1046,8 +1109,8 @@ def run(context):
         for s in SEITEN:
             for e in ENDEN:
                 o = root.occurrences.addNewComponent(einheit)
-                o.component.name = 'Fuss_{}_{}'.format(s, e)
-                bau_fuss(app, design, o.component, L, s, e, fehler)
+                o.component.name = halter_name(s, e)
+                bau_halter(app, design, o.component, L, s, e, fehler)
                 o.isGrounded = True
 
         # Der Riegel steht in der Lage 'zu'; offen ist er um 180 Grad um

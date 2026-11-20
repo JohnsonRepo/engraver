@@ -17,6 +17,14 @@
 # Messpunkt 18 bis 43 Grad unter der Linse; das Bild reicht hochkant nur
 # +-27 Grad. Deshalb ist die Kamera jetzt geneigt.
 #
+# Rev. 3 (2026-11-21): nur die Hoehe der Opferplatte. Maschine und Platte
+# stehen auf demselben Tisch, die Oberflaeche liegt bei Z -103,7 statt
+# -129 (die Fuesse gab es nur im Modell). Damit passen noch 32,7 mm
+# Werkstueck unter den Toolhead. Der Halter ist gedruckt und eingebaut und
+# bleibt, wie er ist: Die Neigung ist weiter auf Oberflaechen von Z -129
+# bis -71 gerechnet (neige_von_z), der Punkt liegt jetzt in der oberen
+# Haelfte dieses Bereichs. Nicht neu drucken.
+#
 # Ein Druckteil, dazu Lehre und Referenzteile:
 #   Kamerahalter  Fuss auf der Oberseite des vorderen 2060, 2 x M5x10 in
 #                 Hammermuttern der Nut; ueber dem Eckwinkel am rechten
@@ -61,7 +69,7 @@ import adsk.core, adsk.fusion, traceback
 import math
 
 SKRIPT_NAME = 'Kamerahalter'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog). Winkel in Grad und
@@ -115,8 +123,15 @@ MASSE = {
     # Werkstueck ueber 100 mm entfernt, der Punkt fuer alle Dicken im Bild
     'mp_links':            (30.0, 'Messpunkt: so weit links der Innenecke'),
     'mp_hinten':           (58.0, 'Messpunkt: so weit hinter der Innenecke'),
-    'platte_z1':         (-129.0, 'Oberseite der Opferplatte'),
-    'werkstueck_max':      (58.0, 'dickstes Werkstueck unter dem Toolhead'),
+    # Maschine und Platte auf demselben Tisch (Opferplatte.py Rev. 4)
+    'platte_z1':         (-103.7, 'Oberseite der Opferplatte'),
+    # werkstueck_frei in ToolheadZ.py; bis Rev. 2 58 ueber Z -129, also
+    # dieselbe Hoehe der dicksten Oberflaeche (Z -71)
+    'werkstueck_max':      (32.7, 'dickstes Werkstueck unter dem Toolhead'),
+    # Die Neigung des gedruckten Halters (Rev. 2) zielt auf die Mitte
+    # zwischen dieser Hoehe und der dicksten Oberflaeche. Bis Rev. 2 war das
+    # die Plattenoberflaeche, die das Modell bei Z -129 sah.
+    'neige_von_z':       (-129.0, 'Neigung: unterste Oberflaeche, auf die sie zielt'),
 
     # --- Kamera v1.3 (OV5647), wie verbaut [w]/[?] --------------------------
     # Foto 2026-11-19: an der Maschine steckt eine Raspberry Pi Kamera v1.3
@@ -225,7 +240,7 @@ ZIELDICHTE = {'PLA': 1.24, 'PETG': 1.27,         # g/cm3
               'Kunststoff': 1.10}               # nur Referenz
 
 # Dicken, fuer die die Sicht gerechnet und im Bericht gezeigt wird (mm)
-DICKEN = (0.0, 3.0, 10.0, 20.0, 30.0, 40.0, 50.0)
+DICKEN = (0.0, 3.0, 10.0, 20.0, 30.0)
 
 
 def w(name):
@@ -335,8 +350,9 @@ def lage():
 
     # ---- Messpunkt; Blick waagerecht zu ihm, Neigung auf die Mitte ---------
     # Die Achse zielt waagerecht genau auf den Punkt (quer 0). Geneigt wird so
-    # weit, dass der Punkt fuer die duennste und die dickste Platte gleich
-    # weit unter und ueber der Bildmitte liegt.
+    # weit, dass der Punkt fuer neige_von_z und die dickste Platte gleich
+    # weit unter und ueber der Bildmitte liegt (seit Rev. 3 liegt die leere
+    # Platte hoeher als neige_von_z, der Halter bleibt wie gedruckt).
     mp = (w('ecke_x') - w('mp_links'), w('ecke_y') - w('mp_hinten'))
     L['mp'] = mp
     dx, dy = mp[0] - lx, mp[1] - ly
@@ -344,8 +360,9 @@ def lage():
     L['blick_az'] = math.degrees(A) % 360.0
     L['sin'], L['cos'] = math.sin(A), math.cos(A)
     horiz = math.hypot(dx, dy)
-    tief = [math.atan2(lz - (w('platte_z1') + t), horiz)
-            for t in (0.0, w('werkstueck_max'))]
+    tief = [math.atan2(lz - z, horiz)
+            for z in (w('neige_von_z'),
+                      w('platte_z1') + w('werkstueck_max'))]
     nu = (tief[0] + tief[1]) / 2.0
     L['neige'] = math.degrees(nu)
     sn, cn = math.sin(nu), math.cos(nu)

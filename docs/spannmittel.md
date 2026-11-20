@@ -1,6 +1,6 @@
 # Spannmittel für die Opferplatte
 
-Erzeugt von `fusion/Spannmittel/Spannmittel.py` (Rev. 2). Geprüft mit
+Erzeugt von `fusion/Spannmittel/Spannmittel.py` (Rev. 3). Geprüft mit
 `python3 tools/spannmittel_check.py`, Zeichnung in
 [spannmittel.svg](spannmittel.svg) (neu erzeugen mit
 `python3 tools/spannmittel_zeichnen.py`). Die Opferplatte selbst steht in
@@ -37,22 +37,27 @@ Zwischen zwei Linien hebt der Laser nicht ab. Der Toolhead fährt in
 Arbeitshöhe über das ganze Feld, also auch über alles, was neben dem
 Werkstück liegt.
 
-Mit Z ganz unten ist die Schlittenplatte, der tiefste Punkt des Toolheads,
-**3,7 mm** über der Opferplatte. Liegt der Fokus auf einem Werkstück, ist
-sie mindestens 3,7 mm über dessen Oberseite. Weniger wäre es nur, wenn der
+Mit Z ganz unten (Softlimit `$132`) ist die Schlittenplatte, der tiefste
+Punkt des Toolheads, **4 mm** über der Opferplatte. Liegt der Fokus auf
+einem Werkstück, ist sie mindestens 4 mm über dessen Oberseite. Weniger wäre es nur, wenn der
 Laser so hoch eingebaut ist, dass er nicht mehr auf die leere Platte
 fokussieren kann. Darauf sind alle Teile ausgelegt:
 
 | Teil | Höhe | Luft zum Toolhead |
 |---|---|---|
-| Anschlagwinkel | 3 mm über der Platte | 0,7 mm, auch mit Z ganz unten ohne Werkstück |
+| Anschlagwinkel | 3 mm über der Platte | 1 mm, auch mit Z ganz unten ohne Werkstück |
 | Exzenter | 3 mm über der Platte | ebenso |
-| Niederhalter | 2,5 mm über dem Werkstück | 1,2 mm |
+| Niederhalter | 2,5 mm über dem Werkstück | 1,5 mm |
 
 Die Prüfung fährt den Toolhead über das ganze Feld: einmal mit Z ganz
 unten ohne Werkstück, einmal mit dem Beispielwerkstück (3 mm) und dem
 Fokus darauf. Er bleibt überall frei. Am knappsten wird es über dem
-vorderen Niederhalter, dort sind es 1,2 mm.
+vorderen Niederhalter, dort sind es 1,5 mm.
+
+Seit Rev. 3 (2026-11-21) liegt die Platte im Modell, wo sie an der
+Maschine liegt: mit der Maschine auf demselben Tisch, Oberfläche Z −103,7
+statt −129 ([opferplatte.md](opferplatte.md)). Die Teile sind dieselben,
+nur 25,3 mm höher im Modell.
 
 ## Anschlagwinkel
 

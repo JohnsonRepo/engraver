@@ -6,7 +6,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; steht auf 4 gedruckten Führungsfüßen 25,3 mm über dem Tisch, dazwischen die Opferplatte |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; steht direkt auf dem Tisch, dazwischen die Opferplatte |
 | Y-Achse | 2 Linearführungen MGN12H (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn je Seite ein NEMA 17 mit dem Ritzel direkt auf der Welle, mittig zur 2040 |
 | Portal | Y-Schlitten auf den MGN12H-Wagen, dazwischen ein 2020-V-Slot-Profil (500 mm); Y-Schienen 514 mm Mitte zu Mitte |
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
@@ -21,7 +21,7 @@ fusion/ToolheadZ/              Baugruppe: kompletter Toolhead mit Z-Achse  ← a
 fusion/Portal/                 Baugruppe: Y-Schlitten, Y-Klemmtürme, X-Antrieb, Y-Antrieb mit Y-Motorhalter, Endschalter X und Y, Wanne der X-Energiekette; seit Rev. 29 das Gesamtmodell der ganzen Maschine  ← aktuell
 fusion/Elektronikfach/         Fach vor dem vorderen 2060 zwischen den Y-Motoren (Rev. 2): Uno, Pi, Wandler, Wago; in der Front Buchse, Not-Aus und Schalter  ← neu
 fusion/Kabelhalter/            Kabelhalter für die untere Seitennut außen an den 2040  ← neu
-fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für die Opferplatte (Spanplatte)  ← neu
+fusion/Opferplatte/            Anschlag, Führung und Riegel innen an den 2060 für die Opferplatte (Spanplatte)  ← neu
 fusion/Spannmittel/           Anschlagwinkel (Ecke vorn rechts, Rev. 2), Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/Kamerahalter/           Halter für die Kamera (Autofokus), geneigt, vorn rechts auf dem vorderen 2060 vor dem Elektronikfach (Rev. 2)  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
@@ -46,8 +46,8 @@ docs/kabelhalter.md            Kabelhalter: Rinne, Kabel, Plätze links und rech
 docs/kabelhalter.svg           Kabelhalter im Schnitt am 2040 und seine Plätze
 docs/pi.md                     Pi: Maschine ohne PC über CNCjs — Teile, Halter, Strom, Einrichten, GRBL aufspielen, Hotspot, LightBurn, Ablauf, Fehlersuche
 docs/pihalter.svg              Pi-Halter mit Haube von hinten und im Schnitt am 2060
-docs/opferplatte.md            Opferplatte, Führungsfüße und Riegel: Lage, Höhen, Montage, Druck
-docs/opferplatte.svg           Gestell von oben mit Platte, Füßen und Riegel, Schnitte durch Füße, Riegel und Anschlag
+docs/opferplatte.md            Opferplatte, Anschlag, Führung und Riegel: Lage, Höhen, Montage, Druck
+docs/opferplatte.svg           Gestell von oben mit Platte, Haltern und Riegel, Schnitte durch Halter, Riegel und Anschlag
 docs/spannmittel.md            Werkstück spannen: Anschlag als Nullpunkt, Exzenter, Niederhalter, Höhe unter dem Toolhead
 docs/spannmittel.svg           Ecke der Opferplatte mit Spannmitteln von oben, Schnitte durch Niederhalter und Anschlag, Exzenter
 docs/kamerahalter.md           Kamerahalter für den Autofokus: Messprinzip, Kamera, Lage, Sicht zum Messpunkt, Teile, Druck, Fokus, Montage, Kabel
@@ -82,8 +82,8 @@ tools/kabelhalter_zeichnen.py  erzeugt die Zeichnung der Kabelhalter
 tools/pihalter_check.py        Prüfung des Pi-Halters: Lage, Freiraum zu Portal, Kasten und Kabeln, Schrauben, Pi, Wandler, Haube, Druck
 tools/pihalter_zeichnen.py     erzeugt die Zeichnung des Pi-Halters
 tools/stl_export.py            schreibt stl/ aus denselben Maßen wie die Fusion-Skripte (braucht manifold3d)
-tools/opferplatte_check.py     Prüfung von Opferplatte, Füßen und Riegel: Arbeitsfeld, Höhen, Freiraum, Riegel, Schrauben, Druck
-tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte, Füßen und Riegel
+tools/opferplatte_check.py     Prüfung von Opferplatte, Haltern und Riegel: Arbeitsfeld, Höhen, Softlimit Z, Freiraum, Riegel, Schrauben, Druck
+tools/opferplatte_zeichnen.py  erzeugt die Zeichnung von Opferplatte, Haltern und Riegel
 tools/spannmittel_check.py     Prüfung der Spannmittel: Höhe unter dem Toolhead, Lage, Selbsthemmung, Schrauben, Druck
 tools/spannmittel_zeichnen.py  erzeugt die Zeichnung der Spannmittel
 tools/kamerahalter_check.py    Prüfung des Kamerahalters: Lage, Freiraum über den ganzen Weg, Fach, Sicht zum Messpunkt je Dicke, Schrauben, Druck, Kabel
@@ -236,17 +236,17 @@ Träger Y, die Kabel laufen dort also gerade durch. Links und rechts ist es
 derselbe Halter, gedruckt liegend und ohne Stützen. Plätze und Kabel stehen
 in [docs/kabelhalter.md](docs/kabelhalter.md).
 
-### Opferplatte und Führungsfüße (neu)
+### Opferplatte, Anschlag und Führung (neu)
 
 Die Opferplatte ist eine Spanplatte 615 × 349 × 25 mm (gemessen 25,3 mm
-dick). Sie liegt auf dem
-Tisch zwischen vier gedruckten **Führungsfüßen** unter den Enden der
-beiden 2060. Die Füße sind so hoch, wie die Platte dick ist: Ihre
-Oberfläche liegt dort, wo bisher der Tisch war, und Fokus und
-Werkstückhöhe (58 mm) bleiben. Jeder Fuß greift mit einer Feder in die
-untere Nut und hält mit einem Flansch und 2 × M5 in Hammermuttern der
-unteren Seitennut. Innen führen die Füße die Platte, links sitzt der
-Anschlag, nach rechts wird sie herausgezogen. Dort hält sie ein
+dick). Sie liegt mit der Maschine auf demselben Tisch, ihre Oberfläche
+25,3 mm über der Unterkante der 2060. Vier gedruckte **Halter** stehen
+innen an den Enden der beiden 2060, je mit 2 × M5 in Hammermuttern der
+inneren unteren Seitennut. Sie führen die Platte, links sitzt der
+**Anschlag**, nach rechts wird sie herausgezogen. Bis Opferplatte Rev. 3
+stand die Maschine im Modell auf Füßen, die es nie gab; seither gilt das
+Z-Softlimit `$132=56`, und Werkstücke bis 32 mm passen unter den Toolhead.
+Rechts hält die Platte ein
 **Klappriegel** auf einer M5 längs X. Ein Stoß gegen die Platte drückt
 ihn längs der Achse an seinen Lagerbock und kann ihn nicht aufklappen;
 zum Herausnehmen klappt man ihn nach vorn um. Details in
@@ -262,7 +262,7 @@ selbsthemmende **Exzenter** schieben das Werkstück in die Ecke, und
 **Niederhalter** je Materialstärke (2–6 mm) halten dünne Platten am Rand
 flach. Alles ist so flach, dass der Toolhead darüberfährt: Anschlag und
 Exzenter sind 3 mm hoch, der Niederhalter ragt 2,5 mm über das Werkstück,
-und der Toolhead bleibt mindestens 3,7 mm darüber. Befestigt wird mit
+und der Toolhead bleibt mindestens 4 mm darüber. Befestigt wird mit
 Spanplattenschrauben 3,0 × 20. Details in
 [docs/spannmittel.md](docs/spannmittel.md).
 
@@ -284,9 +284,10 @@ Pi Kamera v1.3; ein Camera Module 3 passt auch.
   Messpunkt gedreht und 28° nach unten geneigt. Darauf sitzt die Kamera
   hochkant auf vier Polstern, oben mit 2 × M2, unten mit 2 Zapfen. Gedruckt
   wird ohne Stützen.
-- **Sicht:** Der Punkt liegt für 0 bis 58 mm Werkstück mindestens 14,6° im
-  Bild, 108 bis 136 mm von der Linse, mit 0,07 mm Höhe je Pixel.
-- **Fokus:** Die Linse der v1.3 wird einmal auf 120 mm gedreht.
+- **Sicht:** Der Punkt liegt für 0 bis 32,7 mm Werkstück mindestens 14,6° im
+  Bild, 108 bis 121 mm von der Linse, mit 0,05 mm Höhe je Pixel.
+- **Fokus:** Die Linse der v1.3 wird einmal auf 114 mm gedreht (120 mm
+  reichen auch).
 - **Offen:** Die Software auf dem Pi fehlt noch.
 
 Details in [docs/kamerahalter.md](docs/kamerahalter.md).
@@ -378,7 +379,7 @@ python3 tools/kabelhalter_zeichnen.py  # docs/kabelhalter.svg neu erzeugen
 python3 tools/pihalter_check.py     # Pi-Halter: Lage, Freiraum, Schrauben, Pi, Wandler, Haube, Druck
 python3 tools/pihalter_zeichnen.py  # docs/pihalter.svg neu erzeugen
 pip install manifold3d && python3 tools/stl_export.py  # stl/ neu: Elektronikfach, Kabelhalter, Kamerahalter in Drucklage (mit Namen, z. B. Kamerahalter: nur dieser)
-python3 tools/opferplatte_check.py  # Opferplatte, Füße, Riegel: Feld, Höhen, Freiraum, Schrauben
+python3 tools/opferplatte_check.py  # Opferplatte, Halter, Riegel: Feld, Höhen, Softlimit, Freiraum, Schrauben
 python3 tools/opferplatte_zeichnen.py  # docs/opferplatte.svg neu erzeugen
 python3 tools/spannmittel_check.py  # Spannmittel: Höhe unter dem Toolhead, Lage, Exzenter, Schrauben
 python3 tools/spannmittel_zeichnen.py  # docs/spannmittel.svg neu erzeugen
@@ -473,7 +474,11 @@ für den Toolhead. Davor kam `Opferplatte.py`: vier Führungsfüße für die Spa
 seit Rev. 2 so hoch wie ihre gemessenen 25,3 mm; die Maschine steht
 darauf, die Plattenoberfläche liegt auf der alten Tischhöhe. Rev. 3 hält
 die Platte an der offenen rechten Seite mit einem Klappriegel, den ein
-Ausleger am Fuß vorn rechts trägt. Portal Rev. 24
+Ausleger am Fuß vorn rechts trägt. Rev. 4 (2026-11-21) streicht die Füße,
+die es an der Maschine nie gab: Platte und Maschine stehen auf demselben
+Tisch, Anschlag, Führung und Riegel sitzen an vier Haltern innen an den
+2060, und ToolheadZ Rev. 39 rechnet Z mit der echten Plattenhöhe
+(`$132=56`). Portal Rev. 24
 stellt auf den
 linken Stirnblock einen Anschlag für den X-Motorhalter: Bis dahin hielt
 ihn nur die Reibung unter seinen zwei Schrauben, und bei kräftig

@@ -18,9 +18,9 @@
 #   Referenz_nicht_drucken  Opferplatte und ein Beispielwerkstueck.
 #
 # Hoehe: Liegt der Fokus auf dem Werkstueck, faehrt der Toolhead mindestens
-# toolhead_frei (3,7 mm) darueber. So tief kommt er mit Z ganz unten an die
-# Platte, und weniger waere es nur, wenn der Laser nicht mehr auf die leere
-# Platte fokussieren koennte. Anschlag und Exzenter sind deshalb 3 mm hoch,
+# toolhead_frei (4 mm) darueber. So tief kommt er mit Z ganz unten an die
+# Platte (Softlimit $132, ToolheadZ.py), und weniger waere es nur, wenn der
+# Laser nicht mehr auf die leere Platte fokussieren koennte. Anschlag und Exzenter sind deshalb 3 mm hoch,
 # der Niederhalter ragt 2,5 mm ueber das Werkstueck: Der Toolhead faehrt
 # ueberall darueber, auch bei Leerfahrten.
 #
@@ -39,6 +39,11 @@
 # tools/spannmittel_check.py vergleicht Platte und Arbeitsfeld mit
 # Opferplatte.py und den Freiraum mit ToolheadZ.py.
 #
+# HOEHE (seit Rev. 3, 2026-11-21): Maschine und Opferplatte stehen auf
+# demselben Tisch, die Oberflaeche liegt 25,3 mm ueber der Unterkante der
+# 2060 (Z -103,7). Bis Rev. 2 lag sie auf Fuessen, die es nur im Modell
+# gab, bei Z -129. Die Teile selbst sind unveraendert.
+#
 # Konventionen: siehe fusion-python/SKILL.md. Eine Bohrlehre gibt es nicht:
 # Die Spanplattenschrauben gehen ohne Vorbohren in die Opferplatte.
 
@@ -47,7 +52,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Spannmittel'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -57,13 +62,13 @@ MASSE = {
     'platte_x1':          (320.0, 'Opferplatte: rechte Kante'),
     'platte_y0':        (-176.65, 'Opferplatte: hintere Kante'),
     'platte_y1':         (172.35, 'Opferplatte: vordere Kante'),
-    'platte_z0':         (-154.3, 'Opferplatte: Unterseite = Tisch'),
-    'platte_z1':         (-129.0, 'Opferplatte: Oberflaeche'),
+    'platte_z0':         (-129.0, 'Opferplatte: Unterseite = Tisch = Unterkante 2060'),
+    'platte_z1':         (-103.7, 'Opferplatte: Oberflaeche'),
     'feld_x0':          (-203.85, 'Arbeitsfeld: links'),
     'feld_x1':           (187.35, 'Arbeitsfeld: rechts'),
     'feld_y0':           (-168.8, 'Arbeitsfeld: hinten'),
     'feld_y1':            (164.5, 'Arbeitsfeld: vorn'),
-    'toolhead_frei':        (3.7, 'Toolhead mit Z ganz unten ueber der Platte'),
+    'toolhead_frei':        (4.0, 'Toolhead mit Z ganz unten (Softlimit) ueber der Platte'),
 
     # --- Anschlagwinkel: fest hinten links ----------------------------------
     # Hinten hat die Platte nur 7,85 mm Rand hinter dem Arbeitsfeld. Mit der

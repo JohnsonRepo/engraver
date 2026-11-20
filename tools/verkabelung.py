@@ -518,8 +518,8 @@ def grbl(Q):
          'vorn bis ans hintere Schienenende, minus {} mm Reserve'.format(
              de(y + Y_RESERVE_HINTEN, 2), de(Y_RESERVE_HINTEN, 0))),
         ('$132', '{:.0f}'.format(math.floor(z)), 'Z: {} mm Arbeitsweg vom '
-         'Schaltpunkt bis ganz unten, minus Rückzug und Reserve'.format(
-             de(z + 3.0, 2))),
+         'Schaltpunkt bis {} mm über der Opferplatte, minus Rückzug und '
+         'Reserve'.format(de(z + 3.0, 2), de(TL['platte_ueber_bett'], 0))),
     ]
 
 

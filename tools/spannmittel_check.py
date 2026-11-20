@@ -142,11 +142,11 @@ def main():
             ('Arbeitsfeld hinten', sw('feld_y0'), ow('feld_y0')),
             ('Arbeitsfeld vorn', sw('feld_y1'), ow('feld_y1'))):
         p.ok(text, abs(ist - soll), 0.01, '<=')
-    platte_tief = TL['zc_min'] + TL['schlitten_unten_rel']
-    laser_tief = (TL['zc_min'] + TL['laser_unten_rel']
+    platte_tief = TL['zc_unten'] + TL['schlitten_unten_rel']
+    laser_tief = (TL['zc_unten'] + TL['laser_unten_rel']
                   - tw('laser_langloch_hub'))
     frei = platte_tief - top
-    p.ok('toolhead_frei = Schlittenplatte ueber der Platte, Z ganz unten '
+    p.ok('toolhead_frei = Schlittenplatte ueber der Platte, Z am Softlimit '
          '({:.2f})'.format(frei), abs(sw('toolhead_frei') - frei), 0.05, '<=')
     p.ok('   tiefster Punkt ist die Schlittenplatte, nicht der Laser',
          laser_tief - platte_tief, 0.0)
@@ -184,7 +184,7 @@ def main():
         for dy in dys:
             for xw in xws:
                 th_ = ([auf(q.verschoben(0.0, xw), dy) for q in feste_th]
-                       + [auf(q.verschoben(TL['zc_min'] + hub, xw), dy)
+                       + [auf(q.verschoben(TL['zc_unten'] + hub, xw), dy)
                           for q in bewegte_th])
                 d = engste(th_, teile)
                 if d[0] < best[0]:

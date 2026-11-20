@@ -35,7 +35,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'ToolheadZ'
-REVISION = 38
+REVISION = 39
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -298,10 +298,20 @@ MASSE = {
     'schlitten_dicke':     (6.0,   'Schlittenplatte: Dicke'),
     'schlitten_breite_l':  (17.5,  'Schlittenplatte: Kante links der Schienenachse'),
     'schlitten_rand':      (4.0,   'Schlittenplatte: Rand um das Lochfeld'),
-    # Nur zur Dokumentation und fuer die Fokusrechnung im Bericht — keine
-    # Geometrie. Gemessen 2026-09-17: Lochbildmitte X-Wagen -> Bettoberflaeche.
-    'bett_abstand':        (130.0, 'Maschine: Bezugsebene -> Bettoberflaeche'),
-    'werkstueck_max':      (50.0,  'Maschine: dickstes Werkstueck'),
+    # Nur fuer Fokusrechnung, Z-Grenze unten und Bericht — keine Geometrie.
+    # Bett = Oberflaeche der Opferplatte. Gemessen 2026-09-17 bis zum Tisch
+    # 130 mm, aus den Profilmassen 129 (Unterkante der 2060). Maschine und
+    # Opferplatte (25,3) stehen auf demselben Tisch, Fuesse gab es nie
+    # (Rev. 39, 2026-11-21): 129 - 25,3. Bis Rev. 38 stand hier 130, als
+    # laege die Platte auf Hoehe der Unterkante der 2060.
+    'bett_abstand':        (103.7, 'Maschine: Bezugsebene -> Oberflaeche Opferplatte'),
+    # So viel laesst die feste Plattenunterkante (traeger_z_unten) mit 5 mm
+    # Luft ueber der Opferplatte frei: 32,7 mm (werkstueck_frei).
+    'werkstueck_max':      (32.0,  'Maschine: dickstes Werkstueck'),
+    # Die Schlittenplatte koennte mechanisch bis 21,6 mm unter die
+    # Plattenoberflaeche fahren. Das Softlimit $132 haelt sie so weit
+    # darueber (zc_unten in lage()).
+    'bett_luft':            (4.0,  'Schlittenplatte: Abstand zur Opferplatte, Z ganz unten'),
     'rippe_mitte_breite':  (5.0,   'Mittelrippe: Breite'),
     # 13,5: die Scheibe der Laserschraube liegt zwischen Mittel- und
     # Seitenrippe. Mit der DIN-125-Scheibe (Ø7) bleiben dort 1,75 mm Luft.
@@ -543,12 +553,26 @@ def lage():
     # Referenzieren steht Z dort, und die letzten ls_ueberfahrt mm bis zur
     # mechanischen Grenze sind Sicherheitsweg, kein Arbeitsweg.
     L['zc_arbeit_max'] = L['zc_max'] - w('ls_ueberfahrt')
-    L['z_arbeit'] = L['zc_arbeit_max'] - L['zc_min']
+    # Unten bindet die Opferplatte, nicht die Schiene: Schlittenplatte und
+    # Laser (ganz unten im Langloch) bleiben bett_luft ueber ihr. Das haelt
+    # das Softlimit $132 ein (tools/verkabelung.py rechnet es aus z_arbeit).
+    bett = -w('bett_abstand') + w('bett_luft')
+    L['zc_unten_grenzen'] = {
+        'Schiene (Wagen am untersten Ende)': L['zc_min'],
+        'Schlittenplatte ueber der Opferplatte':
+            bett - L['schlitten_unten_rel'],
+        'Laser (ganz unten im Langloch) ueber der Opferplatte':
+            bett - (L['laser_unten_rel'] - w('laser_langloch_hub')),
+    }
+    L['zc_unten'] = max(L['zc_unten_grenzen'].values())
+    L['zc_unten_bindend'] = max(L['zc_unten_grenzen'],
+                                key=lambda k: L['zc_unten_grenzen'][k])
+    L['z_arbeit'] = L['zc_arbeit_max'] - L['zc_unten']
 
     # ---- Fokusfenster: Hoehe der Gehaeuseunterkante ueber dem Bett. Reine
     #      Rechnung fuer den Bericht, keine Geometrie. Oben zaehlt der
-    #      Schaltpunkt, nicht die mechanische Grenze.
-    L['linse_tief'] = w('bett_abstand') + L['laser_unten_rel'] + L['zc_min']
+    #      Schaltpunkt, nicht die mechanische Grenze, unten das Softlimit.
+    L['linse_tief'] = w('bett_abstand') + L['laser_unten_rel'] + L['zc_unten']
     L['linse_hoch'] = (w('bett_abstand') + L['laser_unten_rel']
                        + L['zc_arbeit_max'])
     # Die festen Teile (Plattenunterkante, Schienenende) haengen auf einer
@@ -660,9 +684,12 @@ def lage():
     # Obere Laserschraubenreihe in der tiefsten Stellung (fuer den Montage-
     # hinweis: liegt sie dort unter der Traegerplatte, ist der Weg frei).
     L['laser_oben_z_min'] = L['zc_min'] + L['laser_loch_oben_rel']
-    # Plattenunterkante in der tiefsten Stellung, ueber dem Bett gemessen.
-    L['platte_ueber_bett'] = (w('bett_abstand') + L['zc_min']
+    # Plattenunterkante in der tiefsten Arbeitsstellung (Softlimit), ueber
+    # dem Bett gemessen; mechanisch ganz unten zum Vergleich.
+    L['platte_ueber_bett'] = (w('bett_abstand') + L['zc_unten']
                               + L['schlitten_unten_rel'])
+    L['platte_ueber_bett_mech'] = (w('bett_abstand') + L['zc_min']
+                                   + L['schlitten_unten_rel'])
 
     # ---- Schraubenlaenge Schlittenplatte -> Z-Wagen -------------------------
     # Naechste gerade Laenge ueber pad_hoehe + Mindesteingriff. Nicht
@@ -2004,6 +2031,11 @@ def hinweise_bauen(L, zc, fehler):
             L['zc_min'], L['zc_max']),
         '  mechanischer Verfahrweg: {:.1f} mm'.format(L['z_weg']),
         '  begrenzt durch: {}'.format(L['zc_bindend']),
+        '  Softlimit unten: zc >= {:+.1f} mm, die Schlittenplatte bleibt'
+        .format(L['zc_unten']),
+        '    {:.0f} mm ueber der Opferplatte (mechanisch ginge es {:.1f} mm'
+        .format(w('bett_luft'), -L['platte_ueber_bett_mech']),
+        '    unter ihre Oberflaeche)',
         '  Arbeitsweg bis zum Endschalter: {:.1f} mm (gebraucht {:.0f} mm'.format(
             L['z_arbeit'], w('werkstueck_max')),
         '    fuer 0..{:.0f} mm Werkstueck)'.format(w('werkstueck_max')),

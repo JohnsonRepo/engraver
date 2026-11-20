@@ -78,7 +78,7 @@ def main():
     sm = bauraum.modul_laden(SPANNMITTEL, 'spannmittel')
     sw, SL = sm.w, sm.lage()
     z0 = SL['z0']
-    frei = TL['zc_min'] + TL['schlitten_unten_rel'] - OL['platte_z'][1]
+    frei = TL['zc_unten'] + TL['schlitten_unten_rel'] - OL['platte_z'][1]
     # gezeichnet in Spannkoordinaten; die Felder sind gespiegelt (a_rueck,
     # b_runter), so dass das Bild der Maschine entspricht. Die Platte liegt
     # nicht mittig zum Feld: in Spannkoordinaten zurueckgedreht.

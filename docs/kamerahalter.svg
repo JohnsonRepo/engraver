@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1272" height="1230" viewBox="0 0 1272 1230" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1272" height="1230" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Kamerahalter für den Autofokus (Kamerahalter.py Rev. 2)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1272" height="1230" viewBox="0 0 1272 1230" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1272" height="1230" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Kamerahalter für den Autofokus (Kamerahalter.py Rev. 3)</text>
 <text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Die Kamera sitzt hochkant und geneigt auf dem vorderen 2060 am rechten 2040, vor dem Elektronikfach, und sieht den Laserpunkt am Messpunkt je nach Werkstückdicke höher oder tiefer im Bild.</text>
 <clipPath id="drauf"><rect x="40.0" y="100.0" width="480.0" height="440.0"/></clipPath>
 <g clip-path="url(#drauf)">
@@ -97,9 +97,9 @@
 <text x="881.3" y="448.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kamera</text>
 <clipPath id="schnitt"><rect x="40.0" y="600.0" width="467.2" height="445.0"/></clipPath>
 <g clip-path="url(#schnitt)">
-<rect x="217.3" y="962.5" width="1098.8" height="63.2" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="217.3" y="899.2" width="1098.8" height="63.2" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
 <rect x="114.5" y="812.5" width="63.0" height="150.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<rect x="272.7" y="955.0" width="41.1" height="7.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="272.7" y="891.8" width="41.1" height="7.5" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="671.8" y="615.0" width="63.0" height="50.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.8"/>
 <rect x="561.6" y="315.0" width="7.3" height="87.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.8"/>
 <rect x="552.4" y="315.0" width="16.5" height="87.5" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.8"/>
@@ -112,8 +112,8 @@
 <rect x="511.3" y="448.8" width="17.3" height="80.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.8"/>
 <rect x="511.2" y="448.8" width="0.0" height="20.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.8"/>
 <rect x="382.1" y="466.6" width="110.2" height="269.0" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.8"/>
-<rect x="313.8" y="955.0" width="413.0" height="7.5" fill="#f7ecd6" stroke="#a8783a" stroke-width="0.8"/>
-<rect x="313.8" y="817.5" width="413.0" height="145.0" fill="none" stroke="#a8783a" stroke-width="0.8" stroke-dasharray="4 3"/>
+<rect x="313.8" y="891.8" width="413.0" height="7.5" fill="#f7ecd6" stroke="#a8783a" stroke-width="0.8"/>
+<rect x="313.8" y="817.5" width="413.0" height="81.8" fill="none" stroke="#a8783a" stroke-width="0.8" stroke-dasharray="4 3"/>
 <rect x="121.6" y="801.2" width="54.3" height="11.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="134.7" y="759.3" width="8.8" height="43.2" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <polygon points="134.7,760.6 143.5,765.3 175.0,705.5 166.1,700.9" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
@@ -124,31 +124,31 @@
 <line x1="177.5" y1="745.0" x2="507.2" y2="750.9" stroke="#2f5d92" stroke-width="0.7" stroke-dasharray="3 3"/>
 <line x1="177.5" y1="745.0" x2="507.2" y2="1207.6" stroke="#2f5d92" stroke-width="0.7" stroke-dasharray="3 3"/>
 <line x1="177.5" y1="745.0" x2="507.2" y2="918.6" stroke="#2f5d92" stroke-width="0.7" stroke-dasharray="8 3 2 3"/>
-<line x1="177.5" y1="745.0" x2="437.2" y2="962.5" stroke="#2f5d92" stroke-width="1.2"/>
-<circle cx="437.2" cy="962.5" r="2.5" fill="#b4342f" stroke="#b4342f" stroke-width="0.8"/>
+<line x1="177.5" y1="745.0" x2="437.2" y2="899.2" stroke="#2f5d92" stroke-width="1.2"/>
+<circle cx="437.2" cy="899.2" r="2.5" fill="#b4342f" stroke="#b4342f" stroke-width="0.8"/>
 <line x1="177.5" y1="745.0" x2="437.2" y2="817.5" stroke="#2f5d92" stroke-width="1.2"/>
 <circle cx="437.2" cy="817.5" r="2.5" fill="#b4342f" stroke="#b4342f" stroke-width="0.8"/>
 </g>
 <rect x="40.0" y="600.0" width="467.2" height="445.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="40.0" y="592.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Schnitt längs der Sichtlinie (54° Bildwinkel senkrecht)</text>
-<line x1="437.2" y1="962.5" x2="377.2" y2="984.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="437.2" cy="962.5" r="1.4" fill="#5b6472"/>
-<text x="374.2" y="987.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">0 mm: 12,2° unter der Achse</text>
+<line x1="437.2" y1="899.2" x2="377.2" y2="921.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="437.2" cy="899.2" r="1.4" fill="#5b6472"/>
+<text x="374.2" y="924.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">0 mm: 2,9° unter der Achse</text>
 <line x1="437.2" y1="817.5" x2="391.2" y2="787.5" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="437.2" cy="817.5" r="1.4" fill="#5b6472"/>
-<text x="388.2" y="790.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">58 mm: 12,2° über der Achse</text>
+<text x="388.2" y="790.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">33 mm: 12,2° über der Achse</text>
 <line x1="392.1" y1="725.6" x2="368.1" y2="699.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="392.1" cy="725.6" r="1.4" fill="#5b6472"/>
 <text x="365.1" y="702.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Laser am Messpunkt, Z oben</text>
 <line x1="127.5" y1="887.5" x2="157.5" y2="941.5" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="127.5" cy="887.5" r="1.4" fill="#5b6472"/>
 <text x="160.5" y="944.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2060 vorn</text>
-<line x1="387.2" y1="987.5" x2="357.2" y2="1009.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="387.2" cy="987.5" r="1.4" fill="#5b6472"/>
-<text x="354.2" y="1012.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte</text>
-<line x1="275.2" y1="957.5" x2="265.2" y2="931.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="275.2" cy="957.5" r="1.4" fill="#5b6472"/>
-<text x="262.2" y="934.5" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag</text>
+<line x1="387.2" y1="924.2" x2="357.2" y2="946.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="387.2" cy="924.2" r="1.4" fill="#5b6472"/>
+<text x="354.2" y="949.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte</text>
+<line x1="275.2" y1="894.2" x2="265.2" y2="868.2" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="275.2" cy="894.2" r="1.4" fill="#5b6472"/>
+<text x="262.2" y="871.2" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag</text>
 <clipPath id="halter"><rect x="560.0" y="600.0" width="294.4" height="339.2"/></clipPath>
 <g clip-path="url(#halter)">
 <rect x="629.2" y="913.6" width="161.2" height="384.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
@@ -231,15 +231,15 @@
 <text x="1116.8" y="647.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Kabelkante</text>
 <text x="40.0" y="1072.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Zahlen</text>
 <text x="40.0" y="1090.0" font-size="8.5" fill="#5b6472" text-anchor="start">Kamera</text>
-<text x="118.0" y="1090.0" font-size="8.5" fill="#1c2733" text-anchor="start">Raspberry Pi Kamera v1.3 (OV5647, wie verbaut), hochkant; Linse 87 mm über der Platte, 30,5 mm vom rechten 2040</text>
+<text x="118.0" y="1090.0" font-size="8.5" fill="#1c2733" text-anchor="start">Raspberry Pi Kamera v1.3 (OV5647, wie verbaut), hochkant; Linse 62 mm über der Platte, 30,5 mm vom rechten 2040</text>
 <text x="40.0" y="1105.0" font-size="8.5" fill="#5b6472" text-anchor="start">Fokus</text>
-<text x="118.0" y="1105.0" font-size="8.5" fill="#1c2733" text-anchor="start">fest ab Werk (1 m bis ∞): Linse auf 120 mm drehen, dann höchstens 3,1 Pixel unscharf</text>
+<text x="118.0" y="1105.0" font-size="8.5" fill="#1c2733" text-anchor="start">fest ab Werk (1 m bis ∞): Linse auf 114 mm drehen, dann höchstens 1,6 Pixel unscharf</text>
 <text x="40.0" y="1120.0" font-size="8.5" fill="#5b6472" text-anchor="start">Blick</text>
 <text x="118.0" y="1120.0" font-size="8.5" fill="#1c2733" text-anchor="start">232,6° (schräg nach hinten links), 27,8° nach unten geneigt</text>
 <text x="40.0" y="1135.0" font-size="8.5" fill="#5b6472" text-anchor="start">Messpunkt</text>
-<text x="118.0" y="1135.0" font-size="8.5" fill="#1c2733" text-anchor="start">G54 X−30 Y+58 (Nullpunkt in der Anschlagecke); 108 bis 136 mm von der Linse</text>
+<text x="118.0" y="1135.0" font-size="8.5" fill="#1c2733" text-anchor="start">G54 X−30 Y+58 (Nullpunkt in der Anschlagecke); 108 bis 121 mm von der Linse</text>
 <text x="40.0" y="1150.0" font-size="8.5" fill="#5b6472" text-anchor="start">Bild</text>
-<text x="118.0" y="1150.0" font-size="8.5" fill="#1c2733" text-anchor="start">Punkt auf der Achse quer, −12,2 bis 12,2° senkrecht (Bild ±26,8°); 15,3 Pixel je mm Höhe</text>
+<text x="118.0" y="1150.0" font-size="8.5" fill="#1c2733" text-anchor="start">Punkt auf der Achse quer, −2,9 bis 12,2° senkrecht (Bild ±26,8°); 18,4 Pixel je mm Höhe</text>
 <text x="40.0" y="1165.0" font-size="8.5" fill="#5b6472" text-anchor="start">Luft</text>
 <text x="118.0" y="1165.0" font-size="8.5" fill="#1c2733" text-anchor="start">Laser bis X 204,8 / Y 182, Halter ab X 208,3; Fach 1 mm hinter dem Fuß</text>
 <text x="40.0" y="1180.0" font-size="8.5" fill="#5b6472" text-anchor="start">Schrauben</text>

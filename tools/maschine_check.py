@@ -443,7 +443,7 @@ def main():
         namen.append('{}_r{}'.format(m.SKRIPT_NAME, m.REVISION))
     if 'Opferplatte' in module:
         om = module['Opferplatte']
-        namen += ['Fuss_{}_{}'.format(s, e) for s in om.SEITEN
+        namen += [om.halter_name(s, e) for s in om.SEITEN
                   for e in om.ENDEN]
     doppelt = sorted({n for n in namen if namen.count(n) > 1})
     p.info('{} Namen gefunden'.format(len(set(namen))))

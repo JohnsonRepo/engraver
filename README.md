@@ -201,12 +201,12 @@ Ein **Raspberry Pi Zero 2 W** mit [CNCjs](https://cnc.js.org/) ersetzt den
 PC am USB des Uno. LightBurn auf dem Mac speichert Aufträge als G-Code-Datei,
 gestartet werden sie im Browser am iPad, iPhone oder Mac. Der Pi schickt die
 Datei selbst an den Uno, ein Abbruch des WLAN hält den Auftrag nicht an.
-Er hängt mit einem **5-V-Wandler** vor Schalter und Not-Aus an der Buchse
-(W18, W6, W19) und versorgt über USB den Uno (W17). Not-Aus und Schalter
-trennen weiter Motoren, Laser und Lüfter, der 24-V-Wächter meldet es an
-GRBL. Der Pi steht im Elektronikfach senkrecht an der Fugenwand, seine
-Oberkante 11 mm über dem 2060; der 5-V-Wandler versorgt über die Wago
-+5 V auch die Lichtschranken.
+Er hängt mit einem **5-V-Wandler** hinter dem Schalter, aber vor dem
+Not-Aus (W18, W6, W19) und versorgt über USB den Uno (W17). Der Schalter
+schaltet alles aus, auch Pi und Uno. Der Not-Aus trennt nur Motoren, Laser
+und Lüfter, der 24-V-Wächter meldet es an GRBL. Der Pi steht im
+Elektronikfach senkrecht an der Fugenwand, seine Oberkante 11 mm über dem
+2060; der 5-V-Wandler versorgt über die Wago +5 V auch die Lichtschranken.
 Die Software in [`pi/`](pi) richtet ein Skript ein (CNCjs 1.11.5 als
 Dienst, Makros für Rahmen und Laserpunkt, Herunterfahren aus dem Browser,
 ein eigenes WLAN, wenn beim Start keins da ist).

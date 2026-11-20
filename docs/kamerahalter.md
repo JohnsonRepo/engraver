@@ -211,9 +211,9 @@ berühren.
 * **Befestigen** mit Klebeband, nicht mit festgezogenen Kabelbindern; die
   schneiden in die Folie. Das Kabel liegt fest und bewegt sich nicht —
   dauerndes Biegen wie in einer Energiekette hält es nicht aus.
-* **Einstecken nur stromlos:** Der Pi hängt vor Schalter und Not-Aus, der
-  Schalter macht ihn nicht stromlos. Erst in CNCjs **Pi herunterfahren**,
-  dann das Netzteil ziehen.
+* **Einstecken nur stromlos:** Erst in CNCjs **Pi herunterfahren**, dann
+  den Schalter aus. Er macht auch den Pi stromlos, denn W18 hängt hinter
+  dem Schalter; der Not-Aus allein tut das nicht.
 * **Enden:** das breite (15 Pole) an die Kamera, das schmale (22 Pole) an
   den Pi. Bügel der Buchse vorsichtig öffnen, Kabel gerade bis zum Anschlag
   einschieben, Bügel schließen; an beiden Enden zeigen die blanken Kontakte

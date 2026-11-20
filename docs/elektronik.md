@@ -70,10 +70,10 @@ der 2040.
 |---|---|---|
 | Steuerung: Uno R3 + CNC Shield V3 + 4 × TMC2209 | im [Elektronikfach](#elektronikfach) links, 24-V-Lüfter im linken Deckel über den Treibern; USB nach rechts zum Pi | gezeichnet |
 | Netzteil | **Steckernetzteil GIDEALED 24 V / 3 A (72 W)**, steht außerhalb — ins Fach kommt nur seine 24-V-Leitung | vorhanden |
-| 24-V-Eingang | Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5, Körper Ø20,0 `[v]`); in Rev. 1 in der Rückwand der rechten Hälfte, seit Rev. 2 in der Front, der Schalter im aufgebohrten Durchbruch für Air Assist; an der Buchse zweigt vor dem Schalter W18 zum 5-V-Wandler ab | gezeichnet, verbaut |
+| 24-V-Eingang | Einbaubuchse 5,5 × 2,1 mm (M8) und runder Wippschalter (Blende Ø22,5, Körper Ø20,0 `[v]`); in Rev. 1 in der Rückwand der rechten Hälfte, seit Rev. 2 in der Front, der Schalter im aufgebohrten Durchbruch für Air Assist; hinter dem Schalter, an seinem Kontakt 2, zweigt W18 zum 5-V-Wandler ab: Der Schalter schaltet alles, auch den Pi | gezeichnet, verbaut |
 | Verteiler | Abwärtswandler 24 → 12 V / 5 A für den Laser (43 × 24 × 20 mm) links hinten neben dem Uno; Wago +24 V und GND (221-420) rechts hinten vor Buchse und Schalter; Wago +5 V und GND 5 V (221-415) senkrecht an der linken Endwand, gespeist vom 5-V-Wandler über W6 | gezeichnet; Wandler und drei Wago vorhanden, die zweite 221-415 neu |
-| Not-Aus | in der Frontwand des Elektronikfachs, links neben Buchse und Schalter (im Schalterloch aus Rev. 1; seit Elektronikfach Rev. 2, so verbaut); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet Laser und Motoren ab, der 24-V-Wächter meldet es an GRBL | vorhanden, verbaut |
-| Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | Pi senkrecht an der Fugenwand der linken Hälfte, der Wandler rechts vorn ([pi.md](pi.md#im-elektronikfach)); hängt vor Schalter und Not-Aus an der Buchse und versorgt über USB den Uno | gezeichnet |
+| Not-Aus | in der Frontwand des Elektronikfachs, links neben Buchse und Schalter (im Schalterloch aus Rev. 1; seit Elektronikfach Rev. 2, so verbaut); Pilztaster mit Wechsler, C–NC in der 24-V-Leitung — schaltet nur Laser, Motoren und Lüfter ab, Pi und Uno laufen weiter; der 24-V-Wächter meldet es an GRBL | vorhanden, verbaut |
+| Pi: Raspberry Pi Zero 2 W mit CNCjs, 5-V-Wandler 24 → 5 V | Pi senkrecht an der Fugenwand der linken Hälfte, der Wandler rechts vorn ([pi.md](pi.md#im-elektronikfach)); hängt hinter dem Schalter und vor dem Not-Aus (W18 an Kontakt 2 des Schalters) und versorgt über USB den Uno | gezeichnet |
 
 Das Fach hängt an der **Rückseite des hinteren 2060** mit 6 × M5 in
 Hammermuttern (je Ohr 2 in der unteren und oberen Nut, innen je 1 in der
@@ -336,7 +336,7 @@ in `tools/elektronik_check.py` (Abschnitt 15), jeweils am längsten Weg:
 | Leitung | Strom | Litze | warum |
 |---|---|---|---|
 | 24 V: Buchse → Schalter → Not-Aus → Wago +24 V, Buchse − → Wago GND, Wago → Shield und Wandler | bis 3 A (Netzteil) | **0,75 mm² (AWG 18)**, rot und schwarz | belastbar 6 A (VDE 0298-4, flexible Leitung); 0,5 mm² hätte genau die 3 A. Not-Aus 1 m hin und zurück: 0,14 V bei 3 A |
-| 24 V zum 5-V-Wandler (W18): Buchse → Wandler | 0,19 A, bei einem Kurzschluss im Wandler bis 3 A | **0,75 mm²**, rot und schwarz | wie die 24-V-Leitung, weil sie vor Schalter und Not-Aus hängt: Das Netzteil begrenzt erst bei 3 A. 0,2 m: unter 0,01 V |
+| 24 V zum 5-V-Wandler (W18): Schalter, Kontakt 2 → Wandler, GND von der Buchse | 0,19 A, bei einem Kurzschluss im Wandler bis 3 A | **0,75 mm²**, rot und schwarz | wie die 24-V-Leitung: Eine Sicherung gibt es nicht, das Netzteil begrenzt erst bei 3 A. 0,25 m: unter 0,01 V |
 | 5 V (W6, W19) und USB (W17) | W6 0,76 A (alles an 5 V), W19 0,68 A (Pi, über ihn Uno und Treiberlogik), W17 0,08 A (Uno, Treiberlogik) | W6 **0,75 mm²**; W19 fertiges Micro-USB-Kabel mit Stromadern mindestens AWG 24; W17 fertiges USB-Kabel | W6 0,33 m: 0,01 V. W6 + W19 mit AWG 24: 0,07 V; mit AWG 28 blieben am Pi 4,84 V, unter ≈ 4,63 V meldet er Unterspannung `[w]`, und die Wago hält AWG 28 nicht sicher. W17 0,25 m: 0,01 V mit AWG 28 |
 | Laser: +12 V, GND, PWM | 1,8 A | **3 × 0,34 mm² (AWG 22)** | dicker passt nicht in den XH-Kontakt am Laser; 2 m: 0,37 V = 3 % von 12 V |
 | Motoren | 1,05 A je Spule | **4 × AWG 24 (0,2 mm²)** | dicker passt nicht in den PH-Kontakt am Motor; Z-Motor, 2 m: 0,35 Ω = 15 % der Wicklung. Fertige Motorkabel mit AWG 26 gehen auch (24 %) |
@@ -365,24 +365,27 @@ und Shield, die Reihenfolge beim Anschließen und die Inbetriebnahme mit
 Tests stehen in [verkabelung.md](verkabelung.md). Plan und Tabellen
 entstehen aus derselben Kabelliste (`tools/verkabelung.py`).
 
-Die 24 V teilen sich an der Einbaubuchse in zwei Zweige:
+Der Schalter schaltet alles. Hinter ihm, an seinem Kontakt 2, teilen sich
+die 24 V in zwei Zweige; nur einer läuft über den Not-Aus:
 
 ```
-Netzteil ── Buchse ─┬─ W1 ── Schalter ── W2 ── Not-Aus ── W2 ── Wago +24 V: Shield, Wandler 12 V, Lüfter
-                    └─ W18 ── 5-V-Wandler ── W6 ── Wago +5 V ─┬─ W19 ── Pi ── W17 (USB) ── Uno
-                                                              └─ W9–W11: Lichtschranken
+Netzteil ── Buchse ── W1 ── Schalter ─┬─ W2 ── Not-Aus ── W2 ── Wago +24 V: Shield, Wandler 12 V, Lüfter
+                                      └─ W18 ── 5-V-Wandler ── W6 ── Wago +5 V ─┬─ W19 ── Pi ── W17 (USB) ── Uno
+                                                                                └─ W9–W11: Lichtschranken
 ```
 
-* **Zweig mit Schalter und Not-Aus:** Shield (Motoren), Abwärtswandler
+* **Zweig mit Not-Aus:** Shield (Motoren), Abwärtswandler
   12 V (Laser) und Lüfter. Fehlen hier die 24 V, meldet der 24-V-Wächter
   (W16) das an GRBL, und GRBL bricht ab.
-* **Zweig zum Pi:** W18 ist an der Buchse angelötet, **vor** Schalter und
-  Not-Aus. Der 5-V-Wandler im Fach gibt seine 5 V über den USB-A-Adapter
-  und W6 an die Wago +5 V. Von dort gehen W19 in **PWR IN** des Pi und die
-  drei Lichtschranken ab. Über W17 an der Buchse **USB** bekommt der Uno
-  Daten und 5 V vom Pi; der Stift 5V am Shield bleibt frei. Pi und Uno
-  laufen also, sobald das Netzteil steckt. Einschalten heißt: Netzteil einstecken, dann den Schalter
-  ([pi.md, Strom](pi.md#strom)).
+* **Zweig zum Pi:** Das Rot von W18 ist an Kontakt 2 des Schalters
+  angelötet, **hinter** dem Schalter und **vor** dem Not-Aus (seit
+  2026-11-13; vorher an der Buchse, vor dem Schalter). Der 5-V-Wandler im
+  Fach gibt seine 5 V über den USB-A-Adapter und W6 an die Wago +5 V. Von
+  dort gehen W19 in **PWR IN** des Pi und die drei Lichtschranken ab. Über
+  W17 an der Buchse **USB** bekommt der Uno Daten und 5 V vom Pi; der Stift
+  5V am Shield bleibt frei. Pi und Uno laufen also, sobald der Schalter an
+  ist, auch bei gedrücktem Not-Aus. Schalter aus heißt: alles aus, auch der
+  Pi; vorher den Pi herunterfahren ([pi.md, Strom](pi.md#strom)).
 * **Masse:** Buchse − an die Wago GND (W1) und an IN− des 5-V-Wandlers
   (W18). Dessen USB-Masse geht über W6 an die Wago GND 5 V, an der
   Lichtschranken und Pi hängen (gemeinsame Masse im Wandler `[w]`,
@@ -414,7 +417,7 @@ Zu den Teilen:
 |---|---|---|
 | 1 | Abwärtswandler 24 → 12 V / 5 A, 43 × 24 × 20 mm | vorhanden |
 | 1 | Einbaubuchse 5,5 × 2,1 mm mit M8-Gewinde (Fach: Loch 8,2) | 24-V-Eingang |
-| 1 | Wippschalter rund (Blende Ø22,5, Einbauloch Ø20), ≥ 3 A | EIN/AUS |
+| 1 | Wippschalter rund (Blende Ø22,5, Körper Ø20), ≥ 3 A | EIN/AUS für alles, auch den Pi |
 | 1 | Lüfter 40 × 40 × 10 mm, 24 V | über den Treibern |
 | 2 | Energiekette, gedruckt: Anfangsstück und Endstück 180, 17 Glieder für X, 16 für Y (gleiche Größe) | X und Y; Wannen, Stützen, Träger und Halter: [energiekette.md](energiekette.md#verschraubung) |
 | 2 + 2 | Wago 221-420 (+24 V, GND), 221-415 (+5 V, GND 5 V); 221-413 Reserve | vorhanden bis auf die zweite 221-415 |

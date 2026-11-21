@@ -43,6 +43,8 @@
 # demselben Tisch, die Oberflaeche liegt 25,3 mm ueber der Unterkante der
 # 2060 (Z -103,7). Bis Rev. 2 lag sie auf Fuessen, die es nur im Modell
 # gab, bei Z -129. Die Teile selbst sind unveraendert.
+# Rev. 4: Die Platte liegt 2 mm weiter links (Opferplatte.py Rev. 5, die
+# Nasen am Ende der 2060); nur die Referenzplatte.
 #
 # Konventionen: siehe fusion-python/SKILL.md. Eine Bohrlehre gibt es nicht:
 # Die Spanplattenschrauben gehen ohne Vorbohren in die Opferplatte.
@@ -52,14 +54,14 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Spannmittel'
-REVISION = 3
+REVISION = 4
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
 MASSE = {
     # --- Opferplatte und Arbeitsfeld (wie Opferplatte.py) [v] ---------------
-    'platte_x0':         (-295.0, 'Opferplatte: linke Kante (am Anschlag)'),
-    'platte_x1':          (320.0, 'Opferplatte: rechte Kante'),
+    'platte_x0':         (-297.0, 'Opferplatte: linke Kante (am Anschlag)'),
+    'platte_x1':          (318.0, 'Opferplatte: rechte Kante'),
     'platte_y0':        (-176.65, 'Opferplatte: hintere Kante'),
     'platte_y1':         (172.35, 'Opferplatte: vordere Kante'),
     'platte_z0':         (-129.0, 'Opferplatte: Unterseite = Tisch = Unterkante 2060'),

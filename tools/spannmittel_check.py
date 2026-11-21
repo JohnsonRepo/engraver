@@ -195,7 +195,7 @@ def main():
     # ------------------------------------------------------------------
     p.titel('3) Anschlagwinkel: fest vorn rechts (seit Rev. 2)')
     xi, yi = SL['aw_ecke_maschine']
-    sp = ow('platte_spiel')
+    sp = OL['spiel_y']                  # Luft der Platte zwischen den 2060
     p.info('Innenecke an der Maschine: X {:+.2f}, Y {:+.2f}'.format(xi, yi))
     p.ok('Innenecke im Arbeitsfeld (X)', sw('feld_x1') - xi, 1.0)
     p.ok('Innenecke im Arbeitsfeld (Y), Platte ganz nach vorn geschoben',
@@ -205,8 +205,8 @@ def main():
          SL['platte_y'][1] - vorn.y[1], 1.0)
     p.ok('rechter Schenkel ganz auf der Platte',
          SL['platte_x'][1] - rechts.x[1], 1.0)
-    p.ok('Platte samt Anschlag laesst sich herausziehen (vor der Fuehrung '
-         'frei)', OL['fuehrung_y']['vorn'] - vorn.y[1], 1.0)
+    p.ok('Platte samt Anschlag laesst sich herausziehen (am vorderen 2060 '
+         'vorbei)', OL['quer_y']['vorn'][0] - vorn.y[1], 1.0)
     p.ok('Drehung zweimal = Ausgangslage', max(
         abs(a - b) for a, b in zip(
             sm.nach_maschine(*sm.nach_maschine(12.0, -100.0, -129.0)),

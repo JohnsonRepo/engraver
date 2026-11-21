@@ -3,7 +3,7 @@
     "type": "script",
     "author": "Johnson",
     "description": {
-        "": "Vier Halter innen an den Enden der beiden 2060, je 2x M5 in Hammermuttern der inneren unteren Seitennut: Sie fuehren die Opferplatte, die wie die Maschine auf dem Tisch liegt. Links der Anschlag fuer das Plattenende, rechts eine Einfuehrschraege, herausgezogen wird nach rechts. Dazu ein Klappriegel vor dem rechten Plattenende: Er dreht sich um eine M5 laengs X am Lagerbock auf einem Ausleger der Endplatte vorn rechts, ein Stoss gegen die Platte kann ihn nicht aufklappen. Ausserdem die Opferplatte (Spanplatte 615 x 349 x 25, gemessen 25,3 dick, vorhanden) und, nur zur Ansicht, die beiden 2060 und 2040 (nicht drucken)."
+        "": "Zwei Anschlaege fuer die Opferplatte, je einer um das linke Ende eines 2060: Flansch aussen mit 2x M5 in Hammermuttern der aeusseren unteren Seitennut, Endplatte vor der Stirnseite, davor die Nase am Plattenende. Die Platte liegt ohne Spalt zwischen den 2060 auf dem Tisch und wird nach rechts herausgezogen. Ausserdem die Opferplatte (Spanplatte 615 x 349 x 25, gemessen 25,3 dick, vorhanden) und, nur zur Ansicht, die beiden 2060 und 2040 (nicht drucken)."
     },
     "supportedOS": "windows|mac",
     "editEnabled": true

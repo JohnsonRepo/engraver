@@ -54,7 +54,7 @@
 <text x="135.9" y="173.2" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Blick 233°, 28° geneigt</text>
 <clipPath id="blick"><rect x="580.0" y="100.0" width="466.4" height="413.6"/></clipPath>
 <g clip-path="url(#blick)">
-<rect x="-201.0" y="-376.6" width="1353.0" height="767.8" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="-205.4" y="-376.6" width="1353.0" height="767.8" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
 <rect x="411.4" y="35.1" width="440.0" height="330.0" fill="#f7ecd6" stroke="#a8783a" stroke-width="0.8"/>
 <rect x="741.4" y="365.1" width="132.0" height="22.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <rect x="851.4" y="255.1" width="22.0" height="132.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>

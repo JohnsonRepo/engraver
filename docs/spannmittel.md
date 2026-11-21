@@ -1,6 +1,6 @@
 # Spannmittel für die Opferplatte
 
-Erzeugt von `fusion/Spannmittel/Spannmittel.py` (Rev. 3). Geprüft mit
+Erzeugt von `fusion/Spannmittel/Spannmittel.py` (Rev. 4). Geprüft mit
 `python3 tools/spannmittel_check.py`, Zeichnung in
 [spannmittel.svg](spannmittel.svg) (neu erzeugen mit
 `python3 tools/spannmittel_zeichnen.py`). Die Opferplatte selbst steht in
@@ -57,7 +57,7 @@ vorderen Niederhalter, dort sind es 1,5 mm.
 Seit Rev. 3 (2026-11-21) liegt die Platte im Modell, wo sie an der
 Maschine liegt: mit der Maschine auf demselben Tisch, Oberfläche Z −103,7
 statt −129 ([opferplatte.md](opferplatte.md)). Die Teile sind dieselben,
-nur 25,3 mm höher im Modell.
+nur 25,3 mm höher im Modell. Seit Rev. 4 liegt sie 2 mm weiter links, an den Nasen der Anschläge am Ende der 2060 ([opferplatte.md](opferplatte.md)).
 
 ## Anschlagwinkel
 
@@ -68,13 +68,13 @@ nur 25,3 mm höher im Modell.
 | Schenkel | 50 mm ab der Innenecke, 10 mm breit, 3 mm hoch |
 | Befestigung | 3 Spanplattenschrauben 3,0 × 20 mit Senkkopf |
 | Platz | Vor dem Arbeitsfeld hat die Platte nur 7,85 mm Rand. Mit der Innenecke 4 mm im Feld bleiben vor dem Schenkel noch 1,85 mm, und vor einem Werkstück neben dem Schenkel ist Platz für einen Niederhalter. |
-| Herausziehen | Die Platte lässt sich samt Anschlag nach rechts herausziehen, er bleibt 2,85 mm hinter der vorderen Führung |
+| Herausziehen | Die Platte lässt sich samt Anschlag nach rechts herausziehen, er bleibt 1,85 mm hinter dem vorderen 2060 |
 
 ### Nullpunkt einrichten (einmal)
 
-1. Die Platte nach links an ihren Anschlag und nach vorn an die Führung
-   schieben. Damit ist ihre Luft von 1 mm je Seite weg, und der Nullpunkt
-   liegt jedes Mal gleich.
+1. Die Platte nach links an die Nasen der beiden Anschläge schieben. In Y
+   liegt sie ohne Spalt zwischen den 2060, so liegt der Nullpunkt jedes
+   Mal gleich.
 2. Referenzieren (`$H`). Dann den Laser mit 1 % Leistung als Punkt genau
    auf die Innenecke fahren (Schutzbrille).
 3. `G10 L20 P1 X0 Y0` setzt dort den Werkstücknullpunkt (G54). GRBL

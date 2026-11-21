@@ -95,9 +95,11 @@
 #   ToolheadZ      Toolhead mit Z-Achse (Z in der Mitte des Wegs), dazu
 #                  seine Kaufteile vereinfacht (Ref_Toolhead): Z-Fuehrung,
 #                  Z-Motor, Kupplung, Spindel, Mutter, Laser, Lichtschranke
-#   Opferplatte    Halter innen an den 2060 (Anschlag, Fuehrung), Riegel,
-#                  Opferplatte auf dem Tisch; seit Rev. 34 ohne Fuesse
-#                  (Opferplatte.py Rev. 4: es gab sie nur im Modell)
+#   Opferplatte    zwei Anschlaege um das linke Ende der 2060, Opferplatte
+#                  auf dem Tisch (Opferplatte.py Rev. 5). Die 2060 stehen
+#                  an der Maschine innen 349 mm auseinander; das kennt bisher
+#                  nur Opferplatte.py, die Gruppe passt hier nicht an die
+#                  2060 dieses Modells
 #   Spannmittel    Anschlagwinkel, 2 Exzenter, 4 Niederhalter am
 #                  Beispielwerkstueck (der Satz der anderen Staerken nicht);
 #                  seit Rev. 31 mit der Ecke vorn rechts: in Spann-
@@ -151,7 +153,7 @@ import textwrap
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 34
+REVISION = 35
 
 # Gesamtmodell (seit Rev. 29, siehe oben): False baut nur das Portal.
 MASCHINE = True
@@ -4129,15 +4131,15 @@ def maschine_ToolheadZ(app, design, g, m, L, protokoll):
 
 
 def maschine_Opferplatte(app, design, g, m, L, protokoll):
-    """Halter, Riegel und Platte; ohne Referenz (nur die Profile)."""
+    """Die beiden Anschlaege und die Platte; ohne Referenz (nur die
+    Profile). Opferplatte.py kennt die neue Lage der 2060 (innen 349 mm),
+    Portal.py noch nicht: Anschlaege und Platte stehen deshalb nicht an
+    den 2060 dieses Modells."""
     O = m.lage()
     for s in m.SEITEN:
-        for e in m.ENDEN:
-            name = m.halter_name(s, e)
-            versuchen(protokoll, name, m.bau_halter, app, design,
-                      teil(g, name).component, O, s, e, protokoll)
-    versuchen(protokoll, 'Riegel', m.bau_riegel, app, design,
-              teil(g, 'Riegel').component, O, protokoll)
+        name = m.anschlag_name(s)
+        versuchen(protokoll, name, m.bau_anschlag, app, design,
+                  teil(g, name).component, O, s, protokoll)
     versuchen(protokoll, 'Opferplatte', m.bau_platte, app, design,
               teil(g, 'Opferplatte').component, O, protokoll)
 

@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1309" height="1367" viewBox="0 0 1309 1367" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1309" height="1367" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Spannmittel auf der Opferplatte (Spannmittel.py Rev. 3)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="1367" viewBox="0 0 1305 1367" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1305" height="1367" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Spannmittel auf der Opferplatte (Spannmittel.py Rev. 4)</text>
 <text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Anschlag vorn rechts (vor der Kamera) als Nullpunkt, Exzenter schieben das Werkstück in die Ecke, Niederhalter halten dünne Platten flach; alles flach genug für den Toolhead.</text>
-<clipPath id="drauf"><rect x="250.0" y="100.0" width="829.3" height="465.7"/></clipPath>
+<clipPath id="drauf"><rect x="250.0" y="100.0" width="825.3" height="465.7"/></clipPath>
 <g clip-path="url(#drauf)">
-<rect x="-166.7" y="-148.3" width="1230.0" height="698.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="-170.7" y="-148.3" width="1230.0" height="698.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
 <rect x="15.6" y="-132.6" width="782.4" height="666.6" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 3"/>
 <rect x="390.0" y="226.0" width="400.0" height="300.0" fill="#f7ecd6" stroke="#a8783a" stroke-width="0.8"/>
 <rect x="690.0" y="526.0" width="120.0" height="20.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
@@ -29,27 +29,27 @@
 </g>
 <text x="704.0" y="182.0" font-size="9.5" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">A</text>
 <text x="698.0" y="496.0" font-size="9.5" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">B</text>
-<rect x="250.0" y="100.0" width="829.3" height="465.7" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
+<rect x="250.0" y="100.0" width="825.3" height="465.7" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="250.0" y="92.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Von oben: vordere rechte Ecke der Platte (vorn unten)</text>
-<line x1="1023.3" y1="316.4" x2="1088.3" y2="316.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="1023.3" cy="316.4" r="1.5" fill="#5b6472"/>
-<text x="1091.3" y="319.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte</text>
-<line x1="797.0" y1="346.0" x2="1088.3" y2="346.4" stroke="#5b6472" stroke-width="0.6"/>
+<line x1="1019.3" y1="316.4" x2="1084.3" y2="316.4" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="1019.3" cy="316.4" r="1.5" fill="#5b6472"/>
+<text x="1087.3" y="319.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte</text>
+<line x1="797.0" y1="346.0" x2="1084.3" y2="346.4" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="797.0" cy="346.0" r="1.5" fill="#5b6472"/>
-<text x="1091.3" y="349.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Niederhalter rechts,</text>
-<text x="1091.3" y="359.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">neben dem Schenkel</text>
-<line x1="806.0" y1="438.0" x2="1088.3" y2="438.0" stroke="#5b6472" stroke-width="0.6"/>
+<text x="1087.3" y="349.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Niederhalter rechts,</text>
+<text x="1087.3" y="359.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">neben dem Schenkel</text>
+<line x1="806.0" y1="438.0" x2="1084.3" y2="438.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="806.0" cy="438.0" r="1.5" fill="#5b6472"/>
-<text x="1091.3" y="441.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlagwinkel, fest</text>
-<text x="1091.3" y="451.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3 mm hoch, 3 Schrauben</text>
-<line x1="798.0" y1="446.0" x2="1088.3" y2="478.0" stroke="#5b6472" stroke-width="0.6"/>
+<text x="1087.3" y="441.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlagwinkel, fest</text>
+<text x="1087.3" y="451.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3 mm hoch, 3 Schrauben</text>
+<line x1="798.0" y1="446.0" x2="1084.3" y2="478.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="798.0" cy="446.0" r="1.5" fill="#5b6472"/>
-<text x="1091.3" y="481.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arbeitsfeld</text>
-<text x="1091.3" y="491.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Strahl, gestrichelt)</text>
-<line x1="790.0" y1="526.0" x2="1088.3" y2="526.0" stroke="#5b6472" stroke-width="0.6"/>
+<text x="1087.3" y="481.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arbeitsfeld</text>
+<text x="1087.3" y="491.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Strahl, gestrichelt)</text>
+<line x1="790.0" y1="526.0" x2="1084.3" y2="526.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="790.0" cy="526.0" r="1.5" fill="#5b6472"/>
-<text x="1091.3" y="529.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Innenecke = Nullpunkt,</text>
-<text x="1091.3" y="539.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">4 mm im Arbeitsfeld</text>
+<text x="1087.3" y="529.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Innenecke = Nullpunkt,</text>
+<text x="1087.3" y="539.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">4 mm im Arbeitsfeld</text>
 <line x1="586.0" y1="178.0" x2="241.0" y2="178.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="586.0" cy="178.0" r="1.5" fill="#5b6472"/>
 <text x="238.0" y="181.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Exzenter hinten: schiebt</text>

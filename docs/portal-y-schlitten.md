@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 34, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 35, fünfundzwanzig
 gedruckte Teile; seit Rev. 29 dazu das
 [Gesamtmodell der ganzen Maschine](#gesamtmodell-die-ganze-maschine-seit-rev-29)).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
@@ -70,8 +70,8 @@ damit man im Browser sieht, welcher Stand gebaut wurde.
 | Gruppe | Inhalt |
 |---|---|
 | `ToolheadZ_r39` | alle Druckteile des Toolheads, Z-Wagen in der Mitte des Z-Wegs. Dazu in `Ref_Toolhead` die Kaufteile vereinfacht: Z-Schiene MGN9 mit Wagen, Z-Motor, Kupplung, Spindel Tr8×2 mit Mutter, Diodenlaser, Lichtschranke Z. Die Gruppe steht um die X-Wagenmitte verschoben (ToolheadZ rechnet X ab dort), also in der Mitte des X-Wegs |
-| `Opferplatte_r4` | vier Halter innen an den 2060 (Anschlag links, Führung rechts), Riegel (zu), Opferplatte auf dem Tisch. Bis Rev. 33 standen hier vier Füße, die es nur im Modell gab |
-| `Spannmittel_r3` | Anschlagwinkel, zwei Exzenter, die vier Niederhalter am Beispielwerkstück und das Werkstück selbst. Den Satz der anderen Stärken legt das eigene Skript neben die Platte, hier fehlt er. Seit Rev. 31 mit der Ecke vorn rechts: `Spannmittel.py` rechnet mit der Ecke hinten links, die Gruppe wird um 180° um die Senkrechte durch die Feldmitte gedreht (`gruppe_lage`, `dreh_xy`) |
+| `Opferplatte_r5` | zwei Anschläge um das linke Ende der 2060, Opferplatte auf dem Tisch. `Opferplatte.py` kennt die neue Lage der 2060 (innen 349 mm), `Portal.py` noch nicht: Die Gruppe passt deshalb nicht an die 2060 dieses Modells. Bis Rev. 33 standen hier vier Füße, die es nur im Modell gab, in Rev. 34 vier Halter und ein Riegel |
+| `Spannmittel_r4` | Anschlagwinkel, zwei Exzenter, die vier Niederhalter am Beispielwerkstück und das Werkstück selbst. Den Satz der anderen Stärken legt das eigene Skript neben die Platte, hier fehlt er. Seit Rev. 31 mit der Ecke vorn rechts: `Spannmittel.py` rechnet mit der Ecke hinten links, die Gruppe wird um 180° um die Senkrechte durch die Feldmitte gedreht (`gruppe_lage`, `dreh_xy`) |
 | `Elektronikfach_r2` | Fach und Deckel (Zwischenstand) und in `Ref_Elektronik` die Geräte: Uno, Pi, Wandler, Wago, Lüfter, Buchse, Schalter, Not-Aus. Seit Rev. 30 vor dem vorderen 2060 zwischen den Y-Motoren, wie verbaut: `Elektronikfach.py` rechnet in Fachkoordinaten, die Gruppe wird um 180° um die Senkrechte gedreht (`gruppe_lage`), darum steht `Fach_links` rechts |
 | `Kamerahalter_r3` | Halter, Kamera (v1.3), M5-Köpfe und die Sichtlinien zum Messpunkt. Seit Rev. 31 vorn rechts auf dem vorderen 2060, wie verbaut; das Skript baut gleich an der Maschine ([kamerahalter.md](kamerahalter.md)) |
 | `Kabelhalter_r2` | alle neun Halter, links fünf, rechts vier, rechts um 180° gedreht. Die Plätze stehen in `KABELHALTER_Y` in `Portal.py` und kommen aus `kabelhalter_check.py` ([kabelhalter.md](kabelhalter.md)) |

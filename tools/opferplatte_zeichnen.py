@@ -100,7 +100,7 @@ def main():
               'Tisch, ohne Spalt zwischen den 2060 (innen {} mm). Nur links '
               'ein Anschlag, um das Profilende herum.'.format(
                   de(ow('platte_l'), 0), de(ow('platte_b'), 0),
-                  de(ow('platte_dicke'), 1), de(ow('quer_innen'), 0)), 9,
+                  de(ow('platte_dicke'), 1), de(OL['quer_y']['vorn'][0] - OL['quer_y']['hinten'][1], 0)), 9,
               GRAU)]
 
     # ---- Feld 1: von oben, vorn unten ---------------------------------------
@@ -310,8 +310,8 @@ def main():
         ('Befestigung', 'je 2 × M5×{} + Scheibe in Hammermuttern der '
          'äußeren unteren Seitennut'.format(de(OL['m5_schraube'], 0))),
         ('Rahmen', '2060 innen {} mm, links {} / {} mm über das 2040 (Angabe '
-         '2026-11-21; Portal.py noch alt)'.format(
-             de(ow('quer_innen'), 0), de(ow('quer_ueber_vorn'), 0),
+         '2026-11-21, wie Portal.py)'.format(
+             de(OL['quer_y']['vorn'][0] - OL['quer_y']['hinten'][1], 0), de(ow('quer_ueber_vorn'), 0),
              de(ow('quer_ueber_hinten'), 0))),
     ]
     t.append(text(tx, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))

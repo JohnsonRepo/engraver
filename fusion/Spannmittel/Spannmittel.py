@@ -45,6 +45,9 @@
 # gab, bei Z -129. Die Teile selbst sind unveraendert.
 # Rev. 4: Die Platte liegt 2 mm weiter links (Opferplatte.py Rev. 5, die
 # Nasen am Ende der 2060); nur die Referenzplatte.
+# Rev. 5: Die Platte liegt zwischen den 2060 in ihrer neuen Lage (Portal.py
+# Rev. 36), Y -159 bis +190; das Arbeitsfeld endet hinten bei -120,5. Die
+# Ecke vorn rechts bleibt, wo sie war; die Teile sind unveraendert.
 #
 # Konventionen: siehe fusion-python/SKILL.md. Eine Bohrlehre gibt es nicht:
 # Die Spanplattenschrauben gehen ohne Vorbohren in die Opferplatte.
@@ -54,7 +57,7 @@ import math
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Spannmittel'
-REVISION = 4
+REVISION = 5
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -62,13 +65,13 @@ MASSE = {
     # --- Opferplatte und Arbeitsfeld (wie Opferplatte.py) [v] ---------------
     'platte_x0':         (-297.0, 'Opferplatte: linke Kante (am Anschlag)'),
     'platte_x1':          (318.0, 'Opferplatte: rechte Kante'),
-    'platte_y0':        (-176.65, 'Opferplatte: hintere Kante'),
-    'platte_y1':         (172.35, 'Opferplatte: vordere Kante'),
+    'platte_y0':         (-159.0, 'Opferplatte: hintere Kante'),
+    'platte_y1':          (190.0, 'Opferplatte: vordere Kante'),
     'platte_z0':         (-129.0, 'Opferplatte: Unterseite = Tisch = Unterkante 2060'),
     'platte_z1':         (-103.7, 'Opferplatte: Oberflaeche'),
     'feld_x0':          (-203.85, 'Arbeitsfeld: links'),
     'feld_x1':           (187.35, 'Arbeitsfeld: rechts'),
-    'feld_y0':           (-168.8, 'Arbeitsfeld: hinten'),
+    'feld_y0':           (-120.5, 'Arbeitsfeld: hinten'),
     'feld_y1':            (164.5, 'Arbeitsfeld: vorn'),
     'toolhead_frei':        (4.0, 'Toolhead mit Z ganz unten (Softlimit) ueber der Platte'),
 

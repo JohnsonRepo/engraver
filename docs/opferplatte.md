@@ -1,6 +1,6 @@
 # Opferplatte und Anschlag
 
-Erzeugt von `fusion/Opferplatte/Opferplatte.py` (zwei Druckteile, Rev. 5).
+Erzeugt von `fusion/Opferplatte/Opferplatte.py` (zwei Druckteile, Rev. 6).
 Geprüft mit `python3 tools/opferplatte_check.py`, Zeichnung in
 [opferplatte.svg](opferplatte.svg) (neu erzeugen mit
 `python3 tools/opferplatte_zeichnen.py`).
@@ -19,7 +19,9 @@ längs in X.
 **Maschine und Platte stehen auf demselben Tisch**, die Plattenoberfläche
 liegt 25,3 mm über der Unterkante der 2060. **Die beiden 2060 sind so nah
 zusammengeschoben, dass die Platte ohne Spalt zwischen ihnen liegt**
-(innen 349 mm, Angabe 2026-11-21). Die Profile führen sie damit in Y; es
+(innen 349 mm, 369 mm Mitte zu Mitte, das vordere 30 mm hinter dem
+vorderen Ende der 2040; Angabe 2026-11-21). Die Profile führen sie damit
+in Y; es
 braucht nur noch einen Anschlag für das linke Plattenende. Rechts hält
 nichts, dort wird sie herausgezogen.
 
@@ -27,7 +29,8 @@ nichts, dort wird sie herausgezogen.
 |---|---|
 | 1–3 | vier Füße unter den 2060, die es an der Maschine nie gab |
 | 4 | vier Halter zwischen Platte und 2060, rechts ein Klappriegel. Zwischen Platte und 2060 ist aber kein Platz |
-| **5** | **zwei Anschläge um das linke Ende der 2060**, sonst nichts |
+| 5 | zwei Anschläge um das linke Ende der 2060, sonst nichts |
+| **6** | **dasselbe, der Rahmen jetzt wie in `Portal.py` Rev. 36** (die Platte zwischen den 2060, das Arbeitsfeld hinten kürzer) |
 
 ## Wo sie liegt
 
@@ -37,18 +40,16 @@ Mitte des Portalrohrs, das Portal in der Mitte seines Wegs.
 | | |
 |---|---|
 | X | −297 bis +318: links an den Nasen der Anschläge, rechts steht sie 15 mm über die 2060, dort fasst du sie zum Herausziehen |
-| Y | −176,65 bis +172,35: zwischen den 2060, ohne Spalt; im Modell mittig unter dem Arbeitsfeld |
+| Y | −159 bis +190: zwischen den 2060, ohne Spalt |
 | Z | −129 bis −103,7: auf dem Tisch wie die 2060, unter den 2040 durch (34,7 mm Luft) |
-| Arbeitsfeld | 391 × 333 mm (X −204 bis +187, Y −168,8 bis +164,5), so weit kommt der Strahl |
-| Rand | in Y je Seite 7,85 mm Platte über das Feld hinaus, in X links 93 und rechts 131 mm |
+| Arbeitsfeld | 391 × 285 mm (X −204 bis +187, Y −120,5 bis +164,5), so weit kommt der Strahl |
+| Rand | in Y hinten 38,5 und vorn 25,5 mm Platte über das Feld hinaus, in X links 93 und rechts 131 mm |
 
-**Die neue Lage der 2060 kennt bisher nur `Opferplatte.py`.** `Portal.py`
-und die anderen Skripte rechnen noch mit der alten: innen 415 mm, das
-vordere 35 mm hinter dem vorderen Ende der 2040, links beide 33 mm über
-das 2040. Im Gesamtmodell stehen Anschläge und Platte deshalb nicht an den
-2060 des Portals. Wo die 2060 an der Maschine in Y genau stehen, ist nicht
-gemessen; im Modell liegt die Platte wie bisher mittig unter dem
-Arbeitsfeld.
+**Das Arbeitsfeld ist hinten kürzer als bisher (285 statt 333 mm).** Das
+hintere 2060 steht so weit vorn, dass der Toolhead mit Z unten 48 mm vor
+dem hinteren Schienenende an ihm anstieße. Das Softlimit `$131=282` hält
+ihn 3 mm davor ([endschalter.md](endschalter.md#grbl)). Vorn bleibt es,
+wie es war: Die Lichtschranke ist nicht mit dem vorderen 2060 gewandert.
 
 ## Die Anschläge
 
@@ -144,20 +145,10 @@ brauchst du nicht.
 
 ## Noch offen
 
-* **Rahmen im Gesamtmodell:** `Portal.py` und die anderen Skripte kennen
-  die neue Lage der 2060 noch nicht (innen 349 statt 415 mm, links 30 und
-  35 statt 33 mm über das 2040). Daran hängen das vordere Ende des Y-Wegs,
-  das Arbeitsfeld, Fach und Kamera. Die Prüfung meldet das unter
-  „OFFEN“.
-* **Y-Weg vorn:** `Portal.py` rechnet, dass der Toolhead mit Z unten vorn
-  bis 3 mm vor das vordere 2060 kommt. Wenn das 2060 nach hinten gewandert
-  ist und die Y-Lichtschranke nicht, kommt er ihm näher. Bis das gerechnet
-  ist: vorn nicht mit Z ganz unten fahren.
-* **Nicht gemessen:** wo die 2060 in Y stehen, ob Kappen auf den
-  Profilenden sitzen, und ob die äußere untere Seitennut am linken Ende
-  frei ist (bis Rev. 3 war sie es).
-* **`$132`** an der Maschine: Steht dort noch 82, kann die Schlittenplatte
-  in die Platte fahren. Der neue Wert ist 56.
+* **Nicht gemessen:** ob Kappen auf den Profilenden sitzen, und ob die
+  äußere untere Seitennut am linken Ende frei ist (bis Rev. 3 war sie es).
+* **`$132=56` und `$131=282`** an der Maschine setzen, falls noch nicht
+  geschehen ([verkabelung.md](verkabelung.md)).
 
 ## Parametrik
 

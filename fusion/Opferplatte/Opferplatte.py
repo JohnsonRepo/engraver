@@ -27,11 +27,10 @@
 # vier Halter zwischen Platte und 2060 und rechts einen Klappriegel; Rev.
 # 1-3 Fuesse unter den 2060, die es an der Maschine nie gab.
 #
-# NUR DIESES SKRIPT kennt die neue Lage der 2060 (innen 349 mm, links 30
-# bzw. 35 mm ueber das 2040). Portal.py und die anderen Skripte rechnen
-# noch mit der alten (innen 415 mm, das vordere 35 mm hinter dem vorderen
-# Ende der 2040); tools/opferplatte_check.py meldet das als offen. Die
-# Platte liegt hier wie bisher mittig unter dem Arbeitsfeld.
+# Rev. 6: Den Rahmen rechnet seit Portal.py Rev. 36 auch das Portal so:
+# das vordere 2060 30 mm hinter dem vorderen Ende der 2040, 369 mm Mitte
+# zu Mitte (innen = Plattenbreite). Die Platte liegt zwischen den 2060,
+# nicht mehr mittig unter dem Arbeitsfeld, deckt es aber.
 #
 # Koordinaten = Maschinenkoordinaten wie Portal.py, Portal in der Mitte
 # seines Wegs: X nach rechts, Y nach vorn, Z senkrecht, Z = 0 in der Mitte
@@ -46,7 +45,7 @@
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Opferplatte'
-REVISION = 5
+REVISION = 6
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -60,10 +59,11 @@ MASSE = {
     'rahmen_z0':          (-69.0, 'Rahmen: Unterkante der 2040 = Oberkante 2060'),
     'quer_laenge':        (600.0, '2060 quer: Laenge'),
     'quer_h':              (60.0, '2060 quer, hochkant: Hoehe'),
-    # --- Lage der 2060, Angabe 2026-11-21 [v] ---------------------------------
+    # --- Lage der 2060, Angabe 2026-11-21 [v] (wie Portal.py Rev. 36) -------
     # Zusammengeschoben, bis die Platte ohne Spalt dazwischen liegt; links
     # ragen sie so weit ueber die Aussenseite des linken 2040.
-    'quer_innen':         (349.0, '2060: Innenseiten auseinander (= Plattenbreite)'),
+    'quer_vorn_zurueck':   (30.0, 'vorderes 2060 so weit hinter der Stirnseite der 2040'),
+    'quer_abstand':       (369.0, '2060: Abstand Mitte zu Mitte (innen = Plattenbreite)'),
     'quer_ueber_vorn':     (30.0, 'vorderes 2060: links so weit ueber das 2040'),
     'quer_ueber_hinten':   (35.0, 'hinteres 2060: links so weit ueber das 2040'),
     'nut_mitte':           (10.0, 'Profil: Nutmitte 10 mm von der Kante'),
@@ -83,7 +83,7 @@ MASSE = {
     # Portal.py und ToolheadZ.py nach.
     'feld_x0':          (-203.85, 'Arbeitsfeld: links'),
     'feld_x1':           (187.35, 'Arbeitsfeld: rechts'),
-    'feld_y0':           (-168.8, 'Arbeitsfeld: hinten'),
+    'feld_y0':           (-120.5, 'Arbeitsfeld: hinten (Z unten 3 mm vor dem 2060)'),
     'feld_y1':            (164.5, 'Arbeitsfeld: vorn'),
 
     # --- Opferplatte [v] Angabe 2026-10-02 ------------------------------------
@@ -144,15 +144,15 @@ def lage():
     # untere Seitennut der 2060 (aussen nimmt sie die Hammermuttern)
     L['nut_seite_z'] = z_u + w('nut_mitte')
 
-    # ---- Opferplatte mittig unter dem Arbeitsfeld (Y); die 2060 liegen ohne
-    #      Spalt an ihr an (quer_innen = Plattenbreite)
-    fy = (w('feld_y0') + w('feld_y1')) / 2.0
-    pb = w('platte_b') / 2.0
-    L['platte_y'] = (fy - pb, fy + pb)
-    qi = w('quer_innen') / 2.0
-    L['quer_y'] = {'vorn': (fy + qi, fy + qi + b),
-                   'hinten': (fy - qi - b, fy - qi)}
-    L['spiel_y'] = (w('quer_innen') - w('platte_b')) / 2.0
+    # ---- 2060 wie Portal.py; die Platte liegt ohne Spalt dazwischen
+    v1 = w('rahmen_y1') - w('quer_vorn_zurueck')
+    L['quer_y'] = {'vorn': (v1 - b, v1),
+                   'hinten': (v1 - b - w('quer_abstand'),
+                              v1 - w('quer_abstand'))}
+    innen = L['quer_y']['vorn'][0] - L['quer_y']['hinten'][1]
+    L['spiel_y'] = (innen - w('platte_b')) / 2.0
+    y0 = L['quer_y']['hinten'][1] + L['spiel_y']
+    L['platte_y'] = (y0, y0 + w('platte_b'))
     L['platte_z'] = (z_u, z_u + w('platte_dicke'))
 
     # ---- 2060 in X: links ragen sie quer_ueber_* ueber die Aussenseite des
@@ -754,13 +754,13 @@ def hinweise_bauen(L, fehler):
         '  Z = 0 Rohrmitte), Portal in der Mitte seines Wegs.',
         '',
         'RAHMEN (Angabe 2026-11-21): Die 2060 stehen innen {:.0f} mm'.format(
-            w('quer_innen')),
+            L['quer_y']['vorn'][0] - L['quer_y']['hinten'][1]),
         '  auseinander, die Platte liegt ohne Spalt dazwischen. Links ragt',
         '  das vordere {:.0f} mm, das hintere {:.0f} mm ueber das 2040; ihre'
         .format(w('quer_ueber_vorn'), w('quer_ueber_hinten')),
-        '  Enden liegen bei X {:+.0f} und {:+.0f}. NUR dieses Skript kennt die'
-        .format(ev, eh),
-        '  neue Lage, Portal.py und die anderen noch die alte.',
+        '  Enden liegen bei X {:+.0f} und {:+.0f}; das vordere {:.0f} mm hinter'
+        .format(ev, eh, w('quer_vorn_zurueck')),
+        '  dem vorderen Ende der 2040 (wie Portal.py).',
         '',
         'ANSCHLAG (2, PETG): je einer um das linke Ende eines 2060. Aussen',
         '  der Flansch mit 2x M5x{:.0f} + Scheibe in Hammermuttern der'.format(
@@ -805,9 +805,8 @@ def hinweise_bauen(L, fehler):
         '',
         'KEINE BOHRLEHRE: Die Anschlaege gehen in Hammermuttern.',
         '',
-        'NICHT GEMESSEN: Lage der 2060 in Y (die Platte ist hier mittig',
-        '  unter dem Arbeitsfeld), Kappen auf den Profilenden, ob die',
-        '  aeussere untere Seitennut am linken Ende frei ist.',
+        'NICHT GEMESSEN: Kappen auf den Profilenden, ob die aeussere',
+        '  untere Seitennut am linken Ende frei ist.',
     ]
     if fehler:
         h += ['', 'FEHLER / WARNUNGEN:'] + ['  ' + f for f in fehler]

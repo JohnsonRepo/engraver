@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1215" height="1077" viewBox="0 0 1215 1077" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Energiekette Y: Wanne Y, Träger, Kettenhalter Y (Portal.py Rev. 28)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1215" height="1077" viewBox="0 0 1215 1077" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="100%" height="100%" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Energiekette Y: Wanne Y, Träger, Kettenhalter Y (Portal.py Rev. 36)</text>
 <text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Gedruckte Kette: Teilung 16, außen 18 × 14, innen 10 × 8,8 mm, Biegeradius 20 mm.</text>
 <clipPath id="links"><rect x="250.0" y="92.0" width="765.0" height="325.5"/></clipPath>
 <g clip-path="url(#links)">
-<rect x="287.5" y="318.5" width="30.0" height="90.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
-<rect x="940.0" y="318.5" width="30.0" height="90.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="394.0" y="318.5" width="30.0" height="90.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
+<rect x="947.5" y="318.5" width="30.0" height="90.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
 <rect x="122.5" y="258.5" width="900.0" height="60.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8"/>
 <rect x="197.5" y="246.5" width="750.0" height="12.0" fill="#d7d7dc" stroke="#55555e" stroke-width="0.8"/>
-<rect x="257.5" y="288.5" width="90.0" height="30.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.5" stroke-dasharray="4 3"/>
-<rect x="910.0" y="288.5" width="90.0" height="30.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.5" stroke-dasharray="4 3"/>
+<rect x="364.0" y="288.5" width="90.0" height="30.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.5" stroke-dasharray="4 3"/>
+<rect x="917.5" y="288.5" width="90.0" height="30.0" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.5" stroke-dasharray="4 3"/>
 <rect x="606.2" y="102.1" width="63.5" height="55.5" fill="#e8ded0" stroke="#8a6d3b" stroke-width="0.8" fill-opacity="0.35"/>
 <rect x="593.5" y="157.6" width="76.2" height="6.8" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
 <rect x="593.5" y="164.4" width="16.7" height="35.6" fill="#c9d9ec" stroke="#2f5d92" stroke-width="0.8" fill-opacity="0.35"/>
@@ -52,20 +52,20 @@
 <circle cx="509.3" cy="267.5" r="1.5" fill="#5b6472"/>
 <text x="238.0" y="313.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Festpunkt: Endstück 180,</text>
 <text x="238.0" y="323.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2 × M3 in den Träger</text>
-<line x1="341.5" y1="293.0" x2="241.0" y2="348.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="341.5" cy="293.0" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="351.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Winkel 20 mm in der</text>
-<text x="238.0" y="361.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">unteren Seitennut</text>
-<line x1="467.3" y1="278.4" x2="241.0" y2="386.6" stroke="#5b6472" stroke-width="0.6"/>
+<line x1="467.3" y1="278.4" x2="241.0" y2="348.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="467.3" cy="278.4" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="389.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Binderschlitze</text>
-<text x="238.0" y="399.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Zugentlastung)</text>
-<line x1="302.5" y1="393.5" x2="241.0" y2="424.6" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="302.5" cy="393.5" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="427.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
-<line x1="494.3" y1="309.5" x2="241.0" y2="452.6" stroke="#5b6472" stroke-width="0.6"/>
+<text x="238.0" y="351.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Binderschlitze</text>
+<text x="238.0" y="361.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Zugentlastung)</text>
+<line x1="448.0" y1="293.0" x2="241.0" y2="386.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="448.0" cy="293.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="389.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Winkel 20 mm in der</text>
+<text x="238.0" y="399.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">unteren Seitennut</text>
+<line x1="494.3" y1="309.5" x2="241.0" y2="424.6" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="494.3" cy="309.5" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="455.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Träger am Festpunkt</text>
+<text x="238.0" y="427.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Träger am Festpunkt</text>
+<line x1="409.0" y1="393.5" x2="241.0" y2="452.6" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="409.0" cy="393.5" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="455.6" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
 <line x1="638.0" y1="111.1" x2="1024.0" y2="111.1" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="638.0" cy="111.1" r="1.5" fill="#5b6472"/>
 <text x="1027.0" y="114.1" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">X-Motor (linker Schlitten)</text>
@@ -87,8 +87,8 @@
 <circle cx="775.0" cy="309.5" r="1.5" fill="#5b6472"/>
 <text x="1027.0" y="351.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Träger mitte und vorn:</text>
 <text x="1027.0" y="361.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">M5 in der unteren Seitennut</text>
-<line x1="955.0" y1="393.5" x2="1024.0" y2="393.5" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="955.0" cy="393.5" r="1.5" fill="#5b6472"/>
+<line x1="962.5" y1="393.5" x2="1024.0" y2="393.5" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="962.5" cy="393.5" r="1.5" fill="#5b6472"/>
 <text x="1027.0" y="396.5" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
 <line x1="887.5" y1="267.5" x2="887.5" y2="207.5" stroke="#2f5d92" stroke-width="0.8"/>
 <line x1="884.5" y1="267.5" x2="890.5" y2="267.5" stroke="#2f5d92" stroke-width="0.8"/>

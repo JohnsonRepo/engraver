@@ -6,7 +6,7 @@ CNC-Engraver mit Diodenlaser — Konstruktionsskripte, Prüfwerkzeuge und Notize
 
 | Ebene | Aufbau |
 |---|---|
-| Gestell | 2 × 2060 Aluprofil quer (600 mm, so nah zusammen, dass die Opferplatte ohne Spalt dazwischen liegt: innen 349 mm; im Gesamtmodell noch 435 mm Mitte zu Mitte, das vordere 35 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; steht direkt auf dem Tisch, dazwischen die Opferplatte |
+| Gestell | 2 × 2060 Aluprofil quer (600 mm, so nah zusammen, dass die Opferplatte ohne Spalt dazwischen liegt: innen 349 mm, 369 mm Mitte zu Mitte, das vordere 30 mm hinter dem Ende der 2040), darauf 2 × 2040 Aluprofil längs (600 mm), alle hochkant; steht direkt auf dem Tisch, dazwischen die Opferplatte |
 | Y-Achse | 2 Linearführungen MGN12H (Schienen 500 mm) oben auf den 2040ern; GT2-Riemen in den oberen Nuten der 2040, vorn je Seite ein NEMA 17 mit dem Ritzel direkt auf der Welle, mittig zur 2040 |
 | Portal | Y-Schlitten auf den MGN12H-Wagen, dazwischen ein 2020-V-Slot-Profil (500 mm); Y-Schienen 514 mm Mitte zu Mitte |
 | X-Achse | Linearführung MGN15H (Schiene 450 mm) am Portalprofil, GT2-Riemen: NEMA 17 links, Umlenkung mit Spanner rechts |
@@ -247,8 +247,9 @@ der 2060 greifen: Flansch außen mit 2 × M5 in der äußeren unteren
 Seitennut, Endplatte vor der Stirnseite, davor die Nase am Plattenende.
 Nach rechts wird die Platte herausgezogen. Weil Maschine und Platte auf
 demselben Tisch stehen, gilt das Z-Softlimit `$132=56`, und Werkstücke bis
-32 mm passen unter den Toolhead. Die neue Lage der 2060 kennt bisher nur
-`Opferplatte.py`. Details in [docs/opferplatte.md](docs/opferplatte.md).
+32 mm passen unter den Toolhead. Seit Portal Rev. 36 kennt das ganze
+Modell diese Lage der 2060; hinten endet der Y-Weg deshalb mit Z unten am
+2060 (`$131=282`). Details in [docs/opferplatte.md](docs/opferplatte.md).
 
 ### Spannmittel (neu)
 
@@ -282,9 +283,9 @@ Pi Kamera v1.3; ein Camera Module 3 passt auch.
   Messpunkt gedreht und 28° nach unten geneigt. Darauf sitzt die Kamera
   hochkant auf vier Polstern, oben mit 2 × M2, unten mit 2 Zapfen. Gedruckt
   wird ohne Stützen.
-- **Sicht:** Der Punkt liegt für 0 bis 32,7 mm Werkstück mindestens 14,6° im
-  Bild, 108 bis 121 mm von der Linse, mit 0,05 mm Höhe je Pixel.
-- **Fokus:** Die Linse der v1.3 wird einmal auf 114 mm gedreht (120 mm
+- **Sicht:** Der Punkt liegt für 0 bis 32,7 mm Werkstück mindestens 14° im
+  Bild, 112 bis 124 mm von der Linse, mit 0,06 mm Höhe je Pixel.
+- **Fokus:** Die Linse der v1.3 wird einmal auf 118 mm gedreht (120 mm
   reichen auch).
 - **Offen:** Die Software auf dem Pi fehlt noch.
 
@@ -419,7 +420,7 @@ gleich an ihrem Platz, und `maschine_check.py` prüft das
 Davor kam Portal Rev. 32: **Y referenziert vorn.** Die Lichtschranke sitzt
 außen am rechten 2040, gut 110 mm hinter dem vorderen 2060. Der Halter_Y
 ist gespiegelt (Gabel hinten, die Fahne kommt von hinten), die Fahne bleibt.
-GRBL: `$23=3`, `$131=325`, danach G54 neu setzen. Hinten schützt nur das
+GRBL: `$23=3`, `$131=325` (seit Portal Rev. 36 `282`), danach G54 neu setzen. Hinten schützt nur das
 Softlimit, bis dort ein Anschlag sitzt
 ([endschalter.md](docs/endschalter.md#grbl)).
 
@@ -477,7 +478,10 @@ Tisch, Anschlag, Führung und Riegel sitzen an vier Haltern innen an den
 2060, und ToolheadZ Rev. 39 rechnet Z mit der echten Plattenhöhe
 (`$132=56`). Rev. 5 ersetzt sie durch zwei Anschläge um das linke Ende der
 2060: Die 2060 stehen ohne Spalt an der Platte, zwischen ihnen ist kein
-Platz. Portal Rev. 24
+Platz. Portal Rev. 36 rechnet den Rahmen so (369 mm Mitte zu Mitte, das
+vordere 30 mm hinter dem Ende der 2040); hinten endet der Y-Weg dadurch
+mit Z unten am 2060 (`$131=282`), die Kabelhalter haben neue Plätze.
+Portal Rev. 24
 stellt auf den
 linken Stirnblock einen Anschlag für den X-Motorhalter: Bis dahin hielt
 ihn nur die Reibung unter seinen zwei Schrauben, und bei kräftig

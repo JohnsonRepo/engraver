@@ -154,7 +154,7 @@ def main():
     p.titel('1) Abgleich: Portal.py <-> ToolheadZ.py und Bauraeume')
     TH = {q.name: q for q in feste}
     abgleich = [
-        ('Y-Weg bis ans Schienenende (portal_check)', EL['y_weg_hinten'],
+        ('Y-Weg bis ans Schienenende (portal_check)', EL['y_weg_schiene'],
          d_schiene),
         ('Schlittenplatte rechts: Aussenkante', EL['platte_x1'],
          P['Platte rechts'].x[1]),
@@ -238,8 +238,10 @@ def main():
     p.ok('Blatt deckt den Strahl ab', EL['ly_strahl_z'] - bz[0], 1.0)
     p.ok('Blatt reicht ueber die offene Seite der Gabel',
          bz[1] - EL['ly_gabel_z'][1], 2.0)
+    # vorderes Wegende im Betrieb: der Schaltpunkt plus Schaltabstand
+    # (y_weg_vorn); bis dorthin faehrt GRBL nach $H, nicht bis vor das 2060
     p.ok('am vorderen Wegende: Blatt noch in der Gabel',
-         EL['ly_gabel_y'][1] - (EL['fy_y_rel'][1] + d_vorn), 0.0)
+         EL['ly_gabel_y'][1] - (EL['fy_y_rel'][1] + ew('y_weg_vorn')), 0.0)
     p.info('Strahl hinter der Innenseite des vorderen 2060',
            L['quer_y_vorn'][0] - EL['ly_strahl_y'])
     p.info('Halter Y: Abstand zum vorderen 2060',
@@ -579,10 +581,15 @@ def main():
     x_weg = L['xw_max'] - xs - 1.0 - 2.0
     # Y referenziert vorn (minus, $23=3): GRBL setzt den Schaltpunkt auf
     # -$131, das Softlimit 0 liegt $131 weiter hinten
-    y_weg = dy_s + d_schiene - Y_RESERVE_HINTEN
+    # hinten: Schienenende minus Reserve oder, mit Z unten, 3 mm vor dem
+    # hinteren 2060 (Portal Rev. 36), wie tools/verkabelung.py
+    y_weg = dy_s + min(d_schiene - Y_RESERVE_HINTEN, EL['y_weg_hinten'])
     p.info('$130 (X: ab Schaltpunkt, 1 mm Rueckzug, 2 mm Reserve)', x_weg)
-    p.info('$131 (Y: ab Schaltpunkt vorn bis {:.0f} mm vor das hintere '
-           'Schienenende)'.format(Y_RESERVE_HINTEN), y_weg)
+    p.info('$131 (Y: ab Schaltpunkt vorn bis {})'.format(
+        '3 mm vor das hintere 2060, Z unten'
+        if EL['y_weg_hinten'] < d_schiene - Y_RESERVE_HINTEN
+        else '{:.0f} mm vor das hintere Schienenende'.format(
+            Y_RESERVE_HINTEN)), y_weg)
     p.info('$23=3: X nach links, Y nach vorn (beide minus), Z nach oben')
     return p.bericht()
 

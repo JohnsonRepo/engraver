@@ -170,7 +170,7 @@ def konzept(w, L, tw, TL, ew, EL):
     # Die Litzen gehen hinten in das Endstueck 180 und kommen hinten aus
     # dem Anfangsstueck.
     K['ky_x'] = L['yk_x']
-    K['ky_hub'] = L['y_weg_hinten'] + w('y_weg_vorn')
+    K['ky_hub'] = L['y_weg_schiene'] + w('y_weg_vorn')   # ganzer Weg
     K['ky_fest'] = L['yk_fest']
     K['ky_eintritt'] = L['yk_fest'] - w('endstueck_l')
     K['ky_austritt'] = w('yk_gelenk_y') - w('endstueck_l')  # Portal Mitte

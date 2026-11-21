@@ -974,8 +974,9 @@ def main():
          L['rahmen_z1'] - L['ym_ritzel_z'][1], 2.0)
     p.ok('Motor unten ueber der Unterkante der 2060 (Tisch)',
          L['ym_motor_z'][0] - L['quer_z'][0], 10.0)
+    # seit Rev. 36 liegt das vordere 2060 an den Schenkeln an (30 mm)
     p.ok('Schenkel enden vor dem vorderen 2060 (dort sitzen Winkel)',
-         (ye + H['wange_y0']) - L['quer_y_vorn'][1], 3.0)
+         (ye + H['wange_y0']) - L['quer_y_vorn'][1], 0.0)
     # Riemen: offen, von Klemme zu Klemme um beide Ritzel. Hinteres Ritzel
     # mittig zur 2040, 11 mm hinter der Stirnseite angenommen.
     wagen_min = L['y_schiene_y'][0] + w('y_wagen_laenge') / 2
@@ -1244,10 +1245,17 @@ def main():
     p.info('  mit beiden Endstuecken', L['yk_laenge'] + 2.0 * w('endstueck_l'))
     p.ok('Kette reicht', L['yk_laenge'] - L['yk_noetig'], 0.0)
     p.ok('kein Glied zu viel', L['yk_laenge'] - L['yk_noetig'], tk, '<')
-    p.ok('y_weg_vorn wie in Abschnitt 14 (Z unten, 3 mm vor dem 2060)',
-         abs(w('y_weg_vorn') - d_vorn), 0.5, '<=')
-    p.ok('y_weg_hinten bis ans Schienenende wie in Abschnitt 14',
-         abs(L['y_weg_hinten'] - d_schiene), 0.01, '<=')
+    p.ok('y_weg_vorn: Toolhead mit Z unten mindestens 3 mm vor dem '
+         'vorderen 2060 (Abschnitt 14)', d_vorn - w('y_weg_vorn'), 0.0)
+    p.info('   so viel mehr Luft als 3 mm (die Schranke ist nicht mit dem '
+           '2060 nach vorn gewandert)', d_vorn - w('y_weg_vorn'))
+    p.ok('y_weg_schiene bis ans Schienenende wie in Abschnitt 14',
+         abs(L['y_weg_schiene'] - d_schiene), 0.01, '<=')
+    p.ok('y_weg_hinten_2060 wie in Abschnitt 14 (Z unten, 3 mm vor dem '
+         'hinteren 2060)', abs(w('y_weg_hinten_2060') - d_hinten), 0.5, '<=')
+    p.info('Y-Weg hinten im Betrieb (Softlimit): {}'.format(
+        'bis 3 mm vor das hintere 2060' if d_hinten < d_schiene
+        else 'bis ans Schienenende'), L['y_weg_hinten'])
     dy_lo, dy_hi = -d_schiene, L['yk_dy_bereich'][1]
     p.ok('Reserve nach vorn ueber den Y-Weg', L['yk_reserve_vorn'],
          w('yk_reserve'))
@@ -1532,9 +1540,9 @@ def luft_weg(w, L, TL, feste_th, bewegte_th, ziele, seite, zonen=None):
 
 def quer_quader(w, L):
     """Beide 2060 als Quader in Rahmenkoordinaten (Portal in der Mitte)."""
-    return [bauraum.Quader('2060 ' + n, L['quer_x'][0], L['quer_x'][1],
-                           y[0], y[1], L['quer_z'][0], L['quer_z'][1],
-                           'kaufteil')
+    return [bauraum.Quader('2060 ' + n, L['quer_x_' + n][0],
+                           L['quer_x_' + n][1], y[0], y[1], L['quer_z'][0],
+                           L['quer_z'][1], 'kaufteil')
             for n, y in (('hinten', L['quer_y_hinten']),
                          ('vorn', L['quer_y_vorn']))]
 

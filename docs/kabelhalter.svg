@@ -70,17 +70,17 @@
 <text x="954.0" y="160.0" font-size="10" fill="#5b6472" text-anchor="end">hinten ← → vorn</text>
 <g transform="translate(514.0,186.0)"><rect x="0.0" y="0.0" width="440.0" height="34.0" rx="2" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
 <polyline points="0.0,25.5 440.0,25.5" fill="none" stroke="#adb5bd" stroke-width="1.0" stroke-dasharray="5 3" stroke-linejoin="round"/>
-<rect x="80.7" y="34.0" width="14.7" height="22.0" rx="1" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
-<text x="88.0" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
-<rect x="399.7" y="34.0" width="14.7" height="22.0" rx="1" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
-<text x="407.0" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
+<rect x="132.7" y="34.0" width="14.7" height="22.0" rx="1" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
+<text x="140.1" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
+<rect x="403.3" y="34.0" width="14.7" height="22.0" rx="1" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
+<text x="410.7" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
 <rect x="164.2" y="-9.0" width="179.1" height="7.0" rx="1" fill="#f8f9fa" stroke="#adb5bd" stroke-width="0.8"/>
 <text x="253.7" y="-12.0" font-size="9" fill="#5b6472" text-anchor="middle">Wanne Y (darüber)</text>
 <rect x="172.2" y="17.0" width="19.1" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <rect x="244.2" y="17.0" width="17.6" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <rect x="310.2" y="17.0" width="17.6" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
-<rect x="66.0" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
-<rect x="385.0" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
+<rect x="118.1" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
+<rect x="388.7" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <rect x="418.0" y="17.0" width="22.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <text x="181.8" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="middle">Träger</text>
 <text x="253.0" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="middle">Träger</text>
@@ -89,47 +89,44 @@
 <polyline points="13.9,64.0 13.9,36.0" fill="none" stroke="#5b6472" stroke-width="1.0" stroke-linejoin="round"/>
 <text x="9.9" y="78.0" font-size="9" fill="#5b6472" text-anchor="start">aus dem Gehäuse</text>
 <polygon points="10.4,41.0 17.4,41.0 13.9,35.0" fill="#5b6472"/>
-<rect x="52.1" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
-<text x="57.9" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L1</text>
-<text x="57.9" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">31</text>
-<rect x="131.3" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
-<text x="137.1" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L2</text>
-<text x="137.1" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">57</text>
+<rect x="60.1" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
+<text x="66.0" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L1</text>
+<text x="66.0" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">91</text>
+<rect x="104.1" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
+<text x="110.0" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L2</text>
+<text x="110.0" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">31</text>
 <rect x="211.9" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
 <text x="217.8" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L3</text>
-<text x="217.8" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">167</text>
+<text x="217.8" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">96</text>
 <rect x="280.1" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
 <text x="286.0" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L4</text>
-<text x="286.0" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">260</text>
-<rect x="350.5" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
-<text x="356.4" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L5</text>
-<text x="356.4" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">356</text></g>
+<text x="286.0" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">189</text>
+<rect x="352.0" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
+<text x="357.9" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">L5</text>
+<text x="357.9" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">287</text></g>
 <text x="514.0" y="356.0" font-size="12.5" fill="#1c2733" text-anchor="start" font-weight="600">rechtes 2040</text>
 <text x="954.0" y="356.0" font-size="10" fill="#5b6472" text-anchor="end">hinten ← → vorn</text>
 <g transform="translate(514.0,382.0)"><rect x="0.0" y="0.0" width="440.0" height="34.0" rx="2" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
 <polyline points="0.0,25.5 440.0,25.5" fill="none" stroke="#adb5bd" stroke-width="1.0" stroke-dasharray="5 3" stroke-linejoin="round"/>
-<rect x="80.7" y="34.0" width="14.7" height="22.0" rx="1" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
-<text x="88.0" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
-<rect x="399.7" y="34.0" width="14.7" height="22.0" rx="1" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
-<text x="407.0" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
-<rect x="66.0" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
-<rect x="385.0" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
+<rect x="132.7" y="34.0" width="14.7" height="22.0" rx="1" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
+<text x="140.1" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
+<rect x="403.3" y="34.0" width="14.7" height="22.0" rx="1" fill="#f1f3f5" stroke="#adb5bd" stroke-width="1.0"/>
+<text x="410.7" y="49.0" font-size="9" fill="#5b6472" text-anchor="middle">2060</text>
+<rect x="118.1" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
+<rect x="388.7" y="17.0" width="44.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <rect x="295.9" y="17.0" width="20.5" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <rect x="418.0" y="17.0" width="22.0" height="17.0" rx="1" fill="#fff4e6" stroke="#d9480f" stroke-width="0.8"/>
 <text x="306.2" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="middle">Halter_Y</text>
 <text x="440.0" y="14.0" font-size="8.5" fill="#d9480f" text-anchor="end">Motor</text>
-<rect x="144.5" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
-<text x="150.3" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">R1</text>
-<text x="150.3" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">75</text>
-<rect x="209.0" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
-<text x="214.9" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">R2</text>
-<text x="214.9" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">163</text>
-<rect x="274.3" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
-<text x="280.1" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">R3</text>
-<text x="280.1" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">252</text>
-<rect x="338.8" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
-<text x="344.7" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">R4</text>
-<text x="344.7" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">340</text></g>
+<rect x="199.5" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
+<text x="205.3" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">R1</text>
+<text x="205.3" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">79</text>
+<rect x="269.9" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
+<text x="275.7" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">R2</text>
+<text x="275.7" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">175</text>
+<rect x="339.5" y="21.1" width="11.7" height="21.9" rx="1" fill="#d0e2f5" stroke="#2f5d92" stroke-width="1.2"/>
+<text x="345.4" y="56.0" font-size="11" fill="#2f5d92" text-anchor="middle" font-weight="600">R3</text>
+<text x="345.4" y="69.0" font-size="9.5" fill="#5b6472" text-anchor="middle">270</text></g>
 <text x="514.0" y="550.0" font-size="10" fill="#5b6472" text-anchor="start">Zahlen: Mitte des Halters in mm vor der Vorderseite des hinteren</text>
 <text x="514.0" y="563.0" font-size="10" fill="#5b6472" text-anchor="start">2060 (L1: hinter seiner Rückseite). Orange: belegt (Winkel, Träger</text>
 <text x="514.0" y="576.0" font-size="10" fill="#5b6472" text-anchor="start">der Wanne Y, Halter_Y, Y-Motorhalter), 3 mm Luft.</text>

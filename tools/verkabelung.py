@@ -513,7 +513,11 @@ def grbl(Q):
     L, TL, K, es_w = Q['L'], Q['TL'], Q['K'], Q['es_w']
     s = es_w('schaltabstand')
     x = (L['xw_max'] - L['xw_min']) - s - 1.0 - 2.0
-    y = L['schalt_dy'] + K['d_schiene'] - Y_RESERVE_HINTEN
+    # hinten: Schienenende minus Reserve oder, mit Z unten, 3 mm vor dem
+    # hinteren 2060 (Portal Rev. 36)
+    y_hinten = min(K['d_schiene'] - Y_RESERVE_HINTEN,
+                   L['y_weg_hinten'])
+    y = L['schalt_dy'] + y_hinten
     z = TL['z_arbeit'] - 1.0 - 2.0
     return [
         ('$5', '1 `[w]`', 'D4', 'Lichtschranken melden „unterbrochen“ mit '
@@ -534,9 +538,13 @@ def grbl(Q):
          'Schaltpunkt bis ans rechte Schienenende, minus Rückzug und '
          'Reserve'.format(de(x + 3.0, 2))),
         ('$131', '{:.0f}'.format(math.floor(y)), 'G', 'Y: {} mm vom '
-         'Schaltpunkt vorn bis ans hintere Schienenende, minus {} mm '
-         'Reserve'.format(de(y + Y_RESERVE_HINTEN, 2),
-                          de(Y_RESERVE_HINTEN, 0))),
+         'Schaltpunkt vorn bis 3 mm vor das hintere 2060 (Toolhead mit Z '
+         'unten); das Schienenende läge {} mm weiter'.format(
+             de(y, 2), de(K['d_schiene'] - y_hinten, 1))
+         if y_hinten < K['d_schiene'] - Y_RESERVE_HINTEN else
+         'Y: {} mm vom Schaltpunkt vorn bis ans hintere Schienenende, '
+         'minus {} mm Reserve'.format(de(y + Y_RESERVE_HINTEN, 2),
+                                      de(Y_RESERVE_HINTEN, 0))),
         ('$132', '{:.0f}'.format(math.floor(z)), 'G', 'Z: {} mm Arbeitsweg '
          'vom Schaltpunkt bis {} mm über der Opferplatte, minus Rückzug und '
          'Reserve'.format(de(z + 3.0, 2), de(TL['platte_ueber_bett'], 0))),

@@ -62,7 +62,9 @@ Die Tiefe folgt aus dem Überstand der 2040 hinter dem hinteren 2060:
 **110 mm** `[v]` (bis Rev. 1 waren 145 mm angenommen), die 2060 liegen damit
 **435 mm** Mitte zu Mitte auseinander. Das Elektronikfach braucht mit seiner
 Montageplatte 107 mm ab der Rückseite des 2060 und endet 3 mm vor dem Ende
-der 2040.
+der 2040. (Das galt für das Fach hinten. Seit 2026-11-21 stehen die 2060
+369 mm Mitte zu Mitte, das vordere 30 mm hinter dem Ende der 2040; das
+Fach sitzt vorn daran, Elektronikfach.py Rev. 3.)
 
 ## Was hinein kommt
 

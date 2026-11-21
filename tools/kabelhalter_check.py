@@ -37,6 +37,9 @@ BETT = 250.0           # Bambu Lab A1: 256, mit Rand
 LUFT = 3.0             # Mindestfreigang zu Teilen am Rahmen
 SPANNE = 100.0         # so weit duerfen zwei Halter hoechstens auseinander
 SPANNE_MAX = 120.0     # ... ausnahmsweise, an einem Hindernis
+# ... ueber die Kreuzung mit dem hinteren 2060: 2060 und Winkel sperren dort
+# 60 mm, dahinter der Traeger Y am Festpunkt (seit Portal Rev. 36)
+SPANNE_KREUZUNG = 150.0
 FUELL_MAX = vk.FUELLGRAD_MAX
 INBUS = 4.0            # M5-Zylinderkopf: Inbus SW 4
 WAND_MIN = 2.0
@@ -420,8 +423,16 @@ def main():
             p.ok('  groesste Spanne zwischen zwei Haltern', sp, SPANNE_MAX,
                  '<=')
     links = sorted(y for sei, y in alle_y if sei < 0)
-    p.ok('links: groesste Spanne ueber beide Abschnitte',
-         max(b - a for a, b in zip(links, links[1:])), SPANNE_MAX, '<=')
+    q_h = PL['quer_y_hinten']
+    ueber = [(b - a) for a, b in zip(links, links[1:])
+             if a < q_h[0] - 20.0 and b > q_h[1] + 20.0]
+    sonst = [(b - a) for a, b in zip(links, links[1:])
+             if not (a < q_h[0] - 20.0 and b > q_h[1] + 20.0)]
+    if ueber:
+        p.ok('links: Spanne ueber die Kreuzung mit dem hinteren 2060',
+             max(ueber), SPANNE_KREUZUNG, '<=')
+    p.ok('links: groesste Spanne ueber beide Abschnitte (sonst)',
+         max(sonst) if sonst else 0.0, SPANNE_MAX, '<=')
     p.ja('Modell: kh_y ist ein Platz links',
          any(abs(kw('kh_y') - y) < 0.01 for y in links),
          ' (kh_y = {})'.format(de(kw('kh_y'))))

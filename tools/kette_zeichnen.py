@@ -330,7 +330,7 @@ def ansicht_y(f, w, L, portal, rahmen):
     # Kette und Halter an den Enden des Wegs gestrichelt, Portal in der
     # Mitte gefuellt
     kh = (q['Kettenhalter Y'], q['Kettenhalter Y Leiste aussen'])
-    for dy in (-L['y_weg_hinten'], w('y_weg_vorn')):
+    for dy in (-L['y_weg_schiene'], w('y_weg_vorn')):
         umr, _ = schleife_y(L, w, dy)
         t.append(f.poly(umr, 'kette', fill='none', stroke_dasharray='4 3'))
         b = q['Platte links']
@@ -641,7 +641,7 @@ def zeichnung_y(w, L, portal, rev):
     t = kopf('Energiekette Y: Wanne Y, Träger, Kettenhalter Y '
              '(Portal.py Rev. {})'.format(rev), w)
     rahmen, _ = bauraum.y_kette_rahmen(w, L)
-    hinten, vorn = -L['y_weg_hinten'], w('y_weg_vorn')
+    hinten, vorn = -L['y_weg_schiene'], w('y_weg_vorn')
 
     # ---- Ansicht von links -------------------------------------------------
     fa = Feld(250, 92, (-275.0, 235.0), (-135.0, 82.0), 1.5)
@@ -749,7 +749,7 @@ def zeichnung_y(w, L, portal, rev):
          '(Weg {} + Reserve {} + 2 × {} Luft) / 2 + Bogen {}), mit '
          'Anfangsstück und Endstück 180 {} mm'.format(
              L['yk_glieder'], de(L['yk_laenge'], 0), de(L['yk_noetig'], 1),
-             de(L['y_weg_hinten'] + w('y_weg_vorn'), 1),
+             de(L['y_weg_schiene'] + w('y_weg_vorn'), 1),
              de(w('yk_reserve'), 0), de(w('luft_bau'), 0),
              de(math.pi * w('kette_r'), 1),
              de(L['yk_laenge'] + 2.0 * w('endstueck_l'), 0))),

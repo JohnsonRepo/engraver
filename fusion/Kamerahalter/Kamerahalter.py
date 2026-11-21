@@ -25,6 +25,12 @@
 # bis -71 gerechnet (neige_von_z), der Punkt liegt jetzt in der oberen
 # Haelfte dieses Bereichs. Nicht neu drucken.
 #
+# Rev. 4 (2026-11-21): Das vordere 2060 ist 5 mm nach vorn gewandert
+# (Portal.py Rev. 36), mit ihm Kamera und Fach; Arbeitsfeld, Anschlagecke
+# und Messpunkt nicht. Richtung und Neigung zielen weiter auf den Punkt,
+# auf den sie in Rev. 2 gerechnet wurden (ziel_dy): Der Halter bleibt, wie
+# er gedruckt ist. Nicht neu drucken.
+#
 # Ein Druckteil, dazu Lehre und Referenzteile:
 #   Kamerahalter  Fuss auf der Oberseite des vorderen 2060, 2 x M5x10 in
 #                 Hammermuttern der Nut; ueber dem Eckwinkel am rechten
@@ -69,15 +75,15 @@ import adsk.core, adsk.fusion, traceback
 import math
 
 SKRIPT_NAME = 'Kamerahalter'
-REVISION = 3
+REVISION = 4
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog). Winkel in Grad und
 # Pixelzahlen stehen in EINHEIT.
 MASSE = {
     # --- Rahmen (wie Portal.py) [v] -----------------------------------------
-    'quer_vorn_y0':       (185.0, 'vorderes 2060: Innenseite (Maschine Y)'),
-    'quer_vorn_y1':       (205.0, 'vorderes 2060: Vorderseite (Maschine Y)'),
+    'quer_vorn_y0':       (190.0, 'vorderes 2060: Innenseite (Maschine Y)'),
+    'quer_vorn_y1':       (210.0, 'vorderes 2060: Vorderseite (Maschine Y)'),
     'rahmen_b':            (20.0, 'Profil: Breite'),
     'quer_h':              (60.0, '2060: Hoehe'),
     'rahmen_z0':          (-69.0, 'Oberseite des 2060 = Unterkante der 2040'),
@@ -95,7 +101,7 @@ MASSE = {
     'kern_d':               (4.2, 'V-Slot: Kernbohrung (Referenz)'),
 
     # --- Elektronikfach vorn (Elektronikfach.py Rev. 2, gedreht) [v] ---------
-    'fach_y0':            (205.0, 'Fach: Montageplatte an der Vorderseite des 2060'),
+    'fach_y0':            (210.0, 'Fach: Montageplatte an der Vorderseite des 2060'),
     'fach_x1':            (222.0, 'Fach: Kasten, halbe Breite'),
     'fach_rand_z':        (-50.0, 'Fach: Oberkante der Waende'),
     'deckel_z1':          (-47.5, 'Fach: Oberseite des Deckels'),
@@ -103,7 +109,7 @@ MASSE = {
     # gedreht). Am Aufbau liegt der Pi anders (Fotos 2026-11-19); dort
     # reicht das 200-mm-Kabel laut Angabe.
     'pi_buchse_x':         (10.5, 'Pi: Kamerabuchse im Modell, Maschine X [?]'),
-    'pi_buchse_y':        (230.0, 'Pi: Kamerabuchse im Modell, Maschine Y [?]'),
+    'pi_buchse_y':        (235.0, 'Pi: Kamerabuchse im Modell, Maschine Y [?]'),
     'pi_buchse_z':        (-73.0, 'Pi: Kamerabuchse im Modell, Maschine Z [?]'),
 
     # --- was vorn herankommt (tools/kamerahalter_check.py rechnet nach) -----
@@ -175,7 +181,10 @@ MASSE = {
     # Messpunkts. Die Lage ist aus einer Suche ueber X, Y, Z: groesster
     # kleinster Abstand zu Laser, Fach und Y-Riemen, Steg ganz auf dem Fuss.
     'linse_x':            (216.5, 'Kamera: Linsenfront, Maschine X'),
-    'linse_y':            (185.0, 'Kamera: Linsenfront, Maschine Y'),
+    'linse_y':            (190.0, 'Kamera: Linsenfront, Maschine Y'),
+    # Rev. 4: Kamera und 2060 sind 5 mm nach vorn gewandert, der Messpunkt
+    # nicht. Gezielt wird auf den Punkt von Rev. 2, so weit weiter vorn.
+    'ziel_dy':              (5.0, 'Richtung/Neigung: Zielpunkt so weit vor dem Messpunkt'),
     'linse_z':            (-42.0, 'Kamera: Linsenfront, Maschine Z'),
     # +1: die Kabelkante liegt bei lokal x < 0 wie in Rev. 1; -1: die Kamera
     # um ihre Achse gedreht, die Kabelkante bei x > 0 (zum Fach)
@@ -355,7 +364,9 @@ def lage():
     # Platte hoeher als neige_von_z, der Halter bleibt wie gedruckt).
     mp = (w('ecke_x') - w('mp_links'), w('ecke_y') - w('mp_hinten'))
     L['mp'] = mp
-    dx, dy = mp[0] - lx, mp[1] - ly
+    # Gezielt wird auf den Messpunkt, wie er zum Halter in Rev. 2 lag
+    L['mp_ziel'] = (mp[0], mp[1] + w('ziel_dy'))
+    dx, dy = L['mp_ziel'][0] - lx, L['mp_ziel'][1] - ly
     A = math.atan2(dy, dx)
     L['blick_az'] = math.degrees(A) % 360.0
     L['sin'], L['cos'] = math.sin(A), math.cos(A)

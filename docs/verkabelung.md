@@ -367,7 +367,7 @@ Dann [Prüfung C](#c-wandler-auf-120-v).
    ([endschalter.md](endschalter.md)), Z durch beide Ketten zum Toolhead.
    Y läuft in der Signalgasse nach rechts, rechts durch das Fenster Signal
    hinaus und in der unteren Nut außen am rechten 2040 zum Halter, seit
-   Portal Rev. 32 gut 110 mm hinter dem vorderen 2060. Hat die
+   Portal Rev. 36 gut 115 mm hinter dem vorderen 2060. Hat die
    Z-Lichtschranke schon ein Kabel: Es muss bis ins Fach reichen, also
    2 m lang sein.
 
@@ -522,7 +522,7 @@ nach vorn werden kürzer; nachgezogen ist das noch nicht.
   (Leistung) W2 und W14, das in der Leistungsgasse von links kommt, vorn
   (Signal) W10 aus der Signalgasse. Unter dem rechten 2040 durch in dessen
   untere Außennut: W14 und W2 nach vorn, W10 zum Halter Y (seit Portal
-  Rev. 32 vorn, gut 110 mm hinter dem vorderen 2060). W2
+  Rev. 32 vorn, seit Rev. 36 gut 115 mm hinter dem vorderen 2060). W2
   verlässt die Nut vor dem 2060, läuft in dessen oberer Nut vorn nach
   links und rechts oben ins Gehäuse des Not-Aus.
 * **Im Fach bleiben** W1, W3–W6, W8 und W16–W19. W18 läuft von der Buchse
@@ -758,7 +758,7 @@ Pi herunterfahren, dann Schalter aus.
 | [G](#g-referenzfahrt) | `$23` | 3 | X referenziert nach links und Y nach vorn (beide minus), Z nach oben (plus) |
 | [G](#g-referenzfahrt) | `$27` | 1 | 1 mm Rückzug vom Schalter |
 | [G](#g-referenzfahrt) | `$130` | 385 | X: 388,2 mm vom Schaltpunkt bis ans rechte Schienenende, minus Rückzug und Reserve |
-| [G](#g-referenzfahrt) | `$131` | 325 | Y: 330,3 mm vom Schaltpunkt vorn bis ans hintere Schienenende, minus 5 mm Reserve |
+| [G](#g-referenzfahrt) | `$131` | 282 | Y: 282 mm vom Schaltpunkt vorn bis 3 mm vor das hintere 2060 (Toolhead mit Z unten); das Schienenende läge 48,3 mm weiter |
 | [G](#g-referenzfahrt) | `$132` | 56 | Z: 59,95 mm Arbeitsweg vom Schaltpunkt bis 4 mm über der Opferplatte, minus Rückzug und Reserve |
 | [G](#g-referenzfahrt) | `$20` | 1 | Softlimits an, nach `$22=1`: schützen beide Enden, auch Y hinten (dort ist kein Schalter), aber nur nach `$H` ([warum](endschalter.md#softlimits-statt-zweitem-y-schalter)) |
 | [H](#h-laser) | `$30` | 1000 | S1000 = volle Laserleistung |
@@ -823,6 +823,10 @@ Referenzfahrt schon an ist, sonst kommt `error:10`.
   gestrichen.
 * **GRBL:** `$130=385` und `$132=82`, beide mit 1 mm Rückzug und 2 mm
   Reserve wie Y. Vorher standen dort ≈ 387 und ≈ 84.
+* **Y-Softlimit hinten am 2060** (2026-11-21, Portal Rev. 36): `$131=282`
+  statt 325. Die 2060 stehen so nah zusammen, dass die Opferplatte ohne
+  Spalt dazwischen liegt; hinten stößt der Toolhead mit Z unten jetzt am
+  2060 an, 48 mm vor dem Schienenende.
 * **Z-Softlimit über der Opferplatte** (2026-11-21, ToolheadZ Rev. 39):
   `$132=56` statt 82. Bis dahin lag die Platte im Modell auf Füßen, die es
   an der Maschine nie gab, 25,3 mm zu tief. Mit `$132=82` kann die

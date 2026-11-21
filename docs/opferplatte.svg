@@ -1,84 +1,84 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1245" height="1553" viewBox="0 0 1245 1553" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1245" height="1553" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Opferplatte zwischen den 2060, Anschläge am linken Ende (Opferplatte.py Rev. 5)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1245" height="1553" viewBox="0 0 1245 1553" font-family="Inter, Helvetica, Arial, sans-serif"><rect width="1245" height="1553" fill="#ffffff"/><text x="24.0" y="30.0" font-size="14" fill="#1c2733" text-anchor="start" font-weight="600">Opferplatte zwischen den 2060, Anschläge am linken Ende (Opferplatte.py Rev. 6)</text>
 <text x="24.0" y="48.0" font-size="9" fill="#5b6472" text-anchor="start">Maßstäblich, alle Maße aus den Skripten. Spanplatte 615 × 349 × 25,3 mm [v]; sie liegt wie die Maschine auf dem Tisch, ohne Spalt zwischen den 2060 (innen 349 mm). Nur links ein Anschlag, um das Profilende herum.</text>
 <clipPath id="drauf"><rect x="250.0" y="100.0" width="680.0" height="524.0"/></clipPath>
 <g clip-path="url(#drauf)">
-<rect x="288.0" y="185.3" width="615.0" height="349.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
-<rect x="288.0" y="554.4" width="50.0" height="6.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="282.0" y="534.4" width="6.0" height="26.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="282.0" y="519.4" width="6.0" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="292.0" y="560.4" width="10.0" height="1.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="292.8" y="561.4" width="8.5" height="5.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="324.0" y="560.4" width="10.0" height="1.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="324.8" y="561.4" width="8.5" height="5.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="283.0" y="159.3" width="50.0" height="6.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="277.0" y="159.3" width="6.0" height="26.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="277.0" y="185.3" width="11.0" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
-<rect x="287.0" y="158.3" width="10.0" height="1.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="287.8" y="153.3" width="8.5" height="5.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="319.0" y="158.3" width="10.0" height="1.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="319.8" y="153.3" width="8.5" height="5.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
-<rect x="288.0" y="534.4" width="600.0" height="20.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
-<rect x="283.0" y="165.3" width="600.0" height="20.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
+<rect x="288.0" y="203.0" width="615.0" height="349.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
+<rect x="288.0" y="572.0" width="50.0" height="6.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="282.0" y="552.0" width="6.0" height="26.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="282.0" y="537.0" width="6.0" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="292.0" y="578.0" width="10.0" height="1.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="292.8" y="579.0" width="8.5" height="5.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="324.0" y="578.0" width="10.0" height="1.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="324.8" y="579.0" width="8.5" height="5.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="283.0" y="177.0" width="50.0" height="6.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="277.0" y="177.0" width="6.0" height="26.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="277.0" y="203.0" width="11.0" height="15.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
+<rect x="287.0" y="176.0" width="10.0" height="1.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="287.8" y="171.0" width="8.5" height="5.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="319.0" y="176.0" width="10.0" height="1.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="319.8" y="171.0" width="8.5" height="5.0" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
+<rect x="288.0" y="552.0" width="600.0" height="20.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
+<rect x="283.0" y="183.0" width="600.0" height="20.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
 <rect x="318.0" y="2.0" width="20.0" height="600.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
 <rect x="832.0" y="2.0" width="20.0" height="600.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
-<rect x="381.1" y="193.2" width="391.2" height="333.3" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 3"/>
+<rect x="381.1" y="241.5" width="391.2" height="285.0" fill="none" stroke="#2f5d92" stroke-width="1.1" stroke-dasharray="6 3"/>
 </g>
 <rect x="250.0" y="100.0" width="680.0" height="524.0" fill="none" stroke="#b9c2cf" stroke-width="0.8"/>
 <text x="250.0" y="92.0" font-size="10.5" fill="#2f5d92" text-anchor="start" font-weight="600">Von oben (vorn unten)</text>
-<line x1="907.0" y1="295.4" x2="941.0" y2="295.4" stroke="#c2621b" stroke-width="1.6"/>
-<polygon points="945.0,295.4 940.0,297.4 940.0,293.4" fill="#c2621b"/>
-<text x="909.0" y="288.4" font-size="8.5" fill="#c2621b" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">herausziehen</text>
-<line x1="303.0" y1="159.3" x2="241.0" y2="159.3" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="303.0" cy="159.3" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="162.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag_hinten</text>
-<line x1="435.0" y1="175.3" x2="241.0" y2="189.3" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="435.0" cy="175.3" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="192.3" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
+<line x1="907.0" y1="313.0" x2="941.0" y2="313.0" stroke="#c2621b" stroke-width="1.6"/>
+<polygon points="945.0,313.0 940.0,315.0 940.0,311.0" fill="#c2621b"/>
+<text x="909.0" y="306.0" font-size="8.5" fill="#c2621b" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">herausziehen</text>
+<line x1="303.0" y1="177.0" x2="241.0" y2="177.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="303.0" cy="177.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="180.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag_hinten</text>
+<line x1="435.0" y1="193.0" x2="241.0" y2="207.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="435.0" cy="193.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="210.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hinteres 2060</text>
 <line x1="435.0" y1="322.0" x2="241.0" y2="322.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="435.0" cy="322.0" r="1.5" fill="#5b6472"/>
 <text x="238.0" y="325.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Opferplatte, Spanplatte</text>
 <text x="238.0" y="335.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">615 × 349 × 25,3 mm</text>
 <line x1="381.1" y1="422.0" x2="241.0" y2="422.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="381.1" cy="422.0" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="425.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arbeitsfeld 391 × 333 mm</text>
+<text x="238.0" y="425.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Arbeitsfeld 391 × 285 mm</text>
 <text x="238.0" y="435.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(Strahl, gestrichelt)</text>
 <line x1="328.0" y1="482.0" x2="241.0" y2="482.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="328.0" cy="482.0" r="1.5" fill="#5b6472"/>
 <text x="238.0" y="485.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040 links</text>
 <text x="238.0" y="495.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">(liegt darüber)</text>
-<line x1="435.0" y1="544.4" x2="241.0" y2="544.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="435.0" cy="544.4" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="547.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
-<line x1="308.0" y1="560.4" x2="241.0" y2="574.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="308.0" cy="560.4" r="1.5" fill="#5b6472"/>
-<text x="238.0" y="577.4" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag_vorn</text>
-<line x1="900.0" y1="245.3" x2="939.0" y2="245.3" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="900.0" cy="245.3" r="1.5" fill="#5b6472"/>
-<text x="942.0" y="248.3" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">steht 15 mm über:</text>
-<text x="942.0" y="258.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hier fassen</text>
+<line x1="435.0" y1="562.0" x2="241.0" y2="562.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="435.0" cy="562.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="565.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">vorderes 2060</text>
+<line x1="308.0" y1="578.0" x2="241.0" y2="592.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="308.0" cy="578.0" r="1.5" fill="#5b6472"/>
+<text x="238.0" y="595.0" font-size="8.0" fill="#1c2733" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Anschlag_vorn</text>
+<line x1="900.0" y1="263.0" x2="939.0" y2="263.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="900.0" cy="263.0" r="1.5" fill="#5b6472"/>
+<text x="942.0" y="266.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">steht 15 mm über:</text>
+<text x="942.0" y="276.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">hier fassen</text>
 <line x1="842.0" y1="482.0" x2="939.0" y2="482.0" stroke="#5b6472" stroke-width="0.6"/>
 <circle cx="842.0" cy="482.0" r="1.5" fill="#5b6472"/>
 <text x="942.0" y="485.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2040 rechts (darüber)</text>
-<line x1="900.0" y1="514.4" x2="939.0" y2="514.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="900.0" cy="514.4" r="1.5" fill="#5b6472"/>
-<text x="942.0" y="517.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechts kein Anschlag</text>
-<line x1="883.0" y1="544.4" x2="939.0" y2="544.4" stroke="#5b6472" stroke-width="0.6"/>
-<circle cx="883.0" cy="544.4" r="1.5" fill="#5b6472"/>
-<text x="942.0" y="547.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">die 2060 liegen ohne</text>
-<text x="942.0" y="557.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Spalt an der Platte</text>
-<text x="942.0" y="567.4" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und führen sie</text>
-<line x1="288.0" y1="584.4" x2="903.0" y2="584.4" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="288.0" y1="581.4" x2="288.0" y2="587.4" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="903.0" y1="581.4" x2="903.0" y2="587.4" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="595.5" y="596.4" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">615 mm</text>
-<line x1="919.0" y1="185.3" x2="919.0" y2="534.4" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="916.0" y1="185.3" x2="922.0" y2="185.3" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="916.0" y1="534.4" x2="922.0" y2="534.4" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="913.0" y="362.9" font-size="8.0" fill="#2f5d92" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">349 mm</text>
-<line x1="381.1" y1="205.2" x2="772.4" y2="205.2" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="381.1" y1="202.2" x2="381.1" y2="208.2" stroke="#2f5d92" stroke-width="0.8"/>
-<line x1="772.4" y1="202.2" x2="772.4" y2="208.2" stroke="#2f5d92" stroke-width="0.8"/>
-<text x="576.8" y="217.2" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">391 mm</text>
+<line x1="900.0" y1="532.0" x2="939.0" y2="532.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="900.0" cy="532.0" r="1.5" fill="#5b6472"/>
+<text x="942.0" y="535.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">rechts kein Anschlag</text>
+<line x1="883.0" y1="562.0" x2="939.0" y2="562.0" stroke="#5b6472" stroke-width="0.6"/>
+<circle cx="883.0" cy="562.0" r="1.5" fill="#5b6472"/>
+<text x="942.0" y="565.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">die 2060 liegen ohne</text>
+<text x="942.0" y="575.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">Spalt an der Platte</text>
+<text x="942.0" y="585.0" font-size="8.0" fill="#1c2733" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">und führen sie</text>
+<line x1="288.0" y1="602.0" x2="903.0" y2="602.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="288.0" y1="599.0" x2="288.0" y2="605.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="903.0" y1="599.0" x2="903.0" y2="605.0" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="595.5" y="614.0" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">615 mm</text>
+<line x1="919.0" y1="203.0" x2="919.0" y2="552.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="916.0" y1="203.0" x2="922.0" y2="203.0" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="916.0" y1="552.0" x2="922.0" y2="552.0" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="913.0" y="380.5" font-size="8.0" fill="#2f5d92" text-anchor="end" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">349 mm</text>
+<line x1="381.1" y1="253.5" x2="772.4" y2="253.5" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="381.1" y1="250.5" x2="381.1" y2="256.5" stroke="#2f5d92" stroke-width="0.8"/>
+<line x1="772.4" y1="250.5" x2="772.4" y2="256.5" stroke="#2f5d92" stroke-width="0.8"/>
+<text x="576.8" y="265.5" font-size="8.0" fill="#2f5d92" text-anchor="middle" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">391 mm</text>
 <clipPath id="links_hinten"><rect x="250.0" y="734.0" width="237.5" height="182.5"/></clipPath>
 <g clip-path="url(#links_hinten)">
 <rect x="307.5" y="824.0" width="192.5" height="872.5" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>
@@ -91,8 +91,8 @@
 <rect x="386.9" y="744.0" width="21.2" height="12.5" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="307.5" y="1696.5" width="1500.0" height="50.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
 <rect x="295.0" y="774.0" width="1500.0" height="50.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
-<rect x="382.5" y="365.6" width="50.0" height="1500.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
-<rect x="1667.5" y="365.6" width="50.0" height="1500.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
+<rect x="382.5" y="321.5" width="50.0" height="1500.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
+<rect x="1667.5" y="321.5" width="50.0" height="1500.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
 <line x1="317.5" y1="739.0" x2="317.5" y2="911.5" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="10 3 2 3"/>
 </g>
 <text x="321.2" y="744.0" font-size="9.5" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">A</text>
@@ -137,8 +137,8 @@
 <rect x="936.9" y="894.0" width="21.2" height="12.5" fill="#c3c8cf" stroke="#4a4f57" stroke-width="0.8"/>
 <rect x="845.0" y="826.5" width="1500.0" height="50.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
 <rect x="832.5" y="-96.0" width="1500.0" height="50.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.92"/>
-<rect x="920.0" y="-504.4" width="50.0" height="1500.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
-<rect x="2205.0" y="-504.4" width="50.0" height="1500.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
+<rect x="920.0" y="-548.5" width="50.0" height="1500.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
+<rect x="2205.0" y="-548.5" width="50.0" height="1500.0" fill="#e4e6ea" stroke="#8c939e" stroke-width="0.8" fill-opacity="0.45" stroke-dasharray="4 3"/>
 <line x1="792.5" y1="807.8" x2="920.0" y2="807.8" stroke="#2f5d92" stroke-width="0.8" stroke-dasharray="10 3 2 3"/>
 </g>
 <text x="922.5" y="804.0" font-size="9.5" fill="#2f5d92" text-anchor="start" font-weight="600" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">B</text>
@@ -257,7 +257,7 @@
 <text x="250.0" y="1343.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
 <text x="328.0" y="1343.5" font-size="8.5" fill="#1c2733" text-anchor="start">X −297 bis +318: links an den Nasen, rechts 15 mm über die 2060</text>
 <text x="250.0" y="1358.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
-<text x="328.0" y="1358.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y −176,7 bis +172,3: ohne Spalt zwischen den 2060, mittig unter dem Arbeitsfeld</text>
+<text x="328.0" y="1358.5" font-size="8.5" fill="#1c2733" text-anchor="start">Y −159 bis +190: ohne Spalt zwischen den 2060, mittig unter dem Arbeitsfeld</text>
 <text x="250.0" y="1373.5" font-size="8.5" fill="#5b6472" text-anchor="start">Höhe</text>
 <text x="328.0" y="1373.5" font-size="8.5" fill="#1c2733" text-anchor="start">Platte und Maschine auf demselben Tisch: Oberfläche Z −103,7, 25,3 mm über der Unterkante der 2060</text>
 <text x="250.0" y="1388.5" font-size="8.5" fill="#5b6472" text-anchor="start"></text>
@@ -269,7 +269,7 @@
 <text x="250.0" y="1433.5" font-size="8.5" fill="#5b6472" text-anchor="start">Befestigung</text>
 <text x="328.0" y="1433.5" font-size="8.5" fill="#1c2733" text-anchor="start">je 2 × M5×12 + Scheibe in Hammermuttern der äußeren unteren Seitennut</text>
 <text x="250.0" y="1448.5" font-size="8.5" fill="#5b6472" text-anchor="start">Rahmen</text>
-<text x="328.0" y="1448.5" font-size="8.5" fill="#1c2733" text-anchor="start">2060 innen 349 mm, links 30 / 35 mm über das 2040 (Angabe 2026-11-21; Portal.py noch alt)</text>
+<text x="328.0" y="1448.5" font-size="8.5" fill="#1c2733" text-anchor="start">2060 innen 349 mm, links 30 / 35 mm über das 2040 (Angabe 2026-11-21, wie Portal.py)</text>
 <rect x="250.0" y="1483.5" width="14.0" height="9.0" fill="#f6d7b8" stroke="#c2621b" stroke-width="0.8"/>
 <text x="269.0" y="1491.5" font-size="8.5" fill="#1c2733" text-anchor="start">neu (PETG)</text>
 <rect x="400.0" y="1483.5" width="14.0" height="9.0" fill="#ecd6ad" stroke="#9a7442" stroke-width="0.8"/>

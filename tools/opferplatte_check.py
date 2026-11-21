@@ -4,8 +4,7 @@
 
 Importiert Opferplatte.py, Portal.py, ToolheadZ.py und
 Elektronikfach.py mit gestubbtem adsk-Modul und prueft: Abgleich des
-Rahmens mit Portal.py (die neue Lage der 2060 kennt bisher nur
-Opferplatte.py: das steht als offen im Bericht), Arbeitsfeld, Lage und
+Rahmens mit Portal.py, Arbeitsfeld, Lage und
 Hoehe der Platte (Maschine und Platte auf demselben Tisch, die 2060 ohne
 Spalt an der Platte), Werkstueckhoehe und Softlimit Z, dass Toolhead und
 Portal ueber den ganzen Weg ueber Platte und Anschlaegen bleiben, die
@@ -126,21 +125,17 @@ def main():
             ('2040: Oberkante', OL['rahmen_z'][1],
              L['rahmen_z0'] + w('rahmen_h')),
             ('2060: Unterkante', OL['quer_z'][0], L['quer_z'][0]),
-            ('2060: Oberkante', OL['quer_z'][1], L['quer_z'][1]),
-            ('2060: Laenge', ow('quer_laenge'),
-             L['quer_x'][1] - L['quer_x'][0])):
+            ('2060: Oberkante', OL['quer_z'][1], L['quer_z'][1])):
         p.ok(text, abs(ist - soll), 0.02, '<=')
-    # Die neue Lage der 2060 (Angabe 2026-11-21) steht nur hier. Bis
-    # Portal.py sie kennt, ist das ein offener Punkt, kein Fehler.
-    innen_portal = L['quer_y_vorn'][0] - L['quer_y_hinten'][1]
-    innen = OL['quer_y']['vorn'][0] - OL['quer_y']['hinten'][1]
-    p.info('OFFEN: 2060 innen auseinander, hier {:.0f} mm, Portal.py noch '
-           '{:.0f} mm'.format(innen, innen_portal))
-    for s, qn in (('vorn', 'quer_y_vorn'), ('hinten', 'quer_y_hinten')):
-        p.info('OFFEN: {} 2060 Y {:+.2f}..{:+.2f}, in Portal.py '
-               '{:+.2f}..{:+.2f}'.format(s, *OL['quer_y'][s], *L[qn]))
-        p.info('OFFEN: {} 2060 linkes Ende X {:+.1f}, in Portal.py {:+.1f}'
-               .format(s, OL['quer_ende'][s], L['quer_x'][0]))
+    for s in om.SEITEN:
+        for i, kante in ((0, 'hinten'), (1, 'vorn')):
+            p.ok('{} 2060: {} Seite (Y)'.format(s, kante),
+                 abs(OL['quer_y'][s][i] - L['quer_y_' + s][i]), 0.02, '<=')
+        for i, kante in ((0, 'links'), (1, 'rechts')):
+            p.ok('{} 2060: Ende {} (X)'.format(s, kante),
+                 abs(OL['quer_x'][s][i] - L['quer_x_' + s][i]), 0.02, '<=')
+    p.info('2060 innen auseinander',
+           OL['quer_y']['vorn'][0] - OL['quer_y']['hinten'][1])
 
     # ------------------------------------------------------------------
     p.titel('2) Arbeitsfeld (Strahl) aus Portal.py und ToolheadZ.py')
@@ -155,9 +150,6 @@ def main():
              abs(ow(k) - soll), 0.05, '<=')
     p.info('Arbeitsfeld X', feld['feld_x1'] - feld['feld_x0'])
     p.info('Arbeitsfeld Y', feld['feld_y1'] - feld['feld_y0'])
-    p.info('OFFEN: Y-Weg vorn mit Z unten ist in Portal.py gegen die alte '
-           'Lage des vorderen 2060 gerechnet (hier {:.2f} mm weiter hinten)'
-           .format(L['quer_y_vorn'][0] - OL['quer_y']['vorn'][0]))
 
     # ------------------------------------------------------------------
     p.titel('3) Opferplatte: Lage (auf dem Tisch, ohne Spalt zwischen den '
@@ -167,9 +159,6 @@ def main():
                        ('hinten', feld['feld_y0'] - py[0]),
                        ('vorn', py[1] - feld['feld_y1'])):
         p.ok('Platte deckt das Arbeitsfeld ({})'.format(text), wert, 5.0)
-    p.ok('Platte mittig unter dem Feld (Y)',
-         abs((py[0] + py[1]) - (feld['feld_y0'] + feld['feld_y1'])) / 2.0,
-         0.05, '<=')
     p.ok('Platte liegt auf dem Tisch = Unterkante der 2060',
          abs(pz[0] - OL['quer_z'][0]), 0.01, '<=')
     p.ok('Oberflaeche = Unterkante der 2060 + gemessene Dicke',
@@ -270,15 +259,7 @@ def main():
                  else abs(q.y[1] - OL['innen'][s])
                  for q in ANSCHLAG[s] if q.name.endswith('Nase')), 0.01,
              '<=')
-    # Fach, Motoren, Halter Y, Winkel und Kette rechnet Portal.py noch mit
-    # der alten Lage der 2060. Fuer den Vergleich wandert jeder Anschlag mit
-    # seinem 2060 dorthin: Was am 2060 sitzt (Fach), steht dann richtig zu
-    # ihm; was am 2040 sitzt, um die Verschiebung daneben (Bericht).
-    dyp = {'vorn': L['quer_y_vorn'][0] - OL['quer_y']['vorn'][0],
-           'hinten': L['quer_y_hinten'][0] - OL['quer_y']['hinten'][0]}
-    dxp = {s: L['quer_x'][0] - OL['quer_ende'][s] for s in om.SEITEN}
-    im_portal = [auf(q, dx=dxp[s], dy=dyp[s]) for s in om.SEITEN
-                 for q in ANSCHLAG[s]]
+    im_portal = alle
     fremd = [('Elektronikfach', elektronik_check.elektronik_quader(ew, EL))]
     YL, fl = L['ymh'], w('motor_flansch')
     ys, zs = L['rahmen_y'][1], L['rahmen_z0']
@@ -316,9 +297,6 @@ def main():
         d = engste(im_portal, liste)
         p.ok('Anschlaege <-> {} ({} / {})'.format(text, d[1], d[2]), d[0],
              ow('luft_bau'))
-    p.info('   (verglichen in der alten Lage aus Portal.py: jeder Anschlag '
-           'um {:+.2f} / {:+.2f} mm in Y mit seinem 2060 verschoben)'.format(
-               dyp['vorn'], dyp['hinten']))
     fach = elektronik_check.elektronik_quader(ew, EL)
     fx = (min(q.x[0] for q in fach), max(q.x[1] for q in fach))
     p.ok('Flansch vorn neben dem Elektronikfach (beide vorn am 2060, X)',
@@ -351,16 +329,14 @@ def main():
         p.ok('{}: Scheibe ganz auf dem Flansch (X)'.format(s),
              min(min(abs(x - OL['flansch_x'][s][0]),
                      abs(x - OL['flansch_x'][s][1])) for x in mx) - sr, 1.0)
-    # Inbus von aussen: vorn nach vorn, hinten nach hinten (in der alten
-    # Lage aus Portal.py, mit dem 2060 verschoben)
+    # Inbus von aussen: vorn nach vorn, hinten nach hinten
     hindernisse = ([q for _, liste in fremd for q in liste]
                    + portal_check.quer_quader(w, L))
     for s in om.SEITEN:
         aus = OL['aus'][s]
         y_kopf = OL['auflage_y'][s] + aus * (ow('m5_scheibe_h')
                                               + ow('m5_kopf_h'))
-        pkt = [(x + dxp[s], y_kopf + dyp[s], OL['nut_seite_z'])
-               for x in OL['m5_x'][s]]
+        pkt = [(x, y_kopf, OL['nut_seite_z']) for x in OL['m5_x'][s]]
         laenge = min(bauraum.freier_korridor(pt, 'y', aus, INBUS / 2.0 + 1.0,
                                              hindernisse)[0] for pt in pkt)
         p.ok('Inbus an den M5 des Anschlags {} (von aussen)'.format(s),

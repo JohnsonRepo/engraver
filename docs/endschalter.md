@@ -266,7 +266,7 @@ Aus den Schaltpunkten, gerechnet in `tools/endschalter_check.py`; die
 | `$23=3` | X referenziert nach links und Y nach vorn, beide in Minus-Richtung (Y+ zeigt bei GRBL nach hinten, wenn `$3` so gesetzt ist). Z nach oben (plus). Bis Portal Rev. 31 `$23=1`: Y nach hinten |
 | `$27=1` | 1 mm Rückzug vom Schalter |
 | `$130=385` | X: vom Schaltpunkt bis ans rechte Schienenende 388,2 mm, minus 1 mm Rückzug und 2 mm Reserve. GRBL zählt den Weg ab dem Schaltpunkt, rechts bleiben also 3,2 mm bis zum Schienenende |
-| `$131=325` | Y: vom Schaltpunkt vorn bis ans hintere Schienenende 330,3 mm, minus 5 mm Reserve. Hinten hält das Softlimit die Y-Wagen 5,3 mm vor dem Schienenende. Bis Rev. 31 `$131=327` |
+| `$131=282` | Y: vom Schaltpunkt vorn bis 3 mm vor das hintere 2060, gerechnet für den Toolhead mit Z unten. Seit Portal Rev. 36 steht das hintere 2060 so weit vorn, dass es vor dem Schienenende (48,3 mm weiter) bindet. Bis Rev. 35 `$131=325` (Schienenende minus 5 mm), bis Rev. 31 `327` |
 
 **Nach dem Umstellen G54 neu setzen.** GRBL speichert den Nullpunkt als
 Abstand zum Maschinennullpunkt, und der liegt mit `$23=3` woanders. Also
@@ -278,16 +278,18 @@ Anschlags fahren und `G10 L20 P1 X0 Y0`
 
 1. **Schranke prüfen:** `?` darf ohne Fahne in der Gabel kein `Pn:Y`
    zeigen, mit Fahne schon. Schaltet sie nicht, fährt `$H` bis zu
-   1,5 × `$131`, rund 490 mm, nach vorn, bis die gespannte Y-Kette das
+   1,5 × `$131`, rund 420 mm, nach vorn, bis die gespannte Y-Kette das
    Portal aufhält.
 2. **Richtung prüfen:** `$X`, dann `$J=G91 Y-5 F500`. Das Portal muss
    **nach vorn** fahren.
 3. **Referenzfahrt:** Das Portal etwa 3 cm hinter den Schaltpunkt
    stellen, die Hand am Not-Aus, dann `$H`. Erst fährt Z nach oben, dann
    X und Y.
-4. **Hintere Grenze prüfen:** `$J=G53 Y0 F1000` fährt an das hintere
-   Softlimit. Dort müssen die Y-Wagen noch etwa 5 mm vor dem
-   Schienenende stehen. Sind es unter 3 mm, `$131` kleiner machen.
+4. **Hintere Grenze prüfen:** Z oben lassen, dann fährt `$J=G53 Y0 F1000`
+   an das hintere Softlimit. Von oben gesehen müssen Lasermodul und
+   Schlittenplatte dort noch etwa 3 mm vor der Innenseite des hinteren
+   2060 stehen; mit Z unten stießen sie sonst an. Sind es weniger,
+   `$131` um die fehlenden Millimeter kleiner machen.
 5. **G54 neu setzen** wie oben.
 
 ### Softlimits statt zweitem Y-Schalter
@@ -300,15 +302,19 @@ vorher an (ALARM:2, die Position bleibt richtig); ein Jog bekommt
 Lichtschranke braucht GRBL nur für die Referenzfahrt.
 
 Vorn liegt die Grenze am Schaltpunkt: Mit Z unten steht das Lasermodul
-dort 6 mm vor dem vorderen 2060. Mit Z oben fährt es darüber hinweg, und
-nach 47 mm hält die gespannte Y-Kette das Portal auf. Hinten liegt die
-Grenze 5,3 mm vor dem Schienenende. Dahinter hält die Wagen nichts auf,
-bis du dort einen Anschlag baust: Sie laufen von den Schienen, und Kugeln
-fallen heraus.
+dort 11 mm vor dem vorderen 2060 (seit Portal Rev. 36: Das 2060 ist 5 mm
+nach vorn gewandert, die Schranke nicht). Mit Z oben fährt es darüber
+hinweg, und nach 47 mm hält die gespannte Y-Kette das Portal auf. Hinten
+liegt die Grenze seit Rev. 36 so, dass der Toolhead mit Z unten 3 mm vor
+dem hinteren 2060 hält; die Y-Wagen stehen dann noch 48 mm vor dem
+Schienenende. Mit Z oben könnte er weiter, das Softlimit lässt ihn aber
+nicht. Hinter dem Schienenende hält die Wagen nichts auf, bis du dort
+einen Anschlag baust: Sie laufen von den Schienen, und Kugeln fallen
+heraus.
 
 **Die Softlimits stimmen nur nach `$H`.** Nach dem Einschalten kennt GRBL die
 Position nicht. Mit `$X` statt `$H` nimmt es die aktuelle Stellung als
-hintere Grenze und erlaubt von dort 325 mm nach vorn. Steht das Portal
+hintere Grenze und erlaubt von dort 282 mm nach vorn. Steht das Portal
 in der Mitte, reicht das bis weit über das vordere 2060 hinaus, nach hinten
 gibt es dann gar keinen Weg. Dasselbe passiert nach Schrittverlusten, etwa
 nach einem Anschlag oder bei zu hoher Beschleunigung. Dann stimmt auch

@@ -1,6 +1,6 @@
 # Portal — Y-Schlitten, Y-Klemmtürme, X- und Y-Antrieb
 
-Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 35, fünfundzwanzig
+Erzeugt von `fusion/Portal/Portal.py` (Baugruppe, Rev. 36, fünfundzwanzig
 gedruckte Teile; seit Rev. 29 dazu das
 [Gesamtmodell der ganzen Maschine](#gesamtmodell-die-ganze-maschine-seit-rev-29)).
 Geprüft mit `python3 tools/portal_check.py` — zusammen mit dem Toolhead aus
@@ -44,7 +44,7 @@ sind sie unter den Einsätzen schmal
 | 4 | **Spannbock** | 1 | rechts fest auf dem Stirnblock (2 × M3): Anschlag für die Zugschraube |
 | 5 | **Lagerschlitten** | 1 | Rahmen um das Umlenkritzel: oben das Kugellager, unten das Gleitlager der Welle; gleitet auf dem Rohr (Feder in der oberen Nut), die Zugschraube zieht ihn nach außen. Seit Rev. 18, ersetzt Umlenkhalter und Spannklotz |
 | 6 | **Y-Motorhalter** | 2 (dasselbe Teil) | vorn an jeder 2040: U-Bügel mit Schenkeln an beiden Seitenflächen (4 × M5 in den unteren Nuten), NEMA 17 hängend, Ritzel mittig zur 2040 direkt auf der Welle. Seit Rev. 16 in diesem Skript (vorher `YMotorhalter.py`), Einzelheiten in [y-motorhalter.md](y-motorhalter.md) |
-| 7 | **Endschalter** | 5 | Halter_Y und Fahne_Y, Halter_X, Klammer_X und Fahne_X für die Gabellichtschranken; Fahnen und Klammer **schwarz**. Lage, Montage und Einstellen: [endschalter.md](endschalter.md) (bis Rev. 14 im eigenen Skript `Endschalter.py`). Seit Rev. 32 referenziert Y vorn: Halter_Y gut 110 mm hinter dem vorderen 2060, gespiegelt (Gabel hinten) |
+| 7 | **Endschalter** | 5 | Halter_Y und Fahne_Y, Halter_X, Klammer_X und Fahne_X für die Gabellichtschranken; Fahnen und Klammer **schwarz**. Lage, Montage und Einstellen: [endschalter.md](endschalter.md) (bis Rev. 14 im eigenen Skript `Endschalter.py`). Seit Rev. 32 referenziert Y vorn: Halter_Y gespiegelt (Gabel hinten), seit Rev. 36 gut 115 mm hinter dem vorderen 2060 (das 2060 ist 5 mm nach vorn gewandert, der Halter nicht) |
 | 8 | **Kettenwanne** | 1 | Rinne über dem Portalrohr direkt hinter der Trägerplatte, führt den Untertrum der X-Energiekette und trägt ihren Festpunkt. Seit Rev. 19 |
 | 9 | **Wannenstütze** | 3 | hinten am Rohr (M5 in der hinteren Nut), Arm über X-Riemen und Riemenhalter unter die Wanne; die am Festpunkt ist breiter und trägt seit Rev. 21 den Kabelflügel (Kabelbinder für die Litzen aus der oberen Nut). Seit Rev. 19 |
 | 10 | **Kettenhalter Y** | 1 | auf der Platte des linken Schlittens hinter dem Stirnblock (2 × M3 von unten), trägt das bewegte Ende der Y-Energiekette. Seit Rev. 21 |
@@ -70,11 +70,11 @@ damit man im Browser sieht, welcher Stand gebaut wurde.
 | Gruppe | Inhalt |
 |---|---|
 | `ToolheadZ_r39` | alle Druckteile des Toolheads, Z-Wagen in der Mitte des Z-Wegs. Dazu in `Ref_Toolhead` die Kaufteile vereinfacht: Z-Schiene MGN9 mit Wagen, Z-Motor, Kupplung, Spindel Tr8×2 mit Mutter, Diodenlaser, Lichtschranke Z. Die Gruppe steht um die X-Wagenmitte verschoben (ToolheadZ rechnet X ab dort), also in der Mitte des X-Wegs |
-| `Opferplatte_r5` | zwei Anschläge um das linke Ende der 2060, Opferplatte auf dem Tisch. `Opferplatte.py` kennt die neue Lage der 2060 (innen 349 mm), `Portal.py` noch nicht: Die Gruppe passt deshalb nicht an die 2060 dieses Modells. Bis Rev. 33 standen hier vier Füße, die es nur im Modell gab, in Rev. 34 vier Halter und ein Riegel |
-| `Spannmittel_r4` | Anschlagwinkel, zwei Exzenter, die vier Niederhalter am Beispielwerkstück und das Werkstück selbst. Den Satz der anderen Stärken legt das eigene Skript neben die Platte, hier fehlt er. Seit Rev. 31 mit der Ecke vorn rechts: `Spannmittel.py` rechnet mit der Ecke hinten links, die Gruppe wird um 180° um die Senkrechte durch die Feldmitte gedreht (`gruppe_lage`, `dreh_xy`) |
-| `Elektronikfach_r2` | Fach und Deckel (Zwischenstand) und in `Ref_Elektronik` die Geräte: Uno, Pi, Wandler, Wago, Lüfter, Buchse, Schalter, Not-Aus. Seit Rev. 30 vor dem vorderen 2060 zwischen den Y-Motoren, wie verbaut: `Elektronikfach.py` rechnet in Fachkoordinaten, die Gruppe wird um 180° um die Senkrechte gedreht (`gruppe_lage`), darum steht `Fach_links` rechts |
-| `Kamerahalter_r3` | Halter, Kamera (v1.3), M5-Köpfe und die Sichtlinien zum Messpunkt. Seit Rev. 31 vorn rechts auf dem vorderen 2060, wie verbaut; das Skript baut gleich an der Maschine ([kamerahalter.md](kamerahalter.md)) |
-| `Kabelhalter_r2` | alle neun Halter, links fünf, rechts vier, rechts um 180° gedreht. Die Plätze stehen in `KABELHALTER_Y` in `Portal.py` und kommen aus `kabelhalter_check.py` ([kabelhalter.md](kabelhalter.md)) |
+| `Opferplatte_r6` | zwei Anschläge um das linke Ende der 2060, Opferplatte auf dem Tisch zwischen den 2060. Bis Rev. 33 standen hier vier Füße, die es nur im Modell gab, in Rev. 34 vier Halter und ein Riegel |
+| `Spannmittel_r5` | Anschlagwinkel, zwei Exzenter, die vier Niederhalter am Beispielwerkstück und das Werkstück selbst. Den Satz der anderen Stärken legt das eigene Skript neben die Platte, hier fehlt er. Seit Rev. 31 mit der Ecke vorn rechts: `Spannmittel.py` rechnet mit der Ecke hinten links, die Gruppe wird um 180° um die Senkrechte durch die Feldmitte gedreht (`gruppe_lage`, `dreh_xy`) |
+| `Elektronikfach_r3` | Fach und Deckel (Zwischenstand) und in `Ref_Elektronik` die Geräte: Uno, Pi, Wandler, Wago, Lüfter, Buchse, Schalter, Not-Aus. Seit Rev. 30 vor dem vorderen 2060 zwischen den Y-Motoren, wie verbaut: `Elektronikfach.py` rechnet in Fachkoordinaten, die Gruppe wird um 180° um die Senkrechte gedreht (`gruppe_lage`), darum steht `Fach_links` rechts |
+| `Kamerahalter_r4` | Halter, Kamera (v1.3), M5-Köpfe und die Sichtlinien zum Messpunkt. Seit Rev. 31 vorn rechts auf dem vorderen 2060, wie verbaut; das Skript baut gleich an der Maschine ([kamerahalter.md](kamerahalter.md)) |
+| `Kabelhalter_r3` | alle acht Halter, links fünf, rechts drei, rechts um 180° gedreht. Die Plätze stehen in `KABELHALTER_Y` in `Portal.py` und kommen aus `kabelhalter_check.py` ([kabelhalter.md](kabelhalter.md)) |
 
 Nicht noch einmal gebaut wird, was es schon gibt: Profile und Y-Motor stehen
 in der Referenz des Portals. Die Opferplatte baut `Opferplatte.py`. Mit
@@ -128,7 +128,7 @@ sie mit „[Referenz, nicht drucken]“.
 
 | Gruppe | Inhalt |
 |---|---|
-| `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 435 mm Mitte zu Mitte, das vordere 35 mm hinter der Stirnseite), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
+| `Ref_Profile` | Portalrohr 2020 (500 mm), beide 2040 hochkant (600 mm) und die zwei 2060 quer darunter (600 mm, 369 mm Mitte zu Mitte, das vordere 30 mm hinter der Stirnseite, links 30 bzw. 35 mm über das 2040), V-Slot vereinfacht: Nutöffnung 6,2, dahinter eine Kammer, Kernbohrung Ø4,2 |
 | `Ref_Fuehrungen` | Y-Schienen MGN12 (500 mm) mit MGN12H, X-Schiene MGN15 mit MGN15H |
 | `Ref_Riemen` | X-Riemen als Schleife um Ritzel und Umlenkritzel, beide Enden im Riemenhalter; je Seite der offene Y-Riemen von Klemme zu Klemme: schräg um das mittige Ritzel des Y-Motors, als Rücklauf gerade durch die äußere obere Nut des 2040, um das hintere Ritzel und schräg zurück |
 | `Ref_Antrieb` | NEMA 17 für X und beide Y mit Welle und Ritzel, die hinteren Y-Ritzel, das X-Umlenkritzel mit Welle, Kugellager und Gleitlager; nur wenn `ToolheadZ` im Gesamtmodell fehlt: vom Toolhead der Riemenhalter, der Kettenhalter und die Trägerplatte vereinfacht, mit der linken Säulenrippe (dort klemmt die Fahne X) |
@@ -139,10 +139,17 @@ Was dabei angenommen ist:
 
 * **2040** (600 mm) und **Y-Schienen** (500 mm) liegen mittig zum Y-Wagen,
   das Portal steht also in der Mitte seines Wegs. Mittig ist angenommen
-  `[?]`. Das vordere **2060** sitzt 35 mm hinter der Stirnseite der 2040
-  `[v]`, das hintere 435 mm Mitte zu Mitte dahinter `[v]`: Die 2040 stehen
-  hinten 110 mm über (gemessen 2026-09-27, Rev. 14; bis Rev. 13 400 mm
-  `[?]`).
+  `[?]`. Das vordere **2060** sitzt 30 mm hinter der Stirnseite der 2040
+  `[v]`, das hintere 369 mm Mitte zu Mitte dahinter `[v]`, so dass die
+  Opferplatte (349 mm) ohne Spalt dazwischen liegt: Die 2040 stehen hinten
+  181 mm über. Links ragt das vordere 30 mm, das hintere 35 mm über das
+  2040 (Angabe 2026-11-21, Rev. 36). Bis Rev. 35 435 mm Mitte zu Mitte, das
+  vordere 35 mm hinter der Stirnseite (gemessen 2026-09-27, Rev. 14).
+* **Y-Weg:** vorn bis zum Schaltpunkt der Lichtschranke; sie ist nicht mit
+  dem 2060 gewandert, der Toolhead hält mit Z unten 8 mm vor ihm. Hinten
+  hält er mit Z unten 3 mm vor dem hinteren 2060, 48,3 mm vor dem
+  Schienenende (`y_weg_hinten_2060`, `$131=282`). Kette und Kabel sind
+  weiter auf den ganzen Weg bis ans Schienenende ausgelegt.
 * Der **Toolhead** steht in der Mitte des X-Wegs und mit dem Z-Wagen in der
   Mitte des Z-Wegs. Im Gesamtmodell kommt er ganz aus `ToolheadZ.py`, ohne
   es sind nur X-Wagen, Riemenhalter, Kettenhalter und die Trägerplatte
@@ -903,8 +910,10 @@ vergleicht die Prüfung als Erstes.
 | `motor_laenge` | 37 mm | Länge der Motoren ohne Welle (gemessen) |
 | `ymh_…` | | Y-Motorhalter, Tabelle in [y-motorhalter.md](y-motorhalter.md#parametrik) |
 | `kette_…`, `endstueck_…`, `xk_…`, `wanne_…`, `st_…`, `kf_…`, `y_weg_vorn`, `yk_…`, `khy_…`, `ywanne_…`, `ytr_…` | | Energieketten X und Y, Wannen, Stützen, Träger und Kabelflügel, Tabelle in [energiekette.md](energiekette.md#parametrik) |
-| `quer_vorn_zurueck` | 35 mm | vorderes 2060 hinter der Stirnseite der 2040 (Referenz, Y-Weg) |
+| `quer_vorn_zurueck` | 30 mm | vorderes 2060 hinter der Stirnseite der 2040 (Referenz, Y-Weg) |
+| `quer_ueber_vorn` / `quer_ueber_hinten` | 30 / 35 mm | so weit ragen die 2060 links über die Außenseite des linken 2040 |
+| `y_weg_hinten_2060` | 179 mm | Y-Weg nach hinten, bis der Toolhead mit Z unten 3 mm vor dem hinteren 2060 steht; bindet vor dem Schienenende, daraus `$131` |
 | `yh_hinter` | 11 mm `[?]` | hinteres Y-Ritzel hinter der Stirnseite (Referenz, Riemenlänge) |
 | `rahmen_laenge` / `y_schiene_laenge` | 600 / 500 mm | Länge der 2040 und der Y-Schienen (Referenz, Y-Weg) |
-| `quer_laenge` / `quer_abstand` / `quer_h` | 600 / 435 / 60 mm | 2060 quer: Länge, Abstand Mitte zu Mitte, Höhe (Referenz, Y-Weg) |
+| `quer_laenge` / `quer_abstand` / `quer_h` | 600 / 369 / 60 mm | 2060 quer: Länge, Abstand Mitte zu Mitte, Höhe (Referenz, Y-Weg) |
 | `winkel_h` | 20 mm | Winkel an den Kreuzungen 2040/2060, Höhe über dem 2060 (Referenz, für die Prüfung) |

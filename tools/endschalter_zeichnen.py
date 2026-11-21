@@ -412,11 +412,11 @@ def main():
         ('Druck', 'PETG; Fahnen und Klammer schwarz (helles PETG lässt IR '
          'durch); keine Stützen'),
         ('GRBL', '$23=3 (X nach links, Y nach vorn), $130={}, $131={} '
-         '(hinten {} mm vor dem Schienenende)'
+         '(hinten: Toolhead mit Z unten 3 mm vor dem 2060)'
          .format(de(math.floor(L['xw_max'] - xs - 1.0 - 2.0), 0),
-                 de(math.floor(L['schalt_dy'] + EL['y_weg_hinten']
-                               - Y_RESERVE_HINTEN), 0),
-                 de(Y_RESERVE_HINTEN, 0))),
+                 de(math.floor(L['schalt_dy']
+                               + min(EL['y_weg_schiene'] - Y_RESERVE_HINTEN,
+                                     EL['y_weg_hinten'])), 0))),
     ]
     t.append(text(tx, ty - 8, 'Zahlen', 10.5, BLAU, fett=True))
     for i, (k_, v) in enumerate(zeilen):

@@ -96,10 +96,8 @@
 #                  seine Kaufteile vereinfacht (Ref_Toolhead): Z-Fuehrung,
 #                  Z-Motor, Kupplung, Spindel, Mutter, Laser, Lichtschranke
 #   Opferplatte    zwei Anschlaege um das linke Ende der 2060, Opferplatte
-#                  auf dem Tisch (Opferplatte.py Rev. 5). Die 2060 stehen
-#                  an der Maschine innen 349 mm auseinander; das kennt bisher
-#                  nur Opferplatte.py, die Gruppe passt hier nicht an die
-#                  2060 dieses Modells
+#                  auf dem Tisch zwischen den 2060 (Opferplatte.py Rev. 6;
+#                  seit Rev. 36 rechnet auch Portal.py den Rahmen so)
 #   Spannmittel    Anschlagwinkel, 2 Exzenter, 4 Niederhalter am
 #                  Beispielwerkstueck (der Satz der anderen Staerken nicht);
 #                  seit Rev. 31 mit der Ecke vorn rechts: in Spann-
@@ -153,7 +151,7 @@ import textwrap
 import adsk.core, adsk.fusion, traceback
 
 SKRIPT_NAME = 'Portal'
-REVISION = 35
+REVISION = 36
 
 # Gesamtmodell (seit Rev. 29, siehe oben): False baut nur das Portal.
 MASCHINE = True
@@ -505,7 +503,15 @@ MASSE = {
     # das vordere 2060, y_weg_vorn) plus yk_reserve nach vorn (Wahl vom
     # 2026-10-01). Der Festpunkt liegt so, dass am hinteren Schienenende noch
     # luft_bau Untertrum bleibt; vorn bleibt so mehr als die Reserve.
-    'y_weg_vorn':        (106.0, 'Y-Weg nach vorn, Z unten, bis 3 mm vor das 2060'),
+    # Die Y-Lichtschranke sitzt am 2040 und ist seit Rev. 36 nicht mit dem
+    # vorderen 2060 nach vorn gewandert: Der Toolhead bleibt mit Z unten
+    # 8 statt 3 mm vor dem 2060 (Angabe 2026-11-21).
+    'y_weg_vorn':        (106.0, 'Y-Weg nach vorn bis zum Schaltpunkt, Z unten mind. 3 mm vor dem 2060'),
+    # Seit Rev. 36 steht das hintere 2060 so weit vorn (Opferplatte ohne
+    # Spalt dazwischen), dass der Toolhead mit Z unten vor dem Schienenende
+    # an ihm anstoesst: Das Softlimit ($131) endet 3 mm davor
+    # (tools/portal_check.py Abschnitt 14 rechnet es nach).
+    'y_weg_hinten_2060': (179.0, 'Y-Weg nach hinten, Z unten, bis 3 mm vor das hintere 2060'),
     'yk_reserve':         (26.0, 'Y-Kette: Reserve nach vorn ueber den Y-Weg'),
     'yk_abstand':          (3.0, 'Y-Kette: aussen neben der Schlittenplatte'),
     'yk_gelenk_y':       (-48.0, 'Y-Kette: bewegtes Gelenk bei Y (Portal)'),
@@ -569,16 +575,22 @@ MASSE = {
     # Angaben am Aufbau [v]: 2040 600 mm, Y-Schienen 500 mm, darunter quer
     # zwei 2060 hochkant, 600 mm lang; das vordere sitzt 35 mm hinter der
     # Stirnseite der 2040, hinten stehen die 2040 110 mm ueber das hintere
-    # 2060 (gemessen 2026-09-27, Rev. 14) — die 2060 liegen damit 435 mm
-    # Mitte zu Mitte auseinander (bis Rev. 13: 400 [?]). Gezeichnet sind
-    # 2040 und Schienen mittig zum Y-Wagen [?].
+    # 2060 (Angabe 2026-11-21, Rev. 36): so nah zusammengeschoben, dass die
+    # Opferplatte (349 breit) ohne Spalt dazwischen liegt, also 369 Mitte zu
+    # Mitte; das vordere 30 mm hinter der Stirnseite der 2040. Links ragt
+    # das vordere 30 mm, das hintere 35 mm ueber die Aussenseite des linken
+    # 2040 [v]. Bis Rev. 35: 435 Mitte zu Mitte (gemessen 2026-09-27, Rev.
+    # 14), das vordere 35 mm hinter der Stirnseite, beide mittig.
+    # Gezeichnet sind 2040 und Schienen mittig zum Y-Wagen [?].
     # V-Slot vereinfacht: Nutoeffnung 6,2 und Kernbohrung 4,2 [w], dahinter
     # eine 8 mm breite Kammer.
     'rahmen_laenge':      (600.0, 'Referenz: Laenge der 2040'),
     'y_schiene_laenge':   (500.0, 'Referenz: Laenge der Y-Schienen'),
     'quer_laenge':        (600.0, 'Referenz: 2060 quer: Laenge'),
-    'quer_abstand':       (435.0, 'Referenz: 2060 quer: Abstand Mitte zu Mitte'),
-    'quer_vorn_zurueck':   (35.0, 'Referenz: vorderes 2060 so weit hinter der Stirnseite der 2040'),
+    'quer_abstand':       (369.0, 'Referenz: 2060 quer: Abstand Mitte zu Mitte (innen = Plattenbreite)'),
+    'quer_vorn_zurueck':   (30.0, 'Referenz: vorderes 2060 so weit hinter der Stirnseite der 2040'),
+    'quer_ueber_vorn':     (30.0, 'Referenz: vorderes 2060 links so weit ueber das 2040'),
+    'quer_ueber_hinten':   (35.0, 'Referenz: hinteres 2060 links so weit ueber das 2040'),
     # Hinten: Ritzel auf einer Edelstahlwelle, Kugellager und Gleitlager [v].
     # Wo die Achse steht, ist nicht gemessen — angenommen wie vorn die alte
     # Eckwelle, 11 mm hinter der Stirnseite [?]. Davon haengt nur die
@@ -998,9 +1010,15 @@ def lage():
     L['y_schiene_y'] = (w('wagen_y') - w('y_schiene_laenge') / 2.0,
                         w('wagen_y') + w('y_schiene_laenge') / 2.0)
     # 2060 quer unter den 2040: das vordere quer_vorn_zurueck hinter der
-    # Stirnseite [v], das hintere quer_abstand (Mitte zu Mitte) dahinter [v]
-    # (aus 110 mm Ueberstand der 2040 hinten, Rev. 14)
-    L['quer_x'] = (-w('quer_laenge') / 2.0, w('quer_laenge') / 2.0)
+    # Stirnseite [v], das hintere quer_abstand (Mitte zu Mitte) dahinter [v].
+    # In X ragen sie links quer_ueber_* ueber die Aussenseite des linken
+    # 2040 [v]; quer_x ist die Huelle beider (fuer Kollisionen).
+    a2040 = -(w('y_schienen_abstand') / 2.0 + w('rahmen_b') / 2.0)
+    for t in ('vorn', 'hinten'):
+        x0 = a2040 - w('quer_ueber_' + t)
+        L['quer_x_' + t] = (x0, x0 + w('quer_laenge'))
+    L['quer_x'] = (min(L['quer_x_vorn'][0], L['quer_x_hinten'][0]),
+                   max(L['quer_x_vorn'][1], L['quer_x_hinten'][1]))
     L['quer_z'] = (L['rahmen_z0'] - w('quer_h'), L['rahmen_z0'])
     v1 = L['rahmen_y'][1] - w('quer_vorn_zurueck')
     L['quer_y_vorn'] = (v1 - w('rahmen_b'), v1)
@@ -1057,7 +1075,9 @@ def lage():
     L['nut_o_z'] = L['rahmen_z1'] - b / 2.0            # obere: Y-Riemen
     L['aussen_x'] = R + b / 2.0                         # rechtes 2040 aussen
     L['tisch_z'] = L['quer_z'][0]
-    L['y_weg_hinten'] = L['wagen_y0'] - L['y_schiene_y'][0]
+    # hinten: Schienenende oder, mit Z unten, 3 mm vor dem hinteren 2060
+    L['y_weg_schiene'] = L['wagen_y0'] - L['y_schiene_y'][0]
+    L['y_weg_hinten'] = min(L['y_weg_schiene'], w('y_weg_hinten_2060'))
     L['schalt_dy'] = w('y_weg_vorn') - w('schaltabstand')
     L['schalt_dy_ende'] = w('y_weg_vorn')
     L['schalt_xs'] = L['xw_min'] + w('schaltabstand')
@@ -1320,7 +1340,10 @@ def lage():
     # Laenge aus Arbeitsweg und Reserve; der Festpunkt so, dass am hinteren
     # Schienenende luft_bau Untertrum bleibt. yk_dy_*: Stellung des Portals
     # aus der Mitte (wie y_weg_hinten), yk_frei: Unter- plus Obertrum.
-    hinten, vorn, lb = L['y_weg_hinten'], w('y_weg_vorn'), w('luft_bau')
+    # Ausgelegt auf den ganzen Weg bis ans hintere Schienenende: Mit Z oben
+    # kommt das Portal von Hand dorthin, auch wenn das Softlimit vorher
+    # endet.
+    hinten, vorn, lb = L['y_weg_schiene'], w('y_weg_vorn'), w('luft_bau')
     pr = math.pi * w('kette_r')
     L['yk_noetig'] = (hinten + vorn + w('yk_reserve') + 2.0 * lb) / 2.0 + pr
     L['yk_glieder'] = int(math.ceil(L['yk_noetig'] / w('kette_teilung')
@@ -3289,7 +3312,7 @@ def bau_referenz(app, design, teile, L, fehler, toolhead_vereinfacht=True):
                (L['rahmen_z0'], L['rahmen_z1']))
     for t in ('hinten', 'vorn'):
         sicher('Quertraeger_2060_' + t, profil, 'Quertraeger_2060_' + t,
-               'x', L['quer_x'], L['quer_y_' + t], L['quer_z'])
+               'x', L['quer_x_' + t], L['quer_y_' + t], L['quer_z'])
 
     # ---- Linearfuehrungen: Schienen und Wagen (mit Kanal fuer die Schiene) --
     c = teile['Ref_Fuehrungen']
@@ -3876,8 +3899,13 @@ def hinweise_bauen(L, fehler, maschine=None):
         '    vereinfacht. 2040 und Schienen mittig zum Y-Wagen [?], das',
         '    vordere 2060 {:.0f} mm hinter der Stirnseite [v], hinten stehen'
         .format(w('quer_vorn_zurueck')),
-        '    die 2040 {:.0f} mm ueber das hintere 2060 [v].'.format(
-            L['quer_y_hinten'][0] - L['rahmen_y'][0]),
+        '    die 2040 {:.0f} mm ueber das hintere 2060. Innen {:.0f} mm: die'
+        .format(L['quer_y_hinten'][0] - L['rahmen_y'][0],
+                L['quer_y_vorn'][0] - L['quer_y_hinten'][1]),
+        '    Opferplatte liegt ohne Spalt dazwischen. Links ragen sie {:.0f}'
+        .format(w('quer_ueber_vorn')),
+        '    bzw. {:.0f} mm ueber das 2040 [v].'.format(
+            w('quer_ueber_hinten')),
         '  Fuehrungen: MGN12 ({:.0f} mm) mit MGN12H, MGN15 mit MGN15H.'
         .format(w('y_schiene_laenge')),
         '  Toolhead in der Mitte des X-Wegs: im Gesamtmodell aus',
@@ -3932,8 +3960,8 @@ def hinweise_bauen(L, fehler, maschine=None):
 # rechnet tools/kabelhalter_check.py (docs/kabelhalter.md, L1 bis L5 und
 # R1 bis R4): Schraube in Maschine Y je Seite (-1 links, +1 rechts).
 # tools/maschine_check.py vergleicht.
-KABELHALTER_Y = {-1: (-281.0, -173.0, -63.0, 30.0, 126.0),
-                 1: (-155.0, -67.0, 22.0, 110.0)}
+KABELHALTER_Y = {-1: (-270.0, -210.0, -63.0, 30.0, 128.0),
+                 1: (-80.0, 16.0, 111.0)}
 
 
 def nachbar_pfad(name):
@@ -4132,9 +4160,7 @@ def maschine_ToolheadZ(app, design, g, m, L, protokoll):
 
 def maschine_Opferplatte(app, design, g, m, L, protokoll):
     """Die beiden Anschlaege und die Platte; ohne Referenz (nur die
-    Profile). Opferplatte.py kennt die neue Lage der 2060 (innen 349 mm),
-    Portal.py noch nicht: Anschlaege und Platte stehen deshalb nicht an
-    den 2060 dieses Modells."""
+    Profile, die baut Portal.py selbst)."""
     O = m.lage()
     for s in m.SEITEN:
         name = m.anschlag_name(s)

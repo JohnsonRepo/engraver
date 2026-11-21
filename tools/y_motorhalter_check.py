@@ -364,8 +364,11 @@ def main():
     # 2026-09-27): die Schenkel muessen davor enden.
     vorn_2060 = w('quer_vorn_zurueck')
     p.info('vorderes 2060 hinter der Stirnseite', vorn_2060)
+    # Seit 2026-11-21 steht das vordere 2060 30 mm hinter der Stirnseite,
+    # die Schenkel (30 mm) enden genau an ihm: Beruehren ja, ueberlappen
+    # nein (Portal.py Rev. 36).
     p.ok('Schenkel enden vor dem 2060 (dort sitzen Winkel)',
-         vorn_2060 - w('ymh_wange_laenge'), 3.0)
+         vorn_2060 - w('ymh_wange_laenge'), 0.0)
     p.ok('hintere M5-Scheibe vor dem 2060',
          vorn_2060 + L['m5_loecher'][1][0] - w('m5_scheibe_d') / 2.0, 3.0)
 

@@ -74,7 +74,7 @@ import adsk.core, adsk.fusion, traceback
 import math
 
 SKRIPT_NAME = 'Elektronikfach'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -85,7 +85,9 @@ MASSE = {
     'rahmen_h':            (40.0, 'Rahmen 2040 hochkant: Hoehe'),
     'rahmen_y1':          (240.0, 'Rahmen: vordere Stirnseite der 2040 (Maschine)'),
     'rahmen_z0':          (-69.0, 'Rahmen: Unterkante der 2040 = Oberkante 2060'),
-    'quer_vorn_y1':       (205.0, 'Rahmen: Vorderseite des vorderen 2060 (Maschine)'),
+    # Rev. 3 (2026-11-21): das vordere 2060 steht 5 mm weiter vorn (Portal.py
+    # Rev. 36), das Fach sitzt daran. Nur die Lage, die Teile bleiben.
+    'quer_vorn_y1':       (210.0, 'Rahmen: Vorderseite des vorderen 2060 (Maschine)'),
     # Fachkoordinaten: die Montageflaeche liegt bei quer_y1 (bis Rev. 1 die
     # Rueckseite des hinteren 2060), das Fach reicht fach_tiefe davor
     'quer_y1':           (-250.0, 'Fachkoordinaten: Montageflaeche am 2060'),

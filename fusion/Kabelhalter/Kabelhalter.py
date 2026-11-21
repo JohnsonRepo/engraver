@@ -32,7 +32,7 @@ import adsk.core, adsk.fusion, traceback
 import math
 
 SKRIPT_NAME = 'Kabelhalter'
-REVISION = 2
+REVISION = 3
 
 # --- Masse (einzige Quelle; erzeugt 1:1 die Fusion-User-Parameter) -----------
 # Name: (Wert in mm, Kommentar fuer den Parameter-Dialog)
@@ -60,7 +60,9 @@ MASSE = {
     # Rev. 1: erster Stand.
     # Rev. 2: Feder um die Schraube ganz weg (Rev. 1 liess neben der Traene
     #         nur 0,15 mm duenne Stege stehen).
-    'kh_y':              (-173.0, 'Modell: Mitte des gezeigten Halters (Maschine Y)'),
+    # Rev. 3: -210 statt -173, dort sitzt seit Portal.py Rev. 36 das
+    # hintere 2060. Der Halter selbst ist unveraendert.
+    'kh_y':              (-210.0, 'Modell: Mitte des gezeigten Halters (Maschine Y)'),
     'kh_b':                (16.0, 'Halter: Breite laengs der Nut'),
     # M5x10 ohne Scheibe: 4,5 Anlage, dann 5,5 in der Nut — 3,7 im Stein,
     # 0,5 vor dem Nutgrund

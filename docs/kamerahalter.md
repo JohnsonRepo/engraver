@@ -9,7 +9,7 @@ rechts.
 
 ![Kamerahalter von oben, Blick zur Ecke, Schnitt längs der Sichtlinie, Halter im Schnitt, Wand in Blickrichtung](kamerahalter.svg)
 
-Die Maße stehen in `fusion/Kamerahalter/Kamerahalter.py` (Rev. 3). Geprüft
+Die Maße stehen in `fusion/Kamerahalter/Kamerahalter.py` (Rev. 4). Geprüft
 wird mit `python3 tools/kamerahalter_check.py`:
 
 - Lage auf dem 2060
@@ -20,6 +20,14 @@ wird mit `python3 tools/kamerahalter_check.py`:
 - Schrauben, Druck und Kabel
 
 Die Zeichnung erzeugt `python3 tools/kamerahalter_zeichnen.py`.
+
+**Rev. 4 (2026-11-21):** Das vordere 2060 ist 5 mm nach vorn gewandert
+(Portal Rev. 36), mit ihm Fach, Halter und Kamera; Anschlagecke und
+Messpunkt nicht. Der Halter bleibt, wie er gedruckt ist: Richtung und
+Neigung zielen auf den Punkt, auf den sie in Rev. 2 gerechnet wurden
+(`ziel_dy`). Der Messpunkt liegt jetzt 1,4° neben der Bildachse und für
+0–33 mm Werkstück 2° unter bis 12,7° über ihr, weiter gut im Bild.
+**Nicht neu drucken.**
 
 **Rev. 3 (2026-11-21):** nur die Höhe der Opferplatte. Maschine und
 Platte stehen auf demselben Tisch, die Oberfläche liegt bei Z −103,7 statt
@@ -82,12 +90,12 @@ Linse säße dann etwas weiter vorn.
 | Fuß | oben auf dem vorderen 2060, X +190 … +230 (Maschinenkoordinaten wie `Portal.py`), 2 × M5×10 in Hammermuttern der Nut bei X +196 und +207 |
 | Eckwinkel | innen am rechten 2040 sitzt ein 20-mm-Winkel in der oberen Nut des 2060 ([hardware-notizen.md](hardware-notizen.md)). Fuß und Steg sind darüber unter 45° ausgespart, 1 mm Luft zur Hülle 20 × 20 |
 | Kamera | hochkant, die Kabelkante zeigt nach vorn links zum Fach |
-| Linse | X +216,5, Y +185, Z −42: über der Innenkante des 2060, **30,5 mm vom rechten 2040** und **62 mm über der Platte** |
+| Linse | X +216,5, Y +190, Z −42: über der Innenkante des 2060, **30,5 mm vom rechten 2040** und **62 mm über der Platte** |
 | Blick | 232,6° gegen +X, also schräg nach hinten links, und **27,8° nach unten** geneigt |
-| Messpunkt | X +153,35, Y +102,5; **108 bis 121 mm** von der Linse |
-| Im Bild | quer genau auf der Achse (Bild ±20,7°), senkrecht 2,9° unter (leere Platte) bis 12,2° über der Achse (32,7 mm Werkstück) (Bild ±26,8°): mindestens 14,6° vom Rand |
-| Auflösung | 18,4 Pixel je mm Höhe, also 0,05 mm je Pixel; ein Diodenlaser verzeiht etwa ±0,5–1 mm |
-| Luft | 3,5 mm zum Laser am Ende des Y-Wegs; 1 mm zum Fach, der Deckel geht ab; 4,7 mm zum Y-Riemen; 6 mm zum Y-Motorhalter |
+| Messpunkt | X +153,35, Y +102,5; **112 bis 124 mm** von der Linse |
+| Im Bild | quer 1,4–1,6° neben der Achse (Bild ±20,7°), senkrecht 2° unter (leere Platte) bis 12,7° über der Achse (32,7 mm Werkstück) (Bild ±26,8°): mindestens 14° vom Rand |
+| Auflösung | 18,1 Pixel je mm Höhe, also 0,06 mm je Pixel; ein Diodenlaser verzeiht etwa ±0,5–1 mm |
+| Luft | 8,5 mm zum Laser am Ende des Y-Wegs (das 2060 ist mit der Kamera 5 mm nach vorn gewandert, die Lichtschranke nicht); 1 mm zum Fach, der Deckel geht ab; 4,7 mm zum Y-Riemen; 10,7 mm zum Y-Motorhalter |
 
 ### Warum geneigt
 
@@ -158,16 +166,16 @@ python3 tools/stl_export.py Kamerahalter
 
 ## Fokus der Kamera einstellen
 
-Die v1.3 ist ab Werk auf 1 m bis unendlich eingestellt. Bei 108 bis 121 mm
+Die v1.3 ist ab Werk auf 1 m bis unendlich eingestellt. Bei 112 bis 124 mm
 wäre der Punkt ein Fleck von rund 30 Pixeln. Die Linse wird deshalb einmal
-auf **114 mm** gedreht. Dann ist der Punkt überall höchstens 1,6 Pixel
+auf **118 mm** gedreht. Dann ist der Punkt überall höchstens 1,5 Pixel
 unscharf, und seine Mitte findet das Skript genau. Hast du sie schon auf
-120 mm gedreht (Rev. 2), lass es so: Das sind höchstens etwa 3 Pixel.
+120 mm gedreht (Rev. 2), lass es so.
 
 1. Kamera am Pi, Bild live im Browser ansehen:
    **`http://laser.local:8080`** ([pi.md](pi.md#kamera)). `rpicam-hello`
    zeigt am Pi ohne Bildschirm nichts.
-2. Ein bedrucktes Blatt 114 mm vor die Linse halten, gut beleuchtet: Zeigt
+2. Ein bedrucktes Blatt 118 mm vor die Linse halten, gut beleuchtet: Zeigt
    die Seite „zu dunkel“, rauscht das Bild zu stark zum Scharfstellen.
 3. Die Linse mit einer Spitzzange oder dem Fokusring vorsichtig **gegen den
    Uhrzeigersinn** herausdrehen, bis die Schrift scharf ist. Ab Werk ist sie
@@ -253,7 +261,7 @@ reicht und ob der Halter am Stück druckt.
   einer Hülle 20 × 20 mm unter der Schräge.
 - **Kamera** `[w]`/`[?]`: Lochbild nach dem Maßblatt, die Linsenhöhe der
   v1.3 geschätzt. Vor dem Druck die Bohrlehre an die Platine halten.
-- **Fokus der Kamera:** auf 114 mm drehen (oben); 120 mm aus Rev. 2 reichen.
+- **Fokus der Kamera:** auf 118 mm drehen (oben); 120 mm aus Rev. 2 reichen.
 - **Elektronikfach:** Zwischenstand. Am Aufbau liegt der Pi anders als im
   Modell.
 - **Y-Endschalter:** referenziert seit Portal Rev. 32 vorn; am Messpunkt

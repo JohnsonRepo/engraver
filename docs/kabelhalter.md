@@ -1,6 +1,6 @@
 # Kabelhalter — untere Seitennut außen an den 2040
 
-Erzeugt von `fusion/Kabelhalter/Kabelhalter.py` (ein Druckteil, Rev. 2).
+Erzeugt von `fusion/Kabelhalter/Kabelhalter.py` (ein Druckteil, Rev. 3; seit Rev. 2 unverändert, nur der gezeigte Platz).
 Geprüft mit `python3 tools/kabelhalter_check.py`, Skizze in
 [kabelhalter.svg](kabelhalter.svg) (neu erzeugen mit
 `python3 tools/kabelhalter_zeichnen.py`). Welche Kabel dort laufen, steht
@@ -69,11 +69,18 @@ ihn; Lücke für Lücke verteilt, würde die Spanne über ihm 124 mm.
 dem hinteren 2060 gerechnet. Seit Elektronikfach Rev. 2 steht es vor dem
 vorderen 2060; Kabelwege und Plätze werden dafür neu gerechnet.
 
-Neun Halter, links fünf und rechts vier. Die Prüfung verteilt sie in den
+**Seit Portal Rev. 36 (2026-11-21)** stehen die 2060 so nah zusammen, dass
+die Opferplatte ohne Spalt dazwischen liegt. Das hintere 2060 sitzt mit
+seinen Winkeln jetzt dort, wo L2 bisher saß (Y −173), rechts entfällt ein
+Halter. Bis Rev. 35 waren es links −281, −173, −63, 30, 126 und rechts
+−155, −67, 22, 110.
+
+Acht Halter, links fünf und rechts drei. Die Prüfung verteilt sie in den
 freien Lücken der Nut so, dass zwischen zwei Haltern höchstens rund 100 mm
-frei hängen. Länger sind nur die Spannen über die hintere Kreuzung (L1–L2,
-108 mm) und über den Träger am Festpunkt (L2–L3, 110 mm). L1 sitzt dicht
-vor dem Winkel: Hinter ihm hält die Zugentlastung im Fenster des
+frei hängen. Länger ist nur die Spanne L2–L3 (147 mm) über die Kreuzung mit
+dem hinteren 2060 und den Träger am Festpunkt: Dort sperren 2060 und Winkel
+60 mm, und kein Halter passt hin (erlaubt bis 150 mm). L2 sitzt dicht vor
+dem Winkel; hinter L1 hält die Zugentlastung im Fenster des
 [Elektronikfachs](elektronik.md#elektronikfach) die Kabel. Gemessen wird
 die Mitte des Halters, also die Schraube, vom hinteren 2060, so wie bei
 den Trägern der Wanne Y.
@@ -81,15 +88,14 @@ den Trägern der Wanne Y.
 <!-- tabelle:plaetze -->
 | Halter | Seite | Mitte (Schraube), vom hinteren 2060 | Y | Kabel |
 |---|---|---|---|---|
-| **L1** | links | 31 mm hinter der Rückseite | −281 | W7 · W9 · W11 · W12 · W13 · W15 |
-| **L2** | links | 57 mm vor der Vorderseite | −173 | W7 · W9 · W11 · W12 · W13 · W15 |
-| **L3** | links | 167 mm vor der Vorderseite | −63 | W13 |
-| **L4** | links | 260 mm vor der Vorderseite | 30 | W13 |
-| **L5** | links | 356 mm vor der Vorderseite | 126 | W13 |
-| **R1** | rechts | 75 mm vor der Vorderseite | −155 | W2 · W14 |
-| **R2** | rechts | 163 mm vor der Vorderseite | −67 | W2 · W14 |
-| **R3** | rechts | 252 mm vor der Vorderseite | 22 | W2 · W14 |
-| **R4** | rechts | 340 mm vor der Vorderseite | 110 | W2 · W14 |
+| **L1** | links | 91 mm hinter der Rückseite | −270 | W7 · W9 · W11 · W12 · W13 · W15 |
+| **L2** | links | 31 mm hinter der Rückseite | −210 | W7 · W9 · W11 · W12 · W13 · W15 |
+| **L3** | links | 96 mm vor der Vorderseite | −63 | W13 |
+| **L4** | links | 189 mm vor der Vorderseite | 30 | W13 |
+| **L5** | links | 287 mm vor der Vorderseite | 128 | W13 |
+| **R1** | rechts | 79 mm vor der Vorderseite | −80 | W2 · W14 |
+| **R2** | rechts | 175 mm vor der Vorderseite | 16 | W2 · W14 |
+| **R3** | rechts | 270 mm vor der Vorderseite | 111 | W2 · W14 |
 <!-- /tabelle:plaetze -->
 
 Frei bleiben jeweils 3 mm zu den Winkeln an den 2060, zum 2060 selbst (die
@@ -101,7 +107,7 @@ liegt 2,75 mm darunter.
 ## Montage
 
 1. **Hammermuttern** an den Plätzen von außen in die untere Seitennut
-   einschwenken, links fünf, rechts vier. Einschieben geht nicht, die
+   einschwenken, links fünf, rechts drei. Einschieben geht nicht, die
    Nutenden belegen Winkel und Y-Motorhalter.
 2. **Halter** mit der Feder in die Nutöffnung, Rinne unten und außen.
    M5×10 ohne Scheibe, handfest anziehen. Längs lässt er sich noch
@@ -109,7 +115,7 @@ liegt 2,75 mm darunter.
 3. **Kabel** von oben in die Rinne legen und nach außen unter die Lippe
    schieben. Die dicken Kabel zuerst.
 4. **Kabelbinder** dort, wo Kabel die Rinne verlassen: bei L2 (Litzen zur
-   Y-Kette) und bei L5 und R4 (Motorkabel nach vorn). Den Binder von oben
+   Y-Kette) und bei L5 und R3 (Motorkabel nach vorn). Den Binder von oben
    neben der Anlage durch das Fenster, unter dem Boden nach außen, außen an
    der Wand hoch und über die Kabel zurück.
 

@@ -25,6 +25,7 @@ fusion/Opferplatte/            Führungsfüße unter den 2060 und Riegel für di
 fusion/Spannmittel/           Anschlagwinkel (Ecke vorn rechts, Rev. 2), Exzenter und Niederhalter für das Werkstück auf der Opferplatte  ← neu
 fusion/Kamerahalter/           Halter für die Kamera (Autofokus), geneigt, vorn rechts auf dem vorderen 2060 vor dem Elektronikfach (Rev. 2)  ← neu
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
+gravur/                        Motive zum Gravieren: Hanfblatt als SVG für LightBurn und fertiger G-Code für CNCjs (Fläche, Linie)  ← neu
 stl/                           druckfertige STL ohne Fusion: Elektronikfach (zwei Hälften, zwei Deckel, Rev. 2), Kabelhalter, Kamerahalter
 pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus, Hotspot ohne WLAN, Kamera-Livebild und Autofokus (Widget für CNCjs)  ← neu
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
@@ -88,6 +89,7 @@ tools/kamerahalter_check.py    Prüfung des Kamerahalters: Lage, Freiraum über 
 tools/kamerahalter_zeichnen.py erzeugt die Zeichnung des Kamerahalters
 tools/autofokus_check.py       Prüfung des Autofokus ohne Pi: Bildauswertung, Lerntabelle, Ablauf gegen simulierte Maschine, Socket zu CNCjs, Webseite
 tools/kette_zeichnen.py        erzeugt die Zeichnung der X-Energiekette
+tools/gravur_hanfblatt.py      erzeugt das Hanfblatt in gravur/ (SVG und G-Code) und prüft den G-Code
 tools/geometrie_check.py       Prüfung der Einzelplatte
 tools/y_motorhalter_check.py   rechnerische Prüfung des Y-Motorhalters
 tools/y_motorhalter_zeichnen.py erzeugt die Zeichnung des Y-Motorhalters
@@ -381,6 +383,7 @@ python3 tools/spannmittel_zeichnen.py  # docs/spannmittel.svg neu erzeugen
 python3 tools/kamerahalter_check.py  # Kamerahalter: Lage, Freiraum, Fach, Sicht zum Messpunkt, Schrauben, Kabel
 python3 tools/kamerahalter_zeichnen.py  # docs/kamerahalter.svg neu erzeugen
 python3 tools/kette_zeichnen.py     # docs/energiekette.svg und energiekette-y.svg neu erzeugen
+python3 tools/gravur_hanfblatt.py   # gravur/: Hanfblatt als SVG und G-Code, Lage, Laser, Vorschub (--help)
 ```
 
 `toolhead_check.py` importiert das Fusion-Skript mit gestubbtem `adsk`-Modul und

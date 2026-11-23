@@ -12,11 +12,16 @@ brennt, und der Stopp-Knopf im Browser hängt am WLAN; nur wer danebensteht,
 erreicht den Not-Aus.
 
 Skripte (Python 3 mit numpy, Pillow, scipy, fontTools) liegen in `scripts/`
-neben dieser Datei. Die Befehle unten nehmen an:
+neben dieser Datei. Die Befehle unten schreiben ihren Ordner als `$S`. Nimm
+den ersten, den es gibt:
 
-```sh
-S=.claude/skills/gravur/scripts     # vom Repo-Ordner aus, sonst <Skill-Ordner>/scripts
-```
+1. `.claude/skills/gravur/scripts` im Repo-Ordner engraver,
+2. `~/Documents/GitHub/engraver/.claude/skills/gravur/scripts` (das Repo auf
+   dem Mac, wenn die Sitzung woanders läuft),
+3. `scripts/` neben dieser Datei (installierte Kopie, Stand beim Verpacken).
+
+Die ersten beiden sind aktuell: Neue Messwerte landen im Repo in
+`materialien.json`, nicht in einer installierten Kopie.
 
 | Skript | wofür |
 |---|---|
@@ -199,7 +204,8 @@ Gib dem Nutzer diese Schritte mit (kurz, an seinen Auftrag angepasst):
 ### 8. Ergebnis festhalten
 
 Meldet der Nutzer, wie es geworden ist (Foto vom Materialtest, „zu hell“,
-„Brandränder“), trag das Gelernte in `$S/materialien.json` ein: Werte,
+„Brandränder“), trag das Gelernte im Repo in
+`.claude/skills/gravur/scripts/materialien.json` ein: Werte,
 `schwarz_ab_e`, `stand: "gemessen JJJJ-MM-TT: …"`, kurze Notiz. So wird
 aus einem Startwert ein gemessener Wert, und die nächste Gravur passt
 sofort. Die Datei liegt im Repo; frag, ob du committen sollst.

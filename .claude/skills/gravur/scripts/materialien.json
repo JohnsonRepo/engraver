@@ -1,0 +1,109 @@
+{
+  "_info": [
+    "Leistung und Vorschub je Material fuer gravur.py (--material NAME).",
+    "E = S/F (S je mm/min) ist die Energie je Millimeter im Lasermodus M4.",
+    "stand: 'gemessen ...' = an dieser Maschine mit einem Materialtest belegt;",
+    "'Startwert' = Annahme fuer einen 4-W-Diodenlaser, vor dem Werkstueck erst",
+    "einen Materialtest brennen (gravur.py materialtest --material NAME).",
+    "Nach jedem Test das Ergebnis hier eintragen, mit Datum."
+  ],
+  "spanplatte": {
+    "name": "Spanplatte roh (unbeschichtet)",
+    "stand": "gemessen 2026-11-18: Materialtest 5 x 5, Felder 6 mm, Zeilenabstand 0,1 mm, M4",
+    "fuellen": {"s": 400, "f": 2000, "intervall": 0.1},
+    "linie": {"s": 400, "f": 2000},
+    "schwarz_ab_e": 0.2,
+    "test": {"leistung": [20, 40, 60, 80, 100], "vorschub": [3000, 2000, 1500, 1000, 600]},
+    "notiz": "E >= 0,2 ganz schwarz, 0,133 dunkel und fleckig, 0,1 braun, 0,067 kaum sichtbar. Bei 600 mm/min ab 60 % Brandraender. S400 F2000 = kleinste Energie, die ganz schwarz brennt, duennste Linien."
+  },
+  "sperrholz_pappel": {
+    "name": "Sperrholz Pappel/Linde (hell, weich)",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 300, "f": 2000, "intervall": 0.1},
+    "linie": {"s": 350, "f": 2000},
+    "schwarz_ab_e": 0.15,
+    "test": {"leistung": [10, 20, 30, 45, 60], "vorschub": [3000, 2000, 1500, 1000]},
+    "notiz": "Leimschicht unter dem Deckfurnier brennt anders; nicht tiefer als das Furnier gravieren."
+  },
+  "sperrholz_birke": {
+    "name": "Sperrholz Birke",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 350, "f": 2000, "intervall": 0.1},
+    "linie": {"s": 400, "f": 2000},
+    "schwarz_ab_e": 0.18,
+    "test": {"leistung": [15, 25, 40, 55, 70], "vorschub": [3000, 2000, 1500, 1000]},
+    "notiz": "Harter, heller Werkstoff, kontrastreich."
+  },
+  "mdf": {
+    "name": "MDF roh",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 350, "f": 2000, "intervall": 0.1},
+    "linie": {"s": 400, "f": 2000},
+    "schwarz_ab_e": 0.18,
+    "test": {"leistung": [15, 25, 40, 55, 70], "vorschub": [3000, 2000, 1500, 1000]},
+    "notiz": "Gleichmaessig, gut fuer Fotos. Rauch riecht stark (Leim): gut lueften."
+  },
+  "bambus": {
+    "name": "Bambus (Brettchen, Untersetzer)",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 300, "f": 2000, "intervall": 0.1},
+    "linie": {"s": 350, "f": 2000},
+    "schwarz_ab_e": 0.15,
+    "test": {"leistung": [10, 20, 30, 45, 60], "vorschub": [3000, 2000, 1500, 1000]},
+    "notiz": ""
+  },
+  "leder": {
+    "name": "Leder, pflanzlich gegerbt (echtes Leder)",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 150, "f": 3000, "intervall": 0.1},
+    "linie": {"s": 180, "f": 3000},
+    "schwarz_ab_e": 0.06,
+    "test": {"leistung": [5, 10, 15, 25, 40], "vorschub": [3000, 2000, 1500]},
+    "notiz": "Kunstleder ist oft PVC: nicht lasern. Chromgegerbtes Leder riecht stark."
+  },
+  "karton": {
+    "name": "Karton, Graupappe, Papier",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 120, "f": 3000, "intervall": 0.1},
+    "linie": {"s": 150, "f": 3000},
+    "schwarz_ab_e": 0.05,
+    "test": {"leistung": [5, 10, 15, 20, 30], "vorschub": [3000, 2000, 1500]},
+    "notiz": "Brennt leicht: nie langsam mit viel Leistung, dabei bleiben."
+  },
+  "kork": {
+    "name": "Kork (Untersetzer, Pinnwand)",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 150, "f": 3000, "intervall": 0.12},
+    "linie": {"s": 200, "f": 3000},
+    "schwarz_ab_e": 0.06,
+    "test": {"leistung": [5, 10, 20, 30, 45], "vorschub": [3000, 2000, 1500]},
+    "notiz": "Kontrast ist schwach; Schrift fett und nicht zu klein waehlen."
+  },
+  "schiefer": {
+    "name": "Schiefer (Untersetzer, Schilder)",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 600, "f": 1500, "intervall": 0.1},
+    "linie": {"s": 700, "f": 1500},
+    "schwarz_ab_e": 0.4,
+    "test": {"leistung": [30, 45, 60, 80, 100], "vorschub": [2000, 1500, 1000, 600]},
+    "notiz": "Brennt hell statt dunkel: Fotos mit --invertieren pruefen. Danach abwischen, ggf. oelen."
+  },
+  "alu_eloxiert": {
+    "name": "Aluminium eloxiert (dunkel)",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 900, "f": 1000, "intervall": 0.08},
+    "linie": {"s": 1000, "f": 800},
+    "schwarz_ab_e": 0.9,
+    "test": {"leistung": [50, 65, 80, 100], "vorschub": [1500, 1000, 800, 500]},
+    "notiz": "Entfernt nur die Farbe der Eloxalschicht, wird hell. Blankes Metall markiert ein Diodenlaser nicht."
+  },
+  "acryl_schwarz": {
+    "name": "Acryl (PMMA) schwarz oder dunkel, undurchsichtig",
+    "stand": "Startwert, nicht getestet",
+    "fuellen": {"s": 250, "f": 2000, "intervall": 0.1},
+    "linie": {"s": 300, "f": 2000},
+    "schwarz_ab_e": 0.12,
+    "test": {"leistung": [10, 20, 30, 45, 60], "vorschub": [3000, 2000, 1500, 1000]},
+    "notiz": "Klares, blaues und transparentes Acryl laesst 450 nm durch: geht nicht. Nur PMMA, kein Polycarbonat."
+  }
+}

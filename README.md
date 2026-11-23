@@ -27,6 +27,7 @@ fusion/Kamerahalter/           Halter für die Kamera (Autofokus), geneigt, vorn
 fusion/ToolheadGrundplatte/    nur die Laserplatte (vom Toolhead überholt)
 stl/                           druckfertige STL ohne Fusion: Elektronikfach (zwei Hälften, zwei Deckel, Rev. 2), Kabelhalter, Kamerahalter
 pi/                            Pi: Einrichtungsskript, CNCjs-Konfiguration mit Makros, Dienst, sudoers, WLAN-Energiesparen aus, Hotspot ohne WLAN, Kamera-Livebild und Autofokus (Widget für CNCjs)  ← neu
+.claude/skills/gravur/         Claude-Skill: Gravuren als G-Code aus Text, SVG, Bild, Materialtest; Prüfung wie GRBL, Vorschau, Materialwerte  ← neu
 docs/toolhead-z.md             Maßkette, Antrieb, Montage, Druck, Prüfliste
 docs/portal-y-schlitten.md     Y-Schlitten, Y- und X-Riemen, Klemmen, Montage, Druck
 docs/portal-y-schlitten.svg    Draufsicht auf beide Portalenden, Schnitte durch Klemmen und Umlenkung
@@ -215,6 +216,24 @@ Dienst, Makros für Rahmen, Laserpunkt und Fokustest, Herunterfahren aus dem Bro
 ein eigenes WLAN, wenn beim Start keins da ist).
 Details in [docs/pi.md](docs/pi.md).
 
+### Gravuren erzeugen (neu)
+
+Der Claude-Skill in [`.claude/skills/gravur/`](.claude/skills/gravur/SKILL.md)
+macht aus Text, SVG, Foto oder Logo eine `.gc`-Datei für genau diese
+Maschine: Nullpunkt an der Anschlagecke vorn rechts, M4, höchstens
+3000 mm/min, ohne Z. Dazu kommt ein Materialtest Leistung × Vorschub. Jede
+Datei wird wie von GRBL durchgespielt: Sie muss auf dem Werkstück und im
+Arbeitsfeld bleiben, am Ende muss der Laser aus sein. Der Skill schätzt
+die Dauer, zeichnet eine Vorschau von oben und legt die Datei auf Wunsch
+in `~/gcode` auf dem Pi; starten muss man selbst. Leistung und Vorschub je
+Material stehen in `scripts/materialien.json`, gemessen ist bisher nur
+rohe Spanplatte (S400 F2000). Ohne Claude geht es auch:
+
+```sh
+python3 .claude/skills/gravur/scripts/gravur.py text "Werkstatt" --hoehe 12 --werkstueck 150x60 --material spanplatte
+python3 .claude/skills/gravur/scripts/gcode_check.py auftrag.gc --werkstueck 140x100 --vorschau auftrag.png
+```
+
 ### Not-Aus (neu)
 
 Pilztaster mit einem Wechsler (C, NO, NC): C und NC liegen in der
@@ -384,6 +403,7 @@ python3 tools/spannmittel_zeichnen.py  # docs/spannmittel.svg neu erzeugen
 python3 tools/kamerahalter_check.py  # Kamerahalter: Lage, Freiraum, Fach, Sicht zum Messpunkt, Schrauben, Kabel
 python3 tools/kamerahalter_zeichnen.py  # docs/kamerahalter.svg neu erzeugen
 python3 tools/kette_zeichnen.py     # docs/energiekette.svg und energiekette-y.svg neu erzeugen
+python3 .claude/skills/gravur/scripts/selbsttest.py  # Gravur-Skripte: Text, SVG, Bild, Materialtest, Prüfung
 ```
 
 `toolhead_check.py` importiert das Fusion-Skript mit gestubbtem `adsk`-Modul und
